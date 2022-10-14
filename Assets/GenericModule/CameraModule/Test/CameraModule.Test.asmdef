@@ -1,0 +1,23 @@
+{
+    "name": "CameraModule.Test",
+    "rootNamespace": "CameraModule.Test",
+    "references": [
+        "UnityEditor.TestRunner",
+        "GameCore.Exposed",
+        "GameCore.ThirdParty",
+        "CameraModule"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "NSubstitute.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

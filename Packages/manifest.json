@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.ciza.gamecore": "https://github.com/Ciza2596/GameCore.git?path=Assets/GameCore",
     "com.unity.collab-proxy": "1.17.2",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.15",
@@ -41,5 +42,17 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.cysharp.messagepipe.zenject",
+        "com.cysharp.messagepipe",
+        "com.cysharp.unitask",
+        "com.svermeulen.extenject"
+      ]
+    }
+  ]
 }

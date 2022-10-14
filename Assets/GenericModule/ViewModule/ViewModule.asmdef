@@ -1,6 +1,6 @@
 {
-    "name": "CameraModule",
-    "rootNamespace": "CameraModule",
+    "name": "ViewModule",
+    "rootNamespace": "ViewModule",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

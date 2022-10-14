@@ -1,5 +1,45 @@
 {
   "dependencies": {
+    "com.ciza.gamecore": {
+      "version": "https://github.com/Ciza2596/GameCore.git?path=Assets/GameCore",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.cysharp.messagepipe.zenject": "1.7.4",
+        "com.cysharp.messagepipe": "1.7.4",
+        "com.cysharp.unitask": "2.3.1",
+        "com.svermeulen.extenject": "9.2.0-stcf3"
+      },
+      "hash": "5957c1da085442a09027e41df521e187fb8ea3af"
+    },
+    "com.cysharp.messagepipe": {
+      "version": "1.7.4",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.cysharp.messagepipe.zenject": {
+      "version": "1.7.4",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.cysharp.unitask": {
+      "version": "2.3.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.svermeulen.extenject": {
+      "version": "9.2.0-stcf3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.7",
       "depth": 1,

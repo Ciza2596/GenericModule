@@ -1,9 +1,9 @@
 {
-    "name": "CameraModule.Test",
-    "rootNamespace": "CameraModule.Test",
+    "name": "ViewModule.Test",
+    "rootNamespace": "ViewModule.Test",
     "references": [
         "UnityEditor.TestRunner",
-        "CameraModule"
+        "ViewModule"
     ],
     "includePlatforms": [
         "Editor"
@@ -11,7 +11,9 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "NSubstitute.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

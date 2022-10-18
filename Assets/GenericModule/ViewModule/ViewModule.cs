@@ -1,219 +1,187 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using GameCore.Exposed;
+using GameCore.Generic.Infrastructure;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 
 namespace ViewModule
 {
-    public class ViewModule : BaseModule
+    public class ViewModule
     {
         //private variable
-        private LogModule _logModule;
-        private ResourcesModule _resourcesModule;
+        private ITimeProvider _timeProvider;
 
         private const string VIEW_PARENT_TRASFORM_NAME = "ViewParent";
-
-        private List<GameObject> _viewPrefabs;
-
-        private Dictionary<string, IView> _views;
-        private List<IView> _visibleViews;
-
         private Transform _viewParentTransform;
-
-        //public variable
-        public const string VIEW_DATA_OVERVIEW = "ViewDataOverView";
-        public IReadOnlyDictionary<string, IView> Views => _views;
-        public IList<IView> VisibleViews => _visibleViews;
+        private Dictionary<string, IView> _viewTemplates;
 
 
-        //module flow
-        public override void Initialize(params object[] param)
+        private Dictionary<string, IView> _views = new Dictionary<string, IView>();
+        private List<string> _isVisibleViewNames = new List<string>();
+
+        private List<string> _waitingReleaseViewNames = new List<string>();
+        private List<string> _isShowingViewNames = new List<string>();
+        private List<string> _isHidingViewNames = new List<string>();
+
+
+        //zenject callback
+        public void Tick()
         {
-            if (param.Length != 2 || !(param[0] is LogModule logModule) ||
-                !(param[1] is ViewDataOverview viewDataOverview))
-            {
-                _logModule.Log(LogModule.LogLevels.Error, "[GameLoopModule::Initialize] fail.");
-                return;
-            }
+            var deltaTime = _timeProvider.GetDeltaTime();
 
-            _logModule = logModule;
-            _viewPrefabs = viewDataOverview.GetViewPrefabs();
-
-            _views = new Dictionary<string, IView>();
-            _visibleViews = new List<IView>();
-
-            _viewParentTransform = new GameObject(VIEW_PARENT_TRASFORM_NAME).transform;
-
-        }
-
-        public override void Release(params object[] param)
-        {
-            _viewPrefabs = null;
-            _views = null;
-            _visibleViews = null;
-
-            Object.DestroyImmediate(_viewParentTransform.gameObject);
-        }
-
-        public override void OnUpdate(float delta)
-        {
-            foreach (var visibleView in VisibleViews)
-                visibleView.OnUpdate(delta);
+            UpdateWaitingReleaseViews(_waitingReleaseViewNames.ToArray());
+            UpdateIsShowingViews(_isShowingViewNames.ToArray());
+            UpdateIsHidingViews(_isHidingViewNames.ToArray());
+            UpdateIsVisibleViews(deltaTime, _isVisibleViewNames.ToArray());
         }
 
 
         //public method
-        public void RegisterView(IView view)
+        public ViewModule(ITimeProvider timeProvider, IViewDataOverview viewDataOverview)
         {
-            var viewName = view.Name;
+            _timeProvider = timeProvider;
+            _viewTemplates = viewDataOverview.GetViewTemplates();
 
-            if (_views.ContainsKey(viewName))
-            {
-                _logModule.Log(LogModule.LogLevels.Debug,
-                               $"[ViewModule::RegisterView] View is registered. ViewName: {viewName}");
-                return;
-            }
 
-            _views.Add(viewName, view);
+            var viewParent = new GameObject(VIEW_PARENT_TRASFORM_NAME);
+            _viewParentTransform = viewParent.transform;
         }
+
+
+        public T GetViewComponent<T>(string viewName) => _views[viewName].GameObject.GetComponent<T>();
+
+        public bool GetIsVisibleView(string viewName) => _isVisibleViewNames.Contains(viewName);
+        public bool GetIsShowing(string viewName) => _views[viewName].IsShowing;
+        public bool GetIsHiding(string viewName) => _views[viewName].IsHiding;
+
 
         public void LoadView(string viewName)
         {
-            if (_views.ContainsKey(viewName))
-            {
-                _logModule.Log(LogModule.LogLevels.Debug, $"[ViewModule::LoadView] View exists. ViewName: {viewName}");
-                return;
-            }
+            Assert.IsTrue(_viewTemplates.ContainsKey(viewName),
+                          $"[ViewModule::LoadView] ViewTemplates hasn't viewTemplate: {viewName}.");
+            Assert.IsTrue(!_views.ContainsKey(viewName), $"[ViewModule::LoadView] View exists. ViewName: {viewName}.");
 
-            var viewPrefab = _viewPrefabs.Find(prefab => prefab.GetComponent<IView>().Name == viewName);
-            var viewGameObject = Object.Instantiate(viewPrefab, _viewParentTransform);
+            var viewTemplate = _viewTemplates[viewName];
+            var viewGameObject = Object.Instantiate(viewTemplate.GameObject, _viewParentTransform);
             var view = viewGameObject.GetComponent<IView>();
             view.Init();
+            view.Hide();
 
             _views.Add(viewName, view);
         }
 
-        public void LoadAllView()
+        public void LoadAllViews()
         {
-            foreach (var viewPrefab in _viewPrefabs)
+            foreach (var template in _viewTemplates)
             {
-                var viewName = viewPrefab.GetComponent<IView>().Name;
+                var viewName = template.Key;
                 LoadView(viewName);
             }
         }
 
         public void ReleaseView(string viewName)
         {
-            if (!_views.ContainsKey(viewName))
+            Assert.IsTrue(_views.ContainsKey(viewName), $"[ViewModule::ReleaseView] Views hasn't view: {viewName}.");
+
+            if (_isVisibleViewNames.Contains(viewName))
+                HideView(viewName);
+
+            _waitingReleaseViewNames.Add(viewName);
+        }
+
+        public void ReleaseAllViews()
+        {
+            foreach (var template in _viewTemplates)
             {
-                _logModule.Log(LogModule.LogLevels.Debug,
-                               $"[ViewModule::ReleaseView] View not exists. ViewName: {viewName}");
+                var viewName = template.Key;
+                ReleaseView(viewName);
+            }
+        }
+
+        public void ShowView(string viewName)
+        {
+            if (_isShowingViewNames.Contains(viewName) || _isVisibleViewNames.Contains(viewName) ||
+                _isHidingViewNames.Contains(viewName))
+            {
+                Debug.LogWarning($"[ViewModule::ShowView] View: {viewName} show fail.");
                 return;
             }
+
+            _isShowingViewNames.Add(viewName);
 
             var view = _views[viewName];
-            _views.Remove(viewName);
-
-            var viewGameObject = view.GameObject;
-            Object.DestroyImmediate(viewGameObject);
+            view.Show();
         }
 
-        public void ReleaseAllView()
+        public void HideView(string viewName)
         {
-            foreach (var view in _views)
+            if (_isHidingViewNames.Contains(viewName) || !_isVisibleViewNames.Contains(viewName) ||
+                _isShowingViewNames.Contains(viewName))
             {
-                var viewName = view.Value.Name;
-                LoadView(viewName);
-            }
-        }
-
-
-        public bool GetHasView(string viewName)
-        {
-            return _views.ContainsKey(viewName);
-        }
-
-        public IView GetView(string viewName)
-        {
-            if (_views.TryGetValue(viewName, out var page))
-            {
-                return page;
-            }
-
-            _logModule.Log(LogModule.LogLevels.Warn, $"[ViewModule::GetView] Can't find view with name : {viewName}");
-            return null;
-        }
-
-        public void ShowView(string viewName, bool isImmediately = false)
-        {
-            var view = GetView(viewName);
-            if (view == null)
-            {
-                _logModule.Log(LogModule.LogLevels.Error,
-                               $"[ViewModule::ShowView] View not exists. ViewName: {viewName}");
+                Debug.LogWarning($"[ViewModule::HideView] View: {viewName} hide fail.");
                 return;
             }
 
-            view.Show(isImmediately);
-            _visibleViews.Add(view);
+            _isHidingViewNames.Add(viewName);
+
+            var view = _views[viewName];
+            view.Hide();
         }
 
-        public async Task ShowViewAsync(string viewName)
+
+        //private method
+        private void UpdateWaitingReleaseViews(string[] waitingReleaseViewNames)
         {
-            var view = GetView(viewName);
-            if (view == null)
+            foreach (var waitingReleaseViewName in waitingReleaseViewNames)
             {
-                _logModule.Log(LogModule.LogLevels.Error,
-                               $"[ViewModule::ShowViewAsync] View not exists. ViewName: {viewName}");
-                return;
+                if (_isHidingViewNames.Contains(waitingReleaseViewName))
+                    continue;
+
+                _waitingReleaseViewNames.Remove(waitingReleaseViewName);
+
+                var view = _views[waitingReleaseViewName];
+                view.Release();
+                Object.DestroyImmediate(view.GameObject);
             }
-
-
-            view.Show(false);
-            while (view.IsShowing) await Task.Yield();
-            _visibleViews.Add(view);
         }
 
-
-        public void HideView(string viewName, bool isImmediately = false)
+        private void UpdateIsShowingViews(string[] isShowingViewNames)
         {
-            var view = GetView(viewName);
-            if (view == null)
+            foreach (var isShowingViewName in isShowingViewNames)
             {
-                _logModule.Log(LogModule.LogLevels.Error,
-                               $"[ViewModule::HideView] View not exists. ViewName: {viewName}");
-                return;
+                var view = _views[isShowingViewName];
+
+                if (view.IsShowing)
+                    continue;
+
+                _isShowingViewNames.Remove(isShowingViewName);
+
+                _isVisibleViewNames.Add(isShowingViewName);
             }
-
-            view.Hide(isImmediately);
-            _visibleViews.Remove(view);
         }
 
-        public async Task HideViewAsync(string viewName)
+        private void UpdateIsHidingViews(string[] isHidingViewNames)
         {
-            var view = GetView(viewName);
-            if (view == null)
+            foreach (var isHidingViewName in isHidingViewNames)
             {
-                _logModule.Log(LogModule.LogLevels.Error,
-                               $"[ViewModule::HideViewAsync] View not exists. ViewName: {viewName}");
-                return;
+                var view = _views[isHidingViewName];
+
+                if (view.IsHiding)
+                    continue;
+
+                _isHidingViewNames.Remove(isHidingViewName);
             }
-
-            view.Hide(false);
-            while (view.IsHiding) await Task.Yield();
-            _visibleViews.Remove(view);
         }
 
-
-        public void HideAllView(bool immediately = true)
+        private void UpdateIsVisibleViews(float deltaTime, string[] isVisibleViewNames)
         {
-            foreach (var viewPair in _views)
+            foreach (var visibleViewNames in isVisibleViewNames)
             {
-                var view = viewPair.Value;
+                if (!_views.ContainsKey(visibleViewNames))
+                    continue;
 
-                view.Hide(immediately);
-                _visibleViews.Remove(view);
+                var view = _views[visibleViewNames];
+                view.OnUpdate(deltaTime);
             }
         }
     }

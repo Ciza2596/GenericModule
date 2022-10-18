@@ -1,19 +1,33 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ViewModule
 {
     [CreateAssetMenu(fileName = "ViewDataOverView", menuName = "ViewModule/ViewDataOverview")]
-    public class ViewDataOverview : ScriptableObject
+    public class ViewDataOverview : ScriptableObject, IViewDataOverview
     {
-        [SerializeField] private List<GameObject> _viewPrefabs;
+        //private variable
+        [SerializeField] private List<Map> _viewPrefabMaps;
+
+        //public method
+        public Dictionary<string, IView> GetViewTemplates()
+        {
+            var viewTemplates = new Dictionary<string, IView>();
+
+            foreach (var viewPrefabMap in _viewPrefabMaps)
+                viewTemplates.Add(viewPrefabMap.Key, viewPrefabMap.ViewPrefabs.GetComponent<IView>());
 
 
-        public ViewDataOverview() { }
+            return viewTemplates;
+        }
 
-        public void InitViewDataOverview(List<GameObject> viewPrefabs) =>
-            _viewPrefabs = viewPrefabs;
 
-        public List<GameObject> GetViewPrefabs() => new List<GameObject>(_viewPrefabs);
+        [Serializable]
+        private class Map
+        {
+            public string Key;
+            public GameObject ViewPrefabs;
+        }
     }
 }

@@ -1,0 +1,50 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace ViewModule.Example
+{
+    public class NoneAnimView_Title : ViewBase
+    {
+        //private variable
+        private IViewModule _viewModule;
+
+        [SerializeField] private Button _goToLobby_Button;
+
+
+        //baseView callback
+        protected override void OnInitStart(params object[] items)
+        {
+            if (items is null || items.Length <= 0)
+                return;
+
+            if (items[0] is IViewModule viewModule)
+                _viewModule = viewModule;
+
+
+            _goToLobby_Button.onClick.AddListener(OnGoToLobbyButtonClick);
+        }
+
+        protected override void OnShowStart(params object[] items)
+        {
+            base.OnShowStart();
+        }
+
+        protected override void OnHideStart()
+        {
+            base.OnHideStart();
+        }
+
+        protected override void OnReleaseStart() { }
+
+        protected override void OnVisibleUpdateStart(float deltaTime) { }
+
+        protected override void OnUpdateStart(float deltaTime) { }
+
+        //private method
+        private void OnGoToLobbyButtonClick()
+        {
+            _viewModule.HideView(ViewConfig.TITLE_NAME);
+            _viewModule.ShowView(ViewConfig.LOBBY_NAME);
+        }
+    }
+}

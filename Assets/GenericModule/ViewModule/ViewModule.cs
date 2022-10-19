@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GameCore.Generic.Infrastructure;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -33,6 +34,7 @@ namespace ViewModule
             UpdateIsShowingViews(_isShowingViewNames.ToArray());
             UpdateIsHidingViews(_isHidingViewNames.ToArray());
             UpdateIsVisibleViews(deltaTime, _isVisibleViewNames.ToArray());
+            UpdateViews(deltaTime, _views.Keys.ToArray());
         }
 
 
@@ -55,17 +57,17 @@ namespace ViewModule
         public bool GetIsHiding(string viewName) => _views[viewName].IsHiding;
 
 
-        public void LoadView(string viewName)
+        public void LoadView(string viewName, params object[] items)
         {
             Assert.IsTrue(_viewTemplates.ContainsKey(viewName),
                           $"[ViewModule::LoadView] ViewTemplates hasn't viewTemplate: {viewName}.");
             Assert.IsTrue(!_views.ContainsKey(viewName), $"[ViewModule::LoadView] View exists. ViewName: {viewName}.");
-
+            
+            
             var viewTemplate = _viewTemplates[viewName];
             var viewGameObject = Object.Instantiate(viewTemplate.GameObject, _viewParentTransform);
             var view = viewGameObject.GetComponent<IView>();
-            view.Init();
-            view.Hide();
+            view.Init(items);
 
             _views.Add(viewName, view);
         }
@@ -98,7 +100,7 @@ namespace ViewModule
             }
         }
 
-        public void ShowView(string viewName)
+        public void ShowView(string viewName, params object[] items)
         {
             if (_isShowingViewNames.Contains(viewName) || _isVisibleViewNames.Contains(viewName) ||
                 _isHidingViewNames.Contains(viewName))
@@ -110,7 +112,7 @@ namespace ViewModule
             _isShowingViewNames.Add(viewName);
 
             var view = _views[viewName];
-            view.Show();
+            view.Show(items);
         }
 
         public void HideView(string viewName)
@@ -169,7 +171,9 @@ namespace ViewModule
                 if (view.IsHiding)
                     continue;
 
+                view.HideAfter();
                 _isHidingViewNames.Remove(isHidingViewName);
+                _isVisibleViewNames.Remove(isHidingViewName);
             }
         }
 
@@ -181,6 +185,18 @@ namespace ViewModule
                     continue;
 
                 var view = _views[visibleViewNames];
+                view.OnVisibleUpdate(deltaTime);
+            }
+        }
+
+        private void UpdateViews(float deltaTime, string[] viewNames)
+        {
+            foreach (var viewName in viewNames)
+            {
+                if (!_views.ContainsKey(viewName))
+                    continue;
+
+                var view = _views[viewName];
                 view.OnUpdate(deltaTime);
             }
         }

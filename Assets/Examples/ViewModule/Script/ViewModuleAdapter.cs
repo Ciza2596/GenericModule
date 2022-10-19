@@ -30,7 +30,7 @@ namespace ViewModule.Example
         public bool GetIsHiding(string viewName) => _viewModule.GetIsHiding(viewName);
 
 
-        public void LoadView(string viewName) => _viewModule.LoadView(viewName);
+        public void LoadView(string viewName, params object[] items) => _viewModule.LoadView(viewName, items);
         public void LoadAllViews() => _viewModule.LoadAllViews();
 
 
@@ -38,7 +38,7 @@ namespace ViewModule.Example
         public void ReleaseAllViews() => _viewModule.ReleaseAllViews();
 
 
-        public void ShowView(string viewName) => _viewModule.ShowView(viewName);
+        public void ShowView(string viewName, params object[] items) => _viewModule.ShowView(viewName, items);
         public void HideView(string viewName) => _viewModule.HideView(viewName);
 
     }

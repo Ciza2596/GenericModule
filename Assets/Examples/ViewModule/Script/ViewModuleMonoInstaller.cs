@@ -11,9 +11,10 @@ namespace ViewModule.Example
 
         public override void InstallBindings()
         {
-            Container.BindInstance(_viewDataOverview);
-            Container.BindInterfacesAndSelfTo<TimeProvider>();
-            Container.BindInterfacesAndSelfTo<ViewModuleAdapter>();
+            Container.Bind<IViewDataOverview>().FromInstance(_viewDataOverview);
+            Container.BindInterfacesAndSelfTo<TimeProvider>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ViewModuleAdapter>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ViewModulePresenter>().AsSingle();
         }
     }
 }

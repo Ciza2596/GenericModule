@@ -10,7 +10,7 @@ namespace ViewModule.Example
         public bool GetIsHiding(string viewName);
 
 
-        public void LoadView(string viewName);
+        public void LoadView(string viewName, params object[] items);
         public void LoadAllViews();
 
 
@@ -18,7 +18,7 @@ namespace ViewModule.Example
         public void ReleaseAllViews();
 
 
-        public void ShowView(string viewName);
+        public void ShowView(string viewName, params object[] items);
         public void HideView(string viewName);
         
     }

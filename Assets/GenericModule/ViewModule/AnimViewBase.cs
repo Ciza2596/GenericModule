@@ -21,12 +21,12 @@ namespace ViewModule
         //protected method
         protected override void OnShowStart(params object[] items)
         {
-            _animSettings.Animator.Play(_animSettings.ShowAnimName);
+            _animSettings.Animator.Play(_animSettings.ShowedAnimName);
         }
 
         protected override void OnHideStart()
         {
-            _animSettings.Animator.Play(_animSettings.HideAnimName);
+            _animSettings.Animator.Play(_animSettings.HidedAnimName);
         }
 
         //private method
@@ -36,10 +36,8 @@ namespace ViewModule
                 return;
 
             var stateInfo = _animSettings.Animator.GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.IsName(_animSettings.ShowAnimName) && stateInfo.normalizedTime >
-                _animSettings.CompleteNormalizedTime)
+            if (stateInfo.IsName(_animSettings.ShowedAnimName))
             {
-                _animSettings.Animator.Play(_animSettings.IdleAnimName);
                 IsShowing = false;
             }
 
@@ -51,10 +49,8 @@ namespace ViewModule
                 return;
             
             var stateInfo = _animSettings.Animator.GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.IsName(_animSettings.HideAnimName) && stateInfo.normalizedTime >
-                _animSettings.CompleteNormalizedTime)
+            if (stateInfo.IsName(_animSettings.HidedAnimName))
             {
-                _animSettings.Animator.Play(_animSettings.IdleAnimName);
                 IsHiding = false;
             }
         }
@@ -65,12 +61,10 @@ namespace ViewModule
         private class Settings
         {
             public Animator Animator;
-            public float CompleteNormalizedTime = 0.95f; 
 
             [Space] 
-            public string IdleAnimName = "Idle";
-            public string ShowAnimName = "Show";
-            public string HideAnimName = "Hide";
+            public string ShowedAnimName = "Showed";
+            public string HidedAnimName = "Hided";
         }
     }
 }

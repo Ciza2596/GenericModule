@@ -6,7 +6,7 @@ namespace ViewModule.Example
     public class NoneAnimView_Title : ViewBase
     {
         //private variable
-        private IViewModule _viewModule;
+        private ViewModule _viewModule;
 
         [SerializeField] private Button _goToLobby_Button;
 
@@ -17,7 +17,7 @@ namespace ViewModule.Example
             if (items is null || items.Length <= 0)
                 return;
 
-            if (items[0] is IViewModule viewModule)
+            if (items[0] is ViewModule viewModule)
                 _viewModule = viewModule;
 
 

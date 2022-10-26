@@ -4,17 +4,17 @@ using System.Linq;
 using GameCore.Generic.Infrastructure;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Zenject;
 using Object = UnityEngine.Object;
 
 
 namespace ViewModule
 {
-    public class ViewModule
+    public class ViewModule: ITickable
     {
         //private variable
         private ITimeProvider _timeProvider;
 
-        private const string VIEW_PARENT_TRASFORM_NAME = "ViewParent";
         private Transform _viewParentTransform;
         private Dictionary<string, IView> _viewTemplates;
 
@@ -47,9 +47,9 @@ namespace ViewModule
         {
             _timeProvider = timeProvider;
             _viewTemplates = viewDataOverview.GetViewTemplates();
-
-
-            var viewParent = new GameObject(VIEW_PARENT_TRASFORM_NAME);
+            
+            var viewParentTransformName = viewDataOverview.GetViewParentTransformName();
+            var viewParent = new GameObject(viewParentTransformName);
             _viewParentTransform = viewParent.transform;
         }
 

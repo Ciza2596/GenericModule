@@ -4,7 +4,7 @@ namespace ViewModule.Example
 {
     public class ViewModulePresenter: IInitializable
     {
-        private IViewModule _viewModule;
+        private ViewModule _viewModule;
         
         
         //zenject callback
@@ -16,7 +16,7 @@ namespace ViewModule.Example
         }
         
         //public method
-        public ViewModulePresenter(IViewModule viewModule)
+        public ViewModulePresenter(ViewModule viewModule)
         {
             _viewModule = viewModule;
         }

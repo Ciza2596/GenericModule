@@ -2,6 +2,7 @@
     "name": "ViewModule",
     "rootNamespace": "ViewModule",
     "references": [
+        "Zenject",
         "GameCore.Infrastructure"
     ],
     "includePlatforms": [],

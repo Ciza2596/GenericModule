@@ -13,7 +13,7 @@ namespace ViewModule.Example
         {
             Container.Bind<IViewDataOverview>().FromInstance(_viewDataOverview);
             Container.BindInterfacesAndSelfTo<TimeProvider>().AsSingle();
-            Container.BindInterfacesAndSelfTo<ViewModuleAdapter>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ViewModule>().AsSingle();
             Container.BindInterfacesAndSelfTo<ViewModulePresenter>().AsSingle();
         }
     }

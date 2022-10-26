@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e4b2d14ad7d2404aa4dacc2e3b26480, type: 3}
-  m_Name: Anim_ViewDataOverView
+  m_Name: HasLoading_ViewDataOverView
   m_EditorClassIdentifier: 
   _viewParentTransformName: ViewParent
   _viewPrefabMaps:
+  - Key: Loading
+    ViewPrefabs: {fileID: 2890687551205818294, guid: 3dc581fd59e16974aba90c52dc228403, type: 3}
   - Key: Title
     ViewPrefabs: {fileID: 5727842697396907951, guid: 7989d2d4640496c4587decaa25e0f12f, type: 3}
   - Key: Lobby

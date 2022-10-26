@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -8,11 +7,11 @@ namespace ViewModule
     {
         //private variable
         [SerializeField] private Settings _animSettings;
-
-        private bool _isPlayingShowAnim;
         private bool _isPlayingHideAnim;
 
-        
+        private bool _isPlayingShowAnim;
+
+
         //viewBase callback
         protected override void OnUpdateStart(float deltaTime)
         {
@@ -23,7 +22,7 @@ namespace ViewModule
 
         //protected method
         protected override void OnShow(params object[] items)
-        { 
+        {
             _animSettings.Animator.Play(_animSettings.ShowAnimName);
             _isPlayingShowAnim = true;
         }
@@ -37,7 +36,7 @@ namespace ViewModule
         //private method
         private void UpdateShowView()
         {
-            if(!IsShowing || !_isPlayingShowAnim)
+            if (!IsShowing || !_isPlayingShowAnim)
                 return;
 
             var stateInfo = _animSettings.Animator.GetCurrentAnimatorStateInfo(0);
@@ -46,14 +45,13 @@ namespace ViewModule
                 IsShowing = false;
                 _isPlayingShowAnim = false;
             }
-
         }
 
         private void UpdateHideView()
         {
-            if(!IsHiding || !_isPlayingHideAnim)
+            if (!IsHiding || !_isPlayingHideAnim)
                 return;
-            
+
             var stateInfo = _animSettings.Animator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.IsName(_animSettings.HidedAnimName))
             {
@@ -69,11 +67,12 @@ namespace ViewModule
         {
             public Animator Animator;
 
-            [Space]
-            
-            public string ShowAnimName = "Show";
+            [Space] public string ShowAnimName = "Show";
+
             public string ShowedAnimName = "Showed";
-            public string HideAnimName = "Hide";
+
+            [Space] public string HideAnimName = "Hide";
+
             public string HidedAnimName = "Hided";
         }
     }

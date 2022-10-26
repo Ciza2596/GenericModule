@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4b2d14ad7d2404aa4dacc2e3b26480, type: 3}
   m_Name: NoneAnim_ViewDataOverView
   m_EditorClassIdentifier: 
+  _viewParentTransformName: ViewParent
   _viewPrefabMaps:
   - Key: Loading
     ViewPrefabs: {fileID: 2890687551205818294, guid: 3dc581fd59e16974aba90c52dc228403, type: 3}

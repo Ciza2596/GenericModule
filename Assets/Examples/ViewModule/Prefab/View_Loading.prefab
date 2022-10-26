@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 1551381026140409383}
   - component: {fileID: 2890687551205818296}
   m_Layer: 0
-  m_Name: NoneAnimView_Loading
+  m_Name: View_Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

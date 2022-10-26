@@ -8,9 +8,13 @@ namespace ViewModule
     public class ViewDataOverview : ScriptableObject, IViewDataOverview
     {
         //private variable
-        [SerializeField] private List<Map> _viewPrefabMaps;
+        [SerializeField] private string _viewParentTransformName = "ViewParent";
+        [Space] [SerializeField] private List<Map> _viewPrefabMaps;
 
         //public method
+        public string GetViewParentTransformName() => _viewParentTransformName;
+
+
         public Dictionary<string, IView> GetViewTemplates()
         {
             var viewTemplates = new Dictionary<string, IView>();

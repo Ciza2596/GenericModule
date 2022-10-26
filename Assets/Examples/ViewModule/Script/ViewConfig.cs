@@ -6,5 +6,6 @@ namespace ViewModule.Example
     {
         public const string TITLE_NAME = "Title";
         public const string LOBBY_NAME = "Lobby";
+        public const string FADE_NAME = "Fade";
     }
 }

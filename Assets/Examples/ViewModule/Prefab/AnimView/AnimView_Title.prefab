@@ -621,10 +621,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animSettings:
     Animator: {fileID: 7068297206113357228}
-    CompleteNormalizedTime: 0.95
-    IdleAnimName: Idle
     ShowAnimName: Show
+    ShowedAnimName: Showed
     HideAnimName: Hide
+    HidedAnimName: Hided
   _goToLobby_Button: {fileID: 1614694050497172866}
 --- !u!225 &5727842697396907937
 CanvasGroup:

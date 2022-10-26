@@ -12,7 +12,7 @@ namespace ViewModule.Example
 
 
         //baseView callback
-        protected override void OnInitStart(params object[] items)
+        protected override void OnInit(params object[] items)
         {
             if (items is null || items.Length <= 0)
                 return;
@@ -24,17 +24,17 @@ namespace ViewModule.Example
             _goToLobby_Button.onClick.AddListener(OnGoToLobbyButtonClick);
         }
 
-        protected override void OnShowStart(params object[] items)
+        protected override void OnShow(params object[] items)
         {
-            base.OnShowStart();
+            base.OnShow();
         }
 
-        protected override void OnHideStart()
+        protected override void OnHide()
         {
-            base.OnHideStart();
+            base.OnHide();
         }
 
-        protected override void OnReleaseStart() { }
+        protected override void OnRelease() { }
 
         protected override void OnVisibleUpdateStart(float deltaTime) { }
         
@@ -42,8 +42,7 @@ namespace ViewModule.Example
         //private method
         private void OnGoToLobbyButtonClick()
         {
-            _viewModule.HideView(ViewConfig.TITLE_NAME);
-            _viewModule.ShowView(ViewConfig.LOBBY_NAME);
+            _viewModule.HideView(ViewConfig.TITLE_NAME, () => _viewModule.ShowView(ViewConfig.LOBBY_NAME));
         }
     }
 }

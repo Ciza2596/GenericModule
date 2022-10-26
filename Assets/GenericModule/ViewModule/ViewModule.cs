@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameCore.Generic.Infrastructure;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Object = UnityEngine.Object;
 
 
 namespace ViewModule
@@ -23,6 +25,8 @@ namespace ViewModule
         private List<string> _waitingReleaseViewNames = new List<string>();
         private List<string> _isShowingViewNames = new List<string>();
         private List<string> _isHidingViewNames = new List<string>();
+
+        private Dictionary<string, Action> _onCompletedActions = new Dictionary<string, Action>();
 
 
         //zenject callback
@@ -115,7 +119,7 @@ namespace ViewModule
             view.Show(items);
         }
 
-        public void HideView(string viewName)
+        public void HideView(string viewName, Action onCompletedAction = null)
         {
             if (_isHidingViewNames.Contains(viewName) || !_isVisibleViewNames.Contains(viewName) ||
                 _isShowingViewNames.Contains(viewName))
@@ -123,6 +127,10 @@ namespace ViewModule
                 Debug.LogWarning($"[ViewModule::HideView] View: {viewName} hide fail.");
                 return;
             }
+
+            if (onCompletedAction != null)
+                _onCompletedActions.Add(viewName, onCompletedAction);
+            
 
             _isHidingViewNames.Add(viewName);
 
@@ -174,6 +182,13 @@ namespace ViewModule
                 view.HideAfter();
                 _isHidingViewNames.Remove(isHidingViewName);
                 _isVisibleViewNames.Remove(isHidingViewName);
+
+                if (_onCompletedActions.ContainsKey(isHidingViewName))
+                {
+                    var onCompletedAction = _onCompletedActions[isHidingViewName];
+                    _onCompletedActions.Remove(isHidingViewName);
+                    onCompletedAction();
+                }
             }
         }
 

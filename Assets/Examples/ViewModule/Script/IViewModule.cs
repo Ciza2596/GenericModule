@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace ViewModule.Example
 {
     public interface IViewModule
@@ -19,7 +21,7 @@ namespace ViewModule.Example
 
 
         public void ShowView(string viewName, params object[] items);
-        public void HideView(string viewName);
+        public void HideView(string viewName, Action onCompletedAction = null);
         
     }
 }

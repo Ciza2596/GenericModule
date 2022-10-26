@@ -19,7 +19,7 @@ namespace ViewModule
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             HideCanvasGroup();
-            OnInitStart(items);
+            OnInit(items);
         }
 
         public void Show(params object[] items)
@@ -27,14 +27,14 @@ namespace ViewModule
             IsHiding = false;
             IsShowing = true;
             ShowCanvasGroup();
-            OnShowStart(items);
+            OnShow(items);
         }
 
         public void Hide()
         {
             IsShowing = false;
             IsHiding = true;
-            OnHideStart();
+            OnHide();
         }
 
         public void HideAfter()
@@ -42,7 +42,7 @@ namespace ViewModule
             HideCanvasGroup();
         }
 
-        public void Release() => OnReleaseStart();
+        public void Release() => OnRelease();
         public void OnVisibleUpdate(float deltaTime) => OnVisibleUpdateStart(deltaTime);
 
         public void OnUpdate(float deltaTime)
@@ -52,10 +52,10 @@ namespace ViewModule
 
 
         //protected method
-        protected abstract void OnInitStart(params object[] items);
-        protected virtual void OnShowStart(params object[] items) => IsShowing = false;
-        protected virtual void OnHideStart() => IsHiding = false;
-        protected abstract void OnReleaseStart();
+        protected abstract void OnInit(params object[] items);
+        protected virtual void OnShow(params object[] items) => IsShowing = false;
+        protected virtual void OnHide() => IsHiding = false;
+        protected abstract void OnRelease();
 
 
         protected abstract void OnVisibleUpdateStart(float deltaTime);

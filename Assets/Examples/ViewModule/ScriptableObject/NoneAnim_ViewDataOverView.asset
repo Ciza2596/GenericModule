@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: NoneAnim_ViewDataOverView
   m_EditorClassIdentifier: 
   _viewPrefabMaps:
+  - Key: Loading
+    ViewPrefabs: {fileID: 2890687551205818294, guid: 3dc581fd59e16974aba90c52dc228403, type: 3}
   - Key: Title
     ViewPrefabs: {fileID: 5727842697396907951, guid: 5eedd034bb151ad4999dba7bb1c55abc, type: 3}
   - Key: Lobby

@@ -1,3 +1,4 @@
+using System;
 using GameCore.Generic.Infrastructure;
 using Zenject;
 
@@ -39,7 +40,7 @@ namespace ViewModule.Example
 
 
         public void ShowView(string viewName, params object[] items) => _viewModule.ShowView(viewName, items);
-        public void HideView(string viewName) => _viewModule.HideView(viewName);
+        public void HideView(string viewName, Action onCompletedAction = null) => _viewModule.HideView(viewName, onCompletedAction);
 
     }
     

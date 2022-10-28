@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example
 {
-    public class FadeView_Lobby : AnimViewBase
+    public class FadeView_Lobby : ViewBase
     {
         //private variable
         private ViewModule _viewModule;
@@ -25,7 +25,7 @@ namespace ViewModule.Example
 
         protected override void OnShow(params object[] items)
         {
-            base.OnShow();
+            base.OnShow(items);
         }
 
         protected override void OnHide()
@@ -40,8 +40,13 @@ namespace ViewModule.Example
         //private method
         private void OnGoToTitleButtonClick()
         {
-            _viewModule.HideView(ViewConfig.LOBBY_NAME,
-                                 () => _viewModule.ShowView(ViewConfig.FADE_NAME, ViewConfig.TITLE_NAME));
+            _viewModule.HideViewThenFadeIn(ViewTypes.FadeIn.ToString(), ViewTypes.Lobby.ToString(),
+                                           () =>
+                                           {
+                                               _viewModule.ShowView(
+                                                   ViewTypes.Loading.ToString(), ViewTypes.FadeOut.ToString(),
+                                                   ViewTypes.Title.ToString());
+                                           });
         }
     }
 }

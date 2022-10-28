@@ -59,9 +59,9 @@ namespace ViewModule
 
 
         protected abstract void OnVisibleUpdateStart(float deltaTime);
-        protected abstract void OnUpdateStart(float deltaTime);
-        
-        
+        protected virtual void OnUpdateStart(float deltaTime) { }
+
+
         //private method
         private void ShowCanvasGroup()
         {

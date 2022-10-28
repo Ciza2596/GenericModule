@@ -10,10 +10,13 @@ namespace ViewModule.Example
         //zenject callback
         public void Initialize()
         {
-            _viewModule.LoadView(ViewConfig.TITLE_NAME, _viewModule);
-            _viewModule.ShowView(ViewConfig.TITLE_NAME);
-            _viewModule.LoadView(ViewConfig.LOBBY_NAME, _viewModule);
-            _viewModule.LoadView(ViewConfig.FADE_NAME, _viewModule);
+            _viewModule.LoadView(ViewTypes.Title.ToString(), _viewModule);
+            _viewModule.LoadView(ViewTypes.Lobby.ToString(), _viewModule);
+            _viewModule.LoadView(ViewTypes.FadeIn.ToString(), _viewModule);
+            _viewModule.LoadView(ViewTypes.Loading.ToString(), _viewModule);
+            _viewModule.LoadView(ViewTypes.FadeOut.ToString(), _viewModule);
+            
+            _viewModule.ShowView(ViewTypes.Title.ToString());
         }
         
         //public method

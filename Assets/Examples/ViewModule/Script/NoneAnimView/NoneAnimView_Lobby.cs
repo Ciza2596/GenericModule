@@ -53,8 +53,8 @@ namespace ViewModule.Example
         //private method
         private void OnGoToTitleButtonClick()
         {
-            _viewModule.HideView(ViewConfig.LOBBY_NAME);
-            _viewModule.ShowView(ViewConfig.TITLE_NAME);
+            _viewModule.HideView(ViewTypes.Lobby.ToString());
+            _viewModule.ShowView(ViewTypes.Title.ToString());
         }
     }
     

@@ -14,6 +14,6 @@ namespace ViewModule
         void HideAfter();
         void Release(); // release 時，會跑一遍。
         void OnVisibleUpdate(float deltaTime);  //只有在顯示時才會跑。
-        void OnUpdate(float deltaTime);        //會一直更新
+        void OnUpdate(float deltaTime);        //Show的當下就會update
     }
 }

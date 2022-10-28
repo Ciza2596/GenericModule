@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2822651327678798748}
   - component: {fileID: 6503856160512358394}
   m_Layer: 0
-  m_Name: FadeView_Fade
+  m_Name: FadeView_Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1963f4bf463f6f249baf59de1df49f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadingTime: 5
+  _loadingTime: 1
 --- !u!225 &6503856160512358394
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4245283, g: 0.17021182, b: 0.17021182, a: 1}
+  m_Color: {r: 0.39215687, g: 0.15686275, b: 0.15686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

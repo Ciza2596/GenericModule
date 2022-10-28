@@ -41,8 +41,7 @@ namespace ViewModule
             UpdateViews(deltaTime, _canUpdateViewNames.ToArray());
         }
 
-
-        //public method
+        //public method 
         public ViewModule(ITimeProvider timeProvider, IViewDataOverview viewDataOverview)
         {
             _timeProvider = timeProvider;

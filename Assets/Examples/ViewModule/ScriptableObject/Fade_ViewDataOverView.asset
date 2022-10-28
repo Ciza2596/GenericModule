@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _viewParentTransformName: ViewParent
   _viewPrefabMaps:
-  - Key: Fade
+  - Key: FadeIn
+    ViewPrefabs: {fileID: 7670923683327212693, guid: 41f1fe7bef9423642818bd6a607ff62b, type: 3}
+  - Key: Loading
     ViewPrefabs: {fileID: 6503856160512358388, guid: 3dc581fd59e16974aba90c52dc228403, type: 3}
+  - Key: FadeOut
+    ViewPrefabs: {fileID: 1611685799388582324, guid: f22218c09594f014c9d6bae2c0cb0fa1, type: 3}
   - Key: Title
     ViewPrefabs: {fileID: 6915256060033040809, guid: 30259a8779d53614f966bde8905e00bf, type: 3}
   - Key: Lobby

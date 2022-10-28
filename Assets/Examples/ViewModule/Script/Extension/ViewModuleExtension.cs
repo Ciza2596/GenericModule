@@ -1,21 +1,20 @@
-
+using System;
 
 namespace ViewModule
 {
     public static class ViewModuleExtension
     {
-
-        public static void ShowViewByFade(this ViewModule viewModule, string fadeViewName, string viewName, params object[] items)
+        public static void ShowViewThenFadeOut(this ViewModule viewModule, string fadeOutViewName, string showViewName,
+                                               params object[] items)
         {
-            var length = items.Length + 1;
-            var varItems = new object[length];
-            varItems[0] = viewName;
-
-            for (int i = 1; i < length; i++)
-                varItems[i] = items[i - 1];
-            
-            viewModule.ShowView(fadeViewName, varItems);
+            viewModule.ShowView(fadeOutViewName, fadeOutViewName);
+            viewModule.ShowView(showViewName, items);
         }
 
+        public static void HideViewThenFadeIn(this ViewModule viewModule, string fadeInViewName, string hideViewName,
+                                              Action onCompletedAction = null)
+        {
+            viewModule.ShowView(fadeInViewName, fadeInViewName, hideViewName, onCompletedAction);
+        }
     }
 }

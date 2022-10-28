@@ -44,7 +44,7 @@ namespace ViewModule.Example
         //private method
         private void OnGoToLobbyButtonClick()
         {
-            _viewModule.HideView(ViewConfig.TITLE_NAME, () => _viewModule.ShowView(ViewConfig.LOBBY_NAME));
+            _viewModule.HideView(ViewTypes.Title.ToString(), () => _viewModule.ShowView(ViewTypes.Lobby.ToString()));
         }
     }
 }

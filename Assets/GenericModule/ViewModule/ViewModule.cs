@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GameCore.Generic.Infrastructure;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -21,6 +20,7 @@ namespace ViewModule
 
         private Dictionary<string, IView> _views = new Dictionary<string, IView>();
         private List<string> _isVisibleViewNames = new List<string>();
+        private List<string> _canUpdateViewNames = new List<string>();
 
         private List<string> _waitingReleaseViewNames = new List<string>();
         private List<string> _isShowingViewNames = new List<string>();
@@ -38,7 +38,7 @@ namespace ViewModule
             UpdateIsShowingViews(_isShowingViewNames.ToArray());
             UpdateIsHidingViews(_isHidingViewNames.ToArray());
             UpdateIsVisibleViews(deltaTime, _isVisibleViewNames.ToArray());
-            UpdateViews(deltaTime, _views.Keys.ToArray());
+            UpdateViews(deltaTime, _canUpdateViewNames.ToArray());
         }
 
 
@@ -113,6 +113,7 @@ namespace ViewModule
                 return;
             }
 
+            _canUpdateViewNames.Add(viewName);
             _isShowingViewNames.Add(viewName);
 
             var view = _views[viewName];
@@ -182,6 +183,7 @@ namespace ViewModule
                 view.HideAfter();
                 _isHidingViewNames.Remove(isHidingViewName);
                 _isVisibleViewNames.Remove(isHidingViewName);
+                _canUpdateViewNames.Remove(isHidingViewName);
 
                 if (_onCompletedActions.ContainsKey(isHidingViewName))
                 {
@@ -204,14 +206,14 @@ namespace ViewModule
             }
         }
 
-        private void UpdateViews(float deltaTime, string[] viewNames)
+        private void UpdateViews(float deltaTime, string[] canUpdateViewNames)
         {
-            foreach (var viewName in viewNames)
+            foreach (var canUpdateViewName in canUpdateViewNames)
             {
-                if (!_views.ContainsKey(viewName))
+                if (!_views.ContainsKey(canUpdateViewName))
                     continue;
 
-                var view = _views[viewName];
+                var view = _views[canUpdateViewName];
                 view.OnUpdate(deltaTime);
             }
         }

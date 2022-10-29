@@ -1,7 +1,6 @@
 using UnityEngine;
-using ViewModule.Example;
 
-namespace ViewModule
+namespace ViewModule.Example
 {
     public class FadeView_Loading : ViewBase
     {

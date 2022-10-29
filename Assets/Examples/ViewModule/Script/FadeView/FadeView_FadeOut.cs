@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace ViewModule
+namespace ViewModule.Example
 {
     public class FadeView_FadeOut : FadeOutViewBase
     {

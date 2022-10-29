@@ -1,6 +1,4 @@
 
-using System;
-
 namespace ViewModule
 {
     public abstract class FadeOutViewBase : ViewBase

@@ -1,4 +1,4 @@
-# GenericModule
+# ViewModule
 
 ## add package from git URL
 ```

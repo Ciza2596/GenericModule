@@ -24,7 +24,7 @@ namespace ViewModule
                 () =>
                 {
                     viewModule.ShowView(
-                        loadingViewName, fadeOutViewName,
+                        loadingViewName, loadingViewName, fadeOutViewName,
                         showViewName);
                 });
         }

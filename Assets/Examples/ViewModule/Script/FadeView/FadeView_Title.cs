@@ -34,21 +34,20 @@ namespace ViewModule.Example
             base.OnHide();
         }
 
-        protected override void OnRelease() { }
+        protected override void OnRelease()
+        {
+        }
 
-        protected override void OnVisibleUpdateStart(float deltaTime) { }
+        protected override void OnVisibleUpdateStart(float deltaTime)
+        {
+        }
 
 
         //private method
         private void OnGoToLobbyButtonClick()
         {
-            _viewModule.HideViewThenFadeIn(ViewTypes.FadeIn.ToString(), ViewTypes.Title.ToString(),
-                                           () =>
-                                           {
-                                               _viewModule.ShowView(
-                                                   ViewTypes.Loading.ToString(), ViewTypes.FadeOut.ToString(),
-                                                   ViewTypes.Lobby.ToString());
-                                           });
+            _viewModule.HideViewThenFadeShow(ViewTypes.FadeIn.ToString(), ViewTypes.Title.ToString(),
+                ViewTypes.Loading.ToString(), ViewTypes.FadeOut.ToString(), ViewTypes.Lobby.ToString());
         }
     }
 }

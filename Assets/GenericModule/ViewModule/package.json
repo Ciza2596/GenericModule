@@ -17,8 +17,19 @@
   },
   "samples": [
     {
-      "displayName": "Examples",
-      "description": "ViewModule Examples",
-      "path": "Samples~/Example1"
-    }]
+      "displayName": "Example1 View",
+      "description": "Example1 View",
+      "path": "Samples~/Example1 View"
+    },
+    {
+      "displayName": "Example2 AnimView",
+      "description": "Example2 AnimView",
+      "path": "Samples~/Example2 AnimView"
+    },
+    {
+      "displayName": "Example3 FadeView",
+      "description": "Example3 FadeView",
+      "path": "Samples~/Example3 FadeView"
+    }
+  ]
 }

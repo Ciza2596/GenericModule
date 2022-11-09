@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4b2d14ad7d2404aa4dacc2e3b26480, type: 3}
+  m_Name: FadeViewDataOverView
+  m_EditorClassIdentifier: 
+  _viewParentTransformName: ViewParent
+  _viewPrefabMaps:
+  - Key: FadeIn
+    ViewPrefabs: {fileID: 7670923683327212693, guid: 41f1fe7bef9423642818bd6a607ff62b, type: 3}
+  - Key: Loading
+    ViewPrefabs: {fileID: 6503856160512358388, guid: 3dc581fd59e16974aba90c52dc228403, type: 3}
+  - Key: FadeOut
+    ViewPrefabs: {fileID: 1611685799388582324, guid: f22218c09594f014c9d6bae2c0cb0fa1, type: 3}
+  - Key: Title
+    ViewPrefabs: {fileID: 6915256060033040809, guid: 30259a8779d53614f966bde8905e00bf, type: 3}
+  - Key: Lobby
+    ViewPrefabs: {fileID: 6395491648302145969, guid: c749bcdbd56e89d43be6108394042986, type: 3}

@@ -14,19 +14,19 @@ namespace ViewModule.Example1
         [SerializeField] private Button _goToTitle_Button;
         
         //baseView callback
-        protected override void OnInit(params object[] items)
+        protected override void OnInit(params object[] parameters)
         {
-            if (items is null || items.Length <= 0)
+            if (parameters is null || parameters.Length <= 0)
                 return;
 
-            if (items[0] is ViewModule viewModule)
+            if (parameters[0] is ViewModule viewModule)
                 _viewModule = viewModule;
             
 
             _goToTitle_Button.onClick.AddListener(OnGoToTitleButtonClick);
         }
 
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
             base.OnShow();
             
@@ -41,11 +41,11 @@ namespace ViewModule.Example1
         {
         }
 
-        protected override void OnVisibleUpdateStart(float deltaTime)
+        protected override void OnVisibleTick(float deltaTime)
         {
         }
 
-        protected override void OnUpdateStart(float deltaTime)
+        protected override void OnTick(float deltaTime)
         {
             
         }

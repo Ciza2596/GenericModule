@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace ViewModule
 {
@@ -15,19 +16,23 @@ namespace ViewModule
 
 
         //view callback
-        public void Init(params object[] items)
+        public void Init(params object[] parameters)
         {
-            _canvasGroup = GetComponent<CanvasGroup>();
+            var hasCanvasGroup = TryGetComponent<CanvasGroup>(out var canvasGroup);
+            Assert.IsTrue(hasCanvasGroup, $"[ViewBase::Init] View: {GetType()} hasnt canvasGroup.");
+            
+            _canvasGroup = canvasGroup;
+
             HideCanvasGroup();
-            OnInit(items);
+            OnInit(parameters);
         }
 
-        public void Show(params object[] items)
+        public void Show(params object[] parameters)
         {
             IsHiding = false;
             IsShowing = true;
             ShowCanvasGroup();
-            OnShow(items);
+            OnShow(parameters);
         }
 
         public void Hide()
@@ -43,23 +48,23 @@ namespace ViewModule
         }
 
         public void Release() => OnRelease();
-        public void OnVisibleUpdate(float deltaTime) => OnVisibleUpdateStart(deltaTime);
+        public void VisibleTick(float deltaTime) => OnVisibleTick(deltaTime);
 
-        public void OnUpdate(float deltaTime)
+        public void Tick(float deltaTime)
         {
-            OnUpdateStart(deltaTime);
+            OnTick(deltaTime);
         }
 
 
         //protected method
-        protected abstract void OnInit(params object[] items);
-        protected virtual void OnShow(params object[] items) => IsShowing = false;
+        protected abstract void OnInit(params object[] parameters);
+        protected virtual void OnShow(params object[] parameters) => IsShowing = false;
         protected virtual void OnHide() => IsHiding = false;
         protected abstract void OnRelease();
 
 
-        protected abstract void OnVisibleUpdateStart(float deltaTime);
-        protected virtual void OnUpdateStart(float deltaTime) { }
+        protected abstract void OnVisibleTick(float deltaTime);
+        protected virtual void OnTick(float deltaTime) { }
 
 
         //private method

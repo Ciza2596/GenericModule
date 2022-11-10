@@ -11,14 +11,14 @@ namespace ViewModule.Example3
 
 
         //baseView callback
-        protected override void OnInit(params object[] items)
+        protected override void OnInit(params object[] parameters)
         {
-            base.OnInit(items);
+            base.OnInit(parameters);
         }
 
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
-            base.OnShow(items);
+            base.OnShow(parameters);
 
             _currentLoadingTime = _loadingTime;
         }
@@ -31,16 +31,16 @@ namespace ViewModule.Example3
 
         protected override void OnRelease() { }
 
-        protected override void OnVisibleUpdateStart(float deltaTime)
+        protected override void OnVisibleTick(float deltaTime)
         {
-            base.OnVisibleUpdateStart(deltaTime);
+            base.OnVisibleTick(deltaTime);
             _currentLoadingTime -= deltaTime;
 
-            if (_currentLoadingTime <= 0 && !_isCompletedLoading)
-                _isCompletedLoading = true;
+            if (_currentLoadingTime <= 0 && !_isCompleting)
+                _isCompleting = true;
 
         }
 
-        protected override void OnUpdateStart(float deltaTime) { }
+        protected override void OnTick(float deltaTime) { }
     }
 }

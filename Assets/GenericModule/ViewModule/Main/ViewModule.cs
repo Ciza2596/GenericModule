@@ -19,14 +19,15 @@ namespace ViewModule
 
 
         private Dictionary<string, IView> _views = new Dictionary<string, IView>();
-        private List<string> _isVisibleViewNames = new List<string>();
         private List<string> _canUpdateViewNames = new List<string>();
 
-        private List<string> _waitingReleaseViewNames = new List<string>();
-        private List<string> _isShowingViewNames = new List<string>();
-        private List<string> _isHidingViewNames = new List<string>();
+        private List<string> _currentShowingViewNames = new List<string>();
+        private List<string> _currentVisibleViewNames = new List<string>();
+        private List<string> _currentHidingViewNames = new List<string>();
 
-        private Dictionary<string, Action> _onCompletedActions = new Dictionary<string, Action>();
+        private List<string> _waitingReleaseViewNames = new List<string>();
+
+        private Dictionary<string, Action> _onCompleteActions = new Dictionary<string, Action>();
 
 
         //zenject callback
@@ -34,11 +35,11 @@ namespace ViewModule
         {
             var deltaTime = _timeProvider.GetDeltaTime();
 
-            UpdateWaitingReleaseViews(_waitingReleaseViewNames.ToArray());
-            UpdateIsShowingViews(_isShowingViewNames.ToArray());
-            UpdateIsHidingViews(_isHidingViewNames.ToArray());
-            UpdateIsVisibleViews(deltaTime, _isVisibleViewNames.ToArray());
-            UpdateViews(deltaTime, _canUpdateViewNames.ToArray());
+            TickWaitingReleaseViews(_waitingReleaseViewNames.ToArray());
+            TickCurrentShowingViews(_currentShowingViewNames.ToArray());
+            TickCurrentHidingViews(_currentHidingViewNames.ToArray());
+            TickIsVisibleViews(deltaTime, _currentVisibleViewNames.ToArray());
+            TickViews(deltaTime, _canUpdateViewNames.ToArray());
         }
 
         //public method 
@@ -55,12 +56,12 @@ namespace ViewModule
 
         public T GetViewComponent<T>(string viewName) => _views[viewName].GameObject.GetComponent<T>();
 
-        public bool GetIsVisibleView(string viewName) => _isVisibleViewNames.Contains(viewName);
+        public bool GetIsVisibleView(string viewName) => _currentVisibleViewNames.Contains(viewName);
         public bool GetIsShowing(string viewName) => _views[viewName].IsShowing;
         public bool GetIsHiding(string viewName) => _views[viewName].IsHiding;
 
 
-        public void LoadView(string viewName, params object[] items)
+        public void LoadView(string viewName, params object[] parameters)
         {
             Assert.IsTrue(_viewTemplates.ContainsKey(viewName),
                           $"[ViewModule::LoadView] ViewTemplates hasn't viewTemplate: {viewName}.");
@@ -70,7 +71,7 @@ namespace ViewModule
             var viewTemplate = _viewTemplates[viewName];
             var viewGameObject = Object.Instantiate(viewTemplate.GameObject, _viewParentTransform);
             var view = viewGameObject.GetComponent<IView>();
-            view.Init(items);
+            view.Init(parameters);
 
             _views.Add(viewName, view);
         }
@@ -88,7 +89,7 @@ namespace ViewModule
         {
             Assert.IsTrue(_views.ContainsKey(viewName), $"[ViewModule::ReleaseView] Views hasn't view: {viewName}.");
 
-            if (_isVisibleViewNames.Contains(viewName))
+            if (_currentVisibleViewNames.Contains(viewName))
                 HideView(viewName);
 
             _waitingReleaseViewNames.Add(viewName);
@@ -103,36 +104,36 @@ namespace ViewModule
             }
         }
 
-        public void ShowView(string viewName, params object[] items)
+        public void ShowView(string viewName, params object[] parameters)
         {
-            if (_isShowingViewNames.Contains(viewName) || _isVisibleViewNames.Contains(viewName) ||
-                _isHidingViewNames.Contains(viewName))
+            if (_currentShowingViewNames.Contains(viewName) || _currentVisibleViewNames.Contains(viewName) ||
+                _currentHidingViewNames.Contains(viewName))
             {
                 Debug.LogWarning($"[ViewModule::ShowView] View: {viewName} show fail.");
                 return;
             }
 
             _canUpdateViewNames.Add(viewName);
-            _isShowingViewNames.Add(viewName);
+            _currentShowingViewNames.Add(viewName);
 
             var view = _views[viewName];
-            view.Show(items);
+            view.Show(parameters);
         }
 
-        public void HideView(string viewName, Action onCompletedAction = null)
+        public void HideView(string viewName, Action onCompleteAction = null)
         {
-            if (_isHidingViewNames.Contains(viewName) || !_isVisibleViewNames.Contains(viewName) ||
-                _isShowingViewNames.Contains(viewName))
+            if (_currentHidingViewNames.Contains(viewName) || !_currentVisibleViewNames.Contains(viewName) ||
+                _currentShowingViewNames.Contains(viewName))
             {
                 Debug.LogWarning($"[ViewModule::HideView] View: {viewName} hide fail.");
                 return;
             }
 
-            if (onCompletedAction != null)
-                _onCompletedActions.Add(viewName, onCompletedAction);
+            if (onCompleteAction != null)
+                _onCompleteActions.Add(viewName, onCompleteAction);
             
 
-            _isHidingViewNames.Add(viewName);
+            _currentHidingViewNames.Add(viewName);
 
             var view = _views[viewName];
             view.Hide();
@@ -140,11 +141,11 @@ namespace ViewModule
 
 
         //private method
-        private void UpdateWaitingReleaseViews(string[] waitingReleaseViewNames)
+        private void TickWaitingReleaseViews(string[] waitingReleaseViewNames)
         {
             foreach (var waitingReleaseViewName in waitingReleaseViewNames)
             {
-                if (_isHidingViewNames.Contains(waitingReleaseViewName))
+                if (_currentHidingViewNames.Contains(waitingReleaseViewName))
                     continue;
 
                 _waitingReleaseViewNames.Remove(waitingReleaseViewName);
@@ -155,24 +156,24 @@ namespace ViewModule
             }
         }
 
-        private void UpdateIsShowingViews(string[] isShowingViewNames)
+        private void TickCurrentShowingViews(string[] currentShowingViewNames)
         {
-            foreach (var isShowingViewName in isShowingViewNames)
+            foreach (var isShowingViewName in currentShowingViewNames)
             {
                 var view = _views[isShowingViewName];
 
                 if (view.IsShowing)
                     continue;
 
-                _isShowingViewNames.Remove(isShowingViewName);
+                _currentShowingViewNames.Remove(isShowingViewName);
 
-                _isVisibleViewNames.Add(isShowingViewName);
+                _currentVisibleViewNames.Add(isShowingViewName);
             }
         }
 
-        private void UpdateIsHidingViews(string[] isHidingViewNames)
+        private void TickCurrentHidingViews(string[] currentHidingViewNames)
         {
-            foreach (var isHidingViewName in isHidingViewNames)
+            foreach (var isHidingViewName in currentHidingViewNames)
             {
                 var view = _views[isHidingViewName];
 
@@ -180,20 +181,20 @@ namespace ViewModule
                     continue;
 
                 view.HideAfter();
-                _isHidingViewNames.Remove(isHidingViewName);
-                _isVisibleViewNames.Remove(isHidingViewName);
+                _currentHidingViewNames.Remove(isHidingViewName);
+                _currentVisibleViewNames.Remove(isHidingViewName);
                 _canUpdateViewNames.Remove(isHidingViewName);
 
-                if (_onCompletedActions.ContainsKey(isHidingViewName))
+                if (_onCompleteActions.ContainsKey(isHidingViewName))
                 {
-                    var onCompletedAction = _onCompletedActions[isHidingViewName];
-                    _onCompletedActions.Remove(isHidingViewName);
+                    var onCompletedAction = _onCompleteActions[isHidingViewName];
+                    _onCompleteActions.Remove(isHidingViewName);
                     onCompletedAction();
                 }
             }
         }
 
-        private void UpdateIsVisibleViews(float deltaTime, string[] isVisibleViewNames)
+        private void TickIsVisibleViews(float deltaTime, string[] isVisibleViewNames)
         {
             foreach (var visibleViewNames in isVisibleViewNames)
             {
@@ -201,11 +202,11 @@ namespace ViewModule
                     continue;
 
                 var view = _views[visibleViewNames];
-                view.OnVisibleUpdate(deltaTime);
+                view.VisibleTick(deltaTime);
             }
         }
 
-        private void UpdateViews(float deltaTime, string[] canUpdateViewNames)
+        private void TickViews(float deltaTime, string[] canUpdateViewNames)
         {
             foreach (var canUpdateViewName in canUpdateViewNames)
             {
@@ -213,7 +214,7 @@ namespace ViewModule
                     continue;
 
                 var view = _views[canUpdateViewName];
-                view.OnUpdate(deltaTime);
+                view.Tick(deltaTime);
             }
         }
     }

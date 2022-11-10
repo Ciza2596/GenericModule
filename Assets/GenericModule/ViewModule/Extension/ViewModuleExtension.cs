@@ -4,28 +4,28 @@ namespace ViewModule
 {
     public static class ViewModuleExtension
     {
-        public static void ShowViewThenFadeOut(this ViewModule viewModule, string fadeOutViewName, string showViewName,
+        public static void ShowViewWithTransition(this ViewModule viewModule, string showViewName, string transitionOutViewName,
             params object[] items)
         {
-            viewModule.ShowView(fadeOutViewName, fadeOutViewName);
+            viewModule.ShowView(transitionOutViewName, transitionOutViewName);
             viewModule.ShowView(showViewName, items);
         }
 
-        public static void HideViewThenFadeIn(this ViewModule viewModule, string fadeInViewName, string hideViewName,
-            Action onCompletedAction = null)
+        public static void HideViewWithTransition(this ViewModule viewModule, string hideViewName, string transitionInViewName,
+            Action onCompleteAction = null)
         {
-            viewModule.ShowView(fadeInViewName, fadeInViewName, hideViewName, onCompletedAction);
+            viewModule.ShowView(transitionInViewName, hideViewName, transitionInViewName, onCompleteAction);
         }
 
-        public static void HideViewThenFadeShow(this ViewModule viewModule, string fadeInViewName, string hideViewName,
-            string loadingViewName, string fadeOutViewName, string showViewName)
+        public static void ChangeView(this ViewModule viewModule, string hideViewName, string transitionInViewName,
+            string loadingViewName, string showViewName, string transitionOutViewName)
         {
-            viewModule.HideViewThenFadeIn(fadeInViewName, hideViewName,
+            viewModule.HideViewWithTransition(hideViewName, transitionInViewName,
                 () =>
                 {
                     viewModule.ShowView(
-                        loadingViewName, loadingViewName, fadeOutViewName,
-                        showViewName);
+                        loadingViewName, loadingViewName, showViewName,
+                        transitionOutViewName);
                 });
         }
     }

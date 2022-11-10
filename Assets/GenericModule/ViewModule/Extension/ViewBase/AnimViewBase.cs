@@ -13,7 +13,7 @@ namespace ViewModule
 
 
         //viewBase callback
-        protected override void OnUpdateStart(float deltaTime)
+        protected override void OnTick(float deltaTime)
         {
             UpdateShowView();
             UpdateHideView();
@@ -21,7 +21,7 @@ namespace ViewModule
 
 
         //protected method
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
             _animSettings.Animator.Play(_animSettings.ShowAnimName);
             _isPlayingShowAnim = true;

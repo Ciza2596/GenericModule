@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_FadeOut : FadeOutViewBase
+    public class FadeView_FadeOut : TransitionOutViewBase
     {
         [SerializeField] private string _animFadingStateName = "Fading";
         [SerializeField] private string _animIdleStateName = "Idle";
@@ -12,17 +12,17 @@ namespace ViewModule.Example3
         
         private bool _isPlayingFadingAnim;
 
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
-            base.OnShow(items);
+            base.OnShow(parameters);
             
             _animator.Play(_animFadingStateName);
             _isPlayingFadingAnim = true;
         }
 
-        protected override void OnVisibleUpdateStart(float deltaTime)
+        protected override void OnVisibleTick(float deltaTime)
         {
-            base.OnVisibleUpdateStart(deltaTime);
+            base.OnVisibleTick(deltaTime);
             
             if(!_isPlayingFadingAnim)
                 return;
@@ -31,7 +31,7 @@ namespace ViewModule.Example3
             if (stateInfo.IsName(_animIdleStateName))
             {
                 _isPlayingFadingAnim = false;
-                _isCompletedFadeOut = true;
+                _hasCompleted = true;
             }
         }
     }

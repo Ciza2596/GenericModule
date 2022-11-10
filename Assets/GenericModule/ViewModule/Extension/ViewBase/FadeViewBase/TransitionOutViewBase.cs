@@ -1,7 +1,7 @@
 
 namespace ViewModule
 {
-    public abstract class FadeOutViewBase : ViewBase
+    public abstract class TransitionOutViewBase : ViewBase
     {
         //private variable
         private ViewModule _viewModule;
@@ -11,31 +11,31 @@ namespace ViewModule
         private bool _once;
         
         //protected variable
-        protected bool _isCompletedFadeOut;
+        protected bool _hasCompleted;
 
 
         //baseView callback
-        protected override void OnInit(params object[] items)
+        protected override void OnInit(params object[] parameters)
         {
-            if (items is null || items.Length <= 0)
+            if (parameters is null || parameters.Length <= 0)
                 return;
 
-            if (items[0] is ViewModule viewModule)
+            if (parameters[0] is ViewModule viewModule)
                 _viewModule = viewModule;
         }
 
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
-            base.OnShow(items);
+            base.OnShow(parameters);
 
             _once = true;
-            _isCompletedFadeOut = false;
+            _hasCompleted = false;
             
             
-            if(items.Length < 1)
+            if(parameters.Length < 1)
                 return;
             
-            if (items[0] is string selfViewName)
+            if (parameters[0] is string selfViewName)
                 _selfViewName = selfViewName;
         }
 
@@ -47,9 +47,9 @@ namespace ViewModule
 
         protected override void OnRelease() { }
 
-        protected override void OnVisibleUpdateStart(float deltaTime)
+        protected override void OnVisibleTick(float deltaTime)
         {
-            if (!_once || !_isCompletedFadeOut)
+            if (!_once || !_hasCompleted)
                 return;
 
             _once = false;
@@ -57,6 +57,6 @@ namespace ViewModule
             _viewModule.HideView(_selfViewName);
         }
 
-        protected override void OnUpdateStart(float deltaTime) { }
+        protected override void OnTick(float deltaTime) { }
     }
 }

@@ -110,11 +110,11 @@ namespace ViewModule
                 return;
             }
 
-            _currentVisibleViewNames.Add(viewName);
-            _currentShowingViewNames.Add(viewName);
-
             var view = _views[viewName];
             view.Show(parameters);
+            
+            _currentVisibleViewNames.Add(viewName);
+            _currentShowingViewNames.Add(viewName);
         }
 
         public void HideView(string viewName, Action onCompleteAction = null)

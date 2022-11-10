@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 namespace ViewModule.Example3
@@ -7,8 +6,7 @@ namespace ViewModule.Example3
     {
         [SerializeField] private string _animFadingStateName = "Fading";
         [SerializeField] private string _animIdleStateName = "Idle";
-        [SerializeField]
-        private Animator _animator;
+        [SerializeField] private Animator _animator;
         
         private bool _isPlayingFadingAnim;
 
@@ -17,18 +15,21 @@ namespace ViewModule.Example3
             base.OnShow(parameters);
             
             _animator.Play(_animFadingStateName);
+            _animator.Update(Time.deltaTime);
+
             _isPlayingFadingAnim = true;
         }
 
         protected override void OnVisibleTick(float deltaTime)
         {
             base.OnVisibleTick(deltaTime);
-            
+
             if(!_isPlayingFadingAnim)
                 return;
             
             var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.IsName(_animIdleStateName))
+            var isPlaying = stateInfo.IsName(_animIdleStateName);
+            if (isPlaying)
             {
                 _isPlayingFadingAnim = false;
                 _hasCompleted = true;

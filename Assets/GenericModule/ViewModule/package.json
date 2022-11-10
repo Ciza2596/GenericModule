@@ -27,9 +27,9 @@
       "path": "Samples~/Example2 AnimView"
     },
     {
-      "displayName": "Example3 FadeView",
-      "description": "Example3 FadeView",
-      "path": "Samples~/Example3 FadeView"
+      "displayName": "Example3 LoadingView",
+      "description": "Example3 LoadingView",
+      "path": "Samples~/Example3 LoadingView"
     }
   ]
 }

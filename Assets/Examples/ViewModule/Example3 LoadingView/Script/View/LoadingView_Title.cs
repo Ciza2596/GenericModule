@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_Title : BaseView
+    public class LoadingView_Title : BaseView
     {
         //private variable
         private ViewModule _viewModule;

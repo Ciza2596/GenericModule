@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 6444041132555277404}
   - component: {fileID: 6395491648302145971}
   m_Layer: 0
-  m_Name: FadeView_Lobby
+  m_Name: LoadingView_Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

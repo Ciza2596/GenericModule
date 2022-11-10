@@ -53,7 +53,7 @@ namespace ViewModule
 
 
         public T GetViewComponent<T>(string viewName) => _views[viewName].GameObject.GetComponent<T>();
-        public bool GetIsVisibleView(string viewName) => _currentVisibleViewNames.Contains(viewName);
+        public bool GetIsVisible(string viewName) => _currentVisibleViewNames.Contains(viewName);
         public bool GetIsShowing(string viewName) => _views[viewName].IsShowing;
         public bool GetIsHiding(string viewName) => _views[viewName].IsHiding;
 

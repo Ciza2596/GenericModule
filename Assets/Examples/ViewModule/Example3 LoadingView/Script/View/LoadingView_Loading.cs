@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_Loading : BaseLoadingView
+    public class LoadingView_Loading : BaseLoadingView
     {
         //private variable
         [SerializeField] private int _loadingTime;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_FadeIn : BaseTransitionInView
+    public class LoadingView_FadeIn : BaseTransitionInView
     {
         [SerializeField] private string _animFadingStateName = "Fading";
         [SerializeField] private string _animIdleStateName = "Idle";

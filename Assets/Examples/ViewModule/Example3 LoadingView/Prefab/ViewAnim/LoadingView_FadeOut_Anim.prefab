@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 6646622182303926193}
   - component: {fileID: 3058636251007927261}
   m_Layer: 0
-  m_Name: FadeView_FadeOut_Anim
+  m_Name: LoadingView_FadeOut_Anim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2822651327678798748}
   - component: {fileID: 6503856160512358394}
   m_Layer: 0
-  m_Name: FadeView_Loading
+  m_Name: LoadingView_Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7640276151540203939}
   - component: {fileID: 1860441086133495123}
   m_Layer: 0
-  m_Name: FadeView_FadeIn_Anim
+  m_Name: LoadingView_FadeIn_Anim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

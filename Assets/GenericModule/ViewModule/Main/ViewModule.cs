@@ -19,7 +19,6 @@ namespace ViewModule
 
 
         private Dictionary<string, IView> _views = new Dictionary<string, IView>();
-        private List<string> _canUpdateViewNames = new List<string>();
 
         private List<string> _currentShowingViewNames = new List<string>();
         private List<string> _currentVisibleViewNames = new List<string>();
@@ -38,8 +37,7 @@ namespace ViewModule
             TickWaitingReleaseViews(_waitingReleaseViewNames.ToArray());
             TickCurrentShowingViews(_currentShowingViewNames.ToArray());
             TickCurrentHidingViews(_currentHidingViewNames.ToArray());
-            TickIsVisibleViews(deltaTime, _currentVisibleViewNames.ToArray());
-            TickViews(deltaTime, _canUpdateViewNames.ToArray());
+            TickCurrentVisibleViews(deltaTime, _currentVisibleViewNames.ToArray());
         }
 
         //public method 
@@ -55,7 +53,6 @@ namespace ViewModule
 
 
         public T GetViewComponent<T>(string viewName) => _views[viewName].GameObject.GetComponent<T>();
-
         public bool GetIsVisibleView(string viewName) => _currentVisibleViewNames.Contains(viewName);
         public bool GetIsShowing(string viewName) => _views[viewName].IsShowing;
         public bool GetIsHiding(string viewName) => _views[viewName].IsHiding;
@@ -113,7 +110,7 @@ namespace ViewModule
                 return;
             }
 
-            _canUpdateViewNames.Add(viewName);
+            _currentVisibleViewNames.Add(viewName);
             _currentShowingViewNames.Add(viewName);
 
             var view = _views[viewName];
@@ -183,7 +180,7 @@ namespace ViewModule
                 view.HideAfter();
                 _currentHidingViewNames.Remove(isHidingViewName);
                 _currentVisibleViewNames.Remove(isHidingViewName);
-                _canUpdateViewNames.Remove(isHidingViewName);
+                _currentVisibleViewNames.Remove(isHidingViewName);
 
                 if (_onCompleteActions.ContainsKey(isHidingViewName))
                 {
@@ -194,21 +191,9 @@ namespace ViewModule
             }
         }
 
-        private void TickIsVisibleViews(float deltaTime, string[] isVisibleViewNames)
+        private void TickCurrentVisibleViews(float deltaTime, string[] currentVisibleViews)
         {
-            foreach (var visibleViewNames in isVisibleViewNames)
-            {
-                if (!_views.ContainsKey(visibleViewNames))
-                    continue;
-
-                var view = _views[visibleViewNames];
-                view.VisibleTick(deltaTime);
-            }
-        }
-
-        private void TickViews(float deltaTime, string[] canUpdateViewNames)
-        {
-            foreach (var canUpdateViewName in canUpdateViewNames)
+            foreach (var canUpdateViewName in currentVisibleViews)
             {
                 if (!_views.ContainsKey(canUpdateViewName))
                     continue;

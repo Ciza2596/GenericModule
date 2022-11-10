@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example1
 {
-    public class View_Title : ViewBase
+    public class View_Title : BaseView
     {
         //private variable
         private ViewModule _viewModule;

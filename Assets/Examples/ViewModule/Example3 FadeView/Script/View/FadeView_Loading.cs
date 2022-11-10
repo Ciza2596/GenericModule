@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_Loading : LoadingViewBase
+    public class FadeView_Loading : BaseLoadingView
     {
         //private variable
         [SerializeField] private int _loadingTime;
@@ -11,25 +11,13 @@ namespace ViewModule.Example3
 
 
         //baseView callback
-        protected override void OnInit(params object[] parameters)
-        {
-            base.OnInit(parameters);
-        }
-
         protected override void OnShow(params object[] parameters)
         {
             base.OnShow(parameters);
 
             _currentLoadingTime = _loadingTime;
         }
-
-        protected override void OnHide()
-        {
-            base.OnHide();
-        }
-
-
-        protected override void OnRelease() { }
+        
 
         protected override void OnVisibleTick(float deltaTime)
         {

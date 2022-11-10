@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example1
 {
-    public class View_Lobby : ViewBase
+    public class View_Lobby : BaseView
     {
         
         //private variable
@@ -22,33 +22,9 @@ namespace ViewModule.Example1
             if (parameters[0] is ViewModule viewModule)
                 _viewModule = viewModule;
             
-
             _goToTitle_Button.onClick.AddListener(OnGoToTitleButtonClick);
         }
-
-        protected override void OnShow(params object[] parameters)
-        {
-            base.OnShow();
-            
-        }
-
-        protected override void OnHide()
-        {
-            base.OnHide();
-        }
-
-        protected override void OnRelease()
-        {
-        }
-
-        protected override void OnVisibleTick(float deltaTime)
-        {
-        }
-
-        protected override void OnTick(float deltaTime)
-        {
-            
-        }
+        
         
         //private method
         private void OnGoToTitleButtonClick()

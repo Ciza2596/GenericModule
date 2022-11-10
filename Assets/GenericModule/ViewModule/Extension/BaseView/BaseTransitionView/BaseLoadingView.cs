@@ -1,7 +1,7 @@
 
 namespace ViewModule
 {
-    public class LoadingViewBase : ViewBase
+    public class BaseLoadingView : BaseView
     {
         //private variable
         private object[] _parameters;

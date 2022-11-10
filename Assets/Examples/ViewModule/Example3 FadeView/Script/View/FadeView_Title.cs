@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example3
 {
-    public class FadeView_Title : ViewBase
+    public class FadeView_Title : BaseView
     {
         //private variable
         private ViewModule _viewModule;
@@ -19,27 +19,8 @@ namespace ViewModule.Example3
 
             if (parameters[0] is ViewModule viewModule)
                 _viewModule = viewModule;
-
-
+            
             _goToLobby_Button.onClick.AddListener(OnGoToLobbyButtonClick);
-        }
-
-        protected override void OnShow(params object[] parameters)
-        {
-            base.OnShow(parameters);
-        }
-
-        protected override void OnHide()
-        {
-            base.OnHide();
-        }
-
-        protected override void OnRelease()
-        {
-        }
-
-        protected override void OnVisibleTick(float deltaTime)
-        {
         }
 
 

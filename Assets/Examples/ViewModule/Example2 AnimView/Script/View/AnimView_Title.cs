@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example2
 {
-    public class AnimView_Title : AnimViewBase
+    public class AnimView_Title : BaseAnimView
     {
         //private variable
         private ViewModule _viewModule;
@@ -24,20 +24,6 @@ namespace ViewModule.Example2
             _goToLobby_Button.onClick.AddListener(OnGoToLobbyButtonClick);
         }
 
-        protected override void OnShow(params object[] parameters)
-        {
-            base.OnShow(parameters);
-        }
-
-        protected override void OnHide()
-        {
-            base.OnHide();
-        }
-
-        protected override void OnRelease() { }
-
-        protected override void OnVisibleTick(float deltaTime) { }
-        
 
         //private method
         private void OnGoToLobbyButtonClick()

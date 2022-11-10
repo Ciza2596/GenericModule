@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ViewModule
 {
-    public abstract class AnimViewBase : ViewBase
+    public abstract class BaseAnimView : BaseView
     {
         //private variable
         [SerializeField] private Settings _animSettings;

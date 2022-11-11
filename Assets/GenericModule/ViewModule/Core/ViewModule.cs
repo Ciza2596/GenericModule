@@ -177,7 +177,7 @@ namespace ViewModule
                 if (view.IsHiding)
                     continue;
 
-                view.HideAfter();
+                view.CompleteHiding();
                 _currentHidingViewNames.Remove(isHidingViewName);
                 _currentVisibleViewNames.Remove(isHidingViewName);
                 _currentVisibleViewNames.Remove(isHidingViewName);

@@ -42,7 +42,7 @@ namespace ViewModule
             OnHide();
         }
 
-        public void HideAfter()
+        public void CompleteHiding()
         {
             HideCanvasGroup();
         }

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ViewModule.Example1
 {
-    public class View_Title : ViewBase
+    public class View_Title : BaseView
     {
         //private variable
         private ViewModule _viewModule;
@@ -12,19 +12,19 @@ namespace ViewModule.Example1
 
 
         //baseView callback
-        protected override void OnInit(params object[] items)
+        protected override void OnInit(params object[] parameters)
         {
-            if (items is null || items.Length <= 0)
+            if (parameters is null || parameters.Length <= 0)
                 return;
 
-            if (items[0] is ViewModule viewModule)
+            if (parameters[0] is ViewModule viewModule)
                 _viewModule = viewModule;
 
 
             _goToLobby_Button.onClick.AddListener(OnGoToLobbyButtonClick);
         }
 
-        protected override void OnShow(params object[] items)
+        protected override void OnShow(params object[] parameters)
         {
             base.OnShow();
         }
@@ -37,9 +37,9 @@ namespace ViewModule.Example1
 
         protected override void OnRelease() { }
 
-        protected override void OnVisibleUpdateStart(float deltaTime) { }
+        protected override void OnVisibleTick(float deltaTime) { }
 
-        protected override void OnUpdateStart(float deltaTime) { }
+        protected override void OnTick(float deltaTime) { }
 
         //private method
         private void OnGoToLobbyButtonClick()

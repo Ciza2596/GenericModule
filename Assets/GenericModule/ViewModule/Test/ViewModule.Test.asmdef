@@ -1,8 +1,11 @@
 {
     "name": "ViewModule.Test",
-    "rootNamespace": "ViewModule.Test",
+    "rootNamespace": "",
     "references": [
         "UnityEditor.TestRunner",
+        "GameCore.Infrastructure",
+        "GameCore.Generic.TestFramework",
+        "Zenject",
         "ViewModule"
     ],
     "includePlatforms": [
@@ -10,11 +13,11 @@
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
+    "overrideReferences": false,
     "precompiledReferences": [
         "NSubstitute.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

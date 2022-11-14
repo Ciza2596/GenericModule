@@ -2,90 +2,88 @@ using NUnit.Framework;
 using UnityEngine;
 
 
-namespace CameraModule.Test
+public class CameraModuleTest
 {
-    public class CameraModuleTest
+    private CameraModule.CameraModule _cameraModule;
+
+    private Camera _camera;
+
+
+    [SetUp]
+    public void SetUp()
     {
-        private CameraModule _cameraModule;
+        
+        _cameraModule = new CameraModule.CameraModule();
 
-        private Camera _camera;
+        var cameraGameObject = new GameObject();
+        _camera = cameraGameObject.AddComponent<Camera>();
+    }
 
-
-        [SetUp]
-        public void SetUp()
-        {
-            _cameraModule = new CameraModule();
-
-            var cameraGameObject = new GameObject();
-            _camera = cameraGameObject.AddComponent<Camera>();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _cameraModule = null;
-            _camera = null;
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        _cameraModule = null;
+        _camera = null;
+    }
 
 
-        [Test]
-        public void Should_Success_When_Register()
-        {
-            //arrange
-            Assert.AreEqual(_cameraModule.Cameras.Count, 0);
+    [Test]
+    public void Should_Success_When_Register()
+    {
+        //arrange
+        Assert.AreEqual(_cameraModule.Cameras.Count, 0);
 
-            //act
-            _cameraModule.Register("123", _camera);
+        //act
+        _cameraModule.Register("123", _camera);
 
-            //Assert
-            Assert.AreEqual(_cameraModule.Cameras.Count, 1);
-        }
+        //Assert
+        Assert.AreEqual(_cameraModule.Cameras.Count, 1);
+    }
 
 
-        [TestCase("123", 1000)]
-        public void Should_Success_When_SetCameraData(string cameraName, int depth)
-        {
-            //arrange
-            var layerMask = LayerMask.GetMask("UI");
-            _cameraModule.Register(cameraName, _camera);
-            Assert.AreEqual(_cameraModule.Cameras.Count, 1);
+    [TestCase("123", 1000)]
+    public void Should_Success_When_SetCameraData(string cameraName, int depth)
+    {
+        //arrange
+        var layerMask = LayerMask.GetMask("UI");
+        _cameraModule.Register(cameraName, _camera);
+        Assert.AreEqual(_cameraModule.Cameras.Count, 1);
 
-            //act
-            _cameraModule.SetCameraData(cameraName, depth, layerMask);
+        //act
+        _cameraModule.SetCameraData(cameraName, depth, layerMask);
 
-            //Assert
-            Assert.AreEqual(_camera.depth, depth);
-            Assert.AreEqual(_camera.cullingMask, layerMask);
-        }
+        //Assert
+        Assert.AreEqual(_camera.depth, depth);
+        Assert.AreEqual(_camera.cullingMask, layerMask);
+    }
 
-        [TestCase("123")]
-        public void Should_Success_When_OpenCamera(string cameraName)
-        {
-            //arrange
-            _cameraModule.Register(cameraName, _camera);
-            Assert.AreEqual(_cameraModule.Cameras.Count, 1);
-            _camera.enabled = false;
+    [TestCase("123")]
+    public void Should_Success_When_OpenCamera(string cameraName)
+    {
+        //arrange
+        _cameraModule.Register(cameraName, _camera);
+        Assert.AreEqual(_cameraModule.Cameras.Count, 1);
+        _camera.enabled = false;
 
-            //act
-            _cameraModule.OpenCamera(cameraName);
+        //act
+        _cameraModule.OpenCamera(cameraName);
 
-            //Assert
-            Assert.AreEqual(_camera.enabled, true);
-        }
+        //Assert
+        Assert.AreEqual(_camera.enabled, true);
+    }
 
-        [TestCase("123")]
-        public void Should_Success_When_CloseCamera(string cameraName)
-        {
-            //arrange
-            _cameraModule.Register(cameraName, _camera);
-            Assert.AreEqual(_cameraModule.Cameras.Count, 1);
-            _camera.enabled = true;
+    [TestCase("123")]
+    public void Should_Success_When_CloseCamera(string cameraName)
+    {
+        //arrange
+        _cameraModule.Register(cameraName, _camera);
+        Assert.AreEqual(_cameraModule.Cameras.Count, 1);
+        _camera.enabled = true;
 
-            //act
-            _cameraModule.CloseCamera(cameraName);
+        //act
+        _cameraModule.CloseCamera(cameraName);
 
-            //Assert
-            Assert.AreEqual(_camera.enabled, false);
-        }
+        //Assert
+        Assert.AreEqual(_camera.enabled, false);
     }
 }

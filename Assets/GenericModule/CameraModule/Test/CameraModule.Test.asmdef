@@ -1,6 +1,6 @@
 {
     "name": "CameraModule.Test",
-    "rootNamespace": "CameraModule.Test",
+    "rootNamespace": "",
     "references": [
         "UnityEditor.TestRunner",
         "CameraModule"
@@ -12,7 +12,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

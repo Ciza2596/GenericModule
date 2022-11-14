@@ -34,6 +34,7 @@ namespace ViewModule
         {
             var deltaTime = _timeProvider.GetDeltaTime();
 
+            
             TickWaitingReleaseViews(_waitingReleaseViewNames.ToArray());
             TickCurrentShowingViews(_currentShowingViewNames.ToArray());
             TickCurrentHidingViews(_currentHidingViewNames.ToArray());
@@ -41,6 +42,7 @@ namespace ViewModule
         }
 
         //public method 
+
         public ViewModule(ITimeProvider timeProvider, IViewDataOverview viewDataOverview)
         {
             _timeProvider = timeProvider;
@@ -51,7 +53,7 @@ namespace ViewModule
             _viewParentTransform = viewParent.transform;
         }
 
-
+        public IReadOnlyDictionary<string, IView> Views => _views;
         public T GetViewComponent<T>(string viewName) => _views[viewName].GameObject.GetComponent<T>();
         public bool GetIsVisible(string viewName) => _currentVisibleViewNames.Contains(viewName);
         public bool GetIsShowing(string viewName) => _views[viewName].IsShowing;
@@ -71,15 +73,6 @@ namespace ViewModule
             view.Init(parameters);
 
             _views.Add(viewName, view);
-        }
-
-        public void LoadAllViews()
-        {
-            foreach (var template in _viewTemplates)
-            {
-                var viewName = template.Key;
-                LoadView(viewName);
-            }
         }
 
         public void ReleaseView(string viewName)
@@ -149,6 +142,8 @@ namespace ViewModule
 
                 var view = _views[waitingReleaseViewName];
                 view.Release();
+                
+                _views.Remove(waitingReleaseViewName);
                 Object.DestroyImmediate(view.GameObject);
             }
         }
@@ -203,4 +198,5 @@ namespace ViewModule
             }
         }
     }
+    
 }

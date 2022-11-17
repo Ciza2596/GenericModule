@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _addressMapList:
   - Address: DUNE_1
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_2
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_3
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_4
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_5
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_6
-    _assetType: 10
+    AssetType: 10
   - Address: DUNE_7
-    _assetType: 10
+    AssetType: 10

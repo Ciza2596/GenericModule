@@ -182,7 +182,6 @@ namespace AddressableModule
 
             return assetHandleInfo;
         }
-
         
         private void CallGC()
         {

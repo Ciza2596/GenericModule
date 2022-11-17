@@ -9,6 +9,8 @@ namespace AddressableModule
     {
         private const string METHOD_NAME = "GetAssetAsync";
 
+        
+        
         public static async Task LoadAssetsAsync(this AddressableModule addressableModule,
             AddressMap[] addressObjectTypeMaps)
         {
@@ -24,7 +26,6 @@ namespace AddressableModule
                 await (Task)methodInfo.Invoke(addressableModule, new object[] { address });
             }
         }
-
 
         public static void ReleaseAssets(this AddressableModule addressableModule,
             AddressMap[] addressMaps)

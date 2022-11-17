@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21fbe55044c974ba0968106b4f7fa911, type: 3}
+  m_Name: AddressMapListDataOverview
+  m_EditorClassIdentifier: 
+  _addressMapList:
+  - Address: DUNE_1
+    _assetType: 10
+  - Address: DUNE_2
+    _assetType: 10
+  - Address: DUNE_3
+    _assetType: 10
+  - Address: DUNE_4
+    _assetType: 10
+  - Address: DUNE_5
+    _assetType: 10
+  - Address: DUNE_6
+    _assetType: 10
+  - Address: DUNE_7
+    _assetType: 10

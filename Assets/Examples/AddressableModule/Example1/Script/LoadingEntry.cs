@@ -7,7 +7,7 @@ namespace AddressableModule.Example1
     {
         //private variable
         [SerializeField]
-        private AddressListDataOverview _addressListDataOverview;
+        private AddressMapListDataOverview addressMapListDataOverview;
 
         [SerializeField] private Image[] _images;
 
@@ -19,13 +19,15 @@ namespace AddressableModule.Example1
         {
             _addressableModule = new AddressableModule();
             
-            var addressList = _addressListDataOverview.GetAddressList();
-            await _addressableModule.LoadAssetsAsync(addressList);
+            var addressObjectTypeMapList = addressMapListDataOverview.GetAddressMapList();
+            await _addressableModule.LoadAssetsAsync(addressObjectTypeMapList);
 
-            var length = addressList.Length;
+            var length = addressObjectTypeMapList.Length;
             for (int i = 0; i < length; i++)
             {
-                var address = addressList[i];
+                var addressObjectTypeMap = addressObjectTypeMapList[i];
+                var address = addressObjectTypeMap.Address;
+                
                 var sprite = _addressableModule.GetAsset<Sprite>(address);
                 
                 var image = _images[i];
@@ -36,8 +38,8 @@ namespace AddressableModule.Example1
 
         private void OnDisable()
         {
-            foreach (var image in _images)
-                image.sprite = null;
+            // foreach (var image in _images)
+            //     image.sprite = null;
 
             _addressableModule.ReleaseAllAsset();
         }

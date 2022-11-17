@@ -24,17 +24,6 @@ namespace AddressableModule
         //public method
 
         //asset
-        public async Task LoadAssetsAsync(string[] addressList)
-        {
-            Assert.IsFalse(addressList == null, $"[AddressableModule::LoadAssetsAsync] AddressList is null.");
-
-            foreach (var address in addressList)
-            {
-                Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::LoadAssetsAsync] Address is null.");
-                await GetAssetHandleInfo(address);
-            }
-        }
-
         public T GetAsset<T>(string address) where T : Object
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAsset] Address is null.");
@@ -50,7 +39,7 @@ namespace AddressableModule
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAssetAsync] Address is null.");
 
-            var handleInfo = await GetAssetHandleInfo(address);
+            var handleInfo = await GetAssetHandleInfo<T>(address);
             var result = handleInfo.Result;
             
             return result as T;
@@ -66,7 +55,9 @@ namespace AddressableModule
                 return;
 
             _assetHandleInfos.Remove(address);
-            Addressables.Release(info.Result);
+
+            var result = info.Result;
+            Addressables.Release(result);
         }
 
         public void ReleaseAssets(string[] addressList)
@@ -81,7 +72,8 @@ namespace AddressableModule
 
         public void ReleaseAllAsset()
         {
-            var addressList = _assetHandleInfos.Keys;
+            var addressList = new List<string>(_assetHandleInfos.Keys);
+            
             foreach (var address in addressList)
                 ReleaseAsset(address);
 
@@ -114,13 +106,6 @@ namespace AddressableModule
             await Addressables.UnloadSceneAsync(asyncSceneHandle, true).Task;
         }
 
-
-        private async Task<IAsyncOperationHandleInfo> GetAssetHandleInfo(string address)
-        {
-            var handleInfo = await GetAssetHandleInfo<Object>(address);
-            return handleInfo;
-        }
-
         private async Task<IAsyncOperationHandleInfo> GetAssetHandleInfo<T>(string address)
             where T : Object
         {
@@ -140,7 +125,11 @@ namespace AddressableModule
             if (handleInfo != null && handleInfo.Result == null)
             {
                 ReleaseAsset(address);
+                hasValue = false;
+            }
 
+            if (!hasValue)
+            {
                 var handle = Addressables.LoadAssetAsync<T>(address);
                 handleInfo = new AsyncOperationHandleInfo<T>(handle);
                 _assetHandleInfos.Add(address, handleInfo);

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AddressableModule.Componet;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
@@ -14,8 +16,8 @@ namespace AddressableModule
     public class AddressableModule
     {
         //private variable
-        private Dictionary<string, IAsyncOperationHandleInfo> _assetHandleInfos =
-            new Dictionary<string, IAsyncOperationHandleInfo>();
+        private Dictionary<Type, Dictionary<string, IAsyncOperationHandleInfo>> _typeAssetHandleInfos =
+            new Dictionary<Type, Dictionary<string, IAsyncOperationHandleInfo>>();
 
         private Dictionary<string, AsyncOperationHandle<SceneInstance>> _sceneHandles =
             new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
@@ -26,58 +28,90 @@ namespace AddressableModule
         //asset
         public T GetAsset<T>(string address) where T : Object
         {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAsset] Address is null.");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAsset] Address is null.");
             
-            var handleInfo = _assetHandleInfos[address];
-            Assert.IsTrue(handleInfo.IsDone,$"[AddressableModule::GetAsset] Address: {address} is not done.");
+            var type = typeof(T);
+            var hasTypeAssetHandleInfo = _typeAssetHandleInfos.TryGetValue(type, out var assetHandleInfos);
+            Assert.IsTrue(hasTypeAssetHandleInfo,$"[AddressableModule::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
 
-            var result = handleInfo.Result;
+            var hasAssetHandleInfo = assetHandleInfos.TryGetValue(address, out var assetHandleInfo);
+            Assert.IsTrue(hasAssetHandleInfo,$"[AddressableModule::GetAsset] Address: {address} doesnt exist in assetHandleInfos.");
+
+            
+            var result = assetHandleInfo.Result;
             return result as T;
         }
 
         public async Task<T> GetAssetAsync<T>(string address) where T : Object
         {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAssetAsync] Address is null.");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressableModule::GetAssetAsync] Address is null.");
 
-            var handleInfo = await GetAssetHandleInfo<T>(address);
-            var result = handleInfo.Result;
+            var assetHandleInfo = await GetAssetHandleInfo<T>(address);
+            var result = assetHandleInfo.Result;
             
             return result as T;
         }
+        
+        
 
-        public void ReleaseAsset(string address)
+        public void ReleaseAsset(string address, Type type)
         {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(address), $"[AddressableModule::ReleaseAsset] Address is null.");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressableModule::ReleaseAsset] Address is null.");
+            Assert.IsTrue(type != null, $"[AddressableModule::ReleaseAsset] Type is null.");
 
-            var hasValue = _assetHandleInfos.TryGetValue(address, out var info);
-
-            if (!hasValue)
+            var hasTypeAssetHandleInfo = _typeAssetHandleInfos.TryGetValue(type, out var assetHandleInfos);
+            if (!hasTypeAssetHandleInfo)
                 return;
 
-            _assetHandleInfos.Remove(address);
+            var hasAssetHandleInfo = assetHandleInfos.TryGetValue(address, out var assetHandleInfo);
+            if(!hasAssetHandleInfo)
+                return;
+            
+            assetHandleInfos.Remove(address);
 
-            var result = info.Result;
+            var result = assetHandleInfo.Result;
             Addressables.Release(result);
+        }
+        
+        public void ReleaseAssets(string[] addressList, Type type)
+        {
+            Assert.IsTrue(addressList != null, $"[AddressableModule::ReleaseAssets] AddressList is null.");
+            Assert.IsTrue(type != null, $"[AddressableModule::ReleaseAsset] Type is null.");
+            
+            foreach (var address in addressList)
+                ReleaseAsset(address, type);
         }
 
         public void ReleaseAssets(string[] addressList)
         {
-            Assert.IsFalse(addressList == null, $"[AddressableModule::ReleaseAssets] AddressList is null.");
-
-            foreach (var address in addressList)
-                ReleaseAsset(address);
+            Assert.IsTrue(addressList != null, $"[AddressableModule::ReleaseAssets] AddressList is null.");
+            
+            var types = _typeAssetHandleInfos.Keys.ToArray();
+            foreach (var type in types)
+            {
+                foreach (var address in addressList)
+                    ReleaseAsset(address, type);
+            }
 
             CallGC();
         }
 
-        public void ReleaseAllAsset()
+        public void ReleaseAllAssets()
         {
-            var addressList = new List<string>(_assetHandleInfos.Keys);
-            
-            foreach (var address in addressList)
-                ReleaseAsset(address);
+            var types = _typeAssetHandleInfos.Keys.ToArray();
 
-            _assetHandleInfos.Clear();
+            foreach (var type in types)
+            {
+                var assetHandleInfo = _typeAssetHandleInfos[type];
+                
+                var addressList = assetHandleInfo.Keys.ToArray();
+                foreach (var address in addressList)
+                    ReleaseAsset(address, type);
+                
+                assetHandleInfo.Clear();
+            }
+
+            _typeAssetHandleInfos.Clear();
             
             CallGC();
         }
@@ -106,6 +140,8 @@ namespace AddressableModule
             await Addressables.UnloadSceneAsync(asyncSceneHandle, true).Task;
         }
 
+        
+        //private method
         private async Task<IAsyncOperationHandleInfo> GetAssetHandleInfo<T>(string address)
             where T : Object
         {
@@ -117,28 +153,37 @@ namespace AddressableModule
                 return null;
             }
 
-            var hasValue = _assetHandleInfos.TryGetValue(address, out var handleInfo);
-
-            if (hasValue)
-                await handleInfo.Task();
-
-            if (handleInfo != null && handleInfo.Result == null)
+            
+            if (!_typeAssetHandleInfos.TryGetValue(type, out var assetHandleInfos))
             {
-                ReleaseAsset(address);
-                hasValue = false;
+                assetHandleInfos = new Dictionary<string, IAsyncOperationHandleInfo>();
+                _typeAssetHandleInfos.Add(type, assetHandleInfos);
             }
 
-            if (!hasValue)
+            var hasAssetHandleInfo = assetHandleInfos.TryGetValue(address, out var assetHandleInfo);
+
+            if (hasAssetHandleInfo)
+                await assetHandleInfo.Task();
+
+            if (assetHandleInfo != null && assetHandleInfo.Result == null)
+            {
+                ReleaseAsset(address, type);
+                hasAssetHandleInfo = false;
+            }
+
+            if (!hasAssetHandleInfo)
             {
                 var handle = Addressables.LoadAssetAsync<T>(address);
-                handleInfo = new AsyncOperationHandleInfo<T>(handle);
-                _assetHandleInfos.Add(address, handleInfo);
-                await handleInfo.Task();
+                assetHandleInfo = new AsyncOperationHandleInfo<T>(handle);
+                await assetHandleInfo.Task();
+                
+                assetHandleInfos.Add(address, assetHandleInfo);
             }
 
-            return handleInfo;
+            return assetHandleInfo;
         }
 
+        
         private void CallGC()
         {
             Resources.UnloadUnusedAssets();

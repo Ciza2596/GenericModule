@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace AddressableModule
+namespace AddressableModule.Componet
 {
     public interface IAsyncOperationHandleInfo
     {

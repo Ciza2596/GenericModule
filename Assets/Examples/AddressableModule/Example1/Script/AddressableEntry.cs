@@ -1,35 +1,35 @@
-using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace AddressableModule.Example1
 {
     public class AddressableEntry : MonoBehaviour
     {
         //private variable
-        [SerializeField] private bool _isUpdate;
-        [SerializeField] private Sprite _sprite;
-        [SerializeField] private Texture2D _textue2D;
         [Space]
-        [SerializeField] private string _address;
+        [SerializeField] private string _address = "DUNE_1";
         [SerializeField] private Image _image;
 
-        private string _currentAddress;
+        private AsyncOperationHandle<Sprite> _asyncOperationHandle;
+        private Sprite _sprite;
         
-        
+
+
         //unity callback
         private async void OnEnable()
         {
-            var handle = Addressables.LoadAssetAsync<Object>(_address); 
-            await handle.Task.ConfigureAwait(false);
-            var texture2D = handle.Result as Texture2D;
-
-
-            Debug.Log(texture2D != null);
+            _asyncOperationHandle = Addressables.LoadAssetAsync<Sprite>(_address);
+            _sprite = await _asyncOperationHandle.Task.ConfigureAwait(false);
+            
+            _image.sprite = _sprite;
+        }
+        
+        private void OnDisable()
+        {
+            _image.sprite = null;
+            Addressables.Release(_asyncOperationHandle);
         }
     }
 }

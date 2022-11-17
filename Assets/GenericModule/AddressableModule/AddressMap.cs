@@ -7,6 +7,6 @@ namespace AddressableModule
     public class AddressMap   
     {
         public string Address;
-        public AssetTypes _assetType;
+        public AssetTypes AssetType;
     }
 }

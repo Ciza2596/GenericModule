@@ -9,13 +9,13 @@ namespace AudioModule.Example1
     public class AudioDataOverview : ScriptableObject
     {
         [SerializeField]
-        private List<AudioData> _audioDatas;
+        private List<AudioResourceData> _audioDatas;
 
-        public List<IAudioData> GetAudioDatas => _audioDatas.ToList<IAudioData>();
+        public List<IAudioResourceData> GetAudioDatas => _audioDatas.ToList<IAudioResourceData>();
         
 
         [Serializable]
-        public class AudioData: IAudioData
+        public class AudioResourceData: IAudioResourceData
         {
             [SerializeField]
             private string _key;

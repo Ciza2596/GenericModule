@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AudioModule
 {
-    public interface IAudioData
+    public interface IAudioResourceData
     {
         public string Key { get; }
         public GameObject Prefab { get; }

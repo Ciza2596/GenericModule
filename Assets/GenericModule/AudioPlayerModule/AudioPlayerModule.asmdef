@@ -2,7 +2,8 @@
     "name": "AudioPlayerModule",
     "rootNamespace": "AudioPlayerModule",
     "references": [
-        "AudioModule"
+        "AudioModule",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

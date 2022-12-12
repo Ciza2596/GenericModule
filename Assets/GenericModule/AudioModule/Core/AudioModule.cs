@@ -17,15 +17,16 @@ namespace AudioModule
         private readonly string _sfxVolumeParameter;
         private readonly string _voiceVolumeParameter;
 
-        private readonly Transform _poolTransform;
+        private readonly Transform _poolRootTransform;
+        private readonly Dictionary<string, Transform> _keyPoolTransformMaps = new Dictionary<string, Transform>();
 
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
-        private readonly Dictionary<string, string> _playingIdKeyMaps = new Dictionary<string, string>();
+        private readonly List<string> _isPlayingIds = new List<string>();
+        
+        private readonly List<AudioData> _audioDatas = new List<AudioData>();
 
-        private readonly Dictionary<string, AudioSource> _pool = new Dictionary<string, AudioSource>();
 
-
-        private List<IAudioData> _audioDatas;
+        private IAudioResourceData[] _audioResourceDatas;
 
 
         //public variable
@@ -47,19 +48,19 @@ namespace AudioModule
             var poolName = audioModuleConfig.PoolName;
             var poolGameObject = new GameObject(poolName);
 
-            _poolTransform = poolGameObject.transform;
+            _poolRootTransform = poolGameObject.transform;
             var poolParentTransform = audioModuleConfig.PoolParentTransform;
-            _poolTransform.SetParent(poolParentTransform);
+            _poolRootTransform.SetParent(poolParentTransform);
         }
 
-        public void Initialize(List<IAudioData> audioDatas) => _audioDatas = audioDatas;
+        public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;
 
         public void Release()
         {
-            _audioDatas = null;
+            _audioResourceDatas = null;
 
             _keyIdsMaps.Clear();
-            _playingIdKeyMaps.Clear();
+            _isPlayingIds.Clear();
 
             ReleasePool();
         }
@@ -81,7 +82,7 @@ namespace AudioModule
             AudioMixer.SetFloat(_voiceVolumeParameter, volume);
 
 
-        public string Play(string key)
+        public string Play(string key, Vector3 position, Transform parentTransform)
         {
             if (!_keyIdsMaps.ContainsKey(key))
             {
@@ -96,33 +97,32 @@ namespace AudioModule
 
             var id = ids[0];
             ids.Remove(id);
+            
+            _isPlayingIds.Add(key);
 
-            _playingIdKeyMaps.Add(id, key);
-
-            Play(id, key);
+            var audioData = GetAudioData(id);
+            audioData.Play(position, parentTransform);
 
             return id;
         }
 
-        public AudioSource GetAudioSource(string id)
-        {
-            var audioSource = _pool[id];
-            return audioSource;
-        }
+        
+        public AudioData GetAudioData(string id) => _audioDatas.First(audioData => audioData.Id == id);
+
 
         public void Stop(string id)
         {
-            var audioSource = _pool[id];
-            audioSource.Stop();
+            if(!_isPlayingIds.Contains(id))
+                return;
 
-            if (_playingIdKeyMaps.TryGetValue(id, out var key))
-            {
-                _playingIdKeyMaps.Remove(id);
+            var audioData = GetAudioData(id);
+            audioData.Stop();
+            
+            _isPlayingIds.Remove(id);
 
-                var ids = _keyIdsMaps[key];
-                if (!ids.Contains(id))
-                    ids.Add(id);
-            }
+            var key = audioData.Key;
+            var keyIdsMap = _keyIdsMaps[key];
+            keyIdsMap.Add(id);
         }
 
 
@@ -130,11 +130,22 @@ namespace AudioModule
         private void CreateAudioSource(string key)
         {
             var prefab = GetPrefab(key);
-            var gameObject = Object.Instantiate(prefab, _poolTransform);
+            Transform poolTransform;
+            if (!_keyPoolTransformMaps.ContainsKey(key))
+            {
+                var poolGameObject = new GameObject(key);
+                poolTransform = poolGameObject.transform;
+                poolTransform.SetParent(_poolRootTransform);
+                _keyPoolTransformMaps.Add(key, poolTransform);
+            }
+
+            poolTransform = _keyPoolTransformMaps[key];
+            var gameObject = Object.Instantiate(prefab, poolTransform);
             if (gameObject.TryGetComponent<AudioSource>(out var audioSource))
             {
                 var id = Guid.NewGuid().ToString();
-                _pool.Add(id, audioSource);
+                var audioData = new AudioData(id, key, audioSource, poolTransform);
+                _audioDatas.Add(audioData);
 
                 if (_keyIdsMaps.TryGetValue(key, out var ids))
                     ids.Add(id);
@@ -146,37 +157,35 @@ namespace AudioModule
                 }
             }
             else
-                Assert.IsNotNull(audioSource, "[AudioModule::CreateAudioSource] ");
-        }
-
-        private void Play(string id, string key)
-        {
-            var audioSource = _pool[id];
-
-            Assert.IsNotNull(audioSource.clip,
-                $"[AudioModule::Play] Clip is null. Please check Key: {key} audioPrefab.");
-            audioSource.Play();
+                Assert.IsNotNull(audioSource, $"[AudioModule::CreateAudioSource] Key: {key} prefab hasnt audioSource.");
         }
 
 
         private GameObject GetPrefab(string key)
         {
-            Assert.IsNotNull(_audioDatas, "[AudioModule::GetPrefab] AudioDatas is null.");
+            Assert.IsNotNull(_audioResourceDatas, "[AudioModule::GetPrefab] AudioDatas is null.");
 
-            var audioData = _audioDatas.Find(data => data.Key == key);
-            Assert.IsNotNull(audioData, $"[AudioModule::GetPrefab] AudioData is null. Please check key: {key}.");
+            var audioResourceData = _audioResourceDatas.First(data => data.Key == key);
+            Assert.IsNotNull(audioResourceData, $"[AudioModule::GetPrefab] AudioData is null. Please check key: {key}.");
 
-            var prefab = audioData.Prefab;
+            var prefab = audioResourceData.Prefab;
             return prefab;
         }
 
+        
         private void ReleasePool()
         {
-            var pool = _pool.Values.ToArray();
-            _pool.Clear();
+            var audioDatas = _audioDatas.ToArray();
+            _audioDatas.Clear();
 
-            foreach (var audioSource in pool)
-                Object.Destroy(audioSource.gameObject);
+            foreach (var audioData in audioDatas)
+                audioData.Release();
+
+            var poolTransforms = _keyPoolTransformMaps.Values.ToList();
+            foreach (var poolTransform in poolTransforms)
+                Object.Instantiate(poolTransform.gameObject);
+
+            _keyPoolTransformMaps.Clear();
         }
     }
 }

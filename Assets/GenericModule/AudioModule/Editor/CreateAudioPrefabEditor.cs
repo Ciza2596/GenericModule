@@ -91,9 +91,14 @@ namespace AudioModule.Editor
             
             if (GUILayout.Button("Create Audio Prefabs"))
             {
-                var audioPrefab = new GameObject("AudioPrefab");
-                var audioPrefabPath = GetPrefabPath("AudioPrefab");
-                PrefabUtility.SaveAsPrefabAssetAndConnect(audioPrefab, audioPrefabPath, InteractionMode.UserAction);
+                var audioGuidList = AssetDatabase.FindAssets("t: AudioClip", new string[] { _audioClipFolderPath });
+
+                foreach (var guid in audioGuidList)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(guid);
+                    var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+                    CreateAudioPrefab(audioClip);
+                }
             }
         }
 

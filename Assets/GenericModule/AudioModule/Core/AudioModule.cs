@@ -11,33 +11,45 @@ namespace AudioModule
     public class AudioModule
     {
         //private variable
-        private IAudioModuleConfig _audioModuleConfig;
-        private List<IAudioData> _audioDatas;
-        
 
-        private Transform _poolTransform;
-        
-        
-        private Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
-        private Dictionary<string, string> _playingIdKeyMaps = new Dictionary<string, string>();
-        
-        
-        private Dictionary<string, AudioSource> _pool = new Dictionary<string, AudioSource>();
-        
+        private readonly string _masterVolumeParameter;
+        private readonly string _bgmVolumeParameter;
+        private readonly string _sfxVolumeParameter;
+        private readonly string _voiceVolumeParameter;
+
+        private readonly Transform _poolTransform;
+
+        private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, string> _playingIdKeyMaps = new Dictionary<string, string>();
+
+        private readonly Dictionary<string, AudioSource> _pool = new Dictionary<string, AudioSource>();
+
+
+        private List<IAudioData> _audioDatas;
+
 
         //public variable
-        public AudioMixer AudioMixer => _audioModuleConfig.AudioMixer;
+        public AudioMixer AudioMixer { get; }
 
 
         //public method
         public AudioModule(IAudioModuleConfig audioModuleConfig)
         {
             Assert.IsNotNull(audioModuleConfig, "[AudioModule::AudioModule] AudioModuleConfig is null.");
-            _audioModuleConfig = audioModuleConfig;
+            AudioMixer = audioModuleConfig.AudioMixer;
 
-            var poolGameObject = new GameObject(_audioModuleConfig.PoolName);
+            _masterVolumeParameter = audioModuleConfig.MasterVolumeParameter;
+            _bgmVolumeParameter = audioModuleConfig.BgmVolumeParameter;
+            _sfxVolumeParameter = audioModuleConfig.SfxVolumeParameter;
+            _voiceVolumeParameter = audioModuleConfig.VoiceVolumeParameter;
+
+
+            var poolName = audioModuleConfig.PoolName;
+            var poolGameObject = new GameObject(poolName);
+
             _poolTransform = poolGameObject.transform;
-            _poolTransform.SetParent(_audioModuleConfig.PoolParentTransform);
+            var poolParentTransform = audioModuleConfig.PoolParentTransform;
+            _poolTransform.SetParent(poolParentTransform);
         }
 
         public void Initialize(List<IAudioData> audioDatas) => _audioDatas = audioDatas;
@@ -45,37 +57,28 @@ namespace AudioModule
         public void Release()
         {
             _audioDatas = null;
-            
+
             _keyIdsMaps.Clear();
             _playingIdKeyMaps.Clear();
-            
+
             ReleasePool();
         }
 
 
-        public void SetMasterVolume(float volume)
-        {
-            var volumeParameter = _audioModuleConfig.MasterVolumeParameter;
-            AudioMixer.SetFloat(volumeParameter, volume);
-        }
+        public void SetMasterVolume(float volume) =>
+            AudioMixer.SetFloat(_masterVolumeParameter, volume);
 
-        public void SetBgmVolume(float volume)
-        {
-            var volumeParameter = _audioModuleConfig.BgmVolumeParameter;
-            AudioMixer.SetFloat(volumeParameter, volume);
-        }
 
-        public void SetSfxVolume(float volume)
-        {
-            var volumeParameter = _audioModuleConfig.SfxVolumeParameter;
-            AudioMixer.SetFloat(volumeParameter, volume);
-        }
+        public void SetBgmVolume(float volume) =>
+            AudioMixer.SetFloat(_bgmVolumeParameter, volume);
 
-        public void SetVoiceVolume(float volume)
-        {
-            var volumeParameter = _audioModuleConfig.VoiceVolumeParameter;
-            AudioMixer.SetFloat(volumeParameter, volume);
-        }
+
+        public void SetSfxVolume(float volume) =>
+            AudioMixer.SetFloat(_sfxVolumeParameter, volume);
+
+
+        public void SetVoiceVolume(float volume) =>
+            AudioMixer.SetFloat(_voiceVolumeParameter, volume);
 
 
         public string Play(string key)
@@ -90,10 +93,10 @@ namespace AudioModule
 
             if (ids.Count <= 0)
                 CreateAudioSource(key);
-            
+
             var id = ids[0];
             ids.Remove(id);
-            
+
             _playingIdKeyMaps.Add(id, key);
 
             Play(id, key);
@@ -101,17 +104,25 @@ namespace AudioModule
             return id;
         }
 
+        public AudioSource GetAudioSource(string id)
+        {
+            var audioSource = _pool[id];
+            return audioSource;
+        }
 
         public void Stop(string id)
         {
             var audioSource = _pool[id];
             audioSource.Stop();
 
-            var key = _playingIdKeyMaps[id];
-            _playingIdKeyMaps.Remove(id);
+            if (_playingIdKeyMaps.TryGetValue(id, out var key))
+            {
+                _playingIdKeyMaps.Remove(id);
 
-            var ids = _keyIdsMaps[key];
-            ids.Add(id);
+                var ids = _keyIdsMaps[key];
+                if (!ids.Contains(id))
+                    ids.Add(id);
+            }
         }
 
 
@@ -119,7 +130,7 @@ namespace AudioModule
         private void CreateAudioSource(string key)
         {
             var prefab = GetPrefab(key);
-            var gameObject = Object.Instantiate(prefab,_poolTransform);
+            var gameObject = Object.Instantiate(prefab, _poolTransform);
             if (gameObject.TryGetComponent<AudioSource>(out var audioSource))
             {
                 var id = Guid.NewGuid().ToString();
@@ -127,7 +138,7 @@ namespace AudioModule
 
                 if (_keyIdsMaps.TryGetValue(key, out var ids))
                     ids.Add(id);
-                
+
                 else
                 {
                     ids = new List<string> { id };
@@ -141,8 +152,9 @@ namespace AudioModule
         private void Play(string id, string key)
         {
             var audioSource = _pool[id];
-            
-            Assert.IsNotNull(audioSource.clip,$"[AudioModule::Play] Clip is null. Please check Key: {key} audioPrefab.");
+
+            Assert.IsNotNull(audioSource.clip,
+                $"[AudioModule::Play] Clip is null. Please check Key: {key} audioPrefab.");
             audioSource.Play();
         }
 

@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: AudioDataOverview
   m_EditorClassIdentifier: 
   _audioDatas:
-  - _key: 
-    _prefab: {fileID: 0}
-  - _key: 
-    _prefab: {fileID: 0}
+  - _key: wind_bell
+    _prefab: {fileID: 3406531864828381534, guid: 3af422905b4eb491dba735bad50ca03d, type: 3}

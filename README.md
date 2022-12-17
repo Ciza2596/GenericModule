@@ -1,6 +1,6 @@
 # LogModule
 
-## add package from git URL
+## Add package from git URL
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
@@ -9,7 +9,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 
 # EventModule
 
-## add package from git URL
+## Add package from git URL
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
@@ -21,7 +21,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventMod
 ## Dependence
 [GameCore](https://github.com/Ciza2596/GameCore)
 
-## add package from git URL
+## Add package from git URL
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/ViewModule
 ```

@@ -1,7 +1,6 @@
 # GenericModule
 
-## LogModule
-### Add package from git URL
+## LogModule ### Add package from git URL
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```

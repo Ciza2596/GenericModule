@@ -82,6 +82,10 @@ namespace AudioModule
             AudioMixer.SetFloat(_voiceVolumeParameter, volume);
 
 
+        public bool CheckIsPlaying(string id) =>
+            _isPlayingIds.Contains(id);
+        
+
         public string Play(string key, Vector3 position, Transform parentTransform)
         {
             if (!_keyIdsMaps.ContainsKey(key))
@@ -112,7 +116,7 @@ namespace AudioModule
 
         public void Stop(string id)
         {
-            if(!_isPlayingIds.Contains(id))
+            if(!CheckIsPlaying(id))
                 return;
 
             var audioData = GetAudioData(id);

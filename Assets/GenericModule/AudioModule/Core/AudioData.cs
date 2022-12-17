@@ -15,8 +15,10 @@ namespace AudioModule
         //public variable
         public string Id { get; private set; }
         public string Key { get; private set; }
+        public float Volume => _audioSource.volume;
         public float OriginVolume { get; }
-        
+        public float Duration { get; private set; }
+
 
         //public method
         public AudioData(string id, string key, AudioSource audioSource, Transform poolTransform)
@@ -29,6 +31,8 @@ namespace AudioModule
             OriginVolume = _audioSource.volume;
             Id = id;
             Key = key;
+            
+            Duration = _audioSource.clip.length;
         }
 
         public void Play(Vector3 position, Transform parentTransform)
@@ -56,6 +60,8 @@ namespace AudioModule
 
         public void Release()
         {
+            Stop();
+            
             Id = null;
             Key = null;
 

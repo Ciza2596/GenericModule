@@ -1,7 +1,7 @@
 {
-  "name": "com.ciza.logmodule",
-  "displayName": "Ciza.LogModule",
-  "description": "LogModule.",
+  "name": "com.ciza.audioplayermodule",
+  "displayName": "Ciza.AudioPlayerModule",
+  "description": "AudioPlayerModule.",
   "version": "0.0.1",
   "unity": "2022.2",
   "unityRelease": "1f1",

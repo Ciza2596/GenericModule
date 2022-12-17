@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AddressableModule
+namespace AddressablesModule
 {
     public static class Extension
     {

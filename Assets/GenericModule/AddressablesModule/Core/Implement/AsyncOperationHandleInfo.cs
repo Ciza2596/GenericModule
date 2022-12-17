@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace AddressableModule.Componet
+namespace AddressablesModule.Componet
 {
     public class AsyncOperationHandleInfo<T> : IAsyncOperationHandleInfo where T : Object
     {

@@ -1,11 +1,13 @@
 {
-  "name": "com.ciza.logmodule",
-  "displayName": "Ciza.LogModule",
-  "description": "LogModule.",
+  "name": "com.ciza.addressablesmodule",
+  "displayName": "Ciza.AddressablesModule",
+  "description": "AddressablesModule.",
   "version": "0.0.1",
   "unity": "2022.2",
   "unityRelease": "1f1",
-  "dependencies": {},
+  "dependencies": {
+    "com.unity.addressables": "1.21.1"
+  },
   "author": {
     "name": "Ciza",
     "email": "Ciza2596@gmail.com",

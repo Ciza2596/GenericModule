@@ -1,6 +1,6 @@
 {
-    "name": "AddressableModule",
-    "rootNamespace": "AddressableModule",
+    "name": "AddressablesModule",
+    "rootNamespace": "AddressablesModule",
     "references": [
         "Unity.Addressables",
         "Unity.ResourceManager"

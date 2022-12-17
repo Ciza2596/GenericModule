@@ -1,5 +1,5 @@
 
-namespace AddressableModule
+namespace AddressablesModule
 {
     public enum AssetTypes
     {

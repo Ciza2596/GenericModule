@@ -1,7 +1,7 @@
 using System;
 
 
-namespace AddressableModule
+namespace AddressablesModule
 {
     [Serializable]
     public class AddressMap   

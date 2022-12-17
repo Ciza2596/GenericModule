@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AddressableModule.Example1
+namespace AddressablesModule.Example1
 {
     public class NormalEntry : MonoBehaviour
     {

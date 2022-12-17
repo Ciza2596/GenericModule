@@ -3,7 +3,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-namespace AddressableModule.Example1
+namespace AddressablesModule.Example1
 {
     public class AddressableEntry : MonoBehaviour
     {

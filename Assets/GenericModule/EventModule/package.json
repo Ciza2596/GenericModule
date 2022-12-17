@@ -3,8 +3,8 @@
   "displayName": "Ciza.EventModule",
   "description": "EventModule.",
   "version": "0.0.1",
-  "unity": "2021.3",
-  "unityRelease": "11f1",
+  "unity": "2022.2",
+  "unityRelease": "1f1",
   "dependencies": {},
   "author": {
     "name": "Ciza",

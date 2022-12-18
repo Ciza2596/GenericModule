@@ -30,11 +30,16 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPla
 ```
 
 
+## GameObjectPoolModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
+```
+
+
 ## AddressablesModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```
-
 
 
 # ViewModule

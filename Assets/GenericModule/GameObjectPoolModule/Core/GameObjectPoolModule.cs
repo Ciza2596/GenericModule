@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 
-namespace PoolModule
+
+namespace GameObjectPoolModule
 {
-    public class PoolModule
+    public class GameObjectPoolModule
     {
         //private variable
         private readonly Transform _poolRootTransform;
@@ -24,14 +25,14 @@ namespace PoolModule
         
 
         //public method
-        public PoolModule(IPoolConfig poolConfig)
+        public GameObjectPoolModule(IGameObjectPoolModuleConfig gameObjectPoolModuleConfig)
         {
-            var poolRootGameObject = new GameObject(poolConfig.PoolRootName);
+            var poolRootGameObject = new GameObject(gameObjectPoolModuleConfig.PoolRootName);
             
             _poolRootTransform = poolRootGameObject.transform;
-            _poolRootTransform.SetParent(poolConfig.PoolRootTransform);
+            _poolRootTransform.SetParent(gameObjectPoolModuleConfig.PoolRootTransform);
 
-            _prefix = poolConfig.Prefix;
+            _prefix = gameObjectPoolModuleConfig.Prefix;
         }
 
 

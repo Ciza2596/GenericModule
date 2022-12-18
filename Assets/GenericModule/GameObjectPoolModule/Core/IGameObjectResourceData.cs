@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace PoolModule
+namespace GameObjectPoolModule
 {
     public interface IGameObjectResourceData
     {

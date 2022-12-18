@@ -1,9 +1,9 @@
 using UnityEngine;
 
 
-namespace PoolModule
+namespace GameObjectPoolModule
 {
-    public interface IPoolConfig
+    public interface IGameObjectPoolModuleConfig
     {
         public string PoolRootName { get; }
         public Transform PoolRootTransform { get; }

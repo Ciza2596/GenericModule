@@ -1,15 +1,18 @@
 
-using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace SceneModule
 {
     public interface ITransitionControllerConfig
     {
-        public ITransitionView GetTransitionInView(string viewName);
+        public GameObject GetViewParentPrefab();
 
-        public ILoadingView GetLoadingView(string viewName);
+        public GameObject GetTransitionInViewPrefab(string viewName);
 
-        public ITransitionView GetTransitionOutView(string viewName);
+        public GameObject GetLoadingViewPrefab(string viewName);
+
+        public GameObject GetTransitionOutPrefab(string viewName);
 
     }
 }

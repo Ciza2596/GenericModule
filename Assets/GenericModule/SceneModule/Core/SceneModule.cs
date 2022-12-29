@@ -1,49 +1,52 @@
-using UnityEngine.SceneManagement;
+using UnityEngine.Assertions;
 
 
 namespace SceneModule
 {
-    
     public class SceneModule
     {
+        //private variable
+        private ISceneManager _sceneManager;
+
         //public variable
         public string TransitionSceneName { get; }
-        
-        public string CurrentSceneName { get; private set; }
+
         public string TransitionInViewName { get; private set; }
-        
+        public string CurrentSceneName { get; private set; }
+
         public string LoadingViewName { get; private set; }
 
-        public string NextSceneName { get; private set; }
         public string TransitionOutViewName { get; private set; }
-        
-        
+         public string NextSceneName { get; private set; }
+
+
         //public method
-        public SceneModule(SceneModuleConfig sceneModuleConfig) =>
-            TransitionSceneName = sceneModuleConfig.TransitionSceneName;
-        
-
-        public void LoadScene(string sceneName, LoadModes loadMode) =>
-            SceneManager.LoadScene(sceneName, new LoadSceneParameters((LoadSceneMode)loadMode));
-
-        
-        public void UnloadScene(string sceneName) => SceneManager.UnloadSceneAsync(sceneName);
-
-        
-
-        public void ChangeScene(string unloadSceneName, string transitionInViewName,
-            string loadingViewName, string loadSceneName, string transitionOutViewName)
+        public SceneModule(ISceneModuleConfig sceneModuleConfig, ISceneManager sceneManager)
         {
-            CurrentSceneName = unloadSceneName;
+            TransitionSceneName = sceneModuleConfig.TransitionSceneName;
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(TransitionSceneName), "[SceneModule::SceneModule] TransitionSceneName is null.Please check SceneModuleConfig.");
+            
+            _sceneManager = sceneManager;
+        }
+
+
+        public void LoadScene(string sceneName, LoadModes loadMode) => _sceneManager.LoadScene(sceneName, loadMode);
+
+        public void UnloadScene(string sceneName) => _sceneManager.UnloadScene(sceneName);
+
+
+        public void ChangeScene(string transitionInViewName, string currentSceneName, 
+            string loadingViewName, string transitionOutViewName, string nextSceneName)
+        {
             TransitionInViewName = transitionInViewName;
+            CurrentSceneName = currentSceneName;
 
             LoadingViewName = loadingViewName;
 
-            NextSceneName = loadSceneName;
             TransitionOutViewName = transitionOutViewName;
+            NextSceneName = nextSceneName;
 
             LoadScene(TransitionSceneName, LoadModes.Additive);
         }
-        
     }
 }

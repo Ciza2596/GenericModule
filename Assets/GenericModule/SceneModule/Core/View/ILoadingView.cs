@@ -4,6 +4,6 @@ namespace SceneModule
 {
     public interface ILoadingView
     {
-        public void Loading(Action loadScene, Action onComplete);
+        public void Loading(TransitionController transitionController, Action onComplete);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SceneModule
 {
-    public interface SceneModuleConfig
+    public interface ISceneModuleConfig
     {
         public string TransitionSceneName { get; }
     }

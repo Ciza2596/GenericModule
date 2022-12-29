@@ -10,7 +10,7 @@ namespace SceneModule
         private AsyncOperation _loadSceneAsync;
         
         //public variable
-        public bool IsDone => _loadSceneAsync.isDone;
+        public float LoadingProgress => _loadSceneAsync.progress;
         
 
         //public method
@@ -64,19 +64,19 @@ namespace SceneModule
 
         private void LoadSceneOnBackground(string sceneName)
         {
-            _loadSceneAsync = SceneManager.LoadSceneAsync(sceneName);
+            _loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             _loadSceneAsync.allowSceneActivation = false;
         }
 
         private void UnloadScene(string sceneName)
-        {
-            var unloadSceneAsync = SceneManager.UnloadSceneAsync(sceneName);
-            unloadSceneAsync.allowSceneActivation = true;
+        { 
+            SceneManager.UnloadSceneAsync(sceneName);
         }
 
         private T CreateView<T>(Transform viewParentTransform, GameObject viewPrefab)
         {
             var viewGameObject = Object.Instantiate(viewPrefab, viewParentTransform);
+            viewGameObject.SetActive(false);
             var view = viewGameObject.GetComponent<T>();
             return view;
         }

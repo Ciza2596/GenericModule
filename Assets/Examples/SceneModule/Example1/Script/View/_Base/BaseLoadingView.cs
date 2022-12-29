@@ -18,6 +18,8 @@ namespace SceneModule.Example1
         //loadingView callback
         public virtual void Loading(TransitionController transitionController, Action onComplete)
         {
+            gameObject.SetActive(true);
+            
             _transitionController = transitionController;
             _onComplete = onComplete;
 
@@ -32,13 +34,16 @@ namespace SceneModule.Example1
             if(!_isOnce)
                 return;
             
-            if (_isOnce && _transitionController.IsDone && _loadingTime <= 0)
+            var loadingProgress = _transitionController.LoadingProgress;
+            Debug.Log($"LoadingProgress: {loadingProgress}");
+            
+            if (_isOnce && loadingProgress >= 0.9f && _loadingTime <= 0)
             {
                 _isOnce = false;
                 _onComplete?.Invoke();
+                gameObject.SetActive(false);
                 return;
             }
-            
             _loadingTime -= Time.deltaTime;
         }
     }

@@ -9,6 +9,7 @@ namespace SceneModule.Example1
         
         public virtual void Play(Action onComplete)
         {
+            gameObject.SetActive(true);
             _onComplete = onComplete;
         }
     }

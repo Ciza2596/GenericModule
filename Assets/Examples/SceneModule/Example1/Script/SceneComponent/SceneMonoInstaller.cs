@@ -13,7 +13,7 @@ namespace SceneModule.Example1
         {
             Container.Bind<TransitionSceneData>().FromInstance(_transitionSceneData);
             Container.Bind<ComponentCollection>().FromInstance(_componentCollection);
-            Container.Bind<ComponentController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ComponentController>().AsSingle();
         }
     }
 }

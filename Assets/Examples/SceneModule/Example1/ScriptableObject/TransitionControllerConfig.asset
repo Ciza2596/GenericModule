@@ -15,10 +15,10 @@ MonoBehaviour:
   _viewParentPrefab: {fileID: 4091583669742502583, guid: a33393ec20f504a818ecb22a18d2220c, type: 3}
   _transitionInViewMaps:
   - _viewName: FadeIn
-    _viewPrefab: {fileID: 0}
+    _viewPrefab: {fileID: 8029520127380002231, guid: 1eb7dbc694a5f4c679b83dddfe06a1d1, type: 3}
   _loadingViewMaps:
   - _viewName: FadeLoading
-    _viewPrefab: {fileID: 0}
+    _viewPrefab: {fileID: 3106792930439568612, guid: c3ea1632add9b4323a527c4ea48f365c, type: 3}
   _transitionOutViewMaps:
   - _viewName: FadeOut
-    _viewPrefab: {fileID: 0}
+    _viewPrefab: {fileID: 6530933760774521548, guid: ddbc6497d6b4441ba89a123c144a79c6, type: 3}

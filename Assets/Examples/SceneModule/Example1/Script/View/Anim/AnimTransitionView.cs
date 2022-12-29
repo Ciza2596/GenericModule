@@ -16,6 +16,7 @@ namespace SceneModule.Example1
             await _animPlayer.Play();
             
             _onComplete?.Invoke();
+            gameObject.SetActive(false);
         }
     }
 }

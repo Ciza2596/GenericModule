@@ -141,9 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 829b1e0439736423ba58aa7b20d15909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idleStateName: Idle
   _playStateName: Play
   _normalizedTime: 0.95
+  _idleStateName: Idle
   _animator: {fileID: 5169799165081178519}
 --- !u!95 &5169799165081178519
 Animator:

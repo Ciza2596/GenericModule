@@ -15,9 +15,8 @@ namespace SceneModule.Example1
         public void Initialize()
         {
             _componentCollection.GoToSceneButton.onClick.AddListener(() =>
-                _sceneModule.ChangeScene(_transitionSceneData.CurrentSceneName,
-                    _transitionSceneData.TransitionInViewName, _transitionSceneData.LoadingViewName,
-                    _transitionSceneData.NextSceneName, _transitionSceneData.TransitionOutViewName));
+                _sceneModule.ChangeScene(_transitionSceneData.TransitionInViewName, _transitionSceneData.CurrentSceneName, 
+                    _transitionSceneData.LoadingViewName, _transitionSceneData.TransitionOutViewName, _transitionSceneData.NextSceneName));
         }
     }
 }

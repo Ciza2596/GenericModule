@@ -11,7 +11,7 @@ namespace SceneModule.Example1
         public override void InstallBindings()
         {
             Container.Bind<ITransitionControllerConfig>().FromInstance(_transitionControllerConfig);
-            Container.Bind<TransitionController>().AsSingle();
+            Container.Bind<TransitionController>().AsSingle().NonLazy();
         }
     }
 }

@@ -29,8 +29,7 @@ namespace SceneModule
             _sceneManager = sceneManager;
         }
 
-
-        public void LoadScene(string sceneName, LoadModes loadMode) => _sceneManager.LoadScene(sceneName, loadMode);
+        public ILoadSceneAsync LoadSceneAsync(string sceneName, LoadModes loadMode, bool isActivateOnLoad = true) => _sceneManager.LoadScene(sceneName, loadMode, isActivateOnLoad);
 
         public void UnloadScene(string sceneName) => _sceneManager.UnloadScene(sceneName);
 
@@ -46,7 +45,7 @@ namespace SceneModule
             TransitionOutViewName = transitionOutViewName;
             NextSceneName = nextSceneName;
 
-            LoadScene(TransitionSceneName, LoadModes.Additive);
+            LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
         }
     }
 }

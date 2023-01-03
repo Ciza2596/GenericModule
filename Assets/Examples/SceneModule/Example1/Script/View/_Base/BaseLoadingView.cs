@@ -35,7 +35,6 @@ namespace SceneModule.Example1
                 return;
             
             var loadingProgress = _transitionController.LoadingProgress;
-            Debug.Log($"LoadingProgress: {loadingProgress}");
             
             if (_isOnce && loadingProgress >= 0.9f && _loadingTime <= 0)
             {

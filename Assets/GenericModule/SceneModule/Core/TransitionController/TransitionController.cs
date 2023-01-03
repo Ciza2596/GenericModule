@@ -1,16 +1,15 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SceneModule
 {
     public class TransitionController
     {
         //private variable
-        private SceneModule _sceneModule;
-        private AsyncOperation _loadSceneAsync;
+        private readonly SceneModule _sceneModule;
+        private ILoadSceneAsync _loadSceneAsync;
         
         //public variable
-        public float LoadingProgress => _loadSceneAsync.progress;
+        public float LoadingProgress => _loadSceneAsync.Progress;
         
 
         //public method
@@ -50,28 +49,24 @@ namespace SceneModule
                 loadingView.Loading(this,
                     () =>
                     {
-                        ShowScene();
+                        ActivateScene();
                         transitionOutView.Play(() => UnloadScene(transitionSceneName));
                     });
             });
         }
 
         //private method
-        private void ShowScene()
-        {
-            _loadSceneAsync.allowSceneActivation = true;
-        }
+        private void ActivateScene() =>
+            _loadSceneAsync.Activate();
+        
 
-        private void LoadSceneOnBackground(string sceneName)
-        {
-            _loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            _loadSceneAsync.allowSceneActivation = false;
-        }
+        private void LoadSceneOnBackground(string sceneName) =>
+            _loadSceneAsync = _sceneModule.LoadSceneAsync(sceneName, LoadModes.Additive, false);
+        
 
-        private void UnloadScene(string sceneName)
-        { 
-            SceneManager.UnloadSceneAsync(sceneName);
-        }
+        private void UnloadScene(string sceneName) =>
+            _sceneModule.UnloadScene(sceneName);
+        
 
         private T CreateView<T>(Transform viewParentTransform, GameObject viewPrefab)
         {

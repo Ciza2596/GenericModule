@@ -118,15 +118,29 @@ namespace AddressablesModule
 
 
         //scene
-        public async Task LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Additive,
-            bool activateOnLoad = true, int priority = 100)
+        public float GetSceneLoadingProgress(string address)
         {
-            var asyncOperationHandle = Addressables.LoadSceneAsync(address, loadMode, activateOnLoad, priority);
-            await asyncOperationHandle.Task;
+            Assert.IsTrue(_sceneHandles.ContainsKey(address), $"[AddressablesModule::GetSceneLoadingProgress] Not find sceneHandle. Address: {address}");
+            var sceneHandle = _sceneHandles[address];
+            var percentComplete = sceneHandle.PercentComplete;
+            return percentComplete;
+        }
 
-            SceneManager.SetActiveScene(asyncOperationHandle.Result.Scene);
+        public void ActivateScene(string address)
+        {
+            Assert.IsTrue(_sceneHandles.ContainsKey(address), $"[AddressablesModule::ActivateScene] Not find sceneHandle. Address: {address}");
+            var sceneHandle = _sceneHandles[address];
+            Assert.IsTrue(sceneHandle.IsDone,"[AddressablesModule::ActivateScene] SceneHandle isnt done. Address: {address}");
+            SceneManager.SetActiveScene(sceneHandle.Result.Scene);
+        }
+        
 
-            _sceneHandles.Add(address, asyncOperationHandle);
+        public async Task LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Additive,
+            bool isActivateOnLoad = false, int priority = 100)
+        {
+            var sceneHandle = Addressables.LoadSceneAsync(address, loadMode, isActivateOnLoad, priority);
+            _sceneHandles.Add(address, sceneHandle);
+            await sceneHandle.Task;
         }
 
         public async Task UnloadSceneAsync(string address)
@@ -134,10 +148,10 @@ namespace AddressablesModule
             if (!_sceneHandles.ContainsKey(address))
                 return;
 
-            var asyncSceneHandle = _sceneHandles[address];
+            var sceneHandle = _sceneHandles[address];
             _sceneHandles.Remove(address);
 
-            await Addressables.UnloadSceneAsync(asyncSceneHandle, true).Task;
+            await Addressables.UnloadSceneAsync(sceneHandle, true).Task;
         }
 
         

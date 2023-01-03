@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SceneModule.Implement
@@ -10,6 +11,7 @@ namespace SceneModule.Implement
 
         //public variable
         public float Progress => _loadSceneAsync.progress;
+        public Task Task { get; }
 
 
         //public method

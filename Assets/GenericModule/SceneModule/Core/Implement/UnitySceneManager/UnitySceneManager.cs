@@ -6,7 +6,7 @@ namespace SceneModule.Implement
     {
         public ILoadSceneAsync LoadScene(string sceneName, LoadModes loadMode, bool isActivateOnLoad)
         {
-            var loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            var loadSceneAsync = SceneManager.LoadSceneAsync(sceneName, (LoadSceneMode)loadMode);
             loadSceneAsync.allowSceneActivation = isActivateOnLoad;
             var unitySceneManagerLoadSceneAsync = new UnitySceneManagerLoadSceneAsync(loadSceneAsync);
             return unitySceneManagerLoadSceneAsync;

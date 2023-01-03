@@ -7,10 +7,6 @@ namespace SceneModule
         //private variable
         private readonly SceneModule _sceneModule;
         private ILoadSceneAsync _loadSceneAsync;
-        
-        //public variable
-        public float LoadingProgress => _loadSceneAsync.Progress;
-        
 
         //public method
 
@@ -46,7 +42,7 @@ namespace SceneModule
                 UnloadScene(currentSceneName);
 
                 LoadSceneOnBackground(nextSceneName);
-                loadingView.Loading(this,
+                loadingView.Loading(_loadSceneAsync,
                     () =>
                     {
                         ActivateScene();
@@ -58,15 +54,15 @@ namespace SceneModule
         //private method
         private void ActivateScene() =>
             _loadSceneAsync.Activate();
-        
+
 
         private void LoadSceneOnBackground(string sceneName) =>
             _loadSceneAsync = _sceneModule.LoadSceneAsync(sceneName, LoadModes.Additive, false);
-        
+
 
         private void UnloadScene(string sceneName) =>
             _sceneModule.UnloadScene(sceneName);
-        
+
 
         private T CreateView<T>(Transform viewParentTransform, GameObject viewPrefab)
         {

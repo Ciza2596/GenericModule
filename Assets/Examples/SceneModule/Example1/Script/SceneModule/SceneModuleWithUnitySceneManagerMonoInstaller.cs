@@ -4,7 +4,7 @@ using Zenject;
 
 namespace SceneModule.Example1
 {
-    public class SceneModuleMonoInstaller : MonoInstaller
+    public class SceneModuleWithUnitySceneManagerMonoInstaller : MonoInstaller
     {
         [SerializeField] public SceneModuleConfig _sceneModuleConfig;
         

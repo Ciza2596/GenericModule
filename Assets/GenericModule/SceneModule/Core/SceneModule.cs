@@ -6,7 +6,7 @@ namespace SceneModule
     public class SceneModule
     {
         //private variable
-        private ISceneManager _sceneManager;
+        private readonly ISceneManager _sceneManager;
 
         //public variable
         public string TransitionSceneName { get; }

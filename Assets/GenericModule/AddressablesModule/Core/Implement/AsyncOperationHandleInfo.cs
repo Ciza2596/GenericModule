@@ -11,8 +11,6 @@ namespace AddressablesModule.Componet
         public AsyncOperationHandleInfo(AsyncOperationHandle<T> handle) =>
             _handle = handle;
 
-        bool IAsyncOperationHandleInfo.IsDone => _handle.IsDone;
-
         async Task IAsyncOperationHandleInfo.Task() =>
             await _handle.Task.ConfigureAwait(false);
         

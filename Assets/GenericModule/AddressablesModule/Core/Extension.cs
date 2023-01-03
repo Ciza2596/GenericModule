@@ -11,7 +11,7 @@ namespace AddressablesModule
 
         
         
-        public static async Task LoadAssetsAsync(this AddressableModule addressableModule,
+        public static async Task LoadAssetsAsync(this AddressablesModule addressablesModule,
             AddressMap[] addressObjectTypeMaps)
         {
             foreach (var addressObjectTypeMap in addressObjectTypeMaps)
@@ -20,14 +20,14 @@ namespace AddressablesModule
                 var assetType = addressObjectTypeMap.AssetType;
                 
                 var type = GetType(assetType);
-                var addressableModuleType = typeof(AddressableModule);
+                var addressableModuleType = typeof(AddressablesModule);
                 var methodInfo = addressableModuleType.GetMethod(METHOD_NAME).MakeGenericMethod(type);
 
-                await (Task)methodInfo.Invoke(addressableModule, new object[] { address });
+                await (Task)methodInfo.Invoke(addressablesModule, new object[] { address });
             }
         }
 
-        public static void ReleaseAssets(this AddressableModule addressableModule,
+        public static void ReleaseAssets(this AddressablesModule addressablesModule,
             AddressMap[] addressMaps)
         {
             foreach (var addressObjectTypeMap in addressMaps)
@@ -36,7 +36,7 @@ namespace AddressablesModule
                 var assetType = addressObjectTypeMap.AssetType;
                 var type = GetType(assetType);
 
-                addressableModule.ReleaseAsset(address, type);
+                addressablesModule.ReleaseAsset(address, type);
             }
         }
 

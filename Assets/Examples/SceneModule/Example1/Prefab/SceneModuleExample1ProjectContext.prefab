@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4691565569872761510}
   - component: {fileID: -5174076897082308086}
   m_Layer: 0
-  m_Name: ProjectContext
+  m_Name: SceneModuleExample1ProjectContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SceneModule.Example1
 {
-    [CreateAssetMenu(fileName = "SceneModuleConfig", menuName = "SceneModule/SceneModuleConfig")]
+    [CreateAssetMenu(fileName = "SceneModuleConfig", menuName = "SceneModule/Example1/SceneModuleConfig")]
     public class SceneModuleConfig : ScriptableObject, ISceneModuleConfig
     {
         [SerializeField]

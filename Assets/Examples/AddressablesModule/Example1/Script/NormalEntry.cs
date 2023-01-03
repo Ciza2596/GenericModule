@@ -1,27 +1,24 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace AddressablesModule.Example1
 {
-    public class LoadingEntry : MonoBehaviour
+    public class NormalEntry : MonoBehaviour
     {
         //private variable
         [SerializeField] private AddressMapListDataOverview addressMapListDataOverview;
         [SerializeField] private Image[] _images;
 
-        private AddressableModule _addressableModule;
+        private AddressablesModule _addressablesModule;
 
 
         
         //unity callback
         private async void OnEnable()
         {
-            _addressableModule = new AddressableModule();
+            _addressablesModule = new AddressablesModule();
 
             var addressObjectTypeMapList = addressMapListDataOverview.GetAddressMapList();
-            await _addressableModule.LoadAssetsAsync(addressObjectTypeMapList);
 
             var length = addressObjectTypeMapList.Length;
             for (int i = 0; i < length; i++)
@@ -29,13 +26,13 @@ namespace AddressablesModule.Example1
                 var addressObjectTypeMap = addressObjectTypeMapList[i];
                 var address = addressObjectTypeMap.Address;
 
-                var sprite = _addressableModule.GetAsset<Sprite>(address);
-
+                var sprite = await _addressablesModule.GetAssetAsync<Sprite>(address);
+                
                 var image = _images[i];
                 image.sprite = sprite;
             }
         }
-        
+
         private void OnDisable()
         {
             foreach (var image in _images)

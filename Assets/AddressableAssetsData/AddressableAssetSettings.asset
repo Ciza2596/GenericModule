@@ -32,11 +32,14 @@ MonoBehaviour:
   m_ShaderBundleNaming: 0
   m_ShaderBundleCustomNaming: 
   m_MonoScriptBundleNaming: 0
+  m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
+  m_ContentStateBuildPathProfileVariableName: 
+  m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: 
@@ -46,6 +49,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fad6ca399e9e945daae86803ed721853, type: 2}
   - {fileID: 11400000, guid: 4e0ec578d39954a8a9fe60776ed3f1ef, type: 2}
   - {fileID: 11400000, guid: 0dfd4caa7d52d410ca882ff28a584a83, type: 2}
+  - {fileID: 11400000, guid: a5ef5f9a89888414a8195b4e97850a3d, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -106,3 +110,4 @@ MonoBehaviour:
     m_Settings: {fileID: 11400000}
     m_NextInstanceId: 0
     m_RegisteredServiceTypeRefs: []
+    m_PingTimeoutInMilliseconds: 5000

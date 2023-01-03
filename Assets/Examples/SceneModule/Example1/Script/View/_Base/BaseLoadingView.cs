@@ -7,42 +7,45 @@ namespace SceneModule.Example1
     {
         //private variable
         [SerializeField] private float _defaultLoadingTime = 1;
-        
-        private TransitionController _transitionController;
+
+        private ILoadSceneAsync _loadSceneAsync;
         private Action _onComplete;
 
         private float _loadingTime;
         private bool _isOnce;
-        
-        
+
+
         //loadingView callback
-        public virtual void Loading(TransitionController transitionController, Action onComplete)
+        public void Loading(ILoadSceneAsync loadSceneAsync, Action onComplete)
         {
             gameObject.SetActive(true);
-            
-            _transitionController = transitionController;
+
+            _loadSceneAsync = loadSceneAsync;
             _onComplete = onComplete;
 
             _loadingTime = _defaultLoadingTime;
             _isOnce = true;
         }
 
-        
+
         //unity callback
         private void Update()
         {
-            if(!_isOnce)
+            if (!_isOnce)
                 return;
+
+            var progress = _loadSceneAsync.Progress;
+
+            Debug.Log($"Progress: {progress}.");
             
-            var loadingProgress = _transitionController.LoadingProgress;
-            
-            if (_isOnce && loadingProgress >= 0.9f && _loadingTime <= 0)
+            if (_isOnce && progress >= 1f && _loadingTime <= 0)
             {
                 _isOnce = false;
                 _onComplete?.Invoke();
                 gameObject.SetActive(false);
                 return;
             }
+
             _loadingTime -= Time.deltaTime;
         }
     }

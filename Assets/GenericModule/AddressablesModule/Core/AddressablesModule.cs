@@ -130,14 +130,13 @@ namespace AddressablesModule
         public async void ActivateScene(string address)
         {
             Assert.IsTrue(_sceneHandles.ContainsKey(address), $"[AddressablesModule::ActivateScene] Address: {address} not find info.");
-
             var sceneHandle = _sceneHandles[address];
-            var scene = sceneHandle.Result.Scene;
 
-            while (!scene.isLoaded)
+            while (sceneHandle.Status != AsyncOperationStatus.Succeeded)
                 await Task.Yield();
 
-            SceneManager.SetActiveScene(scene);
+            sceneHandle.Result.ActivateAsync();
+            //SceneManager.SetActiveScene(scene);
         }
 
         public async Task LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool isActivateOnLoad = true)

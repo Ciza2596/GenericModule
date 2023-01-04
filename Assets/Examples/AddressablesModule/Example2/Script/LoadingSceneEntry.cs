@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace AddressablesModule.Example2
@@ -13,11 +13,16 @@ namespace AddressablesModule.Example2
         private AddressablesModule _addressablesModule;
 
 
-        //unity callback
-        private void OnEnable()
+        private void Awake()
         {
             _addressablesModule = new AddressablesModule();
-            _addressablesModule.LoadSceneAsync(_address, LoadSceneMode.Additive);
+        }
+
+        //unity callback
+        private async void OnEnable()
+        {
+            await _addressablesModule.LoadSceneAsync(_address, LoadSceneMode.Additive, false);
+            _addressablesModule.ActivateScene(_address);
         }
         
         private void OnDisable()

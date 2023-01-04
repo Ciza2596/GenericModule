@@ -3,7 +3,7 @@ namespace SceneModule
 {
     public interface ILoadSceneAsync
     {
-        public float Progress { get; }
+        public bool IsDone { get; }
         
         public void Activate();
     }

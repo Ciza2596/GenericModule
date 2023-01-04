@@ -10,8 +10,7 @@ namespace SceneModule.Implement
 
 
         //public variable
-        public float Progress => _loadSceneAsync.progress;
-        public Task Task { get; }
+        public bool IsDone  => _loadSceneAsync.progress >= 0.90f;
 
 
         //public method

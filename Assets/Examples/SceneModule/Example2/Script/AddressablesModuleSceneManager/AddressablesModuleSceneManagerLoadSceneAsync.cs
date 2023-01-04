@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.SceneManagement;
 
 namespace SceneModule.Example2
@@ -12,7 +11,7 @@ namespace SceneModule.Example2
         private bool _isDone = false;
 
         //public variable
-        public float Progress => _isDone ? 1 : 0;
+        public bool IsDone => _isDone;
 
         //public method
         public AddressablesModuleSceneManagerLoadSceneAsync(AddressablesModule.AddressablesModule addressablesModule) =>

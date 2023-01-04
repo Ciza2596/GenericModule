@@ -34,11 +34,7 @@ namespace SceneModule.Example1
             if (!_isOnce)
                 return;
 
-            var progress = _loadSceneAsync.Progress;
-
-            Debug.Log($"Progress: {progress}.");
-            
-            if (_isOnce && progress >= 1f && _loadingTime <= 0)
+            if (_isOnce && _loadSceneAsync.IsDone && _loadingTime <= 0)
             {
                 _isOnce = false;
                 _onComplete?.Invoke();

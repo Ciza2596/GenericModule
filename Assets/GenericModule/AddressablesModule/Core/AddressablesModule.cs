@@ -151,8 +151,7 @@ namespace AddressablesModule
 
         public async Task UnloadSceneAsync(string address)
         {
-            if (!_sceneHandles.ContainsKey(address))
-                return;
+            Assert.IsTrue(_sceneHandles.ContainsKey(address),"[AddressablesModule::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
 
             var sceneHandle = _sceneHandles[address];
             _sceneHandles.Remove(address);

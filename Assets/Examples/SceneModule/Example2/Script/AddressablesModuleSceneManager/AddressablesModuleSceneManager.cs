@@ -1,4 +1,7 @@
 
+using System;
+using UnityEngine.SceneManagement;
+
 namespace SceneModule.Example2
 {
     public class AddressablesModuleSceneManager : ISceneManager
@@ -15,11 +18,22 @@ namespace SceneModule.Example2
             // var loadSceneAsync =
             //     _addressablesModule.LoadSceneAsyncAndGetHandle(sceneName, (LoadSceneMode)loadMode, isActivateOnLoad);
 
-            var addressablesModuleSceneManagerLoadSceneAsync = new AddressablesModuleSceneManagerLoadSceneAsync(_addressablesModule, sceneName, loadMode, isActivateOnLoad);
+            var addressablesModuleSceneManagerLoadSceneAsync = new AddressablesModuleSceneManagerLoadSceneAsync(_addressablesModule);
+            addressablesModuleSceneManagerLoadSceneAsync.LoadScene(sceneName, loadMode, isActivateOnLoad);
+            
             return addressablesModuleSceneManagerLoadSceneAsync;
         }
 
-        public void UnloadScene(string sceneName) =>
-            _addressablesModule.UnloadSceneAsync(sceneName);
+        public async void UnloadScene(string sceneName)
+        {
+            try
+            {
+                await _addressablesModule.UnloadSceneAsync(sceneName);
+            }
+            catch (Exception e)
+            {
+                SceneManager.UnloadSceneAsync(sceneName);
+            } 
+        }
     }
 }

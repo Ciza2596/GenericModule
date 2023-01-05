@@ -45,14 +45,3 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Addressa
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
 ```
-
-
-# ViewModule
-
-## Dependence
-[GameCore](https://github.com/Ciza2596/GameCore)
-
-## Add package from git URL
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/ViewModule
-```

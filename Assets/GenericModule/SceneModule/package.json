@@ -18,27 +18,27 @@
   "samples": [
     {
       "displayName": "Extension1 AnimView",
-      "description": "Extension1 AnimView",
+      "description": "Implement sceneModule view to animView.",
       "path": "Samples~/Extension1 AnimView"
     },
     {
       "displayName": "Extension2 ZenjectUnitySceneManagerInstaller",
-      "description": "Extension2 ZenjectUnitySceneManagerInstaller",
+      "description": "UnitySceneManager inject to sceneModule with zenject.",
       "path": "Samples~/Extension2 ZenjectUnitySceneManagerInstaller"
     },
     {
       "displayName": "Example1 WithAnimView",
-      "description": "Example1 WithAnimView",
+      "description": "Implement animView include animation, prefab, scene, script, scriptableObject etc.",
       "path": "Samples~/Example1 WithAnimView"
     },
     {
       "displayName": "Extension3 WithAddressablesModule",
-      "description": "Extension3 WithAddressablesModule",
+      "description": "Please download addressablesModule.",
       "path": "Samples~/Extension3 WithAddressablesModule"
     },
     {
       "displayName": "Extension4 ZenjectAddressablesModuleSceneManagerInstaller",
-      "description": "Extension4 ZenjectAddressablesModuleSceneManagerInstaller",
+      "description": "Install addressablesModuleSceneManager with zenject",
       "path": "Samples~/Extension4 ZenjectAddressablesModuleSceneManagerInstaller"
     }
   ]

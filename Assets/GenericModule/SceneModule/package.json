@@ -22,14 +22,14 @@
       "path": "Samples~/Extension1 AnimView"
     },
     {
-      "displayName": "Example1 WithAnimView",
-      "description": "Example1 WithAnimView",
-      "path": "Samples~/Example1 WithAnimView"
-    },
-    {
       "displayName": "Extension2 ZenjectUnitySceneManagerInstaller",
       "description": "Extension2 ZenjectUnitySceneManagerInstaller",
       "path": "Samples~/Extension2 ZenjectUnitySceneManagerInstaller"
+    },
+    {
+      "displayName": "Example1 WithAnimView",
+      "description": "Example1 WithAnimView",
+      "path": "Samples~/Example1 WithAnimView"
     },
     {
       "displayName": "Extension3 WithAddressablesModule",

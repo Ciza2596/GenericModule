@@ -28,7 +28,7 @@
     },
     {
       "displayName": "Example1 WithAnimView",
-      "description": "Implement animView include animation, prefab, scene, script, scriptableObject etc.",
+      "description": "Please import Extension1 AnimView, Extension2 ZenjectUnitySceneManagerInstaller. Implement animView include animation, prefab, scene, script, scriptableObject etc.",
       "path": "Samples~/Example1 WithAnimView"
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "displayName": "Extension4 ZenjectAddressablesModuleSceneManagerInstaller",
-      "description": "Install addressablesModuleSceneManager with zenject",
+      "description": "Please download addressablesModule. Install addressablesModuleSceneManager with zenject",
       "path": "Samples~/Extension4 ZenjectAddressablesModuleSceneManagerInstaller"
     }
   ]

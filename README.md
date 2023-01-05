@@ -41,6 +41,11 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObje
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```
 
+## SceneModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
+```
+
 
 # ViewModule
 

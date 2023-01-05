@@ -14,5 +14,17 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Ciza2596/GenericModule.git"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Example1 BaseImplement",
+      "description": "Example1 BaseImplement",
+      "path": "Samples~/Example1 BaseImplement"
+    },
+    {
+      "displayName": "Example2 WithAddressablesModule",
+      "description": "Need Example1 and AddressablesModule",
+      "path": "Samples~/Example2 WithAddressablesModule"
+    }
+  ]
 }

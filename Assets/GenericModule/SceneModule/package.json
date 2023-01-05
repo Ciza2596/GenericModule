@@ -17,14 +17,29 @@
   },
   "samples": [
     {
-      "displayName": "Example1 BaseImplement",
-      "description": "Example1 BaseImplement",
-      "path": "Samples~/Example1 BaseImplement"
+      "displayName": "Extension1 AnimView",
+      "description": "Extension1 AnimView",
+      "path": "Samples~/Extension1 AnimView"
     },
     {
-      "displayName": "Example2 WithAddressablesModule",
-      "description": "Need Example1 and AddressablesModule",
-      "path": "Samples~/Example2 WithAddressablesModule"
+      "displayName": "Example1 WithAnimView",
+      "description": "Example1 WithAnimView",
+      "path": "Samples~/Example1 WithAnimView"
+    },
+    {
+      "displayName": "Extension2 ZenjectUnitySceneManagerInstaller",
+      "description": "Extension2 ZenjectUnitySceneManagerInstaller",
+      "path": "Samples~/Extension2 ZenjectUnitySceneManagerInstaller"
+    },
+    {
+      "displayName": "Extension3 WithAddressablesModule",
+      "description": "Extension3 WithAddressablesModule",
+      "path": "Samples~/Extension3 WithAddressablesModule"
+    },
+    {
+      "displayName": "Extension4 ZenjectAddressablesModuleSceneManagerInstaller",
+      "description": "Extension4 ZenjectAddressablesModuleSceneManagerInstaller",
+      "path": "Samples~/Extension4 ZenjectAddressablesModuleSceneManagerInstaller"
     }
   ]
 }

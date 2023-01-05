@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Examples/SceneModule/Example1 BaseImplement/Scene/Scene1.unity
+    path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene1.unity
     guid: 2780e4694c8c5445d98784f2f21c6bbc
   - enabled: 1
-    path: Assets/Examples/SceneModule/Example1 BaseImplement/Scene/Scene2.unity
+    path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene2.unity
     guid: 6903b2a24bad0412f8a707a116532ca3
   - enabled: 1
-    path: Assets/Examples/SceneModule/Example1 BaseImplement/Scene/TransitionScene.unity
+    path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/TransitionScene.unity
     guid: 93308f1aa9d0944ce9014f93f88e65fb
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 33aa2fe3b15344c31bd9d2e8170ea24b, type: 2}

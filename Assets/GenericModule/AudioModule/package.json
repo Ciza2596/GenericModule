@@ -17,9 +17,9 @@
   },
   "samples": [
     {
-      "displayName": "Extension1 Extension1 ZenjectInstaller",
+      "displayName": "Extension1 ZenjectInstaller",
       "description": "Implement audioModule installer with zenject.",
-      "path": "Samples~/Extension1 Extension1 ZenjectInstaller"
+      "path": "Samples~/Extension1 ZenjectInstaller"
     },
     {
       "displayName": "Example1 WithZenejctInstaller",

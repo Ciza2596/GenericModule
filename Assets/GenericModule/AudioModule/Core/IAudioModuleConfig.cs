@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.Audio;
 
 namespace AudioModule
@@ -7,12 +6,11 @@ namespace AudioModule
     {
         AudioMixer AudioMixer { get; }
 
-        string PoolName { get; }
-        
-        Transform PoolParentTransform { get; }
+        string PoolRootName { get; }
+        string PoolSuffix { get; }
 
         string MasterVolumeParameter { get; }
-        
+
         string BgmVolumeParameter { get; }
 
         string SfxVolumeParameter { get; }
@@ -20,4 +18,3 @@ namespace AudioModule
         string VoiceVolumeParameter { get; }
     }
 }
-

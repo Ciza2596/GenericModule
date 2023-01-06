@@ -18,6 +18,7 @@ namespace AudioModule
         private readonly string _voiceVolumeParameter;
 
         private readonly Transform _poolRootTransform;
+        private readonly string _poolSuffix;
         private readonly Dictionary<string, Transform> _keyPoolTransformMaps = new Dictionary<string, Transform>();
 
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
@@ -45,12 +46,11 @@ namespace AudioModule
             _voiceVolumeParameter = audioModuleConfig.VoiceVolumeParameter;
 
 
-            var poolName = audioModuleConfig.PoolName;
-            var poolGameObject = new GameObject(poolName);
+            var poolRootName = audioModuleConfig.PoolRootName;
+            var poolRootGameObject = new GameObject(poolRootName);
+            _poolRootTransform = poolRootGameObject.transform;
 
-            _poolRootTransform = poolGameObject.transform;
-            var poolParentTransform = audioModuleConfig.PoolParentTransform;
-            _poolRootTransform.SetParent(poolParentTransform);
+            _poolSuffix = audioModuleConfig.PoolSuffix;
         }
 
         public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;
@@ -84,8 +84,10 @@ namespace AudioModule
 
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
-        
 
+
+        public string Play(string key) => Play(key, Vector3.zero, null);
+        
         public string Play(string key, Vector3 position, Transform parentTransform)
         {
             if (!_keyIdsMaps.ContainsKey(key))
@@ -102,7 +104,7 @@ namespace AudioModule
             var id = ids[0];
             ids.Remove(id);
             
-            _isPlayingIds.Add(key);
+            _isPlayingIds.Add(id);
 
             var audioData = GetAudioData(id);
             audioData.Play(position, parentTransform);
@@ -137,7 +139,7 @@ namespace AudioModule
             Transform poolTransform;
             if (!_keyPoolTransformMaps.ContainsKey(key))
             {
-                var poolGameObject = new GameObject(key);
+                var poolGameObject = new GameObject(key + _poolSuffix);
                 poolTransform = poolGameObject.transform;
                 poolTransform.SetParent(_poolRootTransform);
                 _keyPoolTransformMaps.Add(key, poolTransform);

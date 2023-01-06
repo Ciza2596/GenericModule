@@ -17,7 +17,7 @@ namespace AudioModule
         public string Key { get; private set; }
         public float Volume => _audioSource.volume;
         public float OriginVolume { get; }
-        public float Duration { get; private set; }
+        public float Duration { get;}
 
 
         //public method
@@ -40,8 +40,7 @@ namespace AudioModule
             if(position != default)
                 _selfTransform.position = position;
             
-            if (parentTransform != null)
-                _selfTransform.SetParent(parentTransform);
+            _selfTransform.SetParent(parentTransform);
             
             
             Assert.IsNotNull(_audioSource.clip,

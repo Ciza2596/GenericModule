@@ -1,17 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace AudioModule.Example1
+namespace AudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioDataOverview", menuName = "AudioModule/AudioDataOverview")]
-    public class AudioDataOverview : ScriptableObject
+    [CreateAssetMenu(fileName = "AudioResourceDataOverview", menuName = "AudioModule/AudioResourceDataOverview")]
+    public class AudioResourceDataOverview : ScriptableObject
     {
         [SerializeField]
-        private List<AudioResourceData> _audioDatas;
+        private AudioResourceData[] _audioDatas;
 
-        public List<IAudioResourceData> GetAudioDatas => _audioDatas.ToList<IAudioResourceData>();
+        public IAudioResourceData[] GetAudioDatas => _audioDatas;
         
 
         [Serializable]

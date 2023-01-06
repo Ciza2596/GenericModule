@@ -12,12 +12,6 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventMod
 ```
 
 
-## CameraModule
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/CameraModule
-```
-
-
 ## AudioModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule

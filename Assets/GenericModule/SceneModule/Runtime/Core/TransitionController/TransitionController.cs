@@ -42,7 +42,7 @@ namespace SceneModule
             transitionInView.Play(() =>
             {
                 UnloadScene(currentSceneName);
-                releasingTask?.Release();
+                releasingTask?.Execute();
 
                 LoadSceneOnBackground(nextSceneName);
                 loadingView.Loading(_loadSceneAsync, loadingTask,

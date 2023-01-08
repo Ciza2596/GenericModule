@@ -13,14 +13,14 @@ namespace SceneModule
 
         public string TransitionInViewName { get; private set; }
         public string CurrentSceneName { get; private set; }
-        public ISceneTask ReleasingTask { get; private set; }
+        public IReleasingTask ReleasingTask { get; private set; }
 
 
         public string LoadingViewName { get; private set; }
 
         public string TransitionOutViewName { get; private set; }
         public string NextSceneName { get; private set; }
-        public ISceneTask LoadingTask { get; private set; }
+        public ILoadingTask LoadingTask { get; private set; }
 
 
         //public method
@@ -33,27 +33,18 @@ namespace SceneModule
             _sceneManager = sceneManager;
         }
 
-        public ILoadSceneAsync LoadSceneAsync(string sceneName, LoadModes loadMode, bool isActivateOnLoad = true,
-            ISceneTask sceneTask = null)
-        {
-            sceneTask?.Load();
+        public ILoadSceneAsync LoadSceneAsync(string sceneName, LoadModes loadMode, bool isActivateOnLoad = true) =>
+            _sceneManager.LoadScene(sceneName, loadMode, isActivateOnLoad);
 
-            var loadSceneAsync = _sceneManager.LoadScene(sceneName, loadMode, isActivateOnLoad);
-            return loadSceneAsync;
-        }
 
-        public void UnloadScene(string sceneName,
-            ISceneTask sceneTask = null)
-        {
-            sceneTask?.Release();
-
+        public void UnloadScene(string sceneName) =>
             _sceneManager.UnloadScene(sceneName);
-        }
 
 
         public void ChangeScene(string transitionInViewName, string currentSceneName,
-            string loadingViewName, string transitionOutViewName, string nextSceneName, ISceneTask releasingTask = null,
-            ISceneTask loadingTask = null)
+            string loadingViewName, string transitionOutViewName, string nextSceneName,
+            IReleasingTask releasingTask = null,
+            ILoadingTask loadingTask = null)
         {
             TransitionInViewName = transitionInViewName;
             CurrentSceneName = currentSceneName;
@@ -63,7 +54,7 @@ namespace SceneModule
 
             TransitionOutViewName = transitionOutViewName;
             NextSceneName = nextSceneName;
-            LoadingTask = LoadingTask;
+            LoadingTask = loadingTask;
 
             LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
         }

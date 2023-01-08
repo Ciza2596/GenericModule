@@ -43,29 +43,14 @@ MonoBehaviour:
     - DOTweenPro.Scripts
     - EventModule
     - EventModule.Test
-    - GameCore.Editor
-    - GameCore.Generic.Installer
-    - GameCore.Generic.TestFramework
-    - GameCore.Implement
-    - GameCore.Infrastructure
     - GameObjectPoolModule
     - LogModule
-    - MessagePipe
-    - MessagePipe.Editor
-    - MessagePipe.Zenject
     - PsdPlugin
     - SaveLoadModule
     - SceneModule
-    - SceneModule.Implement
-    - UniTask
-    - UniTask.Addressables
-    - UniTask.DOTween
-    - UniTask.Editor
-    - UniTask.Linq
-    - UniTask.TextMeshPro
-    - ViewModule
-    - ViewModule.Test
     - Zenject
+    - Zenject-IntegrationTests
+    - Zenject-TestFramework
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

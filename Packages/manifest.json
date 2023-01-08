@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.ciza.gamecore": "https://github.com/Ciza2596/GameCore.git?path=Assets/GameCore",
     "com.unity.addressables": "1.21.1",
     "com.unity.ai.navigation": "1.1.1",
     "com.unity.collab-proxy": "1.17.7",

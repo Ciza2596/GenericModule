@@ -9,6 +9,7 @@ namespace SceneModule.Implement
         [SerializeField] private float _defaultLoadingTime = 1;
 
         private ILoadSceneAsync _loadSceneAsync;
+        private ISceneTask _loadingTask;
         private Action _onComplete;
 
         private float _loadingTime;
@@ -16,12 +17,15 @@ namespace SceneModule.Implement
 
 
         //loadingView callback
-        public void Loading(ILoadSceneAsync loadSceneAsync, Action onComplete)
+        public void Loading(ILoadSceneAsync loadSceneAsync,ISceneTask loadingTask, Action onComplete)
         {
             gameObject.SetActive(true);
 
             _loadSceneAsync = loadSceneAsync;
+            _loadingTask = loadingTask;
             _onComplete = onComplete;
+            
+            loadingTask?.Load();
 
             _loadingTime = _defaultLoadingTime;
             _isOnce = true;
@@ -34,7 +38,9 @@ namespace SceneModule.Implement
             if (!_isOnce)
                 return;
 
-            if (_isOnce && _loadSceneAsync.IsDone && _loadingTime <= 0)
+            var isCompleteLoading = _loadingTask?.IsCompleteLoading ?? true;
+
+            if (_isOnce && _loadSceneAsync.IsDone && isCompleteLoading && _loadingTime <= 0)
             {
                 _isOnce = false;
                 _onComplete?.Invoke();

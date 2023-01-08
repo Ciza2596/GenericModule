@@ -23,12 +23,14 @@ namespace SceneModule
             var transitionInViewPrefab = transitionControllerConfig.GetTransitionInViewPrefab(transitionInViewName);
             var transitionInView = CreateView<ITransitionView>(viewParentTransform, transitionInViewPrefab);
             var currentSceneName = sceneModule.CurrentSceneName;
+            var releasingTask = sceneModule.ReleasingTask;
 
 
             var loadingViewName = sceneModule.LoadingViewName;
             var loadingViewPrefab = transitionControllerConfig.GetLoadingViewPrefab(loadingViewName);
             var loadingView = CreateView<ILoadingView>(viewParentTransform, loadingViewPrefab);
             var nextSceneName = sceneModule.NextSceneName;
+            var loadingTask = sceneModule.LoadingTask;
 
 
             var transitionOutViewName = sceneModule.TransitionOutViewName;
@@ -40,9 +42,10 @@ namespace SceneModule
             transitionInView.Play(() =>
             {
                 UnloadScene(currentSceneName);
+                releasingTask?.Release();
 
                 LoadSceneOnBackground(nextSceneName);
-                loadingView.Loading(_loadSceneAsync,
+                loadingView.Loading(_loadSceneAsync, loadingTask,
                     () =>
                     {
                         ActivateScene();

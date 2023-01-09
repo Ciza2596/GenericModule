@@ -26,30 +26,28 @@ namespace LogModule
 
 
         //public method
-        public void Log(LogLevels logLevel, string message)
+        public void Debug(string message)
         {
-            switch (logLevel)
-            {
-                case LogLevels.None:
-                default:
-                    break;
-                case LogLevels.Debug:
-                    if (_logConfig.IsPrintDebug)
-                        _logPrinter.PrintDebug(message);
-                    break;
-                case LogLevels.Info:
-                    if (_logConfig.IsPrintInfo)
-                        _logPrinter.PrintInfo(message);
-                    break;
-                case LogLevels.Warn:
-                    if (_logConfig.IsPrintWarn)
-                        _logPrinter.PrintWarn(message);
-                    break;
-                case LogLevels.Error:
-                    if (_logConfig.IsPrintError)
-                        _logPrinter.PrintError(message);
-                    break;
-            }
+            if(_logConfig.IsPrintDebug)
+                _logPrinter.PrintDebug(message);
+        }
+
+        public void Info(string message)
+        {
+            if (_logConfig.IsPrintInfo)
+                _logPrinter.PrintInfo(message);
+        }
+
+        public void Warn(string message)
+        {
+            if(_logConfig.IsPrintWarn)
+                _logPrinter.PrintWarn(message);
+        }
+
+        public void Error(string message)
+        {
+            if(_logConfig.IsPrintError)
+                _logPrinter.PrintError(message);
         }
     }
 }

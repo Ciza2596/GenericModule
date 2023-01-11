@@ -6,6 +6,7 @@ namespace SaveLoadModule.Example1
 {
     public class TestSaveLoadModule : MonoBehaviour
     {
+        [SerializeField] private string _key;
         [SerializeField] private string _filePath;
         [Space] [SerializeField] private float _hp;
 
@@ -34,12 +35,12 @@ namespace SaveLoadModule.Example1
                 playerData.AddGameObjectDict(key, prefab);
             }
 
-            _saveLoadModule.Save<PlayerData>(_playerData, _filePath);
+            _saveLoadModule.Save<PlayerData>(_key, _playerData, _filePath);
         }
 
         private void OnDisable()
         {
-            _playerData = _saveLoadModule.Load<PlayerData>(_filePath);
+            _playerData = _saveLoadModule.Load<PlayerData>(_key, _filePath);
             
             Print($"Hp: {_playerData.Hp}");
             

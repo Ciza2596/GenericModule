@@ -5,22 +5,22 @@ namespace LogModule
     public class LogModule
     {
         //private variable
-        private ILogConfig _logConfig;
+        private ILogModuleConfig _logModuleConfig;
         private ILogPrinter _logPrinter;
 
         //module callback
-        public LogModule(ILogConfig logConfig, ILogPrinter logPrinter)
+        public LogModule(ILogModuleConfig logModuleConfig, ILogPrinter logPrinter)
         {
-            Assert.IsNotNull(logConfig, "[LogModule::LogModule] LogConfig is null.");
+            Assert.IsNotNull(logModuleConfig, "[LogModule::LogModule] LogConfig is null.");
             Assert.IsNotNull(logPrinter, "[LogModule::LogModule] LogPrinter is null.");
             
-            _logConfig = logConfig;
+            _logModuleConfig = logModuleConfig;
             _logPrinter = logPrinter;
         }
 
         ~LogModule()
         {
-            _logConfig = null;
+            _logModuleConfig = null;
             _logPrinter = null;
         }
 
@@ -28,25 +28,25 @@ namespace LogModule
         //public method
         public void Debug(string message)
         {
-            if(_logConfig.IsPrintDebug)
+            if(_logModuleConfig.IsPrintDebug)
                 _logPrinter.PrintDebug(message);
         }
 
         public void Info(string message)
         {
-            if (_logConfig.IsPrintInfo)
+            if (_logModuleConfig.IsPrintInfo)
                 _logPrinter.PrintInfo(message);
         }
 
         public void Warn(string message)
         {
-            if(_logConfig.IsPrintWarn)
+            if(_logModuleConfig.IsPrintWarn)
                 _logPrinter.PrintWarn(message);
         }
 
         public void Error(string message)
         {
-            if(_logConfig.IsPrintError)
+            if(_logModuleConfig.IsPrintError)
                 _logPrinter.PrintError(message);
         }
     }

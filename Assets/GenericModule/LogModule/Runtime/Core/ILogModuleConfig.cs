@@ -1,12 +1,12 @@
 ﻿
 namespace LogModule
 {
-    public interface ILogConfig
+    public interface ILogModuleConfig
     {
-        //Dev, Demo, Editor使用
+        //Dev, Demo, Editor
         public bool IsPrintDebug { get; }
         
-        //以下為正式版本使用
+        //Production
         public bool IsPrintInfo { get; }
         public bool IsPrintWarn { get; }
         public bool IsPrintError { get; }

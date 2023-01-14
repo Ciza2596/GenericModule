@@ -21,6 +21,7 @@ namespace AudioPlayerModule.Example1
         [Space] [SerializeField] private Button _playerButton;
         [SerializeField] private Button _stopButton;
         [SerializeField] private Button _stopAllButton;
+        [SerializeField] private Button _releaseButton;
 
         public Slider MasterSlider => _masterSlider;
         public Slider BgmSlider => _bgmSlider;
@@ -36,5 +37,6 @@ namespace AudioPlayerModule.Example1
         public Button PlayerButton => _playerButton;
         public Button StopButton => _stopButton;
         public Button StopAllButton => _stopAllButton;
+        public Button ReleaseButton => _releaseButton;
     }
 }

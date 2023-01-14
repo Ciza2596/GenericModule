@@ -31,7 +31,8 @@ namespace AudioPlayerModule.Example1
 
             _componentCollectionData.PlayerButton.onClick.AddListener(() =>
             {
-                _currentAudioId = _audioModule.Play(_componentCollectionData.Key, Vector3.zero, _componentCollectionData.ParentTransform);
+                _currentAudioId = _audioModule.Play(_componentCollectionData.Key, _componentCollectionData.AudioPosition,
+                    _componentCollectionData.ParentTransform);
                 _audioIds.Add(_currentAudioId);
             });
 
@@ -50,11 +51,18 @@ namespace AudioPlayerModule.Example1
                     _audioIds.Remove(audioId);
                 }
             });
-            
-            _componentCollectionData.MasterSlider.onValueChanged.AddListener( masterVolume => _audioModule.SetMasterVolume(masterVolume));
-            _componentCollectionData.BgmSlider.onValueChanged.AddListener( bgmVolume => _audioModule.SetBgmVolume(bgmVolume));
-            _componentCollectionData.SfxSlider.onValueChanged.AddListener( sfxVolume => _audioModule.SetSfxVolume(sfxVolume));
-            _componentCollectionData.VoiceSlider.onValueChanged.AddListener( voiceVolume => _audioModule.SetVoiceVolume(voiceVolume));
+
+
+            _componentCollectionData.ReleaseButton.onClick.AddListener(() => _audioModule.Release());
+
+            _componentCollectionData.MasterSlider.onValueChanged.AddListener(masterVolume =>
+                _audioModule.SetMasterVolume(masterVolume));
+            _componentCollectionData.BgmSlider.onValueChanged.AddListener(bgmVolume =>
+                _audioModule.SetBgmVolume(bgmVolume));
+            _componentCollectionData.SfxSlider.onValueChanged.AddListener(sfxVolume =>
+                _audioModule.SetSfxVolume(sfxVolume));
+            _componentCollectionData.VoiceSlider.onValueChanged.AddListener(voiceVolume =>
+                _audioModule.SetVoiceVolume(voiceVolume));
         }
     }
 }

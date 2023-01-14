@@ -58,9 +58,10 @@ namespace AudioModule
 
         public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;
 
-        public void Release()
+        public void Release(bool isReleaseAudioResourceDatas = false)
         {
-            _audioResourceDatas = null;
+            if(isReleaseAudioResourceDatas)
+                _audioResourceDatas = null;
 
             _keyIdsMaps.Clear();
             _isPlayingIds.Clear();
@@ -194,7 +195,7 @@ namespace AudioModule
 
             var poolTransforms = _keyPoolTransformMaps.Values.ToList();
             foreach (var poolTransform in poolTransforms)
-                Object.Instantiate(poolTransform.gameObject);
+                Object.Destroy(poolTransform.gameObject);
 
             _keyPoolTransformMaps.Clear();
         }

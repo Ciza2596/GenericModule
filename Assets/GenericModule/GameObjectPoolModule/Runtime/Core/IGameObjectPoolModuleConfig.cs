@@ -8,6 +8,7 @@ namespace GameObjectPoolModule
         public string PoolRootName { get; }
         public Transform PoolRootTransform { get; }
         
-        public string Prefix { get; }
+        public string PoolPrefix { get; }
+        public string PoolSuffix { get; }
     }
 }

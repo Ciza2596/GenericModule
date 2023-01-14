@@ -18,6 +18,7 @@ namespace AudioModule
         private readonly string _voiceVolumeParameter;
 
         private readonly Transform _poolRootTransform;
+        private readonly string _poolPrefix;
         private readonly string _poolSuffix;
         private readonly Dictionary<string, Transform> _keyPoolTransformMaps = new Dictionary<string, Transform>();
 
@@ -50,6 +51,8 @@ namespace AudioModule
             var poolRootGameObject = new GameObject(poolRootName);
             _poolRootTransform = poolRootGameObject.transform;
 
+            
+            _poolPrefix = audioModuleConfig.PoolPrefix;
             _poolSuffix = audioModuleConfig.PoolSuffix;
         }
 
@@ -141,7 +144,7 @@ namespace AudioModule
             Transform poolTransform;
             if (!_keyPoolTransformMaps.ContainsKey(key))
             {
-                var poolGameObject = new GameObject(key + _poolSuffix);
+                var poolGameObject = new GameObject( _poolPrefix + key + _poolSuffix);
                 poolTransform = poolGameObject.transform;
                 poolTransform.SetParent(_poolRootTransform);
                 _keyPoolTransformMaps.Add(key, poolTransform);

@@ -9,9 +9,11 @@ namespace AudioModule.Implement
         [SerializeField]
         private AudioMixer _audioMixer;
         [SerializeField]
-        private string _poolName = "AudioModulePools";
+        private string _poolRootName = "[AudioModuleRootPool]";
 
-        [SerializeField] private string _poolSuffix = "s";
+        [Space]
+        [SerializeField] private string _poolPrefix = "[";
+        [SerializeField] private string _poolSuffix = "s]";
 
         [Space] [SerializeField] private string _masterVolumeParameter = "Master";
         [SerializeField] private string _bgmVolumeParameter = "Master/Bgm";
@@ -20,7 +22,8 @@ namespace AudioModule.Implement
         
 
         public AudioMixer AudioMixer => _audioMixer;
-        public string PoolRootName => _poolName;
+        public string PoolRootName => _poolRootName;
+        public string PoolPrefix => _poolPrefix;
         public string PoolSuffix => _poolSuffix;
 
         public string MasterVolumeParameter => _masterVolumeParameter;

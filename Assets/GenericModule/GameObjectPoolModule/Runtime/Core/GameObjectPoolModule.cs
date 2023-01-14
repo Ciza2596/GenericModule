@@ -11,7 +11,8 @@ namespace GameObjectPoolModule
     {
         //private variable
         private readonly Transform _poolRootTransform;
-        private readonly string _prefix;
+        private readonly string _poolPrefix;
+        private readonly string _poolSuffix;
         private readonly Dictionary<string, Transform> _poolTransforms = new Dictionary<string, Transform>();
         
         
@@ -32,7 +33,8 @@ namespace GameObjectPoolModule
             _poolRootTransform = poolRootGameObject.transform;
             _poolRootTransform.SetParent(gameObjectPoolModuleConfig.PoolRootTransform);
 
-            _prefix = gameObjectPoolModuleConfig.Prefix;
+            _poolPrefix = gameObjectPoolModuleConfig.PoolPrefix;
+            _poolSuffix = gameObjectPoolModuleConfig.PoolSuffix;
         }
 
 
@@ -125,7 +127,7 @@ namespace GameObjectPoolModule
             var gameObjects = new List<GameObject>();
             _pools.Add(key, gameObjects);
 
-            var gameObject = new GameObject(key + _prefix);
+            var gameObject = new GameObject( _poolPrefix + key + _poolSuffix);
             var poolTransform = gameObject.transform;
             _poolTransforms.Add(key, poolTransform);
         }

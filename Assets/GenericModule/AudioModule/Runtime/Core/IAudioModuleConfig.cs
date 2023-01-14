@@ -7,6 +7,7 @@ namespace AudioModule
         AudioMixer AudioMixer { get; }
 
         string PoolRootName { get; }
+        string PoolPrefix { get; }
         string PoolSuffix { get; }
 
         string MasterVolumeParameter { get; }

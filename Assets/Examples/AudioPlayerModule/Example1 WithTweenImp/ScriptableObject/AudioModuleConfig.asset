@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd1fb2ee0fc445fcaa2ddcf3a47f4d3, type: 3}
   m_Name: AudioModuleConfig
   m_EditorClassIdentifier: 
-  _audioMixer: {fileID: 24100000, guid: 1b4c83034f69440c78981273b31b33e5, type: 2}
-  _poolRootName: '[AudioModuleRootPool]'
-  _poolPrefix: '['
-  _poolSuffix: s]
+  _audioMixer: {fileID: 24100000, guid: b697e6443aa7f4c43827a0c24bc9c6f4, type: 2}
+  _poolName: AudioModulePool
+  _poolSuffix: s
   _masterVolumeParameter: Master
   _bgmVolumeParameter: Bgm
   _sfxVolumeParameter: Sfx

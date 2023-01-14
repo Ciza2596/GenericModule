@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using AudioModule.Implement;
-using UnityEngine;
 using Zenject;
 
 namespace AudioPlayerModule.Example1
@@ -53,7 +52,7 @@ namespace AudioPlayerModule.Example1
             });
 
 
-            _componentCollectionData.ReleaseButton.onClick.AddListener(() => _audioModule.Release());
+            _componentCollectionData.ReleasePoolButton.onClick.AddListener(() => _audioModule.ReleasePool());
 
             _componentCollectionData.MasterSlider.onValueChanged.AddListener(masterVolume =>
                 _audioModule.SetMasterVolume(masterVolume));

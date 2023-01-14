@@ -5,7 +5,7 @@ namespace AudioPlayerModule
 {
     public interface ITween
     {
-        public string StartTimer(float duration, Action callBack);
+        public string StartTimer(float duration, Action onComplete);
         
         public void StopTimer(string id);
         

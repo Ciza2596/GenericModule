@@ -24,7 +24,7 @@ namespace AudioModule
 
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
         private readonly List<string> _isPlayingIds = new List<string>();
-        
+
         private readonly List<AudioData> _audioDatas = new List<AudioData>();
 
 
@@ -51,22 +51,36 @@ namespace AudioModule
             var poolRootGameObject = new GameObject(poolRootName);
             _poolRootTransform = poolRootGameObject.transform;
 
-            
+
             _poolPrefix = audioModuleConfig.PoolPrefix;
             _poolSuffix = audioModuleConfig.PoolSuffix;
         }
 
         public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;
 
-        public void Release(bool isReleaseAudioResourceDatas = false)
+        public void Release()
         {
-            if(isReleaseAudioResourceDatas)
-                _audioResourceDatas = null;
+            _audioResourceDatas = null;
 
+            ReleasePool();
+        }
+
+        public void ReleasePool()
+        {
             _keyIdsMaps.Clear();
             _isPlayingIds.Clear();
 
-            ReleasePool();
+            var audioDatas = _audioDatas.ToArray();
+            _audioDatas.Clear();
+
+            foreach (var audioData in audioDatas)
+                audioData.Release();
+
+            var poolTransforms = _keyPoolTransformMaps.Values.ToList();
+            foreach (var poolTransform in poolTransforms)
+                Object.Destroy(poolTransform.gameObject);
+
+            _keyPoolTransformMaps.Clear();
         }
 
 
@@ -91,9 +105,9 @@ namespace AudioModule
 
 
         public string Play(string key) => Play(key, Vector3.zero, null);
-        
+
         public string Play(string key, Transform parentTransform) => Play(key, Vector3.zero, parentTransform);
-        
+
         public string Play(string key, Vector3 position, Transform parentTransform)
         {
             if (!_keyIdsMaps.ContainsKey(key))
@@ -109,7 +123,7 @@ namespace AudioModule
 
             var id = ids[0];
             ids.Remove(id);
-            
+
             _isPlayingIds.Add(id);
 
             var audioData = GetAudioData(id);
@@ -118,18 +132,18 @@ namespace AudioModule
             return id;
         }
 
-        
+
         public AudioData GetAudioData(string id) => _audioDatas.First(audioData => audioData.Id == id);
 
 
         public void Stop(string id)
         {
-            if(!CheckIsPlaying(id))
+            if (!CheckIsPlaying(id))
                 return;
 
             var audioData = GetAudioData(id);
             audioData.Stop();
-            
+
             _isPlayingIds.Remove(id);
 
             var key = audioData.Key;
@@ -145,7 +159,7 @@ namespace AudioModule
             Transform poolTransform;
             if (!_keyPoolTransformMaps.ContainsKey(key))
             {
-                var poolGameObject = new GameObject( _poolPrefix + key + _poolSuffix);
+                var poolGameObject = new GameObject(_poolPrefix + key + _poolSuffix);
                 poolTransform = poolGameObject.transform;
                 poolTransform.SetParent(_poolRootTransform);
                 _keyPoolTransformMaps.Add(key, poolTransform);
@@ -178,26 +192,11 @@ namespace AudioModule
             Assert.IsNotNull(_audioResourceDatas, "[AudioModule::GetPrefab] AudioDatas is null.");
 
             var audioResourceData = _audioResourceDatas.First(data => data.Key == key);
-            Assert.IsNotNull(audioResourceData, $"[AudioModule::GetPrefab] AudioData is null. Please check key: {key}.");
+            Assert.IsNotNull(audioResourceData,
+                $"[AudioModule::GetPrefab] AudioData is null. Please check key: {key}.");
 
             var prefab = audioResourceData.Prefab;
             return prefab;
-        }
-
-        
-        private void ReleasePool()
-        {
-            var audioDatas = _audioDatas.ToArray();
-            _audioDatas.Clear();
-
-            foreach (var audioData in audioDatas)
-                audioData.Release();
-
-            var poolTransforms = _keyPoolTransformMaps.Values.ToList();
-            foreach (var poolTransform in poolTransforms)
-                Object.Destroy(poolTransform.gameObject);
-
-            _keyPoolTransformMaps.Clear();
         }
     }
 }

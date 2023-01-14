@@ -10,9 +10,9 @@ namespace AudioPlayerModule.Implement
 
         public TweenImp(ITimerModule timerModule) => _timerModule = timerModule;
 
-        public string StartTimer(float duration, Action callback)
+        public string StartTimer(float duration, Action onComplete)
         {
-            var id = _timerModule.RegisterOnceTimer(duration, callback);
+            var id = _timerModule.RegisterOnceTimer(duration, onComplete);
             return id;
         }
 

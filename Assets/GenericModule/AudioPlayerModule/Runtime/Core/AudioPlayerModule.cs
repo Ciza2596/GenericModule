@@ -46,6 +46,19 @@ namespace AudioPlayerModule
             });
         }
 
+        public void ReleasePool()
+        {
+            IsReleasing = true;
+
+            StopAll(onComplete: () =>
+            {
+                _channelIdsMaps.Clear();
+                _audioModule.ReleasePool();
+
+                IsReleasing = false;
+            });
+        }
+
 
         public bool CheckIsPlaying(string id)
         {
@@ -144,14 +157,18 @@ namespace AudioPlayerModule
         {
             var ids = _channelIdsMaps[channel].ToArray();
             foreach (var id in ids)
-                StopById(id, fadeTime, onComplete);
+                StopById(id, fadeTime);
+
+            _tween.StartTimer(fadeTime, onComplete);
         }
 
         public void StopAll(float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
             var channels = _channelIdsMaps.Keys.ToArray();
             foreach (var channel in channels)
-                StopByChannel(channel, fadeTime, onComplete);
+                StopByChannel(channel, fadeTime);
+            
+            _tween.StartTimer(fadeTime, onComplete);
         }
 
 

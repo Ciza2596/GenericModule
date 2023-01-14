@@ -52,6 +52,9 @@ namespace GameObjectPoolModule.Example1
             _componentCollectionData.ReleasePoolButton.onClick.AddListener(() =>
             {
                 _gameObjectPoolModule.ReleasePool(_componentCollectionData.Key);
+                
+                _gameObjects.Clear();
+                _currentGameObject = null;
             });
         }
     }

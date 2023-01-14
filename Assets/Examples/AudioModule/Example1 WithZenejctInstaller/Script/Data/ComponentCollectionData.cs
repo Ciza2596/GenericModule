@@ -15,8 +15,8 @@ namespace AudioPlayerModule.Example1
         [SerializeField] private Slider _voiceSlider;
 
         [Space] [SerializeField] private TMP_InputField _inputField;
-        [SerializeField] private Vector3 _audioPosition;
-        [SerializeField] private Transform _parentTransform;
+        [SerializeField] private Vector3 _audioLocalPosition;
+        [SerializeField] private Transform _audioParentTransform;
 
         [Space] [SerializeField] private Button _playerButton;
         [SerializeField] private Button _stopButton;
@@ -30,8 +30,8 @@ namespace AudioPlayerModule.Example1
 
 
         public string Key => _inputField.text;
-        public Transform ParentTransform => _parentTransform;
-        public Vector3 AudioPosition => _audioPosition;
+        public Transform AudioParentTransform => _audioParentTransform;
+        public Vector3 AudioLocalPosition => _audioLocalPosition;
         
         
         public Button PlayerButton => _playerButton;

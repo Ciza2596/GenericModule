@@ -30,8 +30,8 @@ namespace AudioPlayerModule.Example1
 
             _componentCollectionData.PlayerButton.onClick.AddListener(() =>
             {
-                _currentAudioId = _audioModule.Play(_componentCollectionData.Key, _componentCollectionData.AudioPosition,
-                    _componentCollectionData.ParentTransform);
+                _currentAudioId = _audioModule.Play(_componentCollectionData.Key, _componentCollectionData.AudioLocalPosition,
+                    _componentCollectionData.AudioParentTransform);
                 _audioIds.Add(_currentAudioId);
             });
 

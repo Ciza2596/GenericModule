@@ -844,10 +844,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1336,7 +1336,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &486518832
 GameObject:
@@ -1900,8 +1900,8 @@ MonoBehaviour:
     _sfxSlider: {fileID: 425979456}
     _voiceSlider: {fileID: 334395736}
     _inputField: {fileID: 628516104}
-    _audioPosition: {x: 0, y: 0, z: 0}
-    _parentTransform: {fileID: 1332536164}
+    _audioLocalPosition: {x: 0, y: 0, z: 0}
+    _audioParentTransform: {fileID: 1332536164}
     _playerButton: {fileID: 1201004310}
     _stopButton: {fileID: 678449118}
     _stopAllButton: {fileID: 2039031324}
@@ -3525,7 +3525,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1402878501
 GameObject:

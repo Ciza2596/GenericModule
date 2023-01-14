@@ -103,7 +103,7 @@ namespace AudioPlayerModule
             var audioData = _audioModule.GetAudioData(id);
 
             var duration = audioData.Duration;
-            var timerId = _tween.StartTimer(duration, () =>
+            var timerId = _tween.PlayTimer(duration, () =>
             {
                 if (CheckIsPlaying(id))
                     StopById(id, 0, onComplete);
@@ -159,7 +159,7 @@ namespace AudioPlayerModule
             foreach (var id in ids)
                 StopById(id, fadeTime);
 
-            _tween.StartTimer(fadeTime, onComplete);
+            _tween.PlayTimer(fadeTime, onComplete);
         }
 
         public void StopAll(float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
@@ -168,7 +168,7 @@ namespace AudioPlayerModule
             foreach (var channel in channels)
                 StopByChannel(channel, fadeTime);
             
-            _tween.StartTimer(fadeTime, onComplete);
+            _tween.PlayTimer(fadeTime, onComplete);
         }
 
 

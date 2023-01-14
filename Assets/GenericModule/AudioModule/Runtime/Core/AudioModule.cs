@@ -102,13 +102,10 @@ namespace AudioModule
 
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
+        
+        public string Play(string key, Transform parentTransform = null) => Play(key, Vector3.zero, parentTransform);
 
-
-        public string Play(string key) => Play(key, Vector3.zero, null);
-
-        public string Play(string key, Transform parentTransform) => Play(key, Vector3.zero, parentTransform);
-
-        public string Play(string key, Vector3 position, Transform parentTransform)
+        public string Play(string key, Vector3 localPosition, Transform parentTransform = null)
         {
             if (!_keyIdsMaps.ContainsKey(key))
             {
@@ -127,7 +124,7 @@ namespace AudioModule
             _isPlayingIds.Add(id);
 
             var audioData = GetAudioData(id);
-            audioData.Play(position, parentTransform);
+            audioData.Play(localPosition, parentTransform);
 
             return id;
         }

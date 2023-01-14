@@ -35,14 +35,14 @@ namespace AudioModule
             Duration = _audioSource.clip.length;
         }
 
-        public void Play(Vector3 position, Transform parentTransform)
+        public void Play(Vector3 localPosition, Transform parentTransform)
         {
-            if(position != default)
-                _selfTransform.position = position;
-            
             _selfTransform.SetParent(parentTransform);
             
-            
+            if(localPosition != default)
+                _selfTransform.localPosition = localPosition;
+
+
             Assert.IsNotNull(_audioSource.clip,
                 $"[AudioData::Play] Clip is null. Please check Key: {Key} audioPrefab.");
             

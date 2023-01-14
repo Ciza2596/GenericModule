@@ -13,7 +13,7 @@ namespace AudioPlayerModule
         private const float DEFAULT_FADE_TIME = 0.25f;
 
         private readonly AudioModule.AudioModule _audioModule;
-        private readonly ITweenTool _tweenTool;
+        private readonly ITween _tween;
 
         private readonly Dictionary<string, List<string>> _channelIdsMaps = new Dictionary<string, List<string>>();
 
@@ -24,10 +24,10 @@ namespace AudioPlayerModule
 
 
         //public method
-        public AudioPlayerModule(AudioModule.AudioModule audioModule, ITweenTool tweenTool)
+        public AudioPlayerModule(AudioModule.AudioModule audioModule, ITween tween)
         {
             _audioModule = audioModule;
-            _tweenTool = tweenTool;
+            _tween = tween;
         }
 
 
@@ -41,8 +41,6 @@ namespace AudioPlayerModule
             {
                 _channelIdsMaps.Clear();
                 _audioModule.Release();
-
-                _tweenTool.Initialize();
 
                 IsReleasing = false;
             });
@@ -92,14 +90,12 @@ namespace AudioPlayerModule
             var audioData = _audioModule.GetAudioData(id);
 
             var duration = audioData.Duration;
-            var timerId = _tweenTool.StartTimer(duration);
-
-            _audioIdTimerIdMaps.Add(id, timerId);
-            _tweenTool.SetTimerCallBack(timerId, () =>
+            var timerId = _tween.StartTimer(duration, () =>
             {
                 if (CheckIsPlaying(id))
                     StopById(id, 0, onComplete);
             });
+            _audioIdTimerIdMaps.Add(id, timerId);
 
             return id;
         }
@@ -129,12 +125,12 @@ namespace AudioPlayerModule
 
             var audioData = _audioModule.GetAudioData(id);
 
-            _tweenTool.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
+            _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
             {
                 if (CheckHasTimerId(id))
                 {
                     _audioIdTimerIdMaps.Remove(id);
-                    _tweenTool.StopTimer(id);
+                    _tween.StopTimer(id);
                 }
 
                 _audioModule.Stop(id);
@@ -182,7 +178,7 @@ namespace AudioPlayerModule
         {
             var audioData = _audioModule.GetAudioData(id);
 
-            _tweenTool.To(startVolume, volume => audioData.SetVolume(volume), endVolume, fadeTime, onComplete);
+            _tween.To(startVolume, volume => audioData.SetVolume(volume), endVolume, fadeTime, onComplete);
         }
 
         private bool CheckHasTimerId(string id)

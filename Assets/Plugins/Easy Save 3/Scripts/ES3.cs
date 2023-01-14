@@ -105,6 +105,7 @@ public class ES3
             return;
         }
 
+        
         using (var writer = ES3Writer.Create(settings))
         {
             writer.Write<T>(key, value);

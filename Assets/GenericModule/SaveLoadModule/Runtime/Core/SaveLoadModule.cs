@@ -4,7 +4,6 @@ namespace SaveLoadModule
 {
     public class SaveLoadModule
     {
-
         public void Save<T>(string key, object data, string path)
         {
             

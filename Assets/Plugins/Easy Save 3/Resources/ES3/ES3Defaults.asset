@@ -43,14 +43,15 @@ MonoBehaviour:
     - DOTweenPro.Scripts
     - EventModule
     - EventModule.Test
+    - GameCore.Implement
+    - GameCore.Infrastructure
     - GameObjectPoolModule
     - LogModule
     - PsdPlugin
     - SaveLoadModule
     - SceneModule
+    - Sirenix.OdinInspector.Modules.UnityMathematics
     - Zenject
-    - Zenject-IntegrationTests
-    - Zenject-TestFramework
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

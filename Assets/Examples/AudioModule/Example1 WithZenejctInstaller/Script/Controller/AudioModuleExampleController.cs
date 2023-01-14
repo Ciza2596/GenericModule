@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AudioModule.Implement;
+using UnityEngine;
 using Zenject;
 
 namespace AudioPlayerModule.Example1
@@ -30,7 +31,7 @@ namespace AudioPlayerModule.Example1
 
             _componentCollectionData.PlayerButton.onClick.AddListener(() =>
             {
-                _currentAudioId = _audioModule.Play(_componentCollectionData.Key);
+                _currentAudioId = _audioModule.Play(_componentCollectionData.Key, Vector3.zero, _componentCollectionData.ParentTransform);
                 _audioIds.Add(_currentAudioId);
             });
 

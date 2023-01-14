@@ -88,6 +88,8 @@ namespace AudioModule
 
         public string Play(string key) => Play(key, Vector3.zero, null);
         
+        public string Play(string key, Transform parentTransform) => Play(key, Vector3.zero, parentTransform);
+        
         public string Play(string key, Vector3 position, Transform parentTransform)
         {
             if (!_keyIdsMaps.ContainsKey(key))

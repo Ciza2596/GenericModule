@@ -22,9 +22,9 @@
       "path": "Samples~/Extension1 ZenjectInstaller"
     },
     {
-      "displayName": "Example1 WithZenejctInstaller",
+      "displayName": "Example1 WithZenjectInstaller",
       "description": "Please import Extension1 ZenjectInstaller. Implement using audioModule include animation, prefab, scene, script, scriptableObject etc.",
-      "path": "Samples~/Example1 WithZenejctInstaller"
+      "path": "Samples~/Example1 WithZenjectInstaller"
     }
   ]
 }

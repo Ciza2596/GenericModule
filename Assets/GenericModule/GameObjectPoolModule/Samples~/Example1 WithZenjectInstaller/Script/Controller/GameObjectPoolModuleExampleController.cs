@@ -8,7 +8,7 @@ namespace GameObjectPoolModule.Example1
     {
         private GameObjectPoolModule _gameObjectPoolModule;
         private ComponentCollectionData _componentCollectionData;
-        
+
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private GameObject _currentGameObject;
 
@@ -28,7 +28,7 @@ namespace GameObjectPoolModule.Example1
                 var key = _componentCollectionData.Key;
                 var gameObjectPosition = _componentCollectionData.GameObjectPosition;
                 var gameObjectParentTransform = _componentCollectionData.GameObjectParentTransform;
-                _currentGameObject = _gameObjectPoolModule.Spawn(key,gameObjectPosition, gameObjectParentTransform);
+                _currentGameObject = _gameObjectPoolModule.Spawn(key, gameObjectPosition, gameObjectParentTransform);
                 _gameObjects.Add(_currentGameObject);
             });
 
@@ -36,15 +36,19 @@ namespace GameObjectPoolModule.Example1
             {
                 _gameObjects.Remove(_currentGameObject);
                 _gameObjectPoolModule.DeSpawn(_currentGameObject);
+                
+                _currentGameObject = null;
             });
-            
+
             _componentCollectionData.DeSpawnAllButton.onClick.AddListener(() =>
             {
                 var gameObjects = _gameObjects.ToArray();
-                _gameObjects.Clear();
                 _gameObjectPoolModule.DeSpawn(gameObjects);
+                
+                _gameObjects.Clear();
+                _currentGameObject = null;
             });
-            
+
             _componentCollectionData.ReleasePoolButton.onClick.AddListener(() =>
             {
                 _gameObjectPoolModule.ReleasePool(_componentCollectionData.Key);

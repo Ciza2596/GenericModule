@@ -35,6 +35,8 @@ namespace AudioModule
             Duration = _audioSource.clip.length;
         }
 
+        public void SetVolume(float volume) => _audioSource.volume = volume;
+        
         public void Play(Vector3 localPosition, Transform parentTransform)
         {
             _selfTransform.SetParent(parentTransform);
@@ -48,8 +50,10 @@ namespace AudioModule
             
             _audioSource.Play();
         }
+        
+        public void Resume() =>_audioSource.Play();
 
-        public void SetVolume(float volume) => _audioSource.volume = volume;
+        public void Pause() => _audioSource.Pause();
 
         public void Stop()
         {
@@ -73,5 +77,6 @@ namespace AudioModule
             var gameObject = audioSource.gameObject;
             Object.Destroy(gameObject);
         }
+        
     }
 }

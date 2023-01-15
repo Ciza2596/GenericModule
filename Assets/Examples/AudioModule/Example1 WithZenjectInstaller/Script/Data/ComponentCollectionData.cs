@@ -18,7 +18,9 @@ namespace AudioPlayerModule.Example1
         [SerializeField] private Vector3 _audioLocalPosition;
         [SerializeField] private Transform _audioParentTransform;
 
-        [Space] [SerializeField] private Button _playerButton;
+        [Space] [SerializeField] private Button _playButton;
+        [SerializeField] private Button _pauseButton;
+        [SerializeField] private Button _resumeButton;
         [SerializeField] private Button _stopButton;
         [SerializeField] private Button _stopAllButton;
         [SerializeField] private Button _releasePoolButton;
@@ -34,7 +36,9 @@ namespace AudioPlayerModule.Example1
         public Vector3 AudioLocalPosition => _audioLocalPosition;
         
         
-        public Button PlayerButton => _playerButton;
+        public Button PlayButton => _playButton;
+        public Button PauseButton => _pauseButton;
+        public Button ResumeButton => _resumeButton;
         public Button StopButton => _stopButton;
         public Button StopAllButton => _stopAllButton;
         public Button ReleasePoolButton => _releasePoolButton;

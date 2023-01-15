@@ -103,6 +103,8 @@ namespace AudioModule
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
         
+        public AudioData GetAudioData(string id) => _audioDatas.Find(audioData => audioData.Id == id);
+
         public string Play(string key, Transform parentTransform = null) => Play(key, Vector3.zero, parentTransform);
 
         public string Play(string key, Vector3 localPosition, Transform parentTransform = null)
@@ -130,8 +132,29 @@ namespace AudioModule
         }
 
 
-        public AudioData GetAudioData(string id) => _audioDatas.First(audioData => audioData.Id == id);
+        public void Resume(string id)
+        {
+            if (!CheckIsPlaying(id))
+            {
+                Debug.Log("[AudioModule::Resume] Not find playing audio.");
+                return;
+            }
 
+            var audioData = GetAudioData(id);
+            audioData.Resume();
+        }
+
+        public void Pause(string id)
+        {
+            if (!CheckIsPlaying(id))
+            {
+                Debug.Log("[AudioModule::Pause] Not find playing audio.");
+                return;
+            }
+
+            var audioData = GetAudioData(id);
+            audioData.Pause();
+        }
 
         public void Stop(string id)
         {

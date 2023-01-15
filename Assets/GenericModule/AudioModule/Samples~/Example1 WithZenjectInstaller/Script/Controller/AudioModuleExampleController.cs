@@ -28,11 +28,21 @@ namespace AudioPlayerModule.Example1
             var audioResourceDatas = _audioResourceDataOverview.GetAudioDatas;
             _audioModule.Initialize(audioResourceDatas);
 
-            _componentCollectionData.PlayerButton.onClick.AddListener(() =>
+            _componentCollectionData.PlayButton.onClick.AddListener(() =>
             {
                 _currentAudioId = _audioModule.Play(_componentCollectionData.Key, _componentCollectionData.AudioLocalPosition,
                     _componentCollectionData.AudioParentTransform);
                 _audioIds.Add(_currentAudioId);
+            });
+            
+            _componentCollectionData.PauseButton.onClick.AddListener(() =>
+            {
+                _audioModule.Pause(_currentAudioId);
+            });
+            
+            _componentCollectionData.ResumeButton.onClick.AddListener(() =>
+            {
+                _audioModule.Resume(_currentAudioId);
             });
 
             _componentCollectionData.StopButton.onClick.AddListener(() =>
@@ -50,9 +60,13 @@ namespace AudioPlayerModule.Example1
                     _audioIds.Remove(audioId);
                 }
             });
-
-
-            _componentCollectionData.ReleasePoolButton.onClick.AddListener(() => _audioModule.ReleasePool());
+            
+            _componentCollectionData.ReleasePoolButton.onClick.AddListener(() =>
+            {
+                _audioModule.ReleasePool();
+                _currentAudioId = string.Empty;
+                _audioIds.Clear();
+            });
 
             _componentCollectionData.MasterSlider.onValueChanged.AddListener(masterVolume =>
                 _audioModule.SetMasterVolume(masterVolume));

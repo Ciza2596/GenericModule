@@ -18,24 +18,25 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioMod
 ```
 
 
-## AudioPlayerModule
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
-```
-
-
 ## GameObjectPoolModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```
 
 
-## AddressablesModule
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
-```
-
 ## SceneModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
+```
+
+
+## AudioPlayerModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
+```
+
+
+## AddressablesModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```

@@ -686,10 +686,10 @@ MonoBehaviour:
     _audioParentTransform: {fileID: 1257754995}
     _playButton: {fileID: 762742716}
     _playAndAutoStopButton: {fileID: 1099164713}
-    _resumeButton: {fileID: 147547151}
-    _resumeByChannelButton: {fileID: 1759620369}
     _pauseButton: {fileID: 491344809}
     _pauseByChannelButton: {fileID: 204432770}
+    _resumeButton: {fileID: 147547151}
+    _resumeByChannelButton: {fileID: 1759620369}
     _stopButton: {fileID: 1627209362}
     _stopChannelButton: {fileID: 834570933}
     _stopAllButton: {fileID: 1046631128}
@@ -6074,10 +6074,10 @@ RectTransform:
   - {fileID: 1778751520}
   - {fileID: 762742715}
   - {fileID: 1099164712}
-  - {fileID: 147547150}
-  - {fileID: 1759620368}
   - {fileID: 491344808}
   - {fileID: 204432769}
+  - {fileID: 147547150}
+  - {fileID: 1759620368}
   - {fileID: 1627209361}
   - {fileID: 834570932}
   - {fileID: 1046631127}

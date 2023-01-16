@@ -52,6 +52,17 @@ namespace AudioPlayerModule.Example1
                     _componentCollectionData.AudioParentTransform);
             });
 
+            
+            _componentCollectionData.PauseButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.Pause(_currentAudioId, _componentCollectionData.FadeTime);
+            });
+            
+            _componentCollectionData.PauseByChannelButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.PauseByChannel(_componentCollectionData.Channel, _componentCollectionData.FadeTime);
+            });
+            
 
             _componentCollectionData.ResumeButton.onClick.AddListener(() =>
             {
@@ -64,17 +75,6 @@ namespace AudioPlayerModule.Example1
             });
             
             
-            _componentCollectionData.PauseButton.onClick.AddListener(() =>
-            {
-                _audioPlayerModule.Pause(_currentAudioId, _componentCollectionData.FadeTime);
-            });
-            
-            _componentCollectionData.PauseByChannelButton.onClick.AddListener(() =>
-            {
-                _audioPlayerModule.PauseByChannel(_componentCollectionData.Channel, _componentCollectionData.FadeTime);
-            });
-
-
             _componentCollectionData.StopButton.onClick.AddListener(() =>
             {
                 _audioPlayerModule.Stop(_currentAudioId);

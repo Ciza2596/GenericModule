@@ -4,17 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace AudioPlayerModule.Example1
+namespace AudioModule.Example1
 {
     [Serializable]
     public class ComponentCollectionData
     {
-        [SerializeField] private Slider _masterSlider;
-        [SerializeField] private Slider _bgmSlider;
-        [SerializeField] private Slider _sfxSlider;
-        [SerializeField] private Slider _voiceSlider;
-
-        [Space] [SerializeField] private TMP_InputField _inputField;
+        [Space] [SerializeField] private TMP_InputField _keyInputField;
         [SerializeField] private Vector3 _audioLocalPosition;
         [SerializeField] private Transform _audioParentTransform;
 
@@ -24,14 +19,15 @@ namespace AudioPlayerModule.Example1
         [SerializeField] private Button _stopButton;
         [SerializeField] private Button _stopAllButton;
         [SerializeField] private Button _releasePoolButton;
+        
+        [Space]
+        [SerializeField] private Slider _masterSlider;
+        [SerializeField] private Slider _bgmSlider;
+        [SerializeField] private Slider _sfxSlider;
+        [SerializeField] private Slider _voiceSlider;
 
-        public Slider MasterSlider => _masterSlider;
-        public Slider BgmSlider => _bgmSlider;
-        public Slider SfxSlider => _sfxSlider;
-        public Slider VoiceSlider => _voiceSlider;
 
-
-        public string Key => _inputField.text;
+        public string Key => _keyInputField.text;
         public Transform AudioParentTransform => _audioParentTransform;
         public Vector3 AudioLocalPosition => _audioLocalPosition;
         
@@ -42,5 +38,11 @@ namespace AudioPlayerModule.Example1
         public Button StopButton => _stopButton;
         public Button StopAllButton => _stopAllButton;
         public Button ReleasePoolButton => _releasePoolButton;
+        
+        
+        public Slider MasterSlider => _masterSlider;
+        public Slider BgmSlider => _bgmSlider;
+        public Slider SfxSlider => _sfxSlider;
+        public Slider VoiceSlider => _voiceSlider;
     }
 }

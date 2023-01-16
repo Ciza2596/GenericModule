@@ -24,6 +24,7 @@ namespace AudioPlayerModule.Example1
         
         [Space]
         [SerializeField] private Slider _changeVolumeSlider;
+        [SerializeField] private Slider _changeVolumeByChannelSlider;
 
 
         public string Channel => _channelInputField.text;
@@ -42,5 +43,6 @@ namespace AudioPlayerModule.Example1
         
         
         public Slider ChangeVolumeSlider => _changeVolumeSlider;
+        public Slider ChangeVolumeByChannelSlider => _changeVolumeByChannelSlider;
     }
 }

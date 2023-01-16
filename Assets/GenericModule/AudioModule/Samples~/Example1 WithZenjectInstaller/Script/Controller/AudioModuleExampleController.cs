@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using AudioModule.Implement;
 using Zenject;
 
-namespace AudioPlayerModule.Example1
+namespace AudioModule.Example1
 {
     public class AudioModuleExampleController : IInitializable
     {
         //private variable
-        private AudioModule.AudioModule _audioModule;
+        private AudioModule _audioModule;
         private AudioResourceDataOverview _audioResourceDataOverview;
         private ComponentCollectionData _componentCollectionData;
 
@@ -15,7 +15,7 @@ namespace AudioPlayerModule.Example1
         private List<string> _audioIds = new List<string>();
 
         //public method
-        public AudioModuleExampleController(AudioModule.AudioModule audioModule,
+        public AudioModuleExampleController(AudioModule audioModule,
             AudioResourceDataOverview audioResourceDataOverview, ComponentCollectionData componentCollectionData)
         {
             _audioModule = audioModule;

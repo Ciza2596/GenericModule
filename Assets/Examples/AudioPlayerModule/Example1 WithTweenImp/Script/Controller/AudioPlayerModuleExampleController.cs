@@ -91,6 +91,11 @@ namespace AudioPlayerModule.Example1
             {
                 _audioPlayerModule.ChangeVolume(_currentAudioId, value, _componentCollectionData.FadeTime);
             });
+            
+            _componentCollectionData.ChangeVolumeByChannelSlider.onValueChanged.AddListener(value =>
+            {
+                _audioPlayerModule.ChangeVolumeByChannel(_currentAudioChannel, value, _componentCollectionData.FadeTime);
+            });
         }
     }
 }

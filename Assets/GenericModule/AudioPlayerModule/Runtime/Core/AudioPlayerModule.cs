@@ -75,11 +75,12 @@ namespace AudioPlayerModule
         }
 
         //play return id
-        public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME, Transform parentTransform = null, bool isOverrideChannelPlaying = false) => Play(channel, key, fadeTime,
+        public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
+            Transform parentTransform = null, bool isOverrideChannelPlaying = false) => Play(channel, key, fadeTime,
             Vector3.zero, parentTransform, isOverrideChannelPlaying);
 
         public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-            Vector3 position = default, Transform parentTransform = null,bool isOverrideChannelPlaying = false)
+            Vector3 position = default, Transform parentTransform = null, bool isOverrideChannelPlaying = false)
         {
             if (!_channelIdsMaps.ContainsKey(channel))
                 _channelIdsMaps.Add(channel, new List<string>());
@@ -118,18 +119,61 @@ namespace AudioPlayerModule
 
 
         //changeVolume
-        public void ChangeVolume(string id, float volume, float fadeTime = DEFAULT_FADE_TIME)
+        public void ChangeVolume(string id, float volume, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
             var audioData = _audioModule.GetAudioData(id);
-            SetVolumeByFade(id, audioData.Volume, volume, fadeTime);
+            SetVolumeByFade(id, audioData.Volume, volume, fadeTime, onComplete);
         }
 
-        public void ChangeVolumeByChannel(string channel, float volume, float fadeTime = DEFAULT_FADE_TIME)
+        public void ChangeVolumeByChannel(string channel, float volume, float fadeTime = DEFAULT_FADE_TIME,
+            Action onComplete = null)
         {
             var ids = _channelIdsMaps[channel];
 
             foreach (var id in ids)
                 ChangeVolume(id, volume, fadeTime);
+
+            _tween.PlayTimer(fadeTime, onComplete);
+        }
+
+        public void Resume(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            var audioData = _audioModule.GetAudioData(id);
+            audioData.Resume();
+            var currentVolume = audioData.Volume;
+            _tween.To(0, volume => audioData.SetVolume(volume), currentVolume, fadeTime,
+                () => { onComplete?.Invoke(); });
+        }
+
+        public void ResumeByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            var ids = _channelIdsMaps[channel].ToArray();
+            foreach (var id in ids)
+                Resume(id, fadeTime);
+
+            _tween.PlayTimer(fadeTime, onComplete);
+        }
+
+        public void Pause(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            var audioData = _audioModule.GetAudioData(id);
+            var currentVolume = audioData.Volume;
+            _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
+            {
+                audioData.Pause();
+                audioData.SetVolume(currentVolume);
+
+                onComplete?.Invoke();
+            });
+        }
+
+        public void PauseByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            var ids = _channelIdsMaps[channel].ToArray();
+            foreach (var id in ids)
+                Pause(id, fadeTime);
+
+            _tween.PlayTimer(fadeTime, onComplete);
         }
 
 
@@ -158,8 +202,9 @@ namespace AudioPlayerModule
 
         public void StopByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
-            Assert.IsTrue(_channelIdsMaps.ContainsKey(channel), $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
-            
+            Assert.IsTrue(_channelIdsMaps.ContainsKey(channel),
+                $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
+
             var ids = _channelIdsMaps[channel].ToArray();
             foreach (var id in ids)
                 Stop(id, fadeTime);

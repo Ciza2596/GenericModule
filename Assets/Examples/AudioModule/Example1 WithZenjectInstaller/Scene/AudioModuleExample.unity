@@ -2030,7 +2030,7 @@ GameObject:
   - component: {fileID: 628516105}
   - component: {fileID: 628516104}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: KeyInputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2271,7 +2271,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &664077512
 MonoBehaviour:
@@ -2291,7 +2291,7 @@ MonoBehaviour:
     _bgmSlider: {fileID: 779551958}
     _sfxSlider: {fileID: 425979456}
     _voiceSlider: {fileID: 334395736}
-    _inputField: {fileID: 628516104}
+    _keyInputField: {fileID: 628516104}
     _audioLocalPosition: {x: 0, y: 0, z: 0}
     _audioParentTransform: {fileID: 1332536164}
     _playButton: {fileID: 1201004310}
@@ -3910,7 +3910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1269129129}
   m_Layer: 5
-  m_Name: KeyInputField
+  m_Name: KeyInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4397,7 +4397,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1654247101
 GameObject:

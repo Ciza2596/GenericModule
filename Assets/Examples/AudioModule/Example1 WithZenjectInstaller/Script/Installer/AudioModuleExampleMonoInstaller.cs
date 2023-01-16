@@ -2,7 +2,7 @@ using AudioModule.Implement;
 using UnityEngine;
 using Zenject;
 
-namespace AudioPlayerModule.Example1
+namespace AudioModule.Example1
 {
     public class AudioModuleExampleMonoInstaller : MonoInstaller
     {

@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 
 namespace AudioModule
 {
-    public struct AudioData
+    public class AudioData
     {
         //private variable
         private AudioSource _audioSource;
@@ -48,6 +48,7 @@ namespace AudioModule
             Assert.IsNotNull(_audioSource.clip,
                 $"[AudioData::Play] Clip is null. Please check Key: {Key} audioPrefab.");
             
+            _audioSource.gameObject.SetActive(true);
             _audioSource.Play();
         }
         
@@ -59,6 +60,7 @@ namespace AudioModule
         {
             _audioSource.Stop();
             _selfTransform.SetParent(_poolTransform);
+            _audioSource.gameObject.SetActive(false);
         }
 
         public void Release()

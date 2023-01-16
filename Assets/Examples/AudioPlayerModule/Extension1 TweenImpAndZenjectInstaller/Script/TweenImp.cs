@@ -22,7 +22,7 @@ namespace AudioPlayerModule.Implement
 
         public void To(float startValue, Action<float> valueSetter, float endValue, float duration,
             Action onComplete = null) =>
-            DOTween.To(() => startValue, volume => valueSetter(volume), endValue, duration).OnComplete(() => onComplete());
+            DOTween.To(() => startValue, volume => valueSetter(volume), endValue, duration).OnComplete(() => onComplete?.Invoke());
     }
     
 }

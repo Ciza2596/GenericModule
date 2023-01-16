@@ -102,8 +102,13 @@ namespace AudioModule
 
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
-        
-        public AudioData GetAudioData(string id) => _audioDatas.Find(audioData => audioData.Id == id);
+
+        public AudioData GetAudioData(string id)
+        {
+            var audioData = _audioDatas.Find(audioData => audioData.Id == id);
+            Assert.IsNotNull(audioData,$"[AudioModule::GetAudioData] Not find audioData by id: {id}.");
+            return audioData;
+        }
 
         public string Play(string key, Transform parentTransform = null) => Play(key, Vector3.zero, parentTransform);
 

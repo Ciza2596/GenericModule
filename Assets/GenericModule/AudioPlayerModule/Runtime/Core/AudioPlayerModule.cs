@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AudioModule;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 
 namespace AudioPlayerModule
@@ -73,10 +74,12 @@ namespace AudioPlayerModule
             return originVolume;
         }
 
-        //return id
+        //play return id
+        public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME, Transform parentTransform = null, bool isOverrideChannelPlaying = false) => Play(channel, key, fadeTime,
+            Vector3.zero, parentTransform, isOverrideChannelPlaying);
+
         public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-            bool isOverrideChannelPlaying = false,
-            Vector3 position = default, Transform parentTransform = null)
+            Vector3 position = default, Transform parentTransform = null,bool isOverrideChannelPlaying = false)
         {
             if (!_channelIdsMaps.ContainsKey(channel))
                 _channelIdsMaps.Add(channel, new List<string>());
@@ -96,17 +99,17 @@ namespace AudioPlayerModule
         }
 
         public string PlayAndAutoStop(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-            bool isOverrideChannelPlaying = false, Vector3 position = default, Transform parentTransform = null,
-            Action onComplete = null)
+            Vector3 position = default, Transform parentTransform = null,
+            Action onComplete = null, bool isOverrideChannelPlaying = false)
         {
-            var id = Play(channel, key, fadeTime, isOverrideChannelPlaying, position, parentTransform);
+            var id = Play(channel, key, fadeTime, position, parentTransform, isOverrideChannelPlaying);
             var audioData = _audioModule.GetAudioData(id);
 
             var duration = audioData.Duration;
             var timerId = _tween.PlayTimer(duration, () =>
             {
                 if (CheckIsPlaying(id))
-                    StopById(id, 0, onComplete);
+                    Stop(id, 0, onComplete);
             });
             _audioIdTimerIdMaps.Add(id, timerId);
 
@@ -131,7 +134,7 @@ namespace AudioPlayerModule
 
 
         //stop
-        public void StopById(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        public void Stop(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
             var channel = GetChannelById(id);
             var ids = _channelIdsMaps[channel];
@@ -155,9 +158,11 @@ namespace AudioPlayerModule
 
         public void StopByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
+            Assert.IsTrue(_channelIdsMaps.ContainsKey(channel), $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
+            
             var ids = _channelIdsMaps[channel].ToArray();
             foreach (var id in ids)
-                StopById(id, fadeTime);
+                Stop(id, fadeTime);
 
             _tween.PlayTimer(fadeTime, onComplete);
         }
@@ -167,7 +172,7 @@ namespace AudioPlayerModule
             var channels = _channelIdsMaps.Keys.ToArray();
             foreach (var channel in channels)
                 StopByChannel(channel, fadeTime);
-            
+
             _tween.PlayTimer(fadeTime, onComplete);
         }
 
@@ -186,16 +191,16 @@ namespace AudioPlayerModule
                 }
             }
 
-            Debug.LogError("[AudioPlayerModule::GetChannelById] Not find channel by ");
-            return null;
+            Debug.LogError($"[AudioPlayerModule::GetChannelById] Not find channel by id: {id}.");
+            return string.Empty;
         }
 
-        private void SetVolumeByFade(string id, float startVolume, float endVolume, float fadeTime,
+        private void SetVolumeByFade(string id, float startVolume, float endVolume, float durationTime,
             Action onComplete = null)
         {
             var audioData = _audioModule.GetAudioData(id);
 
-            _tween.To(startVolume, volume => audioData.SetVolume(volume), endVolume, fadeTime, onComplete);
+            _tween.To(startVolume, volume => audioData.SetVolume(volume), endVolume, durationTime, onComplete);
         }
 
         private bool CheckHasTimerId(string id)

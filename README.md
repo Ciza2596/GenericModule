@@ -30,13 +30,13 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneMod
 ```
 
 
-## AudioPlayerModule(Dependence AudioModule)
+## AudioPlayerModule (Dependence AudioModule)
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
 ```
 
 
-## AddressablesModule(Dependence Unity Addressables)
+## AddressablesModule (Dependence Unity Addressables)
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```

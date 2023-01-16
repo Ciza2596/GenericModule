@@ -197,7 +197,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &88376197
 MonoBehaviour:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -541,7 +541,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &149537306
 MonoBehaviour:
@@ -594,7 +594,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -832,7 +832,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &185239344
 MonoBehaviour:
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -1396,7 +1396,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350925089
 MonoBehaviour:
@@ -1449,7 +1449,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -2287,10 +2287,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioResourceDataOverview: {fileID: 11400000, guid: 544d27f540bf94c3aa9d512f2c4151a5, type: 2}
   _componentCollectionData:
-    _masterSlider: {fileID: 902693173}
-    _bgmSlider: {fileID: 779551958}
-    _sfxSlider: {fileID: 425979456}
-    _voiceSlider: {fileID: 334395736}
     _keyInputField: {fileID: 628516104}
     _audioLocalPosition: {x: 0, y: 0, z: 0}
     _audioParentTransform: {fileID: 1332536164}
@@ -2300,6 +2296,10 @@ MonoBehaviour:
     _stopButton: {fileID: 678449118}
     _stopAllButton: {fileID: 2039031324}
     _releasePoolButton: {fileID: 1193768641}
+    _masterSlider: {fileID: 902693173}
+    _bgmSlider: {fileID: 779551958}
+    _sfxSlider: {fileID: 425979456}
+    _voiceSlider: {fileID: 334395736}
 --- !u!1 &678449116
 GameObject:
   m_ObjectHideFlags: 0
@@ -2964,7 +2964,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &918441662
 MonoBehaviour:
@@ -3017,7 +3017,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -4939,7 +4939,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2006748685
 MonoBehaviour:
@@ -4992,7 +4992,7 @@ MonoBehaviour:
   m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 15
   m_fontSizeMax: 23
   m_fontStyle: 0
   m_HorizontalAlignment: 2

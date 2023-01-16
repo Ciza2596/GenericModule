@@ -17,6 +17,10 @@ namespace AudioPlayerModule.Example1
 
         [Space] [SerializeField] private Button _playButton;
         [SerializeField] private Button _playAndAutoStopButton;
+        [SerializeField] private Button _resumeButton;
+        [SerializeField] private Button _resumeByChannelButton;
+        [SerializeField] private Button _pauseButton;
+        [SerializeField] private Button _pauseByChannelButton;
         [SerializeField] private Button _stopButton;
         [SerializeField] private Button _stopChannelButton;
         [SerializeField] private Button _stopAllButton;
@@ -36,6 +40,13 @@ namespace AudioPlayerModule.Example1
 
         public Button PlayButton => _playButton;
         public Button PlayAndAutoStopButton => _playAndAutoStopButton;
+
+        public Button ResumeButton => _resumeButton;
+        public Button ResumeByChannelButton => _resumeByChannelButton;
+        public Button PauseButton => _pauseButton;
+        public Button PauseByChannelButton => _pauseByChannelButton;
+        
+        
         public Button StopButton => _stopButton;
         public Button StopChannelButton => _stopChannelButton;
         public Button StopAllButton => _stopAllButton;

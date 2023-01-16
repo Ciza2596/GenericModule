@@ -52,6 +52,29 @@ namespace AudioPlayerModule.Example1
                     _componentCollectionData.AudioParentTransform);
             });
 
+
+            _componentCollectionData.ResumeButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.Resume(_currentAudioId, _componentCollectionData.FadeTime);
+            });
+            
+            _componentCollectionData.ResumeByChannelButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.ResumeByChannel(_componentCollectionData.Channel, _componentCollectionData.FadeTime);
+            });
+            
+            
+            _componentCollectionData.PauseButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.Pause(_currentAudioId, _componentCollectionData.FadeTime);
+            });
+            
+            _componentCollectionData.PauseByChannelButton.onClick.AddListener(() =>
+            {
+                _audioPlayerModule.PauseByChannel(_componentCollectionData.Channel, _componentCollectionData.FadeTime);
+            });
+
+
             _componentCollectionData.StopButton.onClick.AddListener(() =>
             {
                 _audioPlayerModule.Stop(_currentAudioId);

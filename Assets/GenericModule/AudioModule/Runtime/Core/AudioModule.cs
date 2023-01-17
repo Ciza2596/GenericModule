@@ -62,10 +62,10 @@ namespace AudioModule
         {
             _audioResourceDatas = null;
 
-            ReleasePool();
+            ReleaseAllPool();
         }
 
-        public void ReleasePool()
+        public void ReleaseAllPool()
         {
             _keyIdsMaps.Clear();
             _isPlayingIds.Clear();
@@ -81,6 +81,27 @@ namespace AudioModule
                 Object.Destroy(poolTransform.gameObject);
 
             _keyPoolTransformMaps.Clear();
+        }
+        
+        public void ReleasePool(string key)
+        {
+            var ids = _keyIdsMaps[key];
+            _keyIdsMaps.Remove(key);
+
+            foreach (var id in ids)
+                if (_isPlayingIds.Contains(id))
+                    _isPlayingIds.Remove(id);
+            
+            ids.Clear();
+            
+            var audioDatas = _audioDatas.Where(audioData => audioData.Key == key).ToArray();
+            
+            foreach (var audioData in audioDatas)
+                audioData.Release();
+
+            var poolTransform = _keyPoolTransformMaps[key];
+            _keyPoolTransformMaps.Remove(key);
+            Object.Destroy(poolTransform.gameObject);
         }
 
 

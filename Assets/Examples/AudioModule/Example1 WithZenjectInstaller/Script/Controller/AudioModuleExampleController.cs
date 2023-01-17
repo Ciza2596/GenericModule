@@ -63,7 +63,7 @@ namespace AudioModule.Example1
             
             _componentCollectionData.ReleasePoolButton.onClick.AddListener(() =>
             {
-                _audioModule.ReleasePool();
+                _audioModule.ReleaseAllPool();
                 _currentAudioId = string.Empty;
                 _audioIds.Clear();
             });

@@ -47,19 +47,30 @@ namespace AudioPlayerModule
             });
         }
 
-        public void ReleasePool()
+        public void ReleaseAllPool()
         {
             IsReleasing = true;
 
             StopAll(onComplete: () =>
             {
                 _channelIdsMaps.Clear();
-                _audioModule.ReleasePool();
+                _audioModule.ReleaseAllPool();
 
                 IsReleasing = false;
             });
         }
 
+
+        public void ReleasePool(string key)
+        {
+            IsReleasing = true;
+            StopByKey(key, onComplete: () =>
+            {
+                _audioModule.ReleasePool(key);
+
+                IsReleasing = false;
+            });
+        }
 
         public bool CheckIsPlaying(string id)
         {
@@ -199,6 +210,14 @@ namespace AudioPlayerModule
                 onComplete?.Invoke();
             });
         }
+        
+        public void Stop(string[] ids, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            foreach (var id in ids)
+                Stop(id, fadeTime);
+            
+            _tween.PlayTimer(fadeTime, onComplete);
+        }
 
         public void StopByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
@@ -206,10 +225,13 @@ namespace AudioPlayerModule
                 $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
 
             var ids = _channelIdsMaps[channel].ToArray();
-            foreach (var id in ids)
-                Stop(id, fadeTime);
-
-            _tween.PlayTimer(fadeTime, onComplete);
+            Stop(ids, fadeTime, onComplete);
+        }
+        
+        public void StopByKey(string key, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
+        {
+            var ids = GetIdsByKey(key);
+            Stop(ids, fadeTime, onComplete);
         }
 
         public void StopAll(float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
@@ -223,6 +245,26 @@ namespace AudioPlayerModule
 
 
         //private
+        private string[] GetIdsByKey(string key)
+        {
+            var matchIdsList = new List<string>();
+            var idsList = _channelIdsMaps.Values.ToArray();
+            foreach (var ids in idsList)
+            {
+                foreach (var id in ids.ToArray())
+                {
+                    var audioData = _audioModule.GetAudioData(id);
+                    if (audioData.Key == key)
+                    {
+                        matchIdsList.Add(audioData.Id);
+                        ids.Remove(audioData.Id);
+                    }
+                }
+            }
+
+            return matchIdsList.ToArray();
+        }
+
         private string GetChannelById(string id)
         {
             var channels = _channelIdsMaps.Keys.ToArray();

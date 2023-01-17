@@ -62,10 +62,10 @@ namespace AudioModule
         {
             _audioResourceDatas = null;
 
-            ReleaseAllPool();
+            ReleaseAllPools();
         }
 
-        public void ReleaseAllPool()
+        public void ReleaseAllPools()
         {
             _keyIdsMaps.Clear();
             _isPlayingIds.Clear();
@@ -82,7 +82,7 @@ namespace AudioModule
 
             _keyPoolTransformMaps.Clear();
         }
-        
+
         public void ReleasePool(string key)
         {
             var ids = _keyIdsMaps[key];
@@ -91,11 +91,11 @@ namespace AudioModule
             foreach (var id in ids)
                 if (_isPlayingIds.Contains(id))
                     _isPlayingIds.Remove(id);
-            
+
             ids.Clear();
-            
+
             var audioDatas = _audioDatas.Where(audioData => audioData.Key == key).ToArray();
-            
+
             foreach (var audioData in audioDatas)
                 audioData.Release();
 
@@ -106,19 +106,19 @@ namespace AudioModule
 
 
         public void SetMasterVolume(float volume) =>
-            AudioMixer.SetFloat(_masterVolumeParameter, volume);
+            SetAudioMixerFloat(_masterVolumeParameter, volume);
 
 
         public void SetBgmVolume(float volume) =>
-            AudioMixer.SetFloat(_bgmVolumeParameter, volume);
+            SetAudioMixerFloat(_bgmVolumeParameter, volume);
 
 
-        public void SetSfxVolume(float volume) =>
-            AudioMixer.SetFloat(_sfxVolumeParameter, volume);
+        public void SetSfxVolume(float volume) => 
+            SetAudioMixerFloat(_sfxVolumeParameter, volume);
 
 
         public void SetVoiceVolume(float volume) =>
-            AudioMixer.SetFloat(_voiceVolumeParameter, volume);
+            SetAudioMixerFloat(_voiceVolumeParameter, volume);
 
 
         public bool CheckIsPlaying(string id) =>
@@ -127,7 +127,7 @@ namespace AudioModule
         public AudioData GetAudioData(string id)
         {
             var audioData = _audioDatas.Find(audioData => audioData.Id == id);
-            Assert.IsNotNull(audioData,$"[AudioModule::GetAudioData] Not find audioData by id: {id}.");
+            Assert.IsNotNull(audioData, $"[AudioModule::GetAudioData] Not find audioData by id: {id}.");
             return audioData;
         }
 
@@ -244,5 +244,15 @@ namespace AudioModule
             var prefab = audioResourceData.Prefab;
             return prefab;
         }
+
+
+        private void SetAudioMixerFloat(string volumeParameter, float volume)
+        {
+            var linearToLogarithmicScale = GetLinearToLogarithmicScale(volume);
+            AudioMixer.SetFloat(volumeParameter, linearToLogarithmicScale);
+        }
+
+        private float GetLinearToLogarithmicScale(float value) =>
+            Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
     }
 }

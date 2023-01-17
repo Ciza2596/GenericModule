@@ -54,7 +54,7 @@ namespace AudioPlayerModule
             StopAll(onComplete: () =>
             {
                 _channelIdsMaps.Clear();
-                _audioModule.ReleaseAllPool();
+                _audioModule.ReleaseAllPools();
 
                 IsReleasing = false;
             });

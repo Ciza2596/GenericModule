@@ -18,7 +18,8 @@ namespace AudioModule.Example1
         [SerializeField] private Button _resumeButton;
         [SerializeField] private Button _stopButton;
         [SerializeField] private Button _stopAllButton;
-        [SerializeField] private Button _releasePoolButton;
+        [SerializeField] private Button _releasePoolByKeyButton;
+        [SerializeField] private Button _releaseAllPoolsButton;
         
         [Space]
         [SerializeField] private Slider _masterSlider;
@@ -37,7 +38,8 @@ namespace AudioModule.Example1
         public Button ResumeButton => _resumeButton;
         public Button StopButton => _stopButton;
         public Button StopAllButton => _stopAllButton;
-        public Button ReleasePoolButton => _releasePoolButton;
+        public Button ReleasePoolByKeyButton => _releasePoolByKeyButton;
+        public Button ReleaseAllPoolsButton => _releaseAllPoolsButton;
         
         
         public Slider MasterSlider => _masterSlider;

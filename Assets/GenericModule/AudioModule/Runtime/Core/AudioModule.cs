@@ -11,15 +11,16 @@ namespace AudioModule
     public class AudioModule
     {
         //private variable
-
+        private Transform _poolRootTransform;
+        private readonly string _poolPrefix;
+        private readonly string _poolSuffix;
+        
         private readonly string _masterVolumeParameter;
         private readonly string _bgmVolumeParameter;
         private readonly string _sfxVolumeParameter;
         private readonly string _voiceVolumeParameter;
-
-        private readonly Transform _poolRootTransform;
-        private readonly string _poolPrefix;
-        private readonly string _poolSuffix;
+        
+        
         private readonly Dictionary<string, Transform> _keyPoolTransformMaps = new Dictionary<string, Transform>();
 
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
@@ -39,21 +40,27 @@ namespace AudioModule
         public AudioModule(IAudioModuleConfig audioModuleConfig)
         {
             Assert.IsNotNull(audioModuleConfig, "[AudioModule::AudioModule] AudioModuleConfig is null.");
+            
+            var poolRootName = audioModuleConfig.PoolRootName;
+            var poolRootGameObject = new GameObject(poolRootName);
+            _poolRootTransform = poolRootGameObject.transform;
+            
+            _poolPrefix = audioModuleConfig.PoolPrefix;
+            _poolSuffix = audioModuleConfig.PoolSuffix;
+            
+            
             AudioMixer = audioModuleConfig.AudioMixer;
-
             _masterVolumeParameter = audioModuleConfig.MasterVolumeParameter;
             _bgmVolumeParameter = audioModuleConfig.BgmVolumeParameter;
             _sfxVolumeParameter = audioModuleConfig.SfxVolumeParameter;
             _voiceVolumeParameter = audioModuleConfig.VoiceVolumeParameter;
+        }
 
-
-            var poolRootName = audioModuleConfig.PoolRootName;
-            var poolRootGameObject = new GameObject(poolRootName);
-            _poolRootTransform = poolRootGameObject.transform;
-
-
-            _poolPrefix = audioModuleConfig.PoolPrefix;
-            _poolSuffix = audioModuleConfig.PoolSuffix;
+        ~AudioModule()
+        {
+            var poolRootTransform = _poolRootTransform;
+            _poolRootTransform = null;
+            Object.Destroy(poolRootTransform);
         }
 
         public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;

@@ -6,12 +6,12 @@ namespace AudioModule
     public class AudioData
     {
         //private variable
-        private AudioSource _audioSource;
-
-        private Transform _selfTransform;
         private Transform _poolTransform;
         
-        
+        private AudioSource _audioSource;
+        private Transform _selfTransform;
+
+
         //public variable
         public string Id { get; private set; }
         public string Key { get; private set; }

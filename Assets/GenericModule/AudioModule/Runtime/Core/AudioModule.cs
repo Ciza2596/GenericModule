@@ -97,7 +97,10 @@ namespace AudioModule
             var audioDatas = _audioDatas.Where(audioData => audioData.Key == key).ToArray();
 
             foreach (var audioData in audioDatas)
+            {
+                _audioDatas.Remove(audioData);
                 audioData.Release();
+            }
 
             var poolTransform = _keyPoolTransformMaps[key];
             _keyPoolTransformMaps.Remove(key);

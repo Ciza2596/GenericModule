@@ -102,7 +102,7 @@ namespace AudioPlayerModule.Example1
 
             _componentCollectionData.ReleasePoolButton.onClick.AddListener(() =>
             {
-                _audioPlayerModule.ReleasePool();
+                _audioPlayerModule.ReleaseAllPool();
 
                 _audioChannelIdsMaps.Clear();
                 _currentAudioChannel = string.Empty;

@@ -11,7 +11,9 @@ namespace AudioModule
     public class AudioModule
     {
         //private variable
+        private readonly string _poolRootName;
         private Transform _poolRootTransform;
+        
         private readonly string _poolPrefix;
         private readonly string _poolSuffix;
         
@@ -34,6 +36,8 @@ namespace AudioModule
 
         //public variable
         public AudioMixer AudioMixer { get; }
+        public bool IsInitialized => _audioResourceDatas != null && _poolRootTransform != null;
+        
 
 
         //public method
@@ -41,10 +45,8 @@ namespace AudioModule
         {
             Assert.IsNotNull(audioModuleConfig, "[AudioModule::AudioModule] AudioModuleConfig is null.");
             
-            var poolRootName = audioModuleConfig.PoolRootName;
-            var poolRootGameObject = new GameObject(poolRootName);
-            _poolRootTransform = poolRootGameObject.transform;
-            
+            _poolRootName = audioModuleConfig.PoolRootName;
+
             _poolPrefix = audioModuleConfig.PoolPrefix;
             _poolSuffix = audioModuleConfig.PoolSuffix;
             
@@ -56,20 +58,26 @@ namespace AudioModule
             _voiceVolumeParameter = audioModuleConfig.VoiceVolumeParameter;
         }
 
-        ~AudioModule()
+        public void Initialize(IAudioResourceData[] audioResourceDatas)
         {
-            var poolRootTransform = _poolRootTransform;
-            _poolRootTransform = null;
-            Object.Destroy(poolRootTransform);
-        }
+            _audioResourceDatas = audioResourceDatas;
 
-        public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioResourceDatas = audioResourceDatas;
+            if (_poolRootTransform is null)
+            {
+                var poolRootGameObject = new GameObject(_poolRootName);
+                _poolRootTransform = poolRootGameObject.transform;
+            }
+        }
 
         public void Release()
         {
             _audioResourceDatas = null;
 
             ReleaseAllPools();
+            
+            var poolRootGameObject = _poolRootTransform.gameObject;
+            _poolRootTransform = null;
+            Object.DestroyImmediate(poolRootGameObject.gameObject);
         }
 
         public void ReleaseAllPools()
@@ -85,7 +93,7 @@ namespace AudioModule
 
             var poolTransforms = _keyPoolTransformMaps.Values.ToList();
             foreach (var poolTransform in poolTransforms)
-                Object.Destroy(poolTransform.gameObject);
+                Object.DestroyImmediate(poolTransform.gameObject);
 
             _keyPoolTransformMaps.Clear();
         }
@@ -111,7 +119,7 @@ namespace AudioModule
 
             var poolTransform = _keyPoolTransformMaps[key];
             _keyPoolTransformMaps.Remove(key);
-            Object.Destroy(poolTransform.gameObject);
+            Object.DestroyImmediate(poolTransform.gameObject);
         }
 
 
@@ -130,6 +138,13 @@ namespace AudioModule
         public void SetVoiceVolume(float volume) =>
             SetAudioMixerFloat(_voiceVolumeParameter, volume);
 
+
+        public string GetPoolName(string key)
+        {
+            var audioResourceData = _audioResourceDatas.FirstOrDefault(audioResourceDatas => audioResourceDatas.Key == key);
+            Assert.IsTrue(audioResourceData != null ,$"[AudioModule::GetPoolName] Key: {key} doesnt exist in resourceData.");
+            return _poolPrefix + key + _poolSuffix;
+        }
 
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
@@ -215,7 +230,8 @@ namespace AudioModule
             Transform poolTransform;
             if (!_keyPoolTransformMaps.ContainsKey(key))
             {
-                var poolGameObject = new GameObject(_poolPrefix + key + _poolSuffix);
+                var poolName = GetPoolName(key);
+                var poolGameObject = new GameObject(poolName);
                 poolTransform = poolGameObject.transform;
                 poolTransform.SetParent(_poolRootTransform);
                 _keyPoolTransformMaps.Add(key, poolTransform);

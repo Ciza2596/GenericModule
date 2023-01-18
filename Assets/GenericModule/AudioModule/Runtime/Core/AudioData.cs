@@ -7,7 +7,7 @@ namespace AudioModule
     {
         //private variable
         private Transform _poolTransform;
-        
+
         private AudioSource _audioSource;
         private Transform _selfTransform;
 
@@ -17,7 +17,7 @@ namespace AudioModule
         public string Key { get; private set; }
         public float Volume => _audioSource.volume;
         public float OriginVolume { get; }
-        public float Duration { get;}
+        public float Duration { get; }
 
 
         //public method
@@ -27,32 +27,35 @@ namespace AudioModule
 
             _selfTransform = _audioSource.transform;
             _poolTransform = poolTransform;
-            
+
             OriginVolume = _audioSource.volume;
             Id = id;
             Key = key;
+
+
+            var clip = _audioSource.clip;
             
-            Duration = _audioSource.clip.length;
+            Duration = clip is null ? 0 : clip.length;
         }
 
         public void SetVolume(float volume) => _audioSource.volume = volume;
-        
+
         public void Play(Vector3 localPosition, Transform parentTransform)
         {
             _selfTransform.SetParent(parentTransform);
-            
-            if(localPosition != default)
+
+            if (localPosition != default)
                 _selfTransform.localPosition = localPosition;
 
 
-            Assert.IsNotNull(_audioSource.clip,
-                $"[AudioData::Play] Clip is null. Please check Key: {Key} audioPrefab.");
-            
+            if(_audioSource.clip is null)
+                Debug.LogWarning($"[AudioData::Play] Clip is null. Please check Key: {Key} audioPrefab.");
+
             _audioSource.gameObject.SetActive(true);
             _audioSource.Play();
         }
-        
-        public void Resume() =>_audioSource.Play();
+
+        public void Resume() => _audioSource.Play();
 
         public void Pause() => _audioSource.Pause();
 
@@ -66,7 +69,7 @@ namespace AudioModule
         public void Release()
         {
             Stop();
-            
+
             Id = null;
             Key = null;
 
@@ -77,8 +80,7 @@ namespace AudioModule
             _audioSource = null;
 
             var gameObject = audioSource.gameObject;
-            Object.Destroy(gameObject);
+            Object.DestroyImmediate(gameObject);
         }
-        
     }
 }

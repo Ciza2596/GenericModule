@@ -41,7 +41,7 @@ public class EventModuleTest
 
 
         //assert
-        Assert.AreEqual(_eventModule.SyncEvents.Count, 1,
+        Assert.AreEqual(1, _eventModule.SyncEventCount,
                         "SyncEvents count not match AddSyncListener times. Please check AddSyncListener times.");
     }
 
@@ -50,7 +50,7 @@ public class EventModuleTest
     {
         //arrange
         _eventModule.AddSyncListener<TestSyncEvent>(OnTestSyncAction);
-        Assert.AreEqual(_eventModule.SyncEvents.Count, 1,
+        Assert.AreEqual(1,_eventModule.SyncEventCount, 
                         "Test init fail. SyncEvents count not match AddSyncListener times. Please check AddSyncListener times.");
 
 
@@ -58,7 +58,7 @@ public class EventModuleTest
         _eventModule.RemoveSyncListener<TestSyncEvent>(OnTestSyncAction);
 
         //assert
-        Assert.AreEqual(_eventModule.SyncEvents.Count, 0,
+        Assert.AreEqual(0,_eventModule.SyncEventCount, 
                         "SyncEvents count not match AddSyncListener times. Please check RemoveSyncListener times.");
     }
 
@@ -70,7 +70,7 @@ public class EventModuleTest
         _eventModule.AddSyncListener<TestSyncEvent>(OnTestSyncAction);
         Assert.IsFalse(_isTestSyncActionTrigger,
                        "Test init fail. Please check _isTestSyncActionTrigger should be false.");
-        Assert.AreEqual(_eventModule.SyncEvents.Count, 1,
+        Assert.AreEqual(1,_eventModule.SyncEventCount, 
                         "Test init fail. SyncEvents count not match AddSyncListener times. Please check AddSyncListener times.");
 
 
@@ -105,7 +105,7 @@ public class EventModuleTest
 
 
         //assert
-        Assert.AreEqual(_eventModule.AsyncEvents.Count, 1,
+        Assert.AreEqual(1,_eventModule.AsyncEventCount, 
                         "AsyncEvents count not match AddAsyncListener times. Please check AddAsyncListener times.");
     }
 
@@ -114,7 +114,7 @@ public class EventModuleTest
     {
         //arrange
         _eventModule.AddAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
-        Assert.AreEqual(_eventModule.AsyncEvents.Count, 1,
+        Assert.AreEqual(1,_eventModule.AsyncEventCount, 
                         "Test init fail. AsyncEvents count not match AddAsyncListener times. Please check AddAsyncListener times.");
 
 
@@ -122,7 +122,7 @@ public class EventModuleTest
         _eventModule.RemoveAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
 
         //assert
-        Assert.AreEqual(_eventModule.AsyncEvents.Count, 0,
+        Assert.AreEqual(0,_eventModule.AsyncEventCount,
                         "AsyncEvents count not match AddAsyncListener times. Please check RemoveAsyncListener times.");
     }
 
@@ -134,7 +134,7 @@ public class EventModuleTest
         _eventModule.AddAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
         Assert.IsFalse(_isTestAsyncActionTrigger,
                        "Test init fail. Please check _isTestAsyncActionTrigger should be false.");
-        Assert.AreEqual(_eventModule.AsyncEvents.Count, 1,
+        Assert.AreEqual(_eventModule.AsyncEventCount, 1,
                         "Test init fail. AsyncEvents count not match AddAsyncListener times. Please check AddAsyncListener times.");
 
 

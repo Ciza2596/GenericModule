@@ -35,6 +35,7 @@ MonoBehaviour:
     - Assembly-CSharp-firstpass
     - AudioModule
     - AudioModule.Editor
+    - AudioModule.Test
     - AudioPlayerModule
     - CameraModule
     - CameraModule.Test

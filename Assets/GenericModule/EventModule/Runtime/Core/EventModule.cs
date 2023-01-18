@@ -8,16 +8,16 @@ namespace EventModule
         where TSyncEvent : TBaseEvent where TAsyncEvent : TBaseEvent
     {
         //private method
-        private Dictionary<Type, SyncEventDelegateContainer> _syncEvents =
+        private readonly Dictionary<Type, SyncEventDelegateContainer> _syncEvents =
             new Dictionary<Type, SyncEventDelegateContainer>();
 
-        private Dictionary<Type, AsyncEventDelegateContainer> _asyncEvents =
+        private readonly Dictionary<Type, AsyncEventDelegateContainer> _asyncEvents =
             new Dictionary<Type, AsyncEventDelegateContainer>();
 
 
         //public variable
-        public IReadOnlyDictionary<Type, SyncEventDelegateContainer> SyncEvents => _syncEvents;
-        public IReadOnlyDictionary<Type, AsyncEventDelegateContainer> AsyncEvents => _asyncEvents;
+        public int SyncEventCount => _syncEvents.Count;
+        public int AsyncEventCount => _asyncEvents.Count;
 
 
         //public method

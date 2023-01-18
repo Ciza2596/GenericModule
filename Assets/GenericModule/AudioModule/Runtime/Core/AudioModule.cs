@@ -77,7 +77,7 @@ namespace AudioModule
             
             var poolRootGameObject = _poolRootTransform.gameObject;
             _poolRootTransform = null;
-            Object.DestroyImmediate(poolRootGameObject.gameObject);
+            Object.DestroyImmediate(poolRootGameObject);
         }
 
         public void ReleaseAllPools()

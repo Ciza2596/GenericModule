@@ -9,7 +9,8 @@ namespace GameObjectPoolModule
     public class GameObjectPoolModule
     {
         //private variable
-        private readonly Transform _poolRootTransform;
+        private readonly string _poolRootName;
+        private Transform _poolRootTransform;
         private readonly string _poolPrefix;
         private readonly string _poolSuffix;
         private readonly Dictionary<string, Transform> _poolTransforms = new Dictionary<string, Transform>();
@@ -26,10 +27,8 @@ namespace GameObjectPoolModule
         //public method
         public GameObjectPoolModule(IGameObjectPoolModuleConfig gameObjectPoolModuleConfig)
         {
-            var poolRootGameObject = new GameObject(gameObjectPoolModuleConfig.PoolRootName);
-
-            _poolRootTransform = poolRootGameObject.transform;
-
+            _poolRootName = gameObjectPoolModuleConfig.PoolRootName;
+            
             _poolPrefix = gameObjectPoolModuleConfig.PoolPrefix;
             _poolSuffix = gameObjectPoolModuleConfig.PoolSuffix;
         }
@@ -37,14 +36,23 @@ namespace GameObjectPoolModule
 
         public void Initialize(IGameObjectResourceData[] gameObjectResourceDatas)
         {
-            ReleaseAllPool();
             _gameObjectResourceDatas = gameObjectResourceDatas;
+            
+            if (_poolRootTransform is null)
+            {
+                var poolRootGameObject = new GameObject(_poolRootName);
+                _poolRootTransform = poolRootGameObject.transform;
+            }
         }
 
         public void Release()
         {
             _gameObjectResourceDatas = null;
             ReleaseAllPool();
+            
+            var poolRootGameObject = _poolRootTransform.gameObject;
+            _poolRootTransform = null;
+            Object.DestroyImmediate(poolRootGameObject);
         }
 
 

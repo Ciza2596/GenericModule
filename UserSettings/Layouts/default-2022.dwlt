@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 27
+    x: 28
     y: 53
-    width: 1777
+    width: 1920
     height: 967
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Project
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -39,9 +39,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 715
+    x: 629
     y: 0
-    width: 218
+    width: 107
     height: 361
   m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
@@ -70,7 +70,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1777
+    width: 1920
     height: 967
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -95,7 +95,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1777
+    width: 1920
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 947
-    width: 1777
+    width: 1920
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -140,12 +140,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 30
-    width: 1777
+    width: 1920
     height: 917
   m_MinSize: {x: 500, y: 100}
   m_MaxSize: {x: 40480, y: 16192}
   vertical: 0
-  controlID: 93
+  controlID: 70
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,12 +165,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1320
+    width: 1281
     height: 917
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 1
-  controlID: 94
+  controlID: 71
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -192,12 +192,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1320
+    width: 1281
     height: 556
   m_MinSize: {x: 400, y: 50}
   m_MaxSize: {x: 32384, y: 8096}
   vertical: 0
-  controlID: 95
+  controlID: 72
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -215,7 +215,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 100
+    width: 230
     height: 556
   m_MinSize: {x: 431, y: 271}
   m_MaxSize: {x: 4001, y: 4021}
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 100
+    x: 230
     y: 0
     width: 100
     height: 556
@@ -267,9 +267,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 200
+    x: 330
     y: 0
-    width: 856
+    width: 659
     height: 556
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -293,9 +293,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1056
+    x: 989
     y: 0
-    width: 264
+    width: 292
     height: 556
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -324,7 +324,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 556
-    width: 1320
+    width: 1281
     height: 361
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
@@ -347,7 +347,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 715
+    width: 629
     height: 361
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
@@ -372,9 +372,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 933
+    x: 736
     y: 0
-    width: 387
+    width: 545
     height: 361
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
@@ -398,9 +398,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1320
+    x: 1281
     y: 0
-    width: 457
+    width: 639
     height: 917
   m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
@@ -410,7 +410,7 @@ MonoBehaviour:
   - {fileID: 28}
   - {fileID: 29}
   m_Selected: 0
-  m_LastSelected: 1
+  m_LastSelected: 2
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -431,9 +431,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 227
+    x: 358
     y: 83
-    width: 854
+    width: 657
     height: 535
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -486,10 +486,10 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 854
+      width: 657
       height: 514
-    m_Scale: {x: 0.44479167, y: 0.44479167}
-    m_Translation: {x: 427, y: 257}
+    m_Scale: {x: 0.3421875, y: 0.3421875}
+    m_Translation: {x: 328.5, y: 257}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -497,12 +497,12 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -960
-      y: -577.7986
+      y: -751.05023
       width: 1920
-      height: 1155.5972
+      height: 1502.1005
     m_MinimalGUI: 1
-  m_defaultScale: 0.44479167
-  m_LastWindowPixelSize: {x: 854, y: 535}
+  m_defaultScale: 0.3421875
+  m_LastWindowPixelSize: {x: 657, y: 535}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -597,9 +597,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 27
+    x: 28
     y: 83
-    width: 99
+    width: 229
     height: 535
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -734,7 +734,7 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 127
+    x: 258
     y: 83
     width: 98
     height: 535
@@ -1175,9 +1175,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1083
+    x: 1017
     y: 83
-    width: 262
+    width: 290
     height: 535
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1191,9 +1191,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8ef9ffff
+      m_SelectedIDs: 262a0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 
+      m_ExpandedIDs: cc52ffff4859ffff626effff4c7bffff067cffffb07cfffffc85ffff0088ffff308affff188cfffffc8dffffc89dffffbc9fffff50a9ffff90abffff04ceffffd0cfffffacd1ffff5cd9ffff42e0ffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1237,9 +1237,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 27
+    x: 28
     y: 639
-    width: 714
+    width: 628
     height: 340
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1306,9 +1306,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 742
+    x: 657
     y: 639
-    width: 216
+    width: 105
     height: 340
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1453,7 +1453,7 @@ MonoBehaviour:
       maxSizes:
       - 0
       - 0
-      lastTotalSize: 216
+      lastTotalSize: 105
       splitSize: 6
       xOffset: 0
       m_Version: 1
@@ -1487,9 +1487,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 960
+    x: 764
     y: 639
-    width: 385
+    width: 543
     height: 340
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1513,37 +1513,37 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Examples/AudioModule/Example1 WithZenjectInstaller/ScriptableObject
+    - Assets/GenericModule/GameObjectPoolModule/Runtime/Core
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Examples/AudioModule/Example1 WithZenjectInstaller/ScriptableObject
+  - Assets/GenericModule/GameObjectPoolModule/Runtime/Core
   m_LastFoldersGridSize: 16
   m_LastProjectPath: '/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule '
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 149.26605}
-    m_SelectedIDs: 2a710000
-    m_LastClickedID: 28970
-    m_ExpandedIDs: 00000000dc6f0000de6f0000e06f0000e26f0000e46f0000e66f0000e86f0000ea6f0000ec6f0000ee6f0000f06f0000f26f0000f46f0000f66f0000f86f0000fa6f0000fc6f0000fe6f000000700000027000000470000006700000087000000a7000000c7000000e70000010700000127000001470000016700000187000001a7000001c7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000387000003a700000bc70000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 259.31885}
+    m_SelectedIDs: 32940000
+    m_LastClickedID: 37938
+    m_ExpandedIDs: 00000000dc6f0000de6f0000e06f0000e26f0000e46f0000e66f0000e86f0000ec6f0000ee6f0000f06f0000f26f0000f46f0000f66f0000f86f0000fa6f0000fc6f0000fe6f000000700000027000000470000006700000087000000a7000000c7000000e7000001270000014700000187000001a7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000bc700000d870000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Test
+      m_OriginalName: Test
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 28894
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 15}
     m_SearchString: 
@@ -1584,24 +1584,24 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000beb50000c4b50000d6b50000e2b50000c09affff866e000098820000746d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: AudioModuleTest
+      m_OriginalName: AudioModuleTest
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 29016
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 15}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1612,7 +1612,7 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 335
+  m_DirectoriesAreaWidth: 231
 --- !u!114 &27
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1633,9 +1633,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1347
+    x: 1309
     y: 83
-    width: 456
+    width: 638
     height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1722,10 +1722,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1000
+    x: 1309
     y: 83
-    width: 595
-    height: 850
+    width: 638
+    height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1736,22 +1736,22 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 19376
-    splitterInitialOffset: 0
+    ID: 1047
+    splitterInitialOffset: 271
     currentActiveSplitter: -1
     realSizes:
-    - 585
-    - 195
+    - 200
+    - 626
     relativeSizes:
-    - 0.75
-    - 0.25
+    - 0.24213076
+    - 0.75786924
     minSizes:
     - 32
     - 32
     maxSizes:
     - 0
     - 0
-    lastTotalSize: 780
+    lastTotalSize: 826
     splitSize: 6
     xOffset: 0
     m_Version: 1
@@ -1803,7 +1803,7 @@ MonoBehaviour:
       name: GenericModule
       fullName: GenericModule
       resultStatus: 1
-      duration: 0.2169101
+      duration: 0.2001013
       messages: 
       output: 
       stacktrace: 
@@ -1814,13 +1814,199 @@ MonoBehaviour:
       categories: []
       parentId: 
       parentUniqueId: 
+    - id: 1003
+      uniqueId: '[AudioModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/AudioModule.Test.dll][suite]'
+      name: AudioModule.Test.dll
+      fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/AudioModule.Test.dll
+      resultStatus: 1
+      duration: 0.0990431
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1000
+      parentUniqueId: '[GenericModule][suite]'
+    - id: 1001
+      uniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+      name: AudioModuleTest
+      fullName: AudioModuleTest
+      resultStatus: 1
+      duration: 0.0950922
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1003
+      parentUniqueId: '[AudioModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/AudioModule.Test.dll][suite]'
+    - id: 1002
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._01_Should_Be_Initialized_When_Initialize]
+      name: _01_Should_Be_Initialized_When_Initialize
+      fullName: AudioModuleTest._01_Should_Be_Initialized_When_Initialize
+      resultStatus: 1
+      duration: 0.0189475
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1003
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._02_Should_Not_Be_Initialized_When_Release]
+      name: _02_Should_Not_Be_Initialized_When_Release
+      fullName: AudioModuleTest._02_Should_Not_Be_Initialized_When_Release
+      resultStatus: 1
+      duration: 0.000704
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1004
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._03_Should_ReleaseAllPools_When_ReleaseAllPools]
+      name: _03_Should_ReleaseAllPools_When_ReleaseAllPools
+      fullName: AudioModuleTest._03_Should_ReleaseAllPools_When_ReleaseAllPools
+      resultStatus: 1
+      duration: 0.0380194
+      messages: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+        [AudioData::Play]
+        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1005
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._04_Should_ReleasePool_When_ReleasePool]
+      name: _04_Should_ReleasePool_When_ReleasePool
+      fullName: AudioModuleTest._04_Should_ReleasePool_When_ReleasePool
+      resultStatus: 1
+      duration: 0.0019606
+      messages: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+        [AudioData::Play]
+        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1006
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._05_Should_GetPoolName_When_GetPoolName]
+      name: _05_Should_GetPoolName_When_GetPoolName
+      fullName: AudioModuleTest._05_Should_GetPoolName_When_GetPoolName
+      resultStatus: 1
+      duration: 0.0133938
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1007
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._06_CheckIsPlaying]
+      name: _06_CheckIsPlaying
+      fullName: AudioModuleTest._06_CheckIsPlaying
+      resultStatus: 1
+      duration: 0.0005752
+      messages: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1008
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._07_GetAudioData]
+      name: _07_GetAudioData
+      fullName: AudioModuleTest._07_GetAudioData
+      resultStatus: 1
+      duration: 0.0005202
+      messages: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1009
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._08_Play]
+      name: _08_Play
+      fullName: AudioModuleTest._08_Play
+      resultStatus: 1
+      duration: 0.0006042
+      messages: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1009
       uniqueId: '[CameraModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
         /Library/ScriptAssemblies/CameraModule.Test.dll][suite]'
       name: CameraModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/CameraModule.Test.dll
       resultStatus: 1
-      duration: 0.0624865
+      duration: 0.0533062
       messages: 
       output: 
       stacktrace: 
@@ -1836,7 +2022,7 @@ MonoBehaviour:
       name: CameraModuleTest
       fullName: CameraModuleTest
       resultStatus: 1
-      duration: 0.0614871
+      duration: 0.0351836
       messages: 
       output: 
       stacktrace: 
@@ -1853,7 +2039,7 @@ MonoBehaviour:
       name: Should_Success_When_CloseCamera
       fullName: CameraModuleTest.Should_Success_When_CloseCamera
       resultStatus: 1
-      duration: 0.028038
+      duration: 0.007972
       messages: 
       output: 
       stacktrace: 
@@ -1869,7 +2055,7 @@ MonoBehaviour:
       name: Should_Success_When_CloseCamera("123")
       fullName: CameraModuleTest.Should_Success_When_CloseCamera("123")
       resultStatus: 1
-      duration: 0.0222854
+      duration: 0.0033845
       messages: 
       output: 
       stacktrace: 
@@ -1886,7 +2072,7 @@ MonoBehaviour:
       name: Should_Success_When_OpenCamera
       fullName: CameraModuleTest.Should_Success_When_OpenCamera
       resultStatus: 1
-      duration: 0.0160114
+      duration: 0.0062364
       messages: 
       output: 
       stacktrace: 
@@ -1902,7 +2088,7 @@ MonoBehaviour:
       name: Should_Success_When_OpenCamera("123")
       fullName: CameraModuleTest.Should_Success_When_OpenCamera("123")
       resultStatus: 1
-      duration: 0.0004599
+      duration: 0.0004265
       messages: 
       output: 
       stacktrace: 
@@ -1919,7 +2105,7 @@ MonoBehaviour:
       name: Should_Success_When_Register
       fullName: CameraModuleTest.Should_Success_When_Register
       resultStatus: 1
-      duration: 0.0001402
+      duration: 0.0001801
       messages: 
       output: 
       stacktrace: 
@@ -1936,7 +2122,7 @@ MonoBehaviour:
       name: Should_Success_When_SetCameraData
       fullName: CameraModuleTest.Should_Success_When_SetCameraData
       resultStatus: 1
-      duration: 0.0056525
+      duration: 0.0087627
       messages: 
       output: 
       stacktrace: 
@@ -1952,7 +2138,7 @@ MonoBehaviour:
       name: Should_Success_When_SetCameraData("123",1000)
       fullName: CameraModuleTest.Should_Success_When_SetCameraData("123",1000)
       resultStatus: 1
-      duration: 0.0009794
+      duration: 0.0013402
       messages: 
       output: 
       stacktrace: 
@@ -1970,7 +2156,7 @@ MonoBehaviour:
       name: EventModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/EventModule.Test.dll
       resultStatus: 1
-      duration: 0.1718153
+      duration: 0.0131008
       messages: 
       output: 
       stacktrace: 
@@ -1986,7 +2172,7 @@ MonoBehaviour:
       name: EventModuleTest
       fullName: EventModuleTest
       resultStatus: 1
-      duration: 0.1704921
+      duration: 0.0075535
       messages: 
       output: 
       stacktrace: 
@@ -2003,7 +2189,7 @@ MonoBehaviour:
       name: Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
       fullName: EventModuleTest.Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
       resultStatus: 1
-      duration: 0.080043
+      duration: 0.0011687
       messages: 
       output: 
       stacktrace: 
@@ -2020,7 +2206,7 @@ MonoBehaviour:
       name: Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
       fullName: EventModuleTest.Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
       resultStatus: 1
-      duration: 0.0005469
+      duration: 0.000472
       messages: 
       output: 
       stacktrace: 
@@ -2037,7 +2223,7 @@ MonoBehaviour:
       name: Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
       fullName: EventModuleTest.Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
       resultStatus: 1
-      duration: 0.0001233
+      duration: 0.0001166
       messages: 
       output: 
       stacktrace: 
@@ -2054,7 +2240,7 @@ MonoBehaviour:
       name: Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
       fullName: EventModuleTest.Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
       resultStatus: 1
-      duration: 0.0001163
+      duration: 0.0001146
       messages: 
       output: 
       stacktrace: 
@@ -2071,7 +2257,7 @@ MonoBehaviour:
       name: Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
       fullName: EventModuleTest.Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
       resultStatus: 1
-      duration: 0.0045131
+      duration: 0.0014783
       messages: 
       output: 
       stacktrace: 
@@ -2088,7 +2274,7 @@ MonoBehaviour:
       name: Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
       fullName: EventModuleTest.Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
       resultStatus: 1
-      duration: 0.0004312
+      duration: 0.0002818
       messages: 
       output: 
       stacktrace: 
@@ -2100,132 +2286,13 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1010
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1018
-      uniqueId: '[ViewModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
-        /Library/ScriptAssemblies/ViewModule.Test.dll][suite]'
-      name: ViewModule.Test.dll
-      fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/ViewModule.Test.dll
-      resultStatus: 1
-      duration: 0.2221054
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1000
-      parentUniqueId: '[GenericModule][suite]'
-    - id: 1016
-      uniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-      name: ViewModuleTest
-      fullName: ViewModuleTest
-      resultStatus: 1
-      duration: 0.2147049
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1018
-      parentUniqueId: '[ViewModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
-        /Library/ScriptAssemblies/ViewModule.Test.dll][suite]'
-    - id: 1019
-      uniqueId: ViewModule.Test.dll/ViewModuleTest/[ViewModule.Test][ViewModuleTest.Should_Success_When_HideView]
-      name: Should_Success_When_HideView
-      fullName: ViewModuleTest.Should_Success_When_HideView
-      resultStatus: 1
-      duration: 0.2003719
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1014
-      parentUniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-    - id: 1017
-      uniqueId: ViewModule.Test.dll/ViewModuleTest/[ViewModule.Test][ViewModuleTest.Should_Success_When_LoadView]
-      name: Should_Success_When_LoadView
-      fullName: ViewModuleTest.Should_Success_When_LoadView
-      resultStatus: 1
-      duration: 0.0079646
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1016
-      parentUniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-    - id: 1019
-      uniqueId: ViewModule.Test.dll/ViewModuleTest/[ViewModule.Test][ViewModuleTest.Should_Success_When_ReleaseAllViews]
-      name: Should_Success_When_ReleaseAllViews
-      fullName: ViewModuleTest.Should_Success_When_ReleaseAllViews
-      resultStatus: 1
-      duration: 0.0009108
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1016
-      parentUniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-    - id: 1018
-      uniqueId: ViewModule.Test.dll/ViewModuleTest/[ViewModule.Test][ViewModuleTest.Should_Success_When_ReleaseView]
-      name: Should_Success_When_ReleaseView
-      fullName: ViewModuleTest.Should_Success_When_ReleaseView
-      resultStatus: 1
-      duration: 0.0006133
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1016
-      parentUniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-    - id: 1018
-      uniqueId: ViewModule.Test.dll/ViewModuleTest/[ViewModule.Test][ViewModuleTest.Should_Success_When_ShowView]
-      name: Should_Success_When_ShowView
-      fullName: ViewModuleTest.Should_Success_When_ShowView
-      resultStatus: 1
-      duration: 0.0006936
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1014
-      parentUniqueId: ViewModule.Test.dll/[ViewModule.Test][ViewModuleTest][suite]
-    m_ResultText: EventModule.Test.dll (0.172s)
+    m_ResultText: AudioModule.Test.dll (0.099s)
     m_ResultStacktrace: 
     m_TestListState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 68505699
-      m_LastClickedID: -1722396568
-      m_ExpandedIDs: 26e38490089746aaf3598fe86a5044facea7d10838b395157a53581e20ffa921ff01b93e183e3b7d6975d37dffffff7f
+      m_SelectedIDs: f0ebd1c3
+      m_LastClickedID: -1009652752
+      m_ExpandedIDs: 26e38490089746aaf3598fe86a5044facea7d10838b395157a53581e20ffa921ff01b93e6975d37dffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

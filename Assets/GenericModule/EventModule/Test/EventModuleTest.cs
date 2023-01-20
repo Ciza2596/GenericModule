@@ -127,7 +127,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public async void Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent()
+    public async void Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent()
     {
         //arrange
         _isTestAsyncActionTrigger = false;

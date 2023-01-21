@@ -1,6 +1,6 @@
 namespace SaveLoadModule.Implement
 {
-    public class Reader: BaseReader
+    public class JsonReader: BaseReader
     {
         
     }

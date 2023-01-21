@@ -18,8 +18,10 @@ namespace SaveLoadModule.Example1
         private SaveLoadModule _saveLoadModule;
 
         //unity callback
-        private void Awake() =>
-            _saveLoadModule = new SaveLoadModule();
+        private void Awake()
+        {
+        }
+        //_saveLoadModule = new SaveLoadModule();
 
 
         private void OnEnable()

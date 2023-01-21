@@ -1,4 +1,3 @@
-using SaveLoadModule.Implement;
 
 namespace SaveLoadModule
 {
@@ -6,15 +5,17 @@ namespace SaveLoadModule
     {
         //private variable
         private readonly ISaveLoadModuleConfig _saveLoadModuleConfig;
+        private readonly IIo _io;
         
         private readonly IWriterProvider _writerProvider;
         private readonly IReaderProvider _readerProvider;
-
+        
 
         //public method
-        public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig, IWriterProvider writerProvider, IReaderProvider readerProvider)
+        public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig,IIo io, IWriterProvider writerProvider, IReaderProvider readerProvider)
         {
             _saveLoadModuleConfig = saveLoadModuleConfig;
+            _io = io;
             
             _writerProvider = writerProvider;
             _readerProvider = readerProvider;
@@ -44,7 +45,7 @@ namespace SaveLoadModule
         private string GetFullPath(string path)
         {
             var applicationDataPath = _saveLoadModuleConfig.ApplicationDataPath;
-            var fullPath = Io.CombinePathAndFilename(applicationDataPath, path);
+            var fullPath = _io.CombinePath(applicationDataPath, path);
             return fullPath;
         }
 

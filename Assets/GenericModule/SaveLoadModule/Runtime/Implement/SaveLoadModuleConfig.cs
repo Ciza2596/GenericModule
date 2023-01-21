@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 namespace SaveLoadModule.Implement
@@ -21,9 +22,9 @@ namespace SaveLoadModule.Implement
             get
             {
                 if (_directory == Directories.PersistentDataPath)
-                    return Io.CombinePathAndFilename(Application.persistentDataPath, _path);
+                    return Path.Combine(Application.persistentDataPath, _path);
 
-                return Io.CombinePathAndFilename(Application.dataPath, _path);
+                return Path.Combine(Application.dataPath, _path);
             }
         }
 

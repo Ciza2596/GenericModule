@@ -1,6 +1,6 @@
 namespace SaveLoadModule
 {
-    public interface IReader
+    public interface IReaderController
     {
         T Read<T>(string key);
     }

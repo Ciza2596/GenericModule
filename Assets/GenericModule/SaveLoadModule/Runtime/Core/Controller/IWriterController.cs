@@ -1,7 +1,7 @@
 
 namespace SaveLoadModule
 {
-    public interface IWriter
+    public interface IWriterController
     {
         void Write<T>(string key, T data);
         void Save();

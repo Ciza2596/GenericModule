@@ -3,25 +3,25 @@ namespace SaveLoadModule
     public class SaveLoadModule
     {
         //private variable
-        private readonly IWriter _writer;
-        private readonly IReader _reader;
+        private readonly IWriterController _writerController;
+        private readonly IReaderController _readerController;
 
 
         //public method
-        public SaveLoadModule(IWriter writer, IReader reader)
+        public SaveLoadModule(IWriterController writerController, IReaderController readerController)
         {
-            _writer = writer;
-            _reader = reader;
+            _writerController = writerController;
+            _readerController = readerController;
         }
 
 
         public void Save<T>(string key, T data, string path)
         {
-            _writer.Write<T>(key, data);
-            _writer.Save();
+            _writerController.Write<T>(key, data);
+            _writerController.Save();
         }
 
         public T Load<T>(string key, string path) =>
-            _reader.Read<T>(key);
+            _readerController.Read<T>(key);
     }
 }

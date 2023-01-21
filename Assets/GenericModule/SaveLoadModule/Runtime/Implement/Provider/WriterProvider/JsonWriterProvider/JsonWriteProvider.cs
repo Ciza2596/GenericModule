@@ -1,7 +1,30 @@
+using System.IO;
+using UnityEngine.Assertions;
+
 namespace SaveLoadModule.Implement
 {
-    public class JsonWriteProvider: IWriterProvider
+    public class JsonWriteProvider : IWriterProvider
     {
-        public IWriter CreateWriter(string path) => throw new System.NotImplementedException();
+        //private variable
+        private readonly IStreamProvider _streamProvider;
+
+
+        //public method
+        public JsonWriteProvider(IStreamProvider streamProvider) => _streamProvider = streamProvider;
+
+
+        public IWriter CreateWriter(string path)
+        {
+            var stream = _streamProvider.CreateStream(FileModes.Write);
+            Assert.IsTrue(stream != null, "");
+
+            var writer = CreateWrite(stream);
+            return writer;
+        }
+
+
+        //private method
+        private IWriter CreateWrite(Stream stream) =>
+            new JsonWriter(stream);
     }
 }

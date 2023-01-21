@@ -6,7 +6,7 @@ namespace SaveLoadModule
 {
     public interface IStreamProvider
     {
-        public Stream CreateStream(FileModes fileMode);
+        public Stream CreateStream(FileModes fileMode, string fullPath, int bufferSize);
         
     }
 }

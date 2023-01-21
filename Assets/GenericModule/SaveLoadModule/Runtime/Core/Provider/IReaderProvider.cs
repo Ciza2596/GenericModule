@@ -2,6 +2,6 @@ namespace SaveLoadModule
 {
     public interface IReaderProvider
     {
-        IReader CreateReader(string path);
+        IReader CreateReader(string fullPath, int bufferSize);
     }
 }

@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace SaveLoadModule.Implement
 {
-    [CreateAssetMenu(fileName = "SaveLoadModule", menuName = "SaveLoadModule/FileStreamProviderConfig")]
-    public class FileStreamProviderConfig : ScriptableObject, IFileStreamProviderConfig
+    [CreateAssetMenu(fileName = "SaveLoadModule", menuName = "SaveLoadModule/SaveLoadModuleConfig")]
+    public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig
     {
         private enum Directories
         {
@@ -17,7 +17,7 @@ namespace SaveLoadModule.Implement
         [Space]
         [SerializeField] private int _bufferSize = 2028;
 
-        public string Path
+        public string ApplicationDataPath
         {
             get
             {

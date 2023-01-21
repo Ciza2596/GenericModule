@@ -13,9 +13,9 @@ namespace SaveLoadModule.Implement
         public JsonWriteProvider(IStreamProvider streamProvider) => _streamProvider = streamProvider;
 
 
-        public IWriter CreateWriter(string path)
+        public IWriter CreateWriter(string fullPath, int bufferSize)
         {
-            var stream = _streamProvider.CreateStream(FileModes.Write);
+            var stream = _streamProvider.CreateStream(FileModes.Write, fullPath, bufferSize);
             Assert.IsTrue(stream != null, "");
 
             var writer = CreateWrite(stream);

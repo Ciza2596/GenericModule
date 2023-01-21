@@ -12,9 +12,9 @@ namespace SaveLoadModule.Implement
         //public method
         public JsonReaderProvider(IStreamProvider streamProvider) => _streamProvider = streamProvider;
 
-        public IReader CreateReader(string path)
+        public IReader CreateReader(string fullPath, int bufferSize)
         {
-            var stream = _streamProvider.CreateStream(FileModes.Read);
+            var stream = _streamProvider.CreateStream(FileModes.Read, fullPath, bufferSize);
             Assert.IsTrue(stream != null, "");
 
             var reader = CreateReader(stream);

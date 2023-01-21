@@ -17,7 +17,7 @@ namespace SaveLoadModule
 
         public void Save<T>(string key, T data, string path)
         {
-            var writer = _writerProvider.CreateWriter();
+            var writer = _writerProvider.CreateWriter(path);
 
             writer.Write<T>(key, data);
             writer.Save();
@@ -25,7 +25,7 @@ namespace SaveLoadModule
 
         public T Load<T>(string key, string path)
         {
-            var reader = _readerProvider.CreateReader();
+            var reader = _readerProvider.CreateReader(path);
             return reader.Read<T>(key);
         }
     }

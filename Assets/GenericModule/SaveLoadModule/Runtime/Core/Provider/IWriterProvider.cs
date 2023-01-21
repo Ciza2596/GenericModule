@@ -1,10 +1,7 @@
 namespace SaveLoadModule
 {
-    public class IWriterProvider
+    public interface IWriterProvider
     {
-        public IWriter CreateWriter()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IWriter CreateWriter(string path);
     }
 }

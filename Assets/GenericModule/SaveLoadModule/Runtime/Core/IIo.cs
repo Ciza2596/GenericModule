@@ -2,7 +2,7 @@ using System;
 
 namespace SaveLoadModule
 {
-    public interface IIO
+    public interface IIo
     {
 
         public string PersistentDataPath { get; }

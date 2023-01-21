@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SaveLoadModule.Implement
 {
-    public static class IO
+    public class Io: IIo
     {
 #if UNITY_SWITCH
         internal static readonly string persistentDataPath = "";
@@ -165,5 +165,62 @@ namespace SaveLoadModule.Implement
         //         PlayerPrefs.Save();
         //     }
         // }
+        public string PersistentDataPath { get; }
+        public string BackupFileSuffix { get; }
+        public string TemporaryFileSuffix { get; }
+        DateTime IIo.GetTimestamp(string filePath) => GetTimestamp(filePath);
+
+        string IIo.GetExtension(string path) => GetExtension(path);
+
+        void IIo.DeleteFile(string filePath)
+        {
+            DeleteFile(filePath);
+        }
+
+        bool IIo.FileExists(string filePath) => FileExists(filePath);
+
+        void IIo.MoveFile(string sourcePath, string destPath)
+        {
+            MoveFile(sourcePath, destPath);
+        }
+
+        void IIo.CopyFile(string sourcePath, string destPath)
+        {
+            CopyFile(sourcePath, destPath);
+        }
+
+        void IIo.MoveDirectory(string sourcePath, string destPath)
+        {
+            MoveDirectory(sourcePath, destPath);
+        }
+
+        void IIo.CreateDirectory(string directoryPath)
+        {
+            CreateDirectory(directoryPath);
+        }
+
+        bool IIo.DirectoryExists(string directoryPath) => DirectoryExists(directoryPath);
+
+        string IIo.GetDirectoryPath(string path, char seperator) => GetDirectoryPath(path, seperator);
+
+        bool IIo.UsesForwardSlash(string path) => UsesForwardSlash(path);
+
+        string IIo.CombinePathAndFilename(string directoryPath, string fileOrDirectoryName) => CombinePathAndFilename(directoryPath, fileOrDirectoryName);
+
+        string[] IIo.GetDirectories(string path, bool getFullPaths) => GetDirectories(path, getFullPaths);
+
+        void IIo.DeleteDirectory(string directoryPath)
+        {
+            DeleteDirectory(directoryPath);
+        }
+
+        string[] IIo.GetFiles(string path, bool getFullPaths) => GetFiles(path, getFullPaths);
+
+        byte[] IIo.ReadAllBytes(string path) => ReadAllBytes(path);
+
+        void IIo.WriteAllBytes(string path, byte[] bytes)
+        {
+            WriteAllBytes(path, bytes);
+        }
     }
 }

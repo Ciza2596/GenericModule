@@ -14,17 +14,16 @@ namespace SaveLoadModule.Implement
         [SerializeField] private Directories _directory;
         [SerializeField] private string _path = "";
 
-        [Space]
-        [SerializeField] private int _bufferSize = 2028;
+        [Space] [SerializeField] private int _bufferSize = 2028;
 
         public string ApplicationDataPath
         {
             get
             {
                 if (_directory == Directories.PersistentDataPath)
-                    return IO.CombinePathAndFilename(Application.persistentDataPath, _path);
+                    return Io.CombinePathAndFilename(Application.persistentDataPath, _path);
 
-                return IO.CombinePathAndFilename(Application.dataPath, _path);
+                return Io.CombinePathAndFilename(Application.dataPath, _path);
             }
         }
 

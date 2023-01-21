@@ -44,7 +44,7 @@ namespace SaveLoadModule
         private string GetFullPath(string path)
         {
             var applicationDataPath = _saveLoadModuleConfig.ApplicationDataPath;
-            var fullPath = IO.CombinePathAndFilename(applicationDataPath, path);
+            var fullPath = Io.CombinePathAndFilename(applicationDataPath, path);
             return fullPath;
         }
 

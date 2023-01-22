@@ -35,7 +35,7 @@ namespace DataTypeManager
             if (!ReadICollection(reader, list, elementType))
                 return null;
 
-            var array = ES3Reflection.ArrayCreateInstance(elementType.type, list.Count);
+            var array = ES3Reflection.ArrayCreateInstance(elementType.Type, list.Count);
             int i = 0;
             foreach (var item in list)
             {

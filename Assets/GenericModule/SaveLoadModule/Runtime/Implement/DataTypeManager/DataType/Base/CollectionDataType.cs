@@ -19,7 +19,7 @@ namespace DataTypeManager
         public CollectionDataType(Type type) : base(type)
 		{
 			elementType = DataTypeManager.GetOrCreateDataType(ES3Reflection.GetElementTypes(type)[0], false);
-			isCollection = true;
+			IsCollection = true;
 
 			// If the element type is null (i.e. unsupported), make this ES3Type null.
 			if(elementType == null)
@@ -29,7 +29,7 @@ namespace DataTypeManager
         public CollectionDataType(Type type, DataType elementType) : base(type)
 		{
 			this.elementType = elementType;
-			isCollection = true;
+			IsCollection = true;
 		}
 
         [UnityEngine.Scripting.Preserve]

@@ -21,7 +21,7 @@ namespace DataTypeManager
 
 		public override object Read<T>(IReader reader)
 		{
-			return (T)(object)reader.Read_int();
+			return (T)(object)reader.ReadInt();
 		}
 	}
 

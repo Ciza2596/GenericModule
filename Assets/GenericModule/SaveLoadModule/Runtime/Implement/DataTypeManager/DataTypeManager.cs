@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DataTypeManager
 {
@@ -22,7 +21,7 @@ namespace DataTypeManager
 			if(_typeDatas == null)
 				Init();
 
-            if (type != typeof(object) && _lastAccessedType != null && _lastAccessedType.type == type)
+            if (type != typeof(object) && _lastAccessedType != null && _lastAccessedType.Type == type)
                 return _lastAccessedType;
 
 			// If type doesn't exist, create one.
@@ -47,7 +46,7 @@ namespace DataTypeManager
 				Init();
 
             var existingType = GetDataType(type);
-            if (existingType != null && existingType.priority > es3Type.priority)
+            if (existingType != null && existingType.Priority > es3Type.Priority)
                 return;
 
             lock (_lock)
@@ -83,12 +82,12 @@ namespace DataTypeManager
                     dataType = new ListDataType(type);
                 else if (typeof(IDictionary).IsAssignableFrom(genericType))
                     dataType = new DictionaryDataType(type);
-                // else if (genericType == typeof(Queue<>))
-                //     dataType = new QueueDataType(type);
-                // else if (genericType == typeof(Stack<>))
-                //     dataType = new StackDataType(type);
-                // else if (genericType == typeof(HashSet<>))
-                //     dataType = new ES3HashSetType(type);
+                else if (genericType == typeof(Queue<>))
+                    dataType = new QueueDataType(type);
+                else if (genericType == typeof(Stack<>))
+                    dataType = new StackDataType(type);
+                else if (genericType == typeof(HashSet<>))
+                    dataType = new HashSetDataType(type);
                 // else if (genericType == typeof(Unity.Collections.NativeArray<>))
                 //     dataType = new ES3NativeArrayType(type);
                 else if (throwException)
@@ -123,7 +122,7 @@ namespace DataTypeManager
                 //     dataType = new ES3ReflectedObjectType(type);
             }
 
-			if(dataType.type == null || dataType.isUnsupported)
+			if(dataType.Type == null || dataType.isUnsupported)
 			{
 				if(throwException)
 					throw new NotSupportedException(string.Format("ES3Type.type is null when trying to create an ES3Type for {0}, possibly because the element type is not supported.", type));

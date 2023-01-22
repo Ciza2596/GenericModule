@@ -23,7 +23,7 @@ namespace DataTypeManager
 			if(_keyDataType == null || _valueDataType == null)
 				isUnsupported = true;;
 
-			isDictionary = true;
+			IsDictionary = true;
 		}
 
         public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType) : base(type)
@@ -35,7 +35,7 @@ namespace DataTypeManager
             if (keyDataType == null || valueDataType == null)
                 isUnsupported = true; ;
 
-            isDictionary = true;
+            IsDictionary = true;
         }
 
         public override void Write(object obj, IWriter writer)
@@ -83,7 +83,7 @@ namespace DataTypeManager
 			if(reader.StartReadDictionary())
 				return null;
 
-			var dict = (IDictionary)ES3Reflection.CreateInstance(type);
+			var dict = (IDictionary)ES3Reflection.CreateInstance(Type);
 
 			// Iterate through each character until we reach the end of the array.
 			while(true)

@@ -7,10 +7,15 @@ namespace SaveLoadModule.Implement
     {
         //private variable
         private readonly IStreamProvider _streamProvider;
+        private readonly IDataTypeController _dataTypeController;
 
 
         //public method
-        public JsonReaderProvider(IStreamProvider streamProvider) => _streamProvider = streamProvider;
+        public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController)
+        {
+            _streamProvider = streamProvider;
+            _dataTypeController = dataTypeController;
+        }
 
         public IReader CreateReader(string fullPath, int bufferSize)
         {
@@ -24,6 +29,6 @@ namespace SaveLoadModule.Implement
         
         //private method
         private IReader CreateReader(Stream stream) =>
-            new JsonReader(stream);
+            new JsonReader(stream, _dataTypeController);
     }
 }

@@ -7,7 +7,7 @@ namespace SaveLoadModule.Implement
     public abstract class BaseReader : IReader
     {
         //public method
-        public BaseReader(Stream stream)
+        public BaseReader(Stream stream, IDataTypeController dataTypeController)
         {
         }
 

@@ -5,7 +5,7 @@ namespace SaveLoadModule.Implement
 {
     public class JsonReader : BaseReader
     {
-        public JsonReader(Stream stream) : base(stream)
+        public JsonReader(Stream stream, IDataTypeController dataTypeController) : base(stream, dataTypeController)
         {
         }
 

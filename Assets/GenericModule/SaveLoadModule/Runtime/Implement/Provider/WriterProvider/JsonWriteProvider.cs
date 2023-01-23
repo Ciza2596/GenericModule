@@ -7,10 +7,15 @@ namespace SaveLoadModule.Implement
     {
         //private variable
         private readonly IStreamProvider _streamProvider;
+        private readonly IDataTypeController _dataTypeController;
 
 
         //public method
-        public JsonWriteProvider(IStreamProvider streamProvider) => _streamProvider = streamProvider;
+        public JsonWriteProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController)
+        {
+            _streamProvider = streamProvider;
+            _dataTypeController = dataTypeController;
+        }
 
 
         public IWriter CreateWriter(string fullPath, int bufferSize)
@@ -25,6 +30,6 @@ namespace SaveLoadModule.Implement
 
         //private method
         private IWriter CreateWrite(Stream stream) =>
-            new JsonWriter(stream);
+            new JsonWriter(stream, _dataTypeController);
     }
 }

@@ -4,7 +4,7 @@ namespace SaveLoadModule.Implement
 {
     public abstract class BaseWriter: IWriter
     {
-        public BaseWriter(Stream stream)
+        public BaseWriter(Stream stream, IDataTypeController dataTypeController)
         {
         }
 

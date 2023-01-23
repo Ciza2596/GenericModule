@@ -7,11 +7,11 @@ namespace DataTypeManager
 	{
 		public Array2DDataType(Type type) : base(type){}
 
-		public override void Write(object obj, IWriter writer, ES3.ReferenceMode unityObjectType)
+		public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
 		{
 			var array = (System.Array)obj;
 
-			if(elementType == null)
+			if(DataType == null)
 				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
 			//writer.StartWriteCollection();
@@ -23,7 +23,7 @@ namespace DataTypeManager
 				for(int j=0; j < array.GetLength(1); j++)
 				{
 					writer.StartWriteCollectionItem(j);
-					writer.Write(array.GetValue(i,j), elementType, unityObjectType);
+					writer.Write(array.GetValue(i,j), DataType, referenceModes);
 					writer.EndWriteCollectionItem(j);
 				}
 				writer.EndWriteCollection();
@@ -82,7 +82,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				ReadICollection<object>(reader, items, elementType);
+				ReadICollection<object>(reader, items, DataType);
 				length1++;
 
 				if(reader.EndReadCollectionItem())
@@ -91,7 +91,7 @@ namespace DataTypeManager
 
 			int length2 = items.Count / length1;
 
-			var array = ES3Reflection.ArrayCreateInstance(elementType.type, new int[]{length1, length2});
+			var array = ReflectionHelper.ArrayCreateInstance(DataType.Type, new int[]{length1, length2});
 
 			for(int i=0; i<length1; i++)
 				for(int j=0; j<length2; j++)
@@ -126,7 +126,7 @@ namespace DataTypeManager
 				{
 					if(!reader.StartReadCollectionItem())
 						throw new IndexOutOfRangeException("The collection we are loading is smaller than the collection provided as a parameter.");
-					reader.ReadInto<object>(array.GetValue(i,j), elementType);
+					reader.ReadInto<object>(array.GetValue(i,j), DataType);
 					jHasBeenRead = reader.EndReadCollectionItem();
 				}
 

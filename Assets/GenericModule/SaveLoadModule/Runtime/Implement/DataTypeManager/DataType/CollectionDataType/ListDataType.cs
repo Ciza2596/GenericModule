@@ -8,15 +8,15 @@ namespace DataTypeManager
 	public class ListDataType : CollectionDataType
 	{
 		public ListDataType(Type type) : base(type){}
-		public ListDataType(Type type, DataType elementType) : base(type, elementType){}
+		public ListDataType(Type type, DataType dataType) : base(type, dataType){}
 
-		public override void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode)
+		public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
 		{
 			if(obj == null){ writer.WriteNull(); return; };
 
 			var list = (IList)obj;
 
-			if(elementType == null)
+			if(DataType == null)
 				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
 			//writer.StartWriteCollection();
@@ -25,7 +25,7 @@ namespace DataTypeManager
 			foreach(object item in list)
 			{
 				writer.StartWriteCollectionItem(i);
-                writer.Write(item, elementType, memberReferenceMode);
+                writer.Write(item, DataType, referenceModes);
 				writer.EndWriteCollectionItem(i);
 				i++;
 			}
@@ -45,12 +45,12 @@ namespace DataTypeManager
 
 		public override void ReadInto<T>(IReader reader, object obj)
 		{
-			ReadICollectionInto(reader, (ICollection)obj, elementType);
+			ReadICollectionInto(reader, (ICollection)obj, DataType);
 		}
 
 		public override object Read(IReader reader)
 		{
-            var instance = (IList)ES3Reflection.CreateInstance(Type);
+            var instance = (IList)ReflectionHelper.CreateInstance(Type);
 
 			if(reader.StartReadCollection())
 				return null;
@@ -60,7 +60,7 @@ namespace DataTypeManager
 			{
 				if(!reader.StartReadCollectionItem())
 					break;
-				instance.Add(reader.Read<object>(elementType));
+				instance.Add(reader.Read<object>(DataType));
 
 				if(reader.EndReadCollectionItem())
 					break;
@@ -88,7 +88,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				reader.ReadInto<object>(item, elementType);
+				reader.ReadInto<object>(item, DataType);
 
 				// If we find a ']', we reached the end of the array.
 				if(reader.EndReadCollectionItem())

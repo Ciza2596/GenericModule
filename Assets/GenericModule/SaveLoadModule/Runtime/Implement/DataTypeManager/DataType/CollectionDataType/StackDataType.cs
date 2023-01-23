@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace DataTypeManager
@@ -10,11 +11,11 @@ namespace DataTypeManager
 	{
 		public StackDataType(Type type) : base(type){}
 
-		public override void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode)
+		public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
 		{
 			var list = (ICollection)obj;
 
-			if(elementType == null)
+			if(DataType == null)
 				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
 			//writer.StartWriteCollection();
@@ -23,7 +24,7 @@ namespace DataTypeManager
 			foreach(object item in list)
 			{
 				writer.StartWriteCollectionItem(i);
-				writer.Write(item, elementType, memberReferenceMode);
+				writer.Write(item, DataType, referenceModes);
 				writer.EndWriteCollectionItem(i);
 				i++;
 			}
@@ -70,7 +71,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				reader.ReadInto<T>(item, elementType);
+				reader.ReadInto<T>(item, DataType);
 
 				// If we find a ']', we reached the end of the array.
 				if(reader.EndReadCollectionItem())
@@ -89,7 +90,7 @@ namespace DataTypeManager
 
 		public override object Read(IReader reader)
 		{
-			var instance = (IList)ES3Reflection.CreateInstance(ES3Reflection.MakeGenericType(typeof(List<>), elementType.Type));
+			var instance = (IList)ReflectionHelper.CreateInstance(ReflectionHelper.MakeGenericType(typeof(List<>), DataType.Type));
 
 			if(reader.StartReadCollection())
 				return null;
@@ -99,7 +100,7 @@ namespace DataTypeManager
 			{
 				if(!reader.StartReadCollectionItem())
 					break;
-				instance.Add(reader.Read<object>(elementType));
+				instance.Add(reader.Read<object>(DataType));
 
 				if(reader.EndReadCollectionItem())
 					break;
@@ -107,8 +108,8 @@ namespace DataTypeManager
 
 			reader.EndReadCollection();
 
-            ES3Reflection.GetMethods(instance.GetType(), "Reverse").FirstOrDefault(t => !t.IsStatic).Invoke(instance, new object[]{});
-            return ES3Reflection.CreateInstance(Type, instance);
+            ReflectionHelper.GetMethods(instance.GetType(), "Reverse").FirstOrDefault(t => !t.IsStatic).Invoke(instance, new object[]{});
+            return ReflectionHelper.CreateInstance(Type, instance);
             
 		}
 
@@ -129,7 +130,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				reader.ReadInto<object>(item, elementType);
+				reader.ReadInto<object>(item, DataType);
 
 				// If we find a ']', we reached the end of the array.
 				if(reader.EndReadCollectionItem())

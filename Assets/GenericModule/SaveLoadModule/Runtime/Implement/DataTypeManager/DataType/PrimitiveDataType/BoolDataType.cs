@@ -1,37 +1,27 @@
-﻿using System;
-using UnityEngine;
-
-namespace DataTypeManager
+﻿namespace DataTypeManager
 {
-	[UnityEngine.Scripting.Preserve]
-	public class BoolDataType : DataType
-	{
-		public static DataType Instance = null;
+    [UnityEngine.Scripting.Preserve]
+    public class BoolDataType : DataType
+    {
+        public static DataType Instance { get; private set; }
 
-		public BoolDataType() : base(typeof(bool))
-		{
-			isPrimitive = true;
-			Instance = this;
-		}
+        public BoolDataType() : base(typeof(bool)) =>
+            Instance = this;
 
-		public override void Write(object obj, IWriter writer)
-		{
-			writer.WritePrimitive((bool)obj);
-		}
 
-		public override object Read<T>(IReader reader)
-		{
-			return (T)(object)reader.Read_bool();
-		}
-	}
+        public override void Write(object obj, IWriter writer) =>
+            writer.WritePrimitive((bool)obj);
 
-	public class BoolArrayDataType : ArrayDataType
-	{
-		public static DataType Instance;
 
-		public BoolArrayDataType() : base(typeof(bool[]), BoolDataType.Instance)
-		{
-			Instance = this;
-		}
-	}
+        public override object Read<T>(IReader reader) =>
+            (T)(object)reader.ReadBool();
+    }
+
+    public class BoolArrayDataType : ArrayDataType
+    {
+        public static DataType Instance { get; private set; }
+
+        public BoolArrayDataType() : base(typeof(bool[]), BoolDataType.Instance) =>
+            Instance = this;
+    }
 }

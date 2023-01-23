@@ -30,8 +30,25 @@ namespace DataTypeManager
         uint ReadUint();
         ulong ReadUlong();
         ushort ReadUshort();
+        string ReadString();
+        void ReadInto<T>(T item, DataType dataType);
         
         
         string ReadPropertyName();
+        T ReadProperty<T>(DataType dataType);
+        T Read<T>(DataType dataType);
+        
+        
+        
+        bool StartReadCollection();
+        bool StartReadCollectionItem();
+        bool EndReadCollectionItem();
+        void EndReadCollection();
+        bool StartReadDictionary();
+        bool StartReadDictionaryKey();
+        void EndReadDictionaryKey();
+        void StartReadDictionaryValue();
+        bool EndReadDictionaryValue();
+        void EndReadDictionary();
     }
 }

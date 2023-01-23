@@ -10,13 +10,13 @@ namespace DataTypeManager
 	{
 		public HashSetDataType(Type type) : base(type){}
 
-        public override void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode)
+        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
         {
             if (obj == null) { writer.WriteNull(); return; };
 
             var list = (IEnumerable)obj;
 
-            if (elementType == null)
+            if (DataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             int count = 0;
@@ -29,7 +29,7 @@ namespace DataTypeManager
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(item, elementType, memberReferenceMode);
+                writer.Write(item, DataType, referenceModes);
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
@@ -52,27 +52,29 @@ namespace DataTypeManager
             if(!(bool)method.Invoke(this, new object[] { reader, list, elementType }))
                 return null;*/
 
-            var genericParam = ES3Reflection.GetGenericArguments(Type)[0];
-            var listType = ES3Reflection.MakeGenericType(typeof(List<>), genericParam);
-            var list = (IList)ES3Reflection.CreateInstance(listType);
+            // var genericParam = ES3Reflection.GetGenericArguments(Type)[0];
+            // var listType = ES3Reflection.MakeGenericType(typeof(List<>), genericParam);
+            // var list = (IList)ES3Reflection.CreateInstance(listType);
+            //
+            // if (!reader.StartReadCollection())
+            // {
+            //     // Iterate through each character until we reach the end of the array.
+            //     while (true)
+            //     {
+            //         if (!reader.StartReadCollectionItem())
+            //             break;
+            //         list.Add(reader.Read<object>(DataType));
+            //
+            //         if (reader.EndReadCollectionItem())
+            //             break;
+            //     }
+            //
+            //     reader.EndReadCollection();
+            // }
+            //
+            // return ES3Reflection.CreateInstance(Type, list);
 
-            if (!reader.StartReadCollection())
-            {
-                // Iterate through each character until we reach the end of the array.
-                while (true)
-                {
-                    if (!reader.StartReadCollectionItem())
-                        break;
-                    list.Add(reader.Read<object>(elementType));
-
-                    if (reader.EndReadCollectionItem())
-                        break;
-                }
-
-                reader.EndReadCollection();
-            }
-
-            return ES3Reflection.CreateInstance(Type, list);
+            return null;
         }
 
         public override void ReadInto<T>(IReader reader, object obj)

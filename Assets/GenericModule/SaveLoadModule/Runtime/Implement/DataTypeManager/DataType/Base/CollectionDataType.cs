@@ -7,35 +7,35 @@ namespace DataTypeManager
 	[UnityEngine.Scripting.Preserve]
 	public abstract class CollectionDataType : DataType
 	{
-		public DataType elementType;
+		public DataType DataType { get; private set; }
 
 		/*protected ES3Reflection.ES3ReflectedMethod readMethod = null;
 		protected ES3Reflection.ES3ReflectedMethod readIntoMethod = null;*/
 
         public abstract object Read(IReader reader);
         public abstract void ReadInto(IReader reader, object obj);
-        public abstract void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode);
+        public abstract void Write(object obj, IWriter writer, ReferenceModes referenceModes);
 
         public CollectionDataType(Type type) : base(type)
 		{
-			elementType = DataTypeManager.GetOrCreateDataType(ES3Reflection.GetElementTypes(type)[0], false);
+			// DataType = DataTypeManager.GetOrCreateDataType(ES3Reflection.GetElementTypes(type)[0], false);
 			IsCollection = true;
 
 			// If the element type is null (i.e. unsupported), make this ES3Type null.
-			if(elementType == null)
-				isUnsupported = true;
+			// if(elementType == null)
+			// 	isUnsupported = true;
 		}
 
-        public CollectionDataType(Type type, DataType elementType) : base(type)
+        public CollectionDataType(Type type, DataType dataType) : base(type)
 		{
-			this.elementType = elementType;
+			DataType = dataType;
 			IsCollection = true;
 		}
 
         [UnityEngine.Scripting.Preserve]
         public override void Write(object obj, IWriter writer)
 		{
-			Write(obj, writer, ES3.ReferenceMode.ByRefAndValue);
+			Write(obj, writer, ReferenceModes.ByRefAndValue);
 		}
 
         protected virtual bool ReadICollection<T>(IReader reader, ICollection<T> collection, DataType elementType)
@@ -59,13 +59,13 @@ namespace DataTypeManager
 			return true;
 		}
 
-        protected virtual void ReadICollectionInto<T>(IReader reader, ICollection<T> collection, DataType elementType)
+        protected virtual void ReadICollectionInto<T>(IReader reader, ICollection<T> collection, DataType dataType)
         {
-            ReadICollectionInto(reader, collection, elementType);
+            ReadICollectionInto(reader, collection, dataType);
         }
 
         [UnityEngine.Scripting.Preserve]
-        protected virtual void ReadICollectionInto(IReader reader, ICollection collection, DataType elementType)
+        protected virtual void ReadICollectionInto(IReader reader, ICollection collection, DataType dataType)
 		{
 			if(reader.StartReadCollection())
 				throw new NullReferenceException("The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
@@ -80,7 +80,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				reader.ReadInto<object>(item, elementType);
+				reader.ReadInto<object>(item, dataType);
 
 				// If we find a ']', we reached the end of the array.
 				if(reader.EndReadCollectionItem())

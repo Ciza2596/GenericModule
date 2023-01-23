@@ -9,11 +9,11 @@ namespace DataTypeManager
         {
         }
 
-        public override void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode)
+        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
         {
             var array = (System.Array)obj;
 
-            if (elementType == null)
+            if (DataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             //writer.StartWriteCollection();
@@ -31,7 +31,7 @@ namespace DataTypeManager
                     for (int k = 0; k < array.GetLength(2); k++)
                     {
                         writer.StartWriteCollectionItem(k);
-                        writer.Write(array.GetValue(i, j, k), elementType, memberReferenceMode);
+                        writer.Write(array.GetValue(i, j, k), DataType, referenceModes);
                         writer.EndWriteCollectionItem(k);
                     }
 
@@ -74,7 +74,7 @@ namespace DataTypeManager
                     if (!reader.StartReadCollectionItem())
                         break;
 
-                    ReadICollection<object>(reader, items, elementType);
+                    ReadICollection<object>(reader, items, DataType);
                     length2++;
 
                     if (reader.EndReadCollectionItem())
@@ -91,7 +91,7 @@ namespace DataTypeManager
             length2 = length2 / length1;
             int length3 = items.Count / length2 / length1;
 
-            var array = ES3Reflection.ArrayCreateInstance(elementType.Type, new int[] { length1, length2, length3 });
+            var array = ReflectionHelper.ArrayCreateInstance(DataType.Type, new int[] { length1, length2, length3 });
 
             for (int i = 0; i < length1; i++)
             for (int j = 0; j < length2; j++)
@@ -141,7 +141,7 @@ namespace DataTypeManager
                         if (!reader.StartReadCollectionItem())
                             throw new IndexOutOfRangeException(
                                 "The collection we are loading is smaller than the collection provided as a parameter.");
-                        reader.ReadInto<object>(array.GetValue(i, j, k), elementType);
+                        reader.ReadInto<object>(array.GetValue(i, j, k), DataType);
                         kHasBeenRead = reader.EndReadCollectionItem();
                     }
 

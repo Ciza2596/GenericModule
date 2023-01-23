@@ -1,37 +1,28 @@
-﻿using System;
-using UnityEngine;
-
-namespace DataTypeManager
+﻿namespace DataTypeManager
 {
-	[UnityEngine.Scripting.Preserve]
-	public class IntDataType : DataType
-	{
-		public static DataType Instance = null;
+    [UnityEngine.Scripting.Preserve]
+    public class IntDataType : DataType
+    {
+        public static DataType Instance { get; private set; }
 
-		public IntDataType() : base(typeof(int))
-		{
-			isPrimitive = true;
-			Instance = this;
-		}
+        public IntDataType() : base(typeof(int)) =>
+            Instance = this;
 
-		public override void Write(object obj, IWriter writer)
-		{
-			writer.WritePrimitive((int)obj);
-		}
 
-		public override object Read<T>(IReader reader)
-		{
-			return (T)(object)reader.ReadInt();
-		}
-	}
+        public override void Write(object obj, IWriter writer)
+        {
+            writer.WritePrimitive((int)obj);
+        }
 
-	public class IntArrayDataType : ArrayDataType
-	{
-		public static DataType Instance;
+        public override object Read<T>(IReader reader) =>
+            (T)(object)reader.ReadInt();
+    }
 
-		public IntArrayDataType() : base(typeof(int[]), IntDataType.Instance)
-		{
-			Instance = this;
-		}
-	}
+    public class IntArrayDataType : ArrayDataType
+    {
+        public static DataType Instance { get; private set; }
+
+        public IntArrayDataType() : base(typeof(int[]), IntDataType.Instance) =>
+            Instance = this;
+    }
 }

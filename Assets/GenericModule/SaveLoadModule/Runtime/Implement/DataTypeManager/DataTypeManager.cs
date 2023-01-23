@@ -57,13 +57,13 @@ namespace DataTypeManager
 
 		internal static DataType CreateDataType(Type type, bool throwException = true)
 		{
-			DataType dataType;
+			DataType dataType = null;
 
-			if(ES3Reflection.IsEnum(type))
+			if(ReflectionHelper.IsEnum(type))
 				return new EnumDataType(type);
-			else if(ES3Reflection.TypeIsArray(type))
+			else if(ReflectionHelper.TypeIsArray(type))
 			{
-				int rank = ES3Reflection.GetArrayRank(type);
+				int rank = ReflectionHelper.GetArrayRank(type);
 				if(rank == 1)
 					dataType = new ArrayDataType(type);
 				else if(rank == 2)
@@ -75,9 +75,9 @@ namespace DataTypeManager
 				else
 					return null;
 			}
-			else if(ES3Reflection.IsGenericType(type) && ES3Reflection.ImplementsInterface(type, typeof(IEnumerable)))
+			else if(ReflectionHelper.IsGenericType(type) && ReflectionHelper.ImplementsInterface(type, typeof(IEnumerable)))
 			{
-				Type genericType = ES3Reflection.GetGenericTypeDefinition(type);
+				Type genericType = ReflectionHelper.GetGenericTypeDefinition(type);
                 if (typeof(List<>).IsAssignableFrom(genericType))
                     dataType = new ListDataType(type);
                 else if (typeof(IDictionary).IsAssignableFrom(genericType))
@@ -95,7 +95,7 @@ namespace DataTypeManager
                 else
                     return null;
 			}
-			else if(ES3Reflection.IsPrimitive(type)) // ERROR: We should not have to create an ES3Type for a primitive.
+			else if(ReflectionHelper.IsPrimitive(type)) // ERROR: We should not have to create an ES3Type for a primitive.
 			{
 				if(_typeDatas == null || _typeDatas.Count == 0)	// If the type list is not initialised, it is most likely an initialisation error.
 					throw new TypeLoadException("ES3Type for primitive could not be found, and the type list is empty. Please contact Easy Save developers at http://www.moodkie.com/contact");
@@ -122,12 +122,12 @@ namespace DataTypeManager
                 //     dataType = new ES3ReflectedObjectType(type);
             }
 
-			if(dataType.Type == null || dataType.isUnsupported)
-			{
-				if(throwException)
-					throw new NotSupportedException(string.Format("ES3Type.type is null when trying to create an ES3Type for {0}, possibly because the element type is not supported.", type));
-				return null;
-			}
+			// if(dataType.Type == null || dataType.isUnsupported)
+			// {
+			// 	if(throwException)
+			// 		throw new NotSupportedException(string.Format("ES3Type.type is null when trying to create an ES3Type for {0}, possibly because the element type is not supported.", type));
+			// 	return null;
+			// }
 
             Add(type, dataType);
 			return dataType;
@@ -139,7 +139,7 @@ namespace DataTypeManager
             {
                 _typeDatas = new Dictionary<Type, DataType>();
                 // ES3Types add themselves to the types Dictionary.
-                ES3Reflection.GetInstances<DataType>();
+                ReflectionHelper.GetInstances<DataType>();
 
                 // Check that the type list was initialised correctly.
                 if (_typeDatas == null || _typeDatas.Count == 0)

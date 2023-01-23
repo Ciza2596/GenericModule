@@ -2,7 +2,7 @@ using System;
 
 namespace DataTypeManager
 {
-    public class FieldProperty : IProperty
+    public class Field : IProperty
     {
         public string Name { get; }
         public Type Type { get; }

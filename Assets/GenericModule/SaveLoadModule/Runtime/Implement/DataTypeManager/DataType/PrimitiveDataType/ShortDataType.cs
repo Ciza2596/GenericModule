@@ -1,37 +1,31 @@
-﻿using System;
-using UnityEngine;
-
+﻿
 namespace DataTypeManager
 {
 	[UnityEngine.Scripting.Preserve]
 	public class ShortDataType : DataType
 	{
-		public static DataType Instance = null;
+		public static DataType Instance { get; private set; }
 
-		public ShortDataType() : base(typeof(short))
-		{
-			isPrimitive = true;
+		public ShortDataType() : base(typeof(short)) =>
 			Instance = this;
-		}
+		
 
 		public override void Write(object obj, IWriter writer)
 		{
 			writer.WritePrimitive((short)obj);
 		}
 
-		public override object Read<T>(IReader reader)
-		{
-			return (T)(object)reader.Read_short();
-		}
+		public override object Read<T>(IReader reader) =>
+			(T)(object)reader.ReadShort();
+		
 	}
 
 	public class ShortArrayDataType : ArrayDataType
 	{
-		public static DataType Instance;
+		public static DataType Instance { get; private set; }
 
-		public ShortArrayDataType() : base(typeof(short[]), ShortDataType.Instance)
-		{
+		public ShortArrayDataType() : base(typeof(short[]), ShortDataType.Instance) =>
 			Instance = this;
-		}
+		
 	}
 }

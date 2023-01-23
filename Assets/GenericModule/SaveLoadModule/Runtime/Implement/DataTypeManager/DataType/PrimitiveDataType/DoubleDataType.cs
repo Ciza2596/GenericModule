@@ -1,37 +1,28 @@
-﻿using System;
-using UnityEngine;
-
-namespace DataTypeManager
+﻿namespace DataTypeManager
 {
-	[UnityEngine.Scripting.Preserve]
-	public class DoubleDataType : DataType
-	{
-		public static DataType Instance = null;
+    [UnityEngine.Scripting.Preserve]
+    public class DoubleDataType : DataType
+    {
+        public static DataType Instance { get; private set; }
 
-		public DoubleDataType() : base(typeof(double))
-		{
-			isPrimitive = true;
-			Instance = this;
-		}
+        public DoubleDataType() : base(typeof(double)) =>
+            Instance = this;
 
-		public override void Write(object obj, IWriter writer)
-		{
-			writer.WritePrimitive((double)obj);
-		}
 
-		public override object Read<T>(IReader reader)
-		{
-			return (T)(object)reader.Read_double();
-		}
-	}
+        public override void Write(object obj, IWriter writer)
+        {
+            writer.WritePrimitive((double)obj);
+        }
 
-	public class DoubleArrayDataType : ArrayDataType
-	{
-		public static DataType Instance;
+        public override object Read<T>(IReader reader) =>
+            (T)(object)reader.ReadDouble();
+    }
 
-		public DoubleArrayDataType() : base(typeof(double[]), DoubleDataType.Instance)
-		{
-			Instance = this;
-		}
-	}
+    public class DoubleArrayDataType : ArrayDataType
+    {
+        public static DataType Instance { get; private set; }
+
+        public DoubleArrayDataType() : base(typeof(double[]), DoubleDataType.Instance) =>
+            Instance = this;
+    }
 }

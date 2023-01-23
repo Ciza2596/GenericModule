@@ -3,7 +3,7 @@ using System;
 
 namespace DataTypeManager
 {
-    public class PropertyProperty: IProperty
+    public class Property: IProperty
     {
         public string Name { get; }
         public Type Type { get; }

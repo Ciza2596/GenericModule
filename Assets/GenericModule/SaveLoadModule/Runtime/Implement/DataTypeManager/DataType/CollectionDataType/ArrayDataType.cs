@@ -8,13 +8,13 @@ namespace DataTypeManager
 	public class ArrayDataType : CollectionDataType
 	{
 		public ArrayDataType(Type type) : base(type){}
-		public ArrayDataType(Type type, DataType elementType) : base(type, elementType){}
+		public ArrayDataType(Type type, DataType dataType) : base(type, dataType){}
 
-		public override void Write(object obj, IWriter writer, ES3.ReferenceMode memberReferenceMode)
+		public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
 		{
 			var array = (System.Array)obj;
 
-			if(elementType == null)
+			if(DataType == null)
 				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
 			//writer.StartWriteCollection();
@@ -22,7 +22,7 @@ namespace DataTypeManager
 			for(int i=0; i<array.Length; i++)
 			{
 				writer.StartWriteCollectionItem(i);
-                writer.Write(array.GetValue(i), elementType, memberReferenceMode);
+                writer.Write(array.GetValue(i), DataType, referenceModes);
 				writer.EndWriteCollectionItem(i);
 			}
 
@@ -32,10 +32,10 @@ namespace DataTypeManager
         public override object Read(IReader reader)
         {
             var list = new List<object>();
-            if (!ReadICollection(reader, list, elementType))
+            if (!ReadICollection(reader, list, DataType))
                 return null;
 
-            var array = ES3Reflection.ArrayCreateInstance(elementType.Type, list.Count);
+            var array = ReflectionHelper.ArrayCreateInstance(DataType.Type, list.Count);
             int i = 0;
             foreach (var item in list)
             {
@@ -53,7 +53,7 @@ namespace DataTypeManager
 
 		public override void ReadInto<T>(IReader reader, object obj)
 		{
-			ReadICollectionInto(reader, (ICollection)obj, elementType);
+			ReadICollectionInto(reader, (ICollection)obj, DataType);
 		}
 
 		public override void ReadInto(IReader reader, object obj)
@@ -76,7 +76,7 @@ namespace DataTypeManager
 				if(!reader.StartReadCollectionItem())
 					break;
 
-				reader.ReadInto<object>(item, elementType);
+				reader.ReadInto<object>(item, DataType);
 
 				// If we find a ']', we reached the end of the array.
 				if(reader.EndReadCollectionItem())

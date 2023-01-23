@@ -5,13 +5,15 @@ namespace DataTypeManager
 {
     public class Array3DDataType : CollectionDataType
     {
-        public Array3DDataType(Type type) : base(type)
-        {
-        }
+        private readonly IReflectionHelper _reflectionHelper;
+        
+        public Array3DDataType(Type type, IReflectionHelper reflectionHelper) : base(type) =>
+            _reflectionHelper = reflectionHelper;
+        
 
         public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
         {
-            var array = (System.Array)obj;
+            var array = (Array)obj;
 
             if (DataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
@@ -57,8 +59,8 @@ namespace DataTypeManager
 
             // Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
             var items = new List<object>();
-            int length1 = 0;
-            int length2 = 0;
+            var length1 = 0;
+            var length2 = 0;
 
             // Iterate through each sub-array
             while (true)
@@ -89,9 +91,9 @@ namespace DataTypeManager
             reader.EndReadCollection();
 
             length2 = length2 / length1;
-            int length3 = items.Count / length2 / length1;
+            var length3 = items.Count / length2 / length1;
 
-            var array = ReflectionHelper.ArrayCreateInstance(DataType.Type, new int[] { length1, length2, length3 });
+            var array = _reflectionHelper.CreateArrayInstance(DataType.Type, new int[] { length1, length2, length3 });
 
             for (int i = 0; i < length1; i++)
             for (int j = 0; j < length2; j++)

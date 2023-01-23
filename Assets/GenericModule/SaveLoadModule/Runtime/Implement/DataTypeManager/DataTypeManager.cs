@@ -59,33 +59,33 @@ namespace DataTypeManager
 		{
 			DataType dataType = null;
 
-			if(ReflectionHelper.IsEnum(type))
+			if(OldReflectionHelper.IsEnum(type))
 				return new EnumDataType(type);
-			else if(ReflectionHelper.TypeIsArray(type))
+			else if(OldReflectionHelper.TypeIsArray(type))
 			{
-				int rank = ReflectionHelper.GetArrayRank(type);
+				int rank = OldReflectionHelper.GetArrayRank(type);
 				if(rank == 1)
 					dataType = new ArrayDataType(type);
 				else if(rank == 2)
-					dataType = new Array2DDataType(type);
+					dataType = new Array2DDataType(type, null);
 				else if(rank == 3)
-					dataType = new Array3DDataType(type);
+					dataType = new Array3DDataType(type, null);
 				else if(throwException)
 					throw new NotSupportedException("Only arrays with up to three dimensions are supported by Easy Save.");
 				else
 					return null;
 			}
-			else if(ReflectionHelper.IsGenericType(type) && ReflectionHelper.ImplementsInterface(type, typeof(IEnumerable)))
+			else if(OldReflectionHelper.IsGenericType(type) && OldReflectionHelper.ImplementsInterface(type, typeof(IEnumerable)))
 			{
-				Type genericType = ReflectionHelper.GetGenericTypeDefinition(type);
+				Type genericType = OldReflectionHelper.GetGenericTypeDefinition(type);
                 if (typeof(List<>).IsAssignableFrom(genericType))
-                    dataType = new ListDataType(type);
+                    dataType = new ListDataType(type, null);
                 else if (typeof(IDictionary).IsAssignableFrom(genericType))
                     dataType = new DictionaryDataType(type);
                 else if (genericType == typeof(Queue<>))
-                    dataType = new QueueDataType(type);
+                    dataType = new QueueDataType(type, null);
                 else if (genericType == typeof(Stack<>))
-                    dataType = new StackDataType(type);
+                    dataType = new StackDataType(type, null);
                 else if (genericType == typeof(HashSet<>))
                     dataType = new HashSetDataType(type);
                 // else if (genericType == typeof(Unity.Collections.NativeArray<>))
@@ -95,7 +95,7 @@ namespace DataTypeManager
                 else
                     return null;
 			}
-			else if(ReflectionHelper.IsPrimitive(type)) // ERROR: We should not have to create an ES3Type for a primitive.
+			else if(OldReflectionHelper.IsPrimitive(type)) // ERROR: We should not have to create an ES3Type for a primitive.
 			{
 				if(_typeDatas == null || _typeDatas.Count == 0)	// If the type list is not initialised, it is most likely an initialisation error.
 					throw new TypeLoadException("ES3Type for primitive could not be found, and the type list is empty. Please contact Easy Save developers at http://www.moodkie.com/contact");
@@ -139,7 +139,7 @@ namespace DataTypeManager
             {
                 _typeDatas = new Dictionary<Type, DataType>();
                 // ES3Types add themselves to the types Dictionary.
-                ReflectionHelper.GetInstances<DataType>();
+                OldReflectionHelper.GetInstances<DataType>();
 
                 // Check that the type list was initialised correctly.
                 if (_typeDatas == null || _typeDatas.Count == 0)

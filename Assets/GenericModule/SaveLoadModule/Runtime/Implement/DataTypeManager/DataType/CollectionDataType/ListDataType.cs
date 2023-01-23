@@ -4,37 +4,49 @@ using System.Collections;
 
 namespace DataTypeManager
 {
-	[UnityEngine.Scripting.Preserve]
-	public class ListDataType : CollectionDataType
-	{
-		public ListDataType(Type type) : base(type){}
-		public ListDataType(Type type, DataType dataType) : base(type, dataType){}
+    [UnityEngine.Scripting.Preserve]
+    public class ListDataType : CollectionDataType
+    {
+        private readonly IReflectionHelper _reflectionHelper;
 
-		public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
-		{
-			if(obj == null){ writer.WriteNull(); return; };
+        public ListDataType(Type type, IReflectionHelper reflectionHelper) : base(type) =>
+            _reflectionHelper = reflectionHelper;
 
-			var list = (IList)obj;
+        public ListDataType(Type type, DataType dataType, IReflectionHelper reflectionHelper) : base(type, dataType) =>
+            _reflectionHelper = reflectionHelper;
 
-			if(DataType == null)
-				throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-			//writer.StartWriteCollection();
+        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
+        {
+            if (obj == null)
+            {
+                writer.WriteNull();
+                return;
+            }
 
-			int i = 0;
-			foreach(object item in list)
-			{
-				writer.StartWriteCollectionItem(i);
+            ;
+
+            var list = (IList)obj;
+
+            if (DataType == null)
+                throw new ArgumentNullException("ES3Type argument cannot be null.");
+
+            //writer.StartWriteCollection();
+
+            int i = 0;
+            foreach (object item in list)
+            {
+                writer.StartWriteCollectionItem(i);
                 writer.Write(item, DataType, referenceModes);
-				writer.EndWriteCollectionItem(i);
-				i++;
-			}
+                writer.EndWriteCollectionItem(i);
+                i++;
+            }
 
-			//writer.EndWriteCollection();
-		}
+            //writer.EndWriteCollection();
+        }
 
-		public override object Read<T>(IReader reader)
-		{
+        public override object Read<T>(IReader reader)
+        {
             return Read(reader);
 
             /*var list = new List<T>();
@@ -43,67 +55,70 @@ namespace DataTypeManager
 			return list;*/
         }
 
-		public override void ReadInto<T>(IReader reader, object obj)
-		{
-			ReadICollectionInto(reader, (ICollection)obj, DataType);
-		}
+        public override void ReadInto<T>(IReader reader, object obj)
+        {
+            ReadICollectionInto(reader, (ICollection)obj, DataType);
+        }
 
-		public override object Read(IReader reader)
-		{
-            var instance = (IList)ReflectionHelper.CreateInstance(Type);
+        public override object Read(IReader reader)
+        {
+            var instance = (IList)_reflectionHelper.CreateInstance(Type);
 
-			if(reader.StartReadCollection())
-				return null;
+            if (reader.StartReadCollection())
+                return null;
 
-			// Iterate through each character until we reach the end of the array.
-			while(true)
-			{
-				if(!reader.StartReadCollectionItem())
-					break;
-				instance.Add(reader.Read<object>(DataType));
+            // Iterate through each character until we reach the end of the array.
+            while (true)
+            {
+                if (!reader.StartReadCollectionItem())
+                    break;
+                instance.Add(reader.Read<object>(DataType));
 
-				if(reader.EndReadCollectionItem())
-					break;
-			}
+                if (reader.EndReadCollectionItem())
+                    break;
+            }
 
-			reader.EndReadCollection();
+            reader.EndReadCollection();
 
-			return instance;
-		}
+            return instance;
+        }
 
-		public override void ReadInto(IReader reader, object obj)
-		{
-			var collection = (IList)obj;
+        public override void ReadInto(IReader reader, object obj)
+        {
+            var collection = (IList)obj;
 
-			if(reader.StartReadCollection())
-				throw new NullReferenceException("The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+            if (reader.StartReadCollection())
+                throw new NullReferenceException(
+                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-			int itemsLoaded = 0;
+            int itemsLoaded = 0;
 
-			// Iterate through each item in the collection and try to load it.
-			foreach(var item in collection)
-			{
-				itemsLoaded++;
+            // Iterate through each item in the collection and try to load it.
+            foreach (var item in collection)
+            {
+                itemsLoaded++;
 
-				if(!reader.StartReadCollectionItem())
-					break;
+                if (!reader.StartReadCollectionItem())
+                    break;
 
-				reader.ReadInto<object>(item, DataType);
+                reader.ReadInto<object>(item, DataType);
 
-				// If we find a ']', we reached the end of the array.
-				if(reader.EndReadCollectionItem())
-					break;
+                // If we find a ']', we reached the end of the array.
+                if (reader.EndReadCollectionItem())
+                    break;
 
-				// If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
-				if(itemsLoaded == collection.Count)
-					throw new IndexOutOfRangeException("The collection we are loading is longer than the collection provided as a parameter.");
-			}
+                // If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
+                if (itemsLoaded == collection.Count)
+                    throw new IndexOutOfRangeException(
+                        "The collection we are loading is longer than the collection provided as a parameter.");
+            }
 
-			// If we loaded fewer items than the parameter collection, throw index out of range exception.
-			if(itemsLoaded != collection.Count)
-				throw new IndexOutOfRangeException("The collection we are loading is shorter than the collection provided as a parameter.");
+            // If we loaded fewer items than the parameter collection, throw index out of range exception.
+            if (itemsLoaded != collection.Count)
+                throw new IndexOutOfRangeException(
+                    "The collection we are loading is shorter than the collection provided as a parameter.");
 
-			reader.EndReadCollection();
-		}
-	}
+            reader.EndReadCollection();
+        }
+    }
 }

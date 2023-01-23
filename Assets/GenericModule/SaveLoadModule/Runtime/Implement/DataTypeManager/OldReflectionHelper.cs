@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DataTypeManager
 {
-    public static class ReflectionHelper
+    public static class OldReflectionHelper
     {
         public const string memberFieldPrefix = "m_";
         public const string componentTagFieldName = "tag";
@@ -30,7 +30,7 @@ namespace DataTypeManager
 
                 if (_assemblies == null)
                 {
-                    var assemblyNames = new ES3Settings().assemblyNames;
+                    var assemblyNames = new List<string>();//new ES3Settings().assemblyNames;
                     var assemblyList = new List<Assembly>();
 
                     /* We only use a try/catch block for UWP because exceptions can be disabled on some other platforms (e.g. WebGL), but the non-try/catch method doesn't work on UWP */
@@ -230,9 +230,9 @@ namespace DataTypeManager
             if (IsPrimitive(type) || IsValueType(type) || IsAssignableFrom(typeof(UnityEngine.Component), type) || IsAssignableFrom(typeof(UnityEngine.ScriptableObject), type))
                 return true;
 
-            var es3Type = DataTypeManager.GetOrCreateES3Type(type, false);
+            var dataType = DataTypeManager.GetOrCreateDataType(type, false);
 
-            if (es3Type != null && !es3Type.isUnsupported)
+            if (dataType != null)
                 return true;
 
             if (TypeIsArray(type))
@@ -254,9 +254,7 @@ namespace DataTypeManager
 
         public static System.Object CreateInstance(Type type)
         {
-            if (IsAssignableFrom(typeof(UnityEngine.Component), type))
-                return ES3ComponentType.CreateComponent(type);
-            else if (IsAssignableFrom(typeof(ScriptableObject), type))
+            if (IsAssignableFrom(typeof(ScriptableObject), type))
                 return ScriptableObject.CreateInstance(type);
             else if (HasParameterlessConstructor(type))
                 return Activator.CreateInstance(type);
@@ -272,9 +270,7 @@ namespace DataTypeManager
 
         public static System.Object CreateInstance(Type type, params object[] args)
         {
-            if (IsAssignableFrom(typeof(UnityEngine.Component), type))
-                return ES3ComponentType.CreateComponent(type);
-            else if (IsAssignableFrom(typeof(ScriptableObject), type))
+            if (IsAssignableFrom(typeof(ScriptableObject), type))
                 return ScriptableObject.CreateInstance(type);
             return Activator.CreateInstance(type, args);
         }

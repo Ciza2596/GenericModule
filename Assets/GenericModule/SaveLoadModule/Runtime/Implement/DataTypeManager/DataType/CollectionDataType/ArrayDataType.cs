@@ -35,7 +35,7 @@ namespace DataTypeManager
             if (!ReadICollection(reader, list, DataType))
                 return null;
 
-            var array = ReflectionHelper.ArrayCreateInstance(DataType.Type, list.Count);
+            var array = OldReflectionHelper.ArrayCreateInstance(DataType.Type, list.Count);
             int i = 0;
             foreach (var item in list)
             {

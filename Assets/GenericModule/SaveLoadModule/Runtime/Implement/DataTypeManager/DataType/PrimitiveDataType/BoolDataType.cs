@@ -21,7 +21,8 @@
     {
         public static DataType Instance { get; private set; }
 
-        public BoolArrayDataType() : base(typeof(bool[]), BoolDataType.Instance) =>
+        public BoolArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(bool[]), BoolDataType.Instance,
+            reflectionHelper) =>
             Instance = this;
     }
 }

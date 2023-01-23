@@ -25,7 +25,7 @@ namespace DataTypeManager
 	{
 		public static DataType Instance { get; private set; }
 
-		public StringArrayDataType() : base(typeof(string[]), StringDataType.Instance) =>
+		public StringArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(string[]), StringDataType.Instance, reflectionHelper) =>
 			Instance = this;
 	}
 }

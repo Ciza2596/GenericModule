@@ -22,8 +22,8 @@
     {
         public static DataType Instance { get; private set; }
 
-        public CharArrayDataType() : base(typeof(char[]), CharDataType.Instance)
-            =>
-                Instance = this;
+        public CharArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(char[]), CharDataType.Instance,
+            reflectionHelper) =>
+            Instance = this;
     }
 }

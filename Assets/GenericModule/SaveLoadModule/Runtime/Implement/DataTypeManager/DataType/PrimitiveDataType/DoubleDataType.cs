@@ -22,7 +22,7 @@
     {
         public static DataType Instance { get; private set; }
 
-        public DoubleArrayDataType() : base(typeof(double[]), DoubleDataType.Instance) =>
+        public DoubleArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(double[]), DoubleDataType.Instance, reflectionHelper) =>
             Instance = this;
     }
 }

@@ -95,9 +95,8 @@ namespace DataTypeManager
 
         public override object Read(IReader reader)
         {
-            var instance =
-                (IList)OldReflectionHelper.CreateInstance(
-                    OldReflectionHelper.MakeGenericType(typeof(List<>), DataType.Type));
+            var genericType = _reflectionHelper.MakeGenericType(typeof(List<>), DataType.Type);
+            var instance = (IList)_reflectionHelper.CreateInstance(genericType);
 
             if (reader.StartReadCollection())
                 return null;

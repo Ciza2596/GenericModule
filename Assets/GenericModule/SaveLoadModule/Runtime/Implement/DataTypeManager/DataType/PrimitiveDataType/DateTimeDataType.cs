@@ -9,7 +9,7 @@ namespace DataTypeManager
 
         public DateTimeDataType() : base(typeof(DateTime)) =>
             Instance = this;
-        
+
 
         public override void Write(object obj, IWriter writer)
         {
@@ -27,7 +27,8 @@ namespace DataTypeManager
     {
         public static DataType Instance { get; private set; }
 
-        public DateTimeArrayDataType() : base(typeof(DateTime[]), DateTimeDataType.Instance) =>
+        public DateTimeArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(DateTime[]),
+            DateTimeDataType.Instance, reflectionHelper) =>
             Instance = this;
     }
 }

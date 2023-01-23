@@ -30,7 +30,7 @@ namespace DataTypeManager
     {
         public static DataType Instance { get; private set; }
 
-        public Vector3ArrayDataType() : base(typeof(Vector3[]), Vector3DataType.Instance) =>
+        public Vector3ArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(Vector3[]), Vector3DataType.Instance, reflectionHelper) =>
             Instance = this;
     }
 }

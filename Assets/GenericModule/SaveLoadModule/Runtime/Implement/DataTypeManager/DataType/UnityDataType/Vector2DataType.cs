@@ -28,7 +28,7 @@ namespace DataTypeManager
     {
         public static DataType Instance { get; private set; }
 
-        public Vector2ArrayDataType() : base(typeof(Vector2[]), Vector2DataType.Instance) =>
+        public Vector2ArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(Vector2[]), Vector2DataType.Instance, reflectionHelper) =>
             Instance = this;
     }
 }

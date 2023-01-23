@@ -23,7 +23,7 @@ namespace DataTypeManager
 	{
 		public static DataType Instance { get; private set; }
 
-		public LongArrayDataType() : base(typeof(long[]), LongDataType.Instance) => 
+		public LongArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(long[]), LongDataType.Instance, reflectionHelper) => 
 			Instance = this;
 		
 	}

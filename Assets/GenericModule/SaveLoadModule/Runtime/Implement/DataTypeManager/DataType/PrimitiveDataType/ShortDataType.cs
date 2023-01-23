@@ -24,7 +24,7 @@ namespace DataTypeManager
 	{
 		public static DataType Instance { get; private set; }
 
-		public ShortArrayDataType() : base(typeof(short[]), ShortDataType.Instance) =>
+		public ShortArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(short[]), ShortDataType.Instance, reflectionHelper) =>
 			Instance = this;
 		
 	}

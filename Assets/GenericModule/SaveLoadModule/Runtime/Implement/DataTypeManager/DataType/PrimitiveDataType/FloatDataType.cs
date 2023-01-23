@@ -22,7 +22,7 @@
     {
         public static DataType Instance { get; private set; }
 
-        public FloatArrayDataType() : base(typeof(float[]), FloatDataType.Instance) =>
+        public FloatArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(float[]), FloatDataType.Instance, reflectionHelper) =>
             Instance = this;
     }
 }

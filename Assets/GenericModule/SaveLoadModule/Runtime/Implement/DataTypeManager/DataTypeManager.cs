@@ -65,7 +65,7 @@ namespace DataTypeManager
 			{
 				int rank = OldReflectionHelper.GetArrayRank(type);
 				if(rank == 1)
-					dataType = new ArrayDataType(type);
+					dataType = new ArrayDataType(type, null);
 				else if(rank == 2)
 					dataType = new Array2DDataType(type, null);
 				else if(rank == 3)

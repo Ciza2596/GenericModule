@@ -43,18 +43,23 @@ namespace DataType
             if (reflectionHelper.CheckIsArray(type))
             {
                 var rank = reflectionHelper.GetArrayRank(type);
+
+                var elementTypes = reflectionHelper.GetElementTypes(type);
+                var elementType = elementTypes[0];
+                var elementDataType = GetOrCreateDataType(elementType);
+
                 switch (rank)
                 {
                     case 1:
-                        dataType = new ArrayDataType(type, reflectionHelper);
+                        dataType = new ArrayDataType(type, elementDataType, reflectionHelper);
                         break;
 
                     case 2:
-                        dataType = new Array2DDataType(type, reflectionHelper);
+                        dataType = new Array2DDataType(type, elementDataType, reflectionHelper);
                         break;
 
                     case 3:
-                        dataType = new Array3DDataType(type, reflectionHelper);
+                        dataType = new Array3DDataType(type, elementDataType, reflectionHelper);
                         break;
 
                     default:
@@ -67,21 +72,31 @@ namespace DataType
                      reflectionHelper.CheckIsGenericType(type))
             {
                 var genericType = reflectionHelper.GetGenericTypeDefinition(type);
+
+                var elementTypes = reflectionHelper.GetElementTypes(type);
                 
+                var elementType = elementTypes[0];
+                var elementDataType = GetOrCreateDataType(elementType);
+
                 if (typeof(List<>).IsAssignableFrom(genericType))
-                    dataType = new ListDataType(type, reflectionHelper);
+                    dataType = new ListDataType(type, elementDataType, reflectionHelper);
                 
                 else if (typeof(IDictionary).IsAssignableFrom(genericType))
-                    dataType = new DictionaryDataType(type);
-                
+                {
+                                    
+                    var valueElementType = elementTypes[1];
+                    var valueElementDataType = GetOrCreateDataType(valueElementType);
+                    
+                    dataType = new DictionaryDataType(type, elementDataType, valueElementDataType);
+                }
                 else if (genericType == typeof(Queue<>))
-                    dataType = new QueueDataType(type, reflectionHelper);
+                    dataType = new QueueDataType(type, elementDataType, reflectionHelper);
                 
                 else if (genericType == typeof(Stack<>))
-                    dataType = new StackDataType(type, reflectionHelper);
+                    dataType = new StackDataType(type, elementDataType, reflectionHelper);
                 
                 else if (genericType == typeof(HashSet<>))
-                    dataType = new HashSetDataType(type);
+                    dataType = new HashSetDataType(type, elementDataType);
                 
                 else
                     Debug.LogError(

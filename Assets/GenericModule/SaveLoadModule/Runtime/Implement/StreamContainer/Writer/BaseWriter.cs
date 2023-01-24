@@ -254,7 +254,7 @@ namespace SaveLoadModule.Implement
             if (dataType.IsCollection)
             {
                 StartWriteCollection();
-                ((CollectionDataType)dataType).Write(value, this, referenceMode);
+                ((CollectionDataType)dataType).Write(value, this);
                 EndWriteCollection();
                 return;
             }

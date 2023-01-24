@@ -69,6 +69,8 @@ namespace DataType
             return string.Empty;
         }
 
+        public Type[] GetElementTypes(Type type) => throw new NotImplementedException();
+
         public void GetArrayRank(Type type)
         {
             throw new NotImplementedException();

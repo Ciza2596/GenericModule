@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using DataType;
 
-namespace SaveLoadModule
+
+namespace DataType.Implement
 {
     public class PrimitiveDataTypeInstaller : IDataTypeInstaller
     {
-        private Dictionary<Type, DataType.DataType> _dataTypes;
+        private Dictionary<Type, DataType> _dataTypes;
 
-        public void Install(Dictionary<Type, DataType.DataType> dataTypes, IReflectionHelper reflectionHelper)
+        public void Install(Dictionary<Type, DataType> dataTypes, IReflectionHelper reflectionHelper)
         {
             _dataTypes = dataTypes;
 
@@ -43,7 +43,7 @@ namespace SaveLoadModule
         }
 
 
-        private void AddDataTypeToDataTypes(DataType.DataType dataType, ArrayDataType arrayDataType)
+        private void AddDataTypeToDataTypes(DataType dataType, ArrayDataType arrayDataType)
         {
             _dataTypes.Add(dataType.Type, dataType);
             _dataTypes.Add(arrayDataType.Type, arrayDataType);

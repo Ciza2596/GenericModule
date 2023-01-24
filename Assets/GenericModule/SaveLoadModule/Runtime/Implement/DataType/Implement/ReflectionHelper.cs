@@ -1,10 +1,8 @@
 using System;
 using System.Reflection;
 using UnityEngine;
-using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
 
-namespace DataType
+namespace DataType.Implement
 {
     public class ReflectionHelper : IReflectionHelper
     {

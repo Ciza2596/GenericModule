@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DataType
+namespace DataType.Implement
 {
     public interface IDataTypeInstaller
     {

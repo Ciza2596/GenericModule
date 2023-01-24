@@ -1,5 +1,5 @@
 using System;
-using DataType;
+using DataType.Implement;
 
 namespace SaveLoadModule.Implement
 {

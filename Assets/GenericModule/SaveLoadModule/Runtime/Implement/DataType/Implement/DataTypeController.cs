@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace DataType
+namespace DataType.Implement
 {
     public class DataTypeController
     {

@@ -5,30 +5,28 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class DateTimeDataType : DataType
     {
-        public static DataType Instance { get; private set; }
+        private readonly LongDataType _longDataType;
 
-        public DateTimeDataType() : base(typeof(DateTime)) =>
-            Instance = this;
-
+        public DateTimeDataType(LongDataType longDataType) : base(typeof(DateTime)) => _longDataType = longDataType;
 
         public override void Write(object obj, IWriter writer)
         {
-            writer.WriteProperty("ticks", ((DateTime)obj).Ticks, LongDataType.Instance);
+            writer.WriteProperty("ticks", ((DateTime)obj).Ticks, _longDataType);
         }
 
         public override object Read<T>(IReader reader)
         {
             reader.ReadPropertyName();
-            return new DateTime(reader.Read<long>(LongDataType.Instance));
+            return new DateTime(reader.Read<long>(_longDataType));
         }
     }
 
     public class DateTimeArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
-
-        public DateTimeArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(DateTime[]),
-            DateTimeDataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public DateTimeArrayDataType(DateTimeDataType dateTimeDataType, IReflectionHelper reflectionHelper) : base(
+            typeof(DateTime[]),
+            dateTimeDataType, reflectionHelper)
+        {
+        }
     }
 }

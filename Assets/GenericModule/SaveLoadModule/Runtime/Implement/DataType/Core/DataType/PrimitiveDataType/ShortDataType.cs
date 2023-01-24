@@ -4,10 +4,8 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class ShortDataType : DataType
 	{
-		public static DataType Instance { get; private set; }
-
-		public ShortDataType() : base(typeof(short)) =>
-			Instance = this;
+		public ShortDataType() : base(typeof(short)) {
+		}
 		
 
 		public override void Write(object obj, IWriter writer)
@@ -22,10 +20,11 @@ namespace DataType
 
 	public class ShortArrayDataType : ArrayDataType
 	{
-		public static DataType Instance { get; private set; }
 
-		public ShortArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(short[]), ShortDataType.Instance, reflectionHelper) =>
-			Instance = this;
-		
+		public ShortArrayDataType(ShortDataType shortDataType, IReflectionHelper reflectionHelper) : base(
+			typeof(short[]), shortDataType, reflectionHelper)
+		{
+		}
+
 	}
 }

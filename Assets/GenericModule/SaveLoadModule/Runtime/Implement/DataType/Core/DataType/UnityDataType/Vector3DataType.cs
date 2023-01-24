@@ -3,34 +3,34 @@
 namespace DataType
 {
     [UnityEngine.Scripting.Preserve]
-    //[ES3Properties("x", "y", "z")]
     public class Vector3DataType : DataType
     {
-        public static DataType Instance { get; private set; }
+        private readonly FloatDataType _floatDataType;
 
-        public Vector3DataType() : base(typeof(Vector3)) =>
-            Instance = this;
+        public Vector3DataType(FloatDataType floatDataType) : base(typeof(Vector3)) =>
+            _floatDataType = floatDataType;
 
 
         public override void Write(object obj, IWriter writer)
         {
             var vector3 = (Vector3)obj;
-            writer.WriteProperty("x", vector3.x, FloatDataType.Instance);
-            writer.WriteProperty("y", vector3.y, FloatDataType.Instance);
-            writer.WriteProperty("z", vector3.z, FloatDataType.Instance);
+            writer.WriteProperty("x", vector3.x, _floatDataType);
+            writer.WriteProperty("y", vector3.y, _floatDataType);
+            writer.WriteProperty("z", vector3.z, _floatDataType);
         }
 
         public override object Read<T>(IReader reader) =>
-            new Vector3(reader.ReadProperty<float>(FloatDataType.Instance),
-                reader.ReadProperty<float>(FloatDataType.Instance),
-                reader.ReadProperty<float>(FloatDataType.Instance));
+            new Vector3(reader.ReadProperty<float>(_floatDataType),
+                reader.ReadProperty<float>(_floatDataType),
+                reader.ReadProperty<float>(_floatDataType));
     }
 
     public class Vector3ArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
 
-        public Vector3ArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(Vector3[]), Vector3DataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public Vector3ArrayDataType(Vector3DataType vector3DataType, IReflectionHelper reflectionHelper) : base(
+            typeof(Vector3[]), vector3DataType, reflectionHelper)
+        {
+        }
     }
 }

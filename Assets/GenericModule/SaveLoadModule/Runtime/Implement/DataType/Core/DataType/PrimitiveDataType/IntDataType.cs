@@ -3,11 +3,10 @@
     [UnityEngine.Scripting.Preserve]
     public class IntDataType : DataType
     {
-        public static DataType Instance { get; private set; }
 
-        public IntDataType() : base(typeof(int)) =>
-            Instance = this;
-
+        public IntDataType() : base(typeof(int))
+        {
+        }
 
         public override void Write(object obj, IWriter writer)
         {
@@ -20,9 +19,10 @@
 
     public class IntArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
 
-        public IntArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(int[]), IntDataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public IntArrayDataType(IntDataType intDataType, IReflectionHelper reflectionHelper) : base(typeof(int[]),
+            intDataType, reflectionHelper)
+        {
+        }
     }
 }

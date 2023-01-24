@@ -1,4 +1,5 @@
 using SaveLoadModule;
+using SaveLoadModule.Implement;
 using Zenject;
 
 public class DataTypeControllerMonoInstaller : MonoInstaller

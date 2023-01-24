@@ -4,11 +4,10 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class LongDataType : DataType
 	{
-		public static DataType Instance { get; private set; }
-
-		public LongDataType() : base(typeof(long)) =>
-			Instance = this;
-
+		public LongDataType() : base(typeof(long))
+		{
+		}
+		
 		public override void Write(object obj, IWriter writer)
 		{
 			writer.WritePrimitive((long)obj);
@@ -21,10 +20,10 @@ namespace DataType
 
 	public class LongArrayDataType : ArrayDataType
 	{
-		public static DataType Instance { get; private set; }
 
-		public LongArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(long[]), LongDataType.Instance, reflectionHelper) => 
-			Instance = this;
-		
+		public LongArrayDataType(LongDataType longDataType, IReflectionHelper reflectionHelper) : base(typeof(long[]),
+			longDataType, reflectionHelper)
+		{
+		}
 	}
 }

@@ -4,11 +4,11 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class StringDataType : DataType
 	{
-		public static DataType Instance { get; private set; }
 
-		public StringDataType() : base(typeof(string)) =>
-			Instance = this;
-		
+		public StringDataType() : base(typeof(string))
+		{
+		}
+
 
 		public override void Write(object obj, IWriter writer)
 		{
@@ -23,9 +23,9 @@ namespace DataType
 	
 	public class StringArrayDataType : ArrayDataType
 	{
-		public static DataType Instance { get; private set; }
-
-		public StringArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(string[]), StringDataType.Instance, reflectionHelper) =>
-			Instance = this;
+		public StringArrayDataType(StringDataType stringDataType, IReflectionHelper reflectionHelper) : base(
+			typeof(string[]), stringDataType, reflectionHelper)
+		{
+		}
 	}
 }

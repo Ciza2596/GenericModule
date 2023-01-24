@@ -3,11 +3,10 @@
     [UnityEngine.Scripting.Preserve]
     public class FloatDataType : DataType
     {
-        public static DataType Instance { get; private set; }
 
-        public FloatDataType() : base(typeof(float)) =>
-            Instance = this;
-
+        public FloatDataType() : base(typeof(float))
+        {
+        }
 
         public override void Write(object obj, IWriter writer)
         {
@@ -20,9 +19,11 @@
 
     public class FloatArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
 
-        public FloatArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(float[]), FloatDataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public FloatArrayDataType(FloatDataType floatDataType, IReflectionHelper reflectionHelper) : base(typeof(float[]), floatDataType,
+            reflectionHelper)
+        {
+        }
+
     }
 }

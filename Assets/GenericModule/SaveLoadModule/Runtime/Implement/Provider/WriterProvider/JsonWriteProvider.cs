@@ -18,18 +18,18 @@ namespace SaveLoadModule.Implement
         }
 
 
-        public IWriter CreateWriter(string fullPath, int bufferSize)
+        public IWriter CreateWriter(ReferenceModes referenceMode, string fullPath, int bufferSize)
         {
             var stream = _streamProvider.CreateStream(FileModes.Write, fullPath, bufferSize);
             Assert.IsTrue(stream != null, "");
 
-            var writer = CreateWrite(stream);
+            var writer = CreateWrite(referenceMode, stream);
             return writer;
         }
 
 
         //private method
-        private IWriter CreateWrite(Stream stream) =>
-            new JsonWriter(stream, _dataTypeController);
+        private IWriter CreateWrite(ReferenceModes referenceMode, Stream stream) =>
+            new JsonWriter(referenceMode, stream, _dataTypeController);
     }
 }

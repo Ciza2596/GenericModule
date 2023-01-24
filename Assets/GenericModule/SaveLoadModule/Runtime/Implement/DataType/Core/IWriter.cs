@@ -36,7 +36,7 @@ namespace DataType
         void StartWriteCollection();
         void EndWriteCollectionItem(int index);
         void EndWriteCollection();
-        void Write(object getValue, DataType dataType, ReferenceModes referenceMode);
+        void Write(object value, DataType dataType, ReferenceModes referenceMode);
         void StartWriteDictionaryKey(int i);
         void EndWriteDictionaryKey(int i);
         void StartWriteDictionaryValue(int i);

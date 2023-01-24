@@ -1,35 +1,32 @@
-﻿#if UNITY_2017_2_OR_NEWER
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DataType
 {
     [UnityEngine.Scripting.Preserve]
-    //[ES3PropertiesAttribute("x", "y")]
     public class Vector2IntDataType : DataType
     {
-        public static DataType Instance { get; private set; }
+        private readonly IntDataType _intDataType;
 
-        public Vector2IntDataType() : base(typeof(Vector2Int)) => Instance = this;
+        public Vector2IntDataType(IntDataType intDataType) : base(typeof(Vector2Int)) => _intDataType = intDataType;
 
 
         public override void Write(object obj, IWriter writer)
         {
             var vector2Int = (Vector2Int)obj;
-            writer.WriteProperty("x", vector2Int.x, IntDataType.Instance);
-            writer.WriteProperty("y", vector2Int.y, IntDataType.Instance);
+            writer.WriteProperty("x", vector2Int.x, _intDataType);
+            writer.WriteProperty("y", vector2Int.y, _intDataType);
         }
 
         public override object Read<T>(IReader reader) =>
-            new Vector2Int(reader.ReadProperty<int>(IntDataType.Instance),
-                reader.ReadProperty<int>(IntDataType.Instance));
+            new Vector2Int(reader.ReadProperty<int>(_intDataType),
+                reader.ReadProperty<int>(_intDataType));
     }
 
     public class Vector2IntArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
-
-        public Vector2IntArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(Vector2Int[]), Vector2IntDataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public Vector2IntArrayDataType(Vector2IntDataType vector2IntDataType, IReflectionHelper reflectionHelper) :
+            base(typeof(Vector2Int[]), vector2IntDataType, reflectionHelper)
+        {
+        }
     }
 }
-#endif

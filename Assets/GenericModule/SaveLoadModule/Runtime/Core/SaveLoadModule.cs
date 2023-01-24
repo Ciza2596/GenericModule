@@ -24,9 +24,10 @@ namespace SaveLoadModule
 
         public void Save<T>(string key, T data, string path)
         {
+            var referenceMode = _saveLoadModuleConfig.ReferenceMode;
             var fullPath = GetFullPath(path);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
-            var writer = _writerProvider.CreateWriter(fullPath, bufferSize);
+            var writer = _writerProvider.CreateWriter(referenceMode, fullPath, bufferSize);
 
             writer.Write<T>(key, data);
             writer.Save();

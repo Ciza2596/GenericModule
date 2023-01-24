@@ -22,16 +22,12 @@ namespace DataType
             if (DataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-            //writer.StartWriteCollection();
-
             for (int i = 0; i < array.Length; i++)
             {
                 writer.StartWriteCollectionItem(i);
                 writer.Write(array.GetValue(i), DataType, referenceModes);
                 writer.EndWriteCollectionItem(i);
             }
-
-            //writer.EndWriteCollection();
         }
 
         public override object Read(IReader reader)

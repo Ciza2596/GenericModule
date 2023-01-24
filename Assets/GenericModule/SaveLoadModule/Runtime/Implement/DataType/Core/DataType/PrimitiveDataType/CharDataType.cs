@@ -3,11 +3,7 @@
     [UnityEngine.Scripting.Preserve]
     public class CharDataType : DataType
     {
-        public static DataType Instance { get; private set; }
-
-        public CharDataType() : base(typeof(char)) =>
-            Instance = this;
-
+        public CharDataType() : base(typeof(char)) { }
 
         public override void Write(object obj, IWriter writer)
         {
@@ -20,10 +16,8 @@
 
     public class CharArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
 
-        public CharArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(char[]), CharDataType.Instance,
-            reflectionHelper) =>
-            Instance = this;
+        public CharArrayDataType(CharDataType dataType, IReflectionHelper reflectionHelper) : base(typeof(char[]), dataType,
+            reflectionHelper) { }
     }
 }

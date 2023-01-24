@@ -12,10 +12,15 @@ namespace SaveLoadModule.Implement
             DataPath
         }
 
+        [SerializeField] private ReferenceModes _referenceMode;
+        
+        [Space]
         [SerializeField] private Directories _directory;
         [SerializeField] private string _path = "";
 
         [Space] [SerializeField] private int _bufferSize = 2028;
+
+        public ReferenceModes ReferenceMode => _referenceMode;
 
         public string ApplicationDataPath
         {

@@ -16,5 +16,11 @@ namespace DataType
         Type MakeGenericType(Type type, Type genericParam);
 
         MethodInfo[] GetMethods(Type type, string methodName);
+        bool CheckIsEnum(Type type);
+        bool CheckIsImplementsInterface(Type type, Type interfaceType);
+        bool CheckIsArray(Type type);
+        bool CheckIsGenericType(Type type);
+        int GetArrayRank(Type type);
+        Type GetGenericTypeDefinition(Type type);
     }
 }

@@ -3,11 +3,9 @@
     [UnityEngine.Scripting.Preserve]
     public class DoubleDataType : DataType
     {
-        public static DataType Instance { get; private set; }
-
-        public DoubleDataType() : base(typeof(double)) =>
-            Instance = this;
-
+        public DoubleDataType() : base(typeof(double))
+        {
+        }
 
         public override void Write(object obj, IWriter writer)
         {
@@ -20,9 +18,9 @@
 
     public class DoubleArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
-
-        public DoubleArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(double[]), DoubleDataType.Instance, reflectionHelper) =>
-            Instance = this;
+        public DoubleArrayDataType(DoubleDataType doubleDataType, IReflectionHelper reflectionHelper) : base(
+            typeof(double[]), doubleDataType, reflectionHelper)
+        {
+        }
     }
 }

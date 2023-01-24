@@ -3,11 +3,9 @@
     [UnityEngine.Scripting.Preserve]
     public class BoolDataType : DataType
     {
-        public static DataType Instance { get; private set; }
-
-        public BoolDataType() : base(typeof(bool)) =>
-            Instance = this;
-
+        public BoolDataType() : base(typeof(bool))
+        {
+        }
 
         public override void Write(object obj, IWriter writer) =>
             writer.WritePrimitive((bool)obj);
@@ -19,10 +17,10 @@
 
     public class BoolArrayDataType : ArrayDataType
     {
-        public static DataType Instance { get; private set; }
-
-        public BoolArrayDataType(IReflectionHelper reflectionHelper) : base(typeof(bool[]), BoolDataType.Instance,
-            reflectionHelper) =>
-            Instance = this;
+        public BoolArrayDataType(BoolDataType boolDataType, IReflectionHelper reflectionHelper) : base(typeof(bool[]),
+            boolDataType,
+            reflectionHelper)
+        {
+        }
     }
 }

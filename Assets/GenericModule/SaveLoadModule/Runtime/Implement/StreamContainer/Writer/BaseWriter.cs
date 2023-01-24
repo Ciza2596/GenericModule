@@ -14,7 +14,7 @@ namespace SaveLoadModule.Implement
         private readonly DataType.ReferenceModes _referenceMode;
         private readonly IDataTypeController _dataTypeController;
         private readonly IReflectionHelper _reflectionHelper;
-
+        
         protected HashSet<string> _keysToDelete = new HashSet<string>();
         protected int _serializationDepth;
 
@@ -61,75 +61,34 @@ namespace SaveLoadModule.Implement
             throw new NotImplementedException();
         }
 
-        public void WritePrimitive(string value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(string value);
+        
+        public abstract void WritePrimitive(int value);
 
-        public void WritePrimitive(int value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(bool value);
 
-        public void WritePrimitive(bool value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(byte value);
 
-        public void WritePrimitive(byte value)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void WritePrimitive(char value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(char value);
 
-        public void WritePrimitive(decimal value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(decimal value);
 
-        public void WritePrimitive(double value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(double value);
 
-        public void WritePrimitive(float value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(float value);
 
-        public void WritePrimitive(long value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(long value);
 
-        public void WritePrimitive(sbyte value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(sbyte value);
 
-        public void WritePrimitive(short value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(short value);
 
-        public void WritePrimitive(uint value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(uint value);
 
-        public void WritePrimitive(ulong value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(ulong value);
 
-        public void WritePrimitive(ushort value)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void WritePrimitive(ushort value);
 
         public void StartWriteCollectionItem(int index)
         {

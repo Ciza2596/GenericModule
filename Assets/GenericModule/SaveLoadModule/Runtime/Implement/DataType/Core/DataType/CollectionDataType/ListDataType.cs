@@ -9,14 +9,11 @@ namespace DataType
     {
         private readonly IReflectionHelper _reflectionHelper;
 
-        public ListDataType(Type type, IReflectionHelper reflectionHelper) : base(type) =>
-            _reflectionHelper = reflectionHelper;
-
-        public ListDataType(Type type, DataType dataType, IReflectionHelper reflectionHelper) : base(type, dataType) =>
+        public ListDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type, elementDataType) =>
             _reflectionHelper = reflectionHelper;
 
 
-        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
+        public override void Write(object obj, IWriter writer)
         {
             if (obj == null)
             {
@@ -28,21 +25,17 @@ namespace DataType
 
             var list = (IList)obj;
 
-            if (DataType == null)
+            if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
-
-            //writer.StartWriteCollection();
 
             int i = 0;
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(item, DataType, referenceModes);
+                writer.Write(item, ElementDataType);
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
-
-            //writer.EndWriteCollection();
         }
 
         public override object Read<T>(IReader reader)
@@ -57,7 +50,7 @@ namespace DataType
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
-            ReadICollectionInto(reader, (ICollection)obj, DataType);
+            ReadICollectionInto(reader, (ICollection)obj, ElementDataType);
         }
 
         public override object Read(IReader reader)
@@ -72,7 +65,7 @@ namespace DataType
             {
                 if (!reader.StartReadCollectionItem())
                     break;
-                instance.Add(reader.Read<object>(DataType));
+                instance.Add(reader.Read<object>(ElementDataType));
 
                 if (reader.EndReadCollectionItem())
                     break;
@@ -101,7 +94,7 @@ namespace DataType
                 if (!reader.StartReadCollectionItem())
                     break;
 
-                reader.ReadInto<object>(item, DataType);
+                reader.ReadInto<object>(item, ElementDataType);
 
                 // If we find a ']', we reached the end of the array.
                 if (reader.EndReadCollectionItem())

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 
 
 namespace DataType
@@ -8,33 +7,29 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class HashSetDataType : CollectionDataType
 	{
-		public HashSetDataType(Type type) : base(type){}
+		public HashSetDataType(Type type, DataType elementDataType) : base(type, elementDataType){}
 
-        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
+        public override void Write(object obj, IWriter writer)
         {
             if (obj == null) { writer.WriteNull(); return; };
 
             var list = (IEnumerable)obj;
 
-            if (DataType == null)
+            if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             int count = 0;
             foreach (var item in list)
                 count++;
-
-            //writer.StartWriteCollection(count);
-
+            
             int i = 0;
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(item, DataType, referenceModes);
+                writer.Write(item, ElementDataType);
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
-
-            //writer.EndWriteCollection();
         }
 
         public override object Read<T>(IReader reader)

@@ -23,8 +23,8 @@ namespace DataType
 	
 	public class StringArrayDataType : ArrayDataType
 	{
-		public StringArrayDataType(StringDataType stringDataType, IReflectionHelper reflectionHelper) : base(
-			typeof(string[]), stringDataType, reflectionHelper)
+		public StringArrayDataType(StringDataType stringElementDataType, IReflectionHelper reflectionHelper) : base(
+			typeof(string[]), stringElementDataType, reflectionHelper)
 		{
 		}
 	}

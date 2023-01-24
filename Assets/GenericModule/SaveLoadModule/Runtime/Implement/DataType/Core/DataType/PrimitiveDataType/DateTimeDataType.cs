@@ -23,9 +23,9 @@ namespace DataType
 
     public class DateTimeArrayDataType : ArrayDataType
     {
-        public DateTimeArrayDataType(DateTimeDataType dateTimeDataType, IReflectionHelper reflectionHelper) : base(
+        public DateTimeArrayDataType(DateTimeDataType dateTimeElementDataType, IReflectionHelper reflectionHelper) : base(
             typeof(DateTime[]),
-            dateTimeDataType, reflectionHelper)
+            dateTimeElementDataType, reflectionHelper)
         {
         }
     }

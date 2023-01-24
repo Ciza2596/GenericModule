@@ -17,7 +17,7 @@
     public class CharArrayDataType : ArrayDataType
     {
 
-        public CharArrayDataType(CharDataType dataType, IReflectionHelper reflectionHelper) : base(typeof(char[]), dataType,
+        public CharArrayDataType(CharDataType elementDataType, IReflectionHelper reflectionHelper) : base(typeof(char[]), elementDataType,
             reflectionHelper) { }
     }
 }

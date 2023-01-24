@@ -20,8 +20,8 @@
     public class IntArrayDataType : ArrayDataType
     {
 
-        public IntArrayDataType(IntDataType intDataType, IReflectionHelper reflectionHelper) : base(typeof(int[]),
-            intDataType, reflectionHelper)
+        public IntArrayDataType(IntDataType intElementDataType, IReflectionHelper reflectionHelper) : base(typeof(int[]),
+            intElementDataType, reflectionHelper)
         {
         }
     }

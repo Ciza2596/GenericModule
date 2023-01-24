@@ -18,8 +18,8 @@
 
     public class DoubleArrayDataType : ArrayDataType
     {
-        public DoubleArrayDataType(DoubleDataType doubleDataType, IReflectionHelper reflectionHelper) : base(
-            typeof(double[]), doubleDataType, reflectionHelper)
+        public DoubleArrayDataType(DoubleDataType doubleElementDataType, IReflectionHelper reflectionHelper) : base(
+            typeof(double[]), doubleElementDataType, reflectionHelper)
         {
         }
     }

@@ -4,38 +4,22 @@ using System.Collections.Generic;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
 	public abstract class CollectionDataType : DataType
 	{
-		public DataType DataType { get; private set; }
+		public DataType ElementDataType { get; }
 
-		/*protected ES3Reflection.ES3ReflectedMethod readMethod = null;
-		protected ES3Reflection.ES3ReflectedMethod readIntoMethod = null;*/
-
-        public abstract object Read(IReader reader);
+		public abstract object Read(IReader reader);
         public abstract void ReadInto(IReader reader, object obj);
-        public abstract void Write(object obj, IWriter writer, ReferenceModes referenceModes);
+        public abstract override void Write(object obj, IWriter writer);
 
-        public CollectionDataType(Type type) : base(type)
-		{
-			// DataType = DataTypeManager.GetOrCreateDataType(ES3Reflection.GetElementTypes(type)[0], false);
+        protected CollectionDataType(Type type, DataType elementDataType) : base(type)
+        {
+	        ElementDataType = elementDataType;
 			IsCollection = true;
-
+ 
 			// If the element type is null (i.e. unsupported), make this ES3Type null.
-			// if(elementType == null)
-			// 	isUnsupported = true;
-		}
-
-        public CollectionDataType(Type type, DataType dataType) : base(type)
-		{
-			DataType = dataType;
-			IsCollection = true;
-		}
-
-        [UnityEngine.Scripting.Preserve]
-        public override void Write(object obj, IWriter writer)
-		{
-			Write(obj, writer, ReferenceModes.ByRefAndValue);
+			if(ElementDataType == null)
+				IsUnsupported = true;
 		}
 
         protected virtual bool ReadICollection<T>(IReader reader, ICollection<T> collection, DataType elementType)
@@ -59,12 +43,6 @@ namespace DataType
 			return true;
 		}
 
-        protected virtual void ReadICollectionInto<T>(IReader reader, ICollection<T> collection, DataType dataType)
-        {
-            ReadICollectionInto(reader, collection, dataType);
-        }
-
-        [UnityEngine.Scripting.Preserve]
         protected virtual void ReadICollectionInto(IReader reader, ICollection collection, DataType dataType)
 		{
 			if(reader.StartReadCollection())
@@ -97,22 +75,5 @@ namespace DataType
 
 			reader.EndReadCollection();
 		}
-
-		/*
-		 * 	Calls the Read method using reflection so we don't need to provide a generic parameter.
-		 */
-		/*public virtual object Read(ES3Reader reader)
-		{
-			if(readMethod == null)
-				readMethod = ES3Reflection.GetMethod(this.GetType(), "Read", new Type[]{elementType.type}, new Type[]{typeof(ES3Reader)});
-			return readMethod.Invoke(this, new object[]{reader});
-		}
-
-		public virtual void ReadInto(ES3Reader reader, object obj)
-		{
-			if(readIntoMethod == null)
-				readIntoMethod = ES3Reflection.GetMethod(this.GetType(), "ReadInto", new Type[]{elementType.type}, new Type[]{typeof(ES3Reader), typeof(object)});
-			readIntoMethod.Invoke(this, new object[]{reader, obj});
-		}*/
 	}
 }

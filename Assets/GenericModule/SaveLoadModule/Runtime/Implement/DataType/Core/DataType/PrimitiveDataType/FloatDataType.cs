@@ -20,7 +20,7 @@
     public class FloatArrayDataType : ArrayDataType
     {
 
-        public FloatArrayDataType(FloatDataType floatDataType, IReflectionHelper reflectionHelper) : base(typeof(float[]), floatDataType,
+        public FloatArrayDataType(FloatDataType floatElementDataType, IReflectionHelper reflectionHelper) : base(typeof(float[]), floatElementDataType,
             reflectionHelper)
         {
         }

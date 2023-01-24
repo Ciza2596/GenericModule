@@ -21,8 +21,8 @@ namespace DataType
 	public class ShortArrayDataType : ArrayDataType
 	{
 
-		public ShortArrayDataType(ShortDataType shortDataType, IReflectionHelper reflectionHelper) : base(
-			typeof(short[]), shortDataType, reflectionHelper)
+		public ShortArrayDataType(ShortDataType shortElementDataType, IReflectionHelper reflectionHelper) : base(
+			typeof(short[]), shortElementDataType, reflectionHelper)
 		{
 		}
 

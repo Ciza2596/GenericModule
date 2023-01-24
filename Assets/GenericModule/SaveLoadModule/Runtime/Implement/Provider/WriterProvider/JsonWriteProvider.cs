@@ -1,4 +1,5 @@
 using System.IO;
+using DataType;
 using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
@@ -8,6 +9,7 @@ namespace SaveLoadModule.Implement
         //private variable
         private readonly IStreamProvider _streamProvider;
         private readonly IDataTypeController _dataTypeController;
+        private readonly IReflectionHelper _reflectionHelper;
 
 
         //public method
@@ -21,7 +23,7 @@ namespace SaveLoadModule.Implement
         public IWriter CreateWriter(ReferenceModes referenceMode, string fullPath, int bufferSize)
         {
             var stream = _streamProvider.CreateStream(FileModes.Write, fullPath, bufferSize);
-            Assert.IsTrue(stream != null, "");
+            Assert.IsNotNull(stream, "[JsonWriteProvider::CreateWriter] Create stream is fail.");
 
             var writer = CreateWrite(referenceMode, stream);
             return writer;
@@ -30,6 +32,6 @@ namespace SaveLoadModule.Implement
 
         //private method
         private IWriter CreateWrite(ReferenceModes referenceMode, Stream stream) =>
-            new JsonWriter(referenceMode, stream, _dataTypeController);
+            new JsonWriter(referenceMode, stream, _dataTypeController, _reflectionHelper);
     }
 }

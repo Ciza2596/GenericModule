@@ -268,7 +268,9 @@ public abstract class ES3Writer : IDisposable
         if (SerializationDepthLimitExceeded())
             return;
 
-        StartWriteProperty(name); Write(value, memberReferenceMode); EndWriteProperty(name);
+        StartWriteProperty(name); 
+        Write(value, memberReferenceMode); 
+        EndWriteProperty(name);
 	}
 
     /// <summary>Writes a field or property to the writer. Note that this should only be called within an ES3Type.</summary>

@@ -21,8 +21,8 @@ namespace DataType
 	public class LongArrayDataType : ArrayDataType
 	{
 
-		public LongArrayDataType(LongDataType longDataType, IReflectionHelper reflectionHelper) : base(typeof(long[]),
-			longDataType, reflectionHelper)
+		public LongArrayDataType(LongDataType longElementDataType, IReflectionHelper reflectionHelper) : base(typeof(long[]),
+			longElementDataType, reflectionHelper)
 		{
 		}
 	}

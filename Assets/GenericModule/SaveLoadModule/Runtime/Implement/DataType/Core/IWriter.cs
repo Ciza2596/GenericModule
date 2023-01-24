@@ -9,12 +9,12 @@ namespace DataType
         void WriteType(Type type);
 
 
-        //property
+        //write property
         void WriteProperty(string name, object value, DataType dataType);
         void WriteProperty(string name, int value, DataType dataType);
         
         
-        //primitive
+        //write primitive
         void WritePrimitive(string value);
         void WritePrimitive(int value);
         void WritePrimitive(bool value);
@@ -36,7 +36,7 @@ namespace DataType
         void StartWriteCollection();
         void EndWriteCollectionItem(int index);
         void EndWriteCollection();
-        void Write(object value, DataType dataType, ReferenceModes referenceMode);
+        void Write(object value, DataType dataType);
         void StartWriteDictionaryKey(int i);
         void EndWriteDictionaryKey(int i);
         void StartWriteDictionaryValue(int i);

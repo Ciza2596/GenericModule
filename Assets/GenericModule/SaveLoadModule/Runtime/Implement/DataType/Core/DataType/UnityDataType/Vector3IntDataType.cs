@@ -26,8 +26,8 @@ namespace DataType
 
     public class Vector3IntArrayDataType : ArrayDataType
     {
-        public Vector3IntArrayDataType(Vector3IntDataType vector3IntDataType, IReflectionHelper reflectionHelper) :
-            base(typeof(Vector3Int[]), vector3IntDataType, reflectionHelper)
+        public Vector3IntArrayDataType(Vector3IntDataType vector3IntElementDataType, IReflectionHelper reflectionHelper) :
+            base(typeof(Vector3Int[]), vector3IntElementDataType, reflectionHelper)
         {
         }
     }

@@ -7,18 +7,17 @@ namespace DataType
     {
         private readonly IReflectionHelper _reflectionHelper;
         
-        public Array3DDataType(Type type, IReflectionHelper reflectionHelper) : base(type) =>
+        public Array3DDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type, elementDataType) =>
             _reflectionHelper = reflectionHelper;
         
 
-        public override void Write(object obj, IWriter writer, ReferenceModes referenceModes)
+        public override void Write(object obj, IWriter writer)
         {
             var array = (Array)obj;
 
-            if (DataType == null)
+            if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-            //writer.StartWriteCollection();
 
             for (int i = 0; i < array.GetLength(0); i++)
             {
@@ -33,7 +32,7 @@ namespace DataType
                     for (int k = 0; k < array.GetLength(2); k++)
                     {
                         writer.StartWriteCollectionItem(k);
-                        writer.Write(array.GetValue(i, j, k), DataType, referenceModes);
+                        writer.Write(array.GetValue(i, j, k), ElementDataType);
                         writer.EndWriteCollectionItem(k);
                     }
 
@@ -44,7 +43,6 @@ namespace DataType
                 writer.EndWriteCollection();
                 writer.EndWriteCollectionItem(i);
             }
-            //writer.EndWriteCollection();
         }
 
         public override object Read<T>(IReader reader)
@@ -76,7 +74,7 @@ namespace DataType
                     if (!reader.StartReadCollectionItem())
                         break;
 
-                    ReadICollection<object>(reader, items, DataType);
+                    ReadICollection<object>(reader, items, ElementDataType);
                     length2++;
 
                     if (reader.EndReadCollectionItem())
@@ -93,7 +91,7 @@ namespace DataType
             length2 = length2 / length1;
             var length3 = items.Count / length2 / length1;
 
-            var array = _reflectionHelper.CreateArrayInstance(DataType.Type, new int[] { length1, length2, length3 });
+            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type, new int[] { length1, length2, length3 });
 
             for (int i = 0; i < length1; i++)
             for (int j = 0; j < length2; j++)
@@ -143,7 +141,7 @@ namespace DataType
                         if (!reader.StartReadCollectionItem())
                             throw new IndexOutOfRangeException(
                                 "The collection we are loading is smaller than the collection provided as a parameter.");
-                        reader.ReadInto<object>(array.GetValue(i, j, k), DataType);
+                        reader.ReadInto<object>(array.GetValue(i, j, k), ElementDataType);
                         kHasBeenRead = reader.EndReadCollectionItem();
                     }
 

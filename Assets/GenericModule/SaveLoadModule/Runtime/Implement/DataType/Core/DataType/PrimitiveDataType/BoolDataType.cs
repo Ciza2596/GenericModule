@@ -17,8 +17,8 @@
 
     public class BoolArrayDataType : ArrayDataType
     {
-        public BoolArrayDataType(BoolDataType boolDataType, IReflectionHelper reflectionHelper) : base(typeof(bool[]),
-            boolDataType,
+        public BoolArrayDataType(BoolDataType boolElementDataType, IReflectionHelper reflectionHelper) : base(typeof(bool[]),
+            boolElementDataType,
             reflectionHelper)
         {
         }

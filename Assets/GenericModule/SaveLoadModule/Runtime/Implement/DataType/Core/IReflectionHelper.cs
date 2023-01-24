@@ -22,5 +22,6 @@ namespace DataType
         bool CheckIsGenericType(Type type);
         int GetArrayRank(Type type);
         Type GetGenericTypeDefinition(Type type);
+        string GetTypeString(Type type);
     }
 }

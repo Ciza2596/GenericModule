@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.IO;
 using DataType;
@@ -10,13 +11,25 @@ namespace SaveLoadModule.Implement
         private const string FALSE_NAME = "false";
 
         private const string DOUBLE_AND_FLOAT_FORMAT_NAME = "R";
+        private static readonly IFormatProvider INVARIANT_CULTURE = CultureInfo.InvariantCulture;
+
 
         private readonly StreamWriter _streamWriter;
+        private bool _isWriteHeaderAndFooter;
+        private System.Text.Encoding _encoding;
 
-        public JsonWriter(ReferenceModes referenceMode, Stream stream, IDataTypeController dataTypeController,
-            IReflectionHelper reflectionHelper) : base(referenceMode, stream, dataTypeController, reflectionHelper)
+
+        private bool _isFirstProperty = true;
+
+        public JsonWriter(ReferenceModes referenceMode, Stream stream, bool isWriteHeaderAndFooter,
+            System.Text.Encoding encoding, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(
+            referenceMode, dataTypeController, reflectionHelper)
         {
             _streamWriter = new StreamWriter(stream);
+            _isWriteHeaderAndFooter = isWriteHeaderAndFooter;
+            _encoding = encoding;
+            StartWriteFile();
         }
 
         public override void WritePrimitive(string value)
@@ -67,28 +80,28 @@ namespace SaveLoadModule.Implement
             _streamWriter.Write(value ? TRUE_NAME : FALSE_NAME);
 
         public override void WritePrimitive(byte value) =>
-            _streamWriter.Write(System.Convert.ToInt32(value));
+            _streamWriter.Write(Convert.ToInt32(value));
 
         public override void WritePrimitive(char value) =>
             WritePrimitive(value.ToString());
-        
+
         public override void WritePrimitive(decimal value) =>
-            _streamWriter.Write(value.ToString(CultureInfo.InvariantCulture));
+            _streamWriter.Write(value.ToString(INVARIANT_CULTURE));
 
         public override void WritePrimitive(double value) =>
-            _streamWriter.Write(value.ToString(DOUBLE_AND_FLOAT_FORMAT_NAME, CultureInfo.InvariantCulture));
+            _streamWriter.Write(value.ToString(DOUBLE_AND_FLOAT_FORMAT_NAME, INVARIANT_CULTURE));
 
         public override void WritePrimitive(float value) =>
-            _streamWriter.Write(value.ToString(DOUBLE_AND_FLOAT_FORMAT_NAME, CultureInfo.InvariantCulture));
+            _streamWriter.Write(value.ToString(DOUBLE_AND_FLOAT_FORMAT_NAME, INVARIANT_CULTURE));
 
-        public override void WritePrimitive(long value) => 
+        public override void WritePrimitive(long value) =>
             _streamWriter.Write(value);
 
-        public override void WritePrimitive(sbyte value) => 
-            _streamWriter.Write(System.Convert.ToInt32(value));
+        public override void WritePrimitive(sbyte value) =>
+            _streamWriter.Write(Convert.ToInt32(value));
 
-        public override void WritePrimitive(short value) => 
-            _streamWriter.Write(System.Convert.ToInt32(value));
+        public override void WritePrimitive(short value) =>
+            _streamWriter.Write(Convert.ToInt32(value));
 
         public override void WritePrimitive(uint value) =>
             _streamWriter.Write(value);
@@ -97,26 +110,142 @@ namespace SaveLoadModule.Implement
             _streamWriter.Write(value);
 
         public override void WritePrimitive(ushort value) =>
-            _streamWriter.Write(System.Convert.ToInt32(value));
+            _streamWriter.Write(Convert.ToInt32(value));
 
-        public override void WriteNull()
+        public override void WriteNull() =>
+            _streamWriter.Write("null");
+
+        public override void Dispose() =>
+            _streamWriter.Dispose();
+        
+
+        public override void StartWriteCollection()
         {
-            throw new System.NotImplementedException();
+            base.StartWriteCollection();
+
+            _streamWriter.Write('[');
+            WriteNewLineAndTabs();
+        }
+
+        public override void EndWriteCollection()
+        {
+            base.EndWriteCollection();
+
+            WriteNewLineAndTabs();
+            _streamWriter.Write(']');
+        }
+
+        public override void StartWriteCollectionItem(int index)
+        {
+            if (index != 0)
+                _streamWriter.Write(',');
+        }
+
+        public override void EndWriteCollectionItem(int index)
+        {
+        }
+
+        public override void StartWriteDictionaryKey(int index)
+        {
+            if (index != 0)
+                _streamWriter.Write(',');
+        }
+
+        public override void EndWriteDictionaryKey(int index) =>
+            _streamWriter.Write(':');
+
+
+        public override void StartWriteDictionaryValue(int index)
+        {
+        }
+
+        public override void EndWriteDictionaryValue(int index)
+        {
+        }
+
+
+        protected override void StartWriteFile()
+        {
+            if (_isWriteHeaderAndFooter)
+                _streamWriter.Write('{');
+
+            base.StartWriteFile();
+        }
+
+        protected override void EndWriteFile()
+        {
+            base.EndWriteFile();
+
+            WriteNewLineAndTabs();
+            if (_isWriteHeaderAndFooter)
+                _streamWriter.Write('}');
+        }
+
+        protected override void StartWriteObject(string name)
+        {
+            base.StartWriteObject(name);
+
+            _isFirstProperty = true;
+            _streamWriter.Write('{');
+        }
+
+        protected override void EndWriteObject(string name)
+        {
+            base.EndWriteObject(name);
+
+            _isFirstProperty = false;
+            WriteNewLineAndTabs();
+            _streamWriter.Write('}');
+        }
+
+
+        protected override void StartWriteProperty(string name)
+        {
+            base.StartWriteProperty(name);
+            WriteCommaIfRequired();
+            Write(name);
+
+            _streamWriter.Write(' ');
+            _streamWriter.Write(':');
+            _streamWriter.Write(' ');
         }
 
         protected override void EndWriteProperty(string name)
         {
-            throw new System.NotImplementedException();
+        }
+
+        protected override void WriteRawProperty(string name, byte[] value)
+        {
+            StartWriteProperty(name);
+            _streamWriter.Write(_encoding.GetString(value, 0, value.Length));
+            EndWriteProperty(name);
         }
 
         protected override void StartWriteDictionary()
         {
-            throw new System.NotImplementedException();
+            StartWriteObject(null);
         }
 
         protected override void EndWriteDictionary()
         {
-            throw new System.NotImplementedException();
+        }
+
+
+        private void WriteNewLineAndTabs()
+        {
+            _streamWriter.Write(Environment.NewLine);
+            for (var i = 0; i < _serializationDepth; i++)
+                _streamWriter.Write('\t');
+        }
+
+        private void WriteCommaIfRequired()
+        {
+            if (!_isFirstProperty)
+                _streamWriter.Write(',');
+            else
+                _isFirstProperty = false;
+
+            WriteNewLineAndTabs();
         }
     }
 }

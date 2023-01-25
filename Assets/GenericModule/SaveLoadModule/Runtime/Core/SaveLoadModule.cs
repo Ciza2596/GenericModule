@@ -27,10 +27,13 @@ namespace SaveLoadModule
             var referenceMode = _saveLoadModuleConfig.ReferenceMode;
             var fullPath = GetFullPath(path);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
-            var writer = _writerProvider.CreateWriter(referenceMode, fullPath, bufferSize);
+            var encoding = _saveLoadModuleConfig.Encoding;
+            var writer = _writerProvider.CreateWriter(referenceMode, fullPath, bufferSize, true, encoding);
 
             writer.Write<T>(key, data);
-            writer.Save();
+            
+            var reader = _readerProvider.CreateReader(fullPath, bufferSize);
+            writer.Save(reader);
         }
 
         public T Load<T>(string key, string path)

@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using DataType;
 using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
 {
-    public abstract class BaseWriter : IWriter, DataType.IWriter
+    public abstract class BaseWriter : IWriter, DataType.IWriter, IDisposable
     {
         private const string VALUE_TAG = "value";
 
@@ -14,13 +13,13 @@ namespace SaveLoadModule.Implement
         private readonly DataType.ReferenceModes _referenceMode;
         private readonly IDataTypeController _dataTypeController;
         private readonly IReflectionHelper _reflectionHelper;
-        
-        protected HashSet<string> _keysToDelete = new HashSet<string>();
+
+        private readonly HashSet<string> _keysToDelete = new HashSet<string>();
         protected int _serializationDepth;
 
 
         //public method
-        public BaseWriter(ReferenceModes referenceMode, Stream stream, IDataTypeController dataTypeController,
+        public BaseWriter(ReferenceModes referenceMode, IDataTypeController dataTypeController,
             IReflectionHelper reflectionHelper)
         {
             _referenceMode = ((DataType.ReferenceModes)(int)referenceMode);
@@ -39,8 +38,11 @@ namespace SaveLoadModule.Implement
             Write(currentType, key, value);
         }
 
-        public void Save()
+        public void Save(IReader reader)
         {
+            Merge(reader);
+            EndWriteFile();
+            
         }
 
 
@@ -53,16 +55,11 @@ namespace SaveLoadModule.Implement
 
         public void WriteProperty(string name, object value, DataType.DataType dataType)
         {
-            throw new NotImplementedException();
-        }
-
-        public void WriteProperty(string name, int value, DataType.DataType dataType)
-        {
-            throw new NotImplementedException();
+            WriteProperty(name, value, dataType, _referenceMode);
         }
 
         public abstract void WritePrimitive(string value);
-        
+
         public abstract void WritePrimitive(int value);
 
         public abstract void WritePrimitive(bool value);
@@ -90,53 +87,34 @@ namespace SaveLoadModule.Implement
 
         public abstract void WritePrimitive(ushort value);
 
-        public void StartWriteCollectionItem(int index)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void StartWriteCollection() =>
+            _serializationDepth++;
 
-        public void StartWriteCollection()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void EndWriteCollection() =>
+            _serializationDepth--;
+        
+        public abstract void StartWriteCollectionItem(int index);
 
-        public void EndWriteCollectionItem(int index)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void EndWriteCollectionItem(int index);
 
-        public void EndWriteCollection()
-        {
-            throw new NotImplementedException();
-        }
 
         public void Write(object value, DataType.DataType dataType)
         {
             Write(value, dataType, _referenceMode);
         }
 
-        public void StartWriteDictionaryKey(int i)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void StartWriteDictionaryKey(int index);
 
-        public void EndWriteDictionaryKey(int i)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void EndWriteDictionaryKey(int index);
 
-        public void StartWriteDictionaryValue(int i)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void StartWriteDictionaryValue(int index);
 
-        public void EndWriteDictionaryValue(int i)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void EndWriteDictionaryValue(int index);
+
 
         public abstract void WriteNull();
 
+        public abstract void Dispose();
 
         //For child class method
         protected virtual void StartWriteProperty(string name) =>
@@ -144,6 +122,13 @@ namespace SaveLoadModule.Implement
 
         protected abstract void EndWriteProperty(string name);
 
+        protected virtual void StartWriteFile() =>
+            _serializationDepth++;
+        
+
+        protected virtual void EndWriteFile() =>
+            _serializationDepth--;
+        
 
         protected virtual void StartWriteObject(string name) =>
             _serializationDepth++;
@@ -154,6 +139,10 @@ namespace SaveLoadModule.Implement
 
         protected abstract void StartWriteDictionary();
         protected abstract void EndWriteDictionary();
+
+        
+        protected abstract void WriteRawProperty(string name, byte[] value);
+
 
         //protected method
         protected void Write(object value,
@@ -175,7 +164,18 @@ namespace SaveLoadModule.Implement
             EndWriteProperty(key);
             MarkKeyForDeletion(key);
         }
-        
+
+        private void Write(string key, Type type, byte[] value)
+        {
+            StartWriteProperty(key);
+            StartWriteObject(key);
+            WriteType(type);
+            WriteRawProperty(VALUE_TAG, value);
+            EndWriteObject(key);
+            EndWriteProperty(key);
+            MarkKeyForDeletion(key);
+        }
+
         private void Write(object value, DataType.DataType dataType, DataType.ReferenceModes referenceMode)
         {
             // Note that we have to check UnityEngine.Object types for null by casting it first, otherwise
@@ -241,7 +241,7 @@ namespace SaveLoadModule.Implement
             EndWriteProperty(name);
         }
 
-        public void WriteProperty(string name, object value) =>
+        private void WriteProperty(string name, object value) =>
             WriteProperty(name, value, _referenceMode);
 
 
@@ -251,5 +251,19 @@ namespace SaveLoadModule.Implement
             Write(value, referenceMode);
             EndWriteProperty(name);
         }
+
+        private void Merge(IReader reader)
+        {
+            var raws = reader.Raws;
+
+            foreach (KeyValuePair<string, DataTypeData> raw in raws)
+            {
+                var key = raw.Key;
+                var value = raw.Value;
+                if (!_keysToDelete.Contains(key) && value.DataType != null)
+                    Write(key, value.DataType.Type, value.Bytes);
+            }
+        }
+        
     }
 }

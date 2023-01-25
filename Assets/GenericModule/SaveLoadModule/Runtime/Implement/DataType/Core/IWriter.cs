@@ -11,9 +11,7 @@ namespace DataType
 
         //write property
         void WriteProperty(string name, object value, DataType dataType);
-        void WriteProperty(string name, int value, DataType dataType);
-        
-        
+
         //write primitive
         void WritePrimitive(string value);
         void WritePrimitive(int value);
@@ -29,18 +27,17 @@ namespace DataType
         void WritePrimitive(uint value);
         void WritePrimitive(ulong value);
         void WritePrimitive(ushort value);
-        
-        
-        
-        void StartWriteCollectionItem(int index);
+
+
         void StartWriteCollection();
-        void EndWriteCollectionItem(int index);
         void EndWriteCollection();
+        void StartWriteCollectionItem(int index);
+        void EndWriteCollectionItem(int index);
         void Write(object value, DataType dataType);
-        void StartWriteDictionaryKey(int i);
-        void EndWriteDictionaryKey(int i);
-        void StartWriteDictionaryValue(int i);
-        void EndWriteDictionaryValue(int i);
+        void StartWriteDictionaryKey(int index);
+        void EndWriteDictionaryKey(int index);
+        void StartWriteDictionaryValue(int index);
+        void EndWriteDictionaryValue(int index);
         void WriteNull();
     }
 }

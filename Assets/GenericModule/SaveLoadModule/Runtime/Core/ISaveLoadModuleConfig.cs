@@ -5,8 +5,8 @@ namespace SaveLoadModule
 
         public ReferenceModes ReferenceMode { get; }
         public string ApplicationDataPath { get; }
-        
         public int BufferSize { get; }
+        System.Text.Encoding Encoding { get; }
 
     }
 }

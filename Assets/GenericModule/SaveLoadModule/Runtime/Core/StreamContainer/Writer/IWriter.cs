@@ -4,6 +4,6 @@ namespace SaveLoadModule
     public interface IWriter
     {
         void Write<T>(string key, object value);
-        void Save();
+        void Save(IReader reader);
     }
 }

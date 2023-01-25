@@ -11,6 +11,9 @@ namespace SaveLoadModule.Implement
         {
         }
 
+        public IReaderPropertyEnumerator Properties { get; }
+        public IReaderRawEnumerator Raws { get; }
+
         public T Read<T>(string key)
         {
             Assert.IsTrue(TryGoTo(key), $"[BaseReader::Read] Cant find key: {key}");

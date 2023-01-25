@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace SaveLoadModule.Implement
@@ -34,5 +35,6 @@ namespace SaveLoadModule.Implement
         }
 
         public int BufferSize => _bufferSize;
+        public Encoding Encoding => Encoding.UTF8;
     }
 }

@@ -67,6 +67,48 @@ namespace DataType.Implement
             return string.Empty;
         }
 
+        public Type GetType(string typeString)
+        {
+            switch (typeString)
+            {
+                case "bool":
+                    return typeof(bool);
+                case "byte":
+                    return typeof(byte);
+                case "sbyte":
+                    return typeof(sbyte);
+                case "char":
+                    return typeof(char);
+                case "decimal":
+                    return typeof(decimal);
+                case "double":
+                    return typeof(double);
+                case "float":
+                    return typeof(float);
+                case "int":
+                    return typeof(int);
+                case "uint":
+                    return typeof(uint);
+                case "long":
+                    return typeof(long);
+                case "ulong":
+                    return typeof(ulong);
+                case "short":
+                    return typeof(short);
+                case "ushort":
+                    return typeof(ushort);
+                case "string":
+                    return typeof(string);
+                case "Vector2":
+                    return typeof(Vector2);
+                case "Vector3":
+                    return typeof(Vector3);
+            }
+            
+            Debug.LogError($"[ReflectionHelper::GetType] TypeString of {typeString} doesnt be supported.");
+            return null;
+        }
+
         public Type[] GetElementTypes(Type type) => throw new NotImplementedException();
 
         public void GetArrayRank(Type type)

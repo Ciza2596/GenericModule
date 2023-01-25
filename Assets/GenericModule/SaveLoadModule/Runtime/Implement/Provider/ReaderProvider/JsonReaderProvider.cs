@@ -1,4 +1,5 @@
 using System.IO;
+using DataType;
 using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
@@ -8,19 +9,21 @@ namespace SaveLoadModule.Implement
         //private variable
         private readonly IStreamProvider _streamProvider;
         private readonly IDataTypeController _dataTypeController;
+        private readonly IReflectionHelper _reflectionHelper;
 
 
         //public method
-        public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController)
+        public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
         {
             _streamProvider = streamProvider;
             _dataTypeController = dataTypeController;
+            _reflectionHelper = reflectionHelper;
         }
 
         public IReader CreateReader(string fullPath, int bufferSize)
         {
             var stream = _streamProvider.CreateStream(FileModes.Read, fullPath, bufferSize);
-            Assert.IsTrue(stream != null, "");
+            Assert.IsNotNull(stream, $"[JsonReaderProvider::CreateReader] stream is null by fullPath: {fullPath}.");
 
             var reader = CreateReader(stream);
             return reader;
@@ -29,6 +32,6 @@ namespace SaveLoadModule.Implement
         
         //private method
         private IReader CreateReader(Stream stream) =>
-            new JsonReader(stream, _dataTypeController);
+            new JsonReader(stream, _dataTypeController, _reflectionHelper);
     }
 }

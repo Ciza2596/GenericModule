@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 
@@ -41,14 +39,18 @@ namespace DataType
         
         
         bool StartReadCollection();
+        void EndReadCollection();
+        
         bool StartReadCollectionItem();
         bool EndReadCollectionItem();
-        void EndReadCollection();
+        
         bool StartReadDictionary();
+        void EndReadDictionary();
+        
         bool StartReadDictionaryKey();
         void EndReadDictionaryKey();
+        
         void StartReadDictionaryValue();
         bool EndReadDictionaryValue();
-        void EndReadDictionary();
     }
 }

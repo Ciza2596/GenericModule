@@ -11,7 +11,7 @@ namespace SaveLoadModule.Implement
         private const string FALSE_NAME = "false";
 
         private const string DOUBLE_AND_FLOAT_FORMAT_NAME = "R";
-        private static readonly IFormatProvider INVARIANT_CULTURE = CultureInfo.InvariantCulture;
+        private readonly IFormatProvider INVARIANT_CULTURE = CultureInfo.InvariantCulture;
 
 
         private readonly StreamWriter _streamWriter;

@@ -24,6 +24,8 @@ namespace DataType
         Type GetGenericTypeDefinition(Type type);
         string GetTypeString(Type type);
 
+        Type GetType(string typeString);
+
         Type[] GetElementTypes(Type type);
     }
 }

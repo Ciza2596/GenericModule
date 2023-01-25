@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
 {
-    public class JsonReaderProvider: IReaderProvider
+    public class JsonReaderProvider : IReaderProvider
     {
         //private variable
         private readonly IStreamProvider _streamProvider;
@@ -13,7 +13,8 @@ namespace SaveLoadModule.Implement
 
 
         //public method
-        public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
+        public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper)
         {
             _streamProvider = streamProvider;
             _dataTypeController = dataTypeController;
@@ -25,13 +26,13 @@ namespace SaveLoadModule.Implement
             var stream = _streamProvider.CreateStream(FileModes.Read, fullPath, bufferSize);
             Assert.IsNotNull(stream, $"[JsonReaderProvider::CreateReader] stream is null by fullPath: {fullPath}.");
 
-            var reader = CreateReader(stream);
+            var reader = CreateReader(stream, bufferSize);
             return reader;
         }
-        
-        
+
+
         //private method
-        private IReader CreateReader(Stream stream) =>
-            new JsonReader(stream, _dataTypeController, _reflectionHelper);
+        private IReader CreateReader(Stream stream, int bufferSize) =>
+            new JsonReader(stream, bufferSize, _dataTypeController, _reflectionHelper);
     }
 }

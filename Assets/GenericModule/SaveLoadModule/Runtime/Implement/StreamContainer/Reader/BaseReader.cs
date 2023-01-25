@@ -8,13 +8,10 @@ namespace SaveLoadModule.Implement
     public abstract class BaseReader : IReader, DataType.IReader, IDisposable
     {
         //private variable
-        private readonly IDataTypeController _dataTypeController;
+        protected readonly IDataTypeController _dataTypeController;
         
         private IEnumerable<string> _properties;
         protected int _serializationDepth = 0;
-        
-
-        
         
         
         //public variable
@@ -22,10 +19,9 @@ namespace SaveLoadModule.Implement
         IEnumerable<string> DataType.IReader.Properties => _properties;
 
 
-        public BaseReader(IDataTypeController dataTypeController)
-        {
+        public BaseReader(IDataTypeController dataTypeController) =>
             _dataTypeController = dataTypeController;
-        }
+        
 
 
         //SaveLoadModule IReader
@@ -45,7 +41,7 @@ namespace SaveLoadModule.Implement
 
 
         //DataType IReader
-        public Type ReadType() => throw new NotImplementedException();
+        public abstract Type ReadType();
 
         public abstract int ReadInt();
 
@@ -77,15 +73,25 @@ namespace SaveLoadModule.Implement
 
         public abstract void Dispose();
 
-        public void ReadInto<T>(T item, DataType.DataType dataType)
+        public void ReadInto<T>(object obj, DataType.DataType dataType)
         {
-            throw new NotImplementedException();
+            if(dataType.IsCollection)
+                ((CollectionDataType)dataType).ReadInto(this, obj);
+            else if(dataType.IsDictionary)
+                ((DictionaryDataType)dataType).ReadInto(this, obj);
+            else
+                ReadObject<T>(obj, dataType);
         }
+        
         
 
         public abstract string ReadPropertyName();
-        
-        public T ReadProperty<T>(DataType.DataType dataType) => throw new NotImplementedException();
+
+        public T ReadProperty<T>(DataType.DataType dataType)
+        {
+            ReadPropertyName();
+            return Read<T>(dataType);
+        }
 
         public T Read<T>(DataType.DataType dataType)
         {
@@ -141,18 +147,27 @@ namespace SaveLoadModule.Implement
             return true;
         }
 
-        protected T ReadObject<T>(DataType.DataType dataType)
+        private void ReadObject<T>(object obj, DataType.DataType dataType)
+        {
+            // Check for null.
+            if(StartReadObject())
+                return;
+
+            dataType.ReadInto<T>(this, obj);
+
+            EndReadObject();
+        }
+        
+        private T ReadObject<T>(DataType.DataType dataType)
         {
             if(StartReadObject())
-                return default(T);
+                return default;
 
             var obj = dataType.Read<T>(this);
 
             EndReadObject();
             return (T)obj;
         }
-
-        protected abstract Type ReadType<T>();
 
         protected abstract byte[] ReadElement(bool skip = false);
 

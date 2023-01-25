@@ -29,7 +29,7 @@ namespace DataType
         ulong ReadUlong();
         ushort ReadUshort();
         string ReadString();
-        void ReadInto<T>(T item, DataType dataType);
+        void ReadInto<T>(object obj, DataType dataType);
         
         
         string ReadPropertyName();

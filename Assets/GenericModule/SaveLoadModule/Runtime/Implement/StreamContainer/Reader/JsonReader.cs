@@ -15,11 +15,21 @@ namespace SaveLoadModule.Implement
         private readonly StreamReader _streamReader;
         private readonly IReflectionHelper _reflectionHelper;
 
-        public JsonReader(Stream stream, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(dataTypeController)
+        private readonly int _bufferSize;
+
+        public JsonReader(Stream stream, int bufferSize, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(dataTypeController)
         {
             _streamReader = new StreamReader(stream);
             _reflectionHelper = reflectionHelper;
+            _bufferSize = bufferSize;
+        }
 
+        public override Type ReadType()
+        {
+            var dataType = _dataTypeController.GetOrCreateDataType(typeof(string));
+            var typeString = Read<string>(dataType);
+            return _reflectionHelper.GetType(typeString);
         }
 
         public override int ReadInt()
@@ -183,9 +193,11 @@ namespace SaveLoadModule.Implement
 
         public override bool StartReadDictionary() =>
             StartReadObject();
-        
-        public override void EndReadDictionary() { }
-        
+
+        public override void EndReadDictionary()
+        {
+        }
+
 
         public override bool StartReadDictionaryKey()
         {
@@ -200,9 +212,11 @@ namespace SaveLoadModule.Implement
 
         public override void EndReadDictionaryKey() =>
             ReadCharIgnoreWhiteSpace(':');
-        
 
-        public override void StartReadDictionaryValue() { }
+
+        public override void StartReadDictionaryValue()
+        {
+        }
 
         public override bool EndReadDictionaryValue()
         {
@@ -218,22 +232,87 @@ namespace SaveLoadModule.Implement
             base.StartReadObject();
             return ReadNullOrCharIgnoreWhiteSpace('{');
         }
-        
+
         protected override void EndReadObject()
         {
             ReadCharIgnoreWhiteSpace('}');
             base.EndReadObject();
         }
-        
 
-        protected override Type ReadType<T>() => throw new NotImplementedException();
+        protected override byte[] ReadElement(bool skip = false)
+        {
+            var writer = skip ? null : new StreamWriter(new MemoryStream(_bufferSize));
+            var nesting = 0;
+            var c = (char)_streamReader.Peek();
 
-        protected override byte[] ReadElement(bool skip = false) => throw new NotImplementedException();
+            // Determine if we're skipping a primitive type.
+            // First check if it's an opening object or array brace.
+            if (!IsOpeningBrace(c))
+            {
+                // If we're skipping a string, use SkipString().
+                if (c == '\"')
+                {
+                    // Skip initial quotation mark as SkipString() requires this.
+                    ReadOrSkipChar(writer, skip);
+                    ReadString(writer, skip);
+                }
+                // Else we just need to read until we reach a closing brace.
+                else
+                    // While we've not peeked a closing brace.
+                    while (!IsEndOfValue((char)_streamReader.Peek()))
+                        ReadOrSkipChar(writer, skip);
+
+                if (skip)
+                    return null;
+                writer.Flush();
+                return ((MemoryStream)writer.BaseStream).ToArray();
+            }
+
+            // Else, we're skipping a type surrounded by braces.
+            // Iterate through every character, logging nesting.
+            while (true)
+            {
+                c = ReadOrSkipChar(writer, skip);
+
+                if (c == END_OF_STREAM_CHAR) // Detect premature end of stream, which denotes missing closing brace.
+                    throw new FormatException(
+                        "Missing closing brace detected, as end of stream was reached before finding it.");
+
+                // Handle quoted strings.
+                // According to the RFC, only '\' and '"' must be escaped in strings.
+                if (IsQuotationMark(c))
+                {
+                    ReadString(writer, skip);
+                    continue;
+                }
+
+                // Handle braces and other characters.
+                switch (c)
+                {
+                    case '{': // Entered another level of nesting.
+                    case '[':
+                        nesting++;
+                        break;
+                    case '}': // Exited a level of nesting.
+                    case ']':
+                        nesting--;
+                        // If nesting < 1, we've come to the end of the object.
+                        if (nesting < 1)
+                        {
+                            if (skip)
+                                return null;
+                            writer.Flush();
+                            return ((MemoryStream)writer.BaseStream).ToArray();
+                        }
+
+                        break;
+                }
+            }
+        }
 
         protected override Type ReadKeyPrefix()
         {
             StartReadObject();
-
 
             var propertyName = ReadPropertyName();
             if (propertyName == DataType.DataType.TYPE_FIELD_NAME)
@@ -255,7 +334,9 @@ namespace SaveLoadModule.Implement
         {
             char c;
             // Skip leading whitespace and read char.
-            while (IsWhiteSpace(c = (char)_streamReader.Read())) { }
+            while (IsWhiteSpace(c = (char)_streamReader.Read()))
+            {
+            }
 
             // Skip trailing whitespace.
             if (isIgnoreTrailingWhitespace)
@@ -264,8 +345,8 @@ namespace SaveLoadModule.Implement
 
             return c;
         }
-        
-        
+
+
         private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar)
         {
             var c = ReadCharIgnoreWhiteSpace();
@@ -281,30 +362,31 @@ namespace SaveLoadModule.Implement
 
             if (c != expectedChar)
             {
-                if(c == END_OF_STREAM_CHAR)
+                if (c == END_OF_STREAM_CHAR)
                     throw new FormatException($"End of stream reached when expecting expectedChar: {expectedChar}.");
-                
+
                 throw new FormatException($"ExpectedChar {expectedChar}, but found {c}.");
             }
 
             return false;
         }
-        
-        
+
+
         private char ReadCharIgnoreWhiteSpace(char expectedChar)
         {
             char c = ReadCharIgnoreWhiteSpace();
-            if(c != expectedChar)
+            if (c != expectedChar)
             {
-                if(c == END_OF_STREAM_CHAR)
+                if (c == END_OF_STREAM_CHAR)
                     throw new FormatException($"End of stream reached when expecting expectedChar: {expectedChar}.");
-                
+
                 throw new FormatException($"ExpectedChar {expectedChar}, but found {c}.");
             }
+
             return c;
         }
-        
-        
+
+
         private bool ReadQuotationMarkOrNullIgnoreWhitespace()
         {
             var c = ReadCharIgnoreWhiteSpace(false); // Don't read trailing whitespace as this is the value.
@@ -313,21 +395,21 @@ namespace SaveLoadModule.Implement
             {
                 var chars = new char[3];
                 _streamReader.ReadBlock(chars, 0, 3);
-                if ((char)chars[0] == 'u' && (char)chars[1] == 'l' && (char)chars[2] == 'l')
+                if (chars[0] == 'u' && chars[1] == 'l' && chars[2] == 'l')
                     return true;
             }
             else if (!IsQuotationMark(c))
             {
                 if (c == END_OF_STREAM_CHAR)
                     throw new FormatException("End of stream reached when expecting quotation mark.");
-                
+
                 throw new FormatException($"Expected quotation mark, found \'{c}\'.");
             }
 
             return false;
         }
-        
-        
+
+
         private char PeekCharIgnoreWhiteSpace()
         {
             char c;
@@ -339,6 +421,10 @@ namespace SaveLoadModule.Implement
 
 
         private bool IsWhiteSpace(char c) => (c == ' ' || c == '\t' || c == '\n' || c == '\r');
+
+        private bool IsOpeningBrace(char c) =>
+            (c == '{' || c == '[');
+
 
         private bool IsEndOfValue(char c) =>
             (c == '}' || c == ' ' || c == '\t' || c == ']' || c == ',' || c == ':' || c == END_OF_STREAM_CHAR ||
@@ -361,6 +447,37 @@ namespace SaveLoadModule.Implement
                 return null;
 
             return stringBuilder.ToString();
+        }
+
+        private char ReadOrSkipChar(StreamWriter writer, bool skip)
+        {
+            var c = (char)_streamReader.Read();
+            if (!skip)
+                writer.Write(c);
+
+            return c;
+        }
+
+        private void ReadString(StreamWriter writer, bool skip = false)
+        {
+            bool isEndOfString = false;
+            // Read to end of string, or throw error if we reach end of stream.
+            while (!isEndOfString)
+            {
+                char c = ReadOrSkipChar(writer, skip);
+                switch (c)
+                {
+                    case END_OF_STREAM_CHAR:
+                        throw new FormatException("String without closing quotation mark detected.");
+                    case '\\':
+                        ReadOrSkipChar(writer, skip);
+                        break;
+                    default:
+                        if (IsQuotationMark(c))
+                            isEndOfString = true;
+                        break;
+                }
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ namespace DataType
         public bool IsPrimitive { get; protected set; } = false;
         public bool IsCollection { get; protected set; } = false;
         public bool IsDictionary { get; protected set; } = false;
+        public bool IsEnum { get; protected set; } = false;
 
         public bool IsUnsupported { get; protected set; }
         

@@ -4,9 +4,7 @@
     public class IntDataType : DataType
     {
 
-        public IntDataType() : base(typeof(int))
-        {
-        }
+        public IntDataType() : base(typeof(int)) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {

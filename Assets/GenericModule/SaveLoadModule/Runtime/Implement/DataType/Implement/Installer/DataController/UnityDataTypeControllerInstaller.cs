@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DataType.Implement
 {
-    public class UnityDataTypeInstaller : IDataTypeInstaller
+    public class UnityDataTypeControllerInstaller : IDataTypeControllerInstaller
     {
         private Dictionary<Type, DataType> _dataTypes;
 

@@ -7,16 +7,14 @@ namespace DataType
     {
         //private variable
         private readonly Type _underlyingType;
-        
-        
-        //public variable
-        public static DataType Instance { get; private set; }
 
-        
+
         //public method
         public EnumDataType(Type type) : base(type)
         {
-            Instance = this;
+            IsPrimitive = true;
+            IsEnum = true;
+            
             _underlyingType = Enum.GetUnderlyingType(type);
         }
 

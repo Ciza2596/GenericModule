@@ -14,7 +14,7 @@ namespace DataType.Implement
 
 
         //public method
-        public DataTypeController(IReflectionHelper reflectionHelper, IDataTypeInstaller[] dataTypeInstallers)
+        public DataTypeController(IReflectionHelper reflectionHelper, IDataTypeControllerInstaller[] dataTypeInstallers)
         {
             _reflectionHelper = reflectionHelper;
             foreach (var dataTypeInstaller in dataTypeInstallers)

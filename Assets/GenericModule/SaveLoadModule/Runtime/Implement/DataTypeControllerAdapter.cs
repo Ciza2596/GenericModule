@@ -5,10 +5,18 @@ namespace SaveLoadModule.Implement
 {
     public class DataTypeControllerAdapter : IDataTypeController
     {
-        private readonly DataTypeController _dataTypeController = new DataTypeController(new ReflectionHelper(), new IDataTypeInstaller[]
+        private readonly DataTypeController _dataTypeController;
+
+        public DataTypeControllerAdapter(IReflectionHelperInstaller reflectionHelperInstaller)
         {
-            new PrimitiveDataTypeInstaller()
-        });
+            _dataTypeController = new DataTypeController(new ReflectionHelper(reflectionHelperInstaller),
+                new IDataTypeControllerInstaller[]
+                {
+                    new PrimitiveDataTypeControllerInstaller(),
+                    new UnityDataTypeControllerInstaller()
+                });
+        }
+
         public DataType.DataType GetOrCreateDataType(Type key) => _dataTypeController.GetOrCreateDataType(key);
     }
 }

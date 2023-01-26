@@ -4,9 +4,8 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class ShortDataType : DataType
 	{
-		public ShortDataType() : base(typeof(short)) {
-		}
-		
+		public ShortDataType() : base(typeof(short)) => IsPrimitive = true;
+
 
 		public override void Write(object obj, IWriter writer)
 		{

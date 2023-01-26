@@ -5,9 +5,7 @@ namespace DataType
 	public class StringDataType : DataType
 	{
 
-		public StringDataType() : base(typeof(string))
-		{
-		}
+		public StringDataType() : base(typeof(string)) => IsPrimitive = true;
 
 
 		public override void Write(object obj, IWriter writer)

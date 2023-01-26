@@ -3,9 +3,7 @@
     [UnityEngine.Scripting.Preserve]
     public class BoolDataType : DataType
     {
-        public BoolDataType() : base(typeof(bool))
-        {
-        }
+        public BoolDataType() : base(typeof(bool)) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer) =>
             writer.WritePrimitive((bool)obj);

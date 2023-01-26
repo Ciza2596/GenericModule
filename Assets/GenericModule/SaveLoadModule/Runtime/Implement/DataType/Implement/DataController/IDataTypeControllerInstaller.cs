@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DataType.Implement
 {
-    public interface IDataTypeInstaller
+    public interface IDataTypeControllerInstaller
     {
         public void Install(Dictionary<Type, DataType> dataTypes, IReflectionHelper reflectionHelper);
     }

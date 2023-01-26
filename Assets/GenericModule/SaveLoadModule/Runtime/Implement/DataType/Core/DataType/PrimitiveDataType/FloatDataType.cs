@@ -4,9 +4,7 @@
     public class FloatDataType : DataType
     {
 
-        public FloatDataType() : base(typeof(float))
-        {
-        }
+        public FloatDataType() : base(typeof(float)) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {

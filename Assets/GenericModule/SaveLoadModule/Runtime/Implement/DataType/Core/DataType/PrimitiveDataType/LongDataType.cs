@@ -4,10 +4,8 @@ namespace DataType
 	[UnityEngine.Scripting.Preserve]
 	public class LongDataType : DataType
 	{
-		public LongDataType() : base(typeof(long))
-		{
-		}
-		
+		public LongDataType() : base(typeof(long)) => IsPrimitive = true;
+
 		public override void Write(object obj, IWriter writer)
 		{
 			writer.WritePrimitive((long)obj);

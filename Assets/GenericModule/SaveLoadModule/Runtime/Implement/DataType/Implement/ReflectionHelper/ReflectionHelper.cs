@@ -6,6 +6,21 @@ namespace DataType.Implement
 {
     public class ReflectionHelper : IReflectionHelper
     {
+        //private variable
+
+        private readonly Type _serializeFieldAttributeType = typeof(SerializeField);
+        private readonly Type _serializableAttributeType;
+        private readonly Type _nonSerializableAttributeType;
+
+
+        public ReflectionHelper(IReflectionHelperInstaller reflectionHelperInstaller)
+        {
+            _serializableAttributeType = reflectionHelperInstaller.SerializableAttributeType;
+            _nonSerializableAttributeType = reflectionHelperInstaller.NonSerializableAttributeType;
+        }
+
+
+
         public object CreateInstance(Type type) => throw new NotImplementedException();
 
         public object CreateInstance(Type type, params object[] args) => throw new NotImplementedException();
@@ -104,17 +119,13 @@ namespace DataType.Implement
                 case "Vector3":
                     return typeof(Vector3);
             }
-            
+
             Debug.LogError($"[ReflectionHelper::GetType] TypeString of {typeString} doesnt be supported.");
             return null;
         }
 
         public Type[] GetElementTypes(Type type) => throw new NotImplementedException();
         public Type[] GetGenericArguments(Type type) => throw new NotImplementedException();
-
-        public void GetArrayRank(Type type)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

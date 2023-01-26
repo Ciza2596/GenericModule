@@ -3,9 +3,7 @@
     [UnityEngine.Scripting.Preserve]
     public class DoubleDataType : DataType
     {
-        public DoubleDataType() : base(typeof(double))
-        {
-        }
+        public DoubleDataType() : base(typeof(double)) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {

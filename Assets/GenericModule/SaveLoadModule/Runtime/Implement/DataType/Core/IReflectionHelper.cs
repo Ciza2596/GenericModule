@@ -13,7 +13,7 @@ namespace DataType
         Array CreateArrayInstance(Type type, int[] dimensions);
 
         
-        Type MakeGenericType(Type type, Type genericParam);
+        Type MakeGenericType(Type type, Type genericArgs);
 
         MethodInfo[] GetMethods(Type type, string methodName);
         bool CheckIsEnum(Type type);

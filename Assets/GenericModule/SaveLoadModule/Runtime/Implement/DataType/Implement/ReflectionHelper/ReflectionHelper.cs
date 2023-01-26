@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -21,27 +22,27 @@ namespace DataType.Implement
 
 
 
-        public object CreateInstance(Type type) => throw new NotImplementedException();
+        public System.Object CreateInstance(Type type) => Activator.CreateInstance(type);
 
-        public object CreateInstance(Type type, params object[] args) => throw new NotImplementedException();
+        public System.Object CreateInstance(Type type, params object[] args) => Activator.CreateInstance(type, args);
 
-        public Array CreateArrayInstance(Type type, int length) => throw new NotImplementedException();
+        public Array CreateArrayInstance(Type type, int length) => Array.CreateInstance(type, new int[] { length });
 
-        public Array CreateArrayInstance(Type type, int[] dimensions) => throw new NotImplementedException();
+        public Array CreateArrayInstance(Type type, int[] dimensions) => Array.CreateInstance(type, dimensions);
 
-        public Type MakeGenericType(Type type, Type genericParam) => throw new NotImplementedException();
+        public Type MakeGenericType(Type type, Type genericArgs) => type.MakeGenericType(genericArgs);
 
-        public MethodInfo[] GetMethods(Type type, string methodName) => throw new NotImplementedException();
-        public bool CheckIsEnum(Type type) => throw new NotImplementedException();
+        public MethodInfo[] GetMethods(Type type, string methodName) => type.GetMethods().Where(t => t.Name == methodName).ToArray();
+        public bool CheckIsEnum(Type type) => type.IsEnum;
 
-        public bool CheckIsImplementsInterface(Type type, Type interfaceType) => throw new NotImplementedException();
+        public bool CheckIsImplementsInterface(Type type, Type interfaceType) => (type.GetInterface(interfaceType.Name) != null);
 
-        public bool CheckIsArray(Type type) => throw new NotImplementedException();
+        public bool CheckIsArray(Type type) => type.IsArray;
 
-        public bool CheckIsGenericType(Type type) => throw new NotImplementedException();
-        int IReflectionHelper.GetArrayRank(Type type) => throw new NotImplementedException();
+        public bool CheckIsGenericType(Type type) => type.IsGenericType;
+        public int GetArrayRank(Type type) => type.GetArrayRank();
 
-        public Type GetGenericTypeDefinition(Type type) => throw new NotImplementedException();
+        public Type GetGenericTypeDefinition(Type type) => type.GetGenericTypeDefinition();
 
         public string GetTypeString(Type type)
         {
@@ -124,8 +125,22 @@ namespace DataType.Implement
             return null;
         }
 
-        public Type[] GetElementTypes(Type type) => throw new NotImplementedException();
-        public Type[] GetGenericArguments(Type type) => throw new NotImplementedException();
+        public Type[] GetElementTypes(Type type)
+        {
+            if (CheckIsGenericType(type))
+                return GetGenericArguments(type);
+            
+            if (type.IsArray)
+                return new Type[] { GetElementType(type) };
+            
+            return null;
+        }
+
+        public Type[] GetGenericArguments(Type type) => type.GetGenericArguments();
         
+        
+        //private method
+        private Type GetElementType(Type type) => type.GetElementType();
+
     }
 }

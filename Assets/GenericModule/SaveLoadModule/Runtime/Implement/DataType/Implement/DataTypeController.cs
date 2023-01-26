@@ -87,7 +87,7 @@ namespace DataType.Implement
                     var valueElementType = elementTypes[1];
                     var valueElementDataType = GetOrCreateDataType(valueElementType);
                     
-                    dataType = new DictionaryDataType(type, elementDataType, valueElementDataType);
+                    dataType = new DictionaryDataType(type, elementDataType, valueElementDataType, _reflectionHelper);
                 }
                 else if (genericType == typeof(Queue<>))
                     dataType = new QueueDataType(type, elementDataType, reflectionHelper);
@@ -96,7 +96,7 @@ namespace DataType.Implement
                     dataType = new StackDataType(type, elementDataType, reflectionHelper);
                 
                 else if (genericType == typeof(HashSet<>))
-                    dataType = new HashSetDataType(type, elementDataType);
+                    dataType = new HashSetDataType(type, elementDataType, _reflectionHelper);
                 
                 else
                     Debug.LogError(

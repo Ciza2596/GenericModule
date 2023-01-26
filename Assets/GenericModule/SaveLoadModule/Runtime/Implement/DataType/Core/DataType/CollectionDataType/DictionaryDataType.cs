@@ -7,13 +7,15 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class DictionaryDataType : DataType
     {
-        public DataType KeyDataType { get; }
-        public DataType ValueDataType { get; }
+        private readonly DataType _keyDataType;
+        private readonly DataType _valueDataType;
+        private readonly IReflectionHelper _reflectionHelper;
 
-        public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType) : base(type)
+        public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType, IReflectionHelper reflectionHelper) : base(type)
         {
-            KeyDataType = keyDataType;
-            ValueDataType = valueDataType;
+            _keyDataType = keyDataType;
+            _valueDataType = valueDataType;
+            _reflectionHelper = reflectionHelper;
 
             // If either the key or value type is unsupported, make this type NULL.
             if (keyDataType == null || valueDataType == null)
@@ -30,10 +32,10 @@ namespace DataType
             foreach (DictionaryEntry kvp in dict)
             {
                 writer.StartWriteDictionaryKey(i);
-                writer.Write(kvp.Key, KeyDataType);
+                writer.Write(kvp.Key, _keyDataType);
                 writer.EndWriteDictionaryKey(i);
                 writer.StartWriteDictionaryValue(i);
-                writer.Write(kvp.Value, ValueDataType);
+                writer.Write(kvp.Value, _valueDataType);
                 writer.EndWriteDictionaryValue(i);
                 i++;
             }
@@ -56,18 +58,18 @@ namespace DataType
             if (reader.StartReadDictionary())
                 return null;
 
-            var dict = new Dictionary<object, object>(); //(IDictionary)ES3Reflection.CreateInstance(Type);
+            var dict = (IDictionary)_reflectionHelper.CreateInstance(Type);
 
             // Iterate through each character until we reach the end of the array.
             while (true)
             {
                 if (!reader.StartReadDictionaryKey())
                     return dict;
-                var key = reader.Read<object>(KeyDataType);
+                var key = reader.Read<object>(_keyDataType);
                 reader.EndReadDictionaryKey();
 
                 reader.StartReadDictionaryValue();
-                var value = reader.Read<object>(ValueDataType);
+                var value = reader.Read<object>(_valueDataType);
 
                 dict.Add(key, value);
 
@@ -93,7 +95,7 @@ namespace DataType
             {
                 if (!reader.StartReadDictionaryKey())
                     return;
-                var key = reader.Read<object>(KeyDataType);
+                var key = reader.Read<object>(_keyDataType);
 
                 if (!dict.Contains(key))
                     throw new KeyNotFoundException("The key \"" + key +
@@ -103,7 +105,7 @@ namespace DataType
 
                 reader.StartReadDictionaryValue();
 
-                reader.ReadInto<object>(value, ValueDataType);
+                reader.ReadInto<object>(value, _valueDataType);
 
                 if (reader.EndReadDictionaryValue())
                     break;

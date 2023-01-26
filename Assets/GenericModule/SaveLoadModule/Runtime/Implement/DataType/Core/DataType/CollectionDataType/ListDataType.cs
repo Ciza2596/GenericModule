@@ -21,8 +21,6 @@ namespace DataType
                 return;
             }
 
-            ;
-
             var list = (IList)obj;
 
             if (ElementDataType == null)

@@ -19,7 +19,7 @@ namespace DataType
             if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-            int i = 0;
+            var i = 0;
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
@@ -29,27 +29,9 @@ namespace DataType
             }
         }
 
-        public override object Read<T>(IReader reader)
-        {
-            return Read(reader);
-            /*if(reader.StartReadCollection())
-                return null;
-
-            var queue = new Queue<T>();
-
-            // Iterate through each character until we reach the end of the array.
-            while(true)
-            {
-                if(!reader.StartReadCollectionItem())
-                    break;
-                queue.Enqueue(reader.Read<T>(elementType));
-                if(reader.EndReadCollectionItem())
-                    break;
-            }
-
-            reader.EndReadCollection();
-            return queue;*/
-        }
+        public override object Read<T>(IReader reader) =>
+            Read(reader);
+        
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
@@ -57,8 +39,7 @@ namespace DataType
                 throw new NullReferenceException(
                     "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-            int itemsLoaded = 0;
-
+            var itemsLoaded = 0;
             var queue = (Queue<T>)obj;
 
             // Iterate through each item in the collection and try to load it.
@@ -118,8 +99,7 @@ namespace DataType
                 throw new NullReferenceException(
                     "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-            int itemsLoaded = 0;
-
+            var itemsLoaded = 0;
             var collection = (ICollection)obj;
 
             // Iterate through each item in the collection and try to load it.

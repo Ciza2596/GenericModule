@@ -7,7 +7,8 @@ namespace DataType
     {
         private readonly IReflectionHelper _reflectionHelper;
 
-        public Array2DDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type, elementDataType) =>
+        public Array2DDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type,
+            elementDataType) =>
             _reflectionHelper = reflectionHelper;
 
 
@@ -17,7 +18,7 @@ namespace DataType
 
             if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
-            
+
             for (int i = 0; i < array.GetLength(0); i++)
             {
                 writer.StartWriteCollectionItem(i);
@@ -34,39 +35,7 @@ namespace DataType
             }
         }
 
-        public override object Read<T>(IReader reader)
-        {
-            return Read(reader);
-            /*if(reader.StartReadCollection())
-                return null;
-
-            // Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
-            var items = new List<T>();
-            int length1 = 0;
-
-            // Iterate through each character until we reach the end of the array.
-            while(true)
-            {
-                if(!reader.StartReadCollectionItem())
-                    break;
-
-                ReadICollection<T>(reader, items, elementType);
-                length1++;
-
-                if(reader.EndReadCollectionItem())
-                    break;
-            }
-
-            int length2 = items.Count / length1;
-
-            var array = new T[length1,length2];
-
-            for(int i=0; i<length1; i++)
-                for(int j=0; j<length2; j++)
-                    array[i,j] = items[ (i * length2) + j ];
-
-            return array;*/
-        }
+        public override object Read<T>(IReader reader) => Read(reader);
 
         public override object Read(IReader reader)
         {
@@ -75,7 +44,7 @@ namespace DataType
 
             // Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
             var items = new List<object>();
-            int length1 = 0;
+            var length1 = 0;
 
             // Iterate through each character until we reach the end of the array.
             while (true)
@@ -90,13 +59,13 @@ namespace DataType
                     break;
             }
 
-            int length2 = items.Count / length1;
+            var length2 = items.Count / length1;
 
             var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type, new int[] { length1, length2 });
 
-            for (int i = 0; i < length1; i++)
-            for (int j = 0; j < length2; j++)
-                array.SetValue(items[(i * length2) + j], i, j);
+            for (var i = 0; i < length1; i++) 
+                for (var j = 0; j < length2; j++)
+                    array.SetValue(items[(i * length2) + j], i, j);
 
             return array;
         }
@@ -114,18 +83,18 @@ namespace DataType
                 throw new NullReferenceException(
                     "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-            bool iHasBeenRead = false;
+            var iHasBeenRead = false;
 
-            for (int i = 0; i < array.GetLength(0); i++)
+            for (var i = 0; i < array.GetLength(0); i++)
             {
-                bool jHasBeenRead = false;
+               var jHasBeenRead = false;
 
                 if (!reader.StartReadCollectionItem())
                     throw new IndexOutOfRangeException(
                         "The collection we are loading is smaller than the collection provided as a parameter.");
 
                 reader.StartReadCollection();
-                for (int j = 0; j < array.GetLength(1); j++)
+                for (var j = 0; j < array.GetLength(1); j++)
                 {
                     if (!reader.StartReadCollectionItem())
                         throw new IndexOutOfRangeException(

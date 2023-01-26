@@ -110,6 +110,7 @@ namespace DataType.Implement
         }
 
         public Type[] GetElementTypes(Type type) => throw new NotImplementedException();
+        public Type[] GetGenericArguments(Type type) => throw new NotImplementedException();
 
         public void GetArrayRank(Type type)
         {

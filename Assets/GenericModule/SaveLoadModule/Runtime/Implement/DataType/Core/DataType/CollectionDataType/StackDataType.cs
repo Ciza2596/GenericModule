@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace DataType
 {
-    [UnityEngine.Scripting.Preserve]
     public class StackDataType : CollectionDataType
     {
         private readonly IReflectionHelper _reflectionHelper;
 
-        public StackDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type, elementDataType) =>
+        public StackDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type,
+            elementDataType) =>
             _reflectionHelper = reflectionHelper;
 
         public override void Write(object obj, IWriter writer)
@@ -20,9 +20,7 @@ namespace DataType
             if (ElementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
-            writer.StartWriteCollection();
-
-            int i = 0;
+            var i = 0;
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
@@ -30,31 +28,11 @@ namespace DataType
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
-
-            writer.EndWriteCollection();
         }
 
-        public override object Read<T>(IReader reader)
-        {
-            return Read(reader);
-            /*if(reader.StartReadCollection())
-                return null;
+        public override object Read<T>(IReader reader) =>
+            Read(reader);
 
-            var stack = new Stack<T>();
-
-            // Iterate through each character until we reach the end of the array.
-            while(true)
-            {
-                if(!reader.StartReadCollectionItem())
-                    break;
-                stack.Push(reader.Read<T>(elementType));
-                if(reader.EndReadCollectionItem())
-                    break;
-            }
-
-            reader.EndReadCollection();
-            return stack;*/
-        }
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
@@ -62,7 +40,7 @@ namespace DataType
                 throw new NullReferenceException(
                     "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-            int itemsLoaded = 0;
+            var itemsLoaded = 0;
 
             var stack = (Stack<T>)obj;
 
@@ -125,7 +103,7 @@ namespace DataType
                 throw new NullReferenceException(
                     "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-            int itemsLoaded = 0;
+            var itemsLoaded = 0;
 
             var collection = (ICollection)obj;
 

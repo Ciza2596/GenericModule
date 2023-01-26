@@ -27,5 +27,6 @@ namespace DataType
         Type GetType(string typeString);
 
         Type[] GetElementTypes(Type type);
+        Type[] GetGenericArguments(Type type);
     }
 }

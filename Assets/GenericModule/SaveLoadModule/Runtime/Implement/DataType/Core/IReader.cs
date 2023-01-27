@@ -8,7 +8,7 @@ namespace DataType
         void Skip();
         IEnumerable<string> Properties { get; }
 
-        string OverridePropertiesName { get; }
+        string OverridePropertiesName { get; set; }
 
 
         Type ReadType();

@@ -6,6 +6,10 @@ namespace DataType
 {
     public interface IWriter
     {
+        
+        bool IsSafeReflection { get; }
+
+        
         void WriteType(Type type);
 
 

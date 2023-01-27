@@ -1,4 +1,5 @@
 using System;
+using DataType;
 using DataType.Implement;
 
 namespace SaveLoadModule.Implement
@@ -9,7 +10,7 @@ namespace SaveLoadModule.Implement
 
         public DataTypeControllerAdapter(IReflectionHelperInstaller reflectionHelperInstaller)
         {
-            _dataTypeController = new DataTypeController(new ReflectionHelper(reflectionHelperInstaller),
+            _dataTypeController = new DataTypeController(new ReflectionHelper(reflectionHelperInstaller, this),
                 new IDataTypeControllerInstaller[]
                 {
                     new PrimitiveDataTypeControllerInstaller(),

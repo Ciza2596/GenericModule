@@ -16,19 +16,6 @@ namespace SaveLoadModule.Implement
 
 
         //private method
-        // private string GetExistPath(string path, FileModes fileMode)
-        // {
-        //     var directoryPath = _io.GetDirectoryPath(path);
-        //
-        //     if (fileMode != FileModes.Read && directoryPath != _io.PersistentDataPath)
-        //         _io.CreateDirectory(directoryPath);
-        //
-        //     if (fileMode == FileModes.Write)
-        //         return path + _io.TemporaryFileSuffix;
-        //
-        //     return path;
-        // }
-
         private FileMode GetIoFileMode(FileModes fileMode)
         {
             if (fileMode == FileModes.Read)

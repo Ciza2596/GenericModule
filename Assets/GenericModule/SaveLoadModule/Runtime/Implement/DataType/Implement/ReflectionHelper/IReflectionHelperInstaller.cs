@@ -5,7 +5,7 @@ namespace DataType.Implement
 {
     public interface IReflectionHelperInstaller
     {
-        Type SerializableAttributeType { get; }
-        Type NonSerializableAttributeType { get; }
+        Type CustomSerializableAttributeType { get; }
+        Type CustomNonSerializableAttributeType { get; }
     }
 }

@@ -20,6 +20,9 @@ namespace DataType
         bool CheckIsImplementsInterface(Type type, Type interfaceType);
         bool CheckIsArray(Type type);
         bool CheckIsGenericType(Type type);
+        bool CheckIsAssignableFrom(Type a, Type b);
+
+        
         int GetArrayRank(Type type);
         Type GetGenericTypeDefinition(Type type);
         string GetTypeString(Type type);
@@ -28,5 +31,7 @@ namespace DataType
 
         Type[] GetElementTypes(Type type);
         Type[] GetGenericArguments(Type type);
+        Type GetBaseType(Type type);
+        IProperty[] GetSerializableProperties(Type type, bool isSafeReflection, string[] memberNames);
     }
 }

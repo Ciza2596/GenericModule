@@ -15,7 +15,7 @@ namespace SaveLoadModule.Implement
         
         
         //public variable
-        public string OverridePropertiesName { get; }
+        public string OverridePropertiesName { get; set; }
         IEnumerable<string> DataType.IReader.Properties => _properties;
 
 

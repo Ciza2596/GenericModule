@@ -7,7 +7,9 @@ namespace DataType
     {
         private readonly IntDataType _intDataType;
 
-        public Vector2IntDataType(IntDataType intDataType) : base(typeof(Vector2Int)) => _intDataType = intDataType;
+        public Vector2IntDataType(IntDataType intDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(typeof(Vector2Int), dataTypeController, reflectionHelper) =>
+            _intDataType = intDataType;
 
 
         public override void Write(object obj, IWriter writer)
@@ -24,8 +26,10 @@ namespace DataType
 
     public class Vector2IntArrayDataType : ArrayDataType
     {
-        public Vector2IntArrayDataType(Vector2IntDataType vector2IntElementDataType, IReflectionHelper reflectionHelper) :
-            base(typeof(Vector2Int[]), vector2IntElementDataType, reflectionHelper)
+        public Vector2IntArrayDataType(Vector2IntDataType vector2IntElementDataType,
+            IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) :
+            base(typeof(Vector2Int[]), vector2IntElementDataType, dataTypeController, reflectionHelper)
         {
         }
     }

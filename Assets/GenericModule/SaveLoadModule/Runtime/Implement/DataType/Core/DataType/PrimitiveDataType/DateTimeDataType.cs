@@ -7,7 +7,8 @@ namespace DataType
     {
         private readonly LongDataType _longDataType;
 
-        public DateTimeDataType(LongDataType longDataType) : base(typeof(DateTime)) =>
+        public DateTimeDataType(LongDataType longDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(typeof(DateTime), dataTypeController, reflectionHelper) =>
             _longDataType = longDataType;
 
 
@@ -25,10 +26,11 @@ namespace DataType
 
     public class DateTimeArrayDataType : ArrayDataType
     {
-        public DateTimeArrayDataType(DateTimeDataType dateTimeElementDataType, IReflectionHelper reflectionHelper) :
+        public DateTimeArrayDataType(DateTimeDataType dateTimeElementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) :
             base(
                 typeof(DateTime[]),
-                dateTimeElementDataType, reflectionHelper)
+                dateTimeElementDataType, dataTypeController, reflectionHelper)
         {
         }
     }

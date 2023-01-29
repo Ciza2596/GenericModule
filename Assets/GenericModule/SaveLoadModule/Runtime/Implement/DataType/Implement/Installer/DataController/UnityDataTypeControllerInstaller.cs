@@ -9,7 +9,8 @@ namespace DataType.Implement
     {
         private Dictionary<Type, DataType> _dataTypes;
 
-        public void Install(Dictionary<Type, DataType> dataTypes, IReflectionHelper reflectionHelper)
+        public void Install(Dictionary<Type, DataType> dataTypes, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper)
         {
             _dataTypes = dataTypes;
 
@@ -17,19 +18,21 @@ namespace DataType.Implement
             var intDataType = _dataTypes.Values.First(dataType => dataType is IntDataType) as IntDataType;
 
 
-            var vector2DataType = new Vector2DataType(floatDataType);
-            AddDataTypeToDataTypes(vector2DataType, new Vector2ArrayDataType(vector2DataType, reflectionHelper));
+            var vector2DataType = new Vector2DataType(floatDataType, dataTypeController, reflectionHelper);
+            AddDataTypeToDataTypes(vector2DataType,
+                new Vector2ArrayDataType(vector2DataType, dataTypeController, reflectionHelper));
 
-            var vector2IntDataType = new Vector2IntDataType(intDataType);
+            var vector2IntDataType = new Vector2IntDataType(intDataType, dataTypeController, reflectionHelper);
             AddDataTypeToDataTypes(vector2IntDataType,
-                new Vector2IntArrayDataType(vector2IntDataType, reflectionHelper));
+                new Vector2IntArrayDataType(vector2IntDataType, dataTypeController, reflectionHelper));
 
-            var vector3DataType = new Vector3DataType(floatDataType);
-            AddDataTypeToDataTypes(vector3DataType, new Vector3ArrayDataType(vector3DataType, reflectionHelper));
+            var vector3DataType = new Vector3DataType(floatDataType, dataTypeController, reflectionHelper);
+            AddDataTypeToDataTypes(vector3DataType,
+                new Vector3ArrayDataType(vector3DataType, dataTypeController, reflectionHelper));
 
-            var vector3IntDataType = new Vector3IntDataType(intDataType);
+            var vector3IntDataType = new Vector3IntDataType(intDataType, dataTypeController, reflectionHelper);
             AddDataTypeToDataTypes(vector3IntDataType,
-                new Vector3IntArrayDataType(vector3IntDataType, reflectionHelper));
+                new Vector3IntArrayDataType(vector3IntDataType, dataTypeController, reflectionHelper));
 
 
             _dataTypes = null;

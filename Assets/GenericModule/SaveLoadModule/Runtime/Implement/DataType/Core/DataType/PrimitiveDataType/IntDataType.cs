@@ -4,7 +4,7 @@
     public class IntDataType : DataType
     {
 
-        public IntDataType() : base(typeof(int)) => IsPrimitive = true;
+        public IntDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(int), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {
@@ -18,8 +18,8 @@
     public class IntArrayDataType : ArrayDataType
     {
 
-        public IntArrayDataType(IntDataType intElementDataType, IReflectionHelper reflectionHelper) : base(typeof(int[]),
-            intElementDataType, reflectionHelper)
+        public IntArrayDataType(IntDataType intElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(int[]),
+            intElementDataType, dataTypeController, reflectionHelper)
         {
         }
     }

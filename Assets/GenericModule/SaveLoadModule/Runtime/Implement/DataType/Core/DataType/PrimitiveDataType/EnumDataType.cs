@@ -10,7 +10,7 @@ namespace DataType
 
 
         //public method
-        public EnumDataType(Type type) : base(type)
+        public EnumDataType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
         {
             IsPrimitive = true;
             IsEnum = true;

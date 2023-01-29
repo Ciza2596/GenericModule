@@ -3,7 +3,7 @@
     [UnityEngine.Scripting.Preserve]
     public class BoolDataType : DataType
     {
-        public BoolDataType() : base(typeof(bool)) => IsPrimitive = true;
+        public BoolDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(bool), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer) =>
             writer.WritePrimitive((bool)obj);
@@ -15,9 +15,8 @@
 
     public class BoolArrayDataType : ArrayDataType
     {
-        public BoolArrayDataType(BoolDataType boolElementDataType, IReflectionHelper reflectionHelper) : base(typeof(bool[]),
-            boolElementDataType,
-            reflectionHelper)
+        public BoolArrayDataType(BoolDataType boolElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(bool[]),
+            boolElementDataType, dataTypeController, reflectionHelper)
         {
         }
     }

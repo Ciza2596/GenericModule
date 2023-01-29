@@ -10,8 +10,8 @@ namespace DataType
     {
         private readonly IReflectionHelper _reflectionHelper;
 
-        public HashSetDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type,
-            elementDataType) =>
+        public HashSetDataType(Type type, DataType elementDataType,IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type,elementDataType,
+            dataTypeController, reflectionHelper) =>
                 _reflectionHelper = reflectionHelper;
 
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DataType;
 using UnityEngine.Assertions;
+using Object = UnityEngine.Object;
 
 namespace SaveLoadModule.Implement
 {
@@ -47,6 +48,8 @@ namespace SaveLoadModule.Implement
 
 
         //DataType IWriter callback
+        public bool IsSafeReflection => true;
+
         public void WriteType(Type type)
         {
             var typeString = _reflectionHelper.GetTypeString(type);
@@ -86,6 +89,16 @@ namespace SaveLoadModule.Implement
         public abstract void WritePrimitive(ulong value);
 
         public abstract void WritePrimitive(ushort value);
+        
+        public void WritePropertyByRef(string name, Object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteRef(Object value)
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual void StartWriteCollection() =>
             _serializationDepth++;

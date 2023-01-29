@@ -1,15 +1,11 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using ES3Internal;
 
 namespace DataType
 {
     [UnityEngine.Scripting.Preserve]
     internal class ReflectedValueDataType : DataType
     {
-        public ReflectedValueDataType(Type type, IReflectionHelper reflectionHelper) : base(type, reflectionHelper)
+        public ReflectedValueDataType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
         {
             GetProperties(true);
         }

@@ -1,4 +1,4 @@
-using SaveLoadModule;
+using DataType;
 using SaveLoadModule.Implement;
 using Zenject;
 

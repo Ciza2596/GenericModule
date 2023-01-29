@@ -162,12 +162,7 @@ namespace DataType
             return obj;
         }
 
-        protected void GetProperties(bool isSafeReflection)
-        {
-            GetProperties(isSafeReflection, null);
-        }
-
-        protected void GetProperties(bool isSafeReflection, string[] memberNames) =>
+        protected void GetProperties(bool isSafeReflection, string[] memberNames = null) =>
             _properties = _reflectionHelper.GetSerializableProperties(Type, isSafeReflection, memberNames);
     }
 }

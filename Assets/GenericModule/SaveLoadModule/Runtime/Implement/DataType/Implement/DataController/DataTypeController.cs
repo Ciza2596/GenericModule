@@ -10,15 +10,19 @@ namespace DataType.Implement
     {
         //private variable
         private readonly Dictionary<Type, DataType> _dataTypes = new Dictionary<Type, DataType>();
+        private readonly IDataTypeController _dataTypeController;
         private readonly IReflectionHelper _reflectionHelper;
 
 
         //public method
-        public DataTypeController(IReflectionHelper reflectionHelper, IDataTypeControllerInstaller[] dataTypeInstallers)
+        public DataTypeController(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper,
+            IDataTypeControllerInstaller[] dataTypeInstallers)
         {
+            _dataTypeController = dataTypeController;
             _reflectionHelper = reflectionHelper;
+
             foreach (var dataTypeInstaller in dataTypeInstallers)
-                dataTypeInstaller.Install(_dataTypes, _reflectionHelper);
+                dataTypeInstaller.Install(_dataTypes, _dataTypeController, _reflectionHelper);
         }
 
 
@@ -27,16 +31,17 @@ namespace DataType.Implement
             if (_dataTypes.TryGetValue(key, out var dataType))
                 return dataType;
 
-            return CreateDataType(key, _reflectionHelper);
+            return CreateDataType(key, _dataTypeController, _reflectionHelper);
         }
 
 
         //private method
 
-        private DataType CreateDataType(Type type, IReflectionHelper reflectionHelper)
+        private DataType CreateDataType(Type type, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper)
         {
             if (reflectionHelper.CheckIsEnum(type))
-                return new EnumDataType(type);
+                return new EnumDataType(type, dataTypeController, reflectionHelper);
 
             DataType dataType = null;
 
@@ -51,15 +56,15 @@ namespace DataType.Implement
                 switch (rank)
                 {
                     case 1:
-                        dataType = new ArrayDataType(type, elementDataType, reflectionHelper);
+                        dataType = new ArrayDataType(type, elementDataType, dataTypeController, reflectionHelper);
                         break;
 
                     case 2:
-                        dataType = new Array2DDataType(type, elementDataType, reflectionHelper);
+                        dataType = new Array2DDataType(type, elementDataType, dataTypeController, reflectionHelper);
                         break;
 
                     case 3:
-                        dataType = new Array3DDataType(type, elementDataType, reflectionHelper);
+                        dataType = new Array3DDataType(type, elementDataType, dataTypeController, reflectionHelper);
                         break;
 
                     default:
@@ -74,30 +79,30 @@ namespace DataType.Implement
                 var genericType = reflectionHelper.GetGenericTypeDefinition(type);
 
                 var elementTypes = reflectionHelper.GetElementTypes(type);
-                
+
                 var elementType = elementTypes[0];
                 var elementDataType = GetOrCreateDataType(elementType);
 
                 if (typeof(List<>).IsAssignableFrom(genericType))
-                    dataType = new ListDataType(type, elementDataType, reflectionHelper);
-                
+                    dataType = new ListDataType(type, elementDataType, dataTypeController, reflectionHelper);
+
                 else if (typeof(IDictionary).IsAssignableFrom(genericType))
                 {
-                                    
                     var valueElementType = elementTypes[1];
                     var valueElementDataType = GetOrCreateDataType(valueElementType);
-                    
-                    dataType = new DictionaryDataType(type, elementDataType, valueElementDataType, _reflectionHelper);
+
+                    dataType = new DictionaryDataType(type, elementDataType, valueElementDataType, dataTypeController,
+                        reflectionHelper);
                 }
                 else if (genericType == typeof(Queue<>))
-                    dataType = new QueueDataType(type, elementDataType, reflectionHelper);
-                
+                    dataType = new QueueDataType(type, elementDataType, dataTypeController, reflectionHelper);
+
                 else if (genericType == typeof(Stack<>))
-                    dataType = new StackDataType(type, elementDataType, reflectionHelper);
-                
+                    dataType = new StackDataType(type, elementDataType, dataTypeController, reflectionHelper);
+
                 else if (genericType == typeof(HashSet<>))
-                    dataType = new HashSetDataType(type, elementDataType, _reflectionHelper);
-                
+                    dataType = new HashSetDataType(type, elementDataType, dataTypeController, reflectionHelper);
+
                 else
                     Debug.LogError(
                         $"[DataTypeController::CreateDataType] Type: {type} is IEnumerable and unsupported for save.");

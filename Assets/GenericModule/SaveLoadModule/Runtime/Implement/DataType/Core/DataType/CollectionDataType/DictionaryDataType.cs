@@ -9,13 +9,11 @@ namespace DataType
     {
         private readonly DataType _keyDataType;
         private readonly DataType _valueDataType;
-        private readonly IReflectionHelper _reflectionHelper;
 
-        public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType, IReflectionHelper reflectionHelper) : base(type)
+        public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
         {
             _keyDataType = keyDataType;
             _valueDataType = valueDataType;
-            _reflectionHelper = reflectionHelper;
 
             // If either the key or value type is unsupported, make this type NULL.
             if (keyDataType == null || valueDataType == null)

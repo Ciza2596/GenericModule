@@ -9,6 +9,7 @@ namespace DataType
         IEnumerable<string> Properties { get; }
 
         string OverridePropertiesName { get; set; }
+        bool IsSafeReflection { get; }
 
 
         Type ReadType();

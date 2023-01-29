@@ -3,7 +3,7 @@
     [UnityEngine.Scripting.Preserve]
     public class DoubleDataType : DataType
     {
-        public DoubleDataType() : base(typeof(double)) => IsPrimitive = true;
+        public DoubleDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(double), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {
@@ -16,8 +16,8 @@
 
     public class DoubleArrayDataType : ArrayDataType
     {
-        public DoubleArrayDataType(DoubleDataType doubleElementDataType, IReflectionHelper reflectionHelper) : base(
-            typeof(double[]), doubleElementDataType, reflectionHelper)
+        public DoubleArrayDataType(DoubleDataType doubleElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
+            typeof(double[]), doubleElementDataType, dataTypeController, reflectionHelper)
         {
         }
     }

@@ -41,6 +41,7 @@ namespace SaveLoadModule.Implement
 
 
         //DataType IReader
+        public bool IsSafeReflection { get; }
         public abstract Type ReadType();
 
         public abstract int ReadInt();
@@ -70,7 +71,7 @@ namespace SaveLoadModule.Implement
         public abstract ushort ReadUshort();
 
         public abstract string ReadString();
-
+        
         public abstract void Dispose();
 
         public void ReadInto<T>(object obj, DataType.DataType dataType)
@@ -126,7 +127,7 @@ namespace SaveLoadModule.Implement
 
         public abstract void StartReadDictionaryValue();
         public abstract bool EndReadDictionaryValue();
-        
+
 
         public void Skip() => ReadElement(true);
 

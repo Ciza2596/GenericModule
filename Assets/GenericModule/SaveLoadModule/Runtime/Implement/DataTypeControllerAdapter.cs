@@ -10,7 +10,7 @@ namespace SaveLoadModule.Implement
 
         public DataTypeControllerAdapter(IReflectionHelperInstaller reflectionHelperInstaller)
         {
-            _dataTypeController = new DataTypeController(new ReflectionHelper(reflectionHelperInstaller, this),
+            _dataTypeController = new DataTypeController(this, new ReflectionHelper(reflectionHelperInstaller, this),
                 new IDataTypeControllerInstaller[]
                 {
                     new PrimitiveDataTypeControllerInstaller(),

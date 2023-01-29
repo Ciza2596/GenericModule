@@ -7,7 +7,9 @@ namespace DataType
     {
         private readonly FloatDataType _floatDataType;
 
-        public Vector2DataType(FloatDataType floatDataType) : base(typeof(Vector2)) => _floatDataType = floatDataType;
+        public Vector2DataType(FloatDataType floatDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(typeof(Vector2), dataTypeController, reflectionHelper) =>
+            _floatDataType = floatDataType;
 
         public override void Write(object obj, IWriter writer)
         {
@@ -23,8 +25,9 @@ namespace DataType
 
     public class Vector2ArrayDataType : ArrayDataType
     {
-        public Vector2ArrayDataType(Vector2DataType vector2DataType, IReflectionHelper reflectionHelper) : base(
-            typeof(Vector2[]), vector2DataType, reflectionHelper)
+        public Vector2ArrayDataType(Vector2DataType vector2DataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(
+            typeof(Vector2[]), vector2DataType, dataTypeController, reflectionHelper)
         {
         }
     }

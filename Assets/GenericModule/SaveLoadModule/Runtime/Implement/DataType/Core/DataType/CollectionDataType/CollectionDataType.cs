@@ -7,20 +7,20 @@ namespace DataType
 	public abstract class CollectionDataType : DataType
 	{
 		public DataType ElementDataType { get; }
-
-		public abstract object Read(IReader reader);
-        public abstract void ReadInto(IReader reader, object obj);
-        public abstract override void Write(object obj, IWriter writer);
-
-        protected CollectionDataType(Type type, DataType elementDataType) : base(type)
-        {
-	        ElementDataType = elementDataType;
+		
+		protected CollectionDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
+		{
+			ElementDataType = elementDataType;
 			IsCollection = true;
  
 			// If the element type is null (i.e. unsupported), make this ES3Type null.
 			if(ElementDataType == null)
 				IsUnsupported = true;
 		}
+		
+		public abstract object Read(IReader reader);
+        public abstract void ReadInto(IReader reader, object obj);
+        public abstract override void Write(object obj, IWriter writer);
 
         protected virtual bool ReadICollection<T>(IReader reader, ICollection<T> collection, DataType elementType)
 		{

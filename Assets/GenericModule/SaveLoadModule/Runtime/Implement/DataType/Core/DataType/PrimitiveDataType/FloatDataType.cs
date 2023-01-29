@@ -3,8 +3,8 @@
     [UnityEngine.Scripting.Preserve]
     public class FloatDataType : DataType
     {
-
-        public FloatDataType() : base(typeof(float)) => IsPrimitive = true;
+        public FloatDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
+            typeof(float), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
         public override void Write(object obj, IWriter writer)
         {
@@ -17,11 +17,10 @@
 
     public class FloatArrayDataType : ArrayDataType
     {
-
-        public FloatArrayDataType(FloatDataType floatElementDataType, IReflectionHelper reflectionHelper) : base(typeof(float[]), floatElementDataType,
+        public FloatArrayDataType(FloatDataType floatElementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(typeof(float[]), floatElementDataType, dataTypeController,
             reflectionHelper)
         {
         }
-
     }
 }

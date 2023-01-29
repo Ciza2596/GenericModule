@@ -6,10 +6,11 @@ namespace DataType
     public class Array3DDataType : CollectionDataType
     {
         private readonly IReflectionHelper _reflectionHelper;
-        
-        public Array3DDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type, elementDataType) =>
+
+        public Array3DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) =>
             _reflectionHelper = reflectionHelper;
-        
+
 
         public override void Write(object obj, IWriter writer)
         {
@@ -91,7 +92,8 @@ namespace DataType
             length2 = length2 / length1;
             var length3 = items.Count / length2 / length1;
 
-            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type, new int[] { length1, length2, length3 });
+            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type,
+                new int[] { length1, length2, length3 });
 
             for (int i = 0; i < length1; i++)
             for (int j = 0; j < length2; j++)

@@ -1,6 +1,7 @@
 
 
 using System;
+using Object = UnityEngine.Object;
 
 namespace DataType
 {
@@ -9,7 +10,6 @@ namespace DataType
         
         bool IsSafeReflection { get; }
 
-        
         void WriteType(Type type);
 
 
@@ -43,5 +43,7 @@ namespace DataType
         void StartWriteDictionaryValue(int index);
         void EndWriteDictionaryValue(int index);
         void WriteNull();
+        void WritePropertyByRef(string name, Object value);
+        void WriteRef(Object value);
     }
 }

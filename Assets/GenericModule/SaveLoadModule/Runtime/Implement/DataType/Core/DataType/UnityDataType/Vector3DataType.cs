@@ -7,7 +7,9 @@ namespace DataType
     {
         private readonly FloatDataType _floatDataType;
 
-        public Vector3DataType(FloatDataType floatDataType) : base(typeof(Vector3)) =>
+        public Vector3DataType(FloatDataType floatDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(typeof(Vector3),
+            dataTypeController, reflectionHelper) =>
             _floatDataType = floatDataType;
 
 
@@ -27,9 +29,9 @@ namespace DataType
 
     public class Vector3ArrayDataType : ArrayDataType
     {
-
-        public Vector3ArrayDataType(Vector3DataType vector3DataType, IReflectionHelper reflectionHelper) : base(
-            typeof(Vector3[]), vector3DataType, reflectionHelper)
+        public Vector3ArrayDataType(Vector3DataType vector3DataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(
+            typeof(Vector3[]), vector3DataType, dataTypeController, reflectionHelper)
         {
         }
     }

@@ -1,35 +1,30 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using ES3Internal;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	internal class ReflectedObjectDataType : ES3ObjectType
-	{
-		public ES3ReflectedObjectType(Type type) : base(type)
-		{
-			isReflectedType = true;
-			GetProperties(true);
-		}
+    [UnityEngine.Scripting.Preserve]
+    public class ReflectedObjectDataType : ObjectType
+    {
+        public ReflectedObjectDataType(Type type, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper) =>
+            GetProperties(true);
 
-		protected override void WriteObject(object obj, ES3Writer writer)
-		{
-			WriteProperties(obj, writer);
+
+        protected override void WriteObject(object obj, IWriter writer)
+        {
+            WriteProperties(obj, writer);
         }
 
-		protected override object ReadObject<T>(ES3Reader reader)
-		{
-			var obj = ES3Reflection.CreateInstance(this.type);
-			ReadProperties(reader, obj);
-			return obj;
-		}
+        protected override object ReadObject<T>(IReader reader)
+        {
+            var obj = _reflectionHelper.CreateInstance(this.Type);
+            ReadProperties(reader, obj);
+            return obj;
+        }
 
-		protected override void ReadObject<T>(ES3Reader reader, object obj)
-		{
-			ReadProperties(reader, obj);
-		}
-	}
+        protected override void ReadObject<T>(IReader reader, object obj)
+        {
+            ReadProperties(reader, obj);
+        }
+    }
 }

@@ -5,18 +5,19 @@ namespace DataType
 {
     public class Array2DDataType : CollectionDataType
     {
-        private readonly IReflectionHelper _reflectionHelper;
 
-        public Array2DDataType(Type type, DataType elementDataType, IReflectionHelper reflectionHelper) : base(type,
-            elementDataType) =>
-            _reflectionHelper = reflectionHelper;
+        public Array2DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(type,
+            elementDataType, dataTypeController, reflectionHelper)
+        {
+        }
 
 
         public override void Write(object obj, IWriter writer)
         {
             var array = (Array)obj;
 
-            if (ElementDataType == null)
+            if (ElementDataType is null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             for (int i = 0; i < array.GetLength(0); i++)

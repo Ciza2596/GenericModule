@@ -69,7 +69,7 @@ namespace DataType
         protected void WriteProperties(object obj, IWriter writer)
         {
             if (_properties == null)
-                GetProperties(writer.IsSafeReflection);
+                GetProperties();
 
             foreach (var property in _properties)
             {
@@ -162,7 +162,7 @@ namespace DataType
             return obj;
         }
 
-        protected void GetProperties(bool isSafeReflection, string[] memberNames = null) =>
-            _properties = _reflectionHelper.GetSerializableProperties(Type, isSafeReflection, memberNames);
+        protected void GetProperties(string[] propertyNames = null) =>
+            _properties = _reflectionHelper.AddSerializableProperties(Type, propertyNames);
     }
 }

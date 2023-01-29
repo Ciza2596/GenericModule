@@ -32,6 +32,6 @@ namespace DataType
         Type[] GetElementTypes(Type type);
         Type[] GetGenericArguments(Type type);
         Type GetBaseType(Type type);
-        IProperty[] GetSerializableProperties(Type type, bool isSafeReflection, string[] memberNames);
+        IProperty[] AddSerializableProperties(Type type, string[] propertyNames);
     }
 }

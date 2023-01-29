@@ -7,11 +7,7 @@ namespace DataType
 {
     public interface IWriter
     {
-        
-        bool IsSafeReflection { get; }
-
         void WriteType(Type type);
-
 
         //write property
         void WriteProperty(string name, object value, DataType dataType);

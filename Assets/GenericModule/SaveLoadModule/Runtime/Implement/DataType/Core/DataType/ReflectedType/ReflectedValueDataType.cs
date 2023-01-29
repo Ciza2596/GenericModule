@@ -7,7 +7,7 @@ namespace DataType
     {
         public ReflectedValueDataType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
         {
-            GetProperties(true);
+            GetProperties();
         }
 
         public override void Write(object obj, IWriter writer)

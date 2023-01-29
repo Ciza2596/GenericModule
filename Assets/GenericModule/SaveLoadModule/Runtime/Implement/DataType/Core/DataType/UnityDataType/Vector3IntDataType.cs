@@ -5,7 +5,7 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class Vector3IntDataType : DataType
     {
-        private IntDataType _intDataType;
+        private readonly IntDataType _intDataType;
 
         public Vector3IntDataType(IntDataType intDataType, IDataTypeController dataTypeController,
             IReflectionHelper reflectionHelper) : base(typeof(Vector3Int), dataTypeController, reflectionHelper) =>

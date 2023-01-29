@@ -151,14 +151,14 @@ namespace DataType.Implement
         public Type[] GetGenericArguments(Type type) => type.GetGenericArguments();
         public Type GetBaseType(Type type) => type.BaseType;
 
-        public IProperty[] GetSerializableProperties(Type type, bool isSafeReflection, string[] propertyNames)
+        public IProperty[] AddSerializableProperties(Type type, string[] propertyNames)
         {
             if (type is null)
                 return Array.Empty<IProperty>();
 
             var properties = new List<IProperty>();
-            GetSerializableFields(type, properties, isSafeReflection, propertyNames);
-            GetSerializableProperties(type, properties, isSafeReflection, propertyNames);
+            AddSerializableFields(type, properties, propertyNames);
+            AddSerializableProperties(type, properties, propertyNames);
             return properties.ToArray();
         }
 
@@ -206,17 +206,10 @@ namespace DataType.Implement
 
         private Type GetElementType(Type type) => type.GetElementType();
 
-        private List<IProperty> GetSerializableFields(Type type, List<IProperty> serializableFields = null,
-            bool isSafeReflection = true, string[] fieldNames = null,
-            BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
-                                    BindingFlags.Static | BindingFlags.DeclaredOnly)
+        private void AddSerializableFields(Type type, List<IProperty> serializableFields, string[] fieldNames = null,
+            bool isSafeReflection = true, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                                                  BindingFlags.Static | BindingFlags.DeclaredOnly)
         {
-            if (type is null)
-                return new List<IProperty>();
-
-            if (serializableFields is null)
-                serializableFields = new List<IProperty>();
-
             var fieldInfos = type.GetFields(bindings);
             foreach (var fieldInfo in fieldInfos)
             {
@@ -228,7 +221,7 @@ namespace DataType.Implement
                         continue;
 
                 var field = new Field(fieldInfo);
-                
+
                 if (CheckIsDefined(fieldInfo, _customSerializableAttributeType))
                 {
                     serializableFields.Add(field);
@@ -249,7 +242,7 @@ namespace DataType.Implement
                 if (fieldInfo.IsLiteral || fieldInfo.IsInitOnly)
                     continue;
 
-                
+
                 // Don't store fields whose type is the same as the class the field is housed in unless it's stored by reference (to prevent cyclic references)
                 var fieldType = fieldInfo.FieldType;
                 if (fieldType == type && !CheckIsAssignableFrom(typeof(UnityEngine.Object), fieldType))
@@ -262,27 +255,19 @@ namespace DataType.Implement
 
                 if (!CheckIsSerializable(fieldInfo.FieldType))
                     continue;
-                
+
                 serializableFields.Add(field);
             }
-
-
-            return serializableFields;
         }
 
-        private List<IProperty> GetSerializableProperties(Type type, List<IProperty> serializableProperties = null,
-            bool isSafeReflection = true, string[] propertyNames = null,
-            BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
-                                    BindingFlags.Static | BindingFlags.DeclaredOnly)
+        private void AddSerializableProperties(Type type, List<IProperty> serializableProperties, string[] propertyNames = null,
+            bool isSafeReflection = true, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                                                 BindingFlags.Static | BindingFlags.DeclaredOnly)
         {
-            
             // Only get private properties if we're not getting properties safely.
             if (!isSafeReflection)
-                bindings = bindings | BindingFlags.NonPublic;
+                bindings |= BindingFlags.NonPublic;
 
-            if (serializableProperties == null)
-                serializableProperties = new List<IProperty>();
-            
             var propertyInfos = type.GetProperties(bindings);
             foreach (var propertyInfo in propertyInfos)
             {
@@ -306,7 +291,8 @@ namespace DataType.Implement
                 if (isSafeReflection)
                 {
                     // If safe serialization is enabled, only get properties which are explicitly marked as serializable.
-                    if (!CheckIsDefined(propertyInfo, _serializeFieldAttributeType) && !CheckIsDefined(propertyInfo, _customSerializableAttributeType))
+                    if (!CheckIsDefined(propertyInfo, _serializeFieldAttributeType) &&
+                        !CheckIsDefined(propertyInfo, _customSerializableAttributeType))
                         continue;
                 }
 
@@ -329,17 +315,16 @@ namespace DataType.Implement
                     continue;
 
                 // If property is marked as obsolete or non-serialized, don't serialize it.
-                if (CheckIsDefined(propertyInfo, _obsoleteAttributeType) || CheckIsDefined(propertyInfo, _nonSerializedAttributeType))
+                if (CheckIsDefined(propertyInfo, _obsoleteAttributeType) ||
+                    CheckIsDefined(propertyInfo, _nonSerializedAttributeType))
                     continue;
-                
+
                 serializableProperties.Add(property);
             }
 
             var baseType = GetBaseType(type);
             if (baseType != null && baseType != typeof(System.Object))
-                GetSerializableProperties(baseType, serializableProperties, isSafeReflection, propertyNames);
-
-            return serializableProperties;
+                AddSerializableProperties(baseType, serializableProperties, propertyNames, isSafeReflection);
         }
     }
 }

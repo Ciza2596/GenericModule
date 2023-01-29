@@ -37,7 +37,7 @@ namespace DataType
                 writer.WriteRef(unityObj);
 
             if (_properties is null)
-                GetProperties(writer.IsSafeReflection);
+                GetProperties();
 
             foreach (var property in _properties)
             {
@@ -61,7 +61,7 @@ namespace DataType
         public override object Read<T>(IReader reader)
         {
             if (_properties is null)
-                GetProperties(reader.IsSafeReflection);
+                GetProperties();
 
             object obj;
             var propertyName = reader.ReadPropertyName();
@@ -88,7 +88,7 @@ namespace DataType
         public override void ReadInto<T>(IReader reader, object obj)
         {
             if (_properties is null)
-                GetProperties(reader.IsSafeReflection);
+                GetProperties();
 
             string propertyName = reader.ReadPropertyName();
 

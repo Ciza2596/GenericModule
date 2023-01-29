@@ -8,9 +8,9 @@ namespace SaveLoadModule.Implement
     {
         private readonly DataTypeController _dataTypeController;
 
-        public DataTypeControllerAdapter(IReflectionHelperInstaller reflectionHelperInstaller)
+        public DataTypeControllerAdapter(IReflectionHelper reflectionHelper)
         {
-            _dataTypeController = new DataTypeController(this, new ReflectionHelper(reflectionHelperInstaller, this),
+            _dataTypeController = new DataTypeController(this, reflectionHelper,
                 new IDataTypeControllerInstaller[]
                 {
                     new PrimitiveDataTypeControllerInstaller(),

@@ -7,11 +7,12 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class QueueDataType : CollectionDataType
     {
-        private readonly IReflectionHelper _reflectionHelper;
 
-        public QueueDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) =>
-            _reflectionHelper = reflectionHelper;
-
+        public QueueDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper)
+        {
+        }
+        
         public override void Write(object obj, IWriter writer)
         {
             var list = (ICollection)obj;

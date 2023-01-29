@@ -8,12 +8,11 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class HashSetDataType : CollectionDataType
     {
-        private readonly IReflectionHelper _reflectionHelper;
-
-        public HashSetDataType(Type type, DataType elementDataType,IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type,elementDataType,
-            dataTypeController, reflectionHelper) =>
-                _reflectionHelper = reflectionHelper;
-
+        public HashSetDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper) : base(type, elementDataType,
+            dataTypeController, reflectionHelper)
+        {
+        }
 
         public override void Write(object obj, IWriter writer)
         {

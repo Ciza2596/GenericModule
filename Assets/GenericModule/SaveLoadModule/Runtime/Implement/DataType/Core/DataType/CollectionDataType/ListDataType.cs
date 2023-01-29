@@ -7,12 +7,11 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public class ListDataType : CollectionDataType
     {
-        private readonly IReflectionHelper _reflectionHelper;
 
         public ListDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
-            IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) =>
-            _reflectionHelper = reflectionHelper;
-
+            IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper)
+        {
+        }
 
         public override void Write(object obj, IWriter writer)
         {

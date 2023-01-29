@@ -10,7 +10,7 @@ public class SaveLoadModuleMonoInstaller : MonoInstaller
     
     public override void InstallBindings()
     {
-        Container.Bind<SaveLoadModule.SaveLoadModule>().AsSingle();
+        Container.Bind<SaveLoadModule.SaveLoadModule>().AsSingle().NonLazy();
         Container.Bind<ISaveLoadModuleConfig>().FromInstance(_saveLoadModuleConfig);
     }
 }

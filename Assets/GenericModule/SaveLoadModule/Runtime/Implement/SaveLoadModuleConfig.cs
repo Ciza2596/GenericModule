@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SaveLoadModule.Implement
 {
-    [CreateAssetMenu(fileName = "SaveLoadModule", menuName = "SaveLoadModule/SaveLoadModuleConfig")]
+    [CreateAssetMenu(fileName = "SaveLoadModuleConfig", menuName = "SaveLoadModule/SaveLoadModuleConfig")]
     public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig
     {
         private enum Directories
@@ -17,9 +17,9 @@ namespace SaveLoadModule.Implement
         
         [Space]
         [SerializeField] private Directories _directory;
-        [SerializeField] private string _path = "";
+        [SerializeField] private string _path = "SaveLoadModule.slv";
 
-        [Space] [SerializeField] private int _bufferSize = 2028;
+        [Space] [SerializeField] private int _bufferSize = 2048;
 
         public ReferenceModes ReferenceMode => _referenceMode;
 

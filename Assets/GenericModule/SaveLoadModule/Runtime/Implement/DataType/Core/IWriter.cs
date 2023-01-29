@@ -1,7 +1,6 @@
 
 
 using System;
-using Object = UnityEngine.Object;
 
 namespace DataType
 {

@@ -20,6 +20,7 @@ namespace DataType.Implement
         {
             _dataTypeController = dataTypeController;
             _reflectionHelper = reflectionHelper;
+            _reflectionHelper.Initialize(_dataTypeController);
 
             foreach (var dataTypeInstaller in dataTypeInstallers)
                 dataTypeInstaller.Install(_dataTypes, _dataTypeController, _reflectionHelper);

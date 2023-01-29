@@ -16,18 +16,16 @@ namespace DataType.Implement
         private readonly Type _customSerializableAttributeType;
         private readonly Type _customNonSerializableAttributeType;
 
-        private readonly IDataTypeController _dataTypeController;
+        private IDataTypeController _dataTypeController;
 
 
-        public ReflectionHelper(IReflectionHelperInstaller reflectionHelperInstaller,
-            IDataTypeController dataTypeController)
+        public ReflectionHelper(IReflectionHelperInstaller reflectionHelperInstaller)
         {
             _customSerializableAttributeType = reflectionHelperInstaller.CustomSerializableAttributeType;
             _customNonSerializableAttributeType = reflectionHelperInstaller.CustomNonSerializableAttributeType;
-
-            _dataTypeController = dataTypeController;
         }
 
+        public void Initialize(IDataTypeController dataTypeController) => _dataTypeController = dataTypeController;
 
         public System.Object CreateInstance(Type type) => Activator.CreateInstance(type);
 

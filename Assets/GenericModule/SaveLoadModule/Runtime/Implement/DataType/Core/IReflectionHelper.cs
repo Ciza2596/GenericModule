@@ -5,6 +5,8 @@ namespace DataType
 {
     public interface IReflectionHelper
     {
+        void Initialize(IDataTypeController dataTypeController);
+        
         Object CreateInstance(Type type);
         Object CreateInstance(Type type, params object[] args);
         

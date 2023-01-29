@@ -39,7 +39,5 @@ namespace DataType
         void StartWriteDictionaryValue(int index);
         void EndWriteDictionaryValue(int index);
         void WriteNull();
-        void WritePropertyByRef(string name, Object value);
-        void WriteRef(Object value);
     }
 }

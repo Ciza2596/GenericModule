@@ -1,5 +1,4 @@
 ﻿using System;
-using Object = UnityEngine.Object;
 
 namespace DataType
 {
@@ -20,9 +19,6 @@ namespace DataType
                 return;
             }
 
-            var unityObj = obj as Object;
-            var isUnityEngineObject = (unityObj != null);
-
             // If this is a derived type, write the type as a property and use it's specific ES3Type.
             var objType = obj.GetType();
             if (objType != Type)
@@ -33,9 +29,6 @@ namespace DataType
                 return;
             }
 
-            if (isUnityEngineObject)
-                writer.WriteRef(unityObj);
-
             if (_properties is null)
                 GetProperties();
 
@@ -45,16 +38,8 @@ namespace DataType
                 var type = property.Type;
                 var value = property.GetValue(obj);
 
-                if (_reflectionHelper.CheckIsAssignableFrom(typeof(Object), type))
-                {
-                    var objValue = (Object)value;
-                    writer.WritePropertyByRef(name, objValue);
-                }
-                else
-                {
-                    var dataType = _dataTypeController.GetOrCreateDataType(type);
-                    writer.WriteProperty(name, value, dataType);
-                }
+                var dataType = _dataTypeController.GetOrCreateDataType(type);
+                writer.WriteProperty(name, value, dataType);
             }
         }
 
@@ -63,7 +48,6 @@ namespace DataType
             if (_properties is null)
                 GetProperties();
 
-            object obj;
             var propertyName = reader.ReadPropertyName();
 
             // If we're loading a derived type, use it's specific ES3Type.
@@ -76,7 +60,8 @@ namespace DataType
             }
 
             reader.OverridePropertiesName = propertyName;
-            obj = _reflectionHelper.CreateInstance(Type);
+            
+            var obj = _reflectionHelper.CreateInstance(Type);
 
             // Iterate through each property in the file and try to load it using the appropriate
             // ES3Property in the members array.

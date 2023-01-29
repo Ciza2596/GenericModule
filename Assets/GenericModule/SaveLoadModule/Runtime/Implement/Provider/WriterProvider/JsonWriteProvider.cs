@@ -20,20 +20,20 @@ namespace SaveLoadModule.Implement
         }
 
 
-        public IWriter CreateWriter(ReferenceModes referenceMode, string fullPath, int bufferSize,  bool isWriteHeaderAndFooter,
+        public IWriter CreateWriter(string fullPath, int bufferSize,  bool isWriteHeaderAndFooter,
             System.Text.Encoding encoding)
         {
             var stream = _streamProvider.CreateStream(FileModes.Write, fullPath, bufferSize);
             Assert.IsNotNull(stream, "[JsonWriteProvider::CreateWriter] Create stream is fail.");
 
-            var writer = CreateWrite(referenceMode, stream, isWriteHeaderAndFooter, encoding);
+            var writer = CreateWrite(stream, isWriteHeaderAndFooter, encoding);
             return writer;
         }
 
 
         //private method
-        private IWriter CreateWrite(ReferenceModes referenceMode, Stream stream,  bool isWriteHeaderAndFooter,
+        private IWriter CreateWrite(Stream stream,  bool isWriteHeaderAndFooter,
             System.Text.Encoding encoding) =>
-            new JsonWriter(referenceMode, stream, isWriteHeaderAndFooter, encoding, _dataTypeController, _reflectionHelper);
+            new JsonWriter(stream, isWriteHeaderAndFooter, encoding, _dataTypeController, _reflectionHelper);
     }
 }

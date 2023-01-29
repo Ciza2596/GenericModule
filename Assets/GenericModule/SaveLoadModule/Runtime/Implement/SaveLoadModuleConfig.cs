@@ -13,15 +13,11 @@ namespace SaveLoadModule.Implement
             DataPath
         }
 
-        [SerializeField] private ReferenceModes _referenceMode;
-        
         [Space]
         [SerializeField] private Directories _directory;
         [SerializeField] private string _path = "SaveLoadModuleFile.slv";
 
         [Space] [SerializeField] private int _bufferSize = 2048;
-
-        public ReferenceModes ReferenceMode => _referenceMode;
 
         public string ApplicationDataPath
         {

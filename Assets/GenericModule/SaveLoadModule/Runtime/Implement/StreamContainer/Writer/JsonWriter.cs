@@ -21,10 +21,9 @@ namespace SaveLoadModule.Implement
 
         private bool _isFirstProperty = true;
 
-        public JsonWriter(ReferenceModes referenceMode, Stream stream, bool isWriteHeaderAndFooter,
+        public JsonWriter(Stream stream, bool isWriteHeaderAndFooter,
             System.Text.Encoding encoding, IDataTypeController dataTypeController,
-            IReflectionHelper reflectionHelper) : base(
-            referenceMode, dataTypeController, reflectionHelper)
+            IReflectionHelper reflectionHelper) : base(dataTypeController, reflectionHelper)
         {
             _streamWriter = new StreamWriter(stream);
             _isWriteHeaderAndFooter = isWriteHeaderAndFooter;

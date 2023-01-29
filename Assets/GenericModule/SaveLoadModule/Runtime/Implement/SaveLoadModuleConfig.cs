@@ -17,7 +17,7 @@ namespace SaveLoadModule.Implement
         
         [Space]
         [SerializeField] private Directories _directory;
-        [SerializeField] private string _path = "SaveLoadModule.slv";
+        [SerializeField] private string _path = "SaveLoadModuleFile.slv";
 
         [Space] [SerializeField] private int _bufferSize = 2048;
 

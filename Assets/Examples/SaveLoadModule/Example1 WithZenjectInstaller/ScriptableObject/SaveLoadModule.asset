@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _referenceMode: 0
   _directory: 0
-  _path: SaveLoadModule.slv
+  _path: SaveLoadModuleFile.slv
   _bufferSize: 2048

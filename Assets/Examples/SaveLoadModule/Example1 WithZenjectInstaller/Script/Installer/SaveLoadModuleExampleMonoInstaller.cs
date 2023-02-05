@@ -16,7 +16,7 @@ namespace SaveLoadModule.Example1
             Container.Bind<IReflectionHelper>().To<ReflectionHelper>().AsSingle();
 
             Container.Bind<ComponentCollectionData>().FromInstance(_componentCollectionData);
-            Container.Bind<SaveLoadModuleExampleController>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SaveLoadModuleExampleController>().AsSingle();
         }
     }
 }

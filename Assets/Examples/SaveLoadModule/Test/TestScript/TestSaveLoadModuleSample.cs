@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace SaveLoadModule.Example1
+namespace SaveLoadModule.Example2
 {
     public class TestSaveLoadModuleSample : MonoBehaviour
     {

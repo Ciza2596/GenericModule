@@ -224,6 +224,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1248253855}
+  - component: {fileID: 1248253860}
   - component: {fileID: 1248253854}
   - component: {fileID: 1248253853}
   - component: {fileID: 1248253859}
@@ -231,7 +232,6 @@ GameObject:
   - component: {fileID: 1248253857}
   - component: {fileID: 1248253856}
   - component: {fileID: 1248253852}
-  - component: {fileID: 1248253860}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -377,3 +377,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edcfc8a4fca04693ae583fb815838ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentCollectionData:
+    _saveLoadKeyInputField: {fileID: 0}
+    _saveButton: {fileID: 0}
+    _loadButton: {fileID: 0}
+    _setHpValueInputField: {fileID: 0}
+    _setHpButton: {fileID: 0}
+    _setMpValueInputField: {fileID: 0}
+    _setMpButton: {fileID: 0}
+    _hpInfoText: {fileID: 0}
+    _mpInfoText: {fileID: 0}

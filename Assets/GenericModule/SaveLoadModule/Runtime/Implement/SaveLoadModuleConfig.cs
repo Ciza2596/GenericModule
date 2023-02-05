@@ -1,4 +1,3 @@
-using System.IO;
 using System.Text;
 using UnityEngine;
 
@@ -13,9 +12,8 @@ namespace SaveLoadModule.Implement
             DataPath
         }
 
-        [Space]
-        [SerializeField] private Directories _directory;
-        [SerializeField] private string _path = "SaveLoadModuleFile.slmf";
+        [Space] [SerializeField] private Directories _directory;
+        [SerializeField] private string _defaultFilePath = "SaveLoadModuleFile.slmf";
 
         [Space] [SerializeField] private int _bufferSize = 2048;
 
@@ -24,11 +22,13 @@ namespace SaveLoadModule.Implement
             get
             {
                 if (_directory == Directories.PersistentDataPath)
-                    return Path.Combine(Application.persistentDataPath, _path);
+                    return Application.persistentDataPath;
 
-                return Path.Combine(Application.dataPath, _path);
+                return Application.dataPath;
             }
         }
+
+        public string DefaultFilePath => _defaultFilePath;
 
         public int BufferSize => _bufferSize;
         public Encoding Encoding => Encoding.UTF8;

@@ -38,13 +38,13 @@ namespace SaveLoadModule.Example1
         private void OnSaveButtonClick()
         {
             var saveLoadKey = _componentCollectionData.SaveLoadKey;
-            _saveLoadModule.Save(saveLoadKey, _playerData, "");
+            _saveLoadModule.Save(saveLoadKey, _playerData);
         }
 
         private void OnLoadButtonClick()
         {
             var saveLoadKey = _componentCollectionData.SaveLoadKey;
-            var playerData = _saveLoadModule.Load<PlayerData>(saveLoadKey, "");
+            var playerData = _saveLoadModule.Load<PlayerData>(saveLoadKey);
 
             if (playerData is null)
             {

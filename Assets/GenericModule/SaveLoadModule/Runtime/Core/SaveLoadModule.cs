@@ -11,7 +11,7 @@ namespace SaveLoadModule
         private readonly IReaderProvider _readerProvider;
         
 
-        //public method
+        //public constructor
         public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig,IIo io, IWriterProvider writerProvider, IReaderProvider readerProvider)
         {
             _saveLoadModuleConfig = saveLoadModuleConfig;
@@ -22,9 +22,10 @@ namespace SaveLoadModule
         }
 
 
-        public void Save<T>(string key, T data, string path)
+        //public method
+        public void Save<T>(string key, T data, string filePath = null)
         {
-            var fullPath = GetFullPath(path);
+            var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var encoding = _saveLoadModuleConfig.Encoding;
             var writer = _writerProvider.CreateWriter(fullPath, bufferSize, true, encoding);
@@ -35,9 +36,9 @@ namespace SaveLoadModule
             writer.Save(reader);
         }
 
-        public T Load<T>(string key, string path)
+        public T Load<T>(string key, string filePath = null)
         {
-            var fullPath = GetFullPath(path);
+            var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var reader = _readerProvider.CreateReader(fullPath, bufferSize);
             
@@ -45,12 +46,12 @@ namespace SaveLoadModule
         }
         
         //private method
-        private string GetFullPath(string path)
+        private string GetFullPath(string filePath)
         {
+            var path = string.IsNullOrWhiteSpace(filePath) ? _saveLoadModuleConfig.DefaultFilePath : filePath;
             var applicationDataPath = _saveLoadModuleConfig.ApplicationDataPath;
             var fullPath = _io.CombinePath(applicationDataPath, path);
             return fullPath;
         }
-
     }
 }

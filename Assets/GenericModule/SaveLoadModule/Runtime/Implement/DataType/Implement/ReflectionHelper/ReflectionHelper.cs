@@ -203,8 +203,8 @@ namespace DataType.Implement
         private Type GetElementType(Type type) => type.GetElementType();
 
         private void AddSerializableFields(Type type, List<IProperty> serializableFields, string[] fieldNames = null,
-            bool isSafeReflection = true, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
-                                                                  BindingFlags.Static | BindingFlags.DeclaredOnly)
+            BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                    BindingFlags.Static | BindingFlags.DeclaredOnly)
         {
             var fieldInfos = type.GetFields(bindings);
             foreach (var fieldInfo in fieldInfos)
@@ -227,12 +227,11 @@ namespace DataType.Implement
                 if (CheckIsDefined(fieldInfo, _customNonSerializableAttributeType))
                     continue;
 
-                if (isSafeReflection)
-                {
-                    // If the field is private, only serialize it if it's explicitly marked as serializable.
-                    if (!fieldInfo.IsPublic && !CheckIsDefined(fieldInfo, _serializeFieldAttributeType))
-                        continue;
-                }
+
+                // If the field is private, only serialize it if it's explicitly marked as serializable.
+                if (!fieldInfo.IsPublic && !CheckIsDefined(fieldInfo, _serializeFieldAttributeType))
+                    continue;
+
 
                 // Exclude const or readonly fields.
                 if (fieldInfo.IsLiteral || fieldInfo.IsInitOnly)
@@ -256,14 +255,11 @@ namespace DataType.Implement
             }
         }
 
-        private void AddSerializableProperties(Type type, List<IProperty> serializableProperties, string[] propertyNames = null,
-            bool isSafeReflection = true, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
-                                                                 BindingFlags.Static | BindingFlags.DeclaredOnly)
+        private void AddSerializableProperties(Type type, List<IProperty> serializableProperties,
+            string[] propertyNames = null, BindingFlags bindings =
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                BindingFlags.Static | BindingFlags.DeclaredOnly)
         {
-            // Only get private properties if we're not getting properties safely.
-            if (!isSafeReflection)
-                bindings |= BindingFlags.NonPublic;
-
             var propertyInfos = type.GetProperties(bindings);
             foreach (var propertyInfo in propertyInfos)
             {
@@ -284,13 +280,10 @@ namespace DataType.Implement
                     if (!propertyNames.Contains(propertyName))
                         continue;
 
-                if (isSafeReflection)
-                {
-                    // If safe serialization is enabled, only get properties which are explicitly marked as serializable.
-                    if (!CheckIsDefined(propertyInfo, _serializeFieldAttributeType) &&
-                        !CheckIsDefined(propertyInfo, _customSerializableAttributeType))
-                        continue;
-                }
+                // If safe serialization is enabled, only get properties which are explicitly marked as serializable.
+                if (!CheckIsDefined(propertyInfo, _serializeFieldAttributeType) &&
+                    !CheckIsDefined(propertyInfo, _customSerializableAttributeType))
+                    continue;
 
                 var propertyType = propertyInfo.PropertyType;
 
@@ -320,7 +313,7 @@ namespace DataType.Implement
 
             var baseType = GetBaseType(type);
             if (baseType != null && baseType != typeof(System.Object))
-                AddSerializableProperties(baseType, serializableProperties, propertyNames, isSafeReflection);
+                AddSerializableProperties(baseType, serializableProperties, propertyNames);
         }
 
         private string GetAssemblyTypeName(Type type)

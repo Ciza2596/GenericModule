@@ -263,6 +263,9 @@ namespace DataType.Implement
             var propertyInfos = type.GetProperties(bindings);
             foreach (var propertyInfo in propertyInfos)
             {
+                
+                if(!propertyInfo.CanWrite)
+                    continue;
                 var property = new Property(propertyInfo);
                 if (CheckIsDefined(propertyInfo, _customSerializableAttributeType))
                 {
@@ -291,7 +294,7 @@ namespace DataType.Implement
                 if (propertyType == type && !CheckIsAssignableFrom(typeof(UnityEngine.Object), propertyType))
                     continue;
 
-                if (!propertyInfo.CanRead || !propertyInfo.CanWrite)
+                if (!propertyInfo.CanRead)
                     continue;
 
                 // Only support properties with indexing if they're an array.

@@ -21,10 +21,10 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioMod
 ```
 Coming soon.
 ```
-###Support type:
-####1.Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
-####2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack, stack
-####3.unity: vector2, vector2Int, vector3, vector3Int
+### Support type:
+#### 1.Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
+#### 2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack, stack
+#### 3.unity: vector2, vector2Int, vector3, vector3Int
 
 
 ## GameObjectPoolModule

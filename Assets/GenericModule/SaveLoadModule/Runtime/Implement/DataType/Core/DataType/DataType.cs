@@ -88,15 +88,16 @@ namespace DataType
         {
             // Iterate through each property in the file and try to load it using the appropriate
             // ES3Member in the members array.
-            foreach (string propertyName in reader.Properties)
+            
+            foreach (string propertyName in reader.PropertyNames)
             {
                 // Find the property.
                 IProperty property = null;
 
-                foreach (var _property in _properties)
+                foreach (var dataTypeProperty in _properties)
                 {
-                    if (_property.Name == propertyName)
-                        property = _property;
+                    if (dataTypeProperty.Name == propertyName)
+                        property = dataTypeProperty;
                 }
 
                 // If this is a class which derives directly from a Collection, we need to load it's dictionary first.

@@ -41,8 +41,9 @@ namespace SaveLoadModule
             var reader = _readerProvider.CreateReader(fullPath, bufferSize);
 
             data = reader.Read<T>(key);
+            reader.Dispose();
 
-            return true;
+            return data != null;
         }
 
         //private method

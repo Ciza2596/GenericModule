@@ -5,29 +5,27 @@ using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
 {
-    public abstract class BaseReader : IReader, DataType.IReader, IDisposable
+    public abstract class BaseReader : IReader, DataType.IReader
     {
         //private variable
         protected readonly IDataTypeController _dataTypeController;
         
-        private IEnumerable<string> _properties;
         protected int _serializationDepth = 0;
-        
-        
+
+
         //public variable
-        public string OverridePropertiesName { get; set; }
-        IEnumerable<string> DataType.IReader.Properties => _properties;
-
-
-        public BaseReader(IDataTypeController dataTypeController) =>
-            _dataTypeController = dataTypeController;
         
+        public IEnumerable<string> PropertyNames => new ReaderPropertyNameEnumerator(this);
+
+        public string OverridePropertiesName { get; set; }
+
+
+        //constructor
+        protected BaseReader(IDataTypeController dataTypeController) =>
+            _dataTypeController = dataTypeController;
 
 
         //SaveLoadModule IReader
-        public IReaderPropertyEnumerator Properties { get; }
-        public IReaderRawEnumerator Raws { get; }
-        
         public T Read<T>(string key)
         {
             Assert.IsTrue(TryGoTo(key), $"[BaseReader::Read] Cant find key: {key}");
@@ -38,10 +36,11 @@ namespace SaveLoadModule.Implement
 
             return obj;
         }
+        
+        public abstract void Dispose();
 
 
         //DataType IReader
-        public bool IsSafeReflection { get; }
         public abstract Type ReadType();
 
         public abstract int ReadInt();
@@ -71,20 +70,17 @@ namespace SaveLoadModule.Implement
         public abstract ushort ReadUshort();
 
         public abstract string ReadString();
-        
-        public abstract void Dispose();
 
         public void ReadInto<T>(object obj, DataType.DataType dataType)
         {
-            if(dataType.IsCollection)
+            if (dataType.IsCollection)
                 ((CollectionDataType)dataType).ReadInto(this, obj);
-            else if(dataType.IsDictionary)
+            else if (dataType.IsDictionary)
                 ((DictionaryDataType)dataType).ReadInto(this, obj);
             else
                 ReadObject<T>(obj, dataType);
         }
-        
-        
+
 
         public abstract string ReadPropertyName();
 
@@ -101,7 +97,7 @@ namespace SaveLoadModule.Implement
 
             if (dataType.IsCollection)
                 return (T)((CollectionDataType)dataType).Read(this);
-            
+
             if (dataType.IsCollection)
                 return (T)((DictionaryDataType)dataType).Read(this);
 
@@ -115,12 +111,12 @@ namespace SaveLoadModule.Implement
 
         public abstract bool StartReadCollectionItem();
         public abstract bool EndReadCollectionItem();
-        
+
 
         public abstract bool StartReadDictionary();
         public abstract void EndReadDictionary();
-        
-        
+
+
         public abstract bool StartReadDictionaryKey();
         public abstract void EndReadDictionaryKey();
 
@@ -133,9 +129,27 @@ namespace SaveLoadModule.Implement
 
 
         //protected method
-        protected bool TryGoTo(string key)
+        protected abstract byte[] ReadElement(bool skip = false);
+
+
+        protected abstract Type ReadKeyPrefix();
+        protected abstract void ReadKeySuffix();
+
+
+        protected virtual bool StartReadObject()
         {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(key), "[BaseReader::TryGoTo] Key cannot be NULL when loading data.");
+            _serializationDepth++;
+            return false;
+        }
+
+        protected virtual void EndReadObject() =>
+            _serializationDepth--;
+
+
+        //private method
+        private bool TryGoTo(string key)
+        {
+            Assert.IsTrue(key != null, "[BaseReader::TryGoTo] Key cannot be NULL when loading data.");
 
             string currentKey;
             while ((currentKey = ReadPropertyName()) != key)
@@ -151,17 +165,17 @@ namespace SaveLoadModule.Implement
         private void ReadObject<T>(object obj, DataType.DataType dataType)
         {
             // Check for null.
-            if(StartReadObject())
+            if (StartReadObject())
                 return;
 
             dataType.ReadInto<T>(this, obj);
 
             EndReadObject();
         }
-        
+
         private T ReadObject<T>(DataType.DataType dataType)
         {
-            if(StartReadObject())
+            if (StartReadObject())
                 return default;
 
             var obj = dataType.Read<T>(this);
@@ -170,29 +184,16 @@ namespace SaveLoadModule.Implement
             return (T)obj;
         }
 
-        protected abstract byte[] ReadElement(bool skip = false);
-
-        
-        protected abstract Type ReadKeyPrefix();
-        protected abstract void ReadKeySuffix();
-
-
-        protected virtual bool StartReadObject()
-        {
-            _serializationDepth++;
-            return false;
-        }
-
-        protected virtual void EndReadObject() =>
-            _serializationDepth--;
-        
-        
-        //private method
         private Type ReadTypeFromHeader<T>()
         {
-            var type = ReadKeyPrefix();
-            return type;
-        }
 
+            if (typeof(T) == typeof(object))
+            {
+                var type = ReadKeyPrefix();
+                return type;
+            }
+
+            return typeof(T);
+        }
     }
 }

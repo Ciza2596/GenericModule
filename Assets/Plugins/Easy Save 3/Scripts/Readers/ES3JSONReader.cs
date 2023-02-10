@@ -93,6 +93,7 @@ namespace ES3Internal
 				propertyName  = ReadPropertyName();
 			}
 				
+				
 			if(propertyName != "value")
 				throw new FormatException("This data is not Easy Save Key Value data. Expected property name \"value\", found \""+propertyName+"\".");
 

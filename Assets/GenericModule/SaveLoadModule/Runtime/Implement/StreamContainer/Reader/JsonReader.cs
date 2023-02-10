@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using DataType;
+using UnityEngine.Assertions;
 
 
 namespace SaveLoadModule.Implement
@@ -23,6 +24,8 @@ namespace SaveLoadModule.Implement
             _streamReader = new StreamReader(stream);
             _reflectionHelper = reflectionHelper;
             _bufferSize = bufferSize;
+            
+            SkipOpeningBraceOfFile();
         }
 
         public override Type ReadType()
@@ -159,12 +162,13 @@ namespace SaveLoadModule.Implement
             var c = PeekCharIgnoreWhiteSpace();
 
             if (IsTerminator(c))
-                return string.Empty;
+                return null;
 
             if (c == ',')
                 ReadCharIgnoreWhiteSpace();
 
             var propertyName = ReadString();
+            ReadCharIgnoreWhiteSpace(':');
             return propertyName;
         }
 
@@ -319,6 +323,7 @@ namespace SaveLoadModule.Implement
             {
                 var typeString = ReadString();
                 var type = _reflectionHelper.GetType(typeString);
+                ReadPropertyName();
                 return type;
             }
 
@@ -330,6 +335,13 @@ namespace SaveLoadModule.Implement
 
 
         //private method
+        private void SkipOpeningBraceOfFile()
+        {
+            var firstChar = ReadCharIgnoreWhiteSpace();
+            Assert.IsTrue(firstChar is '{',$"[JsonReader::SkipOpeningBraceOfFile] File is not valid JSON. Expected '{{' at beginning of file, but found '{firstChar}'.");
+        }
+
+
         private char ReadCharIgnoreWhiteSpace(bool isIgnoreTrailingWhitespace = true)
         {
             char c;

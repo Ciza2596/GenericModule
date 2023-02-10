@@ -45,17 +45,17 @@ namespace SaveLoadModule.Example1
 
         private void OnLoadButtonClick()
         {
-            // var saveLoadKey = _componentCollectionData.SaveLoadKey;
-            // var playerData = _saveLoadModule.TryLoad<PlayerData>(saveLoadKey);
-            //
-            // if (playerData is null)
-            // {
-            //     Debug.Log("[SaveLoadModuleExampleController::OnLoadButtonClick] PlayerData is null.");
-            //     return;
-            // }
-            //
-            // _playerData = playerData;
-            // UpdatePlayerInfo();
+            var saveLoadKey = _componentCollectionData.SaveLoadKey;
+            var hasPlayerData = _saveLoadModule.TryLoad<PlayerData>(saveLoadKey, out var playerData);
+            
+            if (!hasPlayerData)
+            {
+                Debug.Log("[SaveLoadModuleExampleController::OnLoadButtonClick] PlayerData is null.");
+                return;
+            }
+            
+            _playerData = playerData;
+            UpdatePlayerInfo();
         }
 
 

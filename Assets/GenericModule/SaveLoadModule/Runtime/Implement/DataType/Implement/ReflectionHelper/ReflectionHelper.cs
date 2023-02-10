@@ -128,10 +128,9 @@ namespace DataType.Implement
                     return typeof(Vector2);
                 case "Vector3":
                     return typeof(Vector3);
+                default:
+                    return Type.GetType(typeString);
             }
-
-            Debug.LogError($"[ReflectionHelper::GetType] TypeString of {typeString} doesnt be supported.");
-            return null;
         }
 
         public Type[] GetElementTypes(Type type)

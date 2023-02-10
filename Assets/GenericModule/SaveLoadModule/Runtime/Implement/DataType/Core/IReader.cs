@@ -5,10 +5,12 @@ namespace DataType
 {
     public interface IReader
     {
-        void Skip();
-        IEnumerable<string> Properties { get; }
+        IEnumerable<string> PropertyNames { get; }
 
         string OverridePropertiesName { get; set; }
+        
+        
+        void Skip();
 
         Type ReadType();
         

@@ -64,7 +64,7 @@ namespace DataType
                 }
 
                 // This is important we return if the enumerator returns null, otherwise we will encounter an endless cycle.
-                if (propertyName == null)
+                if (propertyName is null)
                     return;
 
                 reader.SetOverridePropertyName(propertyName);

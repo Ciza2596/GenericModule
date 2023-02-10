@@ -58,7 +58,7 @@ namespace DataType
         {
             if (reader.OverridePropertyName != null)
             {
-                string propertyName = reader.OverridePropertyName;
+                var propertyName = reader.OverridePropertyName;
                 reader.SetOverridePropertyName(null);
                 return propertyName;
             }

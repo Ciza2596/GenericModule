@@ -190,13 +190,8 @@ namespace SaveLoadModule.Implement
 
         private Type ReadTypeFromHeader<T>()
         {
-            if (typeof(T) == typeof(object))
-            {
-                var type = ReadKeyPrefix();
-                return type;
-            }
-
-            return typeof(T);
+            var type = ReadKeyPrefix();
+            return type;
         }
     }
 }

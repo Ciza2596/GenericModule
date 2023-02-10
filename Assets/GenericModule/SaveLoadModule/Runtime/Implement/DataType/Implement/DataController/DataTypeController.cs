@@ -109,7 +109,7 @@ namespace DataType.Implement
                         $"[DataTypeController::CreateDataType] Type: {type} is IEnumerable and unsupported for save.");
             }
             else
-                dataType = new ReflectedDataType(type, dataTypeController, reflectionHelper);
+                dataType = new ReflectedObjectDataType(type, dataTypeController, reflectionHelper);
             
 
             Assert.IsNotNull(dataType, $"[DataTypeController::CreateDataType] Type: {type} is unsupported for save.");

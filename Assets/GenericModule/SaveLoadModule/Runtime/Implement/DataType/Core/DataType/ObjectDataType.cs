@@ -38,7 +38,7 @@ namespace DataType
             {
                 var propertyName = ReadPropertyName(reader);
 
-                if (propertyName == TYPE_FIELD_NAME)
+                if (propertyName == TYPE_TAG)
                     return _dataTypeController.GetOrCreateDataType(reader.ReadType()).Read<T>(reader);
 
                 reader.OverridePropertiesName = propertyName;
@@ -52,7 +52,7 @@ namespace DataType
             {
                 var propertyName = ReadPropertyName(reader);
 
-                if (propertyName == TYPE_FIELD_NAME)
+                if (propertyName == TYPE_TAG)
                 {
                     var readType = reader.ReadType();
                     var dataType = _dataTypeController.GetOrCreateDataType(readType);

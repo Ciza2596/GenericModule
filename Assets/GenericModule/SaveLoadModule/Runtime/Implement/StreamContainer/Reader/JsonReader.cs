@@ -315,7 +315,7 @@ namespace SaveLoadModule.Implement
             StartReadObject();
 
             var propertyName = ReadPropertyName();
-            if (propertyName == DataType.DataType.TYPE_FIELD_NAME)
+            if (propertyName == DataType.DataType.TYPE_TAG)
             {
                 var typeString = ReadString();
                 var type = _reflectionHelper.GetType(typeString);

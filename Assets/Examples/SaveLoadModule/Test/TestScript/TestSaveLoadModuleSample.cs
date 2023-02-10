@@ -42,16 +42,16 @@ namespace SaveLoadModule.Example2
 
         private void OnDisable()
         {
-            _playerData = _saveLoadModule.TryLoad<PlayerData>(_key, _filePath);
-            
-            Print($"Hp: {_playerData.Hp}");
-            
-            foreach (var keyValuePair in _playerData.GameObjectDict)
-            {
-                var key = keyValuePair.Key;
-                var value = keyValuePair.Value;
-                Print($"Key: {key}, Prefab: {value}");
-            }
+            // _playerData = _saveLoadModule.TryLoad<PlayerData>(_key, _filePath);
+            //
+            // Print($"Hp: {_playerData.Hp}");
+            //
+            // foreach (var keyValuePair in _playerData.GameObjectDict)
+            // {
+            //     var key = keyValuePair.Key;
+            //     var value = keyValuePair.Value;
+            //     Print($"Key: {key}, Prefab: {value}");
+            // }
         }
         
         

@@ -51,7 +51,7 @@ namespace DataType
             var propertyName = reader.ReadPropertyName();
 
             // If we're loading a derived type, use it's specific ES3Type.
-            if (propertyName == TYPE_FIELD_NAME)
+            if (propertyName == TYPE_TAG)
             {
                 var type = reader.ReadType();
                 var dataType = _dataTypeController.GetOrCreateDataType(type);
@@ -78,7 +78,7 @@ namespace DataType
             string propertyName = reader.ReadPropertyName();
 
             // If we're loading a derived type, use it's specific ES3Type.
-            if (propertyName == TYPE_FIELD_NAME)
+            if (propertyName == TYPE_TAG)
             {
                 var type = reader.ReadType();
                 var dataType = _dataTypeController.GetOrCreateDataType(type);

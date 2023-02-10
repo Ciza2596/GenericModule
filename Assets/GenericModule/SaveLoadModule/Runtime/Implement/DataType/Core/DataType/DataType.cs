@@ -13,7 +13,7 @@ namespace DataType
 
         //public variable
 
-        public const string TYPE_FIELD_NAME = "__type";
+        public const string TYPE_TAG = "@type";
         public Type Type { get; }
         public bool IsPrimitive { get; protected set; } = false;
         public bool IsCollection { get; protected set; } = false;

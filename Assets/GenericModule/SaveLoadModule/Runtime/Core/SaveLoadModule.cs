@@ -1,4 +1,3 @@
-
 namespace SaveLoadModule
 {
     public class SaveLoadModule
@@ -6,17 +5,18 @@ namespace SaveLoadModule
         //private variable
         private readonly ISaveLoadModuleConfig _saveLoadModuleConfig;
         private readonly IIo _io;
-        
+
         private readonly IWriterProvider _writerProvider;
         private readonly IReaderProvider _readerProvider;
-        
+
 
         //public constructor
-        public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig,IIo io, IWriterProvider writerProvider, IReaderProvider readerProvider)
+        public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig, IIo io, IWriterProvider writerProvider,
+            IReaderProvider readerProvider)
         {
             _saveLoadModuleConfig = saveLoadModuleConfig;
             _io = io;
-            
+
             _writerProvider = writerProvider;
             _readerProvider = readerProvider;
         }
@@ -28,7 +28,7 @@ namespace SaveLoadModule
             var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var encoding = _saveLoadModuleConfig.Encoding;
-            var writer = _writerProvider.CreateWriter(fullPath, bufferSize, true, encoding);
+            var writer = _writerProvider.CreateWriter(fullPath, bufferSize, encoding);
 
             writer.Write<T>(key, data);
             writer.Dispose();
@@ -39,12 +39,12 @@ namespace SaveLoadModule
             var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var reader = _readerProvider.CreateReader(fullPath, bufferSize);
-            
+
             data = reader.Read<T>(key);
 
             return true;
         }
-        
+
         //private method
         private string GetFullPath(string filePath)
         {

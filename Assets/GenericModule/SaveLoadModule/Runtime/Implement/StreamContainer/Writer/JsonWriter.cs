@@ -15,18 +15,15 @@ namespace SaveLoadModule.Implement
 
 
         private readonly StreamWriter _streamWriter;
-        private bool _isWriteHeaderAndFooter;
         private System.Text.Encoding _encoding;
 
 
         private bool _isFirstProperty = true;
 
-        public JsonWriter(Stream stream, bool isWriteHeaderAndFooter,
-            System.Text.Encoding encoding, IDataTypeController dataTypeController,
+        public JsonWriter(Stream stream, System.Text.Encoding encoding, IDataTypeController dataTypeController,
             IReflectionHelper reflectionHelper) : base(dataTypeController, reflectionHelper)
         {
             _streamWriter = new StreamWriter(stream);
-            _isWriteHeaderAndFooter = isWriteHeaderAndFooter;
             _encoding = encoding;
             
             StartWriteFile();
@@ -166,8 +163,7 @@ namespace SaveLoadModule.Implement
 
         protected sealed override void StartWriteFile()
         {
-            if (_isWriteHeaderAndFooter)
-                _streamWriter.Write('{');
+            _streamWriter.Write('{');
 
             base.StartWriteFile();
         }
@@ -177,8 +173,7 @@ namespace SaveLoadModule.Implement
             base.EndWriteFile();
 
             WriteNewLineAndTabs();
-            if (_isWriteHeaderAndFooter)
-                _streamWriter.Write('}');
+            _streamWriter.Write('}');
         }
 
         protected override void StartWriteObject(string name)
@@ -214,13 +209,6 @@ namespace SaveLoadModule.Implement
         {
         }
 
-        protected override void WriteRawProperty(string name, byte[] value)
-        {
-            StartWriteProperty(name);
-            _streamWriter.Write(_encoding.GetString(value, 0, value.Length));
-            EndWriteProperty(name);
-        }
-
         protected override void StartWriteDictionary()
         {
             StartWriteObject(null);
@@ -244,6 +232,7 @@ namespace SaveLoadModule.Implement
                 _streamWriter.Write(',');
             else
                 _isFirstProperty = false;
+            
 
             WriteNewLineAndTabs();
         }

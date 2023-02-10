@@ -7,7 +7,7 @@ namespace SaveLoadModule.Implement
 {
     public abstract class BaseWriter : IWriter, DataType.IWriter
     {
-        private const string VALUE_TAG = "value";
+        private const string VALUE_TAG = "@value";
 
 
         private readonly IDataTypeController _dataTypeController;
@@ -16,8 +16,7 @@ namespace SaveLoadModule.Implement
         private readonly HashSet<string> _keysToDelete = new HashSet<string>();
         protected int _serializationDepth;
 
-
-        //public method
+        //constructor
         protected BaseWriter(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
         {
             _dataTypeController = dataTypeController;
@@ -32,11 +31,6 @@ namespace SaveLoadModule.Implement
             var currentType = type == typeof(object) ? value.GetType() : type;
 
             Write(currentType, key, value);
-        }
-
-        public void Save(IReader reader)
-        {
-            Merge(reader);
             EndWriteFile();
         }
 
@@ -47,7 +41,7 @@ namespace SaveLoadModule.Implement
         public void WriteType(Type type)
         {
             var typeString = _reflectionHelper.GetTypeName(type);
-            WriteProperty(DataType.DataType.TYPE_FIELD_NAME, typeString);
+            WriteProperty(DataType.DataType.TYPE_TAG, typeString);
         }
 
         public void WriteProperty(string name, object value, DataType.DataType dataType)
@@ -131,6 +125,12 @@ namespace SaveLoadModule.Implement
             Assert.IsNotNull(dataType, $"[BaseWriter::Write] DataType argument cannot be null");
 
 
+            if (dataType.IsPrimitive || dataType.IsEnum)
+            {
+                dataType.Write(value, this);
+                return;
+            }
+
             if (dataType.IsCollection)
             {
                 StartWriteCollection();
@@ -147,7 +147,10 @@ namespace SaveLoadModule.Implement
                 return;
             }
 
+            //write value
+            StartWriteObject(null);
             dataType.Write(value, this);
+            EndWriteObject(null);
         }
 
         public abstract void StartWriteDictionaryKey(int index);
@@ -186,9 +189,6 @@ namespace SaveLoadModule.Implement
         protected abstract void EndWriteDictionary();
 
 
-        protected abstract void WriteRawProperty(string name, byte[] value);
-
-
         //protected method
         protected void Write(object value)
         {
@@ -209,17 +209,6 @@ namespace SaveLoadModule.Implement
             MarkKeyForDeletion(key);
         }
 
-        private void Write(string key, Type type, byte[] value)
-        {
-            StartWriteProperty(key);
-            StartWriteObject(key);
-            WriteType(type);
-            WriteRawProperty(VALUE_TAG, value);
-            EndWriteObject(key);
-            EndWriteProperty(key);
-            MarkKeyForDeletion(key);
-        }
-
         private void MarkKeyForDeletion(string key) =>
             _keysToDelete.Add(key);
 
@@ -229,19 +218,6 @@ namespace SaveLoadModule.Implement
             StartWriteProperty(name);
             Write(value);
             EndWriteProperty(name);
-        }
-
-        private void Merge(IReader reader)
-        {
-            var raws = reader.Raws;
-
-            foreach (KeyValuePair<string, DataTypeData> raw in raws)
-            {
-                var key = raw.Key;
-                var value = raw.Value;
-                if (!_keysToDelete.Contains(key) && value.DataType != null)
-                    Write(key, value.DataType.Type, value.Bytes);
-            }
         }
     }
 }

@@ -97,7 +97,10 @@ namespace DataType
                 foreach (var dataTypeProperty in _properties)
                 {
                     if (dataTypeProperty.Name == propertyName)
+                    {
                         property = dataTypeProperty;
+                        break;
+                    }
                 }
 
                 // If this is a class which derives directly from a Collection, we need to load it's dictionary first.

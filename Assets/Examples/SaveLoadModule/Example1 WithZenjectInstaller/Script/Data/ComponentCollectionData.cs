@@ -28,14 +28,14 @@ namespace SaveLoadModule.Example1
         public Button SaveButton => _saveButton;
         public Button LoadButton => _loadButton;
 
-        public float SetHpValue => float.Parse(_setHpValueInputField.text);
+        public int SetHpValue => int.Parse(_setHpValueInputField.text);
         public Button SetHpButton => _setHpButton;
 
-        public float SetMpValue => float.Parse(_setMpValueInputField.text);
+        public int SetMpValue => int.Parse(_setMpValueInputField.text);
         public Button SetMpButton => _setMpButton;
 
 
-        public void SetHpInfo(float hp) => _hpInfoText.text = hp.ToString(CultureInfo.InvariantCulture);
-        public void SetMpInfo(float mp) => _mpInfoText.text = mp.ToString(CultureInfo.InvariantCulture);
+        public void SetHpInfo(int hp) => _hpInfoText.text = hp.ToString(CultureInfo.InvariantCulture);
+        public void SetMpInfo(int mp) => _mpInfoText.text = mp.ToString(CultureInfo.InvariantCulture);
     }
 }

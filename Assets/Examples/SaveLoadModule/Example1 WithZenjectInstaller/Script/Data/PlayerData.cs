@@ -4,6 +4,8 @@ namespace SaveLoadModule.Example1
     {
         //private variable
         [CustomSerializable] private float _hp = 100;
+        [CustomSerializable]
+        private SkillData _skillData = new SkillData();
 
 
         //public variable

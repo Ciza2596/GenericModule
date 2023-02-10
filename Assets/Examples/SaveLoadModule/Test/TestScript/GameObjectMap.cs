@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace SaveLoadModule.Example2
+namespace SaveLoadModule.Test
 {
     [Serializable]
     public class GameObjectMap

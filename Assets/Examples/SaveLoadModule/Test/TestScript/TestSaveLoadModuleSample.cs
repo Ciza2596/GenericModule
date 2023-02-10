@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace SaveLoadModule.Example2
+namespace SaveLoadModule.Test
 {
     public class TestSaveLoadModuleSample : MonoBehaviour
     {
@@ -28,14 +28,6 @@ namespace SaveLoadModule.Example2
         {
             var playerData = new PlayerData();
             playerData.SetHp(_hp);
-
-            foreach (var gameObjectMap in _gameObjectMaps)
-            {
-                var key = gameObjectMap.Key;
-                var prefab = gameObjectMap.Prefab;
-
-                playerData.AddGameObjectDict(key, prefab);
-            }
 
             _saveLoadModule.Save<PlayerData>(_key, _playerData, _filePath);
         }

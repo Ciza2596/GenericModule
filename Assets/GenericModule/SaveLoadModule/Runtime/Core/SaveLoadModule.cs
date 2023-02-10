@@ -34,13 +34,15 @@ namespace SaveLoadModule
             writer.Dispose();
         }
 
-        public T Load<T>(string key, string filePath = null)
+        public bool TryLoad<T>(string key, out T data, string filePath = null)
         {
             var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var reader = _readerProvider.CreateReader(fullPath, bufferSize);
+            
+            data = reader.Read<T>(key);
 
-            return reader.Read<T>(key);
+            return true;
         }
         
         //private method

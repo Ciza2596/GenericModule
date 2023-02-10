@@ -42,7 +42,7 @@ namespace SaveLoadModule.Example2
 
         private void OnDisable()
         {
-            _playerData = _saveLoadModule.Load<PlayerData>(_key, _filePath);
+            _playerData = _saveLoadModule.TryLoad<PlayerData>(_key, _filePath);
             
             Print($"Hp: {_playerData.Hp}");
             

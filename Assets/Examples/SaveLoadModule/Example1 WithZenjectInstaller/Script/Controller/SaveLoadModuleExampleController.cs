@@ -46,7 +46,7 @@ namespace SaveLoadModule.Example1
         private void OnLoadButtonClick()
         {
             var saveLoadKey = _componentCollectionData.SaveLoadKey;
-            var playerData = _saveLoadModule.Load<PlayerData>(saveLoadKey);
+            var playerData = _saveLoadModule.TryLoad<PlayerData>(saveLoadKey);
 
             if (playerData is null)
             {

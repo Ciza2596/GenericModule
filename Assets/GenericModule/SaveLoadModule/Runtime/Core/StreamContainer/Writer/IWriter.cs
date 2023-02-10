@@ -5,5 +5,7 @@ namespace SaveLoadModule
     {
         void Write<T>(string key, object value);
         void Save(IReader reader);
+
+        void Dispose();
     }
 }

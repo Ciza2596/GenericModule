@@ -54,7 +54,7 @@ namespace DataType.Implement
 
         public Type GetGenericTypeDefinition(Type type) => type.GetGenericTypeDefinition();
 
-        public string GetTypeString(Type type)
+        public string GetTypeName(Type type)
         {
             if (type == typeof(bool))
                 return "bool";
@@ -89,8 +89,7 @@ namespace DataType.Implement
             if (type == typeof(Vector3))
                 return "Vector3";
 
-            Debug.LogError($"[ReflectionHelper::GetTypeString] Type of {type} doesnt be supported.");
-            return string.Empty;
+            return GetAssemblyTypeName(type);
         }
 
         public Type GetType(string typeString)
@@ -323,6 +322,13 @@ namespace DataType.Implement
             var baseType = GetBaseType(type);
             if (baseType != null && baseType != typeof(System.Object))
                 AddSerializableProperties(baseType, serializableProperties, propertyNames, isSafeReflection);
+        }
+
+        private string GetAssemblyTypeName(Type type)
+        {
+            if (CheckIsPrimitive(type))
+                return type.ToString();
+            return type.FullName + "," + type.Assembly.GetName().Name;
         }
     }
 }

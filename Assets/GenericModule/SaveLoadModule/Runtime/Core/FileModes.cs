@@ -6,6 +6,5 @@ namespace SaveLoadModule
     {
         Read,
         Write,
-        Append
     }
 }

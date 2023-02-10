@@ -31,9 +31,7 @@ namespace SaveLoadModule
             var writer = _writerProvider.CreateWriter(fullPath, bufferSize, true, encoding);
 
             writer.Write<T>(key, data);
-            
-            var reader = _readerProvider.CreateReader(fullPath, bufferSize);
-            writer.Save(reader);
+            writer.Dispose();
         }
 
         public T Load<T>(string key, string filePath = null)
@@ -41,7 +39,7 @@ namespace SaveLoadModule
             var fullPath = GetFullPath(filePath);
             var bufferSize = _saveLoadModuleConfig.BufferSize;
             var reader = _readerProvider.CreateReader(fullPath, bufferSize);
-            
+
             return reader.Read<T>(key);
         }
         

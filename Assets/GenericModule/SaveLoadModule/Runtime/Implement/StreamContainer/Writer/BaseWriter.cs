@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
 {
-    public abstract class BaseWriter : IWriter, DataType.IWriter, IDisposable
+    public abstract class BaseWriter : IWriter, DataType.IWriter
     {
         private const string VALUE_TAG = "value";
 
@@ -18,7 +18,7 @@ namespace SaveLoadModule.Implement
 
 
         //public method
-        public BaseWriter(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
+        protected BaseWriter(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
         {
             _dataTypeController = dataTypeController;
             _reflectionHelper = reflectionHelper;
@@ -40,13 +40,13 @@ namespace SaveLoadModule.Implement
             EndWriteFile();
         }
 
+        public abstract void Dispose();
+
 
         //DataType IWriter callback
-        public bool IsSafeReflection => true;
-
         public void WriteType(Type type)
         {
-            var typeString = _reflectionHelper.GetTypeString(type);
+            var typeString = _reflectionHelper.GetTypeName(type);
             WriteProperty(DataType.DataType.TYPE_FIELD_NAME, typeString);
         }
 
@@ -161,17 +161,15 @@ namespace SaveLoadModule.Implement
 
         public abstract void WriteNull();
 
-        public abstract void Dispose();
-
         //For child class method
         protected virtual void StartWriteProperty(string name) =>
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(name), "[BaseWriter::StartWriteProperty] Name is null.");
+            Assert.IsTrue(name != null, "[BaseWriter::StartWriteProperty] Name is null.");
 
         protected abstract void EndWriteProperty(string name);
 
+
         protected virtual void StartWriteFile() =>
             _serializationDepth++;
-
 
         protected virtual void EndWriteFile() =>
             _serializationDepth--;

@@ -28,6 +28,7 @@ namespace SaveLoadModule.Implement
             _streamWriter = new StreamWriter(stream);
             _isWriteHeaderAndFooter = isWriteHeaderAndFooter;
             _encoding = encoding;
+            
             StartWriteFile();
         }
 
@@ -163,7 +164,7 @@ namespace SaveLoadModule.Implement
         }
 
 
-        protected override void StartWriteFile()
+        protected sealed override void StartWriteFile()
         {
             if (_isWriteHeaderAndFooter)
                 _streamWriter.Write('{');

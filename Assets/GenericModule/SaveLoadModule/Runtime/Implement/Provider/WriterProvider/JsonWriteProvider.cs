@@ -13,14 +13,16 @@ namespace SaveLoadModule.Implement
 
 
         //public method
-        public JsonWriteProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController)
+        public JsonWriteProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController,
+            IReflectionHelper reflectionHelper)
         {
             _streamProvider = streamProvider;
             _dataTypeController = dataTypeController;
+            _reflectionHelper = reflectionHelper;
         }
 
 
-        public IWriter CreateWriter(string fullPath, int bufferSize,  bool isWriteHeaderAndFooter,
+        public IWriter CreateWriter(string fullPath, int bufferSize, bool isWriteHeaderAndFooter,
             System.Text.Encoding encoding)
         {
             var stream = _streamProvider.CreateStream(FileModes.Write, fullPath, bufferSize);
@@ -32,7 +34,7 @@ namespace SaveLoadModule.Implement
 
 
         //private method
-        private IWriter CreateWrite(Stream stream,  bool isWriteHeaderAndFooter,
+        private IWriter CreateWrite(Stream stream, bool isWriteHeaderAndFooter,
             System.Text.Encoding encoding) =>
             new JsonWriter(stream, isWriteHeaderAndFooter, encoding, _dataTypeController, _reflectionHelper);
     }

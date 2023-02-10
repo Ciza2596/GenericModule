@@ -27,7 +27,7 @@ namespace DataType
         
         int GetArrayRank(Type type);
         Type GetGenericTypeDefinition(Type type);
-        string GetTypeString(Type type);
+        string GetTypeName(Type type);
 
         Type GetType(string typeString);
 

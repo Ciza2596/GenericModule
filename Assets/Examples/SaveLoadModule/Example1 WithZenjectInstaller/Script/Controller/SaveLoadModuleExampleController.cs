@@ -31,6 +31,8 @@ namespace SaveLoadModule.Example1
             _componentCollectionData.SetHpButton.onClick.AddListener(OnSetHpButtonClick);
 
             _componentCollectionData.SetMpButton.onClick.AddListener(OnSetMpButtonClick);
+            
+            UpdatePlayerInfo();
         }
 
 

@@ -7,9 +7,10 @@ namespace DataType
     {
         IEnumerable<string> PropertyNames { get; }
 
-        string OverridePropertiesName { get; set; }
-        
-        
+        string OverridePropertyName { get; }
+
+        public void SetOverridePropertyName(string overridePropertyName);
+
         void Skip();
 
         Type ReadType();

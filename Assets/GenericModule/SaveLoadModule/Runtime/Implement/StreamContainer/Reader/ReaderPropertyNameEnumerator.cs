@@ -15,10 +15,10 @@ namespace SaveLoadModule.Implement
             while (true)
             {
                 // Allows us to repeat a property name or insert one of our own.
-                if (_reader.OverridePropertiesName != null)
+                if (_reader.OverridePropertyName != null)
                 {
-                    var tempName = _reader.OverridePropertiesName;
-                    _reader.OverridePropertiesName = null;
+                    var tempName = _reader.OverridePropertyName;
+                    _reader.SetOverridePropertyName(null);
                     yield return tempName;
                 }
                 else

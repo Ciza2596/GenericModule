@@ -59,7 +59,7 @@ namespace DataType
                 return dataType.Read<T>(reader);
             }
 
-            reader.OverridePropertiesName = propertyName;
+            reader.SetOverridePropertyName(propertyName);
             
             var obj = _reflectionHelper.CreateInstance(Type);
 
@@ -86,7 +86,7 @@ namespace DataType
                 return;
             }
 
-            reader.OverridePropertiesName = propertyName;
+            reader.SetOverridePropertyName(propertyName);
 
             // Iterate through each property in the file and try to load it using the appropriate
             // ES3Property in the members array.

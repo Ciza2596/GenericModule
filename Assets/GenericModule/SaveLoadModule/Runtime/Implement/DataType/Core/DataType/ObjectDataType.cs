@@ -5,7 +5,10 @@ namespace DataType
     [UnityEngine.Scripting.Preserve]
     public abstract class ObjectType : DataType
     {
-        public ObjectType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper) { }
+        public ObjectType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
+            type, dataTypeController, reflectionHelper)
+        {
+        }
 
         protected abstract void WriteObject(object obj, IWriter writer);
         protected abstract object ReadObject<T>(IReader reader);
@@ -41,7 +44,7 @@ namespace DataType
                 if (propertyName == TYPE_TAG)
                     return _dataTypeController.GetOrCreateDataType(reader.ReadType()).Read<T>(reader);
 
-                reader.OverridePropertiesName = propertyName;
+                reader.SetOverridePropertyName(propertyName);
                 return ReadObject<T>(reader);
             }
         }
@@ -59,12 +62,12 @@ namespace DataType
                     dataType.ReadInto<T>(reader, obj);
                     return;
                 }
-                
+
                 // This is important we return if the enumerator returns null, otherwise we will encounter an endless cycle.
                 if (propertyName == null)
                     return;
-                
-                reader.OverridePropertiesName = propertyName;
+
+                reader.SetOverridePropertyName(propertyName);
                 ReadObject<T>(reader, obj);
             }
         }

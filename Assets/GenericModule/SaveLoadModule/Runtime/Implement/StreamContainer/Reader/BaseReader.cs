@@ -9,15 +9,15 @@ namespace SaveLoadModule.Implement
     {
         //private variable
         protected readonly IDataTypeController _dataTypeController;
-        
+
         protected int _serializationDepth = 0;
 
 
         //public variable
-        
+
         public IEnumerable<string> PropertyNames => new ReaderPropertyNameEnumerator(this);
 
-        public string OverridePropertiesName { get; set; }
+        public string OverridePropertyName { get; private set; }
 
 
         //constructor
@@ -36,7 +36,7 @@ namespace SaveLoadModule.Implement
 
             return obj;
         }
-        
+
         public abstract void Dispose();
 
 
@@ -125,6 +125,10 @@ namespace SaveLoadModule.Implement
         public abstract bool EndReadDictionaryValue();
 
 
+        public void SetOverridePropertyName(string overridePropertyName) =>
+            OverridePropertyName = overridePropertyName;
+
+
         public void Skip() => ReadElement(true);
 
 
@@ -186,7 +190,6 @@ namespace SaveLoadModule.Implement
 
         private Type ReadTypeFromHeader<T>()
         {
-
             if (typeof(T) == typeof(object))
             {
                 var type = ReadKeyPrefix();

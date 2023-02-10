@@ -56,10 +56,10 @@ namespace DataType
 
         protected string ReadPropertyName(IReader reader)
         {
-            if (reader.OverridePropertiesName != null)
+            if (reader.OverridePropertyName != null)
             {
-                string propertyName = reader.OverridePropertiesName;
-                reader.OverridePropertiesName = null;
+                string propertyName = reader.OverridePropertyName;
+                reader.SetOverridePropertyName(null);
                 return propertyName;
             }
 

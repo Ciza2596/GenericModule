@@ -47,9 +47,12 @@ MonoBehaviour:
     - GameCore.Implement
     - GameCore.Infrastructure
     - GameObjectPoolModule
+    - GameObjectPoolModule.Test
     - LogModule
+    - LogModule.Test
     - PsdPlugin
     - SaveLoadModule
+    - SaveLoadModule.Test
     - SceneModule
     - Sirenix.OdinInspector.Modules.UnityMathematics
     - Zenject

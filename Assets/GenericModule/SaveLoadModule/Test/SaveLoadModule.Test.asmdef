@@ -1,0 +1,18 @@
+{
+    "name": "SaveLoadModule.Test",
+    "rootNamespace": "",
+    "references": [
+        "GUID:98add68d08da94cb29316679009cc291"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

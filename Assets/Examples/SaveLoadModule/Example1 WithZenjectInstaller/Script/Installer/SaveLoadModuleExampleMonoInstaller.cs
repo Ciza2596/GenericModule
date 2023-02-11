@@ -12,7 +12,7 @@ namespace SaveLoadModule.Example1
         
         public override void InstallBindings()
         {
-            Container.Bind<IReflectionHelperInstaller>().To<ReflectionHelperInstaller>().AsSingle();
+            Container.Bind<IReflectionHelperConfig>().To<ReflectionHelperConfig>().AsSingle();
             Container.Bind<IReflectionHelper>().To<ReflectionHelper>().AsSingle();
 
             Container.Bind<ComponentCollectionData>().FromInstance(_componentCollectionData);

@@ -55,8 +55,8 @@ namespace SaveLoadModule.Implement
 
         public override char ReadChar()
         {
-            var valueString = GetValueString();
-            return char.Parse(valueString);
+            var readString = ReadString();
+            return char.Parse(readString);
         }
 
         public override decimal ReadDecimal()

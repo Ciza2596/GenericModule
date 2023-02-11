@@ -51,7 +51,7 @@ namespace SaveLoadModule
         {
             var path = string.IsNullOrWhiteSpace(filePath) ? _saveLoadModuleConfig.DefaultFilePath : filePath;
             var applicationDataPath = _saveLoadModuleConfig.ApplicationDataPath;
-            var fullPath = _io.CombinePath(applicationDataPath, path);
+            var fullPath = _io.GetFullPath(applicationDataPath, path);
             return fullPath;
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace SaveLoadModule.Implement
 {
-    public class JsonWriteProvider : IWriterProvider
+    public class JsonWriterProvider : IWriterProvider
     {
         //private variable
         private readonly IStreamProvider _streamProvider;
@@ -13,7 +13,7 @@ namespace SaveLoadModule.Implement
 
 
         //public method
-        public JsonWriteProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController,
+        public JsonWriterProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController,
             IReflectionHelper reflectionHelper)
         {
             _streamProvider = streamProvider;

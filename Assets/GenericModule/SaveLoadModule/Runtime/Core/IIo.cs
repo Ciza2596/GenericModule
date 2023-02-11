@@ -3,6 +3,7 @@ namespace SaveLoadModule
 {
     public interface IIo
     {
-        public string CombinePath(string directoryPath, string fileOrDirectoryName);
+        string GetFullPath(string directoryPath, string fileOrDirectoryName);
+        void DeleteFile(string fullPath);
     }
 }

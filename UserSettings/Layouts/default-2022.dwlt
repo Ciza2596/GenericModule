@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: -5
+    x: 122
     y: 66
     width: 1728
     height: 967
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Test Runner
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_MinSize: {x: 500, y: 100}
   m_MaxSize: {x: 40480, y: 16192}
   vertical: 1
-  controlID: 98
+  controlID: 60
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 500, y: 100}
   m_MaxSize: {x: 40480, y: 16192}
   vertical: 0
-  controlID: 99
+  controlID: 61
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -163,12 +163,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1078
+    width: 623
     height: 917
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 1
-  controlID: 100
+  controlID: 62
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -190,12 +190,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1078
+    width: 623
     height: 524.5
   m_MinSize: {x: 400, y: 50}
   m_MaxSize: {x: 32384, y: 8096}
   vertical: 0
-  controlID: 101
+  controlID: 63
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -213,7 +213,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 119
+    width: 114
     height: 524.5
   m_MinSize: {x: 431, y: 271}
   m_MaxSize: {x: 4001, y: 4021}
@@ -238,9 +238,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 119
+    x: 114
     y: 0
-    width: 124
+    width: 120
     height: 524.5
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -260,23 +260,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: ES3Window
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 243
+    x: 234
     y: 0
-    width: 577
+    width: 227
     height: 524.5
-  m_MinSize: {x: 202, y: 221}
+  m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 19}
+  m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 19}
   - {fileID: 18}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -292,9 +292,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 820
+    x: 461
     y: 0
-    width: 258
+    width: 162
     height: 524.5
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -322,7 +322,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 524.5
-    width: 1078
+    width: 623
     height: 392.5
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
@@ -345,7 +345,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 691
+    width: 395
     height: 392.5
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
@@ -372,9 +372,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 691
+    x: 395
     y: 0
-    width: 387
+    width: 228
     height: 392.5
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
@@ -393,24 +393,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: InspectorWindow
+  m_Name: TestRunnerWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1078
+    x: 623
     y: 0
-    width: 650
+    width: 1105
     height: 917
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 29}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 31}
   m_Panes:
   - {fileID: 29}
   - {fileID: 30}
   - {fileID: 31}
-  m_Selected: 0
-  m_LastSelected: 2
+  m_Selected: 2
+  m_LastSelected: 0
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -473,7 +473,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 335}
     m_SelectedIDs: 24770000
     m_LastClickedID: 30500
-    m_ExpandedIDs: 000000001a7000001c7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e7000008070000082700000
+    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -501,7 +501,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001a7000001c7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e7000008070000082700000
+    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -577,10 +577,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 382
+    x: 356
     y: 96
-    width: 575
-    height: 340.5
+    width: 225
+    height: 503.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -610,9 +610,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 238
+    x: 308
     y: 96
-    width: 575
+    width: 671.5
     height: 503.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -665,23 +665,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 575
+      width: 671.5
       height: 482.5
-    m_Scale: {x: 0.5989583, y: 0.5989583}
-    m_Translation: {x: 287.5, y: 241.25}
+    m_Scale: {x: 0.69947916, y: 0.69947916}
+    m_Translation: {x: 335.75, y: 241.25}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -480.00003
-      y: -402.78262
-      width: 960.00006
-      height: 805.56525
+      x: -480
+      y: -344.89948
+      width: 960
+      height: 689.79895
     m_MinimalGUI: 1
-  m_defaultScale: 0.5989583
-  m_LastWindowPixelSize: {x: 1150, y: 1007}
+  m_defaultScale: 0.69947916
+  m_LastWindowPixelSize: {x: 1343, y: 1007}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -776,9 +776,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: -5
+    x: 122
     y: 96
-    width: 118
+    width: 113
     height: 503.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -913,9 +913,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 114
+    x: 236
     y: 96
-    width: 122
+    width: 118
     height: 503.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1192,7 +1192,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: -216, y: -275}
-      snapOffsetDelta: {x: 94, y: 0}
+      snapOffsetDelta: {x: 98, y: 0}
       snapCorner: 3
       id: AINavigationOverlay
       index: 1
@@ -1354,9 +1354,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 815
+    x: 583
     y: 96
-    width: 256
+    width: 160
     height: 503.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1370,9 +1370,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 64b00000
-      m_LastClickedID: 45156
-      m_ExpandedIDs: 10fbffff12fbffff
+      m_SelectedIDs: 12a50000
+      m_LastClickedID: 0
+      m_ExpandedIDs: 6e46ffff1a47ffffbc47ffff6448ffff1849ffffc449ffffa24affff7e4bffff644cffffd64dffffba51ffff9454ffff4656ffff1459ffffe05affff9e5cffff5e5effff9464ffff4065ffffd866ffff1c6afffff66dffffa86effff5a6fffff0a70ffffc870ffff4073ffffe473ffffa074ffff7276ffff6479ffff307dfffff07effffc280ffff8882ffff4683ffff1c86fffffc87ffff088cffffb88cffff8c8effff8890ffff9eddffff24f1ffff64f1ffff2af4ffffe2f5ffffa8f7ffff58f9fffff4ffffff50770000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1416,9 +1416,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: -5
+    x: 122
     y: 620.5
-    width: 690
+    width: 394
     height: 371.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1666,9 +1666,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 686
+    x: 517
     y: 620.5
-    width: 385
+    width: 226
     height: 371.5
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1692,23 +1692,23 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Examples/SaveLoadModule/Test/ExampleEasySave/Script
+    - Assets/GenericModule/SaveLoadModule/Test/Fake
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Examples/SaveLoadModule/Test/ExampleEasySave/Script
+  - Assets/GenericModule/SaveLoadModule/Test/Fake
   m_LastFoldersGridSize: 16
   m_LastProjectPath: '/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule '
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 287}
-    m_SelectedIDs: 5e760000
-    m_LastClickedID: 30302
-    m_ExpandedIDs: 000000001a7000001c7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e700000707000007270000074700000767000007a7000007c7000007e70000082700000207100004071000046710000ae7400001a9a000000ca9a3b
+    scrollPos: {x: 0, y: 548.49854}
+    m_SelectedIDs: d6800000
+    m_LastClickedID: 32982
+    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005c7000005e7000006070000062700000687000006a7000006c70000070700000727000007470000076700000787000007a7000007c7000007e7000008070000084700000887000008a7000008e700000907000009270000096700000987000009a7000009c7000003671000066710000147900001a790000d87e0000d680000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1724,7 +1724,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 15}
+      m_ClientGUIView: {fileID: 0}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -1736,7 +1736,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001a7000001c7000001e70000020700000227000002470000026700000287000002a7000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e7000008070000082700000
+    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1767,20 +1767,20 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c6230000beb50000c4b50000d6b50000e2b50000c09affff866e000098820000746d0000da780000ac770000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: FakeEnum
+      m_OriginalName: FakeEnum
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 42258
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 15}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1791,7 +1791,7 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 219
+  m_DirectoriesAreaWidth: 175.5
 --- !u!114 &29
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1812,9 +1812,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1073
+    x: 1285
     y: 96
-    width: 649
+    width: 470
     height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1831,7 +1831,7 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: 42258
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
@@ -1877,7 +1877,7 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: 1412526313
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: 28220
+  m_LastInspectedObjectInstanceID: 28240
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: GlobalObjectId_V1-3-50c2e07cfadf248e0914f67364e48e89-11400000-0
   m_InspectorMode: 0
@@ -1901,9 +1901,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1309
-    y: 83
-    width: 638
+    x: 745
+    y: 96
+    width: 1104
     height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1915,15 +1915,15 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 1047
-    splitterInitialOffset: 271
+    ID: 321
+    splitterInitialOffset: 307
     currentActiveSplitter: -1
     realSizes:
-    - 200
-    - 626
+    - 235
+    - 591
     relativeSizes:
-    - 0.24213076
-    - 0.75786924
+    - 0.28450364
+    - 0.71549636
     minSizes:
     - 32
     - 32
@@ -1982,7 +1982,7 @@ MonoBehaviour:
       name: GenericModule
       fullName: GenericModule
       resultStatus: 1
-      duration: 0.2001013
+      duration: 34.65349
       messages: 
       output: 
       stacktrace: 
@@ -2028,11 +2028,11 @@ MonoBehaviour:
       parentUniqueId: '[AudioModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
         /Library/ScriptAssemblies/AudioModule.Test.dll][suite]'
     - id: 1002
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._01_Should_Be_Initialized_When_Initialize]
-      name: _01_Should_Be_Initialized_When_Initialize
-      fullName: AudioModuleTest._01_Should_Be_Initialized_When_Initialize
-      resultStatus: 1
-      duration: 0.0189475
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._01_Initialize]
+      name: _01_Initialize
+      fullName: AudioModuleTest._01_Initialize
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2045,11 +2045,11 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1003
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._02_Should_Not_Be_Initialized_When_Release]
-      name: _02_Should_Not_Be_Initialized_When_Release
-      fullName: AudioModuleTest._02_Should_Not_Be_Initialized_When_Release
-      resultStatus: 1
-      duration: 0.000704
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._02_Release]
+      name: _02_Release
+      fullName: AudioModuleTest._02_Release
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2062,18 +2062,13 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1004
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._03_Should_ReleaseAllPools_When_ReleaseAllPools]
-      name: _03_Should_ReleaseAllPools_When_ReleaseAllPools
-      fullName: AudioModuleTest._03_Should_ReleaseAllPools_When_ReleaseAllPools
-      resultStatus: 1
-      duration: 0.0380194
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._03_ReleaseAllPools]
+      name: _03_ReleaseAllPools
+      fullName: AudioModuleTest._03_ReleaseAllPools
+      resultStatus: 0
+      duration: 0
       messages: 
-      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
-
-        [AudioData::Play]
-        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
-
-'
+      output: 
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2084,18 +2079,13 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1005
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._04_Should_ReleasePool_When_ReleasePool]
-      name: _04_Should_ReleasePool_When_ReleasePool
-      fullName: AudioModuleTest._04_Should_ReleasePool_When_ReleasePool
-      resultStatus: 1
-      duration: 0.0019606
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._04_ReleasePool_By_Key]
+      name: _04_ReleasePool_By_Key
+      fullName: AudioModuleTest._04_ReleasePool_By_Key
+      resultStatus: 0
+      duration: 0
       messages: 
-      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
-
-        [AudioData::Play]
-        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
-
-'
+      output: 
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2106,11 +2096,11 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1006
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._05_Should_GetPoolName_When_GetPoolName]
-      name: _05_Should_GetPoolName_When_GetPoolName
-      fullName: AudioModuleTest._05_Should_GetPoolName_When_GetPoolName
-      resultStatus: 1
-      duration: 0.0133938
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._05_GetPoolName_By_Key]
+      name: _05_GetPoolName_By_Key
+      fullName: AudioModuleTest._05_GetPoolName_By_Key
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2123,15 +2113,13 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1007
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._06_CheckIsPlaying]
-      name: _06_CheckIsPlaying
-      fullName: AudioModuleTest._06_CheckIsPlaying
-      resultStatus: 1
-      duration: 0.0005752
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._06_CheckIsPlaying_By_Key]
+      name: _06_CheckIsPlaying_By_Key
+      fullName: AudioModuleTest._06_CheckIsPlaying_By_Key
+      resultStatus: 0
+      duration: 0
       messages: 
-      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
-
-'
+      output: 
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2161,15 +2149,30 @@ MonoBehaviour:
       parentId: 1001
       parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
     - id: 1009
-      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._08_Play]
-      name: _08_Play
-      fullName: AudioModuleTest._08_Play
-      resultStatus: 1
-      duration: 0.0006042
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._08_Play_By_Key_ParentTransform]
+      name: _08_Play_By_Key_ParentTransform
+      fullName: AudioModuleTest._08_Play_By_Key_ParentTransform
+      resultStatus: 0
+      duration: 0
       messages: 
-      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
-
-'
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: AudioModule.Test.dll/[AudioModule.Test][AudioModuleTest][suite]
+    - id: 1010
+      uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._09_Stop_By_Id]
+      name: _09_Stop_By_Id
+      fullName: AudioModuleTest._09_Stop_By_Id
+      resultStatus: 0
+      duration: 0
+      messages: 
+      output: 
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2363,12 +2366,12 @@ MonoBehaviour:
       parentId: 1017
       parentUniqueId: '[EventModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
         /Library/ScriptAssemblies/EventModule.Test.dll][suite]'
-    - id: 1015
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener]
-      name: Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
-      fullName: EventModuleTest.Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
-      resultStatus: 1
-      duration: 0.0011687
+    - id: 1022
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener]
+      name: _01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
+      fullName: EventModuleTest._01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2378,14 +2381,14 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1012
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener]
-      name: Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
-      fullName: EventModuleTest.Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
-      resultStatus: 1
-      duration: 0.000472
+    - id: 1023
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener]
+      name: _02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
+      fullName: EventModuleTest._02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2395,14 +2398,14 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1014
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener]
-      name: Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
-      fullName: EventModuleTest.Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
-      resultStatus: 1
-      duration: 0.0001166
+    - id: 1024
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent]
+      name: _03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
+      fullName: EventModuleTest._03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2412,14 +2415,14 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1011
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_HasOneSyncEventDelegateContainer_When_AddSyncListener]
-      name: Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
-      fullName: EventModuleTest.Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
-      resultStatus: 1
-      duration: 0.0001146
+    - id: 1025
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener]
+      name: _04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
+      fullName: EventModuleTest._04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2429,14 +2432,14 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1016
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent]
-      name: Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
-      fullName: EventModuleTest.Should_isTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
-      resultStatus: 1
-      duration: 0.0014783
+    - id: 1026
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener]
+      name: _05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
+      fullName: EventModuleTest._05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2446,14 +2449,14 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    - id: 1013
-      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest.Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent]
-      name: Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
-      fullName: EventModuleTest.Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
-      resultStatus: 1
-      duration: 0.0002818
+    - id: 1027
+      uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent]
+      name: _05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
+      fullName: EventModuleTest._05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
+      resultStatus: 0
+      duration: 0
       messages: 
       output: 
       stacktrace: 
@@ -2463,15 +2466,903 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1021
       parentUniqueId: EventModule.Test.dll/[EventModule.Test][EventModuleTest][suite]
-    m_ResultText: AudioModule.Test.dll (0.099s)
+    - id: 1039
+      uniqueId: '[GameObjectPoolModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/GameObjectPoolModule.Test.dll][suite]'
+      name: GameObjectPoolModule.Test.dll
+      fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/GameObjectPoolModule.Test.dll
+      resultStatus: 1
+      duration: 0.0278195
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1000
+      parentUniqueId: '[GenericModule][suite]'
+    - id: 1029
+      uniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+      name: GameObjectPoolModuleTest
+      fullName: GameObjectPoolModuleTest
+      resultStatus: 1
+      duration: 0.0237169
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1039
+      parentUniqueId: '[GameObjectPoolModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/GameObjectPoolModule.Test.dll][suite]'
+    - id: 1030
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._01_Initialize]
+      name: _01_Initialize
+      fullName: GameObjectPoolModuleTest._01_Initialize
+      resultStatus: 1
+      duration: 0.0081488
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1031
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._02_Release]
+      name: _02_Release
+      fullName: GameObjectPoolModuleTest._02_Release
+      resultStatus: 1
+      duration: 0.0004266
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1032
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._03_Spawn_By_Key_ParentTransform]
+      name: _03_Spawn_By_Key_ParentTransform
+      fullName: GameObjectPoolModuleTest._03_Spawn_By_Key_ParentTransform
+      resultStatus: 1
+      duration: 0.0012682
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1033
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._05_DeSpawn_By_GameObjects]
+      name: _05_DeSpawn_By_GameObjects
+      fullName: GameObjectPoolModuleTest._05_DeSpawn_By_GameObjects
+      resultStatus: 1
+      duration: 0.000375
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1034
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._06_DeSpawn_By_GameObject]
+      name: _06_DeSpawn_By_GameObject
+      fullName: GameObjectPoolModuleTest._06_DeSpawn_By_GameObject
+      resultStatus: 1
+      duration: 0.0001679
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1035
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._07_DeSpawn_By_Key]
+      name: _07_DeSpawn_By_Key
+      fullName: GameObjectPoolModuleTest._07_DeSpawn_By_Key
+      resultStatus: 1
+      duration: 0.0002981
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1036
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._08_DeSpawnAll]
+      name: _08_DeSpawnAll
+      fullName: GameObjectPoolModuleTest._08_DeSpawnAll
+      resultStatus: 1
+      duration: 0.0002059
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1037
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._09_ReleasePool]
+      name: _09_ReleasePool
+      fullName: GameObjectPoolModuleTest._09_ReleasePool
+      resultStatus: 1
+      duration: 0.0014252
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1038
+      uniqueId: GameObjectPoolModule.Test.dll/GameObjectPoolModuleTest/[GameObjectPoolModule.Test][GameObjectPoolModuleTest._10_ReleaseAllPool]
+      name: _10_ReleaseAllPool
+      fullName: GameObjectPoolModuleTest._10_ReleaseAllPool
+      resultStatus: 1
+      duration: 0.0002217
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1029
+      parentUniqueId: GameObjectPoolModule.Test.dll/[GameObjectPoolModule.Test][GameObjectPoolModuleTest][suite]
+    - id: 1044
+      uniqueId: '[LogModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/LogModule.Test.dll][suite]'
+      name: LogModule.Test.dll
+      fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/LogModule.Test.dll
+      resultStatus: 1
+      duration: 0.0571717
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1000
+      parentUniqueId: '[GenericModule][suite]'
+    - id: 1040
+      uniqueId: LogModule.Test.dll/[LogModule.Test][LogModuleTest][suite]
+      name: LogModuleTest
+      fullName: LogModuleTest
+      resultStatus: 1
+      duration: 0.0533361
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1044
+      parentUniqueId: '[LogModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/LogModule.Test.dll][suite]'
+    - id: 1043
+      uniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._01_DeBug][suite]
+      name: _01_DeBug
+      fullName: LogModuleTest._01_DeBug
+      resultStatus: 1
+      duration: 0.0186787
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1040
+      parentUniqueId: LogModule.Test.dll/[LogModule.Test][LogModuleTest][suite]
+    - id: 1041
+      uniqueId: LogModule.Test.dll/LogModuleTest/_01_DeBug/[LogModule.Test][LogModuleTest._01_DeBug(True,"Hello")]
+      name: _01_DeBug(True,"Hello")
+      fullName: LogModuleTest._01_DeBug(True,"Hello")
+      resultStatus: 1
+      duration: 0.0103328
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1043
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._01_DeBug][suite]
+    - id: 1042
+      uniqueId: LogModule.Test.dll/LogModuleTest/_01_DeBug/[LogModule.Test][LogModuleTest._01_DeBug(False,null)]
+      name: _01_DeBug(False,null)
+      fullName: LogModuleTest._01_DeBug(False,null)
+      resultStatus: 1
+      duration: 0.0001402
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1043
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._01_DeBug][suite]
+    - id: 1046
+      uniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._02_Info][suite]
+      name: _02_Info
+      fullName: LogModuleTest._02_Info
+      resultStatus: 1
+      duration: 0.0188165
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1040
+      parentUniqueId: LogModule.Test.dll/[LogModule.Test][LogModuleTest][suite]
+    - id: 1044
+      uniqueId: LogModule.Test.dll/LogModuleTest/_02_Info/[LogModule.Test][LogModuleTest._02_Info(True,"Hello")]
+      name: _02_Info(True,"Hello")
+      fullName: LogModuleTest._02_Info(True,"Hello")
+      resultStatus: 1
+      duration: 0.0004438
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1046
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._02_Info][suite]
+    - id: 1045
+      uniqueId: LogModule.Test.dll/LogModuleTest/_02_Info/[LogModule.Test][LogModuleTest._02_Info(False,null)]
+      name: _02_Info(False,null)
+      fullName: LogModuleTest._02_Info(False,null)
+      resultStatus: 1
+      duration: 0.0000831
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1046
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._02_Info][suite]
+    - id: 1049
+      uniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._03_Warn][suite]
+      name: _03_Warn
+      fullName: LogModuleTest._03_Warn
+      resultStatus: 1
+      duration: 0.0054735
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1040
+      parentUniqueId: LogModule.Test.dll/[LogModule.Test][LogModuleTest][suite]
+    - id: 1047
+      uniqueId: LogModule.Test.dll/LogModuleTest/_03_Warn/[LogModule.Test][LogModuleTest._03_Warn(True,"Hello")]
+      name: _03_Warn(True,"Hello")
+      fullName: LogModuleTest._03_Warn(True,"Hello")
+      resultStatus: 1
+      duration: 0.0004122
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1049
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._03_Warn][suite]
+    - id: 1048
+      uniqueId: LogModule.Test.dll/LogModuleTest/_03_Warn/[LogModule.Test][LogModuleTest._03_Warn(False,null)]
+      name: _03_Warn(False,null)
+      fullName: LogModuleTest._03_Warn(False,null)
+      resultStatus: 1
+      duration: 0.0000877
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1049
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._03_Warn][suite]
+    - id: 1052
+      uniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._04_Error][suite]
+      name: _04_Error
+      fullName: LogModuleTest._04_Error
+      resultStatus: 1
+      duration: 0.0056659
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1040
+      parentUniqueId: LogModule.Test.dll/[LogModule.Test][LogModuleTest][suite]
+    - id: 1050
+      uniqueId: LogModule.Test.dll/LogModuleTest/_04_Error/[LogModule.Test][LogModuleTest._04_Error(True,"Hello")]
+      name: _04_Error(True,"Hello")
+      fullName: LogModuleTest._04_Error(True,"Hello")
+      resultStatus: 1
+      duration: 0.0004582
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1052
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._04_Error][suite]
+    - id: 1051
+      uniqueId: LogModule.Test.dll/LogModuleTest/_04_Error/[LogModule.Test][LogModuleTest._04_Error(False,null)]
+      name: _04_Error(False,null)
+      fullName: LogModuleTest._04_Error(False,null)
+      resultStatus: 1
+      duration: 0.0000734
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1052
+      parentUniqueId: LogModule.Test.dll/LogModuleTest/[LogModule.Test][LogModuleTest._04_Error][suite]
+    - id: 1067
+      uniqueId: '[SaveLoadModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/SaveLoadModule.Test.dll][suite]'
+      name: SaveLoadModule.Test.dll
+      fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/SaveLoadModule.Test.dll
+      resultStatus: 1
+      duration: 34.61731
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1000
+      parentUniqueId: '[GenericModule][suite]'
+    - id: 1054
+      uniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+      name: PrimitiveTypeTest
+      fullName: PrimitiveTypeTest
+      resultStatus: 1
+      duration: 34.6149
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1067
+      parentUniqueId: '[SaveLoadModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/SaveLoadModule.Test.dll][suite]'
+    - id: 1057
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._01_Save_Bool_Type][suite]
+      name: _01_Save_Bool_Type
+      fullName: PrimitiveTypeTest._01_Save_Bool_Type
+      resultStatus: 1
+      duration: 33.87672
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1055
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_01_Save_Bool_Type/[SaveLoadModule.Test][PrimitiveTypeTest._01_Save_Bool_Type(True,True)]
+      name: _01_Save_Bool_Type(True,True)
+      fullName: PrimitiveTypeTest._01_Save_Bool_Type(True,True)
+      resultStatus: 1
+      duration: 33.86124
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1057
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._01_Save_Bool_Type][suite]
+    - id: 1056
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_01_Save_Bool_Type/[SaveLoadModule.Test][PrimitiveTypeTest._01_Save_Bool_Type(False,False)]
+      name: _01_Save_Bool_Type(False,False)
+      fullName: PrimitiveTypeTest._01_Save_Bool_Type(False,False)
+      resultStatus: 1
+      duration: 0.0021697
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1057
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._01_Save_Bool_Type][suite]
+    - id: 1060
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._02_Save_Char_Type][suite]
+      name: _02_Save_Char_Type
+      fullName: PrimitiveTypeTest._02_Save_Char_Type
+      resultStatus: 1
+      duration: 0.0503571
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1058
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_02_Save_Char_Type/[SaveLoadModule.Test][PrimitiveTypeTest._02_Save_Char_Type('s','s')]
+      name: _02_Save_Char_Type('s','s')
+      fullName: PrimitiveTypeTest._02_Save_Char_Type('s','s')
+      resultStatus: 1
+      duration: 0.0033987
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1060
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._02_Save_Char_Type][suite]
+    - id: 1059
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_02_Save_Char_Type/[SaveLoadModule.Test][PrimitiveTypeTest._02_Save_Char_Type('@','@')]
+      name: _02_Save_Char_Type('@','@')
+      fullName: PrimitiveTypeTest._02_Save_Char_Type('@','@')
+      resultStatus: 1
+      duration: 0.0006999
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1060
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._02_Save_Char_Type][suite]
+    - id: 1061
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._03_Save_DateTime_Type]
+      name: _03_Save_DateTime_Type
+      fullName: PrimitiveTypeTest._03_Save_DateTime_Type
+      resultStatus: 1
+      duration: 0.0008154
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1064
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._04_Save_Double_Type][suite]
+      name: _04_Save_Double_Type
+      fullName: PrimitiveTypeTest._04_Save_Double_Type
+      resultStatus: 1
+      duration: 0.0653257
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1062
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_04_Save_Double_Type/[SaveLoadModule.Test][PrimitiveTypeTest._04_Save_Double_Type(0.5d,0.5d)]
+      name: _04_Save_Double_Type(0.5d,0.5d)
+      fullName: PrimitiveTypeTest._04_Save_Double_Type(0.5d,0.5d)
+      resultStatus: 1
+      duration: 0.0007677
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1064
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._04_Save_Double_Type][suite]
+    - id: 1063
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_04_Save_Double_Type/[SaveLoadModule.Test][PrimitiveTypeTest._04_Save_Double_Type(10,10)]
+      name: _04_Save_Double_Type(10,10)
+      fullName: PrimitiveTypeTest._04_Save_Double_Type(10,10)
+      resultStatus: 1
+      duration: 0.0003567
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1064
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._04_Save_Double_Type][suite]
+    - id: 1067
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._05_Save_Enum_Type][suite]
+      name: _05_Save_Enum_Type
+      fullName: PrimitiveTypeTest._05_Save_Enum_Type
+      resultStatus: 1
+      duration: 0.1056819
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1065
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_05_Save_Enum_Type/[SaveLoadModule.Test][PrimitiveTypeTest._05_Save_Enum_Type(Fake_1,Fake_1)]
+      name: _05_Save_Enum_Type(Fake_1,Fake_1)
+      fullName: PrimitiveTypeTest._05_Save_Enum_Type(Fake_1,Fake_1)
+      resultStatus: 1
+      duration: 0.0011363
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1067
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._05_Save_Enum_Type][suite]
+    - id: 1066
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_05_Save_Enum_Type/[SaveLoadModule.Test][PrimitiveTypeTest._05_Save_Enum_Type(Fake_2,Fake_2)]
+      name: _05_Save_Enum_Type(Fake_2,Fake_2)
+      fullName: PrimitiveTypeTest._05_Save_Enum_Type(Fake_2,Fake_2)
+      resultStatus: 1
+      duration: 0.0005835
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1067
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._05_Save_Enum_Type][suite]
+    - id: 1070
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._06_Save_Float_Type][suite]
+      name: _06_Save_Float_Type
+      fullName: PrimitiveTypeTest._06_Save_Float_Type
+      resultStatus: 1
+      duration: 0.1034704
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1068
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_06_Save_Float_Type/[SaveLoadModule.Test][PrimitiveTypeTest._06_Save_Float_Type(0.5f,0.5f)]
+      name: _06_Save_Float_Type(0.5f,0.5f)
+      fullName: PrimitiveTypeTest._06_Save_Float_Type(0.5f,0.5f)
+      resultStatus: 1
+      duration: 0.00148
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1070
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._06_Save_Float_Type][suite]
+    - id: 1069
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_06_Save_Float_Type/[SaveLoadModule.Test][PrimitiveTypeTest._06_Save_Float_Type(10.0f,10.0f)]
+      name: _06_Save_Float_Type(10.0f,10.0f)
+      fullName: PrimitiveTypeTest._06_Save_Float_Type(10.0f,10.0f)
+      resultStatus: 1
+      duration: 0.0006805
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1070
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._06_Save_Float_Type][suite]
+    - id: 1073
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._07_Save_Int_Type][suite]
+      name: _07_Save_Int_Type
+      fullName: PrimitiveTypeTest._07_Save_Int_Type
+      resultStatus: 1
+      duration: 0.1035546
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1071
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_07_Save_Int_Type/[SaveLoadModule.Test][PrimitiveTypeTest._07_Save_Int_Type(0,0)]
+      name: _07_Save_Int_Type(0,0)
+      fullName: PrimitiveTypeTest._07_Save_Int_Type(0,0)
+      resultStatus: 1
+      duration: 0.0014239
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1073
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._07_Save_Int_Type][suite]
+    - id: 1072
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_07_Save_Int_Type/[SaveLoadModule.Test][PrimitiveTypeTest._07_Save_Int_Type(10,10)]
+      name: _07_Save_Int_Type(10,10)
+      fullName: PrimitiveTypeTest._07_Save_Int_Type(10,10)
+      resultStatus: 1
+      duration: 0.0006316
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1073
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._07_Save_Int_Type][suite]
+    - id: 1075
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._08_Save_Long_Type][suite]
+      name: _08_Save_Long_Type
+      fullName: PrimitiveTypeTest._08_Save_Long_Type
+      resultStatus: 1
+      duration: 0.098563
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1074
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_08_Save_Long_Type/[SaveLoadModule.Test][PrimitiveTypeTest._08_Save_Long_Type(100,100)]
+      name: _08_Save_Long_Type(100,100)
+      fullName: PrimitiveTypeTest._08_Save_Long_Type(100,100)
+      resultStatus: 1
+      duration: 0.0012078
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1075
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._08_Save_Long_Type][suite]
+    - id: 1077
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._09_Save_Short_Type][suite]
+      name: _09_Save_Short_Type
+      fullName: PrimitiveTypeTest._09_Save_Short_Type
+      resultStatus: 1
+      duration: 0.1020767
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1076
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_09_Save_Short_Type/[SaveLoadModule.Test][PrimitiveTypeTest._09_Save_Short_Type(50,50)]
+      name: _09_Save_Short_Type(50,50)
+      fullName: PrimitiveTypeTest._09_Save_Short_Type(50,50)
+      resultStatus: 1
+      duration: 0.0022044
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1077
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._09_Save_Short_Type][suite]
+    - id: 1080
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type][suite]
+      name: _10_Save_String_Type
+      fullName: PrimitiveTypeTest._10_Save_String_Type
+      resultStatus: 1
+      duration: 0.1023957
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
+    - id: 1078
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_10_Save_String_Type/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type("Hello","Hello")]
+      name: _10_Save_String_Type("Hello","Hello")
+      fullName: PrimitiveTypeTest._10_Save_String_Type("Hello","Hello")
+      resultStatus: 1
+      duration: 0.0019582
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1080
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type][suite]
+    - id: 1079
+      uniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/_10_Save_String_Type/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type("Ciza","Ciza")]
+      name: _10_Save_String_Type("Ciza","Ciza")
+      fullName: PrimitiveTypeTest._10_Save_String_Type("Ciza","Ciza")
+      resultStatus: 1
+      duration: 0.0008951
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1080
+      parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type][suite]
+    m_ResultText: PrimitiveTypeTest (34.615s)
     m_ResultStacktrace: 
     m_TestListState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: f0ebd1c3
-      m_LastClickedID: -1009652752
-      m_ExpandedIDs: 26e38490089746aaf3598fe86a5044facea7d10838b395157a53581e20ffa921ff01b93e6975d37dffffff7f
+      scrollPos: {x: 0, y: 57}
+      m_SelectedIDs: aaab86cc
+      m_LastClickedID: -863589462
+      m_ExpandedIDs: 26e38490089746aab856e9bcaaab86ccf3598fe8213a17f96a5044facea7d10838b395157a53581e20ffa921ff01b93e6975d37dffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

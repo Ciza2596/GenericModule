@@ -19,10 +19,10 @@ namespace DataType.Implement
         private IDataTypeController _dataTypeController;
 
 
-        public ReflectionHelper(IReflectionHelperInstaller reflectionHelperInstaller)
+        public ReflectionHelper(IReflectionHelperConfig reflectionHelperConfig)
         {
-            _customSerializableAttributeType = reflectionHelperInstaller.CustomSerializableAttributeType;
-            _customNonSerializableAttributeType = reflectionHelperInstaller.CustomNonSerializableAttributeType;
+            _customSerializableAttributeType = reflectionHelperConfig.CustomSerializableAttributeType;
+            _customNonSerializableAttributeType = reflectionHelperConfig.CustomNonSerializableAttributeType;
         }
 
         public void Initialize(IDataTypeController dataTypeController) => _dataTypeController = dataTypeController;

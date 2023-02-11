@@ -18,7 +18,7 @@ public class SaveLoadModuleMonoInstaller : MonoInstaller
         Container.Bind<IDataTypeController>().To<DataTypeControllerAdapter>().AsSingle();
         
         Container.Bind<IStreamProvider>().To<FileStreamProvider>().AsSingle();
-        Container.Bind<IWriterProvider>().To<JsonWriteProvider>().AsSingle();
+        Container.Bind<IWriterProvider>().To<JsonWriterProvider>().AsSingle();
         Container.Bind<IReaderProvider>().To<JsonReaderProvider>().AsSingle();
         
     }

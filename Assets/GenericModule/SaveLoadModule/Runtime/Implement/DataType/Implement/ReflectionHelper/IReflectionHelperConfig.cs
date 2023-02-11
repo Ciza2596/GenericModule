@@ -3,7 +3,7 @@ using System;
 
 namespace DataType.Implement
 {
-    public interface IReflectionHelperInstaller
+    public interface IReflectionHelperConfig
     {
         Type CustomSerializableAttributeType { get; }
         Type CustomNonSerializableAttributeType { get; }

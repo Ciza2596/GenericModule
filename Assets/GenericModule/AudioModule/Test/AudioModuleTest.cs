@@ -3,7 +3,6 @@ using System.Linq;
 using AudioModule;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Audio;
 
 
 public class AudioModuleTest
@@ -13,6 +12,8 @@ public class AudioModuleTest
 
     private List<FakeAudioResourceData> _fakeAudioResourceDatas;
 
+    private Transform _audioPlayingTransform;
+
     [SetUp]
     public void SetUp()
     {
@@ -20,27 +21,30 @@ public class AudioModuleTest
         _audioModule = new AudioModule.AudioModule(_fakeAudioModuleConfig);
 
         _fakeAudioResourceDatas = new List<FakeAudioResourceData>();
+
+        var audioPlayingGameObject = new GameObject();
+        _audioPlayingTransform = audioPlayingGameObject.transform;
     }
 
 
     [Test]
-    public void _01_Should_Be_Initialized_When_Initialize()
+    public void _01_Initialize()
     {
         //arrange
         Assert.IsFalse(_audioModule.IsInitialized);
         var fakeAudioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
 
-        
+
         //act
         _audioModule.Initialize(fakeAudioResourceDatas);
 
-        
+
         //assert
         Assert.IsTrue(_audioModule.IsInitialized, "AudioModule initialize success.");
     }
 
     [Test]
-    public void _02_Should_Not_Be_Initialized_When_Release()
+    public void _02_Release()
     {
         //arrange
         Assert.IsFalse(_audioModule.IsInitialized);
@@ -49,17 +53,17 @@ public class AudioModuleTest
         _audioModule.Initialize(fakeAudioResourceDatas);
         Assert.IsTrue(_audioModule.IsInitialized);
 
-        
+
         //act
         _audioModule.Release();
 
-        
+
         //assert
         Assert.IsFalse(_audioModule.IsInitialized, "AudioModule release failed.");
     }
 
     [Test]
-    public void _03_Should_ReleaseAllPools_When_ReleaseAllPools()
+    public void _03_ReleaseAllPools()
     {
         //arrange
         var key1 = "HelloAudio_1";
@@ -91,7 +95,7 @@ public class AudioModuleTest
 
 
     [Test]
-    public void _04_Should_ReleasePool_When_ReleasePool()
+    public void _04_ReleasePool_By_Key()
     {
         //arrange
         var key1 = "HelloAudio_1";
@@ -122,7 +126,7 @@ public class AudioModuleTest
     }
 
     [Test]
-    public void _05_Should_GetPoolName_When_GetPoolName()
+    public void _05_GetPoolName_By_Key()
     {
         //arrange
         var key = "HelloAudio_1";
@@ -131,18 +135,18 @@ public class AudioModuleTest
         var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
-        
+
         //act
         var poolName = _audioModule.GetPoolName(key);
 
-        
+
         //assert
         var expectedPoolName = _fakeAudioModuleConfig.PoolPrefix + key + _fakeAudioModuleConfig.PoolSuffix;
         Assert.AreEqual(expectedPoolName, poolName, "Pool name is not equal.");
     }
 
     [Test]
-    public void _06_CheckIsPlaying()
+    public void _06_CheckIsPlaying_By_Key()
     {
         //arrange
         var key = "HelloAudio_1";
@@ -153,11 +157,11 @@ public class AudioModuleTest
 
         var id = _audioModule.Play(key);
 
-        
+
         //act
         var isPlaying = _audioModule.CheckIsPlaying(id);
-        
-        
+
+
         //assert
         Assert.IsTrue(isPlaying, "AudioData doesnt play.");
     }
@@ -174,18 +178,18 @@ public class AudioModuleTest
 
         var id = _audioModule.Play(key);
 
-        
+
         //act
         var audioData = _audioModule.GetAudioData(id);
-        
-        
+
+
         //assert
         Assert.IsNotNull(audioData, "AudioData is null.");
     }
 
 
     [Test]
-    public void _08_Play()
+    public void _08_Play_By_Key_ParentTransform()
     {
         //arrange
         var key = "HelloAudio_1";
@@ -194,20 +198,19 @@ public class AudioModuleTest
         var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
-        var audioPlayingGameObject= new GameObject();
-        var audioPlayingTransform = audioPlayingGameObject.transform;
-        Check_Transform_Hasnt_Child(audioPlayingTransform);
+        Check_Transform_Hasnt_Child();
 
-        
+
         //act
-        var id = _audioModule.Play(key, audioPlayingTransform);
-        
-        
+        var id = _audioModule.Play(key, _audioPlayingTransform);
+
+
         //assert
-        Check_Transform_Has_Child(audioPlayingTransform);
+        Check_Transform_Has_Child();
     }
 
-    public void Stop()
+    [Test]
+    public void _09_Stop_By_Id()
     {
         //arrange
         var key = "HelloAudio_1";
@@ -216,20 +219,18 @@ public class AudioModuleTest
         var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
-        var audioPlayingGameObject= new GameObject();
-        var audioPlayingTransform = audioPlayingGameObject.transform;
-        Check_Transform_Hasnt_Child(audioPlayingTransform);
-        
-        var id = _audioModule.Play(key, audioPlayingTransform);
-        Check_Transform_Has_Child(audioPlayingTransform);
+        Check_Transform_Hasnt_Child();
 
-        
+        var id = _audioModule.Play(key, _audioPlayingTransform);
+        Check_Transform_Has_Child();
+
+
         //act
-        _audioModule.Stop(key);
-        
-        
+        _audioModule.Stop(id);
+
+
         //assert
-        Check_Transform_Hasnt_Child(audioPlayingTransform);
+        Check_Transform_Hasnt_Child();
     }
 
 
@@ -245,6 +246,7 @@ public class AudioModuleTest
         var poolGameObject = GameObject.Find(poolName);
         Assert.IsNull(poolGameObject, "Pool already exist.");
     }
+
     private void Check_Pool_Exists_In_Game(string key)
     {
         var poolName = _audioModule.GetPoolName(key);
@@ -252,12 +254,13 @@ public class AudioModuleTest
         Assert.IsNotNull(poolGameObject, "Pool doesnt exists.");
     }
 
-    
-    private void Check_Transform_Hasnt_Child(Transform transform) =>
-        Assert.IsTrue(transform.childCount == 0, $"Transform: {transform.name} has child.");
-    private void Check_Transform_Has_Child(Transform transform) =>
-        Assert.IsTrue(transform.childCount > 0, $"Transform: {transform.name} hasnt child.");
 
+    private void Check_Transform_Hasnt_Child() =>
+        Assert.IsTrue(_audioPlayingTransform.childCount == 0, $"Transform: {_audioPlayingTransform.name} has child.");
+
+
+    private void Check_Transform_Has_Child() =>
+        Assert.IsTrue(_audioPlayingTransform.childCount > 0, $"Transform: {_audioPlayingTransform.name} hasnt child.");
 
 
     private void CreateMultFakeAudioResourceDataAndAddToList(string[] keys)
@@ -279,45 +282,4 @@ public class AudioModuleTest
         audioPrefab.AddComponent<AudioSource>();
         return audioPrefab;
     }
-}
-
-public class FakeAudioResourceData : IAudioResourceData
-{
-    //public variable
-    public string Key { get; }
-    public GameObject Prefab { get; }
-
-    //public method
-    public FakeAudioResourceData(string key, GameObject prefab)
-    {
-        Key = key;
-        Prefab = prefab;
-    }
-}
-
-
-public class FakeAudioModuleConfig : IAudioModuleConfig
-{
-    public string PoolRootName { get; private set; } = "[AudioModule]";
-    public string PoolPrefix { get; private set; } = "[";
-    public string PoolSuffix { get; private set; } = "s]";
-
-    public AudioMixer AudioMixer { get; private set; }
-
-    public string MasterVolumeParameter { get; private set; }
-    public string BgmVolumeParameter { get; private set; }
-    public string SfxVolumeParameter { get; private set; }
-    public string VoiceVolumeParameter { get; private set; }
-
-
-    public void SetPoolRootName(string poolRootName) => PoolRootName = poolRootName;
-    public void SetPoolPrefix(string poolPrefix) => PoolPrefix = poolPrefix;
-    public void SetPoolSuffix(string poolSuffix) => PoolSuffix = poolSuffix;
-
-    public void SetAudioMixer(AudioMixer audioMixer) => AudioMixer = audioMixer;
-
-    public void SetMasterVolumeParameter(string masterVolumeParameter) => MasterVolumeParameter = masterVolumeParameter;
-    public void SetBgmVolumeParameter(string bgmVolumeParameter) => BgmVolumeParameter = bgmVolumeParameter;
-    public void SetSfxVolumeParameter(string sfxVolumeParameter) => SfxVolumeParameter = sfxVolumeParameter;
-    public void SetVoiceVolumeParameter(string voiceVolumeParameter) => VoiceVolumeParameter = voiceVolumeParameter;
 }

@@ -1,18 +1,18 @@
 ## Add package from git URL
 
-## LogModule
+## LogModule [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
 
 
-## EventModule
+## EventModule [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
 
 
-## AudioModule
+## AudioModule [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
@@ -28,7 +28,7 @@ Coming soon.
 #### 3.Unity: vector2, vector2Int, vector3, vector3Int
 
 
-## GameObjectPoolModule
+## GameObjectPoolModule [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```

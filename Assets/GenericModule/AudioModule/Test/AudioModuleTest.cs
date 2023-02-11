@@ -198,7 +198,7 @@ public class AudioModuleTest
         var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
-        Check_Transform_Hasnt_Child();
+        Check_AudioPlayingTransform_Hasnt_Child();
 
 
         //act
@@ -206,7 +206,7 @@ public class AudioModuleTest
 
 
         //assert
-        Check_Transform_Has_Child();
+        Check_AudioPlayingTransform_Has_Child();
     }
 
     [Test]
@@ -219,10 +219,10 @@ public class AudioModuleTest
         var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
-        Check_Transform_Hasnt_Child();
+        Check_AudioPlayingTransform_Hasnt_Child();
 
         var id = _audioModule.Play(key, _audioPlayingTransform);
-        Check_Transform_Has_Child();
+        Check_AudioPlayingTransform_Has_Child();
 
 
         //act
@@ -230,7 +230,7 @@ public class AudioModuleTest
 
 
         //assert
-        Check_Transform_Hasnt_Child();
+        Check_AudioPlayingTransform_Hasnt_Child();
     }
 
 
@@ -255,12 +255,12 @@ public class AudioModuleTest
     }
 
 
-    private void Check_Transform_Hasnt_Child() =>
-        Assert.IsTrue(_audioPlayingTransform.childCount == 0, $"Transform: {_audioPlayingTransform.name} has child.");
+    private void Check_AudioPlayingTransform_Hasnt_Child() =>
+        Assert.IsTrue(_audioPlayingTransform.childCount == 0, $"AudioPlayingTransform has child.");
 
 
-    private void Check_Transform_Has_Child() =>
-        Assert.IsTrue(_audioPlayingTransform.childCount > 0, $"Transform: {_audioPlayingTransform.name} hasnt child.");
+    private void Check_AudioPlayingTransform_Has_Child() =>
+        Assert.IsTrue(_audioPlayingTransform.childCount > 0, $"AudioPlayingTransform hasnt child.");
 
 
     private void CreateMultFakeAudioResourceDataAndAddToList(string[] keys)

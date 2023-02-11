@@ -22,9 +22,12 @@ namespace GameObjectPoolModule
 
 
         private IGameObjectResourceData[] _gameObjectResourceDatas;
+        
+        //public variable
+        public bool IsInitialized => _gameObjectResourceDatas != null && _poolRootTransform != null;
 
 
-        //public method
+        //constructor
         public GameObjectPoolModule(IGameObjectPoolModuleConfig gameObjectPoolModuleConfig)
         {
             _poolRootName = gameObjectPoolModuleConfig.PoolRootName;
@@ -34,8 +37,11 @@ namespace GameObjectPoolModule
         }
 
 
+        //public method
         public void Initialize(IGameObjectResourceData[] gameObjectResourceDatas)
         {
+            Assert.IsNotNull(gameObjectResourceDatas,"[GameObjectPoolModule::Initialize] GameObjectResourceDatas is null.");
+            
             _gameObjectResourceDatas = gameObjectResourceDatas;
             
             if (_poolRootTransform is null)
@@ -109,6 +115,16 @@ namespace GameObjectPoolModule
 
             var gameObjects = _pools[key];
             gameObjects.Add(gameObject);
+        }
+
+        public void DeSpawnAll(string key)
+        {
+            
+        }
+
+        public void DeSpawnAll()
+        {
+            
         }
 
         public void ReleasePool(string key)

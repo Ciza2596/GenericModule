@@ -293,25 +293,3 @@ public class GameObjectPoolModuleTest
         return gameObjectResourceData.Key;
     }
 }
-
-public class FakeGameObjectPoolModuleConfig : IGameObjectPoolModuleConfig
-{
-    //public variable
-    public string PoolRootName { get; } = "[GameObjectModule]";
-    public string PoolPrefix { get; } = "[";
-    public string PoolSuffix { get; } = "s]";
-}
-
-public class FakeGameObjectResourceData : IGameObjectResourceData
-{
-    //public variable
-    public string Key { get; }
-    public GameObject Prefab { get; }
-
-    //constructor
-    public FakeGameObjectResourceData(string key, GameObject prefab)
-    {
-        Key = key;
-        Prefab = prefab;
-    }
-}

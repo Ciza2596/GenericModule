@@ -34,7 +34,7 @@ public class EventModuleTest
 
 
     [Test]
-    public void Should_HasOneSyncEventDelegateContainer_When_AddSyncListener()
+    public void _01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener()
     {
         //act
         _eventModule.AddSyncListener<TestSyncEvent>(OnTestSyncAction);
@@ -46,7 +46,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public void Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener()
+    public void _02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener()
     {
         //arrange
         _eventModule.AddSyncListener<TestSyncEvent>(OnTestSyncAction);
@@ -63,7 +63,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public void Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent()
+    public void _03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent()
     {
         //arrange
         _isTestSyncActionTrigger = false;
@@ -98,7 +98,7 @@ public class EventModuleTest
 
 
     [Test]
-    public void Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener()
+    public void _04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener()
     {
         //act
         _eventModule.AddAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
@@ -110,7 +110,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public void Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener()
+    public void _05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener()
     {
         //arrange
         _eventModule.AddAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
@@ -127,7 +127,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public async void Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent()
+    public async void _05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent()
     {
         //arrange
         _isTestAsyncActionTrigger = false;

@@ -32,8 +32,10 @@ public class GameObjectPoolModuleTest
         Check_GameObjectPoolModule_Is_Uninitialized();
         var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
 
+
         //act
         _gameObjectPoolModule.Initialize(gameObjectResourceDatas);
+
 
         //assert
         Check_GameObjectPoolModule_Is_Initialized();
@@ -45,10 +47,12 @@ public class GameObjectPoolModuleTest
         //arrange
         var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
-        
+
+
         //act
         _gameObjectPoolModule.Release();
-        
+
+
         //assert
         Check_GameObjectPoolModule_Is_Uninitialized();
     }
@@ -60,48 +64,152 @@ public class GameObjectPoolModuleTest
         var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
 
-        Check_SpawnTransform_Hasnt_Child();
-        
-        var gameObjectResourceData = gameObjectResourceDatas[0];
-        var key = gameObjectResourceData.Key;
+        Check_SpawnTransform_Hasnt_Children();
 
-        
+
         //act
-        _gameObjectPoolModule.Spawn(key, _spawnTransform);
-        
-        
+        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+
+
         //assert
-        Check_SpawnTransform_Has_Child();
+        Check_SpawnTransform_Has_Children();
     }
 
     [Test]
     public void _05_DeSpawn_By_GameObjects()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        Check_SpawnTransform_Hasnt_Children();
+
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,2, gameObjectResourceDatas);
+        Check_SpawnTransform_Has_Children(2);
+        
+        
+        //act
+        _gameObjectPoolModule.DeSpawn(gameObjects);
+
+
+        //assert
+        Check_SpawnTransform_Hasnt_Children();
     }
 
     [Test]
     public void _06_DeSpawn_By_GameObject()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        Check_SpawnTransform_Hasnt_Children();
+
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,1, gameObjectResourceDatas);
+        Check_SpawnTransform_Has_Children();
+
+        
+        //act
+        var gameObject = gameObjects[0];
+        _gameObjectPoolModule.DeSpawn(gameObject);
+
+
+        //assert
+        Check_SpawnTransform_Hasnt_Children();
     }
-    
+
     [Test]
-    public void _07_DeSpawnAll_By_Key()
+    public void _07_DeSpawn_By_Key()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        Check_SpawnTransform_Hasnt_Children();
+
+        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+        Check_SpawnTransform_Has_Children(2);
+
+        
+        //act
+        var key = GetKey(0, gameObjectResourceDatas);
+        _gameObjectPoolModule.DeSpawn(key);
+
+
+        //assert
+        Check_SpawnTransform_Has_Children();
     }
-    
+
     [Test]
     public void _08_DeSpawnAll()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        Check_SpawnTransform_Hasnt_Children();
+
+        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+        Check_SpawnTransform_Has_Children(2);
+
+        
+        //act
+        _gameObjectPoolModule.DeSpawnAll();
+
+
+        //assert
+        Check_SpawnTransform_Hasnt_Children();
     }
 
     [Test]
     public void _09_ReleasePool()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        var key = GetKey(0, gameObjectResourceDatas);
+        Check_Not_Exist_Pool(key);
+        
+        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Check_Exist_Pool(key);
+        
+        
+        //act
+        _gameObjectPoolModule.ReleasePool(key);
+        
+        
+        //assert
+        Check_Not_Exist_Pool(key);
     }
 
     [Test]
     public void _10_ReleaseAllPool()
     {
+        //arrange
+        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        
+        var key1 = GetKey(0, gameObjectResourceDatas);
+        var key2 = GetKey(1, gameObjectResourceDatas);
+
+        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+
+        Check_Exist_Pool(key1);
+        Check_Exist_Pool(key2);
+        
+        
+        //act
+        _gameObjectPoolModule.ReleaseAllPool();
+        
+        
+        //assert
+        Check_Not_Exist_Pool(key1);
+        Check_Not_Exist_Pool(key2);
+        
     }
 
 
@@ -140,11 +248,50 @@ public class GameObjectPoolModuleTest
             "GameObjectPoolModule is initialized.");
 
 
-    private void Check_SpawnTransform_Has_Child() =>
-        Assert.IsTrue(_spawnTransform.childCount > 0, $"SpawnTransform hasnt child.");
+    private void Check_SpawnTransform_Has_Children(int count = 1) =>
+        Assert.IsTrue(_spawnTransform.childCount >= count, $"SpawnTransform hasnt {count} children.");
+
+    private void Check_SpawnTransform_Hasnt_Children(int count = 0) =>
+        Assert.IsTrue(_spawnTransform.childCount <= 0, $"SpawnTransform has children.");
+
+    private void Check_Exist_Pool(string key)
+    {
+        var hasPool = _gameObjectPoolModule.TryGetPoolName(key, out var poolName);
+        Assert.IsTrue(hasPool, $"GameObjectPoolModule doesnt spawn {key} pool.");
+    }
     
-    private void Check_SpawnTransform_Hasnt_Child() =>
-        Assert.IsTrue(_spawnTransform.childCount == 0, $"SpawnTransform has child.");
+    private void Check_Not_Exist_Pool(string key)
+    {
+        var hasPool = _gameObjectPoolModule.TryGetPoolName(key, out var poolName);
+        Assert.IsFalse(hasPool, $"GameObjectPoolModule spawns {key} pool.");
+    }
+
+    private GameObject Spawn_GameObject_To_SpawnTransform(int keyIndex,
+        IGameObjectResourceData[] gameObjectResourceDatas)
+    {
+        var gameObjectResourceData = gameObjectResourceDatas[keyIndex];
+        var key = gameObjectResourceData.Key;
+        return _gameObjectPoolModule.Spawn(key, _spawnTransform);
+    }
+
+    private GameObject[] Spawn_GameObjects_To_SpawnTransform(int keyIndex, int count,
+        IGameObjectResourceData[] gameObjectResourceDatas)
+    {
+        var gameObjects = new List<GameObject>();
+        for (int i = 0; i < count; i++)
+        {
+            var gameObject = Spawn_GameObject_To_SpawnTransform(keyIndex, gameObjectResourceDatas);
+            gameObjects.Add(gameObject);
+        }
+
+        return gameObjects.ToArray();
+    }
+
+    private string GetKey(int keyIndex, IGameObjectResourceData[] gameObjectResourceDatas)
+    {
+        var gameObjectResourceData = gameObjectResourceDatas[keyIndex];
+        return gameObjectResourceData.Key;
+    }
 }
 
 public class FakeGameObjectPoolModuleConfig : IGameObjectPoolModuleConfig

@@ -61,6 +61,20 @@ namespace GameObjectPoolModule
             Object.DestroyImmediate(poolRootGameObject);
         }
 
+        public bool TryGetPoolRootName(out string poolRootName)
+        {
+            poolRootName = _poolRootName;
+            return _poolRootTransform != null;
+        }
+
+        public bool TryGetPoolName(string key, out string poolName)
+        {
+            poolName = GetPoolName(key);
+
+            var hasPool = _poolTransforms.ContainsKey(key);
+            return hasPool;
+        }
+
 
         public GameObject Spawn(string key, Transform parentTransform = null) =>
             Spawn(key, Vector3.zero, parentTransform);
@@ -117,14 +131,16 @@ namespace GameObjectPoolModule
             gameObjects.Add(gameObject);
         }
 
-        public void DeSpawnAll(string key)
+        public void DeSpawn(string key)
         {
-            
+            var usingGameObjects = GetUsingGameObjects(key);
+            DeSpawn(usingGameObjects);
         }
 
         public void DeSpawnAll()
         {
-            
+            var usingGameObjects = _usingGameObjects.ToArray();
+            DeSpawn(usingGameObjects);
         }
 
         public void ReleasePool(string key)
@@ -156,7 +172,7 @@ namespace GameObjectPoolModule
 
             var poolTransform = _poolTransforms[key];
             _poolTransforms.Remove(key);
-            Object.Destroy(poolTransform.gameObject);
+            Object.DestroyImmediate(poolTransform.gameObject);
         }
 
         public void ReleaseAllPool()
@@ -168,12 +184,15 @@ namespace GameObjectPoolModule
 
 
         //private method
+        private string GetPoolName(string key) => _poolPrefix + key + _poolSuffix;
+
         private void CreatePool(string key)
         {
             var gameObjects = new List<GameObject>();
             _pools.Add(key, gameObjects);
 
-            var gameObject = new GameObject(_poolPrefix + key + _poolSuffix);
+            var poolName = GetPoolName(key);
+            var gameObject = new GameObject(poolName);
             var poolTransform = gameObject.transform;
             poolTransform.SetParent(_poolRootTransform);
             _poolTransforms.Add(key, poolTransform);
@@ -192,6 +211,21 @@ namespace GameObjectPoolModule
             _gameObjectKeyMaps.Add(gameObject, key);
 
             return gameObject;
+        }
+
+        private GameObject[] GetUsingGameObjects(string key)
+        {
+            var usingGameObjects = _usingGameObjects.ToArray();
+            var usingGameObjectsByKey = new List<GameObject>();
+
+            foreach (var usingGameObject in usingGameObjects)
+            {
+                var usingKey = _gameObjectKeyMaps[usingGameObject];
+                if(usingKey == key)
+                    usingGameObjectsByKey.Add(usingGameObject);
+            }
+
+            return usingGameObjectsByKey.ToArray();
         }
     }
 }

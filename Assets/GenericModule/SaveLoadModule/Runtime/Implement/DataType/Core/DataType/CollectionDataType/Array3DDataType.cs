@@ -16,7 +16,7 @@ namespace DataType
             var array = (Array)obj;
 
             if (_elementDataType == null)
-                throw new ArgumentNullException("ES3Type argument cannot be null.");
+                throw new ArgumentNullException("[Array3DDataType::Write] DataType argument cannot be null.");
 
 
             for (int i = 0; i < array.GetLength(0); i++)
@@ -113,7 +113,7 @@ namespace DataType
 
             if (reader.StartReadCollection())
                 throw new NullReferenceException(
-                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[Array3DDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             bool iHasBeenRead = false;
 
@@ -123,7 +123,7 @@ namespace DataType
 
                 if (!reader.StartReadCollectionItem())
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is smaller than the collection provided as a parameter.");
+                        "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
 
                 reader.StartReadCollection();
 
@@ -133,7 +133,7 @@ namespace DataType
 
                     if (!reader.StartReadCollectionItem())
                         throw new IndexOutOfRangeException(
-                            "The collection we are loading is smaller than the collection provided as a parameter.");
+                            "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
 
                     reader.StartReadCollection();
 
@@ -141,14 +141,14 @@ namespace DataType
                     {
                         if (!reader.StartReadCollectionItem())
                             throw new IndexOutOfRangeException(
-                                "The collection we are loading is smaller than the collection provided as a parameter.");
+                                "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
                         reader.ReadInto<object>(array.GetValue(i, j, k), _elementDataType);
                         kHasBeenRead = reader.EndReadCollectionItem();
                     }
 
                     if (!kHasBeenRead)
                         throw new IndexOutOfRangeException(
-                            "The collection we are loading is larger than the collection provided as a parameter.");
+                            "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
                     reader.EndReadCollection();
 
@@ -157,7 +157,7 @@ namespace DataType
 
                 if (!jHasBeenRead)
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is larger than the collection provided as a parameter.");
+                        "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
                 reader.EndReadCollection();
 
@@ -166,7 +166,7 @@ namespace DataType
 
             if (!iHasBeenRead)
                 throw new IndexOutOfRangeException(
-                    "The collection we are loading is larger than the collection provided as a parameter.");
+                    "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
             reader.EndReadCollection();
         }

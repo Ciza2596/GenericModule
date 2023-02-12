@@ -19,7 +19,7 @@ namespace DataType
             var array = (Array)obj;
 
             if (_elementDataType == null)
-                throw new ArgumentNullException("ES3Type argument cannot be null.");
+                throw new ArgumentNullException("[ArrayDataType::Write] DataType argument cannot be null.");
 
             for (int i = 0; i < array.Length; i++)
             {
@@ -59,13 +59,10 @@ namespace DataType
         public override void ReadInto(IReader reader, object obj)
         {
             var collection = (IList)obj;
-
-            // if (collection.Count == 0)
-            //     ES3Debug.LogWarning("LoadInto/ReadInto expects a collection containing instances to load data in to, but the collection is empty.");
-
+            
             if (reader.StartReadCollection())
                 throw new NullReferenceException(
-                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[ArrayDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             int itemsLoaded = 0;
 
@@ -86,13 +83,13 @@ namespace DataType
                 // If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
                 if (itemsLoaded == collection.Count)
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is longer than the collection provided as a parameter.");
+                        "[ArrayDataType::ReadInto] The collection we are loading is longer than the collection provided as a parameter.");
             }
 
             // If we loaded fewer items than the parameter collection, throw index out of range exception.
             if (itemsLoaded != collection.Count)
                 throw new IndexOutOfRangeException(
-                    "The collection we are loading is shorter than the collection provided as a parameter.");
+                    "[ArrayDataType::ReadInto] The collection we are loading is shorter than the collection provided as a parameter.");
 
             reader.EndReadCollection();
         }

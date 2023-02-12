@@ -17,7 +17,7 @@ namespace DataType
             var list = (ICollection)obj;
 
             if (_elementDataType == null)
-                throw new ArgumentNullException("ES3Type argument cannot be null.");
+                throw new ArgumentNullException("[StackDataType::Write] DataType argument cannot be null.");
 
             var i = 0;
             foreach (object item in list)
@@ -37,7 +37,7 @@ namespace DataType
         {
             if (reader.StartReadCollection())
                 throw new NullReferenceException(
-                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[StackDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             var itemsLoaded = 0;
 
@@ -59,13 +59,13 @@ namespace DataType
                 // If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
                 if (itemsLoaded == stack.Count)
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is longer than the collection provided as a parameter.");
+                        "[StackDataType::ReadInto] The collection we are loading is longer than the collection provided as a parameter.");
             }
 
             // If we loaded fewer items than the parameter collection, throw index out of range exception.
             if (itemsLoaded != stack.Count)
                 throw new IndexOutOfRangeException(
-                    "The collection we are loading is shorter than the collection provided as a parameter.");
+                    "[StackDataType::ReadInto] The collection we are loading is shorter than the collection provided as a parameter.");
 
             reader.EndReadCollection();
         }
@@ -100,7 +100,7 @@ namespace DataType
         {
             if (reader.StartReadCollection())
                 throw new NullReferenceException(
-                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[StackDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             var itemsLoaded = 0;
 
@@ -122,13 +122,13 @@ namespace DataType
                 // If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
                 if (itemsLoaded == collection.Count)
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is longer than the collection provided as a parameter.");
+                        "[StackDataType::ReadInto] The collection we are loading is longer than the collection provided as a parameter.");
             }
 
             // If we loaded fewer items than the parameter collection, throw index out of range exception.
             if (itemsLoaded != collection.Count)
                 throw new IndexOutOfRangeException(
-                    "The collection we are loading is shorter than the collection provided as a parameter.");
+                    "[StackDataType::ReadInto] The collection we are loading is shorter than the collection provided as a parameter.");
 
             reader.EndReadCollection();
         }

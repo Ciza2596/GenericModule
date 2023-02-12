@@ -129,7 +129,7 @@ namespace SaveLoadModule.Implement
                 {
                     c = (char)_streamReader.Read();
                     if (IsEndOfStream(c))
-                        throw new FormatException("Reached end of stream while trying to read string literal.");
+                        throw new FormatException("[JsonReader::ReadString] Reached end of stream while trying to read string literal.");
 
                     switch (c)
                     {
@@ -375,9 +375,9 @@ namespace SaveLoadModule.Implement
             if (c != expectedChar)
             {
                 if (c == END_OF_STREAM_CHAR)
-                    throw new FormatException($"End of stream reached when expecting expectedChar: {expectedChar}.");
+                    throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
-                throw new FormatException($"ExpectedChar {expectedChar}, but found {c}.");
+                throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
             }
 
             return false;
@@ -390,9 +390,9 @@ namespace SaveLoadModule.Implement
             if (c != expectedChar)
             {
                 if (c == END_OF_STREAM_CHAR)
-                    throw new FormatException($"End of stream reached when expecting expectedChar: {expectedChar}.");
+                    throw new FormatException($"[JsonReader::ReadCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
-                throw new FormatException($"ExpectedChar {expectedChar}, but found {c}.");
+                throw new FormatException($"[JsonReader::ReadCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
             }
 
             return c;
@@ -413,9 +413,9 @@ namespace SaveLoadModule.Implement
             else if (!IsQuotationMark(c))
             {
                 if (c == END_OF_STREAM_CHAR)
-                    throw new FormatException("End of stream reached when expecting quotation mark.");
+                    throw new FormatException("[JsonReader::ReadQuotationMarkOrNullIgnoreWhitespace] End of stream reached when expecting quotation mark.");
 
-                throw new FormatException($"Expected quotation mark, found \'{c}\'.");
+                throw new FormatException($"[JsonReader::ReadQuotationMarkOrNullIgnoreWhitespace] Expected quotation mark, found \'{c}\'.");
             }
 
             return false;
@@ -480,7 +480,7 @@ namespace SaveLoadModule.Implement
                 switch (c)
                 {
                     case END_OF_STREAM_CHAR:
-                        throw new FormatException("String without closing quotation mark detected.");
+                        throw new FormatException("[JsonReader::ReadString] String without closing quotation mark detected.");
                     case '\\':
                         ReadOrSkipChar(writer, skip);
                         break;

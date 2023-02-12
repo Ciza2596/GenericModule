@@ -24,7 +24,7 @@ namespace DataType
             var list = (IList)obj;
 
             if (_elementDataType == null)
-                throw new ArgumentNullException("ES3Type argument cannot be null.");
+                throw new ArgumentNullException("[ListDataType::Write] DataType argument cannot be null.");
 
             int i = 0;
             foreach (object item in list)
@@ -36,15 +36,9 @@ namespace DataType
             }
         }
 
-        public override object Read<T>(IReader reader)
-        {
-            return Read(reader);
-
-            /*var list = new List<T>();
-			if(!ReadICollection<T>(reader, list, elementType))
-				return null;
-			return list;*/
-        }
+        public override object Read<T>(IReader reader) =>
+            Read(reader);
+        
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
@@ -80,7 +74,7 @@ namespace DataType
 
             if (reader.StartReadCollection())
                 throw new NullReferenceException(
-                    "The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[ListDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             int itemsLoaded = 0;
 
@@ -101,13 +95,13 @@ namespace DataType
                 // If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
                 if (itemsLoaded == collection.Count)
                     throw new IndexOutOfRangeException(
-                        "The collection we are loading is longer than the collection provided as a parameter.");
+                        "[ListDataType::ReadInto] The collection we are loading is longer than the collection provided as a parameter.");
             }
 
             // If we loaded fewer items than the parameter collection, throw index out of range exception.
             if (itemsLoaded != collection.Count)
                 throw new IndexOutOfRangeException(
-                    "The collection we are loading is shorter than the collection provided as a parameter.");
+                    "[ListDataType::ReadInto] The collection we are loading is shorter than the collection provided as a parameter.");
 
             reader.EndReadCollection();
         }

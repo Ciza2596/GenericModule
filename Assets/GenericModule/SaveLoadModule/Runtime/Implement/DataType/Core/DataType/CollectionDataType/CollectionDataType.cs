@@ -46,7 +46,7 @@ namespace DataType
         protected virtual void ReadICollectionInto(IReader reader, ICollection collection, DataType dataType)
 		{
 			if(reader.StartReadCollection())
-				throw new NullReferenceException("The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+				throw new NullReferenceException("[CollectionDataType::ReadICollectionInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
 			int itemsLoaded = 0;
 
@@ -66,12 +66,12 @@ namespace DataType
 
 				// If there's still items to load, but we've reached the end of the collection we're loading into, throw an error.
 				if(itemsLoaded == collection.Count)
-					throw new IndexOutOfRangeException("The collection we are loading is longer than the collection provided as a parameter.");
+					throw new IndexOutOfRangeException("[CollectionDataType::ReadICollectionInto] The collection we are loading is longer than the collection provided as a parameter.");
 			}
 
 			// If we loaded fewer items than the parameter collection, throw index out of range exception.
 			if(itemsLoaded != collection.Count)
-				throw new IndexOutOfRangeException("The collection we are loading is shorter than the collection provided as a parameter.");
+				throw new IndexOutOfRangeException("[CollectionDataType::ReadICollectionInto] The collection we are loading is shorter than the collection provided as a parameter.");
 
 			reader.EndReadCollection();
 		}

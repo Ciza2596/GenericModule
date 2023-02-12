@@ -20,15 +20,15 @@ namespace DataType
             var obj = _reflectionHelper.CreateInstance(Type);
 
             if (obj == null)
-                throw new NotSupportedException("Cannot create an instance of " + Type +
-                                                ". However, you may be able to add support for it using a custom ES3Type file. For more information see: http://docs.moodkie.com/easy-save-3/es3-guides/controlling-serialization-using-es3types/");
+                throw new NotSupportedException($"[ReflectedValueDataType::Read] Cannot create an instance of {Type}. However, you may be able to add support for it using a custom DataType file.");
+            
             // Make sure we return the result of ReadProperties as properties aren't assigned by reference.
             return ReadProperties(reader, obj);
         }
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
-            throw new NotSupportedException("Cannot perform self-assigning load on a value type.");
+            throw new NotSupportedException("[ReflectedValueDataType::Read] Cannot perform self-assigning load on a value type.");
         }
     }
 }

@@ -15,7 +15,7 @@ namespace DataType
 
         protected virtual void ReadObject<T>(IReader reader, object obj)
         {
-            throw new NotSupportedException($"ReadInto is not supported for type {Type}.");
+            throw new NotSupportedException($"[ObjectType::eadObject] ReadInto is not supported for type {Type}.");
         }
 
         public override void Write(object obj, IWriter writer)

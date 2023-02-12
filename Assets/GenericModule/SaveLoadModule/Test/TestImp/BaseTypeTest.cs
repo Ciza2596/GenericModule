@@ -27,6 +27,6 @@ public abstract class BaseTypeTest
     public void TearDown()
     {
         var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, FILE_PATH);
-        //_io.DeleteFile(fullPath);
+        _io.DeleteFile(fullPath);
     }
 }

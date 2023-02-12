@@ -25,7 +25,7 @@ namespace DataType
             var list = (IEnumerable)obj;
 
             if (_elementDataType == null)
-                throw new ArgumentNullException("ES3Type argument cannot be null.");
+                throw new ArgumentNullException("[HashSetDataType::Write] DataType argument cannot be null.");
 
             var count = 0;
             foreach (var item in list)
@@ -84,7 +84,7 @@ namespace DataType
         public override void ReadInto(IReader reader, object obj)
         {
             throw new NotImplementedException(
-                "Cannot use LoadInto/ReadInto with HashSet because HashSets do not maintain the order of elements");
+                "[HashSetDataType::ReadInto] Cannot use LoadInto/ReadInto with HashSet because HashSets do not maintain the order of elements");
         }
     }
 }

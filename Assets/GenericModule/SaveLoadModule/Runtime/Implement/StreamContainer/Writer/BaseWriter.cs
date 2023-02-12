@@ -108,7 +108,7 @@ namespace SaveLoadModule.Implement
                 dataType = _dataTypeController.GetOrCreateDataType(valueType);
 
 
-                Assert.IsNotNull(dataType, $"[BaseWriter::Write] Types of {valueType} are not supported.");
+                Assert.IsNotNull(dataType, $"[BaseWriter::Writer] Types of {valueType} are not supported.");
 
                 if (!dataType.IsCollection && !dataType.IsDictionary)
                 {
@@ -122,7 +122,7 @@ namespace SaveLoadModule.Implement
                 }
             }
 
-            Assert.IsNotNull(dataType, $"[BaseWriter::Write] DataType argument cannot be null");
+            Assert.IsNotNull(dataType, $"[BaseWriter::Writer] DataType argument cannot be null");
 
 
             if (dataType.IsPrimitive || dataType.IsEnum)

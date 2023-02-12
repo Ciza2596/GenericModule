@@ -34,10 +34,9 @@ namespace DataType
         public abstract void Write(object obj, IWriter writer);
         public abstract object Read<T>(IReader reader);
 
-        public virtual void ReadInto<T>(IReader reader, object obj)
-        {
-            throw new NotImplementedException("Self-assigning Read is not implemented or supported on this type.");
-        }
+        public virtual void ReadInto<T>(IReader reader, object obj) =>
+            throw new NotImplementedException("[DataType::ReadInto] ReadInfo is not implemented or supported on this type.");
+        
 
         protected bool WriteUsingDerivedType(object obj, IWriter writer)
         {
@@ -87,7 +86,6 @@ namespace DataType
         protected object ReadProperties(IReader reader, object obj)
         {
             // Iterate through each property in the file and try to load it using the appropriate
-            // ES3Member in the members array.
             
             foreach (string propertyName in reader.PropertyNames)
             {

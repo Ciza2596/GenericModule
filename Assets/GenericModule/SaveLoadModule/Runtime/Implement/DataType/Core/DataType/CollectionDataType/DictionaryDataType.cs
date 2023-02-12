@@ -84,7 +84,7 @@ namespace DataType
         {
             if (reader.StartReadDictionary())
                 throw new NullReferenceException(
-                    "The Dictionary we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+                    "[DictionaryDataType::ReadInto] The Dictionary we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
             var dict = (IDictionary)obj;
 
@@ -96,8 +96,7 @@ namespace DataType
                 var key = reader.Read<object>(_keyDataType);
 
                 if (!dict.Contains(key))
-                    throw new KeyNotFoundException("The key \"" + key +
-                                                   "\" in the Dictionary we are loading does not exist in the Dictionary we are loading into");
+                    throw new KeyNotFoundException($"[DictionaryDataType::ReadInto] The key \"{key}\" in the Dictionary we are loading does not exist in the Dictionary we are loading into.");
                 var value = dict[key];
                 reader.EndReadDictionaryKey();
 

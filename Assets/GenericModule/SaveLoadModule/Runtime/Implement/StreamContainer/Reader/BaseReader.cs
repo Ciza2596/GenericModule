@@ -98,7 +98,7 @@ namespace SaveLoadModule.Implement
             if (dataType.IsCollection)
                 return (T)((CollectionDataType)dataType).Read(this);
 
-            if (dataType.IsCollection)
+            if (dataType.IsDictionary)
                 return (T)((DictionaryDataType)dataType).Read(this);
 
             return ReadObject<T>(dataType);

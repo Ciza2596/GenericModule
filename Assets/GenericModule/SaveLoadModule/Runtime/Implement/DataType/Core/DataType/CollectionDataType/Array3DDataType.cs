@@ -15,7 +15,7 @@ namespace DataType
         {
             var array = (Array)obj;
 
-            if (ElementDataType == null)
+            if (_elementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
 
@@ -32,7 +32,7 @@ namespace DataType
                     for (int k = 0; k < array.GetLength(2); k++)
                     {
                         writer.StartWriteCollectionItem(k);
-                        writer.Write(array.GetValue(i, j, k), ElementDataType);
+                        writer.Write(array.GetValue(i, j, k), _elementDataType);
                         writer.EndWriteCollectionItem(k);
                     }
 
@@ -74,7 +74,7 @@ namespace DataType
                     if (!reader.StartReadCollectionItem())
                         break;
 
-                    ReadICollection<object>(reader, items, ElementDataType);
+                    ReadICollection<object>(reader, items, _elementDataType);
                     length2++;
 
                     if (reader.EndReadCollectionItem())
@@ -91,7 +91,7 @@ namespace DataType
             length2 = length2 / length1;
             var length3 = items.Count / length2 / length1;
 
-            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type,
+            var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type,
                 new int[] { length1, length2, length3 });
 
             for (int i = 0; i < length1; i++)
@@ -142,7 +142,7 @@ namespace DataType
                         if (!reader.StartReadCollectionItem())
                             throw new IndexOutOfRangeException(
                                 "The collection we are loading is smaller than the collection provided as a parameter.");
-                        reader.ReadInto<object>(array.GetValue(i, j, k), ElementDataType);
+                        reader.ReadInto<object>(array.GetValue(i, j, k), _elementDataType);
                         kHasBeenRead = reader.EndReadCollectionItem();
                     }
 

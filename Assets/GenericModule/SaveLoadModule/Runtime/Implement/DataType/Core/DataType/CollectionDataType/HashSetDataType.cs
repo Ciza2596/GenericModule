@@ -24,7 +24,7 @@ namespace DataType
 
             var list = (IEnumerable)obj;
 
-            if (ElementDataType == null)
+            if (_elementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             var count = 0;
@@ -35,7 +35,7 @@ namespace DataType
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(item, ElementDataType);
+                writer.Write(item, _elementDataType);
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
@@ -64,7 +64,7 @@ namespace DataType
                 {
                     if (!reader.StartReadCollectionItem())
                         break;
-                    var val = reader.Read<object>(ElementDataType);
+                    var val = reader.Read<object>(_elementDataType);
                     list.Add(val);
 
                     if (reader.EndReadCollectionItem())

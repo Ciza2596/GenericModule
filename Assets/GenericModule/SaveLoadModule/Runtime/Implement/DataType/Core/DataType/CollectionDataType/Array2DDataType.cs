@@ -17,7 +17,7 @@ namespace DataType
         {
             var array = (Array)obj;
 
-            if (ElementDataType is null)
+            if (_elementDataType is null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             for (int i = 0; i < array.GetLength(0); i++)
@@ -27,7 +27,7 @@ namespace DataType
                 for (int j = 0; j < array.GetLength(1); j++)
                 {
                     writer.StartWriteCollectionItem(j);
-                    writer.Write(array.GetValue(i, j), ElementDataType);
+                    writer.Write(array.GetValue(i, j), _elementDataType);
                     writer.EndWriteCollectionItem(j);
                 }
 
@@ -53,7 +53,7 @@ namespace DataType
                 if (!reader.StartReadCollectionItem())
                     break;
 
-                ReadICollection<object>(reader, items, ElementDataType);
+                ReadICollection<object>(reader, items, _elementDataType);
                 length1++;
 
                 if (reader.EndReadCollectionItem())
@@ -62,7 +62,7 @@ namespace DataType
 
             var length2 = items.Count / length1;
 
-            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type, new int[] { length1, length2 });
+            var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type, new int[] { length1, length2 });
 
             for (var i = 0; i < length1; i++) 
                 for (var j = 0; j < length2; j++)
@@ -100,7 +100,7 @@ namespace DataType
                     if (!reader.StartReadCollectionItem())
                         throw new IndexOutOfRangeException(
                             "The collection we are loading is smaller than the collection provided as a parameter.");
-                    reader.ReadInto<object>(array.GetValue(i, j), ElementDataType);
+                    reader.ReadInto<object>(array.GetValue(i, j), _elementDataType);
                     jHasBeenRead = reader.EndReadCollectionItem();
                 }
 

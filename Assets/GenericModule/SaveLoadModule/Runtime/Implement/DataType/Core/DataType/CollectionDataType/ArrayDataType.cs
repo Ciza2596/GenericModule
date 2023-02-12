@@ -18,13 +18,13 @@ namespace DataType
         {
             var array = (Array)obj;
 
-            if (ElementDataType == null)
+            if (_elementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             for (int i = 0; i < array.Length; i++)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(array.GetValue(i), ElementDataType);
+                writer.Write(array.GetValue(i), _elementDataType);
                 writer.EndWriteCollectionItem(i);
             }
         }
@@ -32,10 +32,10 @@ namespace DataType
         public override object Read(IReader reader)
         {
             var list = new List<object>();
-            if (!ReadICollection(reader, list, ElementDataType))
+            if (!ReadICollection(reader, list, _elementDataType))
                 return null;
 
-            var array = _reflectionHelper.CreateArrayInstance(ElementDataType.Type, list.Count);
+            var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type, list.Count);
             int i = 0;
             foreach (var item in list)
             {
@@ -53,7 +53,7 @@ namespace DataType
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
-            ReadICollectionInto(reader, (ICollection)obj, ElementDataType);
+            ReadICollectionInto(reader, (ICollection)obj, _elementDataType);
         }
 
         public override void ReadInto(IReader reader, object obj)
@@ -77,7 +77,7 @@ namespace DataType
                 if (!reader.StartReadCollectionItem())
                     break;
 
-                reader.ReadInto<object>(item, ElementDataType);
+                reader.ReadInto<object>(item, _elementDataType);
 
                 // If we find a ']', we reached the end of the array.
                 if (reader.EndReadCollectionItem())

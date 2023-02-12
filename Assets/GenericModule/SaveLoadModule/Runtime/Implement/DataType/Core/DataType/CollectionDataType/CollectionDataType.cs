@@ -6,15 +6,15 @@ namespace DataType
 {
 	public abstract class CollectionDataType : DataType
 	{
-		public DataType ElementDataType { get; }
+		protected readonly DataType _elementDataType;
 		
 		protected CollectionDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
 		{
-			ElementDataType = elementDataType;
+			_elementDataType = elementDataType;
 			IsCollection = true;
  
 			// If the element type is null (i.e. unsupported), make this ES3Type null.
-			if(ElementDataType == null)
+			if(_elementDataType == null)
 				IsUnsupported = true;
 		}
 		

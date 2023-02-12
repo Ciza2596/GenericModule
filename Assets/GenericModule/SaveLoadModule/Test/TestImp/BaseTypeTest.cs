@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using SaveLoadModule;
+using SaveLoadModule.Implement;
 
 public abstract class BaseTypeTest
 {
@@ -9,7 +9,7 @@ public abstract class BaseTypeTest
     protected SaveLoadModule.SaveLoadModule _saveLoadModule;
     protected FakeSaveLoadModuleConfig _saveLoadModuleConfig;
 
-    private IIo _io;
+    private Io _io;
 
 
     [SetUp]
@@ -27,6 +27,6 @@ public abstract class BaseTypeTest
     public void TearDown()
     {
         var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, FILE_PATH);
-        _io.DeleteFile(fullPath);
+        //_io.DeleteFile(fullPath);
     }
 }

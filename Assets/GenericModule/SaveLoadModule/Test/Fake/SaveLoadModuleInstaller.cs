@@ -5,7 +5,7 @@ using SaveLoadModule.Implement;
 public class SaveLoadModuleInstaller
 {
 
-    private IIo _io;
+    private Io _io;
     
     public SaveLoadModule.SaveLoadModule CreateSaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig)
     {
@@ -23,5 +23,5 @@ public class SaveLoadModuleInstaller
         return new SaveLoadModule.SaveLoadModule(saveLoadModuleConfig, _io, jsonWriterProvider, jsonReaderProvider);
     }
 
-    public IIo GetIo() => _io;
+    public Io GetIo() => _io;
 }

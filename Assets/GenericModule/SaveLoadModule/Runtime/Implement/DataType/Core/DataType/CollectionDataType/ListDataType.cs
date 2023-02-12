@@ -23,14 +23,14 @@ namespace DataType
 
             var list = (IList)obj;
 
-            if (ElementDataType == null)
+            if (_elementDataType == null)
                 throw new ArgumentNullException("ES3Type argument cannot be null.");
 
             int i = 0;
             foreach (object item in list)
             {
                 writer.StartWriteCollectionItem(i);
-                writer.Write(item, ElementDataType);
+                writer.Write(item, _elementDataType);
                 writer.EndWriteCollectionItem(i);
                 i++;
             }
@@ -48,7 +48,7 @@ namespace DataType
 
         public override void ReadInto<T>(IReader reader, object obj)
         {
-            ReadICollectionInto(reader, (ICollection)obj, ElementDataType);
+            ReadICollectionInto(reader, (ICollection)obj, _elementDataType);
         }
 
         public override object Read(IReader reader)
@@ -63,7 +63,7 @@ namespace DataType
             {
                 if (!reader.StartReadCollectionItem())
                     break;
-                instance.Add(reader.Read<object>(ElementDataType));
+                instance.Add(reader.Read<object>(_elementDataType));
 
                 if (reader.EndReadCollectionItem())
                     break;
@@ -92,7 +92,7 @@ namespace DataType
                 if (!reader.StartReadCollectionItem())
                     break;
 
-                reader.ReadInto<object>(item, ElementDataType);
+                reader.ReadInto<object>(item, _elementDataType);
 
                 // If we find a ']', we reached the end of the array.
                 if (reader.EndReadCollectionItem())

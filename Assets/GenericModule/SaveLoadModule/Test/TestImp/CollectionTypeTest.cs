@@ -8,7 +8,7 @@ public class CollectionTypeTest : BaseTypeTest
     public void _01_Save_Array_Type()
     {
         //arrange
-        var saveValue = new int[3] { 1, 2, 3 };
+        var saveValue = new int[] { 1, 2, 3 };
         var expectedValue = saveValue;
 
 
@@ -25,7 +25,7 @@ public class CollectionTypeTest : BaseTypeTest
     public void _02_Save_Array2D_Type()
     {
         //arrange
-        var saveValue = new int[2][] { new int[3] { 1, 2, 3 }, new int[3] { 4, 5, 6 } };
+        var saveValue = new int[][] { new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 } };
         var expectedValue = saveValue;
 
 
@@ -48,10 +48,10 @@ public class CollectionTypeTest : BaseTypeTest
     public void _03_Save_Array3D_Type()
     {
         //arrange
-        var saveValue = new int[2][][]
+        var saveValue = new int[][][]
         {
-            new int[2][] { new int[2] { 1, 2 }, new int[2] { 3, 4 } },
-            new int[2][] { new int[2] { 5, 6 }, new int[2] { 7, 8 } }
+            new int[][] { new int[] { 1, 2 }, new int[] { 3, 4 } },
+            new int[][] { new int[] { 5, 6 }, new int[] { 7, 8 } }
         };
         var expectedValue = saveValue;
 
@@ -105,6 +105,18 @@ public class CollectionTypeTest : BaseTypeTest
     [Test]
     public void _05_Save_HashSet_Type()
     {
+        //arrange
+        var saveValue = new HashSet<int>() { 1, 2, 3 };
+        var expectedValue = saveValue;
+
+
+        //act
+        Save_Data(saveValue);
+
+
+        //assert
+        var loadData = GetAndCheck_LoadData<HashSet<int>>();
+        Check_Value_Match(expectedValue.ToArray(), loadData.ToArray());
     }
 
     [Test]
@@ -127,11 +139,45 @@ public class CollectionTypeTest : BaseTypeTest
     [Test]
     public void _07_Save_Queue_Type()
     {
+        //arrange
+        var saveValue = new Queue<int>();
+        saveValue.Enqueue(1);
+        saveValue.Enqueue(2);
+        saveValue.Enqueue(3);
+        
+        var expectedValue = saveValue;
+
+
+        //act
+        Save_Data(saveValue);
+
+
+        //assert
+        var loadData = GetAndCheck_LoadData<Queue<int>>();
+        Check_Value_Match(expectedValue.ToArray(), loadData.ToArray());
+        
     }
 
     [Test]
-    public void _07_Save_Stack_Type()
+    public void _08_Save_Stack_Type()
     {
+        //arrange
+        var saveValue = new Stack<int>();
+        saveValue.Push(1);
+        saveValue.Push(2);
+        saveValue.Push(3);
+        
+        var expectedValue = saveValue;
+
+
+        //act
+        Save_Data(saveValue);
+
+
+        //assert
+        var loadData = GetAndCheck_LoadData<Stack<int>>();
+        Check_Value_Match(expectedValue.ToArray(), loadData.ToArray());
+
     }
 
     private void Check_Value_Match<T>(T[] exceptedValues, T[] values)

@@ -1,6 +1,6 @@
 {
-    "name": "AudioModule.Editor",
-    "rootNamespace": "AudioModule.Editor",
+    "name": "SaveLoadModule.Editor",
+    "rootNamespace": "SaveLoadModule.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"

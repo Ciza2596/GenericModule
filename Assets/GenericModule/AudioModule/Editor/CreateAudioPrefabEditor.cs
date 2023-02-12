@@ -24,7 +24,7 @@ namespace AudioModule.Editor
 
 
         //private method
-        [MenuItem("Tools/CreateAudioPrefab")]
+        [MenuItem("Tools/CizaModule/CreateAudioPrefab")]
         private static void ShowWindow() =>
             GetWindow<CreateAudioPrefabEditor>("CreateAudioPrefab");
 

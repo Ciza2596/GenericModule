@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: Scene
   m_Data:
     m_SerializedData: []
-  m_GUID: f7144b324e77047f98cc47c9fd853645
+  m_GUID: bcbb8eb07a0b24afe9191f04c214288e
   m_SerializeEntries:
   - m_GUID: 5346df1f4a1a14321b25f2eebff97324
     m_Address: AddressableModuleExample2_LoadScene
@@ -41,5 +41,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: f13026c52f0494d528ed53640ba9254c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 2595cd20281834e7db55e96dddeec494, type: 2}
     - {fileID: 11400000, guid: 24b504e9c9e434aac8049679944031a2, type: 2}
+    - {fileID: 11400000, guid: 2595cd20281834e7db55e96dddeec494, type: 2}

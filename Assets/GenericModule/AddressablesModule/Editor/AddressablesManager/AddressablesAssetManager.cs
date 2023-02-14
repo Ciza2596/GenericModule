@@ -1,0 +1,276 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEngine;
+
+namespace AddressablesModule.Editor
+{
+    public class AddressablesAssetManager
+    {
+        //private method
+        private const string END_TAG = "\n";
+
+        private const string GROUP_TAG = "@Group: ";
+        private const string GROUP_END_TAG = END_TAG;
+
+        private const string ASSET_INFO_TAG = "#";
+        private const string ASSET_INFO_AND_TAG = ";";
+
+        private const string ADDRESS_TAG = "Address: ";
+        private const string PATH_TAG = "Path: ";
+        private const string LABELS_TAG = "Labels: ";
+        private const string LABELS_AND_TAG = ", ";
+
+
+        //public method
+        public string Export()
+        {
+            string content = string.Empty;
+
+            if (TryGetAllGroupNames(out var groupNames))
+            {
+                foreach (var groupName in groupNames)
+                {
+                    content += GetGroupNameWithTag(groupName);
+
+                    if (TryGetGroupAssets(groupName, out var groupDatas))
+                        foreach (var groupData in groupDatas)
+                            content += GetAssetInfoWithTag(groupData);
+
+                    content += GROUP_END_TAG;
+                }
+            }
+
+            return content;
+        }
+
+        public void Import(string content, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        {
+            ClearAddressables();
+
+            var assetInfoDatas = CreateAssetInfoDatasByContent(content, out var groupNames);
+
+            CreateAddressablesGroups(groupNames, bundlePackingMode);
+
+
+            foreach (var assetInfoData in assetInfoDatas)
+            {
+                var groupName = assetInfoData.GroupName;
+                var address = assetInfoData.Address;
+                var assetPath = assetInfoData.AssetPath;
+                var labels = assetInfoData.Labels;
+
+                AddEntryToAddressables(groupName, address, assetPath, labels);
+            }
+        }
+
+
+        //private method
+        private bool TryGetAllGroupNames(out string[] groupNames)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            groupNames = null;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::GetAllGroupName] Settings is null.");
+                return false;
+            }
+
+            var groups = settings.groups;
+            var groupsCount = groups.Count - 2;
+
+            if (groupsCount <= 0)
+            {
+                Debug.Log("[AddressablesAssetManager::GetAllGroupName] Group is only Built In Data.");
+                return false;
+            }
+
+            groupNames = new string[groupsCount];
+
+            for (int i = 0; i < groupsCount; i++)
+            {
+                var groupName = groups[i + 2].Name;
+                groupNames[i] = groupName;
+            }
+
+            return true;
+        }
+
+        private bool TryGetGroupAssets(string groupName, out AssetInfoData[] groupDatas)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            groupDatas = null;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::TryGetGroupAssets] Settings is null.");
+                return false;
+            }
+
+            var groups = settings.groups;
+            var group = groups.Find(group => group.Name == groupName);
+            if (group is null)
+            {
+                Debug.LogError($"[AddressablesAssetManager::TryGetGroupAssets] Not find group: {groupName}.");
+                return false;
+            }
+
+            var entries = group.entries.ToArray();
+            var entriesLength = entries.Length;
+            groupDatas = new AssetInfoData[entriesLength];
+
+            for (int i = 0; i < entriesLength; i++)
+            {
+                var entry = entries[i];
+                var address = entry.address;
+                var assetPath = entry.AssetPath;
+                var labels = entry.labels.ToArray();
+
+                groupDatas[i] = new AssetInfoData(groupName, address, assetPath, labels, LABELS_AND_TAG);
+            }
+
+            return true;
+        }
+
+        private void ClearAddressables()
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::ClearAddressables] Settings is null.");
+                return;
+            }
+
+            var groups = settings.groups.ToArray();
+            for (int i = 2; i < groups.Length; i++)
+            {
+                var group = groups[i];
+                settings.RemoveGroup(group);
+            }
+        }
+
+        private void CreateAddressablesGroups(string[] groupNames, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        {
+            for (int i = 0; i < groupNames.Length; i++)
+            {
+                var groupName = groupNames[i];
+                CreateAddressablesGroup(groupName, bundlePackingMode);
+            }
+        }
+
+        private void CreateAddressablesGroup(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::CreateAddressablesGroup] Settings is null.");
+                return;
+            }
+
+            var group = settings.FindGroup(groupName);
+            if (!group)
+                group = settings.CreateGroup(groupName, false, false, true, null, typeof(ContentUpdateGroupSchema),
+                    typeof(BundledAssetGroupSchema));
+
+            var bundledAssetGroupSchema = group.GetSchema<BundledAssetGroupSchema>();
+            bundledAssetGroupSchema.BundleMode = bundlePackingMode;
+        }
+
+        private void AddEntryToAddressables(string groupName, string address, string assetPath, string[] labels)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::AddToAddressables] Settings is null.");
+                return;
+            }
+
+            var group = settings.FindGroup(groupName);
+            if (!group)
+            {
+                Debug.LogError($"[AddressablesAssetManager::AddToAddressables] Not Find Group: {groupName}.");
+                return;
+            }
+
+            var guid = AssetDatabase.AssetPathToGUID(assetPath);
+
+            var entry = settings.CreateOrMoveEntry(guid, group, false, false);
+            entry.SetAddress(address);
+            var entriesAdded = new List<AddressableAssetEntry> { entry };
+
+            group.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, false, true);
+            settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, true, false);
+        }
+
+
+        private AssetInfoData[] CreateAssetInfoDatasByContent(string content, out string[] groupNames)
+        {
+            content = content.Replace(END_TAG, null);
+            var groupContents = content.Split(GROUP_TAG);
+
+            var originGroupNames = new List<string>();
+
+            var assetInfoDatas = Array.Empty<AssetInfoData>();
+            foreach (var groupContent in groupContents)
+            {
+                if (string.IsNullOrWhiteSpace(groupContent))
+                    continue;
+
+                var newAssetInfoDatas = CreateAssetInfoDatasByGroupContent(groupContent, out var groupName);
+                originGroupNames.Add(groupName);
+                
+                assetInfoDatas = assetInfoDatas.Concat(newAssetInfoDatas).ToArray();
+            }
+
+            groupNames = originGroupNames.ToArray();
+            return assetInfoDatas;
+        }
+
+        private AssetInfoData[] CreateAssetInfoDatasByGroupContent(string groupContent, out string groupName)
+        {
+            var assetInfoContents = groupContent.Split(ASSET_INFO_TAG);
+            groupName = assetInfoContents[0];
+
+            var length = assetInfoContents.Length - 1;
+            var assetInfoDatas = new AssetInfoData[length];
+            for (int i = 0; i < length; i++)
+            {
+                var assetInfoContent = assetInfoContents[i + 1];
+                assetInfoDatas[i] = CreateAssetInfoDataByAssetInfoContent(groupName, assetInfoContent);
+            }
+
+            return assetInfoDatas;
+        }
+
+        private AssetInfoData CreateAssetInfoDataByAssetInfoContent(string groupName, string assetInfoContent)
+        {
+            var infoContents = assetInfoContent.Split(ASSET_INFO_AND_TAG);
+
+            var address = infoContents[0].Replace(ADDRESS_TAG, "");
+            var path = infoContents[1].Replace(PATH_TAG, "");
+            var labels = infoContents[2].Replace(LABELS_TAG, "");
+            return new AssetInfoData(groupName, address, path, labels, LABELS_AND_TAG);
+        }
+
+        private string GetGroupNameWithTag(string groupName) => GROUP_TAG + groupName + END_TAG;
+
+
+        private string GetAssetInfoWithTag(AssetInfoData assetInfoData)
+        {
+            var content = ASSET_INFO_TAG + END_TAG;
+            content += ADDRESS_TAG + assetInfoData.Address + ASSET_INFO_AND_TAG + END_TAG;
+            content += PATH_TAG + assetInfoData.AssetPath + ASSET_INFO_AND_TAG + END_TAG;
+            content += LABELS_TAG + assetInfoData.LabelsString + END_TAG;
+            content += END_TAG;
+            return content;
+        }
+    }
+}

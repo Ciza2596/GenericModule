@@ -31,6 +31,7 @@ MonoBehaviour:
     serializationDepthLimit: 64
     assemblyNames:
     - AddressablesModule
+    - AddressablesModule.Editor
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AudioModule
@@ -52,6 +53,7 @@ MonoBehaviour:
     - LogModule.Test
     - PsdPlugin
     - SaveLoadModule
+    - SaveLoadModule.Editor
     - SaveLoadModule.Test
     - SceneModule
     - Sirenix.OdinInspector.Modules.UnityMathematics

@@ -15,15 +15,16 @@ MonoBehaviour:
   m_GroupName: Prefab
   m_Data:
     m_SerializedData: []
-  m_GUID: ba9795d0b663a4b0590d617ec217aae9
+  m_GUID: 9fc096029f5374a1db2c949c41acbab1
   m_SerializeEntries:
   - m_GUID: 5d8c88ed4e8864c46b2dff0b75f3d158
     m_Address: GameObject
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f13026c52f0494d528ed53640ba9254c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 014e71af77ef9400c9ba112e15d0cd9d, type: 2}
     - {fileID: 11400000, guid: c2bba6b117b224f5387683980c591683, type: 2}
+    - {fileID: 11400000, guid: 014e71af77ef9400c9ba112e15d0cd9d, type: 2}

@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -7,6 +8,9 @@ namespace AudioModule.Editor
     public class CreateAudioPrefabEditor : EditorWindow
     {
         //private variable
+        private readonly string[] _toolbarTexts = { "CreateByFolder", "CreateByClip" };
+        private int _toolbarIndex = 0;
+        
         private AudioMixer _audioMixer;
         private string _volumeParameter;
 
@@ -14,13 +18,10 @@ namespace AudioModule.Editor
         private bool _isLoop;
         private float _spatialBlend;
 
-        private string _audioPrefabFolderPath;
+        private string _audioPrefabFolderPath = Application.dataPath;
 
         private AudioClip _audioClip;
-        private string _audioClipFolderPath;
-
-        private string[] _toolbarText = { "CreateByFolder", "CreateByClip" };
-        private int _toolbarIndex = 0;
+        private string _audioClipFolderPath = Application.dataPath;
 
 
         //private method
@@ -31,11 +32,11 @@ namespace AudioModule.Editor
         private void OnGUI()
         {
             SettingsArea();
-            
+
             EditorGUILayout.Space();
 
             ToolbarArea();
-            
+
             EditorGUILayout.Space();
 
             switch (_toolbarIndex)
@@ -51,25 +52,26 @@ namespace AudioModule.Editor
 
         private void SettingsArea()
         {
-            _audioMixer = EditorGUILayout.ObjectField(_audioMixer, typeof(AudioMixer), true) as AudioMixer;
+            _audioMixer =
+                EditorGUILayout.ObjectField("AudioMixer", _audioMixer, typeof(AudioMixer), true) as AudioMixer;
             _volumeParameter = EditorGUILayout.TextField("volumeParameter", _volumeParameter);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            
+
             _isPlayOnAwake = EditorGUILayout.Toggle("isPlayOnAwake", _isPlayOnAwake);
             _isLoop = EditorGUILayout.Toggle("isLoop", _isLoop);
             _spatialBlend = EditorGUILayout.FloatField("spatialBlend", _spatialBlend);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            _audioPrefabFolderPath = EditorGUILayout.TextField("AudioPrefabFolderPath", _audioPrefabFolderPath);
+            _audioPrefabFolderPath = GetFolderPathAndOpenWindow("AudioPrefabFolderPath", _audioPrefabFolderPath);
         }
 
 
         private void ToolbarArea()
         {
             GUILayout.BeginHorizontal();
-            _toolbarIndex = GUILayout.Toolbar(_toolbarIndex, _toolbarText);
+            _toolbarIndex = GUILayout.Toolbar(_toolbarIndex, _toolbarTexts);
             GUILayout.EndHorizontal();
         }
 
@@ -78,17 +80,17 @@ namespace AudioModule.Editor
             _audioClip = EditorGUILayout.ObjectField(_audioClip, typeof(AudioClip), true) as AudioClip;
 
             EditorGUILayout.Space();
-            
+
             if (GUILayout.Button("Create Audio Prefab"))
                 CreateAudioPrefab(_audioClip);
         }
 
         private void CreateAudioPrefabsArea()
         {
-            _audioClipFolderPath = EditorGUILayout.TextField("AudioClipFolderPath", _audioClipFolderPath);
+            _audioClipFolderPath = GetFolderPathAndOpenWindow("AudioClipFolderPath", _audioClipFolderPath);
 
             EditorGUILayout.Space();
-            
+
             if (GUILayout.Button("Create Audio Prefabs"))
             {
                 var audioGuidList = AssetDatabase.FindAssets("t: AudioClip", new string[] { _audioClipFolderPath });
@@ -135,9 +137,22 @@ namespace AudioModule.Editor
 
         private string GetPrefabPath(string prefabName)
         {
-            var path = _audioPrefabFolderPath + "/" + prefabName + ".prefab";
+            prefabName += ".prefab";
+            var path = Path.Combine(_audioPrefabFolderPath, prefabName);
             var localPath = AssetDatabase.GenerateUniqueAssetPath(path);
             return localPath;
+        }
+
+        private string GetFolderPathAndOpenWindow(string label, string originPath)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                var path = EditorGUILayout.TextField(label, originPath);
+                if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
+                    path = EditorUtility.OpenFolderPanel("Folder Path", "", "");
+
+                return string.IsNullOrWhiteSpace(path) ? originPath : path;
+            }
         }
     }
 }

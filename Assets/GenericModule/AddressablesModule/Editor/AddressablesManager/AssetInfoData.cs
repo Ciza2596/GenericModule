@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace AddressablesModule.Editor
 {
     public class AssetInfoData
@@ -5,15 +7,18 @@ namespace AddressablesModule.Editor
         //public variable
         public string GroupName { get; }
         public string Address { get; }
-        public string AssetPath { get; }
+        public int InstanceId { get; }
         public string LabelsString { get; }
-
         public string[] Labels { get; }
 
 
+        public string AssetPath { get; }
+
+
         //constructor
-        public AssetInfoData(string groupName, string address, string assetPath, string[] labels, string splitTag) : this(
-            groupName, address, assetPath)
+        public AssetInfoData(string groupName, string address, int instanceId, string[] labels,
+                             string splitTag,  string assetPath) : this(
+            groupName, address, instanceId, assetPath)
         {
             var labelsLength = labels.Length;
             for (int i = 0; i < labelsLength; i++)
@@ -25,16 +30,21 @@ namespace AddressablesModule.Editor
             }
         }
 
-        public AssetInfoData(string groupName, string address, string assetPath, string labelsString,
-            string splitTag) : this(
-            groupName, address, assetPath) =>
-            Labels = labelsString.Split(splitTag);
+        public AssetInfoData(string groupName, string address, int instanceId, string labelsString,
+                             string splitTag) : this(
+            groupName, address, instanceId)
+        {
+            var labelsWithNull= labelsString.Split(splitTag).ToList();
+            labelsWithNull.Remove("");
+            Labels = labelsWithNull.ToArray();
+        }
+        
 
-
-        private AssetInfoData(string groupName, string address, string assetPath)
+        private AssetInfoData(string groupName, string address, int instanceId, string assetPath = null)
         {
             GroupName = groupName;
             Address = address;
+            InstanceId = instanceId;
             AssetPath = assetPath;
         }
     }

@@ -23,8 +23,8 @@ namespace AddressablesModule.Editor
 
 
         //private method
-        [MenuItem("Tools/CizaModule/AddressablesModuleAsset")]
-        private static void ShowWindow() => GetWindow<AddressablesAssetManagerEditor>("AddressablesModuleAssetEditor");
+        [MenuItem("Tools/CizaModule/AddressablesAssetManager")]
+        private static void ShowWindow() => GetWindow<AddressablesAssetManagerEditor>("AddressablesAssetManager");
 
         private void OnGUI()
         {
@@ -52,7 +52,7 @@ namespace AddressablesModule.Editor
         private void ExportArea()
         {
             EditorGUILayout.Space();
-            _fileName = EditorGUILayout.TextField("Enter File Name", _fileName);
+            _fileName = EditorGUILayout.TextField("Config Name", _fileName);
             _exportPath = GetFolderPathAndOpenWindow("Export Path", _exportPath);
             EditorGUILayout.Space();
 
@@ -64,7 +64,7 @@ namespace AddressablesModule.Editor
         {
             EditorGUILayout.Space();
             _importText =
-                EditorGUILayout.ObjectField("Addressables Config", _importText, typeof(TextAsset)) as TextAsset;
+                EditorGUILayout.ObjectField("Config", _importText, typeof(TextAsset)) as TextAsset;
             _bundleMode = (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", _bundleMode);
             EditorGUILayout.Space();
 
@@ -91,6 +91,7 @@ namespace AddressablesModule.Editor
 
             var content = _importText.text;
             _addressablesAssetManager.Import(content, _bundleMode);
+            Export();
         }
 
 

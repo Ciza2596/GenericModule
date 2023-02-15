@@ -6,6 +6,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AddressablesModule.Editor
 {
@@ -21,8 +22,12 @@ namespace AddressablesModule.Editor
         private const string ASSET_INFO_AND_TAG = ";";
 
         private const string ADDRESS_TAG = "Address: ";
-        private const string PATH_TAG = "Path: ";
+        private const string INSTANCE_ID_TAG = "InstanceId: ";
         private const string LABELS_TAG = "Labels: ";
+
+        private const string ASSET_PATH_TAG = "(AssetPath: ";
+        private const string ASSET_PATH_END_TAG = ")";
+
         private const string LABELS_AND_TAG = ", ";
 
 
@@ -48,9 +53,11 @@ namespace AddressablesModule.Editor
             return content;
         }
 
-        public void Import(string content, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        public void Import(string content,
+                           BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
         {
             ClearAddressables();
+            ClearLabels();
 
             var assetInfoDatas = CreateAssetInfoDatasByContent(content, out var groupNames);
 
@@ -61,10 +68,10 @@ namespace AddressablesModule.Editor
             {
                 var groupName = assetInfoData.GroupName;
                 var address = assetInfoData.Address;
-                var assetPath = assetInfoData.AssetPath;
+                var instanceId = assetInfoData.InstanceId;
                 var labels = assetInfoData.Labels;
 
-                AddEntryToAddressables(groupName, address, assetPath, labels);
+                AddEntryToAddressables(groupName, address, instanceId, labels);
             }
         }
 
@@ -129,9 +136,11 @@ namespace AddressablesModule.Editor
                 var entry = entries[i];
                 var address = entry.address;
                 var assetPath = entry.AssetPath;
+                var obj = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
+                var instanceId = obj.GetInstanceID();
                 var labels = entry.labels.ToArray();
 
-                groupDatas[i] = new AssetInfoData(groupName, address, assetPath, labels, LABELS_AND_TAG);
+                groupDatas[i] = new AssetInfoData(groupName, address, instanceId, labels, LABELS_AND_TAG, assetPath);
             }
 
             return true;
@@ -155,7 +164,23 @@ namespace AddressablesModule.Editor
             }
         }
 
-        private void CreateAddressablesGroups(string[] groupNames, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        private void ClearLabels()
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+
+            if (!settings)
+            {
+                Debug.LogError("[AddressablesAssetManager::ClearLabels] Settings is null.");
+                return;
+            }
+
+            var labels = settings.GetLabels().ToArray();
+            foreach (var label in labels)
+                settings.RemoveLabel(label);
+        }
+
+        private void CreateAddressablesGroups(string[] groupNames,
+                                              BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
         {
             for (int i = 0; i < groupNames.Length; i++)
             {
@@ -164,7 +189,8 @@ namespace AddressablesModule.Editor
             }
         }
 
-        private void CreateAddressablesGroup(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        private void CreateAddressablesGroup(string groupName,
+                                             BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
 
@@ -177,13 +203,13 @@ namespace AddressablesModule.Editor
             var group = settings.FindGroup(groupName);
             if (!group)
                 group = settings.CreateGroup(groupName, false, false, true, null, typeof(ContentUpdateGroupSchema),
-                    typeof(BundledAssetGroupSchema));
+                                             typeof(BundledAssetGroupSchema));
 
             var bundledAssetGroupSchema = group.GetSchema<BundledAssetGroupSchema>();
             bundledAssetGroupSchema.BundleMode = bundlePackingMode;
         }
 
-        private void AddEntryToAddressables(string groupName, string address, string assetPath, string[] labels)
+        private void AddEntryToAddressables(string groupName, string address, int instanceId, string[] labels)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
 
@@ -200,10 +226,13 @@ namespace AddressablesModule.Editor
                 return;
             }
 
-            var guid = AssetDatabase.AssetPathToGUID(assetPath);
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(instanceId, out string guid, out long localId);
 
             var entry = settings.CreateOrMoveEntry(guid, group, false, false);
             entry.SetAddress(address);
+            foreach (var label in labels)
+                entry.SetLabel(label, true, true);
+
             var entriesAdded = new List<AddressableAssetEntry> { entry };
 
             group.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, false, true);
@@ -226,7 +255,7 @@ namespace AddressablesModule.Editor
 
                 var newAssetInfoDatas = CreateAssetInfoDatasByGroupContent(groupContent, out var groupName);
                 originGroupNames.Add(groupName);
-                
+
                 assetInfoDatas = assetInfoDatas.Concat(newAssetInfoDatas).ToArray();
             }
 
@@ -255,9 +284,10 @@ namespace AddressablesModule.Editor
             var infoContents = assetInfoContent.Split(ASSET_INFO_AND_TAG);
 
             var address = infoContents[0].Replace(ADDRESS_TAG, "");
-            var path = infoContents[1].Replace(PATH_TAG, "");
+            var instanceIdString = infoContents[1].Replace(INSTANCE_ID_TAG, "");
+            var instanceId = int.Parse(instanceIdString);
             var labels = infoContents[2].Replace(LABELS_TAG, "");
-            return new AssetInfoData(groupName, address, path, labels, LABELS_AND_TAG);
+            return new AssetInfoData(groupName, address, instanceId, labels, LABELS_AND_TAG);
         }
 
         private string GetGroupNameWithTag(string groupName) => GROUP_TAG + groupName + END_TAG;
@@ -266,9 +296,11 @@ namespace AddressablesModule.Editor
         private string GetAssetInfoWithTag(AssetInfoData assetInfoData)
         {
             var content = ASSET_INFO_TAG + END_TAG;
-            content += ADDRESS_TAG + assetInfoData.Address + ASSET_INFO_AND_TAG + END_TAG;
-            content += PATH_TAG + assetInfoData.AssetPath + ASSET_INFO_AND_TAG + END_TAG;
-            content += LABELS_TAG + assetInfoData.LabelsString + END_TAG;
+            content += ADDRESS_TAG     + assetInfoData.Address      + ASSET_INFO_AND_TAG + END_TAG;
+            content += INSTANCE_ID_TAG + assetInfoData.InstanceId   + ASSET_INFO_AND_TAG + END_TAG;
+            content += LABELS_TAG      + assetInfoData.LabelsString + ASSET_INFO_AND_TAG + END_TAG;
+
+            content += ASSET_PATH_TAG + assetInfoData.AssetPath + ASSET_PATH_END_TAG + END_TAG;
             content += END_TAG;
             return content;
         }

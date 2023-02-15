@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 122
-    y: 66
-    width: 1728
+    x: 147
+    y: 53
+    width: 1360
     height: 967
   m_ShowMode: 4
-  m_Title: Test Runner
+  m_Title: Console
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -42,12 +42,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 30
-    width: 1728
+    width: 1360
     height: 917
   m_MinSize: {x: 500, y: 100}
   m_MaxSize: {x: 40480, y: 16192}
   vertical: 1
-  controlID: 60
+  controlID: 2162
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -68,7 +68,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1728
+    width: 1360
     height: 967
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -93,7 +93,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1728
+    width: 1360
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 947
-    width: 1728
+    width: 1360
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -138,12 +138,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1728
+    width: 1360
     height: 917
   m_MinSize: {x: 500, y: 100}
   m_MaxSize: {x: 40480, y: 16192}
   vertical: 0
-  controlID: 61
+  controlID: 2163
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -163,12 +163,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 623
+    width: 1063
     height: 917
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 1
-  controlID: 62
+  controlID: 20
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -190,12 +190,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 623
-    height: 524.5
+    width: 1063
+    height: 491
   m_MinSize: {x: 400, y: 50}
   m_MaxSize: {x: 32384, y: 8096}
   vertical: 0
-  controlID: 63
+  controlID: 21
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -213,14 +213,14 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 114
-    height: 524.5
+    width: 403
+    height: 491
   m_MinSize: {x: 431, y: 271}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 21}
+  m_ActualView: {fileID: 22}
   m_Panes:
-  - {fileID: 20}
   - {fileID: 21}
+  - {fileID: 22}
   m_Selected: 1
   m_LastSelected: 0
 --- !u!114 &10
@@ -233,22 +233,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: AddressablesAssetManagerEditor
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 114
+    x: 403
     y: 0
-    width: 120
-    height: 524.5
-  m_MinSize: {x: 202, y: 221}
+    width: 424
+    height: 491
+  m_MinSize: {x: 102, y: 121}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 22}
+  m_ActualView: {fileID: 17}
   m_Panes:
-  - {fileID: 22}
   - {fileID: 23}
-  m_Selected: 0
+  - {fileID: 24}
+  - {fileID: 17}
+  m_Selected: 2
   m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
@@ -260,23 +261,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ES3Window
+  m_Name: GameView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 234
+    x: 827
     y: 0
-    width: 227
-    height: 524.5
-  m_MinSize: {x: 102, y: 121}
+    width: 136
+    height: 491
+  m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 18}
+  m_ActualView: {fileID: 20}
   m_Panes:
+  - {fileID: 20}
   - {fileID: 19}
-  - {fileID: 18}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -292,15 +293,15 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 461
+    x: 963
     y: 0
-    width: 162
-    height: 524.5
+    width: 100
+    height: 491
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 24}
+  m_ActualView: {fileID: 25}
   m_Panes:
-  - {fileID: 24}
+  - {fileID: 25}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &13
@@ -321,13 +322,13 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 524.5
-    width: 623
-    height: 392.5
+    y: 491
+    width: 1063
+    height: 426
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 163
+  controlID: 151
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -345,18 +346,18 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 395
-    height: 392.5
+    width: 528
+    height: 426
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 25}
+  m_ActualView: {fileID: 26}
   m_Panes:
-  - {fileID: 25}
   - {fileID: 26}
-  - {fileID: 17}
   - {fileID: 27}
+  - {fileID: 18}
+  - {fileID: 28}
   m_Selected: 0
-  m_LastSelected: 2
+  m_LastSelected: 0
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -372,15 +373,15 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 395
+    x: 528
     y: 0
-    width: 228
-    height: 392.5
+    width: 535
+    height: 426
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 28}
+  m_ActualView: {fileID: 29}
   m_Panes:
-  - {fileID: 28}
+  - {fileID: 29}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &16
@@ -393,25 +394,58 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: TestRunnerWindow
+  m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 623
+    x: 1063
     y: 0
-    width: 1105
+    width: 297
     height: 917
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 31}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 30}
   m_Panes:
-  - {fileID: 29}
   - {fileID: 30}
   - {fileID: 31}
-  m_Selected: 2
-  m_LastSelected: 0
+  - {fileID: 32}
+  m_Selected: 0
+  m_LastSelected: 2
 --- !u!114 &17
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc4b69de194a47eebdee72053cc1c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: AddressablesModuleAssetEditor
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 550
+    y: 83
+    width: 422
+    height: 470
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -427,7 +461,7 @@ MonoBehaviour:
   m_MaxSize: {x: 10000, y: 10000}
   m_TitleContent:
     m_Text: Project
-    m_Image: {fileID: -5179483145760003458, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -5467254957812901981, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -473,7 +507,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 335}
     m_SelectedIDs: 24770000
     m_LastClickedID: 30500
-    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
+    m_ExpandedIDs: 000000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -501,7 +535,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
+    m_ExpandedIDs: 000000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -557,7 +591,7 @@ MonoBehaviour:
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 311
---- !u!114 &18
+--- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -577,10 +611,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 356
+    x: 643.5
     y: 96
-    width: 225
-    height: 503.5
+    width: 321
+    height: 507.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -590,7 +624,7 @@ MonoBehaviour:
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &19
+--- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -606,14 +640,14 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Game
-    m_Image: {fileID: 4621777727084837110, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -6423792434712278376, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 308
-    y: 96
-    width: 671.5
-    height: 503.5
+    x: 974
+    y: 83
+    width: 134
+    height: 470
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -644,10 +678,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -480
-    m_HBaseRangeMax: 480
-    m_VBaseRangeMin: -270
-    m_VBaseRangeMax: 270
+    m_HBaseRangeMin: -960
+    m_HBaseRangeMax: 960
+    m_VBaseRangeMin: -540
+    m_VBaseRangeMax: 540
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -665,29 +699,29 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 671.5
-      height: 482.5
-    m_Scale: {x: 0.69947916, y: 0.69947916}
-    m_Translation: {x: 335.75, y: 241.25}
+      width: 134
+      height: 449
+    m_Scale: {x: 0.06979167, y: 0.06979167}
+    m_Translation: {x: 67, y: 224.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -480
-      y: -344.89948
-      width: 960
-      height: 689.79895
+      x: -960
+      y: -3216.7163
+      width: 1920
+      height: 6433.4326
     m_MinimalGUI: 1
-  m_defaultScale: 0.69947916
-  m_LastWindowPixelSize: {x: 1343, y: 1007}
+  m_defaultScale: 0.06979167
+  m_LastWindowPixelSize: {x: 134, y: 470}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
   m_XRRenderMode: 0
   m_RenderTexture: {fileID: 0}
---- !u!114 &20
+--- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -703,7 +737,7 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Animator
-    m_Image: {fileID: 1711060831702674872, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -1673928668082335149, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -756,7 +790,7 @@ MonoBehaviour:
   m_CurrentEditor: 0
   m_LayerEditor:
     m_SelectedLayerIndex: 0
---- !u!114 &21
+--- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -776,10 +810,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 122
-    y: 96
-    width: 113
-    height: 503.5
+    x: 147
+    y: 83
+    width: 402
+    height: 470
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -792,23 +826,23 @@ MonoBehaviour:
   m_GroupEditor:
     m_TreeState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 178670c3
+      m_SelectedIDs: d39cc933
+      m_LastClickedID: 868850899
+      m_ExpandedIDs: e7070d8b178670c37ae3ca60
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Prefab
+        m_OriginalName: Prefab
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -1142197394
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 9}
       m_SearchString: 
@@ -829,7 +863,7 @@ MonoBehaviour:
         allowToggleVisibility: 1
         canSort: 0
         userData: 0
-      - width: 100
+      - width: 155.45459
         sortedAscending: 0
         headerContent:
           m_Text: Group Name \ Addressable Name
@@ -859,7 +893,7 @@ MonoBehaviour:
         allowToggleVisibility: 1
         canSort: 0
         userData: 0
-      - width: 100
+      - width: 155.45459
         sortedAscending: 0
         headerContent:
           m_Text: Path
@@ -874,7 +908,7 @@ MonoBehaviour:
         allowToggleVisibility: 1
         canSort: 1
         userData: 0
-      - width: 20
+      - width: 31.090862
         sortedAscending: 0
         headerContent:
           m_Text: Labels
@@ -891,9 +925,9 @@ MonoBehaviour:
         userData: 0
       m_VisibleColumns: 0000000001000000020000000300000004000000
       m_SortedColumns: 
-    window: {fileID: 21}
+    window: {fileID: 22}
     m_VerticalSplitterPercent: 0.8
---- !u!114 &22
+--- !u!114 &23
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -909,14 +943,14 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Scene
-    m_Image: {fileID: 8634526014445323508, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: 2593428753322112591, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 236
-    y: 96
-    width: 118
-    height: 503.5
+    x: 310
+    y: 83
+    width: 559
+    height: 508
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1009,9 +1043,9 @@ MonoBehaviour:
       floating: 1
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 0, y: -152}
+      snapOffset: {x: -98, y: -152}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 2
+      snapCorner: 3
       id: unity-transform-toolbar
       index: 0
       layout: 2
@@ -1047,7 +1081,7 @@ MonoBehaviour:
       containerId: overlay-container--right
       floating: 0
       collapsed: 0
-      displayed: 0
+      displayed: 1
       snapOffset: {x: 0, y: 0}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
@@ -1192,7 +1226,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: -216, y: -275}
-      snapOffsetDelta: {x: 98, y: 0}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       id: AINavigationOverlay
       index: 1
@@ -1222,9 +1256,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1150.1027, y: 834.1506, z: -6.2891273}
+    m_Target: {x: 1596.5455, y: 339.3397, z: -29.385296}
     speed: 2
-    m_Value: {x: 1150.1027, y: 834.1506, z: -6.2891273}
+    m_Value: {x: 1596.5455, y: 339.3397, z: -29.385296}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1274,9 +1308,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 743.73596
+    m_Target: 3053.3455
     speed: 2
-    m_Value: 743.73596
+    m_Value: 3053.3455
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1301,7 +1335,7 @@ MonoBehaviour:
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
   m_ViewIsLockedToObject: 0
---- !u!114 &23
+--- !u!114 &24
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1317,14 +1351,14 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Package Manager
-    m_Image: {fileID: 5076950121296946556, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -2824328813065806953, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 195
+    x: 305
     y: 83
-    width: 450
-    height: 294
+    width: 425
+    height: 508
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1334,7 +1368,7 @@ MonoBehaviour:
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &24
+--- !u!114 &25
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1350,14 +1384,14 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Hierarchy
-    m_Image: {fileID: -3734745235275155857, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: 7966133145522015247, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 583
-    y: 96
-    width: 160
-    height: 503.5
+    x: 1110
+    y: 83
+    width: 98
+    height: 470
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1370,9 +1404,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 12a50000
+      m_SelectedIDs: 74dffeff
       m_LastClickedID: 0
-      m_ExpandedIDs: 6e46ffff1a47ffffbc47ffff6448ffff1849ffffc449ffffa24affff7e4bffff644cffffd64dffffba51ffff9454ffff4656ffff1459ffffe05affff9e5cffff5e5effff9464ffff4065ffffd866ffff1c6afffff66dffffa86effff5a6fffff0a70ffffc870ffff4073ffffe473ffffa074ffff7276ffff6479ffff307dfffff07effffc280ffff8882ffff4683ffff1c86fffffc87ffff088cffffb88cffff8c8effff8890ffff9eddffff24f1ffff64f1ffff2af4ffffe2f5ffffa8f7ffff58f9fffff4ffffff50770000
+      m_ExpandedIDs: b86affff986dffff329bffff149effffc09effffa0a0ffffc8a3ffff7aa4ffff32a5ffff12a9ffffdeaaffffa6aeffffc8b0ffffa2b2ffff5cb6fffffab7ffffa6b9ffffccbcffffead4fffff6d5ffffa4d7ffff68deffff14e0ffffc6e4ffffdaeeffff8af8ffff76f9ffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1396,7 +1430,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: 4c969a2b90040154d917609493e03593
---- !u!114 &25
+--- !u!114 &26
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1412,14 +1446,14 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Console
-    m_Image: {fileID: -4950941429401207979, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -4327648978806127646, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 122
-    y: 620.5
-    width: 394
-    height: 371.5
+    x: 147
+    y: 574
+    width: 527
+    height: 405
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1429,7 +1463,7 @@ MonoBehaviour:
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &26
+--- !u!114 &27
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1445,7 +1479,7 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Animation
-    m_Image: {fileID: -3237396543322336831, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -8166618308981325432, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -1465,7 +1499,7 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_LastSelectedObjectID: 42710
---- !u!114 &27
+--- !u!114 &28
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1481,7 +1515,7 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Audio Mixer
-    m_Image: {fileID: -3283902137440876849, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: 2344599766593239149, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
@@ -1646,7 +1680,7 @@ MonoBehaviour:
   m_ShowReferencedBuses: 1
   m_ShowBusConnections: 0
   m_ShowBusConnectionsOfSelection: 0
---- !u!114 &28
+--- !u!114 &29
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1662,14 +1696,14 @@ MonoBehaviour:
   m_MaxSize: {x: 10000, y: 10000}
   m_TitleContent:
     m_Text: Project
-    m_Image: {fileID: -5179483145760003458, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -5467254957812901981, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 517
-    y: 620.5
-    width: 226
-    height: 371.5
+    x: 675
+    y: 574
+    width: 533
+    height: 405
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1692,39 +1726,39 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/GenericModule/SaveLoadModule/Test/Fake
+    - Assets
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/GenericModule/SaveLoadModule/Test/Fake
+  - Assets
   m_LastFoldersGridSize: 16
   m_LastProjectPath: '/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule '
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 548.49854}
-    m_SelectedIDs: d6800000
-    m_LastClickedID: 32982
-    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005c7000005e7000006070000062700000687000006a7000006c70000070700000727000007470000076700000787000007a7000007c7000007e7000008070000084700000887000008a7000008e700000907000009270000096700000987000009a7000009c7000003671000066710000147900001a790000d87e0000d680000000ca9a3b
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 2c700000
+    m_LastClickedID: 28716
+    m_ExpandedIDs: 000000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e7000005070000052700000547000005a70000060700000627000006470000066700000687000006a7000006c7000006e7000007070000072700000747000007a7000007c7000007e70000080700000827000008470000086700000887000008a70000090700000927000004a7100000e850000a8950000ba95000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: LogModule
+      m_OriginalName: LogModule
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 29012
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 15}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -1736,7 +1770,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000987000009a7000009c700000
+    m_ExpandedIDs: 000000002c7000002e70000030700000327000003470000036700000387000003a7000003c7000003e70000040700000427000004470000046700000487000004a7000004c7000004e70000050700000527000005470000056700000587000005a7000005c7000005e70000060700000627000006470000066700000687000006a7000006c7000006e70000070700000727000007470000076700000787000007a7000007c7000007e70000080700000827000008470000086700000887000008a7000008c7000008e70000090700000927000009470000096700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1763,22 +1797,22 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000beb50000c4b50000d6b50000e2b50000c09affff866e000098820000746d0000da780000ac770000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: FakeEnum
-      m_OriginalName: FakeEnum
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 42258
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 15}
     m_CreateAssetUtility:
@@ -1791,8 +1825,8 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 175.5
---- !u!114 &29
+  m_DirectoriesAreaWidth: 192
+--- !u!114 &30
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1808,13 +1842,13 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Inspector
-    m_Image: {fileID: -440750813802333266, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -2667387946076563598, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1285
-    y: 96
-    width: 470
+    x: 1210
+    y: 83
+    width: 296
     height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1831,14 +1865,14 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: 42258
+  m_LastInspectedObjectInstanceID: -1
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
     m_IsLocked: 0
   m_PreviewWindow: {fileID: 0}
---- !u!114 &30
+--- !u!114 &31
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1877,11 +1911,11 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: 1412526313
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: 28240
+  m_LastInspectedObjectInstanceID: 28250
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: GlobalObjectId_V1-3-50c2e07cfadf248e0914f67364e48e89-11400000-0
   m_InspectorMode: 0
---- !u!114 &31
+--- !u!114 &32
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1901,9 +1935,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 745
+    x: 1307
     y: 96
-    width: 1104
+    width: 364
     height: 896
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1915,15 +1949,15 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 321
-    splitterInitialOffset: 307
+    ID: 239
+    splitterInitialOffset: 421
     currentActiveSplitter: -1
     realSizes:
-    - 235
-    - 591
+    - 351
+    - 475
     relativeSizes:
-    - 0.28450364
-    - 0.71549636
+    - 0.42493945
+    - 0.57506055
     minSizes:
     - 32
     - 32
@@ -1975,14 +2009,14 @@ MonoBehaviour:
       availableCategories: []
     m_SelectedOption: 0
   m_EditModeTestListGUI:
-    m_Window: {fileID: 31}
+    m_Window: {fileID: 32}
     m_NewResultList:
     - id: 1000
       uniqueId: '[GenericModule][suite]'
       name: GenericModule
       fullName: GenericModule
       resultStatus: 1
-      duration: 34.65349
+      duration: 0.5299531
       messages: 
       output: 
       stacktrace: 
@@ -1999,7 +2033,7 @@ MonoBehaviour:
       name: AudioModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/AudioModule.Test.dll
       resultStatus: 1
-      duration: 0.0990431
+      duration: 0.0756154
       messages: 
       output: 
       stacktrace: 
@@ -2015,7 +2049,7 @@ MonoBehaviour:
       name: AudioModuleTest
       fullName: AudioModuleTest
       resultStatus: 1
-      duration: 0.0950922
+      duration: 0.0721004
       messages: 
       output: 
       stacktrace: 
@@ -2031,8 +2065,8 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._01_Initialize]
       name: _01_Initialize
       fullName: AudioModuleTest._01_Initialize
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0230386
       messages: 
       output: 
       stacktrace: 
@@ -2048,8 +2082,8 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._02_Release]
       name: _02_Release
       fullName: AudioModuleTest._02_Release
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0008319
       messages: 
       output: 
       stacktrace: 
@@ -2065,10 +2099,15 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._03_ReleaseAllPools]
       name: _03_ReleaseAllPools
       fullName: AudioModuleTest._03_ReleaseAllPools
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0094945
       messages: 
-      output: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+        [AudioData::Play]
+        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
+
+'
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2082,10 +2121,15 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._04_ReleasePool_By_Key]
       name: _04_ReleasePool_By_Key
       fullName: AudioModuleTest._04_ReleasePool_By_Key
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0019644
       messages: 
-      output: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+        [AudioData::Play]
+        Clip is null. Please check Key: HelloAudio_2 audioPrefab.
+
+'
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2099,8 +2143,8 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._05_GetPoolName_By_Key]
       name: _05_GetPoolName_By_Key
       fullName: AudioModuleTest._05_GetPoolName_By_Key
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0125417
       messages: 
       output: 
       stacktrace: 
@@ -2116,10 +2160,12 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._06_CheckIsPlaying_By_Key]
       name: _06_CheckIsPlaying_By_Key
       fullName: AudioModuleTest._06_CheckIsPlaying_By_Key
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0009122
       messages: 
-      output: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2134,7 +2180,7 @@ MonoBehaviour:
       name: _07_GetAudioData
       fullName: AudioModuleTest._07_GetAudioData
       resultStatus: 1
-      duration: 0.0005202
+      duration: 0.000618
       messages: 
       output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
 
@@ -2152,10 +2198,12 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._08_Play_By_Key_ParentTransform]
       name: _08_Play_By_Key_ParentTransform
       fullName: AudioModuleTest._08_Play_By_Key_ParentTransform
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0006098
       messages: 
-      output: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2169,10 +2217,12 @@ MonoBehaviour:
       uniqueId: AudioModule.Test.dll/AudioModuleTest/[AudioModule.Test][AudioModuleTest._09_Stop_By_Id]
       name: _09_Stop_By_Id
       fullName: AudioModuleTest._09_Stop_By_Id
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0006323
       messages: 
-      output: 
+      output: '[AudioData::Play] Clip is null. Please check Key: HelloAudio_1 audioPrefab.
+
+'
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -2188,7 +2238,7 @@ MonoBehaviour:
       name: CameraModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/CameraModule.Test.dll
       resultStatus: 1
-      duration: 0.0533062
+      duration: 0.0444272
       messages: 
       output: 
       stacktrace: 
@@ -2204,7 +2254,7 @@ MonoBehaviour:
       name: CameraModuleTest
       fullName: CameraModuleTest
       resultStatus: 1
-      duration: 0.0351836
+      duration: 0.024523
       messages: 
       output: 
       stacktrace: 
@@ -2221,7 +2271,7 @@ MonoBehaviour:
       name: Should_Success_When_CloseCamera
       fullName: CameraModuleTest.Should_Success_When_CloseCamera
       resultStatus: 1
-      duration: 0.007972
+      duration: 0.0082698
       messages: 
       output: 
       stacktrace: 
@@ -2237,7 +2287,7 @@ MonoBehaviour:
       name: Should_Success_When_CloseCamera("123")
       fullName: CameraModuleTest.Should_Success_When_CloseCamera("123")
       resultStatus: 1
-      duration: 0.0033845
+      duration: 0.003949
       messages: 
       output: 
       stacktrace: 
@@ -2254,7 +2304,7 @@ MonoBehaviour:
       name: Should_Success_When_OpenCamera
       fullName: CameraModuleTest.Should_Success_When_OpenCamera
       resultStatus: 1
-      duration: 0.0062364
+      duration: 0.0043529
       messages: 
       output: 
       stacktrace: 
@@ -2270,7 +2320,7 @@ MonoBehaviour:
       name: Should_Success_When_OpenCamera("123")
       fullName: CameraModuleTest.Should_Success_When_OpenCamera("123")
       resultStatus: 1
-      duration: 0.0004265
+      duration: 0.0005837
       messages: 
       output: 
       stacktrace: 
@@ -2287,7 +2337,7 @@ MonoBehaviour:
       name: Should_Success_When_Register
       fullName: CameraModuleTest.Should_Success_When_Register
       resultStatus: 1
-      duration: 0.0001801
+      duration: 0.0001857
       messages: 
       output: 
       stacktrace: 
@@ -2304,7 +2354,7 @@ MonoBehaviour:
       name: Should_Success_When_SetCameraData
       fullName: CameraModuleTest.Should_Success_When_SetCameraData
       resultStatus: 1
-      duration: 0.0087627
+      duration: 0.0047985
       messages: 
       output: 
       stacktrace: 
@@ -2320,7 +2370,7 @@ MonoBehaviour:
       name: Should_Success_When_SetCameraData("123",1000)
       fullName: CameraModuleTest.Should_Success_When_SetCameraData("123",1000)
       resultStatus: 1
-      duration: 0.0013402
+      duration: 0.0013376
       messages: 
       output: 
       stacktrace: 
@@ -2338,7 +2388,7 @@ MonoBehaviour:
       name: EventModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/EventModule.Test.dll
       resultStatus: 1
-      duration: 0.0131008
+      duration: 0.0120812
       messages: 
       output: 
       stacktrace: 
@@ -2354,7 +2404,7 @@ MonoBehaviour:
       name: EventModuleTest
       fullName: EventModuleTest
       resultStatus: 1
-      duration: 0.0075535
+      duration: 0.009022
       messages: 
       output: 
       stacktrace: 
@@ -2370,8 +2420,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener]
       name: _01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
       fullName: EventModuleTest._01_Should_HasOneSyncEventDelegateContainer_When_AddSyncListener
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0011084
       messages: 
       output: 
       stacktrace: 
@@ -2387,8 +2437,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener]
       name: _02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
       fullName: EventModuleTest._02_Should_HasntSyncEventDelegateContainer_When_RemoveSyncListener
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.000298
       messages: 
       output: 
       stacktrace: 
@@ -2404,8 +2454,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent]
       name: _03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
       fullName: EventModuleTest._03_Should_isTestSyncActionTriggerBeTrue_When_NotifySyncEvent
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.000359
       messages: 
       output: 
       stacktrace: 
@@ -2421,8 +2471,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener]
       name: _04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
       fullName: EventModuleTest._04_Should_HasOneAsyncEventDelegateContainer_When_AddAsyncListener
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.000336
       messages: 
       output: 
       stacktrace: 
@@ -2438,8 +2488,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener]
       name: _05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
       fullName: EventModuleTest._05_Should_HasntAsyncEventDelegateContainer_When_RemoveAsyncListener
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0002437
       messages: 
       output: 
       stacktrace: 
@@ -2455,8 +2505,8 @@ MonoBehaviour:
       uniqueId: EventModule.Test.dll/EventModuleTest/[EventModule.Test][EventModuleTest._05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent]
       name: _05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
       fullName: EventModuleTest._05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent
-      resultStatus: 0
-      duration: 0
+      resultStatus: 1
+      duration: 0.0015713
       messages: 
       output: 
       stacktrace: 
@@ -2474,7 +2524,7 @@ MonoBehaviour:
       name: GameObjectPoolModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/GameObjectPoolModule.Test.dll
       resultStatus: 1
-      duration: 0.0278195
+      duration: 0.0160644
       messages: 
       output: 
       stacktrace: 
@@ -2490,7 +2540,7 @@ MonoBehaviour:
       name: GameObjectPoolModuleTest
       fullName: GameObjectPoolModuleTest
       resultStatus: 1
-      duration: 0.0237169
+      duration: 0.0121127
       messages: 
       output: 
       stacktrace: 
@@ -2507,7 +2557,7 @@ MonoBehaviour:
       name: _01_Initialize
       fullName: GameObjectPoolModuleTest._01_Initialize
       resultStatus: 1
-      duration: 0.0081488
+      duration: 0.0019023
       messages: 
       output: 
       stacktrace: 
@@ -2524,7 +2574,7 @@ MonoBehaviour:
       name: _02_Release
       fullName: GameObjectPoolModuleTest._02_Release
       resultStatus: 1
-      duration: 0.0004266
+      duration: 0.0003386
       messages: 
       output: 
       stacktrace: 
@@ -2541,7 +2591,7 @@ MonoBehaviour:
       name: _03_Spawn_By_Key_ParentTransform
       fullName: GameObjectPoolModuleTest._03_Spawn_By_Key_ParentTransform
       resultStatus: 1
-      duration: 0.0012682
+      duration: 0.0017032
       messages: 
       output: 
       stacktrace: 
@@ -2558,7 +2608,7 @@ MonoBehaviour:
       name: _05_DeSpawn_By_GameObjects
       fullName: GameObjectPoolModuleTest._05_DeSpawn_By_GameObjects
       resultStatus: 1
-      duration: 0.000375
+      duration: 0.0005195
       messages: 
       output: 
       stacktrace: 
@@ -2575,7 +2625,7 @@ MonoBehaviour:
       name: _06_DeSpawn_By_GameObject
       fullName: GameObjectPoolModuleTest._06_DeSpawn_By_GameObject
       resultStatus: 1
-      duration: 0.0001679
+      duration: 0.0002056
       messages: 
       output: 
       stacktrace: 
@@ -2592,7 +2642,7 @@ MonoBehaviour:
       name: _07_DeSpawn_By_Key
       fullName: GameObjectPoolModuleTest._07_DeSpawn_By_Key
       resultStatus: 1
-      duration: 0.0002981
+      duration: 0.000398
       messages: 
       output: 
       stacktrace: 
@@ -2609,7 +2659,7 @@ MonoBehaviour:
       name: _08_DeSpawnAll
       fullName: GameObjectPoolModuleTest._08_DeSpawnAll
       resultStatus: 1
-      duration: 0.0002059
+      duration: 0.0002408
       messages: 
       output: 
       stacktrace: 
@@ -2626,7 +2676,7 @@ MonoBehaviour:
       name: _09_ReleasePool
       fullName: GameObjectPoolModuleTest._09_ReleasePool
       resultStatus: 1
-      duration: 0.0014252
+      duration: 0.0019344
       messages: 
       output: 
       stacktrace: 
@@ -2643,7 +2693,7 @@ MonoBehaviour:
       name: _10_ReleaseAllPool
       fullName: GameObjectPoolModuleTest._10_ReleaseAllPool
       resultStatus: 1
-      duration: 0.0002217
+      duration: 0.0004503
       messages: 
       output: 
       stacktrace: 
@@ -2661,7 +2711,7 @@ MonoBehaviour:
       name: LogModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/LogModule.Test.dll
       resultStatus: 1
-      duration: 0.0571717
+      duration: 0.0343821
       messages: 
       output: 
       stacktrace: 
@@ -2677,7 +2727,7 @@ MonoBehaviour:
       name: LogModuleTest
       fullName: LogModuleTest
       resultStatus: 1
-      duration: 0.0533361
+      duration: 0.0253539
       messages: 
       output: 
       stacktrace: 
@@ -2694,7 +2744,7 @@ MonoBehaviour:
       name: _01_DeBug
       fullName: LogModuleTest._01_DeBug
       resultStatus: 1
-      duration: 0.0186787
+      duration: 0.0062216
       messages: 
       output: 
       stacktrace: 
@@ -2710,7 +2760,7 @@ MonoBehaviour:
       name: _01_DeBug(True,"Hello")
       fullName: LogModuleTest._01_DeBug(True,"Hello")
       resultStatus: 1
-      duration: 0.0103328
+      duration: 0.0019763
       messages: 
       output: 
       stacktrace: 
@@ -2727,7 +2777,7 @@ MonoBehaviour:
       name: _01_DeBug(False,null)
       fullName: LogModuleTest._01_DeBug(False,null)
       resultStatus: 1
-      duration: 0.0001402
+      duration: 0.0000759
       messages: 
       output: 
       stacktrace: 
@@ -2744,7 +2794,7 @@ MonoBehaviour:
       name: _02_Info
       fullName: LogModuleTest._02_Info
       resultStatus: 1
-      duration: 0.0188165
+      duration: 0.0043072
       messages: 
       output: 
       stacktrace: 
@@ -2760,7 +2810,7 @@ MonoBehaviour:
       name: _02_Info(True,"Hello")
       fullName: LogModuleTest._02_Info(True,"Hello")
       resultStatus: 1
-      duration: 0.0004438
+      duration: 0.0004555
       messages: 
       output: 
       stacktrace: 
@@ -2777,7 +2827,7 @@ MonoBehaviour:
       name: _02_Info(False,null)
       fullName: LogModuleTest._02_Info(False,null)
       resultStatus: 1
-      duration: 0.0000831
+      duration: 0.0000811
       messages: 
       output: 
       stacktrace: 
@@ -2794,7 +2844,7 @@ MonoBehaviour:
       name: _03_Warn
       fullName: LogModuleTest._03_Warn
       resultStatus: 1
-      duration: 0.0054735
+      duration: 0.0042485
       messages: 
       output: 
       stacktrace: 
@@ -2810,7 +2860,7 @@ MonoBehaviour:
       name: _03_Warn(True,"Hello")
       fullName: LogModuleTest._03_Warn(True,"Hello")
       resultStatus: 1
-      duration: 0.0004122
+      duration: 0.0003584
       messages: 
       output: 
       stacktrace: 
@@ -2827,7 +2877,7 @@ MonoBehaviour:
       name: _03_Warn(False,null)
       fullName: LogModuleTest._03_Warn(False,null)
       resultStatus: 1
-      duration: 0.0000877
+      duration: 0.0000914
       messages: 
       output: 
       stacktrace: 
@@ -2844,7 +2894,7 @@ MonoBehaviour:
       name: _04_Error
       fullName: LogModuleTest._04_Error
       resultStatus: 1
-      duration: 0.0056659
+      duration: 0.0039603
       messages: 
       output: 
       stacktrace: 
@@ -2860,7 +2910,7 @@ MonoBehaviour:
       name: _04_Error(True,"Hello")
       fullName: LogModuleTest._04_Error(True,"Hello")
       resultStatus: 1
-      duration: 0.0004582
+      duration: 0.0003717
       messages: 
       output: 
       stacktrace: 
@@ -2877,7 +2927,7 @@ MonoBehaviour:
       name: _04_Error(False,null)
       fullName: LogModuleTest._04_Error(False,null)
       resultStatus: 1
-      duration: 0.0000734
+      duration: 0.0000807
       messages: 
       output: 
       stacktrace: 
@@ -2895,7 +2945,7 @@ MonoBehaviour:
       name: SaveLoadModule.Test.dll
       fullName: /Users/cizahuang/Documents/Game/Unity/Tool/GenericModule /Library/ScriptAssemblies/SaveLoadModule.Test.dll
       resultStatus: 1
-      duration: 34.61731
+      duration: 0.2754523
       messages: 
       output: 
       stacktrace: 
@@ -2907,11 +2957,164 @@ MonoBehaviour:
       parentId: 1000
       parentUniqueId: '[GenericModule][suite]'
     - id: 1054
+      uniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+      name: CollectionTypeTest
+      fullName: CollectionTypeTest
+      resultStatus: 1
+      duration: 0.1886142
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1095
+      parentUniqueId: '[SaveLoadModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/SaveLoadModule.Test.dll][suite]'
+    - id: 1055
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._01_Save_Array_Type]
+      name: _01_Save_Array_Type
+      fullName: CollectionTypeTest._01_Save_Array_Type
+      resultStatus: 1
+      duration: 0.1670996
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1056
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._02_Save_Array2D_Type]
+      name: _02_Save_Array2D_Type
+      fullName: CollectionTypeTest._02_Save_Array2D_Type
+      resultStatus: 1
+      duration: 0.0016476
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1057
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._03_Save_Array3D_Type]
+      name: _03_Save_Array3D_Type
+      fullName: CollectionTypeTest._03_Save_Array3D_Type
+      resultStatus: 1
+      duration: 0.0006076
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1058
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._04_Save_Dictionary_Type]
+      name: _04_Save_Dictionary_Type
+      fullName: CollectionTypeTest._04_Save_Dictionary_Type
+      resultStatus: 1
+      duration: 0.0099999
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1059
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._05_Save_HashSet_Type]
+      name: _05_Save_HashSet_Type
+      fullName: CollectionTypeTest._05_Save_HashSet_Type
+      resultStatus: 1
+      duration: 0.0021397
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1060
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._06_Save_List_Type]
+      name: _06_Save_List_Type
+      fullName: CollectionTypeTest._06_Save_List_Type
+      resultStatus: 1
+      duration: 0.0010372
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1061
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._07_Save_Queue_Type]
+      name: _07_Save_Queue_Type
+      fullName: CollectionTypeTest._07_Save_Queue_Type
+      resultStatus: 1
+      duration: 0.0016558
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1062
+      uniqueId: SaveLoadModule.Test.dll/CollectionTypeTest/[SaveLoadModule.Test][CollectionTypeTest._08_Save_Stack_Type]
+      name: _08_Save_Stack_Type
+      fullName: CollectionTypeTest._08_Save_Stack_Type
+      resultStatus: 1
+      duration: 0.0019339
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1054
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][CollectionTypeTest][suite]
+    - id: 1054
       uniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][PrimitiveTypeTest][suite]
       name: PrimitiveTypeTest
       fullName: PrimitiveTypeTest
       resultStatus: 1
-      duration: 34.6149
+      duration: 0.0699486
       messages: 
       output: 
       stacktrace: 
@@ -2928,7 +3131,7 @@ MonoBehaviour:
       name: _01_Save_Bool_Type
       fullName: PrimitiveTypeTest._01_Save_Bool_Type
       resultStatus: 1
-      duration: 33.87672
+      duration: 0.0055196
       messages: 
       output: 
       stacktrace: 
@@ -2944,7 +3147,7 @@ MonoBehaviour:
       name: _01_Save_Bool_Type(True,True)
       fullName: PrimitiveTypeTest._01_Save_Bool_Type(True,True)
       resultStatus: 1
-      duration: 33.86124
+      duration: 0.0021692
       messages: 
       output: 
       stacktrace: 
@@ -2961,7 +3164,7 @@ MonoBehaviour:
       name: _01_Save_Bool_Type(False,False)
       fullName: PrimitiveTypeTest._01_Save_Bool_Type(False,False)
       resultStatus: 1
-      duration: 0.0021697
+      duration: 0.0011198
       messages: 
       output: 
       stacktrace: 
@@ -2978,7 +3181,7 @@ MonoBehaviour:
       name: _02_Save_Char_Type
       fullName: PrimitiveTypeTest._02_Save_Char_Type
       resultStatus: 1
-      duration: 0.0503571
+      duration: 0.0069841
       messages: 
       output: 
       stacktrace: 
@@ -2994,7 +3197,7 @@ MonoBehaviour:
       name: _02_Save_Char_Type('s','s')
       fullName: PrimitiveTypeTest._02_Save_Char_Type('s','s')
       resultStatus: 1
-      duration: 0.0033987
+      duration: 0.0021148
       messages: 
       output: 
       stacktrace: 
@@ -3011,7 +3214,7 @@ MonoBehaviour:
       name: _02_Save_Char_Type('@','@')
       fullName: PrimitiveTypeTest._02_Save_Char_Type('@','@')
       resultStatus: 1
-      duration: 0.0006999
+      duration: 0.0003799
       messages: 
       output: 
       stacktrace: 
@@ -3028,7 +3231,7 @@ MonoBehaviour:
       name: _03_Save_DateTime_Type
       fullName: PrimitiveTypeTest._03_Save_DateTime_Type
       resultStatus: 1
-      duration: 0.0008154
+      duration: 0.0018016
       messages: 
       output: 
       stacktrace: 
@@ -3045,7 +3248,7 @@ MonoBehaviour:
       name: _04_Save_Double_Type
       fullName: PrimitiveTypeTest._04_Save_Double_Type
       resultStatus: 1
-      duration: 0.0653257
+      duration: 0.0073641
       messages: 
       output: 
       stacktrace: 
@@ -3061,7 +3264,7 @@ MonoBehaviour:
       name: _04_Save_Double_Type(0.5d,0.5d)
       fullName: PrimitiveTypeTest._04_Save_Double_Type(0.5d,0.5d)
       resultStatus: 1
-      duration: 0.0007677
+      duration: 0.0023531
       messages: 
       output: 
       stacktrace: 
@@ -3078,7 +3281,7 @@ MonoBehaviour:
       name: _04_Save_Double_Type(10,10)
       fullName: PrimitiveTypeTest._04_Save_Double_Type(10,10)
       resultStatus: 1
-      duration: 0.0003567
+      duration: 0.0005987
       messages: 
       output: 
       stacktrace: 
@@ -3095,7 +3298,7 @@ MonoBehaviour:
       name: _05_Save_Enum_Type
       fullName: PrimitiveTypeTest._05_Save_Enum_Type
       resultStatus: 1
-      duration: 0.1056819
+      duration: 0.0067108
       messages: 
       output: 
       stacktrace: 
@@ -3111,7 +3314,7 @@ MonoBehaviour:
       name: _05_Save_Enum_Type(Fake_1,Fake_1)
       fullName: PrimitiveTypeTest._05_Save_Enum_Type(Fake_1,Fake_1)
       resultStatus: 1
-      duration: 0.0011363
+      duration: 0.0019559
       messages: 
       output: 
       stacktrace: 
@@ -3128,7 +3331,7 @@ MonoBehaviour:
       name: _05_Save_Enum_Type(Fake_2,Fake_2)
       fullName: PrimitiveTypeTest._05_Save_Enum_Type(Fake_2,Fake_2)
       resultStatus: 1
-      duration: 0.0005835
+      duration: 0.0003846
       messages: 
       output: 
       stacktrace: 
@@ -3145,7 +3348,7 @@ MonoBehaviour:
       name: _06_Save_Float_Type
       fullName: PrimitiveTypeTest._06_Save_Float_Type
       resultStatus: 1
-      duration: 0.1034704
+      duration: 0.0063507
       messages: 
       output: 
       stacktrace: 
@@ -3161,7 +3364,7 @@ MonoBehaviour:
       name: _06_Save_Float_Type(0.5f,0.5f)
       fullName: PrimitiveTypeTest._06_Save_Float_Type(0.5f,0.5f)
       resultStatus: 1
-      duration: 0.00148
+      duration: 0.0018442
       messages: 
       output: 
       stacktrace: 
@@ -3178,7 +3381,7 @@ MonoBehaviour:
       name: _06_Save_Float_Type(10.0f,10.0f)
       fullName: PrimitiveTypeTest._06_Save_Float_Type(10.0f,10.0f)
       resultStatus: 1
-      duration: 0.0006805
+      duration: 0.0004659
       messages: 
       output: 
       stacktrace: 
@@ -3195,7 +3398,7 @@ MonoBehaviour:
       name: _07_Save_Int_Type
       fullName: PrimitiveTypeTest._07_Save_Int_Type
       resultStatus: 1
-      duration: 0.1035546
+      duration: 0.0057993
       messages: 
       output: 
       stacktrace: 
@@ -3211,7 +3414,7 @@ MonoBehaviour:
       name: _07_Save_Int_Type(0,0)
       fullName: PrimitiveTypeTest._07_Save_Int_Type(0,0)
       resultStatus: 1
-      duration: 0.0014239
+      duration: 0.0013257
       messages: 
       output: 
       stacktrace: 
@@ -3228,7 +3431,7 @@ MonoBehaviour:
       name: _07_Save_Int_Type(10,10)
       fullName: PrimitiveTypeTest._07_Save_Int_Type(10,10)
       resultStatus: 1
-      duration: 0.0006316
+      duration: 0.0003837
       messages: 
       output: 
       stacktrace: 
@@ -3245,7 +3448,7 @@ MonoBehaviour:
       name: _08_Save_Long_Type
       fullName: PrimitiveTypeTest._08_Save_Long_Type
       resultStatus: 1
-      duration: 0.098563
+      duration: 0.0052644
       messages: 
       output: 
       stacktrace: 
@@ -3261,7 +3464,7 @@ MonoBehaviour:
       name: _08_Save_Long_Type(100,100)
       fullName: PrimitiveTypeTest._08_Save_Long_Type(100,100)
       resultStatus: 1
-      duration: 0.0012078
+      duration: 0.0015464
       messages: 
       output: 
       stacktrace: 
@@ -3278,7 +3481,7 @@ MonoBehaviour:
       name: _09_Save_Short_Type
       fullName: PrimitiveTypeTest._09_Save_Short_Type
       resultStatus: 1
-      duration: 0.1020767
+      duration: 0.0054377
       messages: 
       output: 
       stacktrace: 
@@ -3294,7 +3497,7 @@ MonoBehaviour:
       name: _09_Save_Short_Type(50,50)
       fullName: PrimitiveTypeTest._09_Save_Short_Type(50,50)
       resultStatus: 1
-      duration: 0.0022044
+      duration: 0.0019575
       messages: 
       output: 
       stacktrace: 
@@ -3311,7 +3514,7 @@ MonoBehaviour:
       name: _10_Save_String_Type
       fullName: PrimitiveTypeTest._10_Save_String_Type
       resultStatus: 1
-      duration: 0.1023957
+      duration: 0.0050711
       messages: 
       output: 
       stacktrace: 
@@ -3327,7 +3530,7 @@ MonoBehaviour:
       name: _10_Save_String_Type("Hello","Hello")
       fullName: PrimitiveTypeTest._10_Save_String_Type("Hello","Hello")
       resultStatus: 1
-      duration: 0.0019582
+      duration: 0.001025
       messages: 
       output: 
       stacktrace: 
@@ -3344,7 +3547,7 @@ MonoBehaviour:
       name: _10_Save_String_Type("Ciza","Ciza")
       fullName: PrimitiveTypeTest._10_Save_String_Type("Ciza","Ciza")
       resultStatus: 1
-      duration: 0.0008951
+      duration: 0.0003987
       messages: 
       output: 
       stacktrace: 
@@ -3356,13 +3559,98 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1080
       parentUniqueId: SaveLoadModule.Test.dll/PrimitiveTypeTest/[SaveLoadModule.Test][PrimitiveTypeTest._10_Save_String_Type][suite]
-    m_ResultText: PrimitiveTypeTest (34.615s)
+    - id: 1081
+      uniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][UnityTypeTest][suite]
+      name: UnityTypeTest
+      fullName: UnityTypeTest
+      resultStatus: 1
+      duration: 0.0101258
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1083
+      parentUniqueId: '[SaveLoadModule.Test][/Users/cizahuang/Documents/Game/Unity/Tool/GenericModule
+        /Library/ScriptAssemblies/SaveLoadModule.Test.dll][suite]'
+    - id: 1082
+      uniqueId: SaveLoadModule.Test.dll/UnityTypeTest/[SaveLoadModule.Test][UnityTypeTest._01_Save_Vector2_Type]
+      name: _01_Save_Vector2_Type
+      fullName: UnityTypeTest._01_Save_Vector2_Type
+      resultStatus: 1
+      duration: 0.0015942
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1081
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][UnityTypeTest][suite]
+    - id: 1083
+      uniqueId: SaveLoadModule.Test.dll/UnityTypeTest/[SaveLoadModule.Test][UnityTypeTest._02_Save_Vector2Int_Type]
+      name: _02_Save_Vector2Int_Type
+      fullName: UnityTypeTest._02_Save_Vector2Int_Type
+      resultStatus: 1
+      duration: 0.0012864
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1081
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][UnityTypeTest][suite]
+    - id: 1084
+      uniqueId: SaveLoadModule.Test.dll/UnityTypeTest/[SaveLoadModule.Test][UnityTypeTest._03_Save_Vector3_Type]
+      name: _03_Save_Vector3_Type
+      fullName: UnityTypeTest._03_Save_Vector3_Type
+      resultStatus: 1
+      duration: 0.0016148
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1081
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][UnityTypeTest][suite]
+    - id: 1085
+      uniqueId: SaveLoadModule.Test.dll/UnityTypeTest/[SaveLoadModule.Test][UnityTypeTest._04_Save_Vector3Int_Type]
+      name: _04_Save_Vector3Int_Type
+      fullName: UnityTypeTest._04_Save_Vector3Int_Type
+      resultStatus: 1
+      duration: 0.0011932
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1081
+      parentUniqueId: SaveLoadModule.Test.dll/[SaveLoadModule.Test][UnityTypeTest][suite]
+    m_ResultText: SaveLoadModule.Test.dll (0.275s)
     m_ResultStacktrace: 
     m_TestListState:
-      scrollPos: {x: 0, y: 57}
-      m_SelectedIDs: aaab86cc
-      m_LastClickedID: -863589462
-      m_ExpandedIDs: 26e38490089746aab856e9bcaaab86ccf3598fe8213a17f96a5044facea7d10838b395157a53581e20ffa921ff01b93e6975d37dffffff7f
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: b856e9bc
+      m_LastClickedID: -1125558600
+      m_ExpandedIDs: 26e38490089746aaaaab86ccf3598fe8213a17f96a5044facea7d10838b395157a53581e20ffa921ff01b93e6975d37dffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

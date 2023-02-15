@@ -1,73 +1,40 @@
+@Group: Scene
+#
+Address: AddressableModuleExample1;
+InstanceId: 29680;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/Scene/AddressableModuleExample1.unity)
+
+#
+Address: AddressableModuleExample2;
+InstanceId: 29682;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example2/Scene/AddressableModuleExample2.unity)
+
+#
+Address: AddressableModuleExample2_LoadScene;
+InstanceId: 29684;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example2/Scene/AddressableModuleExample2_LoadScene.unity)
+
+
 @Group: Texture2D
 #
 Address: DUNE_1;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_1.JPG;
-Labels: 
+InstanceId: 29704;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_1.JPG)
 
 #
 Address: DUNE_2;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_2.png;
-Labels: 
+InstanceId: 29706;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_2.png)
 
 #
 Address: DUNE_3;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_3.jpeg;
-Labels: 
-
-#
-Address: DUNE_4;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_4.jpeg;
-Labels: 
-
-#
-Address: DUNE_5;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_5.jpeg;
-Labels: 
-
-#
-Address: DUNE_6;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_6.jpg;
-Labels: 
-
-#
-Address: DUNE_7;
-Path: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_7.png;
-Labels: 
-
-
-@Group: Prefab
-#
-Address: GameObject;
-Path: Assets/Examples/AddressablesModule/Example1/Prefab/GameObject.prefab;
-Labels: 
-
-
-@Group: Audio
-#
-Address: Encourage;
-Path: Assets/Examples/AddressablesModule/Example1/Audio/Encourage.wav;
-Labels: 
-
-
-@Group: Scene
-#
-Address: AddressableModuleExample2_LoadScene;
-Path: Assets/Examples/AddressablesModule/Example2/Scene/AddressableModuleExample2_LoadScene.unity;
-Labels: 
-
-#
-Address: Scene1;
-Path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene1.unity;
-Labels: 
-
-#
-Address: Scene2;
-Path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene2.unity;
-Labels: 
-
-#
-Address: TransitionScene;
-Path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/TransitionScene.unity;
-Labels: 
+InstanceId: 29708;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_3.jpeg)
 
 

@@ -175,6 +175,9 @@ namespace AddressablesModule.Editor
             }
 
             var labels = settings.GetLabels().ToArray();
+            if(labels.Length <= 0)
+                return;
+            
             foreach (var label in labels)
                 settings.RemoveLabel(label);
         }

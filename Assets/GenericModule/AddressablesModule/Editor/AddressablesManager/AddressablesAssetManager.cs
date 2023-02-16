@@ -76,7 +76,7 @@ namespace AddressablesModule.Editor
             }
         }
 
-        public void Add(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode, string assetFolderPath, string labelsString)
+        public void Add(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode, string assetFolderPath, string labelsString, string addressPrefix, string addressSuffix)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (string.IsNullOrWhiteSpace(groupName))
@@ -95,7 +95,7 @@ namespace AddressablesModule.Editor
                 if (obj is DefaultAsset)
                     continue;
 
-                var address = obj.name;
+                var address = addressPrefix + obj.name + addressSuffix;
                 var instanceId = obj.GetInstanceID();
                 AddEntryToAddressables(groupName, address, instanceId, labels);
             }

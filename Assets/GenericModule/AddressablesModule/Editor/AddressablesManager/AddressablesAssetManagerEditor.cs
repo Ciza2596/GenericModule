@@ -26,6 +26,8 @@ namespace AddressablesModule.Editor
         private string _assetFolderPath;
         private string _groupName;
         private string _labelsString;
+        private string _addressPrefix;
+        private string _addressSuffix;
 
 
         //private method
@@ -86,10 +88,16 @@ namespace AddressablesModule.Editor
         {
             EditorGUILayout.Space();
             _assetFolderPath = GetFolderAssetPathAndOpenWindow("Asset Folder Path", _assetFolderPath);
+            EditorGUILayout.Space();
+            
             _groupName = EditorGUILayout.TextField("Group Name", _groupName);
             _bundleMode =
                 (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", _bundleMode);
             _labelsString = EditorGUILayout.TextField("Labels", _labelsString);
+            EditorGUILayout.Space();
+            
+            _addressPrefix = EditorGUILayout.TextField("Address Prefix", _addressPrefix);
+            _addressSuffix = EditorGUILayout.TextField("Address Suffix", _addressSuffix);
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Add"))
@@ -119,7 +127,8 @@ namespace AddressablesModule.Editor
         }
 
         private void Add() =>
-            _addressablesAssetManager.Add(_groupName, _bundleMode, _assetFolderPath, _labelsString);
+            _addressablesAssetManager.Add(_groupName, _bundleMode, _assetFolderPath, _labelsString, _addressPrefix,
+                _addressSuffix);
 
 
         private void CreateAndWriteFile(string content = null)
@@ -164,7 +173,7 @@ namespace AddressablesModule.Editor
                 return string.IsNullOrWhiteSpace(path) ? originPath : path;
             }
         }
-        
+
         private string GetFolderAssetPathAndOpenWindow(string label, string originPath)
         {
             using (new EditorGUILayout.HorizontalScope())

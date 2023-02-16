@@ -1,40 +1,68 @@
-@Group: Scene
+@Group: Hello
+#
+Address: Encourage;
+InstanceId: 29850;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Audio/Encourage.wav)
+
+#
+Address: GameObject;
+InstanceId: 29210;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Prefab/GameObject.prefab)
+
 #
 Address: AddressableModuleExample1;
 InstanceId: 29680;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/Scene/AddressableModuleExample1.unity)
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Scene/AddressableModuleExample1.unity)
 
 #
-Address: AddressableModuleExample2;
-InstanceId: 29682;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example2/Scene/AddressableModuleExample2.unity)
+Address: AddressMapListDataOverview;
+InstanceId: 28196;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/ScriptableObject/AddressMapListDataOverview.asset)
 
-#
-Address: AddressableModuleExample2_LoadScene;
-InstanceId: 29684;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example2/Scene/AddressableModuleExample2_LoadScene.unity)
-
-
-@Group: Texture2D
 #
 Address: DUNE_1;
 InstanceId: 29704;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_1.JPG)
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_1.JPG)
 
 #
 Address: DUNE_2;
 InstanceId: 29706;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_2.png)
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_2.png)
 
 #
 Address: DUNE_3;
 InstanceId: 29708;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/Texture/DUNE_3.jpeg)
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_3.jpeg)
+
+#
+Address: DUNE_4;
+InstanceId: 29710;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_4.jpeg)
+
+#
+Address: DUNE_5;
+InstanceId: 29712;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_5.jpeg)
+
+#
+Address: DUNE_6;
+InstanceId: 29714;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_6.jpg)
+
+#
+Address: DUNE_7;
+InstanceId: 29716;
+Labels: default, hello;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_7.png)
 
 

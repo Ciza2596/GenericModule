@@ -16,29 +16,14 @@ namespace AddressablesModule.Editor
 
 
         //constructor
-        public AssetInfoData(string groupName, string address, int instanceId, string[] labels,
-                             string splitTag,  string assetPath) : this(
-            groupName, address, instanceId, assetPath)
-        {
-            var labelsLength = labels.Length;
-            for (int i = 0; i < labelsLength; i++)
-            {
-                LabelsString += labels[i];
+        public AssetInfoData(string groupName, string address, int instanceId, string labelsString, string assetPath) : this(
+            groupName, address, instanceId, assetPath) =>
+            LabelsString = labelsString;
 
-                if (i < (labelsLength - 1))
-                    LabelsString += splitTag;
-            }
-        }
+        public AssetInfoData(string groupName, string address, int instanceId, string[] labels) : this(
+            groupName, address, instanceId) =>
+            Labels = labels;
 
-        public AssetInfoData(string groupName, string address, int instanceId, string labelsString,
-                             string splitTag) : this(
-            groupName, address, instanceId)
-        {
-            var labelsWithNull= labelsString.Split(splitTag).ToList();
-            labelsWithNull.Remove("");
-            Labels = labelsWithNull.ToArray();
-        }
-        
 
         private AssetInfoData(string groupName, string address, int instanceId, string assetPath = null)
         {

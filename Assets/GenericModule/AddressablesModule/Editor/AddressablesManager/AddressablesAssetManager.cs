@@ -76,16 +76,17 @@ namespace AddressablesModule.Editor
             }
         }
 
-        public void Add(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode, string assetFolderPath, string labelsString, string addressPrefix, string addressSuffix)
+        public void Add(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode,
+            string assetFolderPath, string labelsString, string addressPrefix, string addressSuffix)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (string.IsNullOrWhiteSpace(groupName))
                 groupName = settings.DefaultGroup.name;
-                
+
             else
                 CreateAddressablesGroup(groupName, bundlePackingMode);
 
-            var labels = GetLabelsFromLabelsString(labelsString);
+            var labels = string.IsNullOrWhiteSpace(labelsString) ? null : GetLabelsFromLabelsString(labelsString);
 
             var guids = AssetDatabase.FindAssets("", new string[] { assetFolderPath });
             foreach (var guid in guids)
@@ -261,7 +262,7 @@ namespace AddressablesModule.Editor
             entry.SetAddress(address);
 
             entry.labels.Clear();
-            
+
             if (labels != null)
                 foreach (var label in labels)
                     entry.SetLabel(label, true, true);

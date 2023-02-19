@@ -316,10 +316,10 @@ namespace AddressablesModule.Editor
         {
             var infoContents = assetInfoContent.Split(ASSET_INFO_AND_TAG);
 
-            var address = infoContents[0].Replace(ADDRESS_TAG, "");
-            var instanceIdString = infoContents[1].Replace(INSTANCE_ID_TAG, "");
+            var address = infoContents[0].Replace(ADDRESS_TAG, null);
+            var instanceIdString = infoContents[1].Replace(INSTANCE_ID_TAG, null);
             var instanceId = int.Parse(instanceIdString);
-            var labelsString = infoContents[2].Replace(LABELS_TAG, "");
+            var labelsString = infoContents[2].Replace(LABELS_TAG, null);
             var labels = GetLabelsFromLabelsString(labelsString);
             return new AssetInfoData(groupName, address, instanceId, labels);
         }
@@ -355,7 +355,7 @@ namespace AddressablesModule.Editor
 
         private string[] GetLabelsFromLabelsString(string labelsString)
         {
-            labelsString = labelsString.Replace(" ", "");
+            labelsString = labelsString.Replace(" ", null);
             var labels = labelsString.Split(LABELS_AND_TAG).ToList();
             return labels.ToArray();
         }

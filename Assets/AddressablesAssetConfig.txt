@@ -1,68 +1,70 @@
-@Group: Hello
+@Group: Hello2
+
+@Group: Heaven
 #
-Address: Encourage;
-InstanceId: 29850;
-Labels: default, hello;
+Address: Naninovel/Encourage;
+InstanceId: 28534;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Audio/Encourage.wav)
 
 #
-Address: GameObject;
-InstanceId: 29210;
-Labels: default, hello;
+Address: Naninovel/GameObject;
+InstanceId: 28536;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Prefab/GameObject.prefab)
 
 #
-Address: AddressableModuleExample1;
-InstanceId: 29680;
-Labels: default, hello;
+Address: Naninovel/AddressableModuleExample1;
+InstanceId: 28540;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Scene/AddressableModuleExample1.unity)
 
 #
-Address: AddressMapListDataOverview;
-InstanceId: 28196;
-Labels: default, hello;
+Address: Naninovel/AddressMapListDataOverview;
+InstanceId: 27816;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/ScriptableObject/AddressMapListDataOverview.asset)
 
 #
-Address: DUNE_1;
-InstanceId: 29704;
-Labels: default, hello;
+Address: Naninovel/DUNE_1;
+InstanceId: 28542;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_1.JPG)
 
 #
-Address: DUNE_2;
-InstanceId: 29706;
-Labels: default, hello;
+Address: Naninovel/DUNE_2;
+InstanceId: 28544;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_2.png)
 
 #
-Address: DUNE_3;
-InstanceId: 29708;
-Labels: default, hello;
+Address: Naninovel/DUNE_3;
+InstanceId: 28546;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_3.jpeg)
 
 #
-Address: DUNE_4;
-InstanceId: 29710;
-Labels: default, hello;
+Address: Naninovel/DUNE_4;
+InstanceId: 28548;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_4.jpeg)
 
 #
-Address: DUNE_5;
-InstanceId: 29712;
-Labels: default, hello;
+Address: Naninovel/DUNE_5;
+InstanceId: 28550;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_5.jpeg)
 
 #
-Address: DUNE_6;
-InstanceId: 29714;
-Labels: default, hello;
+Address: Naninovel/DUNE_6;
+InstanceId: 28552;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_6.jpg)
 
 #
-Address: DUNE_7;
-InstanceId: 29716;
-Labels: default, hello;
+Address: Naninovel/DUNE_7;
+InstanceId: 28554;
+Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_7.png)
 
 

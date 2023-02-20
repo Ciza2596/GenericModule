@@ -1,13 +1,13 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace EventModule
 {
     public class AsyncEventDelegateContainer : BaseEventDelegateContainer
     {
-        public async Task Invoke<T1>(T1 eventData)
+        public async UniTask Invoke<T>(T eventData)
         {
-            await ((Func<T1, Task>)EventDelegate)?.Invoke(eventData);
+            await ((Func<T, UniTask>)EventDelegate).Invoke(eventData);
         }
     }
 }

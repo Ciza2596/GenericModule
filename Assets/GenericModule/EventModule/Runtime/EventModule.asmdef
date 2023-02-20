@@ -1,7 +1,9 @@
 {
     "name": "EventModule",
     "rootNamespace": "EventModule",
-    "references": [],
+    "references": [
+        "UniTask"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

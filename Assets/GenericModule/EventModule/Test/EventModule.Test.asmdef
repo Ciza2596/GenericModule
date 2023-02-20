@@ -2,8 +2,9 @@
     "name": "EventModule.Test",
     "rootNamespace": "",
     "references": [
-        "GUID:0acc523941302664db1f4e527237feb3",
-        "GUID:9586c15f055e6473cb6aec253983af25"
+        "UnityEditor.TestRunner",
+        "EventModule",
+        "UniTask"
     ],
     "includePlatforms": [
         "Editor"

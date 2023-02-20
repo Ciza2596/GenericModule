@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using EventModule;
 using NUnit.Framework;
 using Assert = UnityEngine.Assertions.Assert;
@@ -90,10 +91,10 @@ public class EventModuleTest
         public TestAsyncEvent(bool isTestAsyncActionTrigger) => IsTestAsyncActionTrigger = isTestAsyncActionTrigger;
     }
 
-    private Task OnTestAsyncAction(TestAsyncEvent @event)
+    private UniTask OnTestAsyncAction(TestAsyncEvent @event)
     {
         _isTestAsyncActionTrigger = @event.IsTestAsyncActionTrigger;
-        return Task.CompletedTask;
+        return UniTask.CompletedTask;
     }
 
 

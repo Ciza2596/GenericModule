@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+
 
 namespace EventModule
 {
@@ -38,17 +39,19 @@ namespace EventModule
 
 
         //async
-        public void AddAsyncListener<TEvent>(Func<TEvent, Task> eventDelegate) where TEvent : TAsyncEvent =>
+        public void AddAsyncListener<TEvent>(Func<TEvent, UniTask> eventDelegate) where TEvent : TAsyncEvent =>
             AddListener<TEvent, AsyncEventDelegateContainer>(eventDelegate, _asyncEvents);
 
-        public void RemoveAsyncListener<TEvent>(Func<TEvent, Task> eventDelegate) where TEvent : TAsyncEvent =>
+        public void RemoveAsyncListener<TEvent>(Func<TEvent, UniTask> eventDelegate) where TEvent : TAsyncEvent =>
             RemoveListener<TEvent, AsyncEventDelegateContainer>(eventDelegate, _asyncEvents);
 
 
-        public async Task NotifyAsyncEvent<TEvent>(TEvent eventData = default) where TEvent : TAsyncEvent
+        public async UniTask NotifyAsyncEvent<TEvent>(TEvent eventData = default) where TEvent : TAsyncEvent
         {
             if (_asyncEvents.TryGetValue(typeof(TEvent), out var asyncEventDelegateContainer))
-                await asyncEventDelegateContainer?.Invoke(eventData);
+                await asyncEventDelegateContainer.Invoke(eventData);
+
+            await UniTask.CompletedTask;
         }
 
 

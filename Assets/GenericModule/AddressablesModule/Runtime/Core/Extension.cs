@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,9 +9,7 @@ namespace AddressablesModule
     {
         private const string METHOD_NAME = "GetAssetAsync";
 
-        
-        
-        public static async Task LoadAssetsAsync(this AddressablesModule addressablesModule,
+        public static async UniTask LoadAssetsAsync(this AddressablesModule addressablesModule,
             AddressMap[] addressObjectTypeMaps)
         {
             foreach (var addressObjectTypeMap in addressObjectTypeMaps)
@@ -23,7 +21,7 @@ namespace AddressablesModule
                 var addressableModuleType = typeof(AddressablesModule);
                 var methodInfo = addressableModuleType.GetMethod(METHOD_NAME).MakeGenericMethod(type);
 
-                await (Task)methodInfo.Invoke(addressablesModule, new object[] { address });
+                await (UniTask)methodInfo.Invoke(addressablesModule, new object[] { address });
             }
         }
 

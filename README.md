@@ -6,7 +6,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 ```
 
 
-## EventModule [HasTest]
+## EventModule (Dependence UniTask) [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
@@ -46,7 +46,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPla
 ```
 
 
-## AddressablesModule (Dependence Unity Addressables)
+## AddressablesModule (Dependence Unity Addressables, UniTask)
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```

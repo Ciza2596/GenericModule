@@ -15,19 +15,108 @@ namespace AddressablesModule.Editor
 
         private AddressablesAssetManager _addressablesAssetManager = new AddressablesAssetManager();
 
-        private string _fileName = "AddressablesAssetConfig.txt";
-        private string _exportPath = Application.dataPath;
+        private const string ADDRESSABLES_ASSET_MANAGER_EDITOR = "AddressablesAssetManagerEditor.";
+        
+        
+        private string _configNameKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ConfigName)}";
+        private string ConfigName
+        {
+            get
+            {
+                var value = PlayerPrefs.GetString(_configNameKey);
+                return string.IsNullOrWhiteSpace(value) ? "AddressablesAssetConfig.txt" : value;
+            }
+
+            set
+            {
+                PlayerPrefs.SetString(_configNameKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+
+        private string _exportPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ExportPath)}";
+        private string ExportPath
+        {
+            get
+            {
+                var value = PlayerPrefs.GetString(_exportPathKey);
+                return string.IsNullOrWhiteSpace(value) ? Application.dataPath : value;
+            }
+
+            set
+            {
+                PlayerPrefs.SetString(_exportPathKey, value);
+                PlayerPrefs.Save();
+            }
+        }
 
         private TextAsset _importText;
 
         private BundledAssetGroupSchema.BundlePackingMode _bundleMode =
             BundledAssetGroupSchema.BundlePackingMode.PackSeparately;
 
-        private string _assetFolderPath;
-        private string _groupName;
-        private string _labelsString;
-        private string _addressPrefix;
-        private string _addressSuffix;
+
+        private readonly string _assetFolderPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AssetFolderPath)}";
+        private string AssetFolderPath
+        {
+            get => PlayerPrefs.GetString(_assetFolderPathKey);
+
+            set
+            {
+                PlayerPrefs.SetString(_assetFolderPathKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+
+        private readonly string _groupNameKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(GroupName)}";
+        private string GroupName
+        {
+            get => PlayerPrefs.GetString(_groupNameKey);
+
+            set
+            {
+                PlayerPrefs.SetString(_groupNameKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+        private readonly string _labelsStringKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(LabelsString)}";
+        private string LabelsString
+        {
+            get => PlayerPrefs.GetString(_labelsStringKey);
+
+            set
+            {
+                PlayerPrefs.SetString(_labelsStringKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+        private readonly string _addressPrefixKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressPrefix)}";
+        private string AddressPrefix
+        {
+            get => PlayerPrefs.GetString(_addressPrefixKey);
+
+            set
+            {
+                PlayerPrefs.SetString(_addressPrefixKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+        private readonly string _addressSuffixKey  = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressSuffix)}";
+        private string AddressSuffix
+        {
+            get => PlayerPrefs.GetString(_addressSuffixKey);
+
+            set
+            {
+                PlayerPrefs.SetString(_addressSuffixKey, value);
+                PlayerPrefs.Save();
+            }
+        }
 
 
         //private method
@@ -62,17 +151,31 @@ namespace AddressablesModule.Editor
 
         private void ExportArea()
         {
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.Space(0.5f);
+            
+            EditorGUILayout.BeginVertical();
             EditorGUILayout.Space();
-            _fileName = EditorGUILayout.TextField("Config Name", _fileName);
-            _exportPath = GetFolderPathAndOpenWindow("Export Path", _exportPath);
+            ConfigName = EditorGUILayout.TextField("Config Name", ConfigName);
+            ExportPath = GetFolderPathAndOpenWindow("Export Path", ExportPath);
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Export"))
                 Export();
+            
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.Space(0.5f);
+            EditorGUILayout.EndHorizontal();
         }
 
         private void ImportArea()
         {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.Space(0.5f);
+            
+            EditorGUILayout.BeginVertical();
             EditorGUILayout.Space();
             _importText =
                 EditorGUILayout.ObjectField("Config", _importText, typeof(TextAsset)) as TextAsset;
@@ -82,26 +185,41 @@ namespace AddressablesModule.Editor
 
             if (GUILayout.Button("Import"))
                 Import();
+            
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.Space(0.5f);
+            EditorGUILayout.EndHorizontal();
         }
 
         private void AddArea()
         {
-            EditorGUILayout.Space();
-            _assetFolderPath = GetFolderAssetPathAndOpenWindow("Asset Folder Path", _assetFolderPath);
-            EditorGUILayout.Space();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.Space(0.5f);
             
-            _groupName = EditorGUILayout.TextField("Group Name", _groupName);
+            EditorGUILayout.BeginVertical();
+            
+            EditorGUILayout.Space();
+            AssetFolderPath = GetAssetFolderPathAndOpenWindow("Asset Folder Path", AssetFolderPath);
+            EditorGUILayout.Space();
+
+            GroupName = EditorGUILayout.TextField("Group Name", GroupName);
             _bundleMode =
                 (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", _bundleMode);
-            _labelsString = EditorGUILayout.TextField("Labels", _labelsString);
+            LabelsString = EditorGUILayout.TextField("Labels", LabelsString);
             EditorGUILayout.Space();
-            
-            _addressPrefix = EditorGUILayout.TextField("Address Prefix", _addressPrefix);
-            _addressSuffix = EditorGUILayout.TextField("Address Suffix", _addressSuffix);
+
+            AddressPrefix = EditorGUILayout.TextField("Address Prefix", AddressPrefix);
+            AddressSuffix = EditorGUILayout.TextField("Address Suffix", AddressSuffix);
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Add"))
                 Add();
+            
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.Space(0.5f);
+            EditorGUILayout.EndHorizontal();
         }
 
 
@@ -127,8 +245,8 @@ namespace AddressablesModule.Editor
         }
 
         private void Add() =>
-            _addressablesAssetManager.Add(_groupName, _bundleMode, _assetFolderPath, _labelsString, _addressPrefix,
-                _addressSuffix);
+            _addressablesAssetManager.Add(GroupName, _bundleMode, AssetFolderPath, LabelsString, AddressPrefix,
+                AddressSuffix);
 
 
         private void CreateAndWriteFile(string content = null)
@@ -157,9 +275,9 @@ namespace AddressablesModule.Editor
 
         private string GetFullPath()
         {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(_fileName),
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(ConfigName),
                 "[AddressablesAssetManagerEditor::GetFullPath] FileName is null.");
-            return Path.Combine(_exportPath, _fileName);
+            return Path.Combine(ExportPath, ConfigName);
         }
 
         private string GetFolderPathAndOpenWindow(string label, string originPath)
@@ -174,7 +292,7 @@ namespace AddressablesModule.Editor
             }
         }
 
-        private string GetFolderAssetPathAndOpenWindow(string label, string originPath)
+        private string GetAssetFolderPathAndOpenWindow(string label, string originPath)
         {
             using (new EditorGUILayout.HorizontalScope())
             {

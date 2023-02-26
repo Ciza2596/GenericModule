@@ -16,8 +16,8 @@ namespace AddressablesModule.Editor
         private AddressablesAssetManager _addressablesAssetManager = new AddressablesAssetManager();
 
         private const string ADDRESSABLES_ASSET_MANAGER_EDITOR = "AddressablesAssetManagerEditor.";
-        
-        
+
+
         private string _configNameKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ConfigName)}";
         private string ConfigName
         {
@@ -51,12 +51,41 @@ namespace AddressablesModule.Editor
             }
         }
 
+
+        private string _importTextGuidKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ImportTextGuid)}";
+        private string ImportTextGuid
+        {
+            get => PlayerPrefs.GetString(_importTextGuidKey);
+            set
+            {
+                PlayerPrefs.SetString(_importTextGuidKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+
+        
         private TextAsset _importText;
+        private TextAsset ImportText
+        {
+            get
+            {
+                if (_importText is null)
+                    _importText = GetObject<TextAsset>(ImportTextGuid);
 
-        private BundledAssetGroupSchema.BundlePackingMode _bundleMode =
-            BundledAssetGroupSchema.BundlePackingMode.PackSeparately;
-
-
+                return _importText;
+            }
+            set
+            {
+                _importText = value;
+                var guid = _importText is null
+                    ? string.Empty
+                    : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_importText));
+                ImportTextGuid = guid;
+            }
+        }
+        
+        
+        
         private readonly string _assetFolderPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AssetFolderPath)}";
         private string AssetFolderPath
         {
@@ -82,6 +111,19 @@ namespace AddressablesModule.Editor
             }
         }
 
+        
+        private string _bundleModeKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(BundleMode)}";
+        private BundledAssetGroupSchema.BundlePackingMode BundleMode
+        {
+            get => (BundledAssetGroupSchema.BundlePackingMode)PlayerPrefs.GetInt(_bundleModeKey);
+
+            set
+            {
+                PlayerPrefs.SetInt(_bundleModeKey, (int)value);
+                PlayerPrefs.Save();
+            }
+        }
+        
         private readonly string _labelsStringKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(LabelsString)}";
         private string LabelsString
         {
@@ -106,7 +148,7 @@ namespace AddressablesModule.Editor
             }
         }
 
-        private readonly string _addressSuffixKey  = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressSuffix)}";
+        private readonly string _addressSuffixKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressSuffix)}";
         private string AddressSuffix
         {
             get => PlayerPrefs.GetString(_addressSuffixKey);
@@ -151,10 +193,9 @@ namespace AddressablesModule.Editor
 
         private void ExportArea()
         {
-
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space(0.5f);
-            
+
             EditorGUILayout.BeginVertical();
             EditorGUILayout.Space();
             ConfigName = EditorGUILayout.TextField("Config Name", ConfigName);
@@ -163,9 +204,9 @@ namespace AddressablesModule.Editor
 
             if (GUILayout.Button("Export"))
                 Export();
-            
+
             EditorGUILayout.EndVertical();
-            
+
             EditorGUILayout.Space(0.5f);
             EditorGUILayout.EndHorizontal();
         }
@@ -174,20 +215,20 @@ namespace AddressablesModule.Editor
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space(0.5f);
-            
+
             EditorGUILayout.BeginVertical();
             EditorGUILayout.Space();
-            _importText =
-                EditorGUILayout.ObjectField("Config", _importText, typeof(TextAsset)) as TextAsset;
-            _bundleMode =
-                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", _bundleMode);
+            ImportText =
+                EditorGUILayout.ObjectField("Config", ImportText, typeof(TextAsset)) as TextAsset;
+            BundleMode =
+                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", BundleMode);
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Import"))
                 Import();
-            
+
             EditorGUILayout.EndVertical();
-            
+
             EditorGUILayout.Space(0.5f);
             EditorGUILayout.EndHorizontal();
         }
@@ -196,16 +237,16 @@ namespace AddressablesModule.Editor
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space(0.5f);
-            
+
             EditorGUILayout.BeginVertical();
-            
+
             EditorGUILayout.Space();
             AssetFolderPath = GetAssetFolderPathAndOpenWindow("Asset Folder Path", AssetFolderPath);
             EditorGUILayout.Space();
 
             GroupName = EditorGUILayout.TextField("Group Name", GroupName);
-            _bundleMode =
-                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", _bundleMode);
+            BundleMode =
+                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", BundleMode);
             LabelsString = EditorGUILayout.TextField("Labels", LabelsString);
             EditorGUILayout.Space();
 
@@ -215,9 +256,9 @@ namespace AddressablesModule.Editor
 
             if (GUILayout.Button("Add"))
                 Add();
-            
+
             EditorGUILayout.EndVertical();
-            
+
             EditorGUILayout.Space(0.5f);
             EditorGUILayout.EndHorizontal();
         }
@@ -233,19 +274,19 @@ namespace AddressablesModule.Editor
 
         private void Import()
         {
-            if (_importText is null)
+            if (ImportText is null)
             {
                 Debug.LogError("[AddressablesAssetManagerEditor::Import] ImportText is null.");
                 return;
             }
 
-            var content = _importText.text;
-            _addressablesAssetManager.Import(content, _bundleMode);
+            var content = ImportText.text;
+            _addressablesAssetManager.Import(content, BundleMode);
             Export();
         }
 
         private void Add() =>
-            _addressablesAssetManager.Add(GroupName, _bundleMode, AssetFolderPath, LabelsString, AddressPrefix,
+            _addressablesAssetManager.Add(GroupName, BundleMode, AssetFolderPath, LabelsString, AddressPrefix,
                 AddressSuffix);
 
 
@@ -308,6 +349,14 @@ namespace AddressablesModule.Editor
 
                 return string.IsNullOrWhiteSpace(path) ? originPath : path;
             }
+        }
+
+
+        private T GetObject<T>(string guid) where T : Object
+        {
+            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            var obj = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            return obj;
         }
     }
 }

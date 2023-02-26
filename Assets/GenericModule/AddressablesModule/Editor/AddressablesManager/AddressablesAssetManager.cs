@@ -19,6 +19,8 @@ namespace AddressablesModule.Editor
         private const string GROUP_TAG = "@Group: ";
         private const string GROUP_END_TAG = END_TAG;
 
+        private const string BUNDLE_MODE_INDEX_TAG = "BundleModeIndex: ";
+
         private const string ASSET_INFO_TAG = "#";
         private const string ASSET_INFO_AND_TAG = ";";
 
@@ -37,11 +39,16 @@ namespace AddressablesModule.Editor
         {
             string content = string.Empty;
 
-            if (TryGetAllGroupNames(out var groupNames))
+            if (TryGetAllGroupNames(out var groupNames, out var bundleModeIndexs))
             {
-                foreach (var groupName in groupNames)
+                var groupNamesLength = groupNames.Length;
+                for (int i = 0; i < groupNamesLength; i++)
                 {
+                    var groupName = groupNames[i];
+                    var bundleModeIndex = bundleModeIndexs[i];
+
                     content += GetGroupNameWithTag(groupName);
+                    content += GetBundleModeIndexWithTag(bundleModeIndex);
 
                     if (TryGetGroupAssets(groupName, out var groupDatas))
                         foreach (var groupData in groupDatas)
@@ -54,15 +61,14 @@ namespace AddressablesModule.Editor
             return content;
         }
 
-        public void Import(string content,
-            BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+        public void Import(string content)
         {
             ClearAddressables();
             ClearLabels();
 
-            var assetInfoDatas = CreateAssetInfoDatasByContent(content, out var groupNames);
+            var assetInfoDatas = CreateAssetInfoDatasByContent(content, out var groupNames, out var bundleModeIndexs);
 
-            CreateAddressablesGroups(groupNames, bundlePackingMode);
+            CreateAddressablesGroups(groupNames, bundleModeIndexs);
 
 
             foreach (var assetInfoData in assetInfoDatas)
@@ -76,7 +82,7 @@ namespace AddressablesModule.Editor
             }
         }
 
-        public void Add(string groupName, BundledAssetGroupSchema.BundlePackingMode bundlePackingMode,
+        public void Add(string groupName, int bundleModeIndex,
             string assetFolderPath, string labelsString, string addressPrefix, string addressSuffix)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -84,7 +90,7 @@ namespace AddressablesModule.Editor
                 groupName = settings.DefaultGroup.name;
 
             else
-                CreateAddressablesGroup(groupName, bundlePackingMode);
+                CreateAddressablesGroup(groupName, bundleModeIndex);
 
             var labels = string.IsNullOrWhiteSpace(labelsString) ? null : GetLabelsFromLabelsString(labelsString);
 
@@ -104,10 +110,11 @@ namespace AddressablesModule.Editor
 
 
         //private method
-        private bool TryGetAllGroupNames(out string[] groupNames)
+        private bool TryGetAllGroupNames(out string[] groupNames, out int[] bundleModeIndexs)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             groupNames = null;
+            bundleModeIndexs = null;
 
             if (!settings)
             {
@@ -125,11 +132,17 @@ namespace AddressablesModule.Editor
             }
 
             groupNames = new string[groupsCount];
+            bundleModeIndexs = new int[groupsCount];
 
             for (int i = 0; i < groupsCount; i++)
             {
-                var groupName = groups[i + 2].Name;
+                var group = groups[i + 2];
+
+                var groupName = group.Name;
                 groupNames[i] = groupName;
+
+                var bundledAssetGroupSchema = group.GetSchema<BundledAssetGroupSchema>();
+                bundleModeIndexs[i] = (int)bundledAssetGroupSchema.BundleMode;
             }
 
             return true;
@@ -210,17 +223,18 @@ namespace AddressablesModule.Editor
         }
 
         private void CreateAddressablesGroups(string[] groupNames,
-            BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+            int[] bundleModeIndexs)
         {
             for (int i = 0; i < groupNames.Length; i++)
             {
                 var groupName = groupNames[i];
-                CreateAddressablesGroup(groupName, bundlePackingMode);
+                var bundleModeIndex = bundleModeIndexs[i];
+                CreateAddressablesGroup(groupName, bundleModeIndex);
             }
         }
 
         private void CreateAddressablesGroup(string groupName,
-            BundledAssetGroupSchema.BundlePackingMode bundlePackingMode)
+            int bundleModeIndex)
         {
             var settings = AddressableAssetSettingsDefaultObject.Settings;
 
@@ -236,7 +250,7 @@ namespace AddressablesModule.Editor
                     typeof(BundledAssetGroupSchema));
 
             var bundledAssetGroupSchema = group.GetSchema<BundledAssetGroupSchema>();
-            bundledAssetGroupSchema.BundleMode = bundlePackingMode;
+            bundledAssetGroupSchema.BundleMode = (BundledAssetGroupSchema.BundlePackingMode)bundleModeIndex;
         }
 
         private void AddEntryToAddressables(string groupName, string address, int instanceId, string[] labels = null)
@@ -273,12 +287,14 @@ namespace AddressablesModule.Editor
             settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, true, false);
         }
 
-        private AssetInfoData[] CreateAssetInfoDatasByContent(string content, out string[] groupNames)
+        private AssetInfoData[] CreateAssetInfoDatasByContent(string content, out string[] groupNames,
+            out int[] bundleModeIndexs)
         {
             content = content.Replace(END_TAG, null);
             var groupContents = content.Split(GROUP_TAG);
 
             var originGroupNames = new List<string>();
+            var originBundleModeIndexs = new List<int>();
 
             var assetInfoDatas = Array.Empty<AssetInfoData>();
             foreach (var groupContent in groupContents)
@@ -286,27 +302,37 @@ namespace AddressablesModule.Editor
                 if (string.IsNullOrWhiteSpace(groupContent))
                     continue;
 
-                var newAssetInfoDatas = CreateAssetInfoDatasByGroupContent(groupContent, out var groupName);
+                var newAssetInfoDatas =
+                    CreateAssetInfoDatasByGroupContent(groupContent, out var groupName, out var bundleModeIndex);
                 originGroupNames.Add(groupName);
+                originBundleModeIndexs.Add(bundleModeIndex);
 
                 assetInfoDatas = assetInfoDatas.Concat(newAssetInfoDatas).ToArray();
             }
 
             groupNames = originGroupNames.ToArray();
+            bundleModeIndexs = originBundleModeIndexs.ToArray();
+
             return assetInfoDatas;
         }
 
-        private AssetInfoData[] CreateAssetInfoDatasByGroupContent(string groupContent, out string groupName)
+        private AssetInfoData[] CreateAssetInfoDatasByGroupContent(string groupContent, out string groupName,
+            out int bundleModeIndex)
         {
             var assetInfoContents = groupContent.Split(ASSET_INFO_TAG);
-            groupName = assetInfoContents[0];
+            var groupNameAndBundleModeIndex = assetInfoContents[0];
+
+            var groupNameAndBundleModeIndexContents = groupNameAndBundleModeIndex.Split(BUNDLE_MODE_INDEX_TAG);
+            groupName = groupNameAndBundleModeIndexContents[0];
+            bundleModeIndex = int.Parse(groupNameAndBundleModeIndexContents[1]);
 
             var length = assetInfoContents.Length - 1;
             var assetInfoDatas = new AssetInfoData[length];
             for (int i = 0; i < length; i++)
             {
                 var assetInfoContent = assetInfoContents[i + 1];
-                assetInfoDatas[i] = CreateAssetInfoDataByAssetInfoContent(groupName, assetInfoContent);
+                assetInfoDatas[i] =
+                    CreateAssetInfoDataByAssetInfoContent(groupName, assetInfoContent);
             }
 
             return assetInfoDatas;
@@ -325,6 +351,9 @@ namespace AddressablesModule.Editor
         }
 
         private string GetGroupNameWithTag(string groupName) => GROUP_TAG + groupName + END_TAG;
+
+        private string GetBundleModeIndexWithTag(int bundleModeIndex) =>
+            BUNDLE_MODE_INDEX_TAG + bundleModeIndex + END_TAG;
 
         private string GetAssetInfoWithTag(AssetInfoData assetInfoData)
         {

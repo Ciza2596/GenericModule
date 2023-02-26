@@ -220,8 +220,6 @@ namespace AddressablesModule.Editor
             EditorGUILayout.Space();
             ImportText =
                 EditorGUILayout.ObjectField("Config", ImportText, typeof(TextAsset)) as TextAsset;
-            BundleMode =
-                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", BundleMode);
             EditorGUILayout.Space();
 
             if (GUILayout.Button("Import"))
@@ -281,12 +279,12 @@ namespace AddressablesModule.Editor
             }
 
             var content = ImportText.text;
-            _addressablesAssetManager.Import(content, BundleMode);
+            _addressablesAssetManager.Import(content);
             Export();
         }
 
         private void Add() =>
-            _addressablesAssetManager.Add(GroupName, BundleMode, AssetFolderPath, LabelsString, AddressPrefix,
+            _addressablesAssetManager.Add(GroupName, (int)BundleMode, AssetFolderPath, LabelsString, AddressPrefix,
                 AddressSuffix);
 
 
@@ -318,7 +316,9 @@ namespace AddressablesModule.Editor
         {
             Assert.IsTrue(!string.IsNullOrWhiteSpace(ConfigName),
                 "[AddressablesAssetManagerEditor::GetFullPath] FileName is null.");
-            return Path.Combine(ExportPath, ConfigName);
+
+            var exportPath = GetAssetPathWithDataPath(ExportPath);
+            return Path.Combine(exportPath, ConfigName);
         }
 
         private string GetFolderPathAndOpenWindow(string label, string originPath)
@@ -327,7 +327,10 @@ namespace AddressablesModule.Editor
             {
                 var path = EditorGUILayout.TextField(label, originPath);
                 if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
-                    path = EditorUtility.OpenFolderPanel("Folder Path", "Assets", "");
+                {
+                    path = EditorUtility.OpenFolderPanel("Folder Path", originPath, "");
+                    path = GetAssetPathWithoutDataPath(path);
+                }
 
                 return string.IsNullOrWhiteSpace(path) ? originPath : path;
             }
@@ -340,13 +343,10 @@ namespace AddressablesModule.Editor
                 var path = EditorGUILayout.TextField(label, originPath);
                 if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
                 {
-                    path = EditorUtility.OpenFolderPanel("Folder Path", "Assets", "");
-                    var dataPath = Application.dataPath;
-                    dataPath = dataPath.Replace("Assets", "");
-                    path = path.Replace(dataPath, "");
+                    path = EditorUtility.OpenFolderPanel("Folder Path", originPath, "");
+                    path = GetAssetPathWithoutDataPath(path);
                 }
-
-
+                
                 return string.IsNullOrWhiteSpace(path) ? originPath : path;
             }
         }
@@ -357,6 +357,28 @@ namespace AddressablesModule.Editor
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             var obj = AssetDatabase.LoadAssetAtPath<T>(assetPath);
             return obj;
+        }
+
+        private string GetAssetPathWithoutDataPath(string path)
+        {
+            var dataPath = Application.dataPath;
+            dataPath = dataPath.Replace("Assets", "");
+            
+            if(path.Contains(dataPath)) 
+                path = path.Replace(dataPath, "");
+
+            return path;
+        }
+
+        private string GetAssetPathWithDataPath(string path)
+        {
+            var dataPath = Application.dataPath;
+            dataPath = dataPath.Replace("Assets", "");
+
+            if (!path.Contains(dataPath))
+                path = dataPath + path;
+
+            return path;
         }
     }
 }

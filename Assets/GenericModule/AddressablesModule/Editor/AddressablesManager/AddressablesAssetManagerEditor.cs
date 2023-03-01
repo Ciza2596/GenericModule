@@ -244,7 +244,7 @@ namespace AddressablesModule.Editor
 
             GroupName = EditorGUILayout.TextField("Group Name", GroupName);
             BundleMode =
-                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumFlagsField("Bundle Mode", BundleMode);
+                (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumPopup("Bundle Mode", BundleMode);
             LabelsString = EditorGUILayout.TextField("Labels", LabelsString);
             EditorGUILayout.Space();
 

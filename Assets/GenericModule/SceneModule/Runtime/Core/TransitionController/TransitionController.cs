@@ -19,6 +19,9 @@ namespace SceneModule
             var viewParentGameObject = Object.Instantiate(viewParentPrefab);
             var viewParentTransform = viewParentGameObject.transform;
 
+            var isViewName = sceneModule.IsViewName;
+            transitionControllerConfig.SetIsViewName(isViewName);
+            
             var transitionInViewName = sceneModule.TransitionInViewName;
             var transitionInViewPrefab = transitionControllerConfig.GetTransitionInViewPrefab(transitionInViewName);
             var transitionInView = CreateView<ITransitionView>(viewParentTransform, transitionInViewPrefab);

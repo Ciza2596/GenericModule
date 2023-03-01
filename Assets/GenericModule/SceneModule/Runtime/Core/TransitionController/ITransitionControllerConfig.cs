@@ -1,5 +1,3 @@
-
-
 using UnityEngine;
 
 namespace SceneModule
@@ -8,11 +6,12 @@ namespace SceneModule
     {
         public GameObject GetViewParentPrefab();
 
-        public GameObject GetTransitionInViewPrefab(string viewName);
+        public void SetIsViewName(bool isViewName);
 
-        public GameObject GetLoadingViewPrefab(string viewName);
+        public GameObject GetTransitionInViewPrefab(string viewNameOrTag);
 
-        public GameObject GetTransitionOutPrefab(string viewName);
+        public GameObject GetLoadingViewPrefab(string viewNameOrTag);
 
+        public GameObject GetTransitionOutPrefab(string viewNameOrTag);
     }
 }

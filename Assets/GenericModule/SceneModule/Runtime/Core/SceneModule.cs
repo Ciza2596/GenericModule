@@ -11,6 +11,8 @@ namespace SceneModule
         //public variable
         public string TransitionSceneName { get; }
 
+        public bool IsViewName { get; private set; }
+
         public string TransitionInViewName { get; private set; }
 
         public string CurrentSceneName { get; private set; }
@@ -41,23 +43,22 @@ namespace SceneModule
         public void UnloadScene(string sceneName) =>
             _sceneManager.UnloadScene(sceneName);
 
-
         public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName,
             string nextSceneName,
             IReleasingTask releasingTask = null,
-            ILoadingTask loadingTask = null)
-        {
+            ILoadingTask loadingTask = null) =>
             ChangeScene(transitionInViewName, null,
                 loadingViewName, transitionOutViewName, nextSceneName,
                 releasingTask,
                 loadingTask);
-        }
 
         public void ChangeScene(string transitionInViewName, string currentSceneName,
             string loadingViewName, string transitionOutViewName, string nextSceneName,
             IReleasingTask releasingTask = null,
             ILoadingTask loadingTask = null)
         {
+            IsViewName = true;
+
             TransitionInViewName = transitionInViewName;
             CurrentSceneName = string.IsNullOrWhiteSpace(currentSceneName)
                 ? _sceneManager.CurrentSceneName
@@ -67,6 +68,34 @@ namespace SceneModule
             LoadingViewName = loadingViewName;
 
             TransitionOutViewName = transitionOutViewName;
+            NextSceneName = nextSceneName;
+            LoadingTask = loadingTask;
+
+            LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
+        }
+
+
+        public void ChangeScene(string transitionViewTag, string nextSceneName,
+            IReleasingTask releasingTask = null,
+            ILoadingTask loadingTask = null) =>
+            ChangeScene(transitionViewTag, nextSceneName, releasingTask, loadingTask);
+
+
+        public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName,
+            IReleasingTask releasingTask = null,
+            ILoadingTask loadingTask = null)
+        {
+            IsViewName = false;
+
+            TransitionInViewName = transitionViewTag;
+            CurrentSceneName = string.IsNullOrWhiteSpace(currentSceneName)
+                ? _sceneManager.CurrentSceneName
+                : currentSceneName;
+            ReleasingTask = releasingTask;
+
+            LoadingViewName = transitionViewTag;
+
+            TransitionOutViewName = transitionViewTag;
             NextSceneName = nextSceneName;
             LoadingTask = loadingTask;
 

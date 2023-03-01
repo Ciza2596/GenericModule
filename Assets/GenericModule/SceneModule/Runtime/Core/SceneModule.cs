@@ -78,7 +78,7 @@ namespace SceneModule
         public void ChangeScene(string transitionViewTag, string nextSceneName,
             IReleasingTask releasingTask = null,
             ILoadingTask loadingTask = null) =>
-            ChangeScene(transitionViewTag, nextSceneName, releasingTask, loadingTask);
+            ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask);
 
 
         public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName,

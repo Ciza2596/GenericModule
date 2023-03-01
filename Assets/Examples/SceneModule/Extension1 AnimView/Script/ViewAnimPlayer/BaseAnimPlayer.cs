@@ -1,8 +1,8 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 
 public abstract class BaseAnimPlayer : MonoBehaviour
 {
-    public abstract Task Play();
+    public abstract UniTask Play();
 }

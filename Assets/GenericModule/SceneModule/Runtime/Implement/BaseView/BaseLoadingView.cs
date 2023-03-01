@@ -17,14 +17,14 @@ namespace SceneModule.Implement
 
 
         //loadingView callback
-        public void Loading(ILoadSceneAsync loadSceneAsync,ILoadingTask loadingTask, Action onComplete)
+        public void Loading(ILoadSceneAsync loadSceneAsync, ILoadingTask loadingTask, Action onComplete)
         {
             gameObject.SetActive(true);
 
             _loadSceneAsync = loadSceneAsync;
             _loadingTask = loadingTask;
             _onComplete = onComplete;
-            
+
             loadingTask?.Execute();
 
             _loadingTime = _defaultLoadingTime;

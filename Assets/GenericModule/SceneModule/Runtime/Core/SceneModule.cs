@@ -12,6 +12,7 @@ namespace SceneModule
         public string TransitionSceneName { get; }
 
         public string TransitionInViewName { get; private set; }
+
         public string CurrentSceneName { get; private set; }
         public IReleasingTask ReleasingTask { get; private set; }
 
@@ -41,13 +42,26 @@ namespace SceneModule
             _sceneManager.UnloadScene(sceneName);
 
 
+        public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName,
+            string nextSceneName,
+            IReleasingTask releasingTask = null,
+            ILoadingTask loadingTask = null)
+        {
+            ChangeScene(transitionInViewName, null,
+                loadingViewName, transitionOutViewName, nextSceneName,
+                releasingTask,
+                loadingTask);
+        }
+
         public void ChangeScene(string transitionInViewName, string currentSceneName,
             string loadingViewName, string transitionOutViewName, string nextSceneName,
             IReleasingTask releasingTask = null,
             ILoadingTask loadingTask = null)
         {
             TransitionInViewName = transitionInViewName;
-            CurrentSceneName = currentSceneName;
+            CurrentSceneName = string.IsNullOrWhiteSpace(currentSceneName)
+                ? _sceneManager.CurrentSceneName
+                : currentSceneName;
             ReleasingTask = releasingTask;
 
             LoadingViewName = loadingViewName;

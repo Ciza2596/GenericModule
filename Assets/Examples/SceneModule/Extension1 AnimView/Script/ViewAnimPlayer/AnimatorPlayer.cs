@@ -1,4 +1,5 @@
-using System.Threading.Tasks;
+
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 
@@ -11,15 +12,16 @@ public class AnimatorPlayer : BaseAnimPlayer
     [Space] [SerializeField] private Animator _animator;
 
 
-    public override async Task Play()
+    
+    public override async UniTask Play()
     {
         _animator.Play(_idleStateName);
-        await Task.Yield();
+        await UniTask.Yield();
 
         _animator.Play(_playStateName);
-        await Task.Yield();
+        await UniTask.Yield();
 
         while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < _normalizedTime)
-            await Task.Yield();
+            await UniTask.Yield();
     }
 }

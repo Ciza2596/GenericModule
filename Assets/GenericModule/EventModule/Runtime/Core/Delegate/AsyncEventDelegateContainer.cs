@@ -1,13 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace EventModule
 {
-    public class AsyncEventDelegateContainer : BaseEventDelegateContainer
+    internal class AsyncEventDelegateContainer : BaseEventDelegateContainer
     {
         public async UniTask Invoke<T>(T eventData)
         {
-            await ((Func<T, UniTask>)EventDelegate).Invoke(eventData);
+            var invocationTasks = new List<UniTask>();
+
+            foreach (var invocation in EventDelegate.GetInvocationList())
+                invocationTasks.Add(((Func<T, UniTask>)invocation).Invoke(eventData));
+
+            await UniTask.WhenAll(invocationTasks);
         }
     }
 }

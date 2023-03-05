@@ -327,6 +327,45 @@ public class PageContainerTest
     }
 
 
+    [Test]
+    public async void _15_Update()
+    {
+        //arrange
+        Create_And_Check_Page_Is_Created<FakePage>();
+        Check_Page_Is_Invisible<FakePage>();
+        
+        await _pageContainer.ShowImmediately(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
+        Check_Page_Is_Visible<FakePage>();
+        
+        Check_IsOnUpdatePass<FakePage>(false);
+
+        //act
+        _pageContainer.Update(0);
+
+        //assert
+        Check_IsOnUpdatePass<FakePage>(true);
+    }
+
+    [Test]
+    public async void _16_FixedUpdate()
+    {
+        //arrange
+        Create_And_Check_Page_Is_Created<FakePage>();
+        Check_Page_Is_Invisible<FakePage>();
+        
+        await _pageContainer.ShowImmediately(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
+        Check_Page_Is_Visible<FakePage>();
+        
+        Check_IsOnFixedUpdatePass<FakePage>(false);
+
+        //act
+        _pageContainer.FixedUpdate(0);
+
+        //assert
+        Check_IsOnFixedUpdatePass<FakePage>(true);
+    }
+
+
     //private method
     private void Check_Page_Is_Created<T>() where T : Component
     {

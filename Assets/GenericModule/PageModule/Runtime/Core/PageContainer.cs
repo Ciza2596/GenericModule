@@ -261,7 +261,8 @@ namespace PageModule
                 beforeShowingTasks.Add(pageData.BeforeShowing(parameters));
 
                 show += pageData.Show;
-                showingActionTasks.Add(pageData.ShowingAction());
+                if(!isImmediately)
+                    showingActionTasks.Add(pageData.ShowingAction());
                 completeShowing += pageData.CompleteShowing;
 
                 canShowPageDatas.Add(pageData);

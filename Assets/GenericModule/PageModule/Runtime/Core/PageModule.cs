@@ -61,7 +61,7 @@ namespace PageModule
             await _pageContainer.Show<T>(parameters);
 
         public async UniTask ShowImmediately<T>(params object[] parameters) where T : Component =>
-            await _pageContainer.Show<T>(parameters);
+            await _pageContainer.ShowImmediately<T>(parameters);
 
         public async UniTask Show(Type[] pageTypes, object[][] parametersList) =>
             await _pageContainer.Show(pageTypes, parametersList);

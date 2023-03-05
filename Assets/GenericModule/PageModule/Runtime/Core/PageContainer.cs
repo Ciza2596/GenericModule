@@ -43,7 +43,7 @@ namespace PageModule
             if (!_pageDataMap.ContainsKey(pageType))
             {
                 Debug.Log(
-                    $"[PageContainer::CheckIsVisible] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                    $"[PageContainer::CheckIsVisible] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return false;
             }
 
@@ -57,7 +57,7 @@ namespace PageModule
             if (!_pageDataMap.ContainsKey(pageType))
             {
                 Debug.Log(
-                    $"[PageContainer::CheckIsShowing] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                    $"[PageContainer::CheckIsShowing] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return false;
             }
 
@@ -71,7 +71,7 @@ namespace PageModule
             if (!_pageDataMap.ContainsKey(pageType))
             {
                 Debug.Log(
-                    $"[PageContainer::CheckIsHiding] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                    $"[PageContainer::CheckIsHiding] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return false;
             }
 
@@ -79,6 +79,7 @@ namespace PageModule
             return pageData.State is PageState.Hiding;
         }
 
+        
         public bool TryGetPage<T>(out T page) where T : Component
         {
             page = null;
@@ -87,7 +88,7 @@ namespace PageModule
             if (!_pageDataMap.ContainsKey(pageType))
             {
                 Debug.Log(
-                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return false;
             }
 
@@ -140,7 +141,6 @@ namespace PageModule
         public async void HideImmediately<T>() where T : Component =>
             await Hide(typeof(T), true);
 
-
         public async UniTask Hide(Type[] pageTypes) =>
             await Hide(pageTypes, false);
 
@@ -190,12 +190,15 @@ namespace PageModule
             if (!_pageDataMap.ContainsKey(pageType))
             {
                 Debug.Log(
-                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return;
             }
 
             var pageData = _pageDataMap[pageType];
             _pageDataMap.Remove(pageType);
+            
+            if(pageData.State is PageState.Invisible)
+                RemoveUpdateAndFixedUpdateHandle(pageData);
 
             pageData.Release();
         }
@@ -211,7 +214,7 @@ namespace PageModule
             if (state != PageState.Invisible)
             {
                 Debug.LogWarning(
-                    $"[PageContainer::Hide] PageType: {pageType} is not Invisible. Current state is {state}.");
+                    $"[PageContainer::Show] PageType: {pageType} is not Invisible. Current state is {state}.");
                 return;
             }
 
@@ -229,10 +232,6 @@ namespace PageModule
 
         private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList)
         {
-            foreach (var pageType in pageTypes)
-                Assert.IsTrue(_pageDataMap.ContainsKey(pageType),
-                    $"[PageContainer::Show] PageType: {pageType} doesnt be created.");
-
             var beforeShowingTasks = new List<UniTask>();
 
             Action show = null;

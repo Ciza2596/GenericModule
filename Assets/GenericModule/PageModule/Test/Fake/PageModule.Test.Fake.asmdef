@@ -1,15 +1,16 @@
 {
-    "name": "PageModule",
-    "rootNamespace": "PageModule",
+    "name": "PageModule.Test.Fake",
+    "rootNamespace": "",
     "references": [
-        "UniTask"
+        "UniTask",
+        "PageModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

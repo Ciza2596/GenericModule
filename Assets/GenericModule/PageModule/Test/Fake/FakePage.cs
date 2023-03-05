@@ -2,8 +2,8 @@ using Cysharp.Threading.Tasks;
 using PageModule;
 using UnityEngine;
 
-public class FakePage : MonoBehaviour, IInitializable, IUpdatable, IFixedUpdatable, IReleasable, IBeforeShowable,
-    IShowable, IShowActionable, ICompleteShowable, IHidable, IHidingActionable, ICompleteHidable
+public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable, IReleasable, IShowingStart,
+    IShowingAnimated, IShowingComplete, IHidingStart, IHidingAnimated, IHidingComplete
 {
     //public variable
     public bool IsInitializePass { get; private set; }
@@ -22,41 +22,37 @@ public class FakePage : MonoBehaviour, IInitializable, IUpdatable, IFixedUpdatab
     public bool IsHidingActionPass { get; private set; }
     public bool IsCompleteHidingPass { get; private set; }
 
-
     //public method
     public void Initialize() => IsInitializePass = true;
 
-    public void OnUpdate(float deltaTime) => IsOnUpdatePass = true;
+    public void Tick(float deltaTime) => IsOnUpdatePass = true;
 
-    public void OnFixedUpdate(float fixedDeltaTime) => IsOnFixedUpdatePass = true;
+    public void FixedTick(float fixedDeltaTime) => IsOnFixedUpdatePass = true;
 
     public void Release() => IsReleasePass = true;
 
 
-    public async UniTask BeforeShowing(params object[] parameters)
+    public async UniTask OnShowingStart(params object[] parameters)
     {
         IsBeforeShowingPass = true;
         await UniTask.CompletedTask;
     }
 
-    public void Show() => IsShowPass = true;
-
-    public async UniTask ShowingAction()
+    public async UniTask PlayShowingAnimation()
     {
         IsShowingActionPass = true;
         await UniTask.CompletedTask;
     }
 
-    public void CompleteShowing() => IsCompleteShowingPass = true;
+    public void OnShowingComplete() => IsCompleteShowingPass = true;
 
+    public void OnHidingStart() => IsHidePass = true;
 
-    public void Hide() => IsHidePass = true;
-
-    public async UniTask HidingAction()
+    public async UniTask PlayHidingAnimation()
     {
         IsHidingActionPass = true;
         await UniTask.CompletedTask;
     }
 
-    public void CompleteHiding() => IsCompleteHidingPass = true;
+    public void OnHidingComplete() => IsCompleteHidingPass = true;
 }

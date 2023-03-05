@@ -32,6 +32,8 @@ namespace PageModule
 
 
         //public method
+        public void Release() => _pageContainer.Release();
+        
         public bool CheckIsVisible<T>() where T : Component =>
             _pageContainer.CheckIsVisible<T>();
 

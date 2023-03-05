@@ -33,69 +33,63 @@ namespace PageModule
         }
 
 
-        public bool TryGetUpdateable(out IUpdatable updatable)
+        public bool TryGetTickable(out ITickable tickable)
         {
-            updatable = Page as IUpdatable;
-            return updatable != null;
+            tickable = Page as ITickable;
+            return tickable != null;
         }
 
-        public bool TryGetFixedUpdateable(out IFixedUpdatable fixedUpdatable)
+        public bool TryGetFixedTickable(out IFixedTickable fixedTickable)
         {
-            fixedUpdatable = Page as IFixedUpdatable;
-            return fixedUpdatable != null;
+            fixedTickable = Page as IFixedTickable;
+            return fixedTickable != null;
         }
 
 
-        public async UniTask BeforeShowing(params object[] parameters)
+        public async UniTask OnShowingStart(params object[] parameters)
         {
             State = PageState.Showing;
 
-            if (Page is IBeforeShowable beforeShowable)
-                await beforeShowable.BeforeShowing(parameters);
-        }
-
-        public void Show()
-        {
+            if (Page is IShowingStart showingStart)
+                await showingStart.OnShowingStart(parameters);
+            
             var pageGameObject = Page.gameObject;
             pageGameObject.SetActive(true);
-            
-            if (Page is IShowable showable)
-                showable.Show();
         }
 
-        public async UniTask ShowingAction()
+        public async UniTask PlayShowingAnimation()
         {
-            if (Page is IShowActionable showActionable)
-                await showActionable.ShowingAction();
+            if (Page is IShowingAnimated showingAnimated)
+                await showingAnimated.PlayShowingAnimation();
         }
 
-        public void CompleteShowing()
+        public void OnShowingComplete()
         {
-            if (Page is ICompleteShowable completeShowable)
-                completeShowable.CompleteShowing();
+            if (Page is IShowingComplete showingComplete)
+                showingComplete.OnShowingComplete();
 
             State = PageState.Visible;
         }
 
 
-        public void Hide()
+        public void OnHidingStart()
         {
             State = PageState.Hiding;
             
-            if(Page is IHidable hidable)
-                hidable.Hide();
+            if(Page is IHidingStart hidingStart)
+                hidingStart.OnHidingStart();
         }
 
-        public async UniTask HidingAction()
+        public async UniTask PlayHidingAnimation()
         {
-            if(Page is IHidingActionable hidingActionable)
-                await hidingActionable.HidingAction();
+            if(Page is IHidingAnimated hidingAnimated)
+                await hidingAnimated.PlayHidingAnimation();
         }
 
-        public void CompleteHiding()
+        public void OnHidingComplete()
         {
-            if (Page is ICompleteHidable completeHidable)
-                completeHidable.CompleteHiding();
+            if (Page is IHidingComplete hidingComplete)
+                hidingComplete.OnHidingComplete();
 
             var pageGameObject = Page.gameObject;
             pageGameObject.SetActive(false);

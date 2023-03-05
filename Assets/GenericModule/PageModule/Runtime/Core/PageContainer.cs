@@ -16,8 +16,8 @@ namespace PageModule
         private readonly Dictionary<Type, Component> _pagePrefabMap;
         private readonly Dictionary<Type, PageData> _pageDataMap = new Dictionary<Type, PageData>();
 
-        private Action<float> _updateHandle;
-        private Action<float> _fixedUpdateHandle;
+        private Action<float> _tickHandle;
+        private Action<float> _fixedTickHandle;
 
 
         //constructor
@@ -30,13 +30,20 @@ namespace PageModule
 
         //Unity callback
         public void Update(float deltaTime) =>
-            _updateHandle?.Invoke(deltaTime);
+            _tickHandle?.Invoke(deltaTime);
 
         public void FixedUpdate(float fixedDeltaTime) =>
-            _fixedUpdateHandle?.Invoke(fixedDeltaTime);
+            _fixedTickHandle?.Invoke(fixedDeltaTime);
 
 
         //public method
+        public void Release()
+        {
+            DestroyAll();
+            var pageGameObjectRoot = _pageGameObjectRootTransform.gameObject;
+            Object.DestroyImmediate(pageGameObjectRoot);
+        }
+
         public bool CheckIsVisible<T>() where T : Component
         {
             var pageType = typeof(T);
@@ -198,7 +205,7 @@ namespace PageModule
             _pageDataMap.Remove(pageType);
             
             if(pageData.State is PageState.Invisible)
-                RemoveUpdateAndFixedUpdateHandle(pageData);
+                RemoveTickAndFixedTickHandle(pageData);
 
             pageData.Release();
         }
@@ -218,25 +225,22 @@ namespace PageModule
                 return;
             }
 
-            await pageData.BeforeShowing(parameters);
-
-            pageData.Show();
+            await pageData.OnShowingStart(parameters);
 
             if (!isImmediately)
-                await pageData.ShowingAction();
+                await pageData.PlayShowingAnimation();
 
-            pageData.CompleteShowing();
+            pageData.OnShowingComplete();
 
-            AddUpdateAndFixedUpdateHandle(pageData);
+            AddTickAndFixedTickHandle(pageData);
         }
 
         private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList)
         {
-            var beforeShowingTasks = new List<UniTask>();
-
-            Action show = null;
-            var showingActionTasks = new List<UniTask>();
-            Action completeShowing = null;
+            var onShowingStartTasks = new List<UniTask>();
+            
+            var playShowingAnimationTasks = new List<UniTask>();
+            Action onShowingComplete = null;
 
             var canShowPageDatas = new List<PageData>();
 
@@ -258,27 +262,25 @@ namespace PageModule
                     continue;
                 }
 
-                beforeShowingTasks.Add(pageData.BeforeShowing(parameters));
-
-                show += pageData.Show;
+                onShowingStartTasks.Add(pageData.OnShowingStart(parameters));
+                
                 if(!isImmediately)
-                    showingActionTasks.Add(pageData.ShowingAction());
-                completeShowing += pageData.CompleteShowing;
+                    playShowingAnimationTasks.Add(pageData.PlayShowingAnimation());
+                
+                onShowingComplete += pageData.OnShowingComplete;
 
                 canShowPageDatas.Add(pageData);
             }
 
-            await UniTask.WhenAll(beforeShowingTasks);
-
-            show?.Invoke();
+            await UniTask.WhenAll(onShowingStartTasks);
 
             if (!isImmediately)
-                await UniTask.WhenAll(showingActionTasks);
+                await UniTask.WhenAll(playShowingAnimationTasks);
 
-            completeShowing?.Invoke();
+            onShowingComplete?.Invoke();
 
             foreach (var canShowPageData in canShowPageDatas)
-                AddUpdateAndFixedUpdateHandle(canShowPageData);
+                AddTickAndFixedTickHandle(canShowPageData);
         }
 
 
@@ -298,14 +300,14 @@ namespace PageModule
             }
 
 
-            RemoveUpdateAndFixedUpdateHandle(pageData);
+            RemoveTickAndFixedTickHandle(pageData);
 
-            pageData.Hide();
+            pageData.OnHidingStart();
 
             if (!isImmediately)
-                await pageData.HidingAction();
+                await pageData.PlayHidingAnimation();
 
-            pageData.CompleteHiding();
+            pageData.OnHidingComplete();
         }
 
         private async UniTask Hide(Type[] pageTypes, bool isImmediately)
@@ -335,9 +337,9 @@ namespace PageModule
 
         private async UniTask Hide(PageData[] pageDatas, bool isImmediately)
         {
-            Action hide = null;
-            var hidingActionTasks = new List<UniTask>();
-            Action completeHiding = null;
+            Action onHidingStart = null;
+            var playHidingAnimationTasks = new List<UniTask>();
+            Action onHidingComplete = null;
 
             foreach (var pageData in pageDatas)
             {
@@ -349,40 +351,42 @@ namespace PageModule
                     continue;
                 }
 
-                hide += pageData.Hide;
+                onHidingStart += pageData.OnHidingStart;
+                
                 if (!isImmediately)
-                    hidingActionTasks.Add(pageData.HidingAction());
-                completeHiding += pageData.CompleteHiding;
+                    playHidingAnimationTasks.Add(pageData.PlayHidingAnimation());
+                
+                onHidingComplete += pageData.OnHidingComplete;
             }
 
-            hide?.Invoke();
+            onHidingStart?.Invoke();
 
             if (!isImmediately)
-                await UniTask.WhenAll(hidingActionTasks);
+                await UniTask.WhenAll(playHidingAnimationTasks);
 
-            completeHiding?.Invoke();
+            onHidingComplete?.Invoke();
 
             foreach (var pageType in pageDatas)
-                RemoveUpdateAndFixedUpdateHandle(pageType);
+                RemoveTickAndFixedTickHandle(pageType);
         }
 
 
-        private void AddUpdateAndFixedUpdateHandle(PageData pageData)
+        private void AddTickAndFixedTickHandle(PageData pageData)
         {
-            if (pageData.TryGetUpdateable(out var updatable))
-                _updateHandle += updatable.OnUpdate;
+            if (pageData.TryGetTickable(out var tickable))
+                _tickHandle += tickable.Tick;
 
-            if (pageData.TryGetFixedUpdateable(out var fixedUpdatable))
-                _fixedUpdateHandle += fixedUpdatable.OnFixedUpdate;
+            if (pageData.TryGetFixedTickable(out var fixedTickable))
+                _fixedTickHandle += fixedTickable.FixedTick;
         }
 
-        private void RemoveUpdateAndFixedUpdateHandle(PageData pageData)
+        private void RemoveTickAndFixedTickHandle(PageData pageData)
         {
-            if (pageData.TryGetUpdateable(out var updatable))
-                _updateHandle -= updatable.OnUpdate;
+            if (pageData.TryGetTickable(out var tickable))
+                _tickHandle -= tickable.Tick;
 
-            if (pageData.TryGetFixedUpdateable(out var fixedUpdatable))
-                _fixedUpdateHandle -= fixedUpdatable.OnFixedUpdate;
+            if (pageData.TryGetFixedTickable(out var fixedTickable))
+                _fixedTickHandle -= fixedTickable.FixedTick;
         }
     }
 }

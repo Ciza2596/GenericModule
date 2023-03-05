@@ -26,8 +26,8 @@ namespace PageModule
             _pageContainer = new PageContainer(pageGameObjectRootTransform, pagePrefabMap);
 
             var pageModuleComponent = pageGameObjectRoot.AddComponent<PageModuleComponent>();
-            pageModuleComponent.SetUpdateCallback(_pageContainer.Update);
-            pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedUpdate);
+            pageModuleComponent.SetUpdateCallback(_pageContainer.Tick);
+            pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedTick);
         }
 
 

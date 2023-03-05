@@ -29,10 +29,10 @@ namespace PageModule
 
 
         //Unity callback
-        public void Update(float deltaTime) =>
+        public void Tick(float deltaTime) =>
             _tickHandle?.Invoke(deltaTime);
 
-        public void FixedUpdate(float fixedDeltaTime) =>
+        public void FixedTick(float fixedDeltaTime) =>
             _fixedTickHandle?.Invoke(fixedDeltaTime);
 
 
@@ -94,7 +94,7 @@ namespace PageModule
             var pageType = typeof(T);
             if (!_pageDataMap.ContainsKey(pageType))
             {
-                Debug.Log(
+                Debug.LogWarning(
                     $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap. Please check it is created.");
                 return false;
             }

@@ -6,53 +6,55 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
     IShowingAnimated, IShowingComplete, IHidingStart, IHidingAnimated, IHidingComplete
 {
     //public variable
-    public bool IsInitializePass { get; private set; }
-    public bool IsOnUpdatePass { get; private set; }
-    public bool IsOnFixedUpdatePass { get; private set; }
-    public bool IsReleasePass { get; private set; }
+    public bool IsPassInitialize { get; private set; }
+    public bool IsPassTick { get; private set; }
+    public bool IsPassFixedTick { get; private set; }
+    public const string IS_PASS_RELEASE_CREATE_GAMEOBJECT_NAME = "FakeIsReleased";
 
 
-    public bool IsBeforeShowingPass { get; private set; }
-    public bool IsShowPass { get; private set; }
-    public bool IsShowingActionPass { get; private set; }
-    public bool IsCompleteShowingPass { get; private set; }
+    public bool IsPassOnShowingStart { get; private set; }
+    public bool IsPassPlayShowingAnimation { get; private set; }
+    public bool IsPassOnShowingComplete { get; private set; }
 
 
-    public bool IsHidePass { get; private set; }
-    public bool IsHidingActionPass { get; private set; }
-    public bool IsCompleteHidingPass { get; private set; }
+    public bool IsPassOnHidingStart { get; private set; }
+    public bool IsPassPlayHidingAnimation { get; private set; }
+    public bool IsPassOnHidingComplete { get; private set; }
 
     //public method
-    public void Initialize() => IsInitializePass = true;
+    public void Initialize() => IsPassInitialize = true;
 
-    public void Tick(float deltaTime) => IsOnUpdatePass = true;
+    public void Tick(float deltaTime) => IsPassTick = true;
 
-    public void FixedTick(float fixedDeltaTime) => IsOnFixedUpdatePass = true;
+    public void FixedTick(float fixedDeltaTime) => IsPassFixedTick = true;
 
-    public void Release() => IsReleasePass = true;
+    public void Release()
+    {
+        new GameObject(IS_PASS_RELEASE_CREATE_GAMEOBJECT_NAME);
+    }
 
 
     public async UniTask OnShowingStart(params object[] parameters)
     {
-        IsBeforeShowingPass = true;
+        IsPassOnShowingStart = true;
         await UniTask.CompletedTask;
     }
 
     public async UniTask PlayShowingAnimation()
     {
-        IsShowingActionPass = true;
+        IsPassPlayShowingAnimation = true;
         await UniTask.CompletedTask;
     }
 
-    public void OnShowingComplete() => IsCompleteShowingPass = true;
+    public void OnShowingComplete() => IsPassOnShowingComplete = true;
 
-    public void OnHidingStart() => IsHidePass = true;
+    public void OnHidingStart() => IsPassOnHidingStart = true;
 
     public async UniTask PlayHidingAnimation()
     {
-        IsHidingActionPass = true;
+        IsPassPlayHidingAnimation = true;
         await UniTask.CompletedTask;
     }
 
-    public void OnHidingComplete() => IsCompleteHidingPass = true;
+    public void OnHidingComplete() => IsPassOnHidingComplete = true;
 }

@@ -112,21 +112,6 @@ namespace PageModule
         public void Destroy<T>() where T : Component =>
             Destroy(typeof(T));
 
-        public void Destroy(Type pageType)
-        {
-            if (!_pageDataMap.ContainsKey(pageType))
-            {
-                Debug.Log(
-                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap.Please check it is created.");
-                return;
-            }
-
-            var pageData = _pageDataMap[pageType];
-            _pageDataMap.Remove(pageType);
-
-            pageData.Release();
-        }
-
         public void DestroyAll()
         {
             var pageTypes = _pageDataMap.Keys.ToArray();
@@ -197,6 +182,22 @@ namespace PageModule
 
             pageData.Initialize(parameters);
             _pageDataMap.Add(pageType, pageData);
+        }
+        
+        
+        private void Destroy(Type pageType)
+        {
+            if (!_pageDataMap.ContainsKey(pageType))
+            {
+                Debug.Log(
+                    $"[PageContainer::Destroy] Not find pageType: {pageType} in pageMap.Please check it is created.");
+                return;
+            }
+
+            var pageData = _pageDataMap[pageType];
+            _pageDataMap.Remove(pageType);
+
+            pageData.Release();
         }
 
         private async UniTask Show(Type pageType, bool isImmediately, params object[] parameters)

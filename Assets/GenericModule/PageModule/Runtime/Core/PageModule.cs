@@ -54,8 +54,6 @@ namespace PageModule
 
         public void Destroy<T>() where T : Component => _pageContainer.Destroy<T>();
 
-        public void Destroy(Type pageType) => _pageContainer.Destroy(pageType);
-
         public void DestroyAll() => _pageContainer.DestroyAll();
 
 

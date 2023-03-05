@@ -99,8 +99,8 @@ namespace PageModule
         }
 
 
-        public void Create<T>(params object[] parameters) where T : Component =>
-            Create(typeof(T), parameters);
+        public void Create<T>() where T : Component =>
+            Create(typeof(T));
 
         public void CreateAll()
         {
@@ -162,7 +162,7 @@ namespace PageModule
 
 
         //private method
-        private void Create(Type pageType, params object[] parameters)
+        private void Create(Type pageType)
         {
             Assert.IsTrue(_pagePrefabMap.ContainsKey(pageType),
                 $"[PageContainer::Create] Not find pageType: {pageType} in pagePrefabComponentMap.");
@@ -180,7 +180,7 @@ namespace PageModule
             var page = pageGameObject.GetComponent(pageType);
             var pageData = new PageData(page);
 
-            pageData.Initialize(parameters);
+            pageData.Initialize();
             _pageDataMap.Add(pageType, pageData);
         }
         
@@ -349,7 +349,8 @@ namespace PageModule
                 }
 
                 hide += pageData.Hide;
-                hidingActionTasks.Add(pageData.HidingAction());
+                if (!isImmediately)
+                    hidingActionTasks.Add(pageData.HidingAction());
                 completeHiding += pageData.CompleteHiding;
             }
 

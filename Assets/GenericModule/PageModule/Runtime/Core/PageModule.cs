@@ -46,8 +46,8 @@ namespace PageModule
             _pageContainer.TryGetPage<T>(out page);
 
 
-        public void Create<T>(params object[] parameters) where T : Component =>
-            _pageContainer.Create<T>(parameters);
+        public void Create<T>() where T : Component =>
+            _pageContainer.Create<T>();
 
         public void CreateAll() => _pageContainer.CreateAll();
 

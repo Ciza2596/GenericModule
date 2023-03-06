@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace AddressablesModule
 {
-    public static class Extension
+    public static class AddressablesModuleExtension
     {
         private const string METHOD_NAME = "GetAssetAsync";
 
@@ -25,7 +25,7 @@ namespace AddressablesModule
             }
         }
 
-        public static void ReleaseAssets(this AddressablesModule addressablesModule,
+        public static void UnloadAssets(this AddressablesModule addressablesModule,
             AddressMap[] addressMaps)
         {
             foreach (var addressObjectTypeMap in addressMaps)
@@ -34,7 +34,7 @@ namespace AddressablesModule
                 var assetType = addressObjectTypeMap.AssetType;
                 var type = GetType(assetType);
 
-                addressablesModule.ReleaseAsset(address, type);
+                addressablesModule.UnloadAsset(address, type);
             }
         }
 

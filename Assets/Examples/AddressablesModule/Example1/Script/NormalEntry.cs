@@ -26,7 +26,7 @@ namespace AddressablesModule.Example1
                 var addressObjectTypeMap = addressObjectTypeMapList[i];
                 var address = addressObjectTypeMap.Address;
 
-                var sprite = await _addressablesModule.GetAssetAsync<Sprite>(address);
+                var sprite = await _addressablesModule.LoadAssetAsync<Sprite>(address);
                 
                 var image = _images[i];
                 image.sprite = sprite;

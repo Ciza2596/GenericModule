@@ -40,19 +40,19 @@ namespace AddressablesModule
             return obj as T;
         }
 
-        public async UniTask<T> GetAssetAsync<T>(string address) where T : Object
+        public async UniTask<T> LoadAssetAsync<T>(string address) where T : Object
         {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::GetAssetAsync] Address is null.");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
 
             var obj = await GetAssetHandleInfo<T>(address);
             return obj;
         }
 
 
-        public void ReleaseAsset(string address, Type type)
+        public void UnloadAsset(string address, Type type)
         {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::ReleaseAsset] Address is null.");
-            Assert.IsTrue(type != null, $"[AddressablesModule::ReleaseAsset] Type is null.");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::UnloadAsset] Address is null.");
+            Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAsset] Type is null.");
 
             if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
                 return;
@@ -64,30 +64,48 @@ namespace AddressablesModule
             Addressables.Release(obj);
         }
 
-        public void ReleaseAssets(string[] addressList, Type type)
+        public void UnloadAssets(string[] addressList, Type type)
         {
-            Assert.IsTrue(addressList != null, $"[AddressablesModule::ReleaseAssets] AddressList is null.");
-            Assert.IsTrue(type != null, $"[AddressablesModule::ReleaseAsset] Type is null.");
+            Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
+            Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAssets] Type is null.");
 
             foreach (var address in addressList)
-                ReleaseAsset(address, type);
+                UnloadAsset(address, type);
         }
 
-        public void ReleaseAssets(string[] addressList)
+        public void UnloadAssets(string[] addressList)
         {
-            Assert.IsTrue(addressList != null, $"[AddressablesModule::ReleaseAssets] AddressList is null.");
+            Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
 
             var types = _typeAddressObjectMapMap.Keys.ToArray();
             foreach (var type in types)
             {
                 foreach (var address in addressList)
-                    ReleaseAsset(address, type);
+                    UnloadAsset(address, type);
             }
 
             CallGC();
         }
 
-        public void ReleaseAllAssets()
+        public void UnloadAllAssets(Type type)
+        {
+            if (!_typeAddressObjectMapMap.ContainsKey(type))
+            {
+                Debug.LogWarning($"[AddressablesModule::UnloadAllAssets] Not find {type} is loaded");
+                return;
+            }
+
+            var assetHandleInfo = _typeAddressObjectMapMap[type];
+            var addressList = assetHandleInfo.Keys.ToArray();
+            foreach (var address in addressList)
+                UnloadAsset(address, type);
+
+            assetHandleInfo.Clear();
+
+            CallGC();
+        }
+        
+        public void UnloadAllAssets()
         {
             var types = _typeAddressObjectMapMap.Keys.ToArray();
 
@@ -97,7 +115,7 @@ namespace AddressablesModule
 
                 var addressList = assetHandleInfo.Keys.ToArray();
                 foreach (var address in addressList)
-                    ReleaseAsset(address, type);
+                    UnloadAsset(address, type);
 
                 assetHandleInfo.Clear();
             }

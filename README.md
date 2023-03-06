@@ -29,7 +29,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoad
 #### 3.Unity: vector2, vector2Int, vector3, vector3Int
 
 
-## PageModule [HasTest]
+## PageModule (Dependence UniTask) [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
 ```

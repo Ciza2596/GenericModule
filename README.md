@@ -17,6 +17,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventMod
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
 
+
 ## SaveLoadModule [HasTest]
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoadModule
@@ -26,6 +27,12 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoad
 #### 1.Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
 #### 2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack
 #### 3.Unity: vector2, vector2Int, vector3, vector3Int
+
+
+## PageModule [HasTest]
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
+```
 
 
 ## GameObjectPoolModule [HasTest]

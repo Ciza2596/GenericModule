@@ -86,7 +86,7 @@ namespace PageModule
             return pageData.State is PageState.Hiding;
         }
 
-        
+
         public bool TryGetPage<T>(out T page) where T : Component
         {
             page = null;
@@ -142,29 +142,29 @@ namespace PageModule
             await Show(pageTypes, true, parametersList);
 
 
-        public async UniTask Hide<T>() where T : Component =>
-            await Hide(typeof(T), false);
+        public async UniTask Hide<T>(Action onComplete = null) where T : Component =>
+            await Hide(typeof(T), false, onComplete);
 
-        public async void HideImmediately<T>() where T : Component =>
-            await Hide(typeof(T), true);
+        public async void HideImmediately<T>(Action onComplete = null) where T : Component =>
+            await Hide(typeof(T), true, onComplete);
 
-        public async UniTask Hide(Type[] pageTypes) =>
-            await Hide(pageTypes, false);
+        public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>
+            await Hide(pageTypes, false, onComplete);
 
-        public async void HideImmediately(Type[] pageTypes) =>
-            await Hide(pageTypes, true);
+        public async void HideImmediately(Type[] pageTypes, Action onComplete = null) =>
+            await Hide(pageTypes, true, onComplete);
 
 
-        public async UniTask HideAll()
+        public async UniTask HideAll(Action onComplete = null)
         {
             var pageDatas = _pageDataMap.Values.Where(pageData => pageData.State is PageState.Visible).ToArray();
-            await Hide(pageDatas, false);
+            await Hide(pageDatas, false, onComplete);
         }
 
-        public async void HideAllImmediately()
+        public async void HideAllImmediately(Action onComplete = null)
         {
             var pageDatas = _pageDataMap.Values.Where(pageData => pageData.State is PageState.Visible).ToArray();
-            await Hide(pageDatas, true);
+            await Hide(pageDatas, true, onComplete);
         }
 
 
@@ -190,8 +190,8 @@ namespace PageModule
             pageData.Initialize();
             _pageDataMap.Add(pageType, pageData);
         }
-        
-        
+
+
         private void Destroy(Type pageType)
         {
             if (!_pageDataMap.ContainsKey(pageType))
@@ -203,8 +203,8 @@ namespace PageModule
 
             var pageData = _pageDataMap[pageType];
             _pageDataMap.Remove(pageType);
-            
-            if(pageData.State is PageState.Invisible)
+
+            if (pageData.State is PageState.Invisible)
                 RemoveTickAndFixedTickHandle(pageData);
 
             pageData.Release();
@@ -238,7 +238,7 @@ namespace PageModule
         private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList)
         {
             var onShowingStartTasks = new List<UniTask>();
-            
+
             var playShowingAnimationTasks = new List<UniTask>();
             Action onShowingComplete = null;
 
@@ -263,10 +263,10 @@ namespace PageModule
                 }
 
                 onShowingStartTasks.Add(pageData.OnShowingStart(parameters));
-                
-                if(!isImmediately)
+
+                if (!isImmediately)
                     playShowingAnimationTasks.Add(pageData.PlayShowingAnimation());
-                
+
                 onShowingComplete += pageData.OnShowingComplete;
 
                 canShowPageDatas.Add(pageData);
@@ -284,7 +284,7 @@ namespace PageModule
         }
 
 
-        private async UniTask Hide(Type pageType, bool isImmediately)
+        private async UniTask Hide(Type pageType, bool isImmediately, Action onComplete)
         {
             Assert.IsTrue(_pageDataMap.ContainsKey(pageType),
                 $"[PageContainer::Hide] PageType: {pageType} doesnt be created.");
@@ -308,9 +308,11 @@ namespace PageModule
                 await pageData.PlayHidingAnimation();
 
             pageData.OnHidingComplete();
+            
+            onComplete?.Invoke();
         }
 
-        private async UniTask Hide(Type[] pageTypes, bool isImmediately)
+        private async UniTask Hide(Type[] pageTypes, bool isImmediately, Action onComplete)
         {
             var canHidePageDatas = new List<PageData>();
 
@@ -332,10 +334,10 @@ namespace PageModule
                 canHidePageDatas.Add(pageData);
             }
 
-            await Hide(canHidePageDatas.ToArray(), isImmediately);
+            await Hide(canHidePageDatas.ToArray(), isImmediately, onComplete);
         }
 
-        private async UniTask Hide(PageData[] pageDatas, bool isImmediately)
+        private async UniTask Hide(PageData[] pageDatas, bool isImmediately, Action onComplete)
         {
             Action onHidingStart = null;
             var playHidingAnimationTasks = new List<UniTask>();
@@ -352,10 +354,10 @@ namespace PageModule
                 }
 
                 onHidingStart += pageData.OnHidingStart;
-                
+
                 if (!isImmediately)
                     playHidingAnimationTasks.Add(pageData.PlayHidingAnimation());
-                
+
                 onHidingComplete += pageData.OnHidingComplete;
             }
 
@@ -368,6 +370,8 @@ namespace PageModule
 
             foreach (var pageType in pageDatas)
                 RemoveTickAndFixedTickHandle(pageType);
+
+            onComplete?.Invoke();
         }
 
 

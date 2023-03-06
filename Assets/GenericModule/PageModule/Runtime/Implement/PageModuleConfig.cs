@@ -8,7 +8,7 @@ namespace PageModule.Implement
     [CreateAssetMenu(fileName = "PageModuleConfig", menuName = "PageModuleModule/PageModuleConfig")]
     public class PageModuleConfig : ScriptableObject, IPageModuleConfig
     {
-        [SerializeField] private string _pageGameObjectRootName;
+        [SerializeField] private string _pageGameObjectRootName = "[PageRoot]";
         [SerializeField] private bool _isDontDestroyOnLoad = true;
         [Space] [SerializeField] private BasePage[] _pagePrefabs;
 

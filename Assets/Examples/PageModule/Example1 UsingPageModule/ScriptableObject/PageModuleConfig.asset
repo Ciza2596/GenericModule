@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b286df77a804fb2a1e9e8a4a7d88e32, type: 3}
+  m_Name: PageModuleConfig
+  m_EditorClassIdentifier: 
+  _pageGameObjectRootName: '[PageRoot]'
+  _isDontDestroyOnLoad: 1
+  _pagePrefabs:
+  - {fileID: 8254280185066362742, guid: d9e9f947b51494abda819ae5ee66c578, type: 3}
+  - {fileID: 6310838406692932823, guid: 685ceb5285bb84721853be7d329e43fe, type: 3}

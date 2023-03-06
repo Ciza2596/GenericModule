@@ -72,18 +72,18 @@ namespace PageModule
             await _pageContainer.ShowImmediately(pageTypes, parametersList);
 
 
-        public async UniTask Hide<T>() where T : Component => await _pageContainer.Hide<T>();
+        public async UniTask Hide<T>(Action onComplete = null) where T : Component => await _pageContainer.Hide<T>(onComplete);
 
-        public void HideImmediately<T>() where T : Component => _pageContainer.HideImmediately<T>();
-
-
-        public async UniTask Hide(Type[] pageTypes) => await _pageContainer.Hide(pageTypes);
-
-        public void HideImmediately(Type[] pageTypes) => _pageContainer.HideImmediately(pageTypes);
+        public void HideImmediately<T>(Action onComplete = null) where T : Component => _pageContainer.HideImmediately<T>(onComplete);
 
 
-        public async UniTask HideAll() => await _pageContainer.HideAll();
+        public async UniTask Hide(Type[] pageTypes, Action onComplete = null) => await _pageContainer.Hide(pageTypes, onComplete);
 
-        public void HideAllImmediately() => _pageContainer.HideAllImmediately();
+        public void HideImmediately(Type[] pageTypes, Action onComplete = null) => _pageContainer.HideImmediately(pageTypes, onComplete);
+
+
+        public async UniTask HideAll(Action onComplete = null) => await _pageContainer.HideAll(onComplete);
+
+        public void HideAllImmediately(Action onComplete = null) => _pageContainer.HideAllImmediately(onComplete);
     }
 }

@@ -13,16 +13,16 @@ namespace AudioModule
         //private variable
         private readonly string _poolRootName;
         private Transform _poolRootTransform;
-        
+
         private readonly string _poolPrefix;
         private readonly string _poolSuffix;
-        
+
         private readonly string _masterVolumeParameter;
         private readonly string _bgmVolumeParameter;
         private readonly string _sfxVolumeParameter;
         private readonly string _voiceVolumeParameter;
-        
-        
+
+
         private readonly Dictionary<string, Transform> _keyPoolTransformMaps = new Dictionary<string, Transform>();
 
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
@@ -37,20 +37,19 @@ namespace AudioModule
         //public variable
         public AudioMixer AudioMixer { get; }
         public bool IsInitialized => _audioResourceDatas != null && _poolRootTransform != null;
-        
 
 
         //public method
         public AudioModule(IAudioModuleConfig audioModuleConfig)
         {
             Assert.IsNotNull(audioModuleConfig, "[AudioModule::AudioModule] AudioModuleConfig is null.");
-            
+
             _poolRootName = audioModuleConfig.PoolRootName;
 
             _poolPrefix = audioModuleConfig.PoolPrefix;
             _poolSuffix = audioModuleConfig.PoolSuffix;
-            
-            
+
+
             AudioMixer = audioModuleConfig.AudioMixer;
             _masterVolumeParameter = audioModuleConfig.MasterVolumeParameter;
             _bgmVolumeParameter = audioModuleConfig.BgmVolumeParameter;
@@ -74,10 +73,11 @@ namespace AudioModule
             _audioResourceDatas = null;
 
             ReleaseAllPools();
-            
+
             var poolRootGameObject = _poolRootTransform.gameObject;
             _poolRootTransform = null;
-            Object.DestroyImmediate(poolRootGameObject);
+
+            DestroyOrImmediate(poolRootGameObject);
         }
 
         public void ReleaseAllPools()
@@ -93,7 +93,7 @@ namespace AudioModule
 
             var poolTransforms = _keyPoolTransformMaps.Values.ToList();
             foreach (var poolTransform in poolTransforms)
-                Object.DestroyImmediate(poolTransform.gameObject);
+                DestroyOrImmediate(poolTransform.gameObject);
 
             _keyPoolTransformMaps.Clear();
         }
@@ -119,7 +119,7 @@ namespace AudioModule
 
             var poolTransform = _keyPoolTransformMaps[key];
             _keyPoolTransformMaps.Remove(key);
-            Object.DestroyImmediate(poolTransform.gameObject);
+            DestroyOrImmediate(poolTransform.gameObject);
         }
 
 
@@ -131,7 +131,7 @@ namespace AudioModule
             SetAudioMixerFloat(_bgmVolumeParameter, volume);
 
 
-        public void SetSfxVolume(float volume) => 
+        public void SetSfxVolume(float volume) =>
             SetAudioMixerFloat(_sfxVolumeParameter, volume);
 
 
@@ -141,8 +141,10 @@ namespace AudioModule
 
         public string GetPoolName(string key)
         {
-            var audioResourceData = _audioResourceDatas.FirstOrDefault(audioResourceDatas => audioResourceDatas.Key == key);
-            Assert.IsTrue(audioResourceData != null ,$"[AudioModule::GetPoolName] Key: {key} doesnt exist in resourceData.");
+            var audioResourceData =
+                _audioResourceDatas.FirstOrDefault(audioResourceDatas => audioResourceDatas.Key == key);
+            Assert.IsTrue(audioResourceData != null,
+                $"[AudioModule::GetPoolName] Key: {key} doesnt exist in resourceData.");
             return _poolPrefix + key + _poolSuffix;
         }
 
@@ -280,5 +282,13 @@ namespace AudioModule
 
         private float GetLinearToLogarithmicScale(float value) =>
             Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
+
+        private void DestroyOrImmediate(Object obj)
+        {
+            if (Application.isPlaying)
+                Object.Destroy(obj);
+            else
+                Object.DestroyImmediate(obj);
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace PageModule
         {
             DestroyAll();
             var pageGameObjectRoot = _pageGameObjectRootTransform.gameObject;
-            Object.DestroyImmediate(pageGameObjectRoot);
+            DestroyOrImmediate(pageGameObjectRoot);
         }
 
         public bool CheckIsVisible<T>() where T : Component
@@ -391,6 +391,14 @@ namespace PageModule
 
             if (pageData.TryGetFixedTickable(out var fixedTickable))
                 _fixedTickHandle -= fixedTickable.FixedTick;
+        }
+        
+        private void DestroyOrImmediate(Object obj)
+        {
+            if (Application.isPlaying)
+                Object.Destroy(obj);
+            else
+                Object.DestroyImmediate(obj);
         }
     }
 }

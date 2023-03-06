@@ -58,7 +58,7 @@ namespace GameObjectPoolModule
             
             var poolRootGameObject = _poolRootTransform.gameObject;
             _poolRootTransform = null;
-            Object.DestroyImmediate(poolRootGameObject);
+            DestroyOrImmediate(poolRootGameObject);
         }
 
         public bool TryGetPoolRootName(out string poolRootName)
@@ -172,7 +172,7 @@ namespace GameObjectPoolModule
 
             var poolTransform = _poolTransforms[key];
             _poolTransforms.Remove(key);
-            Object.DestroyImmediate(poolTransform.gameObject);
+            DestroyOrImmediate(poolTransform.gameObject);
         }
 
         public void ReleaseAllPool()
@@ -226,6 +226,14 @@ namespace GameObjectPoolModule
             }
 
             return usingGameObjectsByKey.ToArray();
+        }
+        
+        private void DestroyOrImmediate(Object obj)
+        {
+            if (Application.isPlaying)
+                Object.Destroy(obj);
+            else
+                Object.DestroyImmediate(obj);
         }
     }
 }

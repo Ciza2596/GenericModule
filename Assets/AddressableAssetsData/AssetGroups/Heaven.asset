@@ -16,73 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: a0a35c874ed964912b9cc1cbf48e6d66
-  m_SerializeEntries:
-  - m_GUID: c77568fe6acdc8a4882a105bf1d56c78
-    m_Address: Naninovel/Encourage
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5d8c88ed4e8864c46b2dff0b75f3d158
-    m_Address: Naninovel/GameObject
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 60deb3a41a9cd404ebdcb66fd2e894c8
-    m_Address: Naninovel/AddressableModuleExample1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f0463142f2c3549cdbcae2b235e51013
-    m_Address: Naninovel/AddressMapListDataOverview
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3752a73f081a14c16b219c85ccdb8ac0
-    m_Address: Naninovel/DUNE_1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 11be15b808f904ff2928bfbfc408b2f7
-    m_Address: Naninovel/DUNE_2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d8a45e8c34754df5bb14a7e23387533
-    m_Address: Naninovel/DUNE_3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0fe07d17455804560aaaf0c8512896ac
-    m_Address: Naninovel/DUNE_4
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 59d65767292f844dcb8a9b90045e5449
-    m_Address: Naninovel/DUNE_5
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4c96ad82129464358aba106eaaef7218
-    m_Address: Naninovel/DUNE_6
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4de6de944fd8e416885d75f12ba10a99
-    m_Address: Naninovel/DUNE_7
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - 
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f13026c52f0494d528ed53640ba9254c, type: 2}
   m_SchemaSet:

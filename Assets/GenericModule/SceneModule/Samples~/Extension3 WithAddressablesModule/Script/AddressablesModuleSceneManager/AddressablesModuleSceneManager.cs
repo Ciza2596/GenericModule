@@ -8,11 +8,13 @@ namespace SceneModule.Implement
     {
         //private variable
         private AddressablesModule.AddressablesModule _addressablesModule;
+        
+        //public variable
+        public string CurrentSceneName => SceneManager.GetActiveScene().name;
 
         //public method
         public AddressablesModuleSceneManager(AddressablesModule.AddressablesModule addressablesesModule)
             => _addressablesModule = addressablesesModule;
-
 
         public ILoadSceneAsync LoadScene(string sceneName, LoadModes loadMode, bool isActivateOnLoad)
         {

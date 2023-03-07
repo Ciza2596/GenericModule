@@ -260,7 +260,7 @@ namespace PageModule
                     continue;
                 }
 
-                onShowingStart += ()=> pageData.OnShowingStart(parameters);
+                onShowingStart += async ()=> await pageData.OnShowingStart(parameters);
                 playShowingAnimation += pageData.PlayShowingAnimation;
                 onShowingComplete += pageData.OnShowingComplete;
 

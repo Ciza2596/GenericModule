@@ -52,7 +52,7 @@ namespace PageModule
 
             if (Page is IShowingStart showingStart)
                 await showingStart.OnShowingStart(parameters);
-            
+
             var pageGameObject = Page.gameObject;
             pageGameObject.SetActive(true);
         }
@@ -75,14 +75,14 @@ namespace PageModule
         public void OnHidingStart()
         {
             State = PageState.Hiding;
-            
-            if(Page is IHidingStart hidingStart)
+
+            if (Page is IHidingStart hidingStart)
                 hidingStart.OnHidingStart();
         }
 
         public async UniTask PlayHidingAnimation()
         {
-            if(Page is IHidingAnimated hidingAnimated)
+            if (Page is IHidingAnimated hidingAnimated)
                 await hidingAnimated.PlayHidingAnimation();
         }
 
@@ -101,7 +101,11 @@ namespace PageModule
         private void Destroy()
         {
             var pageGameObject = Page.gameObject;
-            Object.DestroyImmediate(pageGameObject);
+
+            if (Application.isPlaying)
+                Object.Destroy(pageGameObject);
+            else
+                Object.DestroyImmediate(pageGameObject);
         }
     }
 }

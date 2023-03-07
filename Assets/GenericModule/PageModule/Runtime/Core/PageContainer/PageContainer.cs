@@ -237,9 +237,8 @@ namespace PageModule
 
         private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList)
         {
-            var onShowingStartTasks = new List<UniTask>();
-
-            var playShowingAnimationTasks = new List<UniTask>();
+            Func<UniTask> onShowingStart = null;
+            Func<UniTask> playShowingAnimation = null;
             Action onShowingComplete = null;
 
             var canShowPageDatas = new List<PageData>();
@@ -250,8 +249,7 @@ namespace PageModule
                 var pageType = pageTypes[i];
                 Assert.IsTrue(_pageDataMap.ContainsKey(pageType),
                     $"[PageContainer::Show] PageType: {pageType} doesnt be created.");
-
-
+                
                 var parameters = parametersList[i];
                 var pageData = _pageDataMap[pageType];
                 var state = pageData.State;
@@ -262,20 +260,18 @@ namespace PageModule
                     continue;
                 }
 
-                onShowingStartTasks.Add(pageData.OnShowingStart(parameters));
-
-                if (!isImmediately)
-                    playShowingAnimationTasks.Add(pageData.PlayShowingAnimation());
-
+                onShowingStart += ()=> pageData.OnShowingStart(parameters);
+                playShowingAnimation += pageData.PlayShowingAnimation;
                 onShowingComplete += pageData.OnShowingComplete;
 
                 canShowPageDatas.Add(pageData);
             }
 
-            await UniTask.WhenAll(onShowingStartTasks);
-
+            await WhenAll(onShowingStart);
+            
             if (!isImmediately)
-                await UniTask.WhenAll(playShowingAnimationTasks);
+                await WhenAll(playShowingAnimation);
+            
 
             onShowingComplete?.Invoke();
 
@@ -340,7 +336,7 @@ namespace PageModule
         private async UniTask Hide(PageData[] pageDatas, bool isImmediately, Action onComplete)
         {
             Action onHidingStart = null;
-            var playHidingAnimationTasks = new List<UniTask>();
+            Func<UniTask> playHidingAnimation = null;
             Action onHidingComplete = null;
 
             foreach (var pageData in pageDatas)
@@ -354,17 +350,14 @@ namespace PageModule
                 }
 
                 onHidingStart += pageData.OnHidingStart;
-
-                if (!isImmediately)
-                    playHidingAnimationTasks.Add(pageData.PlayHidingAnimation());
-
+                playHidingAnimation += pageData.PlayHidingAnimation;
                 onHidingComplete += pageData.OnHidingComplete;
             }
 
             onHidingStart?.Invoke();
 
             if (!isImmediately)
-                await UniTask.WhenAll(playHidingAnimationTasks);
+                await WhenAll(playHidingAnimation);
 
             onHidingComplete?.Invoke();
 
@@ -399,6 +392,18 @@ namespace PageModule
                 Object.Destroy(obj);
             else
                 Object.DestroyImmediate(obj);
+        }
+
+        private async UniTask WhenAll(Func<UniTask> funcs)
+        {
+            if(funcs is null)
+                return;
+            
+            var uniTasks = new List<UniTask>();
+            foreach (var invocation in funcs.GetInvocationList())
+                uniTasks.Add(((Func<UniTask>)invocation).Invoke());
+            
+            await UniTask.WhenAll(uniTasks);
         }
     }
 }

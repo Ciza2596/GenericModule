@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using EventModule;
 using NUnit.Framework;
@@ -84,6 +85,7 @@ public class EventModuleTest
 
 
     private bool _isTestAsyncActionTrigger;
+    private bool _hasCancellationToken;
     private struct TestAsyncEvent : IAsyncEvent
     {
         public bool IsTestAsyncActionTrigger { get; }
@@ -91,9 +93,10 @@ public class EventModuleTest
         public TestAsyncEvent(bool isTestAsyncActionTrigger) => IsTestAsyncActionTrigger = isTestAsyncActionTrigger;
     }
 
-    private UniTask OnTestAsyncAction(TestAsyncEvent @event)
+    private UniTask OnTestAsyncAction(TestAsyncEvent @event, CancellationToken cancellationToken)
     {
         _isTestAsyncActionTrigger = @event.IsTestAsyncActionTrigger;
+        _hasCancellationToken = cancellationToken != default;
         return UniTask.CompletedTask;
     }
 
@@ -128,7 +131,7 @@ public class EventModuleTest
     }
 
     [Test]
-    public async void _05_Should_IsTestAsyncActionTriggerBeTrue_When_NotifyAsyncEvent()
+    public async void _05_Should_IsTestAsyncActionTriggerBeTrue_And_HasCancellationTokenBeFalse_CancelToke_When_NotifyAsyncEvent()
     {
         //arrange
         _isTestAsyncActionTrigger = false;
@@ -144,5 +147,26 @@ public class EventModuleTest
 
         //assert
         Assert.IsTrue(_isTestAsyncActionTrigger, "NotifyAsyncEvent fail.");
+        Assert.IsFalse(_hasCancellationToken, "NotifyAsyncEvent fail.");
+    }
+    
+    [Test]
+    public async void _06_Should_IsTestAsyncActionTriggerBeTrue_And_HasCancellationTokenBeTrue_When_NotifyAsyncEventWithCancellationTokenSource()
+    {
+        //arrange
+        _isTestAsyncActionTrigger = false;
+        _eventModule.AddAsyncListener<TestAsyncEvent>(OnTestAsyncAction);
+        Assert.IsFalse(_isTestAsyncActionTrigger,
+            "Test init fail. Please check _isTestAsyncActionTrigger should be false.");
+        Assert.AreEqual(_eventModule.AsyncEventCount, 1,
+            "Test init fail. AsyncEvents count not match AddAsyncListener times. Please check AddAsyncListener times.");
+
+
+        //act
+        await _eventModule.NotifyAsyncEvent(new TestAsyncEvent(true), out var cancellationTokenSource);
+
+        //assert
+        Assert.IsTrue(_isTestAsyncActionTrigger, "NotifyAsyncEvent fail.");
+        Assert.IsTrue(_hasCancellationToken, "NotifyAsyncEvent fail.");
     }
 }

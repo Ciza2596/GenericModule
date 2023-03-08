@@ -2,7 +2,7 @@
 
 namespace EventModule
 {
-    internal class BaseEventDelegateContainer
+    internal  class BaseEventDelegateContainer
     {
         public Delegate EventDelegate { get; private set; }
 

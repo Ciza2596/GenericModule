@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace EventModule
@@ -31,7 +33,7 @@ namespace EventModule
             RemoveListener<TEvent, SyncEventDelegateContainer>(eventDelegate, _syncEvents);
 
 
-        public void NotifySyncEvent<TEvent>(TEvent eventData = default) where TEvent : TSyncEvent
+        public void NotifySyncEvent<TEvent>(TEvent eventData) where TEvent : TSyncEvent
         {
             if (_syncEvents.TryGetValue(typeof(TEvent), out var syncEventDelegateContainer))
                 syncEventDelegateContainer?.Invoke(eventData);
@@ -39,19 +41,36 @@ namespace EventModule
 
 
         //async
-        public void AddAsyncListener<TEvent>(Func<TEvent, UniTask> eventDelegate) where TEvent : TAsyncEvent =>
+        public void AddAsyncListener<TEvent>(Func<TEvent, CancellationToken, UniTask> eventDelegate)
+            where TEvent : TAsyncEvent =>
             AddListener<TEvent, AsyncEventDelegateContainer>(eventDelegate, _asyncEvents);
 
-        public void RemoveAsyncListener<TEvent>(Func<TEvent, UniTask> eventDelegate) where TEvent : TAsyncEvent =>
+        public void RemoveAsyncListener<TEvent>(Func<TEvent, CancellationToken, UniTask> eventDelegate)
+            where TEvent : TAsyncEvent =>
             RemoveListener<TEvent, AsyncEventDelegateContainer>(eventDelegate, _asyncEvents);
 
 
-        public async UniTask NotifyAsyncEvent<TEvent>(TEvent eventData = default) where TEvent : TAsyncEvent
+        public async UniTask NotifyAsyncEvent<TEvent>(TEvent eventData, CancellationToken cancellationToken = default)
+            where TEvent : TAsyncEvent
         {
-            if (_asyncEvents.TryGetValue(typeof(TEvent), out var asyncEventDelegateContainer))
-                await asyncEventDelegateContainer.Invoke(eventData);
+            if (!_asyncEvents.TryGetValue(typeof(TEvent), out var asyncEventDelegateContainer))
+                return;
 
-            await UniTask.CompletedTask;
+            try
+            {
+                await asyncEventDelegateContainer.Invoke(eventData, cancellationToken);
+            }
+            catch
+            {
+                Debug.Log($"[EventModule::NotifyAsyncEvent] AsyncEvent: {typeof(TEvent)} is canceled.");
+            }
+        }
+
+        public UniTask NotifyAsyncEvent<TEvent>(TEvent eventData, out CancellationTokenSource cts)
+            where TEvent : TAsyncEvent
+        {
+            cts = new CancellationTokenSource();
+            return NotifyAsyncEvent(eventData, cts.Token);
         }
 
 

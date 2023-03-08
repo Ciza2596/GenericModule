@@ -39,12 +39,11 @@ public class UniTaskExample : MonoBehaviour
         try
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_delaySeconds), cancellationToken: _cancellationTokenSource.Token);
+            Debug.Log("PlayAnimEnd.");
         }
         catch
         {
             // ignored
         }
-
-        Debug.Log("PlayAnimEnd.");
     }
 }

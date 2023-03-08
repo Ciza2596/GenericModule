@@ -88,11 +88,11 @@ namespace PageModule
 
         public void OnHidingComplete()
         {
-            if (Page is IHidingComplete hidingComplete)
-                hidingComplete.OnHidingComplete();
-
             var pageGameObject = Page.gameObject;
             pageGameObject.SetActive(false);
+            
+            if (Page is IHidingComplete hidingComplete)
+                hidingComplete.OnHidingComplete();
 
             State = PageState.Invisible;
         }

@@ -20,17 +20,23 @@ Modules for unity.
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
 
+### Manual:
+LogModule manual.
+
 
 ## PageModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
 ```
+
 ### Dependency:
  - [UniTask](https://github.com/Cysharp/UniTask)
 ```
 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
 ```
-###
+
+### Manual:
+PageModule manual.
 
 
 
@@ -39,27 +45,44 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModu
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
 
+### Manual:
+AudioModule manual.
+
 
 ## EventModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
 
+### Dependency:
+ - [UniTask](https://github.com/Cysharp/UniTask)
+```
+"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+```
+
+### Manual:
+EventModule manual.
+
 
 ## SaveLoadModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoadModule
 ```
-### Can use on field and property. Not include - public/protected/private type propertyName { get; }
-### Support type:
-#### 1.Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
-#### 2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack
-#### 3.Unity: vector2, vector2Int, vector3, vector3Int
+
+### Manual:
+Can use on field and property. Not include - public/protected/private type propertyName { get; }
+Support type:
+1.Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
+2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack
+3.Unity: vector2, vector2Int, vector3, vector3Int
 
 ## GameObjectPoolModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```
+
+### Manual:
+GameObjectPoolModule manual.
 
 
 ## SceneModule
@@ -67,14 +90,31 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObje
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
 ```
 
+### Manual:
+SceneModule manual.
+
 
 ## AudioPlayerModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
 ```
 
+### Dependency:
+ - [AudioModule](#audiomodule)
+
+### Manual:
+AudioPlayerModule manual.
 
 ## AddressablesModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```
+
+### Dependency:
+ - [UniTask](https://github.com/Cysharp/UniTask)
+```
+"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+```
+
+### Manual:
+AddressablesModule manual.

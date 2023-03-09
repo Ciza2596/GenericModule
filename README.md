@@ -10,28 +10,41 @@
  - [AudioPlayerModule](#audioplayermodule)
  - [AddressablesModule](#addressablesmodule)
 
+
 ## Info
 Modules for unity.
+
 
 ## LogModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
 
+
 ## PageModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
 ```
+### Dependency:
+ - [UniTask](https://github.com/Cysharp/UniTask)
+```
+"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+```
+###
+
+
 
 ## AudioModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
 
+
 ## EventModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
+
 
 ## SaveLoadModule
 ```
@@ -48,15 +61,18 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoad
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```
 
+
 ## SceneModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
 ```
 
+
 ## AudioPlayerModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
 ```
+
 
 ## AddressablesModule
 ```

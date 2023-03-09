@@ -128,18 +128,19 @@ namespace PageModule
         }
 
 
-        public async UniTask Show<T>(params object[] parameters) where T : Component =>
-            await Show(typeof(T), false, parameters);
+        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+            await Show(typeof(T), false, onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(params object[] parameters) where T : Component =>
-            await Show(typeof(T), true, parameters);
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters)
+            where T : Component =>
+            await Show(typeof(T), true, onComplete, parameters);
 
 
-        public async UniTask Show(Type[] pageTypes, object[][] parametersList) =>
-            await Show(pageTypes, false, parametersList);
+        public async UniTask Show(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+            await Show(pageTypes, false, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList) =>
-            await Show(pageTypes, true, parametersList);
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+            await Show(pageTypes, true, parametersList, onComplete);
 
 
         public async UniTask Hide<T>(Action onComplete = null) where T : Component =>
@@ -210,7 +211,7 @@ namespace PageModule
             pageData.Release();
         }
 
-        private async UniTask Show(Type pageType, bool isImmediately, params object[] parameters)
+        private async UniTask Show(Type pageType, bool isImmediately, Action onComplete, params object[] parameters)
         {
             Assert.IsTrue(_pageDataMap.ContainsKey(pageType),
                 $"[PageContainer::Show] PageType: {pageType} doesnt be created.");
@@ -233,9 +234,11 @@ namespace PageModule
             pageData.OnShowingComplete();
 
             AddTickAndFixedTickHandle(pageData);
+            
+            onComplete?.Invoke();
         }
 
-        private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList)
+        private async UniTask Show(Type[] pageTypes, bool isImmediately, object[][] parametersList, Action onComplete)
         {
             Func<UniTask> onShowingStart = null;
             Func<UniTask> playShowingAnimation = null;
@@ -249,7 +252,7 @@ namespace PageModule
                 var pageType = pageTypes[i];
                 Assert.IsTrue(_pageDataMap.ContainsKey(pageType),
                     $"[PageContainer::Show] PageType: {pageType} doesnt be created.");
-                
+
                 var parameters = parametersList[i];
                 var pageData = _pageDataMap[pageType];
                 var state = pageData.State;
@@ -260,7 +263,7 @@ namespace PageModule
                     continue;
                 }
 
-                onShowingStart += async ()=> await pageData.OnShowingStart(parameters);
+                onShowingStart += async () => await pageData.OnShowingStart(parameters);
                 playShowingAnimation += pageData.PlayShowingAnimation;
                 onShowingComplete += pageData.OnShowingComplete;
 
@@ -268,15 +271,17 @@ namespace PageModule
             }
 
             await WhenAll(onShowingStart);
-            
+
             if (!isImmediately)
                 await WhenAll(playShowingAnimation);
-            
+
 
             onShowingComplete?.Invoke();
 
             foreach (var canShowPageData in canShowPageDatas)
                 AddTickAndFixedTickHandle(canShowPageData);
+            
+            onComplete?.Invoke();
         }
 
 
@@ -304,7 +309,7 @@ namespace PageModule
                 await pageData.PlayHidingAnimation();
 
             pageData.OnHidingComplete();
-            
+
             onComplete?.Invoke();
         }
 
@@ -385,7 +390,7 @@ namespace PageModule
             if (pageData.TryGetFixedTickable(out var fixedTickable))
                 _fixedTickHandle -= fixedTickable.FixedTick;
         }
-        
+
         private void DestroyOrImmediate(Object obj)
         {
             if (Application.isPlaying)
@@ -396,13 +401,13 @@ namespace PageModule
 
         private async UniTask WhenAll(Func<UniTask> funcs)
         {
-            if(funcs is null)
+            if (funcs is null)
                 return;
-            
+
             var uniTasks = new List<UniTask>();
             foreach (var invocation in funcs.GetInvocationList())
                 uniTasks.Add(((Func<UniTask>)invocation).Invoke());
-            
+
             await UniTask.WhenAll(uniTasks);
         }
     }

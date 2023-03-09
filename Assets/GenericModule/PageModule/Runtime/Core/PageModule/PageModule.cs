@@ -59,17 +59,17 @@ namespace PageModule
         public void DestroyAll() => _pageContainer.DestroyAll();
 
 
-        public async UniTask Show<T>(params object[] parameters) where T : Component =>
-            await _pageContainer.Show<T>(parameters);
+        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+            await _pageContainer.Show<T>(onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(params object[] parameters) where T : Component =>
-            await _pageContainer.ShowImmediately<T>(parameters);
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+            await _pageContainer.ShowImmediately<T>(onComplete, parameters);
 
-        public async UniTask Show(Type[] pageTypes, object[][] parametersList) =>
-            await _pageContainer.Show(pageTypes, parametersList);
+        public async UniTask Show(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+            await _pageContainer.Show(pageTypes, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList) =>
-            await _pageContainer.ShowImmediately(pageTypes, parametersList);
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+            await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
 
 
         public async UniTask Hide<T>(Action onComplete = null) where T : Component => await _pageContainer.Hide<T>(onComplete);

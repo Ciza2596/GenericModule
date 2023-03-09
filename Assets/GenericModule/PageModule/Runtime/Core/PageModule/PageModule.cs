@@ -48,10 +48,11 @@ namespace PageModule
             _pageContainer.TryGetPage<T>(out page);
 
 
-        public void Create<T>() where T : Component =>
-            _pageContainer.Create<T>();
+        public void Create<T>(params object[] parameters) where T : Component =>
+            _pageContainer.Create<T>(parameters);
 
-        public void CreateAll() => _pageContainer.CreateAll();
+        public void CreateAll(object[][] parametersList = null) =>
+            _pageContainer.CreateAll(parametersList);
 
 
         public void Destroy<T>() where T : Component => _pageContainer.Destroy<T>();

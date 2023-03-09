@@ -3,6 +3,6 @@ namespace PageModule
 {
     public interface IInitializable 
     {
-        void Initialize();
+        void Initialize(params object[] parameters);
     }
 }

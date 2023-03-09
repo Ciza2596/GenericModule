@@ -16,12 +16,12 @@ namespace PageModule
 
 
         //public method
-        public void Initialize()
+        public void Initialize(params object[] parameters)
         {
             var pageGameObject = Page.gameObject;
             pageGameObject.SetActive(false);
             if (Page is IInitializable initializable)
-                initializable.Initialize();
+                initializable.Initialize(parameters);
         }
 
         public void Release()

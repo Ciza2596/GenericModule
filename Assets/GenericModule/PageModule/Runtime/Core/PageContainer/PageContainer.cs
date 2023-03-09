@@ -106,14 +106,22 @@ namespace PageModule
         }
 
 
-        public void Create<T>() where T : Component =>
-            Create(typeof(T));
+        public void Create<T>(params object[] parameters) where T : Component =>
+            Create(typeof(T), parameters);
 
-        public void CreateAll()
+        public void CreateAll(object[][] parametersList = null)
         {
             var pageTypes = _pagePrefabMap.Keys.ToArray();
-            foreach (var pageType in pageTypes)
-                Create(pageType);
+            var pageTypesLength = pageTypes.Length;
+            if (parametersList is null)
+                parametersList = new object[pageTypesLength][];
+
+            for (var i = 0; i < pageTypesLength; i++)
+            {
+                var pageType = pageTypes[i];
+                var parameters = parametersList[i];
+                Create(pageType, parameters);
+            }
         }
 
 
@@ -131,8 +139,7 @@ namespace PageModule
         public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : Component =>
             await Show(typeof(T), false, onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters)
-            where T : Component =>
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : Component =>
             await Show(typeof(T), true, onComplete, parameters);
 
 
@@ -170,7 +177,7 @@ namespace PageModule
 
 
         //private method
-        private void Create(Type pageType)
+        private void Create(Type pageType, params object[] parameters)
         {
             Assert.IsTrue(_pagePrefabMap.ContainsKey(pageType),
                 $"[PageContainer::Create] Not find pageType: {pageType} in pagePrefabComponentMap.");
@@ -188,7 +195,7 @@ namespace PageModule
             var page = pageGameObject.GetComponent(pageType);
             var pageData = new PageData(page);
 
-            pageData.Initialize();
+            pageData.Initialize(parameters);
             _pageDataMap.Add(pageType, pageData);
         }
 

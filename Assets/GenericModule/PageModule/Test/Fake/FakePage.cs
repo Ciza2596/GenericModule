@@ -22,7 +22,7 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
     public bool IsPassOnHidingComplete { get; private set; }
 
     //public method
-    public void Initialize() => IsPassInitialize = true;
+    public void Initialize(params object[] parameters) => IsPassInitialize = true;
 
     public void Tick(float deltaTime) => IsPassTick = true;
 

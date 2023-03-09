@@ -104,7 +104,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioMod
 ```
 
 #### Manual:
-Dependency [AudioPlayerModule](#audiomodule)
+Dependency [AudioModule](#audiomodule)
 
 AudioPlayerModule manual.
 

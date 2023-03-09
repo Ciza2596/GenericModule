@@ -118,6 +118,6 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Addressa
 ```
 
 #### Manual:
-Dependency [UniTask](https://github.com/Cysharp/UniTask) and [addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html).
+Dependency [UniTask](https://github.com/Cysharp/UniTask) and [Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html).
 
 AddressablesModule manual.

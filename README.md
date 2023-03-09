@@ -1,24 +1,39 @@
-## Add package from git URL
+## Tables of Contents
 
-## LogModule [HasTest]
+ - [LogModule](#logmodule)
+ - [PageModule](#pagemodule)
+ - [AudioModule](#audiomodule)
+ - [EventModule](#eventmodule)
+ - [SaveLoadModule](#saveloadmodule)
+ - [GameObjectPoolModule](#gameobjectpoolmodule)
+ - [SceneModule](#scenemodule)
+ - [AudioPlayerModule](#audioplayermodule)
+ - [AddressablesModule](#addressablesmodule)
+
+## Info
+Modules for unity.
+
+## LogModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
 
+## PageModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
+```
 
-## EventModule (Dependence UniTask) [HasTest]
+## EventModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
 
-
-## AudioModule [HasTest]
+## AudioModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
 
-
-## SaveLoadModule [HasTest]
+## SaveLoadModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoadModule
 ```
@@ -28,32 +43,22 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoad
 #### 2.Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack
 #### 3.Unity: vector2, vector2Int, vector3, vector3Int
 
-
-## PageModule (Dependence UniTask) [HasTest]
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
-```
-
-
-## GameObjectPoolModule [HasTest]
+## GameObjectPoolModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```
-
 
 ## SceneModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
 ```
 
-
-## AudioPlayerModule (Dependence AudioModule)
+## AudioPlayerModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
 ```
 
-
-## AddressablesModule (Dependence Unity Addressables, UniTask)
+## AddressablesModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```

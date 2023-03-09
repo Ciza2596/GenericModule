@@ -9,7 +9,7 @@ namespace PageModule.Implement
     public class PageModuleConfig : ScriptableObject, IPageModuleConfig
     {
         [SerializeField] private string _pageGameObjectRootName = "[PageRoot]";
-        [SerializeField] private bool _isDontDestroyOnLoad = true;
+        [SerializeField] private bool _isDontDestroyOnLoad = false;
         [Space] [SerializeField] private BasePage[] _pagePrefabs;
 
 

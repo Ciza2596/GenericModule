@@ -1,19 +1,17 @@
-## Tables of Contents
-
- - [LogModule](#logmodule)
- - [PageModule](#pagemodule)
- - [AudioModule](#audiomodule)
- - [EventModule](#eventmodule)
- - [SaveLoadModule](#saveloadmodule)
- - [GameObjectPoolModule](#gameobjectpoolmodule)
- - [SceneModule](#scenemodule)
- - [AudioPlayerModule](#audioplayermodule)
- - [AddressablesModule](#addressablesmodule)
-
-
 ## Info
 Modules for unity.
 
+module | Test |
+--- | --- |
+[LogModule](#logmodule) | O |
+[PageModule](#pagemodule) | O |
+[AudioModule](#audiomodule) | O |
+[EventModule](#eventmodule) | O |
+[SaveLoadModule](#saveloadmodule) | O |
+[GameObjectPoolModule](#gameobjectpoolmodule) | O |
+[SceneModule](#scenemodule) | X |
+[AudioPlayerModule](#audioplayermodule) | X |
+[AddressablesModule](#addressablesmodule) | X |
 
 ## LogModule
 ```

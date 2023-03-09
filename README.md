@@ -23,14 +23,14 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
 ```
 
-## EventModule
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
-```
-
 ## AudioModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
+```
+
+## EventModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
 
 ## SaveLoadModule

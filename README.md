@@ -3,15 +3,15 @@ Modules for unity.
 
 module | Test |
 --- | :---: |
-[LogModule](#logmodule) | O |
-[PageModule](#pagemodule) | O |
-[AudioModule](#audiomodule) | O |
-[EventModule](#eventmodule) | O |
-[SaveLoadModule](#saveloadmodule) | O |
-[GameObjectPoolModule](#gameobjectpoolmodule) | O |
-[SceneModule](#scenemodule) | X |
-[AudioPlayerModule](#audioplayermodule) | X |
-[AddressablesModule](#addressablesmodule) | X |
+[LogModule](#logmodule) | <li>- [x] </li> |
+[PageModule](#pagemodule) | <li>- [x] </li> |
+[AudioModule](#audiomodule) | <li>- [x] </li> |
+[EventModule](#eventmodule) | <li>- [x] </li> |
+[SaveLoadModule](#saveloadmodule) | <li>- [x] </li> |
+[GameObjectPoolModule](#gameobjectpoolmodule) | <li>- [x] </li> |
+[SceneModule](#scenemodule) | <li>- [ ] </li> |
+[AudioPlayerModule](#audioplayermodule) | <li>- [ ] </li> |
+[AddressablesModule](#addressablesmodule) | <li>- [ ] </li> |
 
 ## LogModule
 ```

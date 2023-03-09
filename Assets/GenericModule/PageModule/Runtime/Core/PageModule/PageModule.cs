@@ -51,7 +51,7 @@ namespace PageModule
         public void Create<T>(params object[] parameters) where T : Component =>
             _pageContainer.Create<T>(parameters);
 
-        public void CreateAll(object[][] parametersList = null) =>
+        public void CreateAll(params object[][] parametersList) =>
             _pageContainer.CreateAll(parametersList);
 
 

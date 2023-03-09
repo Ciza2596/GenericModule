@@ -109,7 +109,7 @@ namespace PageModule
         public void Create<T>(params object[] parameters) where T : Component =>
             Create(typeof(T), parameters);
 
-        public void CreateAll(object[][] parametersList = null)
+        public void CreateAll(params object[][] parametersList)
         {
             var pageTypes = _pagePrefabMap.Keys.ToArray();
             var pageTypesLength = pageTypes.Length;

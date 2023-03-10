@@ -34,36 +34,36 @@ namespace PageModule
         //public method
         public void Release() => _pageContainer.Release();
         
-        public bool CheckIsVisible<T>() where T : Component =>
+        public bool CheckIsVisible<T>() where T : MonoBehaviour =>
             _pageContainer.CheckIsVisible<T>();
 
-        public bool CheckIsShowing<T>() where T : Component =>
+        public bool CheckIsShowing<T>() where T : MonoBehaviour =>
             _pageContainer.CheckIsShowing<T>();
 
-        public bool CheckIsHiding<T>() where T : Component =>
+        public bool CheckIsHiding<T>() where T : MonoBehaviour =>
             _pageContainer.CheckIsHiding<T>();
 
 
-        public bool TryGetPage<T>(out T page) where T : Component =>
+        public bool TryGetPage<T>(out T page) where T : MonoBehaviour =>
             _pageContainer.TryGetPage<T>(out page);
 
 
-        public void Create<T>(params object[] parameters) where T : Component =>
+        public void Create<T>(params object[] parameters) where T : MonoBehaviour =>
             _pageContainer.Create<T>(parameters);
 
         public void CreateAll(params object[][] parametersList) =>
             _pageContainer.CreateAll(parametersList);
 
 
-        public void Destroy<T>() where T : Component => _pageContainer.Destroy<T>();
+        public void Destroy<T>() where T : MonoBehaviour => _pageContainer.Destroy<T>();
 
         public void DestroyAll() => _pageContainer.DestroyAll();
 
 
-        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await _pageContainer.Show<T>(onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await _pageContainer.ShowImmediately<T>(onComplete, parameters);
 
         public async UniTask Show(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
@@ -73,9 +73,9 @@ namespace PageModule
             await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
 
 
-        public async UniTask Hide<T>(Action onComplete = null) where T : Component => await _pageContainer.Hide<T>(onComplete);
+        public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour => await _pageContainer.Hide<T>(onComplete);
 
-        public void HideImmediately<T>(Action onComplete = null) where T : Component => _pageContainer.HideImmediately<T>(onComplete);
+        public void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour => _pageContainer.HideImmediately<T>(onComplete);
 
 
         public async UniTask Hide(Type[] pageTypes, Action onComplete = null) => await _pageContainer.Hide(pageTypes, onComplete);

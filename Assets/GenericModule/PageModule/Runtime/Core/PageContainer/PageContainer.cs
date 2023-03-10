@@ -44,7 +44,7 @@ namespace PageModule
             DestroyOrImmediate(pageGameObjectRoot);
         }
 
-        public bool CheckIsVisible<T>() where T : Component
+        public bool CheckIsVisible<T>() where T : MonoBehaviour
         {
             var pageType = typeof(T);
             if (!_pageDataMap.ContainsKey(pageType))
@@ -58,7 +58,7 @@ namespace PageModule
             return pageData.State is PageState.Visible;
         }
 
-        public bool CheckIsShowing<T>() where T : Component
+        public bool CheckIsShowing<T>() where T : MonoBehaviour
         {
             var pageType = typeof(T);
             if (!_pageDataMap.ContainsKey(pageType))
@@ -72,7 +72,7 @@ namespace PageModule
             return pageData.State is PageState.Showing;
         }
 
-        public bool CheckIsHiding<T>() where T : Component
+        public bool CheckIsHiding<T>() where T : MonoBehaviour
         {
             var pageType = typeof(T);
             if (!_pageDataMap.ContainsKey(pageType))
@@ -87,7 +87,7 @@ namespace PageModule
         }
 
 
-        public bool TryGetPage<T>(out T page) where T : Component
+        public bool TryGetPage<T>(out T page) where T : MonoBehaviour
         {
             page = null;
 
@@ -106,7 +106,7 @@ namespace PageModule
         }
 
 
-        public void Create<T>(params object[] parameters) where T : Component =>
+        public void Create<T>(params object[] parameters) where T : MonoBehaviour =>
             Create(typeof(T), parameters);
 
         public void CreateAll(params object[][] parametersList)
@@ -125,7 +125,7 @@ namespace PageModule
         }
 
 
-        public void Destroy<T>() where T : Component =>
+        public void Destroy<T>() where T : MonoBehaviour =>
             Destroy(typeof(T));
 
         public void DestroyAll()
@@ -136,10 +136,10 @@ namespace PageModule
         }
 
 
-        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+        public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await Show(typeof(T), false, onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : Component =>
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await Show(typeof(T), true, onComplete, parameters);
 
 
@@ -150,10 +150,10 @@ namespace PageModule
             await Show(pageTypes, true, parametersList, onComplete);
 
 
-        public async UniTask Hide<T>(Action onComplete = null) where T : Component =>
+        public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour =>
             await Hide(typeof(T), false, onComplete);
 
-        public async void HideImmediately<T>(Action onComplete = null) where T : Component =>
+        public async void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour =>
             await Hide(typeof(T), true, onComplete);
 
         public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>

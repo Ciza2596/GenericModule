@@ -66,10 +66,10 @@ namespace PageModule
         public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await _pageContainer.ShowImmediately<T>(onComplete, parameters);
 
-        public async UniTask Show(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+        public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await _pageContainer.Show(pageTypes, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
 
 

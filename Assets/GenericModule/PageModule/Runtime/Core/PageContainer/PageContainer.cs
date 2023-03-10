@@ -143,10 +143,10 @@ namespace PageModule
             await Show(typeof(T), true, onComplete, parameters);
 
 
-        public async UniTask Show(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+        public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await Show(pageTypes, false, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList, Action onComplete = null) =>
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await Show(pageTypes, true, parametersList, onComplete);
 
 

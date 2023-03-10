@@ -17,9 +17,9 @@ namespace PageModule.Implement
 
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-        public Dictionary<Type, Component> GetPagePrefabMap()
+        public Dictionary<Type, MonoBehaviour> GetPagePrefabMap()
         {
-            var pagePrefabMap = new Dictionary<Type, Component>();
+            var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
 
             foreach (var pagePrefab in _pagePrefabs)
             {

@@ -11,22 +11,17 @@ namespace PageModule
     public class PageContainer
     {
         //private variable
-        private readonly Transform _pageGameObjectRootTransform;
-
-        private readonly Dictionary<Type, Component> _pagePrefabMap;
+        private Transform _pageGameObjectRootTransform;
+        private Dictionary<Type, MonoBehaviour> _pagePrefabMap;
+        
         private readonly Dictionary<Type, PageData> _pageDataMap = new Dictionary<Type, PageData>();
 
         private Action<float> _tickHandle;
         private Action<float> _fixedTickHandle;
 
-
-        //constructor
-        public PageContainer(Transform pageGameObjectRootTransform, Dictionary<Type, Component> pagePrefabMap)
-        {
-            _pageGameObjectRootTransform = pageGameObjectRootTransform;
-            _pagePrefabMap = pagePrefabMap;
-        }
-
+        //public variable
+        public bool IsInitialized => _pageGameObjectRootTransform != null && _pagePrefabMap != null;
+        
 
         //Unity callback
         public void Tick(float deltaTime) =>
@@ -37,10 +32,25 @@ namespace PageModule
 
 
         //public method
+        public void Initialize(Transform pageGameObjectRootTransform, Dictionary<Type, MonoBehaviour> pagePrefabMap)
+        {
+            Release();
+
+            _pageGameObjectRootTransform = pageGameObjectRootTransform;
+            _pagePrefabMap = pagePrefabMap;
+        }
+        
         public void Release()
         {
+            if(!IsInitialized)
+                return;
+            
             DestroyAll();
+            
+            _pagePrefabMap = null;
+            
             var pageGameObjectRoot = _pageGameObjectRootTransform.gameObject;
+            _pageGameObjectRootTransform = null;
             DestroyOrImmediate(pageGameObjectRoot);
         }
 

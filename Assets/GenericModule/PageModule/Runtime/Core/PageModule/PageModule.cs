@@ -9,31 +9,46 @@ namespace PageModule
     {
         //private variable
         private readonly PageContainer _pageContainer;
+        private readonly IPageModuleConfig _pageModuleConfig;
+        
 
         //constructor
         public PageModule(IPageModuleConfig pageModuleConfig)
         {
-            var pageGameObjectRootName = pageModuleConfig.PageGameObjectRootName;
-            var pageGameObjectRoot = new GameObject(pageGameObjectRootName);
+            _pageContainer = new PageContainer();
+            _pageModuleConfig = pageModuleConfig;
+        }
+        
+        //public variable
+        public bool IsInitialized => _pageContainer.IsInitialized;
 
-            var isDontDestroyOnLoad = pageModuleConfig.IsDontDestroyOnLoad;
+
+        //public method
+        public void Initialize(Transform pageGameObjectRootParentTransform = null)
+        {
+            Release();
+            
+            var pageGameObjectRootName = _pageModuleConfig.PageGameObjectRootName;
+            var pageGameObjectRoot = new GameObject(pageGameObjectRootName);
+            var pageGameObjectRootTransform = pageGameObjectRoot.transform;
+
+            var isDontDestroyOnLoad = _pageModuleConfig.IsDontDestroyOnLoad;
             if (isDontDestroyOnLoad)
                 Object.DontDestroyOnLoad(pageGameObjectRoot);
+            else if(pageGameObjectRootParentTransform != null)
+                pageGameObjectRootTransform.SetParent(pageGameObjectRootParentTransform);
 
-            var pageGameObjectRootTransform = pageGameObjectRoot.transform;
-            var pagePrefabMap = pageModuleConfig.GetPagePrefabMap();
+            var pagePrefabMap = _pageModuleConfig.GetPagePrefabMap();
 
-            _pageContainer = new PageContainer(pageGameObjectRootTransform, pagePrefabMap);
+            _pageContainer.Initialize(pageGameObjectRootTransform, pagePrefabMap);
 
             var pageModuleComponent = pageGameObjectRoot.AddComponent<PageModuleComponent>();
             pageModuleComponent.SetUpdateCallback(_pageContainer.Tick);
             pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedTick);
         }
 
-
-        //public method
         public void Release() => _pageContainer.Release();
-        
+
         public bool CheckIsVisible<T>() where T : MonoBehaviour =>
             _pageContainer.CheckIsVisible<T>();
 
@@ -63,24 +78,30 @@ namespace PageModule
         public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await _pageContainer.Show<T>(onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters)
+            where T : MonoBehaviour =>
             await _pageContainer.ShowImmediately<T>(onComplete, parameters);
 
         public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await _pageContainer.Show(pageTypes, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null,
+            Action onComplete = null) =>
             await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
 
 
-        public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour => await _pageContainer.Hide<T>(onComplete);
+        public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour =>
+            await _pageContainer.Hide<T>(onComplete);
 
-        public void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour => _pageContainer.HideImmediately<T>(onComplete);
+        public void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour =>
+            _pageContainer.HideImmediately<T>(onComplete);
 
 
-        public async UniTask Hide(Type[] pageTypes, Action onComplete = null) => await _pageContainer.Hide(pageTypes, onComplete);
+        public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>
+            await _pageContainer.Hide(pageTypes, onComplete);
 
-        public void HideImmediately(Type[] pageTypes, Action onComplete = null) => _pageContainer.HideImmediately(pageTypes, onComplete);
+        public void HideImmediately(Type[] pageTypes, Action onComplete = null) =>
+            _pageContainer.HideImmediately(pageTypes, onComplete);
 
 
         public async UniTask HideAll(Action onComplete = null) => await _pageContainer.HideAll(onComplete);

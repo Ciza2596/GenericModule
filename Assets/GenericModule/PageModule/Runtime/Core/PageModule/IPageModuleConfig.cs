@@ -9,6 +9,6 @@ namespace PageModule
         public string PageGameObjectRootName { get; }
         public bool IsDontDestroyOnLoad { get; }
 
-        public Dictionary<Type, Component> GetPagePrefabMap();
+        public Dictionary<Type, MonoBehaviour> GetPagePrefabMap();
     }
 }

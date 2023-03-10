@@ -19,7 +19,8 @@ public class PageContainerTest
         {
             typeof(FakePage)
         });
-        _pageContainer = new PageContainer(_pageGameObjectRootTransform, pagePrefabMap);
+        _pageContainer = new PageContainer();
+        _pageContainer.Initialize(_pageGameObjectRootTransform, pagePrefabMap);
     }
 
     [TearDown]
@@ -33,7 +34,7 @@ public class PageContainerTest
         Object.DestroyImmediate(pageGameObjectRootTransform.gameObject);
 
         var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAMEOBJECT_NAME);
-        if(gameObject != null)
+        if (gameObject != null)
             Object.DestroyImmediate(gameObject);
     }
 
@@ -487,9 +488,9 @@ public class PageContainerTest
     }
 
 
-    private Dictionary<Type, Component> CreatePagePrefabMap(Type[] pageTypes)
+    private Dictionary<Type, MonoBehaviour> CreatePagePrefabMap(Type[] pageTypes)
     {
-        var pagePrefabMap = new Dictionary<Type, Component>();
+        var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
 
         foreach (var pageType in pageTypes)
         {
@@ -500,11 +501,11 @@ public class PageContainerTest
         return pagePrefabMap;
     }
 
-    private Component CreatePagePrefabAndGetPage(Type pageType)
+    private MonoBehaviour CreatePagePrefabAndGetPage(Type pageType)
     {
         var prefab = new GameObject(pageType.Name);
         prefab.AddComponent(pageType);
 
-        return prefab.GetComponent(pageType);
+        return prefab.GetComponent(pageType) as MonoBehaviour;
     }
 }

@@ -367,38 +367,38 @@ public class PageContainerTest
 
 
     //private method
-    private void Check_Page_Is_Created<T>() where T : Component
+    private void Check_Page_Is_Created<T>() where T : MonoBehaviour
     {
         var pageType = typeof(T);
         Assert.IsTrue(_pageContainer.TryGetPage<T>(out var page), $"Page: {pageType} doesnt be created.");
     }
 
-    private void Create_And_Check_Page_Is_Created<T>() where T : Component
+    private void Create_And_Check_Page_Is_Created<T>() where T : MonoBehaviour
     {
         _pageContainer.Create<T>();
         Check_Page_Is_Created<T>();
     }
 
-    private void Check_Page_Is_Destroyed<T>() where T : Component
+    private void Check_Page_Is_Destroyed<T>() where T : MonoBehaviour
     {
         var pageType = typeof(T);
         Assert.IsFalse(_pageContainer.TryGetPage<T>(out var page), $"Page: {pageType} doesnt be destroyed.");
     }
 
 
-    private void Check_Page_Is_Visible<T>() where T : Component
+    private void Check_Page_Is_Visible<T>() where T : MonoBehaviour
     {
         var pageType = typeof(T);
         Assert.IsTrue(_pageContainer.CheckIsVisible<T>(), $"Page: {pageType} isnt visible.");
     }
 
-    private void Check_Page_Is_Invisible<T>() where T : Component
+    private void Check_Page_Is_Invisible<T>() where T : MonoBehaviour
     {
         var pageType = typeof(T);
         Assert.IsFalse(_pageContainer.CheckIsVisible<T>(), $"Page: {pageType} isnt invisible.");
     }
 
-    private async void Show_Immediately_And_Check_Page_Is_Visible<T>() where T : Component
+    private async void Show_Immediately_And_Check_Page_Is_Visible<T>() where T : MonoBehaviour
     {
         await _pageContainer.ShowImmediately<T>();
         Check_Page_Is_Visible<T>();

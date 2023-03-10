@@ -113,7 +113,7 @@ namespace PageModule
         {
             var pageTypes = _pagePrefabMap.Keys.ToArray();
             var pageTypesLength = pageTypes.Length;
-            if (parametersList is null)
+            if (parametersList.Length != pageTypesLength)
                 parametersList = new object[pageTypesLength][];
 
             for (var i = 0; i < pageTypesLength; i++)

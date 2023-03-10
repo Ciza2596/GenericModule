@@ -47,7 +47,12 @@ namespace AddressablesModule
             var obj = await GetAssetHandleInfo<T>(address);
             return obj;
         }
-
+        
+        public void UnloadAsset<T>(string address) where T: Object
+        {
+            var type = typeof(T);
+            UnloadAsset(address, type);
+        }
 
         public void UnloadAsset(string address, Type type)
         {

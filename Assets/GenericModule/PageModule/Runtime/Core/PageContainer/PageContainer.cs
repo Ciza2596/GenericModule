@@ -13,7 +13,7 @@ namespace PageModule
         //private variable
         private Transform _pageGameObjectRootTransform;
         private Dictionary<Type, MonoBehaviour> _pagePrefabMap;
-        
+
         private readonly Dictionary<Type, PageData> _pageDataMap = new Dictionary<Type, PageData>();
 
         private Action<float> _tickHandle;
@@ -21,7 +21,7 @@ namespace PageModule
 
         //public variable
         public bool IsInitialized => _pageGameObjectRootTransform != null && _pagePrefabMap != null;
-        
+
 
         //Unity callback
         public void Tick(float deltaTime) =>
@@ -39,16 +39,16 @@ namespace PageModule
             _pageGameObjectRootTransform = pageGameObjectRootTransform;
             _pagePrefabMap = pagePrefabMap;
         }
-        
+
         public void Release()
         {
-            if(!IsInitialized)
+            if (!IsInitialized)
                 return;
-            
+
             DestroyAll();
-            
+
             _pagePrefabMap = null;
-            
+
             var pageGameObjectRoot = _pageGameObjectRootTransform.gameObject;
             _pageGameObjectRootTransform = null;
             DestroyOrImmediate(pageGameObjectRoot);
@@ -149,14 +149,16 @@ namespace PageModule
         public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
             await Show(typeof(T), false, onComplete, parameters);
 
-        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+        public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters)
+            where T : MonoBehaviour =>
             await Show(typeof(T), true, onComplete, parameters);
 
 
         public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
             await Show(pageTypes, false, parametersList, onComplete);
 
-        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
+        public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null,
+            Action onComplete = null) =>
             await Show(pageTypes, true, parametersList, onComplete);
 
 
@@ -251,7 +253,7 @@ namespace PageModule
             pageData.OnShowingComplete();
 
             AddTickAndFixedTickHandle(pageData);
-            
+
             onComplete?.Invoke();
         }
 
@@ -263,6 +265,9 @@ namespace PageModule
 
             var canShowPageDatas = new List<PageData>();
 
+            var pageTypesLength = pageTypes.Length;
+            if (parametersList is null || parametersList.Length != pageTypesLength)
+                parametersList = new object[pageTypesLength][];
 
             for (int i = 0; i < pageTypes.Length; i++)
             {
@@ -297,7 +302,7 @@ namespace PageModule
 
             foreach (var canShowPageData in canShowPageDatas)
                 AddTickAndFixedTickHandle(canShowPageData);
-            
+
             onComplete?.Invoke();
         }
 

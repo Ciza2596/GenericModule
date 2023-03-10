@@ -149,7 +149,7 @@ public class PageContainerTest
         Check_IsPassOnShowingComplete<FakePage>(false);
 
         //act
-        await _pageContainer.Show(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
+        await _pageContainer.Show(new[] { typeof(FakePage) });
 
         //assert
         Check_Page_Is_Visible<FakePage>();
@@ -171,7 +171,7 @@ public class PageContainerTest
         Check_IsPassOnShowingComplete<FakePage>(false);
 
         //act
-        await _pageContainer.ShowImmediately(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
+        await _pageContainer.ShowImmediately(new[] { typeof(FakePage) });
 
         //assert
         Check_Page_Is_Visible<FakePage>();

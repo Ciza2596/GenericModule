@@ -66,11 +66,11 @@ namespace EventModule
             }
         }
 
-        public UniTask NotifyAsyncEvent<TEvent>(TEvent eventData, out CancellationTokenSource cts)
+        public UniTask NotifyAsyncEvent<TEvent>(TEvent eventData, out CancellationTokenSource notifyAsyncEventCTS)
             where TEvent : TAsyncEvent
         {
-            cts = new CancellationTokenSource();
-            return NotifyAsyncEvent(eventData, cts.Token);
+            notifyAsyncEventCTS = new CancellationTokenSource();
+            return NotifyAsyncEvent(eventData, notifyAsyncEventCTS.Token);
         }
 
 

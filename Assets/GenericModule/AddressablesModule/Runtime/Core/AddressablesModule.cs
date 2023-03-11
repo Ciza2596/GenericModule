@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -14,11 +15,13 @@ namespace AddressablesModule
     public class AddressablesModule
     {
         //private variable
-        private Dictionary<Type, Dictionary<string, Object>> _typeAddressObjectMapMap =
+        private readonly Dictionary<Type, Dictionary<string, Object>> _typeAddressObjectMapMap =
             new Dictionary<Type, Dictionary<string, Object>>();
 
-        private Dictionary<string, SceneInstance> _addressSceneMap =
+        private readonly Dictionary<string, SceneInstance> _addressSceneMap =
             new Dictionary<string,SceneInstance>();
+
+        private List<CancellationTokenSource> _loadAssetAsyncCTSList = new List<CancellationTokenSource>();
 
 
         //public method
@@ -43,11 +46,19 @@ namespace AddressablesModule
         public async UniTask<T> LoadAssetAsync<T>(string address) where T : Object
         {
             Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
-
+            
             var obj = await GetAssetHandleInfo<T>(address);
             return obj;
         }
-        
+
+        public void StopLoadingAssetAsyncs()
+        {
+            foreach (var loadAssetAsyncCTS in _loadAssetAsyncCTSList)
+                loadAssetAsyncCTS.Cancel();
+            
+            _loadAssetAsyncCTSList.Clear();
+        }
+
         public void UnloadAsset<T>(string address) where T: Object
         {
             var type = typeof(T);
@@ -112,6 +123,8 @@ namespace AddressablesModule
         
         public void UnloadAllAssets()
         {
+            StopLoadingAssetAsyncs();
+            
             var types = _typeAddressObjectMapMap.Keys.ToArray();
 
             foreach (var type in types)
@@ -185,8 +198,18 @@ namespace AddressablesModule
 
             if (!addressObjectMap.TryGetValue(address, out var obj))
             {
-                obj = await Addressables.LoadAssetAsync<T>(address);
-                addressObjectMap.Add(address, obj);
+                var loadAssetAsyncCTS = new CancellationTokenSource();
+                _loadAssetAsyncCTSList.Add(loadAssetAsyncCTS);
+                try
+                {
+                    obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(loadAssetAsyncCTS.Token);
+                    addressObjectMap.Add(address, obj);
+                }
+                catch
+                {
+                    Debug.Log($"[AddressablesModule::GetAssetHandleInfo] Loading assets with address: {address} is canceled.");
+                    return null;
+                }
             }
 
             return obj as T;

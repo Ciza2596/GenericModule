@@ -18,20 +18,44 @@ module | Test |
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModule
 ```
 
-#### Manual:
-LogModule manual.
+### Manual:
+
+1 - **Example**
+```csharp
+public class LogModuleExample : MonoBehaviour
+{
+    [SerializeField]
+    private LogModuleConfig _logModuleConfig;
+    
+    private void Awake()
+    {
+        var logModule = new LogModule.LogModule(_logModuleConfig, new UnityLogPrinter());
+        logModule.Debug("Hello World!");
+    }
+}
+```
+2 - **Operate LogModuleConfig**
+
+1. Create LogModuleConfig:
+
+<img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
+
+2. LogModuleConfig Inspector:
+
+<img src="Document/LogModule/Image/LogModuleInspector.png"/>
+
 
 
 ## PageModule
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
 ```
-#### Dependency:
+### Dependency:
 ```
 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
 ```
 
-#### Manual:
+### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask)
 
 PageModule manual.
@@ -51,12 +75,12 @@ AudioModule manual.
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventModule
 ```
-#### Dependency:
+### Dependency:
 ```
 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
 ```
 
-#### Manual:
+### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask)
 
 EventModule manual.
@@ -67,7 +91,7 @@ EventModule manual.
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoadModule
 ```
 
-#### Manual:
+### Manual:
 - Can use on field and property. Not include - public/protected/private type propertyName { get; }
 - Support type:
   1. Primitive: bool, char, dateTime, double, enum, float, int, long, short, string
@@ -79,7 +103,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SaveLoad
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObjectPoolModule
 ```
 
-#### Manual:
+### Manual:
 GameObjectPoolModule manual.
 
 
@@ -88,7 +112,7 @@ GameObjectPoolModule manual.
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneModule
 ```
 
-#### Manual:
+### Manual:
 SceneModule manual.
 
 
@@ -96,12 +120,12 @@ SceneModule manual.
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
 ```
-#### Dependency:
+### Dependency:
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
 
-#### Manual:
+### Manual:
 Dependency [AudioModule](#audiomodule)
 
 AudioPlayerModule manual.
@@ -110,12 +134,12 @@ AudioPlayerModule manual.
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```
-#### Dependency:
+### Dependency:
 ```
 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
 ```
 
-#### Manual:
+### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask) and [Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html).
 
 AddressablesModule manual.

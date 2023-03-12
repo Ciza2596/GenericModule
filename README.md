@@ -20,7 +20,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 
 ### Manual:
 
-1 - **Example**
+- **Example**
 ```csharp
 public class LogModuleExample : MonoBehaviour
 {
@@ -34,15 +34,12 @@ public class LogModuleExample : MonoBehaviour
     }
 }
 ```
-2 - **Operate LogModuleConfig**
-
-1. Create LogModuleConfig:
-
-<img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
-
-2. LogModuleConfig Inspector:
-
-<img src="Document/LogModule/Image/LogModuleInspector.png"/>
+- **Operate LogModuleConfig**
+    1. Create LogModuleConfig:
+    <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
+    
+    2. LogModuleConfig Inspector:
+    <img src="Document/LogModule/Image/LogModuleInspector.png"/>
 
 
 

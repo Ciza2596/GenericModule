@@ -20,7 +20,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 
 ### Manual:
 
-- **Use Case**
+- **Example**
 ```csharp
 public class LogModuleExample : MonoBehaviour
 {
@@ -82,7 +82,15 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventMod
 ### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask)
 
-EventModule manual.
+- **Example**
+```csharp
+public class EventModuleExample : MonoBehaviour
+{
+    private void Awake()
+    {
+    }
+}
+```
 
 
 ## SaveLoadModule
@@ -141,9 +149,9 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Addressa
 ### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask) and [Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html).
 
-- **Use Case**
+- **Example**
 ```csharp
-public class LogModuleExample : MonoBehaviour
+public class AddressablesModuleExample : MonoBehaviour
 {
     private void Awake()
     {
@@ -163,6 +171,6 @@ public class LogModuleExample : MonoBehaviour
     
        <img src="Document/LogModule/Image/LogModuleInspector.png"/>
        
-    4. Import Page:
+    4. Add Page:
     
        <img src="Document/LogModule/Image/LogModuleInspector.png"/>

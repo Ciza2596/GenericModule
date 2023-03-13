@@ -20,7 +20,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 
 ### Manual:
 
-- **Example**
+- **Use Case**
 ```csharp
 public class LogModuleExample : MonoBehaviour
 {
@@ -141,4 +141,28 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Addressa
 ### Manual:
 Dependency [UniTask](https://github.com/Cysharp/UniTask) and [Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html).
 
-AddressablesModule manual.
+- **Use Case**
+```csharp
+public class LogModuleExample : MonoBehaviour
+{
+    private void Awake()
+    {
+    }
+}
+```
+- **Operate Editor**
+    1. Open AddressblesAssetManager:
+    
+       <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
+    
+    2. Export Page:
+    
+       <img src="Document/LogModule/Image/LogModuleInspector.png"/>
+       
+    3. Import Page:
+    
+       <img src="Document/LogModule/Image/LogModuleInspector.png"/>
+       
+    4. Import Page:
+    
+       <img src="Document/LogModule/Image/LogModuleInspector.png"/>

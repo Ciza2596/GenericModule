@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-namespace PageModule
+namespace CizaPageModule
 {
     public interface IHidingAnimated
     {

@@ -1,6 +1,6 @@
 {
     "name": "AudioPlayerModule",
-    "rootNamespace": "AudioPlayerModule",
+    "rootNamespace": "CizaAudioPlayerModule",
     "references": [
         "AudioModule"
     ],

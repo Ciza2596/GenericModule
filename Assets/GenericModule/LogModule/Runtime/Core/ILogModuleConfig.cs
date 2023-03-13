@@ -1,5 +1,5 @@
 ﻿
-namespace LogModule
+namespace CizaLogModule
 {
     public interface ILogModuleConfig
     {

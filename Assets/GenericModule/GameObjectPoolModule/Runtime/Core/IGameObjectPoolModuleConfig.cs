@@ -1,6 +1,6 @@
 
 
-namespace GameObjectPoolModule
+namespace CizaGameObjectPoolModule
 {
     public interface IGameObjectPoolModuleConfig
     {

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace AudioModule.Editor
+namespace CizaAudioModule.Editor
 {
     public class CreateAudioPrefabEditor : EditorWindow
     {

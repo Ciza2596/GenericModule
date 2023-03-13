@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using AudioModule.Implement;
+using CizaAudioModule.Implement;
 using Unity.VisualScripting;
 using IInitializable = Zenject.IInitializable;
 
-namespace AudioModule.Example1
+namespace CizaAudioModule.Example1
 {
     public class AudioModuleExampleController : IInitializable
     {

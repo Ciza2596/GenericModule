@@ -1,13 +1,13 @@
 using DataType.Implement;
-using SaveLoadModule;
-using SaveLoadModule.Implement;
+using CizaSaveLoadModule;
+using CizaSaveLoadModule.Implement;
 
 public class SaveLoadModuleInstaller
 {
 
     private Io _io;
     
-    public SaveLoadModule.SaveLoadModule CreateSaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig)
+    public CizaSaveLoadModule.SaveLoadModule CreateSaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig)
     {
         var fakeReflectionHelperConfig = new FakeReflectionHelperConfig();
         var reflectionHelper = new ReflectionHelper(fakeReflectionHelperConfig);
@@ -20,7 +20,7 @@ public class SaveLoadModuleInstaller
         var jsonWriterProvider = new JsonWriterProvider(fileStreamProvider, dataTypeController, reflectionHelper);
         var jsonReaderProvider = new JsonReaderProvider(fileStreamProvider, dataTypeController, reflectionHelper);
 
-        return new SaveLoadModule.SaveLoadModule(saveLoadModuleConfig, _io, jsonWriterProvider, jsonReaderProvider);
+        return new CizaSaveLoadModule.SaveLoadModule(saveLoadModuleConfig, _io, jsonWriterProvider, jsonReaderProvider);
     }
 
     public Io GetIo() => _io;

@@ -1,5 +1,5 @@
 
-namespace AddressablesModule
+namespace CizaAddressablesModule
 {
     public enum AssetTypes
     {

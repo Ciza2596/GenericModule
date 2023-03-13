@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public interface IStreamProvider
     {

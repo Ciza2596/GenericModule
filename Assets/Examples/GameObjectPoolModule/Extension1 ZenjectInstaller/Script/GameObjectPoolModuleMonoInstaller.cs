@@ -1,5 +1,5 @@
-using GameObjectPoolModule;
-using GameObjectPoolModule.Implement;
+using CizaGameObjectPoolModule;
+using CizaGameObjectPoolModule.Implement;
 using UnityEngine;
 using Zenject;
 
@@ -10,7 +10,7 @@ public class GameObjectPoolModuleMonoInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.Bind<GameObjectPoolModule.GameObjectPoolModule>().AsSingle();
+        Container.Bind<CizaGameObjectPoolModule.GameObjectPoolModule>().AsSingle();
         Container.Bind<IGameObjectPoolModuleConfig>().FromInstance(_gameObjectPoolModuleConfig);
     }
 }

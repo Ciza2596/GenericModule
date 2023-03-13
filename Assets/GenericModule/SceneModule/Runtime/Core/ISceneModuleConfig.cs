@@ -1,6 +1,6 @@
 
 
-namespace SceneModule
+namespace CizaSceneModule
 {
     public interface ISceneModuleConfig
     {

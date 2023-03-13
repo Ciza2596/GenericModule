@@ -1,6 +1,6 @@
 {
     "name": "PageModule",
-    "rootNamespace": "PageModule",
+    "rootNamespace": "CizaPageModule",
     "references": [
         "UniTask"
     ],

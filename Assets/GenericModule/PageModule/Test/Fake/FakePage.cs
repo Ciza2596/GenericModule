@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using PageModule;
+using CizaPageModule;
 using UnityEngine;
 
 public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable, IReleasable, IShowingStart,

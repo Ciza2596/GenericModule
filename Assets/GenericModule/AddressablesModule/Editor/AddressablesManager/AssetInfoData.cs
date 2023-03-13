@@ -1,6 +1,6 @@
 
 
-namespace AddressablesModule.Editor
+namespace CizaAddressablesModule.Editor
 {
     public class AssetInfoData
     {

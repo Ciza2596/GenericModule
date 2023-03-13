@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AddressablesModule.Example1
+namespace CizaAddressablesModule.Example1
 {
     public class NormalEntry : MonoBehaviour
     {

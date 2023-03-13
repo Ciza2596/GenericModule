@@ -1,6 +1,6 @@
 {
     "name": "GameObjectPoolModule",
-    "rootNamespace": "GameObjectPoolModule",
+    "rootNamespace": "CizaGameObjectPoolModule",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

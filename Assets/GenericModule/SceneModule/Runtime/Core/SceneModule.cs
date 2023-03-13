@@ -1,7 +1,7 @@
 using UnityEngine.Assertions;
 
 
-namespace SceneModule
+namespace CizaSceneModule
 {
     public class SceneModule
     {

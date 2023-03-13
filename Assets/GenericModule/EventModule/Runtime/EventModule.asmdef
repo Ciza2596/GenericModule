@@ -1,6 +1,6 @@
 {
     "name": "EventModule",
-    "rootNamespace": "EventModule",
+    "rootNamespace": "CizaEventModule",
     "references": [
         "UniTask"
     ],

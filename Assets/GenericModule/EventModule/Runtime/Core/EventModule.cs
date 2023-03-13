@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 
-namespace EventModule
+namespace CizaEventModule
 {
     public abstract class EventModule<TBaseEvent, TSyncEvent, TAsyncEvent>
         where TSyncEvent : TBaseEvent where TAsyncEvent : TBaseEvent

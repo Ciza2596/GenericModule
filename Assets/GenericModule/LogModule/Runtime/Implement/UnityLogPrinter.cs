@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LogModule.Implement
+namespace CizaLogModule.Implement
 {
     public class UnityLogPrinter : ILogPrinter
     {

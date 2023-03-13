@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public interface ISaveLoadModuleConfig
     {

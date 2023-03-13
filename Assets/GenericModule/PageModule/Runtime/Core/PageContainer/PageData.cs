@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace PageModule
+namespace CizaPageModule
 {
     internal class PageData
     {

@@ -1,9 +1,9 @@
+using CizaPageModule.Implement;
 using Cysharp.Threading.Tasks;
-using PageModule.Implement;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PageModule.Example1
+namespace CizaPageModule.Example1
 {
     public class TitlePage: BasePage, IShowingAnimated, IShowingComplete, IHidingStart
     {

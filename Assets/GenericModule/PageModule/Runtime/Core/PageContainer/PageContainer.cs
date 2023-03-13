@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
 
-namespace PageModule
+namespace CizaPageModule
 {
     public class PageContainer
     {

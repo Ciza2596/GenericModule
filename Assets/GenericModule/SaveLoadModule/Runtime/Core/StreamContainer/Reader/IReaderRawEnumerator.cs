@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public interface IReaderRawEnumerator
     {

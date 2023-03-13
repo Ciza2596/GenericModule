@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventModule
+namespace CizaEventModule
 {
     internal  class BaseEventDelegateContainer
     {

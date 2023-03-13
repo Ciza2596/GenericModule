@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SceneModule.Example1
+namespace CizaSceneModule.Example1
 {
     [Serializable]
     public class TransitionSceneData

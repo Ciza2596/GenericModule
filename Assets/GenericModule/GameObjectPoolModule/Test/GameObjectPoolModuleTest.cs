@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using GameObjectPoolModule;
+using CizaGameObjectPoolModule;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ public class GameObjectPoolModuleTest
     private string _prefabNamePrefix = "Prefab";
 
     private IGameObjectPoolModuleConfig _gameObjectPoolModuleConfig;
-    private GameObjectPoolModule.GameObjectPoolModule _gameObjectPoolModule;
+    private CizaGameObjectPoolModule.GameObjectPoolModule _gameObjectPoolModule;
 
     private Transform _spawnTransform;
 
@@ -19,7 +19,7 @@ public class GameObjectPoolModuleTest
     public void SetUp()
     {
         _gameObjectPoolModuleConfig = new FakeGameObjectPoolModuleConfig();
-        _gameObjectPoolModule = new GameObjectPoolModule.GameObjectPoolModule(_gameObjectPoolModuleConfig);
+        _gameObjectPoolModule = new CizaGameObjectPoolModule.GameObjectPoolModule(_gameObjectPoolModuleConfig);
 
         var spawnGameObject = new GameObject();
         _spawnTransform = spawnGameObject.transform;

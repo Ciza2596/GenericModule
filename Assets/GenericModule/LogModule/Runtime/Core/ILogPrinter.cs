@@ -1,6 +1,6 @@
 
 
-namespace LogModule
+namespace CizaLogModule
 {
     public interface ILogPrinter
     {

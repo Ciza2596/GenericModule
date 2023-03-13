@@ -1,6 +1,6 @@
 {
     "name": "SaveLoadModule",
-    "rootNamespace": "SaveLoadModule",
+    "rootNamespace": "CizaSaveLoadModule",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

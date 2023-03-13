@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 
-namespace GameObjectPoolModule
+namespace CizaGameObjectPoolModule
 {
     public class GameObjectPoolModule
     {

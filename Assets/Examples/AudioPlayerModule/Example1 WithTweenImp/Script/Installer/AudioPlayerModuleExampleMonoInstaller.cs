@@ -1,10 +1,10 @@
-using AudioModule.Implement;
+using CizaAudioModule.Implement;
 using GameCore.Implement;
 using GameCore.Infrastructure;
 using UnityEngine;
 using Zenject;
 
-namespace AudioPlayerModule.Example1
+namespace CizaAudioPlayerModule.Example1
 {
     public class AudioPlayerModuleExampleMonoInstaller : MonoInstaller
     {

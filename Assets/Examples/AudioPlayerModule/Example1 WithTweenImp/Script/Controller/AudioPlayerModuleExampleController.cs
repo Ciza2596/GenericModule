@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using AudioModule.Implement;
+using CizaAudioModule.Implement;
 using Zenject;
 
-namespace AudioPlayerModule.Example1
+namespace CizaAudioPlayerModule.Example1
 {
     public class AudioPlayerModuleExampleController : IInitializable
     {

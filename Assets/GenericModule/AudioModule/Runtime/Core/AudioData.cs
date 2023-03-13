@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 
-namespace AudioModule
+namespace CizaAudioModule
 {
     public class AudioData
     {

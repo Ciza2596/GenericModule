@@ -1,6 +1,6 @@
 using System;
 
-namespace SceneModule
+namespace CizaSceneModule
 {
     public interface ILoadingView
     {

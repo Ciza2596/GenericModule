@@ -1,7 +1,7 @@
-using PageModule.Implement;
+using CizaPageModule.Implement;
 using UnityEngine;
 
-namespace PageModule.Example1
+namespace CizaPageModule.Example1
 {
     public class PageModuleExample : MonoBehaviour
     {

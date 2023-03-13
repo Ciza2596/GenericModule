@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace GameObjectPoolModule
+namespace CizaGameObjectPoolModule
 {
     public interface IGameObjectResourceData
     {

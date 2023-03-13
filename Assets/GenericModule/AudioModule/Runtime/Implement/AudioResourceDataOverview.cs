@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AudioModule.Implement
+namespace CizaAudioModule.Implement
 {
     [CreateAssetMenu(fileName = "AudioResourceDataOverview", menuName = "AudioModule/AudioResourceDataOverview")]
     public class AudioResourceDataOverview : ScriptableObject

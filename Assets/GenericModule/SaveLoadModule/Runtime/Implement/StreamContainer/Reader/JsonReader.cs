@@ -6,7 +6,7 @@ using DataType;
 using UnityEngine.Assertions;
 
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class JsonReader : BaseReader
     {

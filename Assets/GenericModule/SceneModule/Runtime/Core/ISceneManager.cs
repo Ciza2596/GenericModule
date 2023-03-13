@@ -1,5 +1,5 @@
 
-namespace SceneModule
+namespace CizaSceneModule
 {
     public interface ISceneManager
     {

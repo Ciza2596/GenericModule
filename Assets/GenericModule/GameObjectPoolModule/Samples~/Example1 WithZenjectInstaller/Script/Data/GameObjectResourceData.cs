@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GameObjectPoolModule.Example1
+namespace CizaGameObjectPoolModule.Example1
 {
     [Serializable]
     public class GameObjectResourceData: IGameObjectResourceData

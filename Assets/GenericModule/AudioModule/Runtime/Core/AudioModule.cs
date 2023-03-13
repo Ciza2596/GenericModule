@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Audio;
 using Object = UnityEngine.Object;
 
-namespace AudioModule
+namespace CizaAudioModule
 {
     public class AudioModule
     {

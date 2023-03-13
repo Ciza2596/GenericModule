@@ -1,5 +1,5 @@
 
-namespace PageModule
+namespace CizaPageModule
 {
     public interface IInitializable 
     {

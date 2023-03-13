@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameObjectPoolModule.Implement
+namespace CizaGameObjectPoolModule.Implement
 {
     [CreateAssetMenu(fileName = "GameObjectPoolModuleConfig", menuName = "GameObjectPoolModule/GameObjectPoolModuleConfig")]
     public class GameObjectPoolModuleConfig : ScriptableObject, IGameObjectPoolModuleConfig

@@ -1,6 +1,6 @@
 {
     "name": "SaveLoadModule.Editor",
-    "rootNamespace": "SaveLoadModule.Editor",
+    "rootNamespace": "CizaSaveLoadModule.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"

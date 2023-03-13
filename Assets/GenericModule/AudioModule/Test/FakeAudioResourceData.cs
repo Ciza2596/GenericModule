@@ -1,4 +1,4 @@
-using AudioModule;
+using CizaAudioModule;
 using UnityEngine;
 
 public class FakeAudioResourceData : IAudioResourceData

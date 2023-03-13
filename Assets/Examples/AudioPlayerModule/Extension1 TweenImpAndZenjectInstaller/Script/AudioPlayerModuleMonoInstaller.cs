@@ -1,12 +1,12 @@
-using AudioPlayerModule;
-using AudioPlayerModule.Implement;
+using CizaAudioPlayerModule;
+using CizaAudioPlayerModule.Implement;
 using Zenject;
 
 public class AudioPlayerModuleMonoInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<AudioPlayerModule.AudioPlayerModule>().AsSingle();
+        Container.Bind<CizaAudioPlayerModule.AudioPlayerModule>().AsSingle();
         Container.Bind<ITween>().To<TweenImp>().AsSingle();
     }
 }

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AddressablesModule
+namespace CizaAddressablesModule
 {
     public static class AddressablesModuleExtension
     {

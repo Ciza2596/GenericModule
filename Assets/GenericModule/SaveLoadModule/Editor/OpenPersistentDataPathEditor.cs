@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SaveLoadModule.Editor
+namespace CizaSaveLoadModule.Editor
 {
     public class OpenPersistentDataPathEditor : EditorWindow
     {

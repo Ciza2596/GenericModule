@@ -1,5 +1,5 @@
-using AudioModule;
-using AudioModule.Implement;
+using CizaAudioModule;
+using CizaAudioModule.Implement;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +11,6 @@ public class AudioModuleMonoInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<IAudioModuleConfig>().FromInstance(_audioModuleConfig);
-        Container.Bind<AudioModule.AudioModule>().AsSingle();
+        Container.Bind<CizaAudioModule.AudioModule>().AsSingle();
     }
 }

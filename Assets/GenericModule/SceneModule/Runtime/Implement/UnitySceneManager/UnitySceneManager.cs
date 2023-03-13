@@ -1,6 +1,6 @@
 using UnityEngine.SceneManagement;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     public class UnitySceneManager : ISceneManager
     {

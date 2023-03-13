@@ -1,8 +1,8 @@
 {
   "name": "com.ciza.eventmodule",
-  "displayName": "Ciza.EventModule",
+  "displayName": "EventModule",
   "description": "EventModule.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

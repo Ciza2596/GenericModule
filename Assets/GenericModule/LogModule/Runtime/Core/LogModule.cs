@@ -1,6 +1,6 @@
 using UnityEngine.Assertions;
 
-namespace LogModule
+namespace CizaLogModule
 {
     public class LogModule
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     [CreateAssetMenu(fileName = "SceneModuleConfig", menuName = "SceneModule/SceneModuleConfig")]
     public class SceneModuleConfig : ScriptableObject, ISceneModuleConfig

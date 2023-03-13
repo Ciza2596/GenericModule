@@ -1,4 +1,4 @@
-namespace PageModule
+namespace CizaPageModule
 {
     public interface IFixedTickable
     {

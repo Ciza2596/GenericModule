@@ -1,4 +1,4 @@
-namespace SceneModule
+namespace CizaSceneModule
 {
     public interface IReleasingTask
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace SaveLoadModule.Example1
+namespace CizaSaveLoadModule.Example1
 {
     public class SaveLoadModuleExampleController : IInitializable
     {

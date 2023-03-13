@@ -8,7 +8,7 @@ using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AddressablesModule.Editor
+namespace CizaAddressablesModule.Editor
 {
     public class AddressablesAssetManager
     {

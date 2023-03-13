@@ -10,7 +10,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace AddressablesModule
+namespace CizaAddressablesModule
 {
     public class AddressablesModule
     {

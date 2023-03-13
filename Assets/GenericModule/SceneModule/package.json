@@ -1,8 +1,8 @@
 {
   "name": "com.ciza.scenemodule",
-  "displayName": "Ciza.SceneModule",
+  "displayName": "SceneModule",
   "description": "SceneModule.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

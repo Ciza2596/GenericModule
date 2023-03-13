@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SceneModule
+namespace CizaSceneModule
 {
     public class TransitionController
     {

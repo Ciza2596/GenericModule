@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PageModule.Implement
+namespace CizaPageModule.Implement
 {
     public abstract class BasePage : MonoBehaviour
     {

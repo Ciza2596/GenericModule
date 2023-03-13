@@ -1,9 +1,9 @@
-using LogModule;
+using CizaLogModule;
 using NUnit.Framework;
 
 public class LogModuleTest
 {
-    private LogModule.LogModule _logModule;
+    private CizaLogModule.LogModule _logModule;
     private FakeLogModuleConfig _fakeLogModuleConfig;
     private FakeLogPrinter _fakeLogPrinter;
 
@@ -14,7 +14,7 @@ public class LogModuleTest
     {
         _fakeLogModuleConfig = new FakeLogModuleConfig();
         _fakeLogPrinter = new FakeLogPrinter();
-        _logModule = new LogModule.LogModule(_fakeLogModuleConfig, _fakeLogPrinter);
+        _logModule = new CizaLogModule.LogModule(_fakeLogModuleConfig, _fakeLogPrinter);
     }
 
     [TestCase(true, MESSAGE)]

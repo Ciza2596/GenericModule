@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace GameObjectPoolModule.Example1
+namespace CizaGameObjectPoolModule.Example1
 {
     public class GameObjectPoolModuleExampleController : IInitializable
     {

@@ -2,18 +2,18 @@
 using System;
 using UnityEngine.SceneManagement;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     public class AddressablesModuleSceneManager : ISceneManager
     {
         //private variable
-        private AddressablesModule.AddressablesModule _addressablesModule;
+        private CizaAddressablesModule.AddressablesModule _addressablesModule;
         
         //public variable
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
 
         //public method
-        public AddressablesModuleSceneManager(AddressablesModule.AddressablesModule addressablesesModule)
+        public AddressablesModuleSceneManager(CizaAddressablesModule.AddressablesModule addressablesesModule)
             => _addressablesModule = addressablesesModule;
 
         public ILoadSceneAsync LoadScene(string sceneName, LoadModes loadMode, bool isActivateOnLoad)

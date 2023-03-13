@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace SceneModule.Example1
+namespace CizaSceneModule.Example1
 {
     public class SceneMonoInstaller : MonoInstaller
     {

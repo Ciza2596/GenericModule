@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace AudioModule.Implement
+namespace CizaAudioModule.Implement
 {
     [CreateAssetMenu(fileName = "AudioModuleConfig", menuName = "AudioModule/AudioModuleConfig")]
     public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace GameObjectPoolModule.Example1
+namespace CizaGameObjectPoolModule.Example1
 {
     public class GameObjectPoolModuleExampleMonoInstaller : MonoInstaller
     {

@@ -5,7 +5,7 @@ using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace AddressablesModule.Editor
+namespace CizaAddressablesModule.Editor
 {
     public class AddressablesAssetManagerEditor : EditorWindow
     {

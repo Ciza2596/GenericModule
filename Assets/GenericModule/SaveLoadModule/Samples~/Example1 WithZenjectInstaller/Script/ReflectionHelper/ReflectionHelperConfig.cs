@@ -1,7 +1,7 @@
 using System;
 using DataType.Implement;
 
-namespace SaveLoadModule.Example1
+namespace CizaSaveLoadModule.Example1
 {
     public class ReflectionHelperConfig : IReflectionHelperConfig
     {

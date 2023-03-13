@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class ReaderPropertyNameEnumerator: IEnumerable<string>
     {

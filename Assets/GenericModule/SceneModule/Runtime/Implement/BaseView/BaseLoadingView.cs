@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     public class BaseLoadingView : MonoBehaviour, ILoadingView
     {

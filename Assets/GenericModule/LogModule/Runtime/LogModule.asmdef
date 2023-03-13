@@ -1,6 +1,6 @@
 {
     "name": "LogModule",
-    "rootNamespace": "LogModule",
+    "rootNamespace": "CizaLogModule",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

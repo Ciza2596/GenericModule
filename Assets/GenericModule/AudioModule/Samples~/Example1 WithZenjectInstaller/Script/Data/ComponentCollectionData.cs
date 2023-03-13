@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace AudioModule.Example1
+namespace CizaAudioModule.Example1
 {
     [Serializable]
     public class ComponentCollectionData

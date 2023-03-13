@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AddressablesModule.Example1
+namespace CizaAddressablesModule.Example1
 {
     [CreateAssetMenu(fileName = "AddressMapListDataOverview", menuName = "AddressableModule/Example1/AddressMapListDataOverview")]
     public class AddressMapListDataOverview : ScriptableObject

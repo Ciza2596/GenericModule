@@ -1,6 +1,6 @@
 
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public struct DataTypeData
     {

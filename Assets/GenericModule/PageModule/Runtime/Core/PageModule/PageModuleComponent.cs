@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace PageModule
+namespace CizaPageModule
 {
     internal class PageModuleComponent : MonoBehaviour
     {

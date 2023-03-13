@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     [CreateAssetMenu(fileName = "TransitionControllerConfig", menuName = "SceneModule/TransitionControllerConfig")]
     public class TransitionControllerConfig : ScriptableObject, ITransitionControllerConfig

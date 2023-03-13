@@ -1,7 +1,7 @@
 using System;
 
 
-namespace AddressablesModule
+namespace CizaAddressablesModule
 {
     [Serializable]
     public class AddressMap   

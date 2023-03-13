@@ -1,7 +1,7 @@
 
 using System;
 
-namespace AudioPlayerModule
+namespace CizaAudioPlayerModule
 {
     public interface ITween
     {

@@ -2,7 +2,7 @@ using System.IO;
 using DataType;
 using UnityEngine.Assertions;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class JsonWriterProvider : IWriterProvider
     {

@@ -1,8 +1,8 @@
-using AudioModule.Implement;
+using CizaAudioModule.Implement;
 using UnityEngine;
 using Zenject;
 
-namespace AudioModule.Example1
+namespace CizaAudioModule.Example1
 {
     public class AudioModuleExampleMonoInstaller : MonoInstaller
     {

@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using GameCore.Infrastructure;
 
-namespace AudioPlayerModule.Implement
+namespace CizaAudioPlayerModule.Implement
 {
     public class TweenImp : ITween
     {

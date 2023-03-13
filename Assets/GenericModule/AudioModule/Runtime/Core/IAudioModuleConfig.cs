@@ -1,6 +1,6 @@
 using UnityEngine.Audio;
 
-namespace AudioModule
+namespace CizaAudioModule
 {
     public interface IAudioModuleConfig
     {

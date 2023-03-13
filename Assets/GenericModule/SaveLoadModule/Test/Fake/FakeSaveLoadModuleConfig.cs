@@ -1,5 +1,5 @@
 using System.Text;
-using SaveLoadModule;
+using CizaSaveLoadModule;
 using UnityEngine;
 
 public class FakeSaveLoadModuleConfig : ISaveLoadModuleConfig

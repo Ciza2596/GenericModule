@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace SaveLoadModule.Example1
+namespace CizaSaveLoadModule.Example1
 {
     [Serializable]
     public class ComponentCollectionData

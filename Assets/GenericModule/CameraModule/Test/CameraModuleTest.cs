@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraModuleTest
 {
-    private CameraModule.CameraModule _cameraModule;
+    private CizaCameraModule.CameraModule _cameraModule;
 
     private Camera _camera;
 
@@ -13,7 +13,7 @@ public class CameraModuleTest
     public void SetUp()
     {
         
-        _cameraModule = new CameraModule.CameraModule();
+        _cameraModule = new CizaCameraModule.CameraModule();
 
         var cameraGameObject = new GameObject();
         _camera = cameraGameObject.AddComponent<Camera>();

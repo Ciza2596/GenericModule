@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     [Serializable]
     public class ViewPrefabMap

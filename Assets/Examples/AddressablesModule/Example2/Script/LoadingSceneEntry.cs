@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace AddressablesModule.Example2
+namespace CizaAddressablesModule.Example2
 {
     public class LoadingSceneEntry : MonoBehaviour
     {

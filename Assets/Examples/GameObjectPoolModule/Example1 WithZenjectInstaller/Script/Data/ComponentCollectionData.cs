@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace GameObjectPoolModule.Example1
+namespace CizaGameObjectPoolModule.Example1
 {
     [Serializable]
     public class ComponentCollectionData

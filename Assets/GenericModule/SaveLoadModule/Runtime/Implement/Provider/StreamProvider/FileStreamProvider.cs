@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class FileStreamProvider : IStreamProvider
     {

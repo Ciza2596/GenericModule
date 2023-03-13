@@ -1,11 +1,11 @@
 using UnityEngine.SceneManagement;
 
-namespace SceneModule.Implement
+namespace CizaSceneModule.Implement
 {
     public class AddressablesModuleSceneManagerLoadSceneAsync : ILoadSceneAsync
     {
         //private variable
-        private readonly AddressablesModule.AddressablesModule _addressablesModule;
+        private readonly CizaAddressablesModule.AddressablesModule _addressablesModule;
         
         private string _sceneName;
         private bool _isDone = false;
@@ -14,7 +14,7 @@ namespace SceneModule.Implement
         public bool IsDone => _isDone;
 
         //public method
-        public AddressablesModuleSceneManagerLoadSceneAsync(AddressablesModule.AddressablesModule addressablesModule) =>
+        public AddressablesModuleSceneManagerLoadSceneAsync(CizaAddressablesModule.AddressablesModule addressablesModule) =>
             _addressablesModule = addressablesModule;
 
 

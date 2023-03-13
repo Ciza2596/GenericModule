@@ -1,7 +1,7 @@
 using System.Text;
 using UnityEngine;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     [CreateAssetMenu(fileName = "SaveLoadModuleConfig", menuName = "SaveLoadModule/SaveLoadModuleConfig")]
     public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig

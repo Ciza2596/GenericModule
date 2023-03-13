@@ -1,4 +1,4 @@
-using GameObjectPoolModule;
+using CizaGameObjectPoolModule;
 
 public class FakeGameObjectPoolModuleConfig : IGameObjectPoolModuleConfig
 {

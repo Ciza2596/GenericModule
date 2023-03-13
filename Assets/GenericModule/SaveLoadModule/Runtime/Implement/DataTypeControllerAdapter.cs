@@ -2,7 +2,7 @@ using System;
 using DataType;
 using DataType.Implement;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class DataTypeControllerAdapter : IDataTypeController
     {

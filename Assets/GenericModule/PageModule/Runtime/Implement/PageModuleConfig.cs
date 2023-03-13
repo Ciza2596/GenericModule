@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace PageModule.Implement
+namespace CizaPageModule.Implement
 {
     [CreateAssetMenu(fileName = "PageModuleConfig", menuName = "PageModuleModule/PageModuleConfig")]
     public class PageModuleConfig : ScriptableObject, IPageModuleConfig

@@ -1,12 +1,12 @@
 using NUnit.Framework;
-using SaveLoadModule.Implement;
+using CizaSaveLoadModule.Implement;
 
 public abstract class BaseTypeTest
 {
     protected const string FILE_PATH = "TypeTest.slmf";
     protected const string SAVE_KEY = "KEY";
 
-    protected SaveLoadModule.SaveLoadModule _saveLoadModule;
+    protected CizaSaveLoadModule.SaveLoadModule _saveLoadModule;
     protected FakeSaveLoadModuleConfig _saveLoadModuleConfig;
 
     private Io _io;

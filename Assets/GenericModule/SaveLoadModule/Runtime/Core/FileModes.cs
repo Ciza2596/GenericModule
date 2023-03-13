@@ -1,6 +1,6 @@
 
 
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public enum FileModes
     {

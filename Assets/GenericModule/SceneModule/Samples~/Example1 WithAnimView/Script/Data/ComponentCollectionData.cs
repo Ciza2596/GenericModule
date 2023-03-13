@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SceneModule.Example1
+namespace CizaSceneModule.Example1
 {
     [Serializable]
     public class ComponentCollectionData

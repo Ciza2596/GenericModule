@@ -1,4 +1,4 @@
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public interface IReader
     {

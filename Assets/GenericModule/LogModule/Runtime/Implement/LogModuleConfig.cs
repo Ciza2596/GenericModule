@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace LogModule.Implement
+namespace CizaLogModule.Implement
 {
     [CreateAssetMenu(fileName = "LogModuleConfig", menuName = "LogModule/LogModuleConfig")]
     public class LogModuleConfig : ScriptableObject, ILogModuleConfig

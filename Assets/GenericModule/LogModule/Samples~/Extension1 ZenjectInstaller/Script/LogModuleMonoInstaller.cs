@@ -1,5 +1,5 @@
-using LogModule;
-using LogModule.Implement;
+using CizaLogModule;
+using CizaLogModule.Implement;
 using UnityEngine;
 using Zenject;
 
@@ -10,7 +10,7 @@ public class LogModuleMonoInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.Bind<LogModule.LogModule>().AsSingle();
+        Container.Bind<CizaLogModule.LogModule>().AsSingle();
         Container.Bind<ILogModuleConfig>().FromInstance(_logModuleConfig);
     }
 }

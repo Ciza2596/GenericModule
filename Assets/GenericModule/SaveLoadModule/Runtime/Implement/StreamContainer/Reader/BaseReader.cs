@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DataType;
 using UnityEngine.Assertions;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public abstract class BaseReader : IReader, DataType.IReader
     {

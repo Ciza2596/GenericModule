@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace EventModule
+namespace CizaEventModule
 {
     internal class AsyncEventDelegateContainer : BaseEventDelegateContainer
     {

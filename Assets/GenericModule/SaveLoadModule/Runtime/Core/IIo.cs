@@ -1,5 +1,5 @@
 
-namespace SaveLoadModule
+namespace CizaSaveLoadModule
 {
     public interface IIo
     {

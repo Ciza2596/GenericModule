@@ -1,6 +1,6 @@
 {
     "name": "CameraModule",
-    "rootNamespace": "CameraModule",
+    "rootNamespace": "CizaCameraModule",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

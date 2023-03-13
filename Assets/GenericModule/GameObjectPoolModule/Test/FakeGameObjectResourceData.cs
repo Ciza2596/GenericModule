@@ -1,4 +1,4 @@
-using GameObjectPoolModule;
+using CizaGameObjectPoolModule;
 using UnityEngine;
 
 public class FakeGameObjectResourceData : IGameObjectResourceData

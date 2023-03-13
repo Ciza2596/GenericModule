@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using DataType;
 
-namespace SaveLoadModule.Implement
+namespace CizaSaveLoadModule.Implement
 {
     public class JsonWriter : BaseWriter
     {

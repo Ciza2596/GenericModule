@@ -1,6 +1,6 @@
 {
     "name": "AudioModule.Editor",
-    "rootNamespace": "AudioModule.Editor",
+    "rootNamespace": "CizaAudioModule.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"

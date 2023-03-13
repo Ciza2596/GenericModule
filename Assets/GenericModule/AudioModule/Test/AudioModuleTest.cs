@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using AudioModule;
+using CizaAudioModule;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ using UnityEngine;
 public class AudioModuleTest
 {
     private FakeAudioModuleConfig _fakeAudioModuleConfig;
-    private AudioModule.AudioModule _audioModule;
+    private CizaAudioModule.AudioModule _audioModule;
 
     private List<FakeAudioResourceData> _fakeAudioResourceDatas;
 
@@ -18,7 +18,7 @@ public class AudioModuleTest
     public void SetUp()
     {
         _fakeAudioModuleConfig = new FakeAudioModuleConfig();
-        _audioModule = new AudioModule.AudioModule(_fakeAudioModuleConfig);
+        _audioModule = new CizaAudioModule.AudioModule(_fakeAudioModuleConfig);
 
         _fakeAudioResourceDatas = new List<FakeAudioResourceData>();
 

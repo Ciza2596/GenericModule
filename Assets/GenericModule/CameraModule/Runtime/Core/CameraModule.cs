@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CameraModule
+namespace CizaCameraModule
 {
     public class CameraModule
     {

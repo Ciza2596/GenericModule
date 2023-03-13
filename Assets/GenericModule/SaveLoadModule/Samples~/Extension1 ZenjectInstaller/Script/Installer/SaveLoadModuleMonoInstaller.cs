@@ -1,6 +1,6 @@
 using DataType;
-using SaveLoadModule;
-using SaveLoadModule.Implement;
+using CizaSaveLoadModule;
+using CizaSaveLoadModule.Implement;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +11,7 @@ public class SaveLoadModuleMonoInstaller : MonoInstaller
     
     public override void InstallBindings()
     {
-        Container.Bind<SaveLoadModule.SaveLoadModule>().AsSingle().NonLazy();
+        Container.Bind<CizaSaveLoadModule.SaveLoadModule>().AsSingle().NonLazy();
         Container.Bind<ISaveLoadModuleConfig>().FromInstance(_saveLoadModuleConfig);
         
         Container.Bind<IIo>().To<Io>().AsSingle();

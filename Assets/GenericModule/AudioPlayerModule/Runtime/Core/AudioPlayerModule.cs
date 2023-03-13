@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AudioModule;
+using CizaAudioModule;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 
-namespace AudioPlayerModule
+namespace CizaAudioPlayerModule
 {
     public class AudioPlayerModule
     {
         //private variable
         private const float DEFAULT_FADE_TIME = 0.25f;
 
-        private readonly AudioModule.AudioModule _audioModule;
+        private readonly CizaAudioModule.AudioModule _audioModule;
         private readonly ITween _tween;
 
         private readonly Dictionary<string, List<string>> _channelIdsMaps = new Dictionary<string, List<string>>();
@@ -25,7 +25,7 @@ namespace AudioPlayerModule
 
 
         //public method
-        public AudioPlayerModule(AudioModule.AudioModule audioModule, ITween tween)
+        public AudioPlayerModule(CizaAudioModule.AudioModule audioModule, ITween tween)
         {
             _audioModule = audioModule;
             _tween = tween;

@@ -1,5 +1,5 @@
-using SceneModule;
-using SceneModule.Implement;
+using CizaSceneModule;
+using CizaSceneModule.Implement;
 using UnityEngine;
 using Zenject;
 
@@ -10,9 +10,9 @@ public class SceneModuleWithAddressablesModuleSceneManagerMonoInstaller : MonoIn
 
     public override void InstallBindings()
     {
-        Container.Bind<AddressablesModule.AddressablesModule>().AsSingle();
+        Container.Bind<CizaAddressablesModule.AddressablesModule>().AsSingle();
         Container.Bind<ISceneModuleConfig>().FromInstance(_sceneModuleConfig);
         Container.BindInterfacesAndSelfTo<AddressablesModuleSceneManager>().AsSingle();
-        Container.Bind<SceneModule.SceneModule>().AsSingle();
+        Container.Bind<CizaSceneModule.SceneModule>().AsSingle();
     }
 }

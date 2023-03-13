@@ -110,7 +110,7 @@ Support type:
   2. Collection: array, array2D, array3D, dictionary, hashset, list, queue, stack
   3. Unity: vector2, vector2Int, vector3, vector3Int
 
-- Example
+- **Example**
 
 - **Operate SaveModuleConfig**
     1. Create SaveModuleConfig:

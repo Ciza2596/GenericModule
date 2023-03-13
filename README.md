@@ -35,13 +35,13 @@ public class LogModuleExample : MonoBehaviour
 }
 ```
 - **Operate LogModuleConfig**
-    1. Create LogModuleConfig:
+  1. Create LogModuleConfig:
     
-       <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
+     <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
     
-    2. LogModuleConfig Inspector:
+  2. LogModuleConfig Inspector:
     
-       <img src="Document/LogModule/Image/LogModuleInspector.png"/>
+     <img src="Document/LogModule/Image/LogModuleInspector.png"/>
 
 
 

@@ -42,6 +42,10 @@ public class LogModuleExample : MonoBehaviour
   2. LogModuleConfig Inspector:
     
      <img src="Document/LogModule/Image/LogModuleInspector.png"/>
+     
+  3. Drop LogModuleConfig to script:
+    
+     <img src="Document/LogModule/Image/LogModuleInspector.png"/>
 
 
 

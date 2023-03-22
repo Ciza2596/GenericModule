@@ -80,7 +80,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/EventMod
 ```
 ### Dependency:
 ```
-"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 
 ### Manual:
@@ -159,7 +159,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Addressa
 ```
 ### Dependency:
 ```
-"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 
 ### Manual:

@@ -5,7 +5,7 @@ namespace CizaSaveLoadModule.Editor
 {
     public class OpenPersistentDataPathEditor : EditorWindow
     {
-        [MenuItem("Tools/CizaModule/OpenPersistentDataPath", false, 10000)]
+        [MenuItem("Tools/Ciza/OpenPersistentDataPath", false, 10000)]
         private static void OpenPersistentDataPath() =>
             EditorUtility.RevealInFinder(Application.persistentDataPath);
     }

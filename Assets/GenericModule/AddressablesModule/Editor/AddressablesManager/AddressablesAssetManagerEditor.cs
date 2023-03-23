@@ -162,7 +162,7 @@ namespace CizaAddressablesModule.Editor
 
 
         //private method
-        [MenuItem("Tools/CizaModule/AddressablesAssetManager")]
+        [MenuItem("Tools/Ciza/AddressablesAssetManager")]
         private static void ShowWindow() => GetWindow<AddressablesAssetManagerEditor>("AddressablesAssetManager");
 
         private void OnGUI()

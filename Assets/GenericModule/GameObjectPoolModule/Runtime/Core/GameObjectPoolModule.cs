@@ -9,10 +9,10 @@ namespace CizaGameObjectPoolModule
     public class GameObjectPoolModule
     {
         //private variable
-        private readonly string _poolRootName;
+
+        private readonly IGameObjectPoolModuleConfig _gameObjectPoolModuleConfig;
         private Transform _poolRootTransform;
-        private readonly string _poolPrefix;
-        private readonly string _poolSuffix;
+
         private readonly Dictionary<string, Transform> _poolTransforms = new Dictionary<string, Transform>();
 
 
@@ -28,13 +28,8 @@ namespace CizaGameObjectPoolModule
 
 
         //constructor
-        public GameObjectPoolModule(IGameObjectPoolModuleConfig gameObjectPoolModuleConfig)
-        {
-            _poolRootName = gameObjectPoolModuleConfig.PoolRootName;
-            
-            _poolPrefix = gameObjectPoolModuleConfig.PoolPrefix;
-            _poolSuffix = gameObjectPoolModuleConfig.PoolSuffix;
-        }
+        public GameObjectPoolModule(IGameObjectPoolModuleConfig gameObjectPoolModuleConfig) =>
+            _gameObjectPoolModuleConfig = gameObjectPoolModuleConfig;
 
 
         //public method
@@ -46,7 +41,7 @@ namespace CizaGameObjectPoolModule
             
             if (_poolRootTransform is null)
             {
-                var poolRootGameObject = new GameObject(_poolRootName);
+                var poolRootGameObject = new GameObject(_gameObjectPoolModuleConfig.PoolRootName);
                 _poolRootTransform = poolRootGameObject.transform;
             }
         }
@@ -63,7 +58,7 @@ namespace CizaGameObjectPoolModule
 
         public bool TryGetPoolRootName(out string poolRootName)
         {
-            poolRootName = _poolRootName;
+            poolRootName = _gameObjectPoolModuleConfig.PoolRootName;
             return _poolRootTransform != null;
         }
 
@@ -184,7 +179,7 @@ namespace CizaGameObjectPoolModule
 
 
         //private method
-        private string GetPoolName(string key) => _poolPrefix + key + _poolSuffix;
+        private string GetPoolName(string key) => _gameObjectPoolModuleConfig.PoolPrefix + key + _gameObjectPoolModuleConfig.PoolSuffix;
 
         private void CreatePool(string key)
         {

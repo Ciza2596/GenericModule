@@ -2,7 +2,7 @@
   "name": "com.ciza.gameobjectpoolmodule",
   "displayName": "GameObjectPoolModule",
   "description": "GameObjectPoolModule.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

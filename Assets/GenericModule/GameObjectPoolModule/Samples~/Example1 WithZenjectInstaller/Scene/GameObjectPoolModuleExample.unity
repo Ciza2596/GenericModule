@@ -2267,7 +2267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentCollectionData:
-    _gameObjectResourceDatas:
+    _prefabMapDatas:
     - _key: Circle
       _prefab: {fileID: 5109187238683279012, guid: f5c00a9a79e41488e871abb318e00aef, type: 3}
     _gameObjectParentTransform: {fileID: 2115873761}

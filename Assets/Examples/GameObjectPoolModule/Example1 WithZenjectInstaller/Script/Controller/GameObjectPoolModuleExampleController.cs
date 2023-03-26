@@ -17,7 +17,7 @@ namespace CizaGameObjectPoolModule.Example1
         {
             _componentCollectionData = componentCollectionData;
             _gameObjectPoolModule = gameObjectPoolModule;
-            _gameObjectPoolModule.Initialize(_componentCollectionData.GameObjectResourceDatas);
+            _gameObjectPoolModule.Initialize(_componentCollectionData.GetPrefabMap());
         }
 
 

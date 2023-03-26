@@ -30,11 +30,11 @@ public class GameObjectPoolModuleTest
     {
         //arrange
         Check_GameObjectPoolModule_Is_Uninitialized();
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
 
 
         //act
-        _gameObjectPoolModule.Initialize(gameObjectResourceDatas);
+        _gameObjectPoolModule.Initialize(prefabMap);
 
 
         //assert
@@ -45,8 +45,8 @@ public class GameObjectPoolModuleTest
     public void _02_Release()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
 
 
         //act
@@ -61,14 +61,14 @@ public class GameObjectPoolModuleTest
     public void _03_Spawn_By_Key_ParentTransform()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
 
         Check_SpawnTransform_Hasnt_Children();
 
 
         //act
-        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(0, prefabMap);
 
 
         //assert
@@ -79,12 +79,12 @@ public class GameObjectPoolModuleTest
     public void _05_DeSpawn_By_GameObjects()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
         Check_SpawnTransform_Hasnt_Children();
 
-        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,2, gameObjectResourceDatas);
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,2, prefabMap);
         Check_SpawnTransform_Has_Children(2);
         
         
@@ -100,12 +100,12 @@ public class GameObjectPoolModuleTest
     public void _06_DeSpawn_By_GameObject()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
         Check_SpawnTransform_Hasnt_Children();
 
-        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,1, gameObjectResourceDatas);
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,1, prefabMap);
         Check_SpawnTransform_Has_Children();
 
         
@@ -122,18 +122,18 @@ public class GameObjectPoolModuleTest
     public void _07_DeSpawn_By_Key()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
         Check_SpawnTransform_Hasnt_Children();
 
-        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
-        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(0, prefabMap);
+        Spawn_GameObject_To_SpawnTransform(1, prefabMap);
         Check_SpawnTransform_Has_Children(2);
 
         
         //act
-        var key = GetKey(0, gameObjectResourceDatas);
+        var key = GetKey(0, prefabMap);
         _gameObjectPoolModule.DeSpawn(key);
 
 
@@ -145,13 +145,13 @@ public class GameObjectPoolModuleTest
     public void _08_DeSpawnAll()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
         Check_SpawnTransform_Hasnt_Children();
 
-        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
-        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(0, prefabMap);
+        Spawn_GameObject_To_SpawnTransform(1, prefabMap);
         Check_SpawnTransform_Has_Children(2);
 
         
@@ -167,13 +167,13 @@ public class GameObjectPoolModuleTest
     public void _09_ReleasePool()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(1, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
-        var key = GetKey(0, gameObjectResourceDatas);
+        var key = GetKey(0, prefabMap);
         Check_Not_Exist_Pool(key);
         
-        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(0, prefabMap);
         Check_Exist_Pool(key);
         
         
@@ -189,14 +189,14 @@ public class GameObjectPoolModuleTest
     public void _10_ReleaseAllPool()
     {
         //arrange
-        var gameObjectResourceDatas = CreateGameObjectResourceDatas(2, _keyPrefix, _prefabNamePrefix);
-        Check_GameObjectPoolModule_Is_Initialized(gameObjectResourceDatas);
+        var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
+        Check_GameObjectPoolModule_Is_Initialized(prefabMap);
         
-        var key1 = GetKey(0, gameObjectResourceDatas);
-        var key2 = GetKey(1, gameObjectResourceDatas);
+        var key1 = GetKey(0, prefabMap);
+        var key2 = GetKey(1, prefabMap);
 
-        Spawn_GameObject_To_SpawnTransform(0, gameObjectResourceDatas);
-        Spawn_GameObject_To_SpawnTransform(1, gameObjectResourceDatas);
+        Spawn_GameObject_To_SpawnTransform(0, prefabMap);
+        Spawn_GameObject_To_SpawnTransform(1, prefabMap);
 
         Check_Exist_Pool(key1);
         Check_Exist_Pool(key2);
@@ -214,29 +214,27 @@ public class GameObjectPoolModuleTest
 
 
     //private method
-    private IGameObjectResourceData[] CreateGameObjectResourceDatas(int length, string keyPrefix,
+    private Dictionary<string, GameObject> CreatePrefabMap(int length, string keyPrefix,
         string prefabNamePrefix)
     {
         Assert.IsTrue(length > 0, "Length less one.");
 
-        var gameObjectResourceDatas = new List<FakeGameObjectResourceData>();
+        var prefabMap = new Dictionary<string, GameObject>();
 
         for (int i = 0; i < length; i++)
         {
             var key = $"{keyPrefix}_{i}";
             var prefabName = $"{prefabNamePrefix}_{i}";
             var prefab = new GameObject(prefabName);
-
-            var fakeGameObjectResourceData = new FakeGameObjectResourceData(key, prefab);
-            gameObjectResourceDatas.Add(fakeGameObjectResourceData);
+            prefabMap.Add(key, prefab);
         }
 
-        return gameObjectResourceDatas.ToArray<IGameObjectResourceData>();
+        return prefabMap;
     }
 
-    private void Check_GameObjectPoolModule_Is_Initialized(IGameObjectResourceData[] gameObjectResourceDatas)
+    private void Check_GameObjectPoolModule_Is_Initialized(Dictionary<string, GameObject> prefabMap)
     {
-        _gameObjectPoolModule.Initialize(gameObjectResourceDatas);
+        _gameObjectPoolModule.Initialize(prefabMap);
         Check_GameObjectPoolModule_Is_Initialized();
     }
 
@@ -267,29 +265,28 @@ public class GameObjectPoolModuleTest
     }
 
     private GameObject Spawn_GameObject_To_SpawnTransform(int keyIndex,
-        IGameObjectResourceData[] gameObjectResourceDatas)
+        Dictionary<string, GameObject> prefabMap)
     {
-        var gameObjectResourceData = gameObjectResourceDatas[keyIndex];
-        var key = gameObjectResourceData.Key;
+        var key = prefabMap.Keys.ToArray()[keyIndex];
         return _gameObjectPoolModule.Spawn(key, _spawnTransform);
     }
 
     private GameObject[] Spawn_GameObjects_To_SpawnTransform(int keyIndex, int count,
-        IGameObjectResourceData[] gameObjectResourceDatas)
+        Dictionary<string, GameObject> prefabMap)
     {
         var gameObjects = new List<GameObject>();
         for (int i = 0; i < count; i++)
         {
-            var gameObject = Spawn_GameObject_To_SpawnTransform(keyIndex, gameObjectResourceDatas);
+            var gameObject = Spawn_GameObject_To_SpawnTransform(keyIndex, prefabMap);
             gameObjects.Add(gameObject);
         }
 
         return gameObjects.ToArray();
     }
 
-    private string GetKey(int keyIndex, IGameObjectResourceData[] gameObjectResourceDatas)
+    private string GetKey(int keyIndex, Dictionary<string, GameObject> prefabMap)
     {
-        var gameObjectResourceData = gameObjectResourceDatas[keyIndex];
-        return gameObjectResourceData.Key;
+        var key = prefabMap.Keys.ToArray()[keyIndex];
+        return key;
     }
 }

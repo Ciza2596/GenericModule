@@ -20,11 +20,10 @@ namespace CizaGameObjectPoolModule
         private readonly Dictionary<GameObject, string> _gameObjectKeyMaps = new Dictionary<GameObject, string>();
         private readonly List<GameObject> _usingGameObjects = new List<GameObject>();
 
+        private Dictionary<string, GameObject> _prefabMap;
 
-        private IGameObjectResourceData[] _gameObjectResourceDatas;
-        
         //public variable
-        public bool IsInitialized => _gameObjectResourceDatas != null && _poolRootTransform != null;
+        public bool IsInitialized => _prefabMap != null && _poolRootTransform != null;
 
 
         //constructor
@@ -33,12 +32,12 @@ namespace CizaGameObjectPoolModule
 
 
         //public method
-        public void Initialize(IGameObjectResourceData[] gameObjectResourceDatas)
+        public void Initialize(Dictionary<string, GameObject> prefabMap)
         {
-            Assert.IsNotNull(gameObjectResourceDatas,"[GameObjectPoolModule::Initialize] GameObjectResourceDatas is null.");
-            
-            _gameObjectResourceDatas = gameObjectResourceDatas;
-            
+            Assert.IsNotNull(prefabMap, "[GameObjectPoolModule::Initialize] PrefabMap is null.");
+
+            _prefabMap = prefabMap;
+
             if (_poolRootTransform is null)
             {
                 var poolRootGameObject = new GameObject(_gameObjectPoolModuleConfig.PoolRootName);
@@ -48,9 +47,9 @@ namespace CizaGameObjectPoolModule
 
         public void Release()
         {
-            _gameObjectResourceDatas = null;
+            _prefabMap = null;
             ReleaseAllPool();
-            
+
             var poolRootGameObject = _poolRootTransform.gameObject;
             _poolRootTransform = null;
             DestroyOrImmediate(poolRootGameObject);
@@ -76,6 +75,12 @@ namespace CizaGameObjectPoolModule
 
         public GameObject Spawn(string key, Vector3 localPosition, Transform parentTransform = null)
         {
+            if (!_prefabMap.ContainsKey(key))
+            {
+                Debug.LogWarning($"[GameObjectPoolModule::Spawn] Not find prefab by key: {key}.");
+                return null;
+            }
+
             if (!_pools.ContainsKey(key))
                 CreatePool(key);
 
@@ -150,7 +155,7 @@ namespace CizaGameObjectPoolModule
             {
                 var gameObject = keyValuePair.Key;
 
-                if(_usingGameObjects.Contains(gameObject)) 
+                if (_usingGameObjects.Contains(gameObject))
                     DeSpawn(gameObject);
                 _gameObjectKeyMaps.Remove(gameObject);
             }
@@ -195,13 +200,7 @@ namespace CizaGameObjectPoolModule
 
         private GameObject CreateGameObject(string key)
         {
-            var gameObjectResourceData = _gameObjectResourceDatas.First(data => data.Key == key);
-            Assert.IsNotNull(gameObjectResourceData,
-                $"[PoolModule::CreateGameObject] Not find gameObjectResourceData. Please check key: {key}.");
-
-            var prefab = gameObjectResourceData.Prefab;
-            Assert.IsNotNull(prefab, $"[PoolModule::CreateGameObject] Not find prefab. Please check key: {key}.");
-
+            var prefab = _prefabMap[key];
             var gameObject = Object.Instantiate(prefab);
             _gameObjectKeyMaps.Add(gameObject, key);
 
@@ -216,13 +215,13 @@ namespace CizaGameObjectPoolModule
             foreach (var usingGameObject in usingGameObjects)
             {
                 var usingKey = _gameObjectKeyMaps[usingGameObject];
-                if(usingKey == key)
+                if (usingKey == key)
                     usingGameObjectsByKey.Add(usingGameObject);
             }
 
             return usingGameObjectsByKey.ToArray();
         }
-        
+
         private void DestroyOrImmediate(Object obj)
         {
             if (Application.isPlaying)

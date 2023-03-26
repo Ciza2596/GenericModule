@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CizaGameObjectPoolModule.Example1
 {
     [Serializable]
-    public class GameObjectResourceData: IGameObjectResourceData
+    public class PrefabMapData
     {
 
         [SerializeField] private string _key;

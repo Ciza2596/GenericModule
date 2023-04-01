@@ -75,7 +75,7 @@ namespace CizaTimerModule
             return true;
         }
 
-        public string AddOnceTimer(float triggerTime, Action action)
+        public string AddOnceTimer(float triggerTime, Action<string> action)
         {
             if (!IsInitialized)
             {
@@ -87,7 +87,7 @@ namespace CizaTimerModule
         }
 
 
-        public string AddLoopTimer(float triggerTime, Action action)
+        public string AddLoopTimer(float triggerTime, Action<string> action)
         {
             if (!IsInitialized)
             {
@@ -118,7 +118,7 @@ namespace CizaTimerModule
 
 
         // private method
-        private string AddTimer(bool isOnce, float triggerTime, Action action)
+        private string AddTimer(bool isOnce, float triggerTime, Action<string> action)
         {
             var timerId = Guid.NewGuid().ToString();
             var timerData = new Timer(timerId, isOnce, triggerTime, action);

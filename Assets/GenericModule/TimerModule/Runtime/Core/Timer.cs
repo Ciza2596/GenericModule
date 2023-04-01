@@ -4,9 +4,9 @@ namespace CizaTimerModule
 {
     internal class Timer : TimerReadModel
     {
-        private Action _action;
+        private Action<string> _action;
 
-        public Timer(string id, bool isOnce, float triggerTime, Action action)
+        public Timer(string id, bool isOnce, float triggerTime, Action<string> action)
         {
             Id = id;
             IsOnce = isOnce;
@@ -25,6 +25,6 @@ namespace CizaTimerModule
         public void AddDeltaTime(float deltaTime) =>
             Time += deltaTime;
 
-        public void Invoke() => _action?.Invoke();
+        public void Invoke() => _action?.Invoke(Id);
     }
 }

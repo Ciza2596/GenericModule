@@ -127,7 +127,7 @@ public class TimerModuleTest
         Assert.AreEqual(SAY_HELLO, sayHello, "Action is not trigger.");
         Check_Timer_Is_Exist(timerId, false);
 
-        void SayHello() =>
+        void SayHello(string timerId) =>
             sayHello = SAY_HELLO;
     }
 
@@ -147,7 +147,7 @@ public class TimerModuleTest
         Assert.AreEqual(SAY_HELLO, sayHello, "Action is not trigger.");
         Check_Timer_Is_Exist(timerId, true);
 
-        void SayHello() =>
+        void SayHello(string timerId) =>
             sayHello = SAY_HELLO;
     }
 

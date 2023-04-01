@@ -25,6 +25,8 @@ namespace CizaTimerModule
         public void AddDeltaTime(float deltaTime) =>
             Time += deltaTime;
 
+        public void ResetTime() => Time = 0;
+
         public void Invoke() => _action?.Invoke(Id);
     }
 }

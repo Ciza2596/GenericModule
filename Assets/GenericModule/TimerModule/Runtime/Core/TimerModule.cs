@@ -49,6 +49,7 @@ namespace CizaTimerModule
 
                 if (timer.Time >= timer.TriggerTime)
                 {
+                    timer.ResetTime();
                     timer.Invoke();
                     if (timer.IsOnce)
                         RemoveTimer(timer.Id);

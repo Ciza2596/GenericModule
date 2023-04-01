@@ -5,6 +5,7 @@ module | Test |
 --- | :---: |
 [LogModule](#logmodule) | ✔️ |
 [PageModule](#pagemodule) | ✔️ |
+[TimerModule](#timermodule) | ✔️ |
 [AudioModule](#audiomodule) | ✔️ |
 [EventModule](#eventmodule) | ✔️ |
 [SaveLoadModule](#saveloadmodule) | ✔️ |
@@ -63,6 +64,14 @@ Dependency [UniTask](https://github.com/Cysharp/UniTask)
 
 PageModule manual.
 
+
+## TimerModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TimerModule
+```
+
+### Manual:
+TimerModule manual.
 
 
 ## AudioModule

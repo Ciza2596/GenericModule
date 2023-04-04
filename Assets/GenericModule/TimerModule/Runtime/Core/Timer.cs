@@ -6,7 +6,7 @@ namespace CizaTimerModule
     {
         private Action<string> _action;
 
-        public Timer(string id, bool isOnce, float triggerTime, Action<string> action)
+        public void Initialize(string id, bool isOnce, float triggerTime, Action<string> action)
         {
             Id = id;
             IsOnce = isOnce;
@@ -14,11 +14,11 @@ namespace CizaTimerModule
             _action = action;
         }
 
-        public string Id { get; }
+        public string Id { get; private set; }
 
         
-        public bool IsOnce { get; }
-        public float TriggerTime { get; }
+        public bool IsOnce { get; private set; }
+        public float TriggerTime { get; private set; }
         public float Time { get; private set; }
         
         

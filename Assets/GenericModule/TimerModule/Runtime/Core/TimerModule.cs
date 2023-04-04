@@ -7,9 +7,10 @@ namespace CizaTimerModule
 {
     public class TimerModule
     {
-        private Dictionary<string, Timer> _timerMap;
+        private Dictionary<string, Timer> _usingTimerMap;
+        private List<Timer> _unusingTimers;
 
-        public bool IsInitialized => _timerMap is not null;
+        public bool IsInitialized => _usingTimerMap is not null && _unusingTimers is not null;
 
         public void Initialize()
         {
@@ -19,7 +20,8 @@ namespace CizaTimerModule
                 return;
             }
 
-            _timerMap = new();
+            _usingTimerMap = new();
+            _unusingTimers = new();
         }
 
 
@@ -31,8 +33,11 @@ namespace CizaTimerModule
                 return;
             }
 
-            _timerMap.Clear();
-            _timerMap = null;
+            _usingTimerMap.Clear();
+            _usingTimerMap = null;
+            
+            _unusingTimers.Clear();
+            _unusingTimers = null;
         }
 
         public void Tick(float deltaTime)
@@ -43,7 +48,7 @@ namespace CizaTimerModule
                 return;
             }
 
-            foreach (var timer in _timerMap.Values.ToArray())
+            foreach (var timer in _usingTimerMap.Values.ToArray())
             {
                 timer.AddDeltaTime(deltaTime);
 
@@ -68,10 +73,10 @@ namespace CizaTimerModule
                 return false;
             }
 
-            if (!_timerMap.ContainsKey(timerId))
+            if (!_usingTimerMap.ContainsKey(timerId))
                 return false;
 
-            timerReadModel = _timerMap[timerId];
+            timerReadModel = _usingTimerMap[timerId];
 
             return true;
         }
@@ -84,7 +89,7 @@ namespace CizaTimerModule
                 return string.Empty;
             }
 
-            return AddTimer(true, triggerTime, action);
+            return AddTimerToUsingTimerMap(true, triggerTime, action);
         }
 
 
@@ -96,7 +101,7 @@ namespace CizaTimerModule
                 return string.Empty;
             }
 
-            return AddTimer(false, triggerTime, action);
+            return AddTimerToUsingTimerMap(false, triggerTime, action);
         }
 
 
@@ -108,25 +113,47 @@ namespace CizaTimerModule
                 return;
             }
 
-            if (!_timerMap.ContainsKey(timerId))
+            if (!_usingTimerMap.ContainsKey(timerId))
             {
                 Debug.LogWarning($"[TimerModule::RemoveTimer] Timer is not found by timerId: {timerId}.");
                 return;
             }
 
-            _timerMap.Remove(timerId);
+            RemoveTimerFromUsingTimerMap(timerId);
         }
 
 
         // private method
-        private string AddTimer(bool isOnce, float triggerTime, Action<string> action)
+        private string AddTimerToUsingTimerMap(bool isOnce, float triggerTime, Action<string> action)
         {
             var timerId = Guid.NewGuid().ToString();
-            var timerData = new Timer(timerId, isOnce, triggerTime, action);
-
-            _timerMap.Add(timerId, timerData);
+            
+            var timer = GetTimerFromUnusingTimer();
+            timer.Initialize(timerId, isOnce, triggerTime, action);
+            
+            _usingTimerMap.Add(timerId, timer);
 
             return timerId;
+        }
+
+
+        private void RemoveTimerFromUsingTimerMap(string timerId)
+        {
+            var timer = _usingTimerMap[timerId];
+            _usingTimerMap.Remove(timerId);
+            
+            _unusingTimers.Add(timer);
+        }
+
+        private Timer GetTimerFromUnusingTimer()
+        {
+            if (_unusingTimers.Count <= 0)
+                _unusingTimers.Add(new Timer());
+
+            var timer = _unusingTimers.First();
+            _unusingTimers.Remove(timer);
+
+            return timer;
         }
     }
 }

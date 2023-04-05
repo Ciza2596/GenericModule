@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaGameObjectPoolModule.Implement
 {
-    [CreateAssetMenu(fileName = "GameObjectPoolModuleConfig", menuName = "GameObjectPoolModule/GameObjectPoolModuleConfig")]
+    [CreateAssetMenu(fileName = "GameObjectPoolModuleConfig", menuName = "Ciza/GameObjectPoolModule/GameObjectPoolModuleConfig")]
     public class GameObjectPoolModuleConfig : ScriptableObject, IGameObjectPoolModuleConfig
     {
         [SerializeField]

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaAddressablesModule.Example1
 {
-    [CreateAssetMenu(fileName = "AddressMapListDataOverview", menuName = "AddressableModule/Example1/AddressMapListDataOverview")]
+    [CreateAssetMenu(fileName = "AddressMapListDataOverview", menuName = "Ciza/AddressableModule/Example1/AddressMapListDataOverview")]
     public class AddressMapListDataOverview : ScriptableObject
     {
         [SerializeField] private List<AddressMap> _addressMapList;

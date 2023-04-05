@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace CizaSceneModule.Implement
 {
-    [CreateAssetMenu(fileName = "TransitionControllerConfig", menuName = "SceneModule/TransitionControllerConfig")]
+    [CreateAssetMenu(fileName = "TransitionControllerConfig", menuName = "Ciza/SceneModule/TransitionControllerConfig")]
     public class TransitionControllerConfig : ScriptableObject, ITransitionControllerConfig
     {
         [SerializeField] private GameObject _viewParentPrefab;

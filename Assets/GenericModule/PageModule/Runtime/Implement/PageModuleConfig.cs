@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace CizaPageModule.Implement
 {
-    [CreateAssetMenu(fileName = "PageModuleConfig", menuName = "PageModuleModule/PageModuleConfig")]
+    [CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModuleModule/PageModuleConfig")]
     public class PageModuleConfig : ScriptableObject, IPageModuleConfig
     {
         [SerializeField] private string _pageGameObjectRootName = "[PageRoot]";

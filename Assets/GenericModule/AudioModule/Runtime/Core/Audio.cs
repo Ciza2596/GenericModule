@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaAudioModule
 {
-    public class AudioData
+    public class Audio
     {
         //private variable
         private Transform _poolTransform;
@@ -20,7 +20,7 @@ namespace CizaAudioModule
 
 
         //public method
-        public AudioData(string id, string key, AudioSource audioSource, Transform poolTransform)
+        public Audio(string id, string key, AudioSource audioSource, Transform poolTransform)
         {
             _audioSource = audioSource;
 

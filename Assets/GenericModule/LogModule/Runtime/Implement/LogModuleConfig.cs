@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaLogModule.Implement
 {
-    [CreateAssetMenu(fileName = "LogModuleConfig", menuName = "LogModule/LogModuleConfig")]
+    [CreateAssetMenu(fileName = "LogModuleConfig", menuName = "Ciza/LogModule/LogModuleConfig")]
     public class LogModuleConfig : ScriptableObject, ILogModuleConfig
     {
         [SerializeField]

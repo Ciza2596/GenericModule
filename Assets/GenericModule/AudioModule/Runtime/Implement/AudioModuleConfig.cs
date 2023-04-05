@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioModuleConfig", menuName = "AudioModule/AudioModuleConfig")]
+    [CreateAssetMenu(fileName = "AudioModuleConfig", menuName = "Ciza/AudioModule/AudioModuleConfig")]
     public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
     {
         [SerializeField] private string _poolRootName = "[AudioModulePoolRoot]";

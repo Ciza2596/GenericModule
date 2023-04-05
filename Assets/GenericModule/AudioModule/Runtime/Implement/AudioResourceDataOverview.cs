@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioResourceDataOverview", menuName = "AudioModule/AudioResourceDataOverview")]
+    [CreateAssetMenu(fileName = "AudioResourceDataOverview", menuName = "Ciza/AudioModule/AudioResourceDataOverview")]
     public class AudioResourceDataOverview : ScriptableObject
     {
         [SerializeField]

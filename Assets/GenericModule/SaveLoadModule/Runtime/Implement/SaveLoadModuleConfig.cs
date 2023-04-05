@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaSaveLoadModule.Implement
 {
-    [CreateAssetMenu(fileName = "SaveLoadModuleConfig", menuName = "SaveLoadModule/SaveLoadModuleConfig")]
+    [CreateAssetMenu(fileName = "SaveLoadModuleConfig", menuName = "Ciza/SaveLoadModule/SaveLoadModuleConfig")]
     public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig
     {
         private enum Directories

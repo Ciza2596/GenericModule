@@ -28,7 +28,7 @@ namespace CizaAudioModule
         private readonly Dictionary<string, List<string>> _keyIdsMaps = new Dictionary<string, List<string>>();
         private readonly List<string> _isPlayingIds = new List<string>();
 
-        private readonly List<AudioData> _audioDatas = new List<AudioData>();
+        private readonly List<Audio> _audioDatas = new List<Audio>();
 
 
         private IAudioResourceData[] _audioResourceDatas;
@@ -151,7 +151,7 @@ namespace CizaAudioModule
         public bool CheckIsPlaying(string id) =>
             _isPlayingIds.Contains(id);
 
-        public AudioData GetAudioData(string id)
+        public Audio GetAudioData(string id)
         {
             var audioData = _audioDatas.Find(audioData => audioData.Id == id);
             Assert.IsNotNull(audioData, $"[AudioModule::GetAudioData] Not find audioData by id: {id}.");
@@ -244,7 +244,7 @@ namespace CizaAudioModule
             if (gameObject.TryGetComponent<AudioSource>(out var audioSource))
             {
                 var id = Guid.NewGuid().ToString();
-                var audioData = new AudioData(id, key, audioSource, poolTransform);
+                var audioData = new Audio(id, key, audioSource, poolTransform);
                 _audioDatas.Add(audioData);
 
                 if (_keyIdsMaps.TryGetValue(key, out var ids))

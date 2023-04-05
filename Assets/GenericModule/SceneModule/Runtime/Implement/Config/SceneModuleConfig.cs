@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaSceneModule.Implement
 {
-    [CreateAssetMenu(fileName = "SceneModuleConfig", menuName = "SceneModule/SceneModuleConfig")]
+    [CreateAssetMenu(fileName = "SceneModuleConfig", menuName = "Ciza/SceneModule/SceneModuleConfig")]
     public class SceneModuleConfig : ScriptableObject, ISceneModuleConfig
     {
         [SerializeField]

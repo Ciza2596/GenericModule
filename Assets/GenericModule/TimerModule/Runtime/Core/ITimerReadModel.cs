@@ -1,9 +1,9 @@
 namespace CizaTimerModule
 {
-    public interface TimerReadModel
+    public interface ITimerReadModel
     {
         bool IsOnce { get; }
-        float TriggerTime { get; }
+        float Duration { get; }
         float Time { get; }
     }
 }

@@ -14,7 +14,7 @@ namespace CizaPageModule
         private Transform _pageGameObjectRootTransform;
         private Dictionary<Type, MonoBehaviour> _pagePrefabMap;
 
-        private readonly Dictionary<Type, PageData> _pageDataMap = new Dictionary<Type, PageData>();
+        private readonly Dictionary<Type, PageController> _pageDataMap = new Dictionary<Type, PageController>();
 
         private Action<float> _tickHandle;
         private Action<float> _fixedTickHandle;
@@ -205,7 +205,7 @@ namespace CizaPageModule
             var pageGameObject = Object.Instantiate(pageGameObjectPrefab, _pageGameObjectRootTransform);
 
             var page = pageGameObject.GetComponent(pageType);
-            var pageData = new PageData(page);
+            var pageData = new PageController(page);
 
             pageData.Initialize(parameters);
             _pageDataMap.Add(pageType, pageData);
@@ -263,7 +263,7 @@ namespace CizaPageModule
             Func<UniTask> playShowingAnimation = null;
             Action onShowingComplete = null;
 
-            var canShowPageDatas = new List<PageData>();
+            var canShowPageDatas = new List<PageController>();
 
             var pageTypesLength = pageTypes.Length;
             if (parametersList is null || parametersList.Length != pageTypesLength)
@@ -337,7 +337,7 @@ namespace CizaPageModule
 
         private async UniTask Hide(Type[] pageTypes, bool isImmediately, Action onComplete)
         {
-            var canHidePageDatas = new List<PageData>();
+            var canHidePageDatas = new List<PageController>();
 
             foreach (var pageType in pageTypes)
             {
@@ -360,7 +360,7 @@ namespace CizaPageModule
             await Hide(canHidePageDatas.ToArray(), isImmediately, onComplete);
         }
 
-        private async UniTask Hide(PageData[] pageDatas, bool isImmediately, Action onComplete)
+        private async UniTask Hide(PageController[] pageDatas, bool isImmediately, Action onComplete)
         {
             Action onHidingStart = null;
             Func<UniTask> playHidingAnimation = null;
@@ -395,21 +395,21 @@ namespace CizaPageModule
         }
 
 
-        private void AddTickAndFixedTickHandle(PageData pageData)
+        private void AddTickAndFixedTickHandle(PageController pageController)
         {
-            if (pageData.TryGetTickable(out var tickable))
+            if (pageController.TryGetTickable(out var tickable))
                 _tickHandle += tickable.Tick;
 
-            if (pageData.TryGetFixedTickable(out var fixedTickable))
+            if (pageController.TryGetFixedTickable(out var fixedTickable))
                 _fixedTickHandle += fixedTickable.FixedTick;
         }
 
-        private void RemoveTickAndFixedTickHandle(PageData pageData)
+        private void RemoveTickAndFixedTickHandle(PageController pageController)
         {
-            if (pageData.TryGetTickable(out var tickable))
+            if (pageController.TryGetTickable(out var tickable))
                 _tickHandle -= tickable.Tick;
 
-            if (pageData.TryGetFixedTickable(out var fixedTickable))
+            if (pageController.TryGetFixedTickable(out var fixedTickable))
                 _fixedTickHandle -= fixedTickable.FixedTick;
         }
 

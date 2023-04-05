@@ -35,7 +35,7 @@ namespace CizaTimerModule
 
             _usingTimerMap.Clear();
             _usingTimerMap = null;
-            
+
             _unusingTimers.Clear();
             _unusingTimers = null;
         }
@@ -50,12 +50,14 @@ namespace CizaTimerModule
 
             foreach (var timer in _usingTimerMap.Values.ToArray())
             {
-                timer.AddDeltaTime(deltaTime);
+                timer.AddTime(deltaTime);
+                timer.OnTick(deltaTime);
 
-                if (timer.Time >= timer.TriggerTime)
+                if (timer.Time >= timer.Duration)
                 {
+                    timer.OnComplete();
+
                     timer.ResetTime();
-                    timer.Invoke();
                     if (timer.IsOnce)
                         RemoveTimer(timer.Id);
                 }
@@ -63,7 +65,7 @@ namespace CizaTimerModule
         }
 
 
-        public bool TryGetTimerReadModel(string timerId, out TimerReadModel timerReadModel)
+        public bool TryGetTimerReadModel(string timerId, out ITimerReadModel timerReadModel)
         {
             timerReadModel = null;
 
@@ -81,7 +83,7 @@ namespace CizaTimerModule
             return true;
         }
 
-        public string AddOnceTimer(float triggerTime, Action<string> action)
+        public string AddOnceTimer(float startValue, float endValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null)
         {
             if (!IsInitialized)
             {
@@ -89,11 +91,32 @@ namespace CizaTimerModule
                 return string.Empty;
             }
 
-            return AddTimerToUsingTimerMap(true, triggerTime, action);
+            var diffValueSpeed = (endValue - startValue) / duration;
+            var value = startValue;
+
+            var id = AddOnceTimer(duration, onComplete, (timerReadModel, deltaTime) =>
+            {
+                var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
+                value += diffValueSpeedDeltaTime;
+                onTickValue(timerReadModel, value);
+            });
+
+            return id;
+        }
+
+        public string AddOnceTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
+        {
+            if (!IsInitialized)
+            {
+                Debug.LogWarning("[TimerModule::AddOnceTimer] TimerModule is not initialized.");
+                return string.Empty;
+            }
+
+            return AddTimerToUsingTimerMap(true, duration, onComplete, onTick);
         }
 
 
-        public string AddLoopTimer(float triggerTime, Action<string> action)
+        public string AddLoopTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
         {
             if (!IsInitialized)
             {
@@ -101,7 +124,7 @@ namespace CizaTimerModule
                 return string.Empty;
             }
 
-            return AddTimerToUsingTimerMap(false, triggerTime, action);
+            return AddTimerToUsingTimerMap(false, duration, onComplete, onTick);
         }
 
 
@@ -124,13 +147,13 @@ namespace CizaTimerModule
 
 
         // private method
-        private string AddTimerToUsingTimerMap(bool isOnce, float triggerTime, Action<string> action)
+        private string AddTimerToUsingTimerMap(bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
         {
             var timerId = Guid.NewGuid().ToString();
-            
+
             var timer = GetTimerFromUnusingTimer();
-            timer.Initialize(timerId, isOnce, triggerTime, action);
-            
+            timer.Initialize(timerId, isOnce, duration, onComplete, onTick);
+
             _usingTimerMap.Add(timerId, timer);
 
             return timerId;
@@ -141,7 +164,7 @@ namespace CizaTimerModule
         {
             var timer = _usingTimerMap[timerId];
             _usingTimerMap.Remove(timerId);
-            
+
             _unusingTimers.Add(timer);
         }
 

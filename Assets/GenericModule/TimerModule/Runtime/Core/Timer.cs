@@ -2,31 +2,35 @@ using System;
 
 namespace CizaTimerModule
 {
-    internal class Timer : TimerReadModel
+    internal class Timer : ITimerReadModel
     {
-        private Action<string> _action;
+        private Action<ITimerReadModel> _onComplete;
+        private Action<ITimerReadModel, float> _onTick;
 
-        public void Initialize(string id, bool isOnce, float triggerTime, Action<string> action)
+        public void Initialize(string id, bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
         {
             Id = id;
             IsOnce = isOnce;
-            TriggerTime = triggerTime;
-            _action = action;
+            Duration = duration;
+            _onComplete = onComplete;
+            _onTick = onTick;
         }
 
         public string Id { get; private set; }
 
-        
+
         public bool IsOnce { get; private set; }
-        public float TriggerTime { get; private set; }
+        public float Duration { get; private set; }
         public float Time { get; private set; }
-        
-        
-        public void AddDeltaTime(float deltaTime) =>
+
+
+        public void AddTime(float deltaTime) =>
             Time += deltaTime;
 
         public void ResetTime() => Time = 0;
 
-        public void Invoke() => _action?.Invoke(Id);
+        public void OnComplete() => _onComplete?.Invoke(this);
+
+        public void OnTick(float deltaTime) => _onTick?.Invoke(this, deltaTime);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaPageModule
 {
-    internal class PageData
+    internal class PageController
     {
         //public variable
         public Component Page { get; }
@@ -11,7 +11,7 @@ namespace CizaPageModule
         public PageState State { get; private set; }
 
         //constructor
-        public PageData(Component page) =>
+        public PageController(Component page) =>
             Page = page;
 
 

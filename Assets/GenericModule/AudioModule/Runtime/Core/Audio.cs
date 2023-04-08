@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 
 namespace CizaAudioModule
 {
-    public abstract class BaseAudio : MonoBehaviour, IAudio
+    public class Audio : MonoBehaviour, IAudio
     {
         [SerializeField] private AudioSource _audioSource;
 
@@ -11,7 +10,7 @@ namespace CizaAudioModule
 
         public string ClipDataId { get; private set; }
         public string PrefabDataId { get; private set; }
-        public float SpatialBlend { get; private set; }
+        public float SpatialBlend => _audioSource.spatialBlend;
 
         public float Volume => _audioSource.volume;
         
@@ -53,8 +52,7 @@ namespace CizaAudioModule
             ClipDataId = clipDataId;
             _audioSource.clip = audioClip;
 
-            SpatialBlend = spatialBlend;
-            _audioSource.spatialBlend = SpatialBlend;
+            _audioSource.spatialBlend = spatialBlend;
 
             SetVolume(volume);
         }

@@ -16,7 +16,7 @@ namespace CizaAudioModule
         private readonly IAudioModuleAssetProvider _assetProvider;
 
         private Transform _poolRootTransform;
-        private readonly Dictionary<string, Transform> _poolTransformMap = new ();
+        private readonly Dictionary<string, Transform> _poolTransformMap = new();
 
         private Dictionary<string, IAudioData> _audioDataMap;
 
@@ -34,7 +34,7 @@ namespace CizaAudioModule
 
 
         //public method
-        public AudioModule(AudioMixer audioMixer, IAudioModuleConfig config, IAudioModuleAssetProvider assetProvider)
+        public AudioModule(IAudioModuleConfig config, IAudioModuleAssetProvider assetProvider, AudioMixer audioMixer = null)
         {
             _config = config;
             _assetProvider = assetProvider;
@@ -42,7 +42,6 @@ namespace CizaAudioModule
             Assert.IsNotNull(_assetProvider, $"[AudioModule::AudioModule] {nameof(assetProvider)} is null.");
 
             AudioMixer = audioMixer;
-            Assert.IsNotNull(AudioMixer, $"[AudioModule::AudioModule] AudioMixer is null.");
         }
 
 
@@ -55,7 +54,7 @@ namespace CizaAudioModule
             }
 
             _audioDataMap = audioDataMap;
-            Assert.IsNotNull(_audioDataMap, $"[AudioModule::Initialize] AudioMixer is null.");
+            Assert.IsNotNull(_audioDataMap, $"[AudioModule::Initialize] AudioDataMap is null.");
 
             InitializeClipAndPrefabAndAssetDataIds();
             await LoadAssets();
@@ -67,7 +66,7 @@ namespace CizaAudioModule
             }
         }
 
-        public void Dispose()
+        public void Release()
         {
             if (!IsInitialized)
             {
@@ -93,12 +92,28 @@ namespace CizaAudioModule
         }
 
 
-        public bool CheckIsPlaying(string audioId) =>
-            _playingAudioMap.ContainsKey(audioId);
+        public bool CheckIsPlaying(string audioId)
+        {
+            if (!IsInitialized)
+            {
+                Debug.LogWarning("[AudioModule::CheckIsPlaying] AudioModule is not initialized.");
+                return false;
+            }
+
+            return _playingAudioMap.ContainsKey(audioId);
+        }
 
 
-        public void SetAudioMixerVolume(float volume) =>
+        public void SetAudioMixerVolume(float volume)
+        {
+            if (AudioMixer is null)
+            {
+                Debug.LogWarning("[AudioModule::SetAudioMixerVolume] AudioMixer is null.");
+                return;
+            }
+
             SetAudioMixerFloat(_config.AudioMixerVolumeParameter, volume);
+        }
 
         public string Play(string clipDataId, Vector3 localPosition = default, Transform parentTransform = null)
         {
@@ -372,9 +387,8 @@ namespace CizaAudioModule
             else
                 Object.DestroyImmediate(obj);
         }
-        
+
         private string GetPoolName(string prefabDataId) =>
             _config.PoolPrefix + prefabDataId + _config.PoolSuffix;
-
     }
 }

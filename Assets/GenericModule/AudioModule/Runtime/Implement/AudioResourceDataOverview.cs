@@ -7,20 +7,22 @@ namespace CizaAudioModule.Implement
     public class AudioResourceDataOverview : ScriptableObject
     {
         [SerializeField]
-        private AudioResourceData[] _audioDatas;
+        private AudioData[] _audioDatas;
 
-        public IAudioResourceData[] GetAudioDatas => _audioDatas;
+        public IAudioData[] GetAudioDatas => _audioDatas;
         
 
         [Serializable]
-        public class AudioResourceData: IAudioResourceData
+        public class AudioData: IAudioData
         {
             [SerializeField]
             private string _key;
 
             [SerializeField] private GameObject _prefab;
 
-            public string Key => _key;
+            public string ClipDataId => _key;
+            public string PrefabDataId { get; }
+            public float SpatialBlend { get; }
             public GameObject Prefab => _prefab;
         }
     }

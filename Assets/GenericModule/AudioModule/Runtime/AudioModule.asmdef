@@ -1,7 +1,9 @@
 {
     "name": "AudioModule",
     "rootNamespace": "CizaAudioModule",
-    "references": [],
+    "references": [
+        "UniTask"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

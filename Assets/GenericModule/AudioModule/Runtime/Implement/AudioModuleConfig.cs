@@ -22,10 +22,11 @@ namespace CizaAudioModule.Implement
         public string PoolRootName => _poolRootName;
         public string PoolPrefix => _poolPrefix;
         public string PoolSuffix => _poolSuffix;
+        public IAudioData GetAudioData(string clipDataId) => throw new System.NotImplementedException();
 
-        public string MasterVolumeParameter => _masterVolumeParameter;
-        public string BgmVolumeParameter => _bgmVolumeParameter;
-        public string SfxVolumeParameter => _sfxVolumeParameter;
+        public string AudioMixerVolumeParameter => _masterVolumeParameter;
+        public string BGMVolumeParameter => _bgmVolumeParameter;
+        public string SFXVolumeParameter => _sfxVolumeParameter;
         public string VoiceVolumeParameter => _voiceVolumeParameter;
     }
 }

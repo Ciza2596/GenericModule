@@ -32,7 +32,7 @@ namespace CizaAudioPlayerModule
         }
 
 
-        public void Initialize(IAudioResourceData[] audioResourceDatas) => _audioModule.Initialize(audioResourceDatas);
+        public void Initialize(IAudioData[] audioResourceDatas) => _audioModule.Initialize(audioResourceDatas);
 
         public void Release()
         {
@@ -80,7 +80,7 @@ namespace CizaAudioPlayerModule
 
         public float GetOriginVolume(string id)
         {
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
             var originVolume = audioData.OriginVolume;
             return originVolume;
         }
@@ -115,7 +115,7 @@ namespace CizaAudioPlayerModule
             Action onComplete = null, bool isOverrideChannelPlaying = false)
         {
             var id = Play(channel, key, fadeTime, position, parentTransform, isOverrideChannelPlaying);
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
 
             var duration = audioData.Duration;
             var timerId = _tween.PlayTimer(duration, () =>
@@ -132,7 +132,7 @@ namespace CizaAudioPlayerModule
         //changeVolume
         public void ChangeVolume(string id, float volume, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
             SetVolumeByFade(id, audioData.Volume, volume, fadeTime, onComplete);
         }
 
@@ -149,7 +149,7 @@ namespace CizaAudioPlayerModule
 
         public void Resume(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
             audioData.Resume();
             var currentVolume = audioData.Volume;
             _tween.To(0, volume => audioData.SetVolume(volume), currentVolume, fadeTime,
@@ -167,7 +167,7 @@ namespace CizaAudioPlayerModule
 
         public void Pause(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
         {
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
             var currentVolume = audioData.Volume;
             _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
             {
@@ -194,7 +194,7 @@ namespace CizaAudioPlayerModule
             var channel = GetChannelById(id);
             var ids = _channelIdsMaps[channel];
 
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
 
             _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
             {
@@ -253,7 +253,7 @@ namespace CizaAudioPlayerModule
             {
                 foreach (var id in ids.ToArray())
                 {
-                    var audioData = _audioModule.GetAudioData(id);
+                    var audioData = _audioModule.GetAudio(id);
                     if (audioData.Key == key)
                     {
                         matchIdsList.Add(audioData.Id);
@@ -285,7 +285,7 @@ namespace CizaAudioPlayerModule
         private void SetVolumeByFade(string id, float startVolume, float endVolume, float durationTime,
             Action onComplete = null)
         {
-            var audioData = _audioModule.GetAudioData(id);
+            var audioData = _audioModule.GetAudio(id);
 
             _tween.To(startVolume, volume => audioData.SetVolume(volume), endVolume, durationTime, onComplete);
         }

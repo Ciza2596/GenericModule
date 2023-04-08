@@ -10,7 +10,7 @@ public class AudioModuleTest
     private FakeAudioModuleConfig _fakeAudioModuleConfig;
     private CizaAudioModule.AudioModule _audioModule;
 
-    private List<FakeAudioResourceData> _fakeAudioResourceDatas;
+    private List<FakeAudioData> _fakeAudioResourceDatas;
 
     private Transform _audioPlayingTransform;
 
@@ -20,7 +20,7 @@ public class AudioModuleTest
         _fakeAudioModuleConfig = new FakeAudioModuleConfig();
         _audioModule = new CizaAudioModule.AudioModule(_fakeAudioModuleConfig);
 
-        _fakeAudioResourceDatas = new List<FakeAudioResourceData>();
+        _fakeAudioResourceDatas = new List<FakeAudioData>();
 
         var audioPlayingGameObject = new GameObject();
         _audioPlayingTransform = audioPlayingGameObject.transform;
@@ -32,7 +32,7 @@ public class AudioModuleTest
     {
         //arrange
         Assert.IsFalse(_audioModule.IsInitialized);
-        var fakeAudioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var fakeAudioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
 
 
         //act
@@ -49,7 +49,7 @@ public class AudioModuleTest
         //arrange
         Assert.IsFalse(_audioModule.IsInitialized);
 
-        var fakeAudioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var fakeAudioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         _audioModule.Initialize(fakeAudioResourceDatas);
         Assert.IsTrue(_audioModule.IsInitialized);
 
@@ -71,7 +71,7 @@ public class AudioModuleTest
         var keys = new List<string>() { key1, key2 }.ToArray();
         CreateMultFakeAudioResourceDataAndAddToList(keys);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         Check_Pool_Doesnt_Exist_In_Game(key1);
@@ -103,7 +103,7 @@ public class AudioModuleTest
         var keys = new List<string>() { key1, key2 }.ToArray();
         CreateMultFakeAudioResourceDataAndAddToList(keys);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         Check_Pool_Doesnt_Exist_In_Game(key1);
@@ -132,7 +132,7 @@ public class AudioModuleTest
         var key = "HelloAudio_1";
         CreateFakeAudioResourceDataAndAddToList(key);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
 
@@ -152,7 +152,7 @@ public class AudioModuleTest
         var key = "HelloAudio_1";
         CreateFakeAudioResourceDataAndAddToList(key);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         var id = _audioModule.Play(key);
@@ -173,14 +173,14 @@ public class AudioModuleTest
         var key = "HelloAudio_1";
         CreateFakeAudioResourceDataAndAddToList(key);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         var id = _audioModule.Play(key);
 
 
         //act
-        var audioData = _audioModule.GetAudioData(id);
+        var audioData = _audioModule.GetAudio(id);
 
 
         //assert
@@ -195,7 +195,7 @@ public class AudioModuleTest
         var key = "HelloAudio_1";
         CreateFakeAudioResourceDataAndAddToList(key);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         Check_AudioPlayingTransform_Hasnt_Child();
@@ -216,7 +216,7 @@ public class AudioModuleTest
         var key = "HelloAudio_1";
         CreateFakeAudioResourceDataAndAddToList(key);
 
-        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioResourceData>();
+        var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
         Check_AudioModule_Already_Initialize(audioResourceDatas);
 
         Check_AudioPlayingTransform_Hasnt_Child();
@@ -234,7 +234,7 @@ public class AudioModuleTest
     }
 
 
-    private void Check_AudioModule_Already_Initialize(IAudioResourceData[] audioResourceDatas)
+    private void Check_AudioModule_Already_Initialize(IAudioData[] audioResourceDatas)
     {
         _audioModule.Initialize(audioResourceDatas);
         Assert.IsTrue(_audioModule.IsInitialized);
@@ -272,7 +272,7 @@ public class AudioModuleTest
     private void CreateFakeAudioResourceDataAndAddToList(string key)
     {
         var audioPrefab = CreateAudioPrefab(key);
-        var fakeAudioResourceData = new FakeAudioResourceData(key, audioPrefab);
+        var fakeAudioResourceData = new FakeAudioData(key, audioPrefab);
         _fakeAudioResourceDatas.Add(fakeAudioResourceData);
     }
 

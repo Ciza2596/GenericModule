@@ -16,6 +16,8 @@ namespace CizaAudioModule
         private readonly IAudioModuleAssetProvider _assetProvider;
 
         private Transform _poolRootTransform;
+        private readonly Dictionary<string, Transform> _poolTransformMap = new ();
+
         private Dictionary<string, IAudioData> _audioDataMap;
 
 
@@ -76,6 +78,9 @@ namespace CizaAudioModule
             StopAll();
             ReleaseUnplayingAudios();
 
+            var prefabDataIds = _poolTransformMap.Keys.ToArray();
+            foreach (var prefabDataId in prefabDataIds)
+                DestroyPool(prefabDataId);
 
             _audioDataMap = null;
 
@@ -95,7 +100,7 @@ namespace CizaAudioModule
         public void SetAudioMixerVolume(float volume) =>
             SetAudioMixerFloat(_config.AudioMixerVolumeParameter, volume);
 
-        public string Play(string clipDataId, Vector3 position = default, Transform parentTransform = null)
+        public string Play(string clipDataId, Vector3 localPosition = default, Transform parentTransform = null)
         {
             if (!IsInitialized)
             {
@@ -105,11 +110,11 @@ namespace CizaAudioModule
 
             var audioData = _config.GetAudioData(clipDataId);
 
-            var audioId = Play(audioData, position, parentTransform);
+            var audioId = Play(audioData, localPosition, parentTransform);
             return audioId;
         }
 
-        public string Play(IAudioData audioData, Vector3 position = default, Transform parentTransform = null, float volume = 1)
+        public string Play(IAudioData audioData, Vector3 localPosition = default, Transform parentTransform = null, float volume = 1)
         {
             if (!IsInitialized)
             {
@@ -125,9 +130,9 @@ namespace CizaAudioModule
             var audio = GetOrCreateAudio(prefabDataId);
             var audioClip = _assetProvider.GetAsset<AudioClip>(clipDataId);
 
-            AddAudioToPlayingAudiosMap(audioId, audio);
-            
-            audio.Play(audioId, clipDataId, audioClip, spatialBlend, position, parentTransform, volume);
+            AddAudioToPlayingAudiosMap(audioId, audio, localPosition, parentTransform);
+
+            audio.Play(audioId, clipDataId, audioClip, spatialBlend, volume);
             audio.GameObject.name = clipDataId;
 
             return audioId;
@@ -168,7 +173,7 @@ namespace CizaAudioModule
                 Debug.LogWarning("[AudioModule::ReleaseUnplayingAudios] AudioModule is not initialized.");
                 return;
             }
-            
+
             var prefabDataIds = _unplayingAudiosMap.Keys.ToArray();
             foreach (var prefabDataId in prefabDataIds)
                 ReleaseUnplayingAudios(prefabDataId);
@@ -235,7 +240,7 @@ namespace CizaAudioModule
         private IAudio GetOrCreateAudio(string prefabDataId)
         {
             if (!_unplayingAudiosMap.ContainsKey(prefabDataId))
-                _unplayingAudiosMap.Add(prefabDataId, new List<IAudio>());
+                CreatePool(prefabDataId);
 
             var unplayingAudios = _unplayingAudiosMap[prefabDataId];
             if (unplayingAudios.Count <= 0)
@@ -244,6 +249,26 @@ namespace CizaAudioModule
             var unplayingAudio = unplayingAudios.First();
             unplayingAudios.Remove(unplayingAudio);
             return unplayingAudio;
+        }
+
+        private void CreatePool(string prefabDataId)
+        {
+            _unplayingAudiosMap.Add(prefabDataId, new List<IAudio>());
+
+            var poolName = GetPoolName(prefabDataId);
+            var pool = new GameObject(poolName);
+            var poolTransform = pool.transform;
+            poolTransform.SetParent(_poolRootTransform);
+
+            _poolTransformMap.Add(prefabDataId, poolTransform);
+        }
+
+        private void DestroyPool(string prefabDataId)
+        {
+            var poolTransform = _poolTransformMap[prefabDataId];
+            var poolGameObject = poolTransform.gameObject;
+            DestroyOrImmediate(poolGameObject);
+            _poolTransformMap.Remove(prefabDataId);
         }
 
         private void CreateAudioAndAddToUnplayingAudiosMap(string prefabDataId)
@@ -258,16 +283,27 @@ namespace CizaAudioModule
         private void AddAudioToUnplayingAudiosMap(IAudio audio)
         {
             audio.GameObject.name = audio.PrefabDataId;
-            audio.GameObject.SetActive(false);
+            SetAudio(audio, false, Vector3.zero, null);
 
             var unplayingAudios = _unplayingAudiosMap[audio.PrefabDataId];
             unplayingAudios.Add(audio);
         }
 
-        private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio)
+        private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 localPosition, Transform parentTransform)
         {
-            audio.GameObject.SetActive(true);
+            SetAudio(audio, true, localPosition, parentTransform);
+
             _playingAudioMap.Add(audioId, audio);
+        }
+
+        private void SetAudio(IAudio audio, bool isActive, Vector3 localPosition, Transform parentTransform)
+        {
+            var audioGameObject = audio.GameObject;
+            audioGameObject.SetActive(isActive);
+
+            var audioTransform = audioGameObject.transform;
+            audioTransform.SetParent(parentTransform);
+            audioTransform.localPosition = localPosition;
         }
 
 
@@ -328,7 +364,7 @@ namespace CizaAudioModule
             foreach (var audio in audios)
                 DestroyOrImmediate(audio.GameObject);
         }
-        
+
         private void DestroyOrImmediate(Object obj)
         {
             if (Application.isPlaying)
@@ -336,5 +372,9 @@ namespace CizaAudioModule
             else
                 Object.DestroyImmediate(obj);
         }
+        
+        private string GetPoolName(string prefabDataId) =>
+            _config.PoolPrefix + prefabDataId + _config.PoolSuffix;
+
     }
 }

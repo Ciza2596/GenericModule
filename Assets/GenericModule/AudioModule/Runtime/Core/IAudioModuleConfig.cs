@@ -8,7 +8,5 @@ namespace CizaAudioModule
         string PoolRootName { get; }
         string PoolPrefix { get; }
         string PoolSuffix { get; }
-
-        IAudioData GetAudioData(string clipDataId);
     }
 }

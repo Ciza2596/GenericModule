@@ -123,8 +123,7 @@ namespace CizaAudioModule
                 return string.Empty;
             }
 
-            var audioData = _config.GetAudioData(clipDataId);
-
+            var audioData = _audioDataMap[clipDataId];
             var audioId = Play(audioData, localPosition, parentTransform, volume);
             return audioId;
         }

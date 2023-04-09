@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b1ea1dd09a644aa6b7d28b5e6d872aa, type: 3}
-  m_Name: AudioResourceDataOverview
+  m_Script: {fileID: 11500000, guid: 17298cc7aa56049d9a48f6285457a5a6, type: 3}
+  m_Name: AudioDataOverview
   m_EditorClassIdentifier: 
   _audioDatas:
-  - _key: wind_bell
-    _prefab: {fileID: 3406531864828381534, guid: 3af422905b4eb491dba735bad50ca03d, type: 3}
+  - _clipDataId: wind_bell
+    _prefabDataId: BGMAudio
+    _spatialBlend: 0

@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8826572704377413044}
+  - component: {fileID: 4949390170751236864}
   - component: {fileID: 1782352975605048614}
   m_Layer: 0
-  m_Name: wind_bell
+  m_Name: BGMAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +33,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4949390170751236864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3406531864828381534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8d555b6487344d4affcbf857c111b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &1782352975605048614
 AudioSource:
   m_ObjectHideFlags: 0
@@ -42,7 +55,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1489157540452927577, guid: 1b4c83034f69440c78981273b31b33e5, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 639e778eaba734dcfb491a3969858932, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

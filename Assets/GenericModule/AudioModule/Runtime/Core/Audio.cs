@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace CizaAudioModule
 {
     public class Audio : MonoBehaviour, IAudio
     {
-        [SerializeField] private AudioSource _audioSource;
+        private AudioSource _audioSource;
 
         public string Id { get; private set; }
 
@@ -13,12 +14,17 @@ namespace CizaAudioModule
         public float SpatialBlend => _audioSource.spatialBlend;
 
         public float Volume => _audioSource.volume;
-        
-        public GameObject GameObject => gameObject;
-        
 
-        public void Initialize(string prefabDataId) =>
+        public GameObject GameObject => gameObject;
+
+
+        public void Initialize(string prefabDataId)
+        {
             PrefabDataId = prefabDataId;
+
+            _audioSource = GetComponentInChildren<AudioSource>();
+            Assert.IsNotNull(_audioSource, $"[Audio::Initialize] AudioSource is not found. Please check prefabDataId: {PrefabDataId}.");
+        }
 
         public void Play(string id, string clipDataId, AudioClip audioClip, float spatialBlend, float volume)
         {
@@ -34,14 +40,14 @@ namespace CizaAudioModule
 
         public void Resume()
         {
-            if(!_audioSource.isPlaying) 
+            if (!_audioSource.isPlaying)
                 _audioSource.Play();
         }
 
         public void Pause() =>
             _audioSource.Pause();
 
-        public void SetVolume(float volume) => 
+        public void SetVolume(float volume) =>
             _audioSource.volume = volume;
 
 

@@ -9,27 +9,31 @@ using UnityEngine;
 public class AudioModuleTest
 {
     private FakeAudioModuleConfig _fakeAudioModuleConfig;
-    private FakeAssetProvider _fakeAssetProvider;
+    private FakeAudioModuleAssetProvider _fakeAudioModuleAssetProvider;
 
     private AudioModule _audioModule;
 
     private IAudioData[] _audioDatas;
     private Dictionary<string, IAudioData> _audioDataMap;
 
+    private Transform _parentTransform;
+
 
     [SetUp]
     public void SetUp()
     {
-        _fakeAssetProvider = new FakeAssetProvider();
+        _fakeAudioModuleAssetProvider = new FakeAudioModuleAssetProvider();
         _fakeAudioModuleConfig = new FakeAudioModuleConfig();
 
-        _audioModule = new AudioModule(_fakeAudioModuleConfig, _fakeAssetProvider);
+        _audioModule = new AudioModule(_fakeAudioModuleConfig, _fakeAudioModuleAssetProvider);
 
         _audioDatas = new[]
         {
-            new FakeAudioData(FakeAssetProvider.CLIP_DATA_ID, FakeAssetProvider.PREFAB_DATA_ID, FakeAssetProvider.SPATIAL_BLEND),
+            new FakeAudioData(FakeAudioModuleAssetProvider.CLIP_DATA_ID, FakeAudioModuleAssetProvider.PREFAB_DATA_ID, FakeAudioModuleAssetProvider.SPATIAL_BLEND),
         };
         _audioDataMap = CreateAudioDataMap(_audioDatas);
+
+        _parentTransform = new GameObject().transform;
     }
 
     [Test]
@@ -37,8 +41,8 @@ public class AudioModuleTest
     {
         // arrange
         Assert.IsFalse(_audioModule.IsInitialized);
-        Assert.IsFalse(_fakeAssetProvider.IsLoadedAssets);
-        Assert.IsNull(_fakeAssetProvider.LoadedAssetsDataIds);
+        Assert.IsFalse(_fakeAudioModuleAssetProvider.IsLoadedAssets);
+        Assert.IsNull(_fakeAudioModuleAssetProvider.LoadedAssetsDataIds);
 
         // act
         await _audioModule.Initialize(_audioDataMap);
@@ -46,8 +50,8 @@ public class AudioModuleTest
 
         // assert
         Assert.IsTrue(_audioModule.IsInitialized, "AudioModule is not initialized.");
-        Assert.IsTrue(_fakeAssetProvider.IsLoadedAssets, "Assets is not loaded.");
-        Check_String_Array_Content_Is_Equal(FakeAssetProvider.ASSETS_DATA_IDS, _fakeAssetProvider.LoadedAssetsDataIds, "AssetsDataIds is incorrect.");
+        Assert.IsTrue(_fakeAudioModuleAssetProvider.IsLoadedAssets, "Assets is not loaded.");
+        Check_String_Array_Content_Is_Equal(FakeAudioModuleAssetProvider.ASSETS_DATA_IDS, _fakeAudioModuleAssetProvider.LoadedAssetsDataIds, "AssetsDataIds is incorrect.");
     }
 
     [Test]
@@ -63,224 +67,89 @@ public class AudioModuleTest
 
         // assert
         Assert.IsFalse(_audioModule.IsInitialized, "AudioModule is initialized.");
-        Assert.IsFalse(_fakeAssetProvider.IsLoadedAssets, "Assets is not unloaded.");
-        Check_String_Array_Content_Is_Equal(FakeAssetProvider.ASSETS_DATA_IDS, _fakeAssetProvider.UnloadedAssetsDataIds, "AssetsDataIds is incorrect.");
+        Assert.IsFalse(_fakeAudioModuleAssetProvider.IsLoadedAssets, "Assets is not unloaded.");
+        Check_String_Array_Content_Is_Equal(FakeAudioModuleAssetProvider.ASSETS_DATA_IDS, _fakeAudioModuleAssetProvider.UnloadedAssetsDataIds, "AssetsDataIds is incorrect.");
     }
 
-
-    public void _03_ReleaseAllPools()
+    [Test]
+    public void _03_Instantiate_Pool_And_Audio_After_AudioModule_Is_Played()
     {
-        // //arrange
-        // var key1 = "HelloAudio_1";
-        // var key2 = "HelloAudio_2";
-        // var keys = new List<string>() { key1, key2 }.ToArray();
-        // CreateMultFakeAudioResourceDataAndAddToList(keys);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // Check_Pool_Doesnt_Exist_In_Game(key1);
-        // Check_Pool_Doesnt_Exist_In_Game(key2);
-        //
-        // _audioModule.Play(key1);
-        // _audioModule.Play(key2);
-        //
-        // Check_Pool_Exists_In_Game(key1);
-        // Check_Pool_Exists_In_Game(key2);
-        //
-        //
-        // //act
-        // _audioModule.ReleaseAllPools();
-        //
-        //
-        // //assert
-        // Check_Pool_Doesnt_Exist_In_Game(key1);
-        // Check_Pool_Doesnt_Exist_In_Game(key2);
+        // arranges
+        _01_IsInitialized_Is_True_After_AudioModule_Is_Initialized();
+
+        _fakeAudioModuleConfig.SetReturnAudioData(_audioDatas.First());
+
+        var fakeAudioClip = CreateFakeAudioClip(FakeAudioModuleAssetProvider.CLIP_DATA_ID);
+        _fakeAudioModuleAssetProvider.SetClip(fakeAudioClip);
+
+        var fakeAudioPrefab = CreateFakeAudioPrefab(FakeAudioModuleAssetProvider.PREFAB_DATA_ID);
+        _fakeAudioModuleAssetProvider.SetAudioPrefab(fakeAudioPrefab);
+
+        var localPosition = new Vector3(0, 1, 0);
+        var volume = 0.6f;
+
+
+        // act
+        var audioId = _audioModule.Play(FakeAudioModuleAssetProvider.CLIP_DATA_ID, localPosition, _parentTransform, volume);
+
+
+        // assert
+        Assert.IsTrue(_parentTransform.childCount == 1, "Audio is not instantiated.");
+
+        var audio = _parentTransform.GetComponentInChildren<IAudio>();
+        Assert.AreEqual(audio.Volume, volume, "Audio volume is incorrect.");
+
+        var audioGameObject = audio.GameObject;
+        var audioTransform = audioGameObject.transform;
+        Assert.AreEqual(audioTransform.position, localPosition, "Audio position is incorrect.");
+
+        Assert.IsTrue(_audioModule.CheckIsPlaying(audioId), "Audio is not playing.");
+        Assert.IsTrue(audioGameObject.activeSelf, "Audio is not Active.");
     }
 
 
-    public void _04_ReleasePool_By_Key()
+    [Test]
+    public void _04_Audio_Stop_Playing_Clip_And_Return_To_Pool_After_AudioModule_Is_stopped()
     {
-        // //arrange
-        // var key1 = "HelloAudio_1";
-        // var key2 = "HelloAudio_2";
-        // var keys = new List<string>() { key1, key2 }.ToArray();
-        // CreateMultFakeAudioResourceDataAndAddToList(keys);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // Check_Pool_Doesnt_Exist_In_Game(key1);
-        // Check_Pool_Doesnt_Exist_In_Game(key2);
-        //
-        // _audioModule.Play(key1);
-        // _audioModule.Play(key2);
-        //
-        // Check_Pool_Exists_In_Game(key1);
-        // Check_Pool_Exists_In_Game(key2);
-        //
-        //
-        // //act
-        // _audioModule.ReleasePool(key1);
-        //
-        //
-        // //assert
-        // Check_Pool_Doesnt_Exist_In_Game(key1);
-        // Check_Pool_Exists_In_Game(key2);
+        // arrange
+        _03_Instantiate_Pool_And_Audio_After_AudioModule_Is_Played();
+        var audio = _parentTransform.GetComponentInChildren<IAudio>();
+        var audioId = audio.Id;
+
+
+        // act
+        _audioModule.Stop(audio.Id);
+
+
+        // assert
+        Assert.IsFalse(_audioModule.CheckIsPlaying(audioId), "Audio is playing.");
+
+        var audioGameObject = audio.GameObject;
+        var audioTransform = audioGameObject.transform;
+        var poolTransform = audioTransform.parent;
+        Assert.AreEqual(_audioModule.GetPoolName(FakeAudioModuleAssetProvider.PREFAB_DATA_ID), poolTransform.name, "PoolName is incorrect.");
+        Assert.IsFalse(audioGameObject.activeSelf, "Audio is Active.");
     }
 
-    public void _05_GetPoolName_By_Key()
+    [TestCase(1)]
+    [TestCase(0.5f)]
+    public void _05_Set_Audio_Volume_After_AudioModule_Is_Called_SetVolume(float volume)
     {
-        // //arrange
-        // var key = "HelloAudio_1";
-        // CreateFakeAudioResourceDataAndAddToList(key);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        //
-        // //act
-        // var poolName = _audioModule.GetPoolName(key);
-        //
-        //
-        // //assert
-        // var expectedPoolName = _fakeAudioModuleConfig.PoolPrefix + key + _fakeAudioModuleConfig.PoolSuffix;
-        // Assert.AreEqual(expectedPoolName, poolName, "Pool name is not equal.");
+        // arrange
+        _03_Instantiate_Pool_And_Audio_After_AudioModule_Is_Played();
+        var audio = _parentTransform.GetComponentInChildren<IAudio>();
+        var audioId = audio.Id;
+
+        // act
+        _audioModule.SetVolume(audioId, volume);
+        
+        
+        // assert
+        Assert.AreEqual(volume, audio.Volume, "Audio volume is incorrect.");
     }
 
-    public void _06_CheckIsPlaying_By_Key()
-    {
-        // //arrange
-        // var key = "HelloAudio_1";
-        // CreateFakeAudioResourceDataAndAddToList(key);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // var id = _audioModule.Play(key);
-        //
-        //
-        // //act
-        // var isPlaying = _audioModule.CheckIsPlaying(id);
-        //
-        //
-        // //assert
-        // Assert.IsTrue(isPlaying, "AudioData doesnt play.");
-    }
-
-    public void _07_GetAudioData()
-    {
-        // //arrange
-        // var key = "HelloAudio_1";
-        // CreateFakeAudioResourceDataAndAddToList(key);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // var id = _audioModule.Play(key);
-        //
-        //
-        // //act
-        // var audioData = _audioModule.GetAudio(id);
-        //
-        //
-        // //assert
-        // Assert.IsNotNull(audioData, "AudioData is null.");
-    }
-
-    public void _08_Play_By_Key_ParentTransform()
-    {
-        // //arrange
-        // var key = "HelloAudio_1";
-        // CreateFakeAudioResourceDataAndAddToList(key);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // Check_AudioPlayingTransform_Hasnt_Child();
-        //
-        //
-        // //act
-        // var id = _audioModule.Play(key, _audioPlayingTransform);
-        //
-        //
-        // //assert
-        // Check_AudioPlayingTransform_Has_Child();
-    }
-
-    public void _09_Stop_By_Id()
-    {
-        // //arrange
-        // var key = "HelloAudio_1";
-        // CreateFakeAudioResourceDataAndAddToList(key);
-        //
-        // var audioResourceDatas = _fakeAudioResourceDatas.ToArray<IAudioData>();
-        // Check_AudioModule_Already_Initialize(audioResourceDatas);
-        //
-        // Check_AudioPlayingTransform_Hasnt_Child();
-        //
-        // var id = _audioModule.Play(key, _audioPlayingTransform);
-        // Check_AudioPlayingTransform_Has_Child();
-        //
-        //
-        // //act
-        // _audioModule.Stop(id);
-        //
-        //
-        // //assert
-        // Check_AudioPlayingTransform_Hasnt_Child();
-    }
-
-
-    // private void Check_AudioModule_Already_Initialize(IAudioData[] audioResourceDatas)
-    // {
-    //     _audioModule.Initialize(audioResourceDatas);
-    //     Assert.IsTrue(_audioModule.IsInitialized);
-    // }
-    //
-    // private void Check_Pool_Doesnt_Exist_In_Game(string key)
-    // {
-    //     var poolName = _audioModule.GetPoolName(key);
-    //     var poolGameObject = GameObject.Find(poolName);
-    //     Assert.IsNull(poolGameObject, "Pool already exist.");
-    // }
-    //
-    // private void Check_Pool_Exists_In_Game(string key)
-    // {
-    //     var poolName = _audioModule.GetPoolName(key);
-    //     var poolGameObject = GameObject.Find(poolName);
-    //     Assert.IsNotNull(poolGameObject, "Pool doesnt exists.");
-    // }
-    //
-    //
-    // private void Check_AudioPlayingTransform_Hasnt_Child() =>
-    //     Assert.IsTrue(_audioPlayingTransform.childCount == 0, $"AudioPlayingTransform has child.");
-    //
-    //
-    // private void Check_AudioPlayingTransform_Has_Child() =>
-    //     Assert.IsTrue(_audioPlayingTransform.childCount > 0, $"AudioPlayingTransform hasnt child.");
-    //
-    //
-    // private void CreateMultFakeAudioResourceDataAndAddToList(string[] keys)
-    // {
-    //     foreach (var key in keys)
-    //         CreateFakeAudioResourceDataAndAddToList(key);
-    // }
-    //
-    // private void CreateFakeAudioResourceDataAndAddToList(string key)
-    // {
-    //     var audioPrefab = CreateAudioPrefab(key);
-    //     var fakeAudioResourceData = new FakeAudioData(key, audioPrefab);
-    //     _fakeAudioResourceDatas.Add(fakeAudioResourceData);
-    // }
-    //
-    // private GameObject CreateAudioPrefab(string key)
-    // {
-    //     var audioPrefab = new GameObject(key);
-    //     audioPrefab.AddComponent<AudioSource>();
-    //     return audioPrefab;
-    // }
-
+    
+    // private method
     private Dictionary<string, IAudioData> CreateAudioDataMap(IAudioData[] audioDatas)
     {
         var audioDataMap = new Dictionary<string, IAudioData>();
@@ -300,6 +169,21 @@ public class AudioModuleTest
             Assert.AreEqual(expectedStr, str, message);
         }
     }
+
+    private AudioClip CreateFakeAudioClip(string name)
+    {
+        var frequency = 1000;
+        var audioClip = AudioClip.Create(name, frequency * 2, 1, frequency, true);
+        return audioClip;
+    }
+
+    private GameObject CreateFakeAudioPrefab(string name)
+    {
+        var fakeAudioPrefab = new GameObject(name);
+        fakeAudioPrefab.AddComponent<Audio>();
+        fakeAudioPrefab.AddComponent<AudioSource>();
+        return fakeAudioPrefab;
+    }
 }
 
 public class FakeAudioData : IAudioData
@@ -316,7 +200,7 @@ public class FakeAudioData : IAudioData
     }
 }
 
-public class FakeAssetProvider : IAudioModuleAssetProvider
+public class FakeAudioModuleAssetProvider : IAudioModuleAssetProvider
 {
     public const string CLIP_DATA_ID = "ClipDataId";
     public const string PREFAB_DATA_ID = "PrefabDataId";
@@ -341,7 +225,7 @@ public class FakeAssetProvider : IAudioModuleAssetProvider
 
         if (LoadedAssetsDataIds is null)
             LoadedAssetsDataIds = dataIds;
-        
+
         else
             LoadedAssetsDataIds = LoadedAssetsDataIds.Concat(dataIds).ToArray();
 

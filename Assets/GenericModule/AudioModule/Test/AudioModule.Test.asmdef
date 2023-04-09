@@ -2,9 +2,9 @@
     "name": "AudioModule.Test",
     "rootNamespace": "",
     "references": [
+        "UniTask",
         "AudioModule",
-        "AudioModule.Test.Fake",
-        "UniTask"
+        "AudioModule.Test.Fake"
     ],
     "includePlatforms": [
         "Editor"

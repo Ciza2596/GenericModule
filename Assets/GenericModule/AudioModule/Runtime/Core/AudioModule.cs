@@ -115,7 +115,7 @@ namespace CizaAudioModule
             SetAudioMixerFloat(_config.AudioMixerVolumeParameter, volume);
         }
 
-        public string Play(string clipDataId, Vector3 localPosition = default, Transform parentTransform = null)
+        public string Play(string clipDataId, Vector3 localPosition = default, Transform parentTransform = null, float volume = 1)
         {
             if (!IsInitialized)
             {
@@ -125,7 +125,7 @@ namespace CizaAudioModule
 
             var audioData = _config.GetAudioData(clipDataId);
 
-            var audioId = Play(audioData, localPosition, parentTransform);
+            var audioId = Play(audioData, localPosition, parentTransform, volume);
             return audioId;
         }
 
@@ -249,6 +249,8 @@ namespace CizaAudioModule
             usingAudio.SetVolume(volume);
         }
 
+        public string GetPoolName(string prefabDataId) =>
+            _config.PoolPrefix + prefabDataId + _config.PoolSuffix;
 
         // private method
 
@@ -298,7 +300,8 @@ namespace CizaAudioModule
         private void AddAudioToUnplayingAudiosMap(IAudio audio)
         {
             audio.GameObject.name = audio.PrefabDataId;
-            SetAudio(audio, false, Vector3.zero, null);
+            var poolTransform = _poolTransformMap[audio.PrefabDataId];
+            SetAudioTransform(audio, false, Vector3.zero, poolTransform);
 
             var unplayingAudios = _unplayingAudiosMap[audio.PrefabDataId];
             unplayingAudios.Add(audio);
@@ -306,12 +309,12 @@ namespace CizaAudioModule
 
         private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 localPosition, Transform parentTransform)
         {
-            SetAudio(audio, true, localPosition, parentTransform);
+            SetAudioTransform(audio, true, localPosition, parentTransform);
 
             _playingAudioMap.Add(audioId, audio);
         }
 
-        private void SetAudio(IAudio audio, bool isActive, Vector3 localPosition, Transform parentTransform)
+        private void SetAudioTransform(IAudio audio, bool isActive, Vector3 localPosition, Transform parentTransform)
         {
             var audioGameObject = audio.GameObject;
             audioGameObject.SetActive(isActive);
@@ -387,8 +390,5 @@ namespace CizaAudioModule
             else
                 Object.DestroyImmediate(obj);
         }
-
-        private string GetPoolName(string prefabDataId) =>
-            _config.PoolPrefix + prefabDataId + _config.PoolSuffix;
     }
 }

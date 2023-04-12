@@ -1,19 +1,19 @@
 ## Info
 Modules for unity.
 
-module | Test |
---- | :---: |
-[LogModule](#logmodule) | ✔️ |
-[PageModule](#pagemodule) | ✔️ |
-[TimerModule](#timermodule) | ✔️ |
-[AudioModule](#audiomodule) | ✔️ |
-[EventModule](#eventmodule) | ✔️ |
-[SaveLoadModule](#saveloadmodule) | ✔️ |
-[ObjectPool](#objectpool) | ✔️ |
-[GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ |
-[SceneModule](#scenemodule) | ❌ |
-[AudioPlayerModule](#audioplayermodule) | ❌ |
-[AddressablesModule](#addressablesmodule) | ❌ |
+module | Test | Samples |
+--- | :---: | :---: |
+[LogModule](#logmodule) | ✔️ | ❌ |
+[PageModule](#pagemodule) | ✔️ | ❌ |
+[TimerModule](#timermodule) | ✔️ | ❌ |
+[AudioModule](#audiomodule) | ✔️ | ✔️ |
+[EventModule](#eventmodule) | ✔️ | ❌ |
+[SaveLoadModule](#saveloadmodule) | ✔️ | ❌ |
+[ObjectPool](#objectpool) | ✔️ | ❌ |
+[GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
+[SceneModule](#scenemodule) | ❌ | ❌ |
+[AudioPlayerModule](#audioplayermodule) | ❌ | ❌ |
+[AddressablesModule](#addressablesmodule) | ❌ | ❌ |
 
 ## LogModule
 ```

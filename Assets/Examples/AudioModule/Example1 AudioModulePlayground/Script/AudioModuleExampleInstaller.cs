@@ -13,10 +13,12 @@ namespace CizaAudioModule.Example1
     {
         // private variable
         [SerializeField] private AudioDataOverview _audioDataOverview;
-        [Space]
-        [SerializeField] private AudioMixer _audioMixer;
+        [Space] [SerializeField] private AudioMixer _audioMixer;
         [SerializeField] private AudioModuleConfig _audioModuleConfig;
         [SerializeField] private AudioModuleAssetProvider _audioModuleAssetProvider;
+        [Space] [SerializeField] private Transform _parentTransform;
+        [SerializeField] private bool _isLocalPosition;
+        [SerializeField] private Vector3 _position;
         [Space] [SerializeField] private ComponentCollectionData _componentCollectionData;
 
         private AudioModule _audioModule;
@@ -32,11 +34,11 @@ namespace CizaAudioModule.Example1
             await _audioModule.Initialize(audioDataMap);
 
             _componentCollectionData.AudioMixerVolumeSlider.onValueChanged.AddListener(SetAudioMixerVolume);
-            
+
             var clipDataIds = _audioModule.ClipDataIds;
             _componentCollectionData.SetClipDataIds(clipDataIds);
             _componentCollectionData.PlayButton.onClick.AddListener(Play);
-            
+
             _componentCollectionData.VolumeSlider.onValueChanged.AddListener(SetVolume);
             _componentCollectionData.PauseButton.onClick.AddListener(Pause);
             _componentCollectionData.ResumeButton.onClick.AddListener(Resume);
@@ -46,20 +48,20 @@ namespace CizaAudioModule.Example1
 
         private void OnApplicationQuit()
         {
-            if(_audioModule.IsInitialized)
+            if (_audioModule.IsInitialized)
                 _audioModule.Release();
         }
-        
-        
+
+
         // private method
         private void SetAudioMixerVolume(float volume) =>
             _audioModule.SetAudioMixerVolume(volume);
-        
+
         private void Play()
         {
             var clipDataId = _componentCollectionData.ClipDataId;
-            var audioId = _audioModule.Play(clipDataId);
-            
+            var audioId = _audioModule.Play(clipDataId, position: _position, parentTransform: _parentTransform, isLocalPosition: _isLocalPosition);
+
             _audioIds.Add(audioId);
             UpdateAudioIds();
         }
@@ -107,11 +109,9 @@ namespace CizaAudioModule.Example1
         private class ComponentCollectionData
         {
             [SerializeField] private Slider _audioMixerVolumeSlider;
-            [Space]
-            [SerializeField] private TMP_Dropdown _clipDataIdDropdown;
+            [Space] [SerializeField] private TMP_Dropdown _clipDataIdDropdown;
             [SerializeField] private Button _playButton;
-            [Space]
-            [SerializeField] private TMP_Dropdown _audioIdDropdown;
+            [Space] [SerializeField] private TMP_Dropdown _audioIdDropdown;
             [SerializeField] private Slider _volumeSlider;
             [SerializeField] private Button _pauseButton;
             [SerializeField] private Button _resumeButton;
@@ -120,31 +120,31 @@ namespace CizaAudioModule.Example1
 
 
             public Slider AudioMixerVolumeSlider => _audioMixerVolumeSlider;
-            
-            
+
+
             public string ClipDataId => _clipDataIdDropdown.captionText.text;
             public Button PlayButton => _playButton;
-            
-            
+
+
             public string AudioId => _audioIdDropdown.captionText.text;
             public Slider VolumeSlider => _volumeSlider;
             public Button PauseButton => _pauseButton;
             public Button ResumeButton => _resumeButton;
             public Button StopButton => _stopButton;
             public Button StopAllButton => _stopAllButton;
-            
-            
+
+
             public void SetClipDataIds(string[] clipDataIds)
             {
                 _clipDataIdDropdown.ClearOptions();
-                if(clipDataIds is not null && clipDataIds.Length >0)
+                if (clipDataIds is not null && clipDataIds.Length > 0)
                     _clipDataIdDropdown.AddOptions(clipDataIds.ToList());
             }
-            
+
             public void SetAudioIds(string[] audioIds)
             {
                 _audioIdDropdown.ClearOptions();
-                if(audioIds is not null && audioIds.Length >0)
+                if (audioIds is not null && audioIds.Length > 0)
                     _audioIdDropdown.AddOptions(audioIds.ToList());
             }
         }

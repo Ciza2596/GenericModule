@@ -115,7 +115,7 @@ namespace CizaAudioModule
             SetAudioMixerFloat(_config.AudioMixerVolumeParameter, volume);
         }
 
-        public string Play(string clipDataId, Vector3 localPosition = default, Transform parentTransform = null, float volume = 1)
+        public string Play(string clipDataId, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false)
         {
             if (!IsInitialized)
             {
@@ -124,11 +124,11 @@ namespace CizaAudioModule
             }
 
             var audioData = _audioDataMap[clipDataId];
-            var audioId = Play(audioData, localPosition, parentTransform, volume);
+            var audioId = Play(audioData, position, parentTransform, volume, isLocalPosition);
             return audioId;
         }
 
-        public string Play(IAudioData audioData, Vector3 localPosition = default, Transform parentTransform = null, float volume = 1)
+        public string Play(IAudioData audioData, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false)
         {
             if (!IsInitialized)
             {
@@ -144,7 +144,7 @@ namespace CizaAudioModule
             var audio = GetOrCreateAudio(prefabDataId);
             var audioClip = _assetProvider.GetAsset<AudioClip>(clipDataId);
 
-            AddAudioToPlayingAudiosMap(audioId, audio, localPosition, parentTransform);
+            AddAudioToPlayingAudiosMap(audioId, audio, position, parentTransform, isLocalPosition);
 
             audio.Play(audioId, clipDataId, audioClip, spatialBlend, volume);
             audio.GameObject.name = clipDataId;
@@ -300,27 +300,32 @@ namespace CizaAudioModule
         {
             audio.GameObject.name = audio.PrefabDataId;
             var poolTransform = _poolTransformMap[audio.PrefabDataId];
-            SetAudioTransform(audio, false, Vector3.zero, poolTransform);
+            SetAudioTransform(audio, false, Vector3.zero, poolTransform, true);
 
             var unplayingAudios = _unplayingAudiosMap[audio.PrefabDataId];
             unplayingAudios.Add(audio);
         }
 
-        private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 localPosition, Transform parentTransform)
+        private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 position, Transform parentTransform, bool isLocalPosition)
         {
-            SetAudioTransform(audio, true, localPosition, parentTransform);
+            SetAudioTransform(audio, true, position, parentTransform, isLocalPosition);
 
             _playingAudioMap.Add(audioId, audio);
         }
 
-        private void SetAudioTransform(IAudio audio, bool isActive, Vector3 localPosition, Transform parentTransform)
+        private void SetAudioTransform(IAudio audio, bool isActive, Vector3 position, Transform parentTransform, bool isLocalPosition)
         {
             var audioGameObject = audio.GameObject;
             audioGameObject.SetActive(isActive);
 
             var audioTransform = audioGameObject.transform;
+            
             audioTransform.SetParent(parentTransform);
-            audioTransform.localPosition = localPosition;
+            
+            if (isLocalPosition)
+                audioTransform.localPosition = position;
+            else
+                audioTransform.position = position;
         }
 
 

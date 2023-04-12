@@ -78,8 +78,14 @@ TimerModule manual.
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
 ```
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
 
 ### Manual:
+Dependency [UniTask](https://github.com/Cysharp/UniTask)
+
 AudioModule manual.
 
 

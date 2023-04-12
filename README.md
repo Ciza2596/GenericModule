@@ -217,7 +217,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/ObjectPo
 ### Manual:
 - **Example**
 ```csharp
-sing System;
+using System;
 using CizaObjectPool;
 using UnityEngine;
 

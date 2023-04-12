@@ -21,6 +21,15 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
 
 ### Manual:
 
+- **Operate LogModuleConfig**
+  1. Create LogModuleConfig:
+    
+     <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
+    
+  2. LogModuleConfig Inspector:
+    
+     <img src="Document/LogModule/Image/LogModuleConfigInspector.png"/>
+     
 - **Example**
 ```csharp
 public class LogModuleExample : MonoBehaviour
@@ -35,18 +44,6 @@ public class LogModuleExample : MonoBehaviour
     }
 }
 ```
-- **Operate LogModuleConfig**
-  1. Create LogModuleConfig:
-    
-     <img src="Document/LogModule/Image/CreateLogModuleConfig.png"/>
-    
-  2. LogModuleConfig Inspector:
-    
-     <img src="Document/LogModule/Image/LogModuleInspector.png"/>
-     
-  3. Drop LogModuleConfig to script:
-    
-     <img src="Document/LogModule/Image/LogModuleInspector.png"/>
 
 
 

@@ -1,7 +1,7 @@
 {
-  "name": "com.ciza.objectpoolmodule",
-  "displayName": "ObjectPoolModule",
-  "description": "ObjectPoolModule.",
+  "name": "com.ciza.objectpool",
+  "displayName": "ObjectPool",
+  "description": "ObjectPool.",
   "version": "0.0.1",
   "unity": "2022.2",
   "unityRelease": "1f1",

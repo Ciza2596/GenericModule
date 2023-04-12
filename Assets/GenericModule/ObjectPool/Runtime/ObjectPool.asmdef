@@ -1,17 +1,13 @@
 {
-    "name": "ObjectPoolModule.Test",
-    "rootNamespace": "",
-    "references": [
-        "ObjectPoolModule"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "name": "ObjectPool",
+    "rootNamespace": "CizaObjectPool",
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

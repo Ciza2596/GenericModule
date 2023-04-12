@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CizaObjectPoolModule
+namespace CizaObjectPool
 {
-    public class ObjectPoolModule<T> where T: class, new()
+    public class ObjectPool<T> where T: class, new()
     {
 
         //private method

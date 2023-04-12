@@ -1,19 +1,19 @@
 
 
 using System;
-using CizaObjectPoolModule;
+using CizaObjectPool;
 using NUnit.Framework;
 
-public class ObjectPoolModuleTest
+public class ObjectPoolTest
 {
 
-    private ObjectPoolModule<FakeObject> _fakeObjectPool; 
+    private ObjectPool<FakeObject> _fakeObjectPool; 
 
     
     [SetUp]
     public void SetUp()
     {
-        _fakeObjectPool = new ObjectPoolModule<FakeObject>();
+        _fakeObjectPool = new ObjectPool<FakeObject>();
     }
 
 

@@ -9,7 +9,7 @@ module | Test |
 [AudioModule](#audiomodule) | ✔️ |
 [EventModule](#eventmodule) | ✔️ |
 [SaveLoadModule](#saveloadmodule) | ✔️ |
-[ObjectPoolModule](#objectpoolmodule) | ✔️ |
+[ObjectPool](#objectpool) | ✔️ |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ |
 [SceneModule](#scenemodule) | ❌ |
 [AudioPlayerModule](#audioplayermodule) | ❌ |
@@ -209,13 +209,13 @@ Support type:
        <img src="Document/LogModule/Image/LogModuleInspector.png"/>
        
        
-## ObjectPoolModule
+## ObjectPool
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/ObjectPoolModule
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/ObjectPool
 ```
 
 ### Manual:
-ObjectPoolModule manual.
+ObjectPool manual.
 
 
 

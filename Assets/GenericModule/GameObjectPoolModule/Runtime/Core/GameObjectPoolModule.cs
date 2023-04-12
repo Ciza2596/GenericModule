@@ -69,11 +69,7 @@ namespace CizaGameObjectPoolModule
             return hasPool;
         }
 
-
-        public GameObject Spawn(string key, Transform parentTransform = null) =>
-            Spawn(key, Vector3.zero, parentTransform);
-
-        public GameObject Spawn(string key, Vector3 localPosition, Transform parentTransform = null)
+        public GameObject Spawn(string key, Vector3 position = default, Transform parentTransform = null, bool isLocalPosition = false)
         {
             if (!_prefabMap.ContainsKey(key))
             {
@@ -101,7 +97,11 @@ namespace CizaGameObjectPoolModule
 
             var transform = gameObject.transform;
             transform.SetParent(parentTransform);
-            transform.localPosition = localPosition;
+
+            if (isLocalPosition)
+                transform.localPosition = position;
+            else
+                transform.position = position;
 
             gameObject.SetActive(true);
             return gameObject;

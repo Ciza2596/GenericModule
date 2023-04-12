@@ -81,13 +81,13 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         Check_SpawnTransform_Hasnt_Children();
 
-        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,2, prefabMap);
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0, 2, prefabMap);
         Check_SpawnTransform_Has_Children(2);
-        
-        
+
+
         //act
         _gameObjectPoolModule.DeSpawn(gameObjects);
 
@@ -102,13 +102,13 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         Check_SpawnTransform_Hasnt_Children();
 
-        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0,1, prefabMap);
+        var gameObjects = Spawn_GameObjects_To_SpawnTransform(0, 1, prefabMap);
         Check_SpawnTransform_Has_Children();
 
-        
+
         //act
         var gameObject = gameObjects[0];
         _gameObjectPoolModule.DeSpawn(gameObject);
@@ -124,14 +124,14 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         Check_SpawnTransform_Hasnt_Children();
 
         Spawn_GameObject_To_SpawnTransform(0, prefabMap);
         Spawn_GameObject_To_SpawnTransform(1, prefabMap);
         Check_SpawnTransform_Has_Children(2);
 
-        
+
         //act
         var key = GetKey(0, prefabMap);
         _gameObjectPoolModule.DeSpawn(key);
@@ -147,14 +147,14 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         Check_SpawnTransform_Hasnt_Children();
 
         Spawn_GameObject_To_SpawnTransform(0, prefabMap);
         Spawn_GameObject_To_SpawnTransform(1, prefabMap);
         Check_SpawnTransform_Has_Children(2);
 
-        
+
         //act
         _gameObjectPoolModule.DeSpawnAll();
 
@@ -169,18 +169,18 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         var key = GetKey(0, prefabMap);
         Check_Not_Exist_Pool(key);
-        
+
         Spawn_GameObject_To_SpawnTransform(0, prefabMap);
         Check_Exist_Pool(key);
-        
-        
+
+
         //act
         _gameObjectPoolModule.ReleasePool(key);
-        
-        
+
+
         //assert
         Check_Not_Exist_Pool(key);
     }
@@ -191,7 +191,7 @@ public class GameObjectPoolModuleTest
         //arrange
         var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
         Check_GameObjectPoolModule_Is_Initialized(prefabMap);
-        
+
         var key1 = GetKey(0, prefabMap);
         var key2 = GetKey(1, prefabMap);
 
@@ -200,16 +200,15 @@ public class GameObjectPoolModuleTest
 
         Check_Exist_Pool(key1);
         Check_Exist_Pool(key2);
-        
-        
+
+
         //act
         _gameObjectPoolModule.ReleaseAllPool();
-        
-        
+
+
         //assert
         Check_Not_Exist_Pool(key1);
         Check_Not_Exist_Pool(key2);
-        
     }
 
 
@@ -257,7 +256,7 @@ public class GameObjectPoolModuleTest
         var hasPool = _gameObjectPoolModule.TryGetPoolName(key, out var poolName);
         Assert.IsTrue(hasPool, $"GameObjectPoolModule doesnt spawn {key} pool.");
     }
-    
+
     private void Check_Not_Exist_Pool(string key)
     {
         var hasPool = _gameObjectPoolModule.TryGetPoolName(key, out var poolName);
@@ -268,7 +267,7 @@ public class GameObjectPoolModuleTest
         Dictionary<string, GameObject> prefabMap)
     {
         var key = prefabMap.Keys.ToArray()[keyIndex];
-        return _gameObjectPoolModule.Spawn(key, _spawnTransform);
+        return _gameObjectPoolModule.Spawn(key, parentTransform: _spawnTransform);
     }
 
     private GameObject[] Spawn_GameObjects_To_SpawnTransform(int keyIndex, int count,

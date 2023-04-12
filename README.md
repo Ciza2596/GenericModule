@@ -32,6 +32,10 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LogModul
      
 - **Example**
 ```csharp
+using CizaLogModule;
+using CizaLogModule.Implement;
+using UnityEngine;
+
 public class LogModuleExample : MonoBehaviour
 {
     [SerializeField]
@@ -39,7 +43,7 @@ public class LogModuleExample : MonoBehaviour
     
     private void Awake()
     {
-        var logModule = new LogModule.LogModule(_logModuleConfig, new UnityLogPrinter());
+        var logModule = new LogModule(_logModuleConfig, new UnityLogPrinter());
         logModule.Debug("Hello World!");
     }
 }

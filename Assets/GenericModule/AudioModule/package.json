@@ -17,14 +17,9 @@
   },
   "samples": [
     {
-      "displayName": "Extension1 ZenjectInstaller",
-      "description": "Implement audioModule installer with zenject.",
-      "path": "Samples~/Extension1 ZenjectInstaller"
-    },
-    {
-      "displayName": "Example1 WithZenjectInstaller",
-      "description": "Please import Extension1 ZenjectInstaller. Implement using audioModule include animation, prefab, scene, script, scriptableObject etc.",
-      "path": "Samples~/Example1 WithZenjectInstaller"
+      "displayName": "Example1 AudioModulePlayground",
+      "description": "Implement using AudioModule include animation, prefab, scene, script, scriptableObject etc.",
+      "path": "Samples~/Example1 AudioModulePlayground"
     }
   ]
 }

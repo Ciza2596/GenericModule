@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-[CreateAssetMenu(fileName = "AudioModuleAssetProvider", menuName = "Ciza/AudioModule/AudioModuleAssetProvider")]
+[CreateAssetMenu(fileName = "AudioModuleAssetProvider", menuName = "Ciza/AudioModule/AudioModuleAssetProvider", order = 1)]
 public class AudioModuleAssetProvider : ScriptableObject, IAudioModuleAssetProvider
 {
     [SerializeField] private ClipMapData[] _clipMapDatas;

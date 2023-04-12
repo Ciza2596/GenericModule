@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioDataOverview", menuName = "Ciza/AudioModule/AudioDataOverview")]
+    [CreateAssetMenu(fileName = "AudioDataOverview", menuName = "Ciza/AudioModule/AudioDataOverview", order = -100)]
     public class AudioDataOverview : ScriptableObject
     {
         [SerializeField]

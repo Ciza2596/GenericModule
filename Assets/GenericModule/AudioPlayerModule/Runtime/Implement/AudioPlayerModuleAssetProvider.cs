@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
+using CizaAudioModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace CizaAudioModule.Implement
+namespace CizaAudioPlayerModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioModuleAssetProvider", menuName = "Ciza/AudioModule/AudioModuleAssetProvider", order = 1)]
-    public class AudioModuleAssetProvider : ScriptableObject, IAudioModuleAssetProvider
+    [CreateAssetMenu(fileName = "AudioPlayerModuleAssetProvider", menuName = "Ciza/AudioPlayerModule/AudioPlayerModuleAssetProvider", order = 1)]
+    public class AudioPlayerModuleAssetProvider : ScriptableObject, IAudioModuleAssetProvider
     {
         [SerializeField] private ClipMapData[] _clipMapDatas;
         [SerializeField] private PrefabMapData[] _prefabMapDatas;

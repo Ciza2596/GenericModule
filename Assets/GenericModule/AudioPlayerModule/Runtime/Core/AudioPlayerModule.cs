@@ -21,7 +21,7 @@ namespace CizaAudioPlayerModule
         private readonly Dictionary<string, float> _volumeMapByAudioId = new Dictionary<string, float>();
         private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
         private readonly List<string> _genericTimerIds = new List<string>();
-        
+
 
         //public variable
         public AudioMixer AudioMixer => _audioModule.AudioMixer;
@@ -35,15 +35,19 @@ namespace CizaAudioPlayerModule
 
 
         //public method
-        public AudioPlayerModule(IAudioPlayerModuleConfig audioPlayerModuleConfig, IAudioPlayerModuleAssetProvider audioPlayerModuleAssetProvider, ITimerModule timerModule, AudioMixer audioMixer)
+        public AudioPlayerModule(IAudioPlayerModuleConfig audioPlayerModuleConfig, IAudioPlayerModuleAssetProvider audioPlayerModuleAssetProvider, AudioMixer audioMixer)
         {
             _audioPlayerModuleConfig = audioPlayerModuleConfig;
             _audioModule = new AudioModule(_audioPlayerModuleConfig, audioPlayerModuleAssetProvider, audioMixer);
 
-            _timerModule = timerModule;
+            _timerModule = null;
         }
 
-        public UniTask Initialize(Dictionary<string, IAudioData> audioDatasMap) => _audioModule.Initialize(audioDatasMap);
+        public async UniTask Initialize(Dictionary<string, IAudioData> audioDataMap)
+        {
+            var audioDataMapForAudioModule = audioDataMap.ToDictionary(kvp => kvp.Key, kvp => (CizaAudioModule.IAudioData)kvp.Value);
+            await _audioModule.Initialize(audioDataMapForAudioModule);
+        }
 
         public void Release()
         {
@@ -58,11 +62,17 @@ namespace CizaAudioPlayerModule
             });
         }
 
+        public void Tick(float deltaTime)
+        {
+            
+        }
+
         public bool CheckIsPlaying(string audioId) => _audioModule.CheckIsPlaying(audioId);
         public void SetAudioMixerVolume(float volume) => _audioModule.SetAudioMixerVolume(volume);
-        
+
         public string Play(string channel, string clipDataId, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false, bool isOverrideChannelPlaying = false) =>
             Play(channel, clipDataId, _audioPlayerModuleConfig.DefaultFadeTime, position, parentTransform, volume, isLocalPosition, isOverrideChannelPlaying);
+
         public string Play(string channel, string clipDataId, float fadeTime, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false, bool isOverrideChannelPlaying = false)
         {
             if (!_audioIdsMapByChannel.ContainsKey(channel))
@@ -80,9 +90,10 @@ namespace CizaAudioPlayerModule
 
             return audioId;
         }
-        
+
         public string PlayAndAutoStop(string channel, string clipDataId, Vector3 position = default, Transform parentTransform = null, float volume = 1, Action onComplete = null, bool isOverrideChannelPlaying = false) =>
             PlayAndAutoStop(channel, clipDataId, _audioPlayerModuleConfig.DefaultFadeTime, position, parentTransform, volume, onComplete, isOverrideChannelPlaying);
+
         public string PlayAndAutoStop(string channel, string clipDataId, float fadeTime, Vector3 position = default, Transform parentTransform = null, float volume = 1, Action onComplete = null, bool isOverrideChannelPlaying = false)
         {
             var audioId = Play(channel, clipDataId, fadeTime, position, parentTransform, volume, isOverrideChannelPlaying);
@@ -97,6 +108,7 @@ namespace CizaAudioPlayerModule
 
         public void ChangeVolume(string audioId, float volume, Action onComplete = null) =>
             ChangeVolume(audioId, volume, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void ChangeVolume(string audioId, float volume, float fadeTime, Action onComplete = null)
         {
             if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
@@ -112,6 +124,7 @@ namespace CizaAudioPlayerModule
 
         public void Pause(string audioId, Action onComplete = null) =>
             Pause(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void Pause(string audioId, float fadeTime, Action onComplete = null)
         {
             if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
@@ -132,6 +145,7 @@ namespace CizaAudioPlayerModule
 
         public void PauseByChannel(string channel, Action onComplete = null) =>
             PauseByChannel(channel, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void PauseByChannel(string channel, float fadeTime, Action onComplete = null)
         {
             if (_audioIdsMapByChannel.ContainsKey(channel))
@@ -150,6 +164,7 @@ namespace CizaAudioPlayerModule
 
         public void Resume(string audioId, Action onComplete = null) =>
             Resume(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void Resume(string audioId, float fadeTime, Action onComplete = null)
         {
             if (!IsInitialized)
@@ -157,21 +172,22 @@ namespace CizaAudioPlayerModule
                 Debug.LogWarning("[AudioPlayerModule::Resume] AudioPlayerModule is not initialized.");
                 return;
             }
-            
+
             if (!CheckIsPlaying(audioId))
             {
                 Debug.LogWarning($"[AudioPlayerModule::Resume] Audio is not found by audioId: {audioId}.");
                 return;
             }
-            
+
             var volume = _volumeMapByAudioId[audioId];
-            FadeAudioVolume(audioId,0, volume, fadeTime, onComplete);
+            FadeAudioVolume(audioId, 0, volume, fadeTime, onComplete);
             _audioModule.Resume(audioId);
         }
 
-        
-        public void ResumeByChannel(string channel,  Action onComplete = null) =>
+
+        public void ResumeByChannel(string channel, Action onComplete = null) =>
             ResumeByChannel(channel, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void ResumeByChannel(string channel, float fadeTime, Action onComplete = null)
         {
             var audioIds = _audioIdsMapByChannel[channel].ToArray();
@@ -184,6 +200,7 @@ namespace CizaAudioPlayerModule
 
         public void Stop(string audioId, Action onComplete = null) =>
             Stop(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void Stop(string audioId, float fadeTime, Action onComplete = null)
         {
             if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
@@ -204,7 +221,7 @@ namespace CizaAudioPlayerModule
                 }
 
                 _audioModule.Stop(audioId);
-                
+
                 var channel = GetChannelByAudioId(audioId);
                 var audioIds = _audioIdsMapByChannel[channel];
                 audioIds.Remove(audioId);
@@ -215,13 +232,14 @@ namespace CizaAudioPlayerModule
 
         public void StopByChannel(string audioId, Action onComplete = null) =>
             StopByChannel(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void StopByChannel(string channel, float fadeTime, Action onComplete = null)
         {
             Assert.IsTrue(_audioIdsMapByChannel.ContainsKey(channel),
                 $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
 
             var audioIds = _audioIdsMapByChannel[channel].ToArray();
-            
+
             foreach (var audioId in audioIds)
                 Stop(audioId, fadeTime);
 
@@ -230,6 +248,7 @@ namespace CizaAudioPlayerModule
 
         public void StopAll(Action onComplete = null) =>
             StopAll(_audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+
         public void StopAll(float fadeTime, Action onComplete = null)
         {
             var channels = _audioIdsMapByChannel.Keys.ToArray();
@@ -260,7 +279,7 @@ namespace CizaAudioPlayerModule
 
         private void FadeAudioVolume(string audioId, float startVolume, float endVolume, float duration, Action onComplete) =>
             _timerModule.AddOnceTimer(startVolume, volume => _audioModule.SetVolume(audioId, volume), endVolume, duration, onComplete);
-        
+
         private bool CheckHasTimerId(string id)
         {
             var hasTimerId = _timerIdMapByAudioId.ContainsKey(id);

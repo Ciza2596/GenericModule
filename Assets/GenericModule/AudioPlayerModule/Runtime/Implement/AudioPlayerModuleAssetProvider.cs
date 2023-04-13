@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace CizaAudioPlayerModule.Implement
 {
     [CreateAssetMenu(fileName = "AudioPlayerModuleAssetProvider", menuName = "Ciza/AudioPlayerModule/AudioPlayerModuleAssetProvider", order = 1)]
-    public class AudioPlayerModuleAssetProvider : ScriptableObject, IAudioModuleAssetProvider
+    public class AudioPlayerModuleAssetProvider : ScriptableObject, IAudioPlayerModuleAssetProvider
     {
         [SerializeField] private ClipMapData[] _clipMapDatas;
         [SerializeField] private PrefabMapData[] _prefabMapDatas;

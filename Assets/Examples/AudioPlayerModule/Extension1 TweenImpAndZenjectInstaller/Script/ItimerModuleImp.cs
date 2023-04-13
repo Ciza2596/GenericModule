@@ -4,13 +4,13 @@ using GameCore.Infrastructure;
 
 namespace CizaAudioPlayerModule.Implement
 {
-    public class TweenImp : ITween
+    public class ItimerModuleImp : ITimerModule
     {
-        private ITimerModule _timerModule;
+        private GameCore.Infrastructure.ITimerModule _timerModule;
 
-        public TweenImp(ITimerModule timerModule) => _timerModule = timerModule;
+        public ItimerModuleImp(GameCore.Infrastructure.ITimerModule timerModule) => _timerModule = timerModule;
 
-        public string PlayTimer(float duration, Action onComplete)
+        public string AddOnceTimer(float duration, Action onComplete)
         {
             var id = _timerModule.RegisterOnceTimer(duration, onComplete);
             return id;
@@ -20,7 +20,7 @@ namespace CizaAudioPlayerModule.Implement
             _timerModule.UnRegisterOnceTimer(id);
         
 
-        public void To(float startValue, Action<float> valueSetter, float endValue, float duration,
+        public void AddOnceTimer(float startValue, Action<float> valueSetter, float endValue, float duration,
             Action onComplete = null) =>
             DOTween.To(() => startValue, volume => valueSetter(volume), endValue, duration).OnComplete(() => onComplete?.Invoke());
     }

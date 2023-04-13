@@ -43,8 +43,7 @@ namespace CizaAudioModule
 
             AudioMixer = audioMixer;
         }
-
-
+        
         public async UniTask Initialize(Dictionary<string, IAudioData> audioDataMap)
         {
             if (IsInitialized)
@@ -65,7 +64,6 @@ namespace CizaAudioModule
                 _poolRootTransform = poolRootGameObject.transform;
             }
         }
-
         public void Release()
         {
             if (!IsInitialized)
@@ -91,6 +89,15 @@ namespace CizaAudioModule
             _assetProvider.UnloadAssets(AssetDataIds);
         }
 
+        public bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
+        {
+            audioReadModel = null;
+            if (!_playingAudioMap.ContainsKey(audioId))
+                return false;
+
+            audioReadModel = _playingAudioMap[audioId];
+            return true;
+        }
 
         public bool CheckIsPlaying(string audioId)
         {
@@ -102,8 +109,6 @@ namespace CizaAudioModule
 
             return _playingAudioMap.ContainsKey(audioId);
         }
-
-
         public void SetAudioMixerVolume(float volume)
         {
             if (AudioMixer is null)

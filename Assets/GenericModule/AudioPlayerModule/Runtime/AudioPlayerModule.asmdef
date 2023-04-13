@@ -2,6 +2,7 @@
     "name": "AudioPlayerModule",
     "rootNamespace": "CizaAudioPlayerModule",
     "references": [
+        "UniTask",
         "AudioModule"
     ],
     "includePlatforms": [],

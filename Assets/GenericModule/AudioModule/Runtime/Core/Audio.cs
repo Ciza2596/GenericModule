@@ -14,6 +14,7 @@ namespace CizaAudioModule
         public float SpatialBlend => _audioSource.spatialBlend;
 
         public float Volume => _audioSource.volume;
+        public float Duration { get; private set; }
 
         public GameObject GameObject => gameObject;
 
@@ -59,6 +60,7 @@ namespace CizaAudioModule
             _audioSource.clip = audioClip;
 
             _audioSource.spatialBlend = spatialBlend;
+            Duration = audioClip is null ? 0 : audioClip.length;
 
             SetVolume(volume);
         }

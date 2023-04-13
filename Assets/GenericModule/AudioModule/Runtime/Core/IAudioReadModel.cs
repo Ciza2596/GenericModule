@@ -5,5 +5,6 @@ namespace CizaAudioModule
     {
         public string Id { get; }
         public float Volume { get; }
+        public float Duration { get; }
     }
 }

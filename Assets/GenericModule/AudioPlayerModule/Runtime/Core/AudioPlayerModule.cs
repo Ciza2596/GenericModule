@@ -2,298 +2,269 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CizaAudioModule;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Audio;
 
 
 namespace CizaAudioPlayerModule
 {
-    // public class AudioPlayerModule
-    // {
-    //     //private variable
-    //     private const float DEFAULT_FADE_TIME = 0.25f;
-    //
-    //     private readonly CizaAudioModule.AudioModule _audioModule;
-    //     private readonly ITween _tween;
-    //
-    //     private readonly Dictionary<string, List<string>> _channelIdsMaps = new Dictionary<string, List<string>>();
-    //
-    //     private readonly Dictionary<string, string> _audioIdTimerIdMaps = new Dictionary<string, string>();
-    //
-    //     //public variable
-    //     public bool IsReleasing { get; private set; }
-    //
-    //
-    //     //public method
-    //     public AudioPlayerModule(CizaAudioModule.AudioModule audioModule, ITween tween)
-    //     {
-    //         _audioModule = audioModule;
-    //         _tween = tween;
-    //     }
-    //
-    //
-    //     public void Initialize(IAudioData[] audioResourceDatas) => _audioModule.Initialize(audioResourceDatas);
-    //
-    //     public void Release()
-    //     {
-    //         IsReleasing = true;
-    //
-    //         StopAll(onComplete: () =>
-    //         {
-    //             _channelIdsMaps.Clear();
-    //             _audioModule.Release();
-    //
-    //             IsReleasing = false;
-    //         });
-    //     }
-    //
-    //     public void ReleaseAllPool()
-    //     {
-    //         IsReleasing = true;
-    //
-    //         StopAll(onComplete: () =>
-    //         {
-    //             _channelIdsMaps.Clear();
-    //             _audioModule.ReleaseAllPools();
-    //
-    //             IsReleasing = false;
-    //         });
-    //     }
-    //
-    //
-    //     public void ReleasePool(string key)
-    //     {
-    //         IsReleasing = true;
-    //         StopByKey(key, onComplete: () =>
-    //         {
-    //             _audioModule.ReleasePool(key);
-    //
-    //             IsReleasing = false;
-    //         });
-    //     }
-    //
-    //     public bool CheckIsPlaying(string id)
-    //     {
-    //         var isPlaying = _audioModule.CheckIsPlaying(id);
-    //         return isPlaying;
-    //     }
-    //
-    //     public float GetOriginVolume(string id)
-    //     {
-    //         var audioData = _audioModule.GetAudio(id);
-    //         var originVolume = audioData.OriginVolume;
-    //         return originVolume;
-    //     }
-    //
-    //     //play return id
-    //     public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-    //         Transform parentTransform = null, bool isOverrideChannelPlaying = false) => Play(channel, key, fadeTime,
-    //         Vector3.zero, parentTransform, isOverrideChannelPlaying);
-    //
-    //     public string Play(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-    //         Vector3 position = default, Transform parentTransform = null, bool isOverrideChannelPlaying = false)
-    //     {
-    //         if (!_channelIdsMaps.ContainsKey(channel))
-    //             _channelIdsMaps.Add(channel, new List<string>());
-    //
-    //         if (isOverrideChannelPlaying)
-    //             StopByChannel(channel, fadeTime);
-    //
-    //         var ids = _channelIdsMaps[channel];
-    //         var id = _audioModule.Play(key, position, parentTransform);
-    //
-    //         var originVolume = GetOriginVolume(id);
-    //         SetVolumeByFade(id, 0, originVolume, fadeTime);
-    //
-    //         ids.Add(id);
-    //
-    //         return id;
-    //     }
-    //
-    //     public string PlayAndAutoStop(string channel, string key, float fadeTime = DEFAULT_FADE_TIME,
-    //         Vector3 position = default, Transform parentTransform = null,
-    //         Action onComplete = null, bool isOverrideChannelPlaying = false)
-    //     {
-    //         var id = Play(channel, key, fadeTime, position, parentTransform, isOverrideChannelPlaying);
-    //         var audioData = _audioModule.GetAudio(id);
-    //
-    //         var duration = audioData.Duration;
-    //         var timerId = _tween.PlayTimer(duration, () =>
-    //         {
-    //             if (CheckIsPlaying(id))
-    //                 Stop(id, 0, onComplete);
-    //         });
-    //         _audioIdTimerIdMaps.Add(id, timerId);
-    //
-    //         return id;
-    //     }
-    //
-    //
-    //     //changeVolume
-    //     public void ChangeVolume(string id, float volume, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var audioData = _audioModule.GetAudio(id);
-    //         SetVolumeByFade(id, audioData.Volume, volume, fadeTime, onComplete);
-    //     }
-    //
-    //     public void ChangeVolumeByChannel(string channel, float volume, float fadeTime = DEFAULT_FADE_TIME,
-    //         Action onComplete = null)
-    //     {
-    //         var ids = _channelIdsMaps[channel];
-    //
-    //         foreach (var id in ids)
-    //             ChangeVolume(id, volume, fadeTime);
-    //
-    //         _tween.PlayTimer(fadeTime, onComplete);
-    //     }
-    //
-    //     public void Resume(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var audioData = _audioModule.GetAudio(id);
-    //         audioData.Resume();
-    //         var currentVolume = audioData.Volume;
-    //         _tween.To(0, volume => audioData.SetVolume(volume), currentVolume, fadeTime,
-    //             () => { onComplete?.Invoke(); });
-    //     }
-    //
-    //     public void ResumeByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var ids = _channelIdsMaps[channel].ToArray();
-    //         foreach (var id in ids)
-    //             Resume(id, fadeTime);
-    //
-    //         _tween.PlayTimer(fadeTime, onComplete);
-    //     }
-    //
-    //     public void Pause(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var audioData = _audioModule.GetAudio(id);
-    //         var currentVolume = audioData.Volume;
-    //         _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
-    //         {
-    //             audioData.Pause();
-    //             audioData.SetVolume(currentVolume);
-    //
-    //             onComplete?.Invoke();
-    //         });
-    //     }
-    //
-    //     public void PauseByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var ids = _channelIdsMaps[channel].ToArray();
-    //         foreach (var id in ids)
-    //             Pause(id, fadeTime);
-    //
-    //         _tween.PlayTimer(fadeTime, onComplete);
-    //     }
-    //
-    //
-    //     //stop
-    //     public void Stop(string id, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var channel = GetChannelById(id);
-    //         var ids = _channelIdsMaps[channel];
-    //
-    //         var audioData = _audioModule.GetAudio(id);
-    //
-    //         _tween.To(audioData.Volume, volume => audioData.SetVolume(volume), 0, fadeTime, () =>
-    //         {
-    //             if (CheckHasTimerId(id))
-    //             {
-    //                 _audioIdTimerIdMaps.Remove(id);
-    //                 _tween.StopTimer(id);
-    //             }
-    //
-    //             _audioModule.Stop(id);
-    //             ids.Remove(id);
-    //
-    //             onComplete?.Invoke();
-    //         });
-    //     }
-    //     
-    //     public void Stop(string[] ids, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         foreach (var id in ids)
-    //             Stop(id, fadeTime);
-    //         
-    //         _tween.PlayTimer(fadeTime, onComplete);
-    //     }
-    //
-    //     public void StopByChannel(string channel, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         Assert.IsTrue(_channelIdsMaps.ContainsKey(channel),
-    //             $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
-    //
-    //         var ids = _channelIdsMaps[channel].ToArray();
-    //         Stop(ids, fadeTime, onComplete);
-    //     }
-    //     
-    //     public void StopByKey(string key, float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var ids = GetIdsByKey(key);
-    //         Stop(ids, fadeTime, onComplete);
-    //     }
-    //
-    //     public void StopAll(float fadeTime = DEFAULT_FADE_TIME, Action onComplete = null)
-    //     {
-    //         var channels = _channelIdsMaps.Keys.ToArray();
-    //         foreach (var channel in channels)
-    //             StopByChannel(channel, fadeTime);
-    //
-    //         _tween.PlayTimer(fadeTime, onComplete);
-    //     }
-    //
-    //
-    //     //private
-    //     private string[] GetIdsByKey(string key)
-    //     {
-    //         var matchIdsList = new List<string>();
-    //         var idsList = _channelIdsMaps.Values.ToArray();
-    //         foreach (var ids in idsList)
-    //         {
-    //             foreach (var id in ids.ToArray())
-    //             {
-    //                 var audioData = _audioModule.GetAudio(id);
-    //                 if (audioData.Key == key)
-    //                 {
-    //                     matchIdsList.Add(audioData.Id);
-    //                     ids.Remove(audioData.Id);
-    //                 }
-    //             }
-    //         }
-    //
-    //         return matchIdsList.ToArray();
-    //     }
-    //
-    //     private string GetChannelById(string id)
-    //     {
-    //         var channels = _channelIdsMaps.Keys.ToArray();
-    //         foreach (var channel in channels)
-    //         {
-    //             var ids = _channelIdsMaps[channel];
-    //             foreach (var varId in ids)
-    //             {
-    //                 if (varId == id)
-    //                     return channel;
-    //             }
-    //         }
-    //
-    //         Debug.LogError($"[AudioPlayerModule::GetChannelById] Not find channel by id: {id}.");
-    //         return string.Empty;
-    //     }
-    //
-    //     private void SetVolumeByFade(string id, float startVolume, float endVolume, float durationTime,
-    //         Action onComplete = null)
-    //     {
-    //         var audioData = _audioModule.GetAudio(id);
-    //
-    //         _tween.To(startVolume, volume => audioData.SetVolume(volume), endVolume, durationTime, onComplete);
-    //     }
-    //
-    //     private bool CheckHasTimerId(string id)
-    //     {
-    //         var hasTimerId = _audioIdTimerIdMaps.ContainsKey(id);
-    //         return hasTimerId;
-    //     }
-    // }
+    public class AudioPlayerModule
+    {
+        //private variable
+        private readonly AudioModule _audioModule;
+        private readonly IAudioPlayerModuleConfig _audioPlayerModuleConfig;
+        private readonly ITimerModule _timerModule;
+
+        private readonly Dictionary<string, List<string>> _audioIdsMapByChannel = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, float> _volumeMapByAudioId = new Dictionary<string, float>();
+        private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
+        private readonly List<string> _genericTimerIds = new List<string>();
+        
+
+        //public variable
+        public AudioMixer AudioMixer => _audioModule.AudioMixer;
+        public bool IsInitialized => _audioModule.IsInitialized;
+
+        public string[] ClipDataIds => _audioModule.ClipDataIds;
+        public string[] PrefabDataIds => _audioModule.PrefabDataIds;
+        public string[] AssetDataIds => _audioModule.AssetDataIds;
+
+        public bool IsReleasing { get; private set; }
+
+
+        //public method
+        public AudioPlayerModule(IAudioPlayerModuleConfig audioPlayerModuleConfig, IAudioPlayerModuleAssetProvider audioPlayerModuleAssetProvider, ITimerModule timerModule, AudioMixer audioMixer)
+        {
+            _audioPlayerModuleConfig = audioPlayerModuleConfig;
+            _audioModule = new AudioModule(_audioPlayerModuleConfig, audioPlayerModuleAssetProvider, audioMixer);
+
+            _timerModule = timerModule;
+        }
+
+        public UniTask Initialize(Dictionary<string, IAudioData> audioDatasMap) => _audioModule.Initialize(audioDatasMap);
+
+        public void Release()
+        {
+            IsReleasing = true;
+
+            StopAll(onComplete: () =>
+            {
+                _audioIdsMapByChannel.Clear();
+                _audioModule.Release();
+
+                IsReleasing = false;
+            });
+        }
+
+        public bool CheckIsPlaying(string audioId) => _audioModule.CheckIsPlaying(audioId);
+        public void SetAudioMixerVolume(float volume) => _audioModule.SetAudioMixerVolume(volume);
+        
+        public string Play(string channel, string clipDataId, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false, bool isOverrideChannelPlaying = false) =>
+            Play(channel, clipDataId, _audioPlayerModuleConfig.DefaultFadeTime, position, parentTransform, volume, isLocalPosition, isOverrideChannelPlaying);
+        public string Play(string channel, string clipDataId, float fadeTime, Vector3 position = default, Transform parentTransform = null, float volume = 1, bool isLocalPosition = false, bool isOverrideChannelPlaying = false)
+        {
+            if (!_audioIdsMapByChannel.ContainsKey(channel))
+                _audioIdsMapByChannel.Add(channel, new List<string>());
+
+            if (isOverrideChannelPlaying)
+                StopByChannel(channel, fadeTime);
+
+            var audioId = _audioModule.Play(clipDataId, position, parentTransform, 0, isLocalPosition);
+            FadeAudioVolume(audioId, 0, volume, fadeTime, null);
+            _volumeMapByAudioId.Add(audioId, volume);
+
+            var audioIds = _audioIdsMapByChannel[channel];
+            audioIds.Add(audioId);
+
+            return audioId;
+        }
+        
+        public string PlayAndAutoStop(string channel, string clipDataId, Vector3 position = default, Transform parentTransform = null, float volume = 1, Action onComplete = null, bool isOverrideChannelPlaying = false) =>
+            PlayAndAutoStop(channel, clipDataId, _audioPlayerModuleConfig.DefaultFadeTime, position, parentTransform, volume, onComplete, isOverrideChannelPlaying);
+        public string PlayAndAutoStop(string channel, string clipDataId, float fadeTime, Vector3 position = default, Transform parentTransform = null, float volume = 1, Action onComplete = null, bool isOverrideChannelPlaying = false)
+        {
+            var audioId = Play(channel, clipDataId, fadeTime, position, parentTransform, volume, isOverrideChannelPlaying);
+            _audioModule.TryGetAudioReadModel(audioId, out var audioReadModel);
+
+            var duration = audioReadModel.Duration;
+            var timerId = _timerModule.AddOnceTimer(duration, () => { Stop(audioId, 0, onComplete); });
+            _timerIdMapByAudioId.Add(audioId, timerId);
+
+            return audioId;
+        }
+
+        public void ChangeVolume(string audioId, float volume, Action onComplete = null) =>
+            ChangeVolume(audioId, volume, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void ChangeVolume(string audioId, float volume, float fadeTime, Action onComplete = null)
+        {
+            if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
+            {
+                Debug.LogWarning($"[AudioPlayerModule::ChangeVolume] AudioReadModel is not found by audioId: {audioId}.");
+                return;
+            }
+
+            _volumeMapByAudioId[audioId] = volume;
+            FadeAudioVolume(audioId, audioReadModel.Volume, volume, fadeTime, onComplete);
+        }
+
+
+        public void Pause(string audioId, Action onComplete = null) =>
+            Pause(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void Pause(string audioId, float fadeTime, Action onComplete = null)
+        {
+            if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
+            {
+                Debug.LogWarning($"[AudioPlayerModule::Pause] AudioReadModel is not found by audioId: {audioId}.");
+                return;
+            }
+
+            var volume = audioReadModel.Volume;
+            _volumeMapByAudioId[audioId] = volume;
+
+            FadeAudioVolume(audioId, volume, 0, fadeTime, () =>
+            {
+                _audioModule.Pause(audioId);
+                onComplete?.Invoke();
+            });
+        }
+
+        public void PauseByChannel(string channel, Action onComplete = null) =>
+            PauseByChannel(channel, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void PauseByChannel(string channel, float fadeTime, Action onComplete = null)
+        {
+            if (_audioIdsMapByChannel.ContainsKey(channel))
+            {
+                Debug.LogWarning($"[AudioPlayerModule::PauseByChannel] Channel: {channel} is not found.");
+                return;
+            }
+
+            var audioIds = _audioIdsMapByChannel[channel].ToArray();
+            foreach (var audioId in audioIds)
+                Pause(audioId, fadeTime);
+
+            _timerModule.AddOnceTimer(fadeTime, onComplete);
+        }
+
+
+        public void Resume(string audioId, Action onComplete = null) =>
+            Resume(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void Resume(string audioId, float fadeTime, Action onComplete = null)
+        {
+            if (!IsInitialized)
+            {
+                Debug.LogWarning("[AudioPlayerModule::Resume] AudioPlayerModule is not initialized.");
+                return;
+            }
+            
+            if (!CheckIsPlaying(audioId))
+            {
+                Debug.LogWarning($"[AudioPlayerModule::Resume] Audio is not found by audioId: {audioId}.");
+                return;
+            }
+            
+            var volume = _volumeMapByAudioId[audioId];
+            FadeAudioVolume(audioId,0, volume, fadeTime, onComplete);
+            _audioModule.Resume(audioId);
+        }
+
+        
+        public void ResumeByChannel(string channel,  Action onComplete = null) =>
+            ResumeByChannel(channel, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void ResumeByChannel(string channel, float fadeTime, Action onComplete = null)
+        {
+            var audioIds = _audioIdsMapByChannel[channel].ToArray();
+            foreach (var audioId in audioIds)
+                Resume(audioId, fadeTime);
+
+            _timerModule.AddOnceTimer(fadeTime, onComplete);
+        }
+
+
+        public void Stop(string audioId, Action onComplete = null) =>
+            Stop(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void Stop(string audioId, float fadeTime, Action onComplete = null)
+        {
+            if (!_audioModule.TryGetAudioReadModel(audioId, out var audioReadModel))
+            {
+                Debug.LogWarning($"[AudioPlayerModule::Stop] AudioReadModel is not found by audioId: {audioId}.");
+                return;
+            }
+
+            var volume = audioReadModel.Volume;
+            _volumeMapByAudioId[audioId] = volume;
+
+            FadeAudioVolume(audioId, volume, 0, fadeTime, () =>
+            {
+                if (CheckHasTimerId(audioId))
+                {
+                    _timerIdMapByAudioId.Remove(audioId);
+                    _timerModule.StopTimer(audioId);
+                }
+
+                _audioModule.Stop(audioId);
+                
+                var channel = GetChannelByAudioId(audioId);
+                var audioIds = _audioIdsMapByChannel[channel];
+                audioIds.Remove(audioId);
+
+                onComplete?.Invoke();
+            });
+        }
+
+        public void StopByChannel(string audioId, Action onComplete = null) =>
+            StopByChannel(audioId, _audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void StopByChannel(string channel, float fadeTime, Action onComplete = null)
+        {
+            Assert.IsTrue(_audioIdsMapByChannel.ContainsKey(channel),
+                $"[AudioPlayerModule::StopByChannel] Channel: {channel} doest exist.");
+
+            var audioIds = _audioIdsMapByChannel[channel].ToArray();
+            
+            foreach (var audioId in audioIds)
+                Stop(audioId, fadeTime);
+
+            _timerModule.AddOnceTimer(fadeTime, onComplete);
+        }
+
+        public void StopAll(Action onComplete = null) =>
+            StopAll(_audioPlayerModuleConfig.DefaultFadeTime, onComplete);
+        public void StopAll(float fadeTime, Action onComplete = null)
+        {
+            var channels = _audioIdsMapByChannel.Keys.ToArray();
+            foreach (var channel in channels)
+                StopByChannel(channel, fadeTime);
+
+            _timerModule.AddOnceTimer(fadeTime, onComplete);
+        }
+
+
+        //private method
+        private string GetChannelByAudioId(string id)
+        {
+            var channels = _audioIdsMapByChannel.Keys.ToArray();
+            foreach (var channel in channels)
+            {
+                var ids = _audioIdsMapByChannel[channel];
+                foreach (var varId in ids)
+                {
+                    if (varId == id)
+                        return channel;
+                }
+            }
+
+            Debug.LogError($"[AudioPlayerModule::GetChannelById] Not find channel by id: {id}.");
+            return string.Empty;
+        }
+
+        private void FadeAudioVolume(string audioId, float startVolume, float endVolume, float duration, Action onComplete) =>
+            _timerModule.AddOnceTimer(startVolume, volume => _audioModule.SetVolume(audioId, volume), endVolume, duration, onComplete);
+        
+        private bool CheckHasTimerId(string id)
+        {
+            var hasTimerId = _timerIdMapByAudioId.ContainsKey(id);
+            return hasTimerId;
+        }
+    }
 }

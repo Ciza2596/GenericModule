@@ -5,10 +5,12 @@ namespace CizaAudioModule
 {
     public interface IAudioModuleAssetProvider
     {
-        UniTask LoadAssets<T>(string[] dataIds) where T : Object;
-
-        void UnloadAssets(string[] dataIds);
+        bool CheckIsLoad<T>(string dataId) where T : Object;
+        
+        UniTask LoadAsset<T>(string dataId) where T : Object;
 
         T GetAsset<T>(string dataId) where T : Object;
+
+        void UnloadAsset(string dataId);
     }
 }

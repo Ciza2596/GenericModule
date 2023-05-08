@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace CizaAudioModule
 {
     public interface IAudioModuleConfig
@@ -8,5 +10,7 @@ namespace CizaAudioModule
         string PoolRootName { get; }
         string PoolPrefix { get; }
         string PoolSuffix { get; }
+
+        IReadOnlyDictionary<string, IAudioData> CreateAudioDataMap();
     }
 }

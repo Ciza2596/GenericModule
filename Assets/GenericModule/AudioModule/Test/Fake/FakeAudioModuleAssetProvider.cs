@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CizaAudioModule;
 using Cysharp.Threading.Tasks;
@@ -15,30 +16,21 @@ public class FakeAudioModuleAssetProvider : IAudioModuleAssetProvider
     private AudioClip _audioClip;
     private GameObject _audioPrefab;
 
-
-    public bool IsLoadedAssets { get; private set; }
-
     public string[] LoadedAssetsDataIds { get; private set; }
 
     public string[] UnloadedAssetsDataIds { get; private set; }
 
-    public async UniTask LoadAssets<T>(string[] dataIds) where T : Object
-    {
-        IsLoadedAssets = true;
+    public bool CheckIsLoad<T>(string dataId) where T : Object => true;
 
+    public async UniTask LoadAsset<T>(string dataId) where T : Object
+    {
         if (LoadedAssetsDataIds is null)
-            LoadedAssetsDataIds = dataIds;
+            LoadedAssetsDataIds = new []{dataId};
 
         else
-            LoadedAssetsDataIds = LoadedAssetsDataIds.Concat(dataIds).ToArray();
-
+            LoadedAssetsDataIds = LoadedAssetsDataIds.Concat(new []{dataId}).ToArray();
+        
         await UniTask.CompletedTask;
-    }
-
-    public void UnloadAssets(string[] dataIds)
-    {
-        IsLoadedAssets = false;
-        UnloadedAssetsDataIds = dataIds;
     }
 
     public T GetAsset<T>(string dataId) where T : Object
@@ -52,6 +44,14 @@ public class FakeAudioModuleAssetProvider : IAudioModuleAssetProvider
         return null;
     }
 
+    public void UnloadAsset(string dataId)
+    {
+        if (UnloadedAssetsDataIds is null)
+            UnloadedAssetsDataIds = new []{dataId};
+
+        else
+            UnloadedAssetsDataIds = UnloadedAssetsDataIds.Concat(new []{dataId}).ToArray();
+    }
 
     public void SetClip(AudioClip audioClip) =>
         _audioClip = audioClip;

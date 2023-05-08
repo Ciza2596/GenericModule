@@ -12,12 +12,11 @@ namespace CizaAudioModule.Implement
         [SerializeField] private ClipMapData[] _clipMapDatas;
         [SerializeField] private PrefabMapData[] _prefabMapDatas;
 
-        public UniTask LoadAssets<T>(string[] dataIds) where T : Object =>
-            UniTask.CompletedTask;
+        public bool CheckIsLoad<T>(string dataId) where T : Object =>
+            true;
 
-        public void UnloadAssets(string[] dataIds)
-        {
-        }
+        public UniTask LoadAsset<T>(string dataId) where T : Object =>
+            UniTask.CompletedTask;
 
         public T GetAsset<T>(string dataId) where T : Object
         {
@@ -33,6 +32,8 @@ namespace CizaAudioModule.Implement
             return null;
         }
 
+        public void UnloadAsset(string dataId) { }
+        
 
         [Serializable]
         private class ClipMapData

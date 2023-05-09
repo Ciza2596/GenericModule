@@ -4,11 +4,11 @@ using GameCore.Infrastructure;
 
 namespace CizaAudioPlayerModule.Implement
 {
-    public class ItimerModuleImp : ITimerModule
+    public class TimerModuleImp
     {
         private GameCore.Infrastructure.ITimerModule _timerModule;
 
-        public ItimerModuleImp(GameCore.Infrastructure.ITimerModule timerModule) => _timerModule = timerModule;
+        public TimerModuleImp(GameCore.Infrastructure.ITimerModule timerModule) => _timerModule = timerModule;
 
         public string AddOnceTimer(float duration, Action onComplete)
         {
@@ -16,7 +16,7 @@ namespace CizaAudioPlayerModule.Implement
             return id;
         }
 
-        public void StopTimer(string id) =>
+        public void RemoveTimer(string id) =>
             _timerModule.UnRegisterOnceTimer(id);
         
 

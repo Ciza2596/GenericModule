@@ -12,8 +12,18 @@ namespace CizaAudioModule.Implement
         [SerializeField] private ClipMapData[] _clipMapDatas;
         [SerializeField] private PrefabMapData[] _prefabMapDatas;
 
-        public bool CheckIsLoad<T>(string dataId) where T : Object =>
-            true;
+        public bool CheckIsLoad<T>(string dataId) where T : Object
+        {
+            var type = typeof(T);
+            if (type == typeof(AudioClip))
+                return _clipMapDatas.FirstOrDefault(clipMapData => clipMapData.DataId == dataId) != null;
+
+
+            if (type == typeof(GameObject))
+                return _prefabMapDatas.FirstOrDefault(clipMapData => clipMapData.DataId == dataId) != null;
+
+            return false;
+        }
 
         public UniTask LoadAsset<T>(string dataId) where T : Object =>
             UniTask.CompletedTask;
@@ -22,11 +32,11 @@ namespace CizaAudioModule.Implement
         {
             var type = typeof(T);
             if (type == typeof(AudioClip))
-                return _clipMapDatas.Where(clipMapData => clipMapData.DataId == dataId).FirstOrDefault()?.AudioClip as T;
+                return _clipMapDatas.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioClip as T;
 
 
             if (type == typeof(GameObject))
-                return _prefabMapDatas.Where(clipMapData => clipMapData.DataId == dataId).FirstOrDefault()?.AudioPrefab as T;
+                return _prefabMapDatas.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioPrefab as T;
 
             Debug.LogError($"[AudioModuleExampleAssetProvider::GetAsset] Asset is not found by dataId: {dataId}");
             return null;

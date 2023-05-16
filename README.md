@@ -11,6 +11,7 @@ module | Test | Samples |
 [SaveLoadModule](#saveloadmodule) | ✔️ | ❌ |
 [ObjectPool](#objectpool) | ✔️ | ❌ |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
+[LocalizationModule](#localizationmodule) | ✔️ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AudioPlayerModule](#audioplayermodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
@@ -320,6 +321,14 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObje
 ### Manual:
 GameObjectPoolModule manual.
 
+
+## LocalizationModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocalizationModule
+```
+
+### Manual:
+LocalizationModule manual.
 
 
 ## SceneModule

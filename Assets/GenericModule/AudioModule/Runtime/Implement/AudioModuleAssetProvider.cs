@@ -12,7 +12,7 @@ namespace CizaAudioModule.Implement
         [SerializeField] private ClipMapData[] _clipMapDatas;
         [SerializeField] private PrefabMapData[] _prefabMapDatas;
 
-        public bool CheckIsLoad<T>(string dataId) where T : Object
+        public bool CheckIsLoaded<T>(string dataId) where T : Object
         {
             var type = typeof(T);
             if (type == typeof(AudioClip))

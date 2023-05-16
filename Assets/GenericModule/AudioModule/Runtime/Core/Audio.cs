@@ -27,9 +27,9 @@ namespace CizaAudioModule
             Assert.IsNotNull(_audioSource, $"[Audio::Initialize] AudioSource is not found. Please check prefabDataId: {PrefabDataId}.");
         }
 
-        public void Play(string id, string clipDataId, AudioClip audioClip, float spatialBlend, float volume, bool isLoop)
+        public void Play(string id, string clipDataId, AudioClip audioClip, float volume, bool isLoop)
         {
-            SetParameter(id, clipDataId, audioClip, spatialBlend, volume, isLoop);
+            SetParameter(id, clipDataId, audioClip, volume, isLoop);
             _audioSource.Play();
         }
 
@@ -53,13 +53,12 @@ namespace CizaAudioModule
 
 
         // private method
-        private void SetParameter(string id = null, string clipDataId = null, AudioClip audioClip = null, float spatialBlend = 0, float volume = 0, bool isLoop = false)
+        private void SetParameter(string id = null, string clipDataId = null, AudioClip audioClip = null, float volume = 0, bool isLoop = false)
         {
             Id                = id;
             ClipDataId        = clipDataId;
             _audioSource.clip = audioClip;
-
-            _audioSource.spatialBlend = spatialBlend;
+            
             Duration                  = audioClip is null ? 0 : audioClip.length;
 
             SetVolume(volume);

@@ -1,0 +1,18 @@
+{
+    "name": "LocalizationModule.Test",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2562770bbd60445c8b76e3a8e7f4a302"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -21,7 +21,6 @@ namespace CizaAudioPlayerModule
 		private readonly Dictionary<string, List<string>> _audioIdsMapByChannel = new Dictionary<string, List<string>>();
 		private readonly Dictionary<string, float>        _volumeMapByAudioId   = new Dictionary<string, float>();
 		private readonly Dictionary<string, string>       _timerIdMapByAudioId  = new Dictionary<string, string>();
-		private readonly List<string>                     _genericTimerIds      = new List<string>();
 
 		//public variable
 		public AudioMixer AudioMixer    => _audioModule.AudioMixer;

@@ -122,7 +122,7 @@ namespace CizaAudioModule
 		public bool CheckIsLoad(string clipDataId)
 		{
 			var audioData = _audioDataMapByClipDataId[clipDataId];
-			return _assetProvider.CheckIsLoad<AudioClip>(audioData.ClipDataId) && _assetProvider.CheckIsLoad<GameObject>(audioData.PrefabDataId);
+			return _assetProvider.CheckIsLoaded<AudioClip>(audioData.ClipDataId) && _assetProvider.CheckIsLoaded<GameObject>(audioData.PrefabDataId);
 		}
 
 		public async UniTask LoadAudio(string clipDataId, CancellationToken cancellationToken = default)
@@ -165,7 +165,6 @@ namespace CizaAudioModule
 
 			var clipDataId   = audioData.ClipDataId;
 			var prefabDataId = audioData.PrefabDataId;
-			var spatialBlend = audioData.SpatialBlend;
 
 			if (!CheckIsLoad(clipDataId))
 			{
@@ -179,7 +178,7 @@ namespace CizaAudioModule
 			audioId = Guid.NewGuid().ToString();
 			AddAudioToPlayingAudiosMap(audioId, audio, position, parentTransform, isLocalPosition);
 
-			audio.Play(audioId, clipDataId, audioClip, spatialBlend, volume, isLoop);
+			audio.Play(audioId, clipDataId, audioClip, volume, isLoop);
 			audio.GameObject.name = clipDataId;
 
 			return true;

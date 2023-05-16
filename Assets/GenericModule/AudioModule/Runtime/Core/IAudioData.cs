@@ -4,6 +4,5 @@ namespace CizaAudioModule
     {
         public string ClipDataId { get; }
         public string PrefabDataId { get; }
-        public float SpatialBlend { get; }
     }
 }

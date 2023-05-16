@@ -5,7 +5,7 @@ namespace CizaAudioModule
 {
     public interface IAudioModuleAssetProvider
     {
-        bool CheckIsLoad<T>(string dataId) where T : Object;
+        bool CheckIsLoaded<T>(string dataId) where T : Object;
         
         UniTask LoadAsset<T>(string dataId) where T : Object;
 

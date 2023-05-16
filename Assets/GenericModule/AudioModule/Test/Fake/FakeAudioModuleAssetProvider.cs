@@ -20,7 +20,7 @@ public class FakeAudioModuleAssetProvider : IAudioModuleAssetProvider
 
     public string[] UnloadedAssetsDataIds { get; private set; }
 
-    public bool CheckIsLoad<T>(string dataId) where T : Object => true;
+    public bool CheckIsLoaded<T>(string dataId) where T : Object => true;
 
     public async UniTask LoadAsset<T>(string dataId) where T : Object
     {

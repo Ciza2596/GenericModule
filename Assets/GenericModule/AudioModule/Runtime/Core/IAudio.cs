@@ -6,7 +6,7 @@ namespace CizaAudioModule
     {
         GameObject GameObject { get; }
         void Initialize(string prefabDataId);
-        void Play(string id, string clipDataId, AudioClip audioClip, float spatialBlend, float volume, bool isLoop);
+        void Play(string id, string clipDataId, AudioClip audioClip, float volume, bool isLoop);
         void Stop();
         void Resume();
         void Pause();

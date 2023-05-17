@@ -12,21 +12,37 @@ namespace CizaAudioModule.Example1
 	public class AudioModuleExampleInstaller : MonoBehaviour
 	{
 		// private variable
-		[SerializeField]         private AudioDataOverview        _audioDataOverview;
-		[Space] [SerializeField] private AudioMixer               _audioMixer;
-		[SerializeField]         private AudioModuleConfig        _audioModuleConfig;
-		[SerializeField]         private AudioModuleAssetProvider _audioModuleAssetProvider;
-		[Space] [SerializeField] private Transform                _parentTransform;
-		[SerializeField]         private bool                     _isLocalPosition;
-		[SerializeField]         private Vector3                  _position;
-		[Space] [SerializeField] private ComponentCollectionData  _componentCollectionData;
+
+		[Space]
+		[SerializeField]
+		private AudioMixer _audioMixer;
+
+		[SerializeField]
+		private AudioModuleConfig _audioModuleConfig;
+
+		[SerializeField]
+		private AudioModuleAssetProvider _audioModuleAssetProvider;
+
+		[Space]
+		[SerializeField]
+		private Transform _parentTransform;
+
+		[SerializeField]
+		private bool _isLocalPosition;
+
+		[SerializeField]
+		private Vector3 _position;
+
+		[Space]
+		[SerializeField]
+		private ComponentCollectionData _componentCollectionData;
 
 		private AudioModule _audioModule;
 
 		private readonly List<string> _audioIds = new();
 
 		// unity callback
-		private async void Awake()
+		private void Awake()
 		{
 			_audioModule = new AudioModule(_audioModuleConfig, _audioModuleAssetProvider, _audioMixer);
 			_audioModule.Initialize();
@@ -105,15 +121,34 @@ namespace CizaAudioModule.Example1
 		[Serializable]
 		private class ComponentCollectionData
 		{
-			[SerializeField]         private Slider       _audioMixerVolumeSlider;
-			[Space] [SerializeField] private TMP_Dropdown _clipDataIdDropdown;
-			[SerializeField]         private Button       _playButton;
-			[Space] [SerializeField] private TMP_Dropdown _audioIdDropdown;
-			[SerializeField]         private Slider       _volumeSlider;
-			[SerializeField]         private Button       _pauseButton;
-			[SerializeField]         private Button       _resumeButton;
-			[SerializeField]         private Button       _stopButton;
-			[SerializeField]         private Button       _stopAllButton;
+			[SerializeField]
+			private Slider _audioMixerVolumeSlider;
+
+			[Space]
+			[SerializeField]
+			private TMP_Dropdown _clipDataIdDropdown;
+
+			[SerializeField]
+			private Button _playButton;
+
+			[Space]
+			[SerializeField]
+			private TMP_Dropdown _audioIdDropdown;
+
+			[SerializeField]
+			private Slider _volumeSlider;
+
+			[SerializeField]
+			private Button _pauseButton;
+
+			[SerializeField]
+			private Button _resumeButton;
+
+			[SerializeField]
+			private Button _stopButton;
+
+			[SerializeField]
+			private Button _stopAllButton;
 
 			public Slider AudioMixerVolumeSlider => _audioMixerVolumeSlider;
 

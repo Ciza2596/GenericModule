@@ -51,7 +51,7 @@ namespace CizaAddressablesModule
             return obj;
         }
 
-        public void StopLoadingAssetAsyncs()
+        public void StopLoadingAssetAsync()
         {
             foreach (var loadAssetAsyncCTS in _loadAssetAsyncCTSList)
                 loadAssetAsyncCTS.Cancel();
@@ -123,7 +123,7 @@ namespace CizaAddressablesModule
         
         public void UnloadAllAssets()
         {
-            StopLoadingAssetAsyncs();
+            StopLoadingAssetAsync();
             
             var types = _typeAddressObjectMapMap.Keys.ToArray();
 

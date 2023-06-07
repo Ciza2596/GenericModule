@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -11,9 +12,9 @@ namespace CizaAddressablesModule
 
 		public IReadOnlyDictionary<string, int> RefCountMapByAddress => _refCountMapByAddress;
 
-		public async UniTask<T> LoadAssetAsync<T>(string address) where T : Object
+		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
 		{
-			var asset = await _addressablesModule.LoadAssetAsync<T>(address);
+			var asset = await _addressablesModule.LoadAssetAsync<T>(address, cancellationToken);
 			AddRefCount(address);
 			return asset;
 		}

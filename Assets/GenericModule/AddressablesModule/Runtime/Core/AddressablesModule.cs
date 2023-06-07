@@ -21,9 +21,6 @@ namespace CizaAddressablesModule
         private readonly Dictionary<string, SceneInstance> _addressSceneMap =
             new Dictionary<string,SceneInstance>();
 
-        private List<CancellationTokenSource> _loadAssetAsyncCTSList = new List<CancellationTokenSource>();
-
-
         //public method
 
         //asset
@@ -43,20 +40,12 @@ namespace CizaAddressablesModule
             return obj as T;
         }
 
-        public async UniTask<T> LoadAssetAsync<T>(string address) where T : Object
+        public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
         {
             Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
             
-            var obj = await GetAssetHandleInfo<T>(address);
+            var obj = await GetAssetHandleInfo<T>(address, cancellationToken);
             return obj;
-        }
-
-        public void StopLoadingAssetAsync()
-        {
-            foreach (var loadAssetAsyncCTS in _loadAssetAsyncCTSList)
-                loadAssetAsyncCTS.Cancel();
-            
-            _loadAssetAsyncCTSList.Clear();
         }
 
         public void UnloadAsset<T>(string address) where T: Object
@@ -123,8 +112,6 @@ namespace CizaAddressablesModule
         
         public void UnloadAllAssets()
         {
-            StopLoadingAssetAsync();
-            
             var types = _typeAddressObjectMapMap.Keys.ToArray();
 
             foreach (var type in types)
@@ -178,7 +165,7 @@ namespace CizaAddressablesModule
 
 
         //private method
-        private async UniTask<T> GetAssetHandleInfo<T>(string address)
+        private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken)
             where T : Object
         {
             var type = typeof(T);
@@ -189,7 +176,6 @@ namespace CizaAddressablesModule
                 return null;
             }
 
-
             if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
             {
                 addressObjectMap = new Dictionary<string, Object>();
@@ -198,11 +184,9 @@ namespace CizaAddressablesModule
 
             if (!addressObjectMap.TryGetValue(address, out var obj))
             {
-                var loadAssetAsyncCTS = new CancellationTokenSource();
-                _loadAssetAsyncCTSList.Add(loadAssetAsyncCTS);
                 try
                 {
-                    obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(loadAssetAsyncCTS.Token);
+                    obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(cancellationToken);
                     addressObjectMap.Add(address, obj);
                 }
                 catch

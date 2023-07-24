@@ -12,196 +12,189 @@ using Object = UnityEngine.Object;
 
 namespace CizaAddressablesModule
 {
-    public class AddressablesModule
-    {
-        //private variable
-        private readonly Dictionary<Type, Dictionary<string, Object>> _typeAddressObjectMapMap =
-            new Dictionary<Type, Dictionary<string, Object>>();
+	public class AddressablesModule
+	{
+		//private variable
+		private readonly Dictionary<Type, Dictionary<string, Object>> _typeAddressObjectMapMap =
+			new Dictionary<Type, Dictionary<string, Object>>();
 
-        private readonly Dictionary<string, SceneInstance> _addressSceneMap =
-            new Dictionary<string,SceneInstance>();
+		private readonly Dictionary<string, SceneInstance> _addressSceneMap =
+			new Dictionary<string, SceneInstance>();
 
-        //public method
+		//public method
 
-        //asset
-        public T GetAsset<T>(string address) where T : Object
-        {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::GetAsset] Address is null.");
+		//asset
+		public T GetAsset<T>(string address) where T : Object
+		{
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::GetAsset] Address is null.");
 
-            var type = typeof(T);
-            var hasAddressObjectMap = _typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap);
-            Assert.IsTrue(hasAddressObjectMap,
-                $"[AddressablesModule::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
+			var type                = typeof(T);
+			var hasAddressObjectMap = _typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap);
+			Assert.IsTrue(hasAddressObjectMap, $"[AddressablesModule::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
 
-            var hasObj = addressObjectMap.TryGetValue(address, out var obj);
-            Assert.IsTrue(hasObj,
-                $"[AddressablesModule::GetAsset] Address: {address} doesnt exist in assetHandleInfos.");
+			var hasObj = addressObjectMap.TryGetValue(address, out var obj);
+			Assert.IsTrue(hasObj, $"[AddressablesModule::GetAsset] Address: {address} doesnt exist in assetHandleInfos.");
 
-            return obj as T;
-        }
+			return obj as T;
+		}
 
-        public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
-        {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
-            
-            var obj = await GetAssetHandleInfo<T>(address, cancellationToken);
-            return obj;
-        }
+		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
+		{
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
 
-        public void UnloadAsset<T>(string address) where T: Object
-        {
-            var type = typeof(T);
-            UnloadAsset(address, type);
-        }
+			var obj = await GetAssetHandleInfo<T>(address, cancellationToken);
+			return obj;
+		}
 
-        public void UnloadAsset(string address, Type type)
-        {
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::UnloadAsset] Address is null.");
-            Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAsset] Type is null.");
+		public void UnloadAsset<T>(string address) where T : Object
+		{
+			var type = typeof(T);
+			UnloadAsset(address, type);
+		}
 
-            if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
-                return;
+		public void UnloadAsset(string address, Type type)
+		{
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::UnloadAsset] Address is null.");
+			Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAsset] Type is null.");
 
-            if (!addressObjectMap.TryGetValue(address, out var obj))
-                return;
+			if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
+				return;
 
-            addressObjectMap.Remove(address);
-            Addressables.Release(obj);
-        }
+			if (!addressObjectMap.TryGetValue(address, out var obj))
+				return;
 
-        public void UnloadAssets(string[] addressList, Type type)
-        {
-            Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
-            Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAssets] Type is null.");
+			addressObjectMap.Remove(address);
+			Addressables.Release(obj);
+		}
 
-            foreach (var address in addressList)
-                UnloadAsset(address, type);
-        }
+		public void UnloadAssets(string[] addressList, Type type)
+		{
+			Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
+			Assert.IsTrue(type        != null, $"[AddressablesModule::UnloadAssets] Type is null.");
 
-        public void UnloadAssets(string[] addressList)
-        {
-            Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
+			foreach (var address in addressList)
+				UnloadAsset(address, type);
+		}
 
-            var types = _typeAddressObjectMapMap.Keys.ToArray();
-            foreach (var type in types)
-            {
-                foreach (var address in addressList)
-                    UnloadAsset(address, type);
-            }
+		public void UnloadAssets(string[] addressList)
+		{
+			Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
 
-            CallGC();
-        }
+			var types = _typeAddressObjectMapMap.Keys.ToArray();
+			foreach (var type in types)
+			{
+				foreach (var address in addressList)
+					UnloadAsset(address, type);
+			}
 
-        public void UnloadAllAssets(Type type)
-        {
-            if (!_typeAddressObjectMapMap.ContainsKey(type))
-            {
-                Debug.LogWarning($"[AddressablesModule::UnloadAllAssets] Not find {type} is loaded");
-                return;
-            }
+			CallGC();
+		}
 
-            var assetHandleInfo = _typeAddressObjectMapMap[type];
-            var addressList = assetHandleInfo.Keys.ToArray();
-            foreach (var address in addressList)
-                UnloadAsset(address, type);
+		public void UnloadAllAssets(Type type)
+		{
+			if (!_typeAddressObjectMapMap.ContainsKey(type))
+			{
+				Debug.LogWarning($"[AddressablesModule::UnloadAllAssets] Not find {type} is loaded");
+				return;
+			}
 
-            assetHandleInfo.Clear();
+			var assetHandleInfo = _typeAddressObjectMapMap[type];
+			var addressList     = assetHandleInfo.Keys.ToArray();
+			foreach (var address in addressList)
+				UnloadAsset(address, type);
 
-            CallGC();
-        }
-        
-        public void UnloadAllAssets()
-        {
-            var types = _typeAddressObjectMapMap.Keys.ToArray();
+			assetHandleInfo.Clear();
 
-            foreach (var type in types)
-            {
-                var assetHandleInfo = _typeAddressObjectMapMap[type];
+			CallGC();
+		}
 
-                var addressList = assetHandleInfo.Keys.ToArray();
-                foreach (var address in addressList)
-                    UnloadAsset(address, type);
+		public void UnloadAllAssets()
+		{
+			var types = _typeAddressObjectMapMap.Keys.ToArray();
 
-                assetHandleInfo.Clear();
-            }
+			foreach (var type in types)
+			{
+				var assetHandleInfo = _typeAddressObjectMapMap[type];
 
-            _typeAddressObjectMapMap.Clear();
+				var addressList = assetHandleInfo.Keys.ToArray();
+				foreach (var address in addressList)
+					UnloadAsset(address, type);
 
-            CallGC();
-        }
+				assetHandleInfo.Clear();
+			}
 
+			_typeAddressObjectMapMap.Clear();
 
-        //scene
-        public void ActivateScene(string address)
-        {
-            Assert.IsTrue(_addressSceneMap.ContainsKey(address),
-                $"[AddressablesModule::ActivateScene] Address: {address} not find info.");
-            var scene = _addressSceneMap[address];
-            scene.ActivateAsync();
-        }
+			CallGC();
+		}
 
-        public async UniTask<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single,
-            bool isActivateOnLoad = true)
-        {
-            var scene = await Addressables.LoadSceneAsync(address, loadMode, false);
-            _addressSceneMap.Add(address, scene);
+		//scene
+		public void ActivateScene(string address)
+		{
+			Assert.IsTrue(_addressSceneMap.ContainsKey(address), $"[AddressablesModule::ActivateScene] Address: {address} not find info.");
+			var scene = _addressSceneMap[address];
+			scene.ActivateAsync();
+		}
 
-            if (isActivateOnLoad)
-                ActivateScene(address);
+		public async UniTask<SceneInstance> LoadSceneAsync(string        address,
+		                                                   LoadSceneMode loadMode         = LoadSceneMode.Single,
+		                                                   bool          isActivateOnLoad = true)
+		{
+			var scene = await Addressables.LoadSceneAsync(address, loadMode, false);
+			_addressSceneMap.Add(address, scene);
 
-            return scene;
-        }
+			if (isActivateOnLoad)
+				ActivateScene(address);
 
-        public async UniTask UnloadSceneAsync(string address)
-        {
-            Assert.IsTrue(_addressSceneMap.ContainsKey(address),
-                "[AddressablesModule::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
+			return scene;
+		}
 
-            var scene = _addressSceneMap[address];
-            _addressSceneMap.Remove(address);
+		public async UniTask UnloadSceneAsync(string address)
+		{
+			Assert.IsTrue(_addressSceneMap.ContainsKey(address), "[AddressablesModule::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
 
-            await Addressables.UnloadSceneAsync(scene);
-        }
+			var scene = _addressSceneMap[address];
+			_addressSceneMap.Remove(address);
 
+			await Addressables.UnloadSceneAsync(scene);
+		}
 
-        //private method
-        private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken) where T : Object
-        {
-            var type = typeof(T);
-            if (type.IsSubclassOf(typeof(Component)))
-            {
-                Debug.LogError(
-                    $"[AddressablesModule::GetAssetHandleInfo] Get asset form ass just support Object type, not support component.");
-                return null;
-            }
+		//private method
+		private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken) where T : Object
+		{
+			var type = typeof(T);
+			if (type.IsSubclassOf(typeof(Component)))
+			{
+				Debug.LogError($"[AddressablesModule::GetAssetHandleInfo] Get asset form ass just support Object type, not support component.");
+				return null;
+			}
 
-            if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
-            {
-                addressObjectMap = new Dictionary<string, Object>();
-                _typeAddressObjectMapMap.Add(type, addressObjectMap);
-            }
+			if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
+			{
+				addressObjectMap = new Dictionary<string, Object>();
+				_typeAddressObjectMapMap.Add(type, addressObjectMap);
+			}
 
-            if (!addressObjectMap.TryGetValue(address, out var obj))
-            {
-                try
-                {
-                    obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(cancellationToken);
-                    addressObjectMap.Add(address, obj);
-                }
-                catch
-                {
-                    Debug.Log($"[AddressablesModule::GetAssetHandleInfo] Loading assets with address: {address} is canceled.");
-                    return null;
-                }
-            }
+			if (!addressObjectMap.TryGetValue(address, out var obj))
+			{
+				try
+				{
+					obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(cancellationToken);
+					addressObjectMap.Add(address, obj);
+				}
+				catch
+				{
+					return null;
+				}
+			}
 
-            return obj as T;
-        }
+			return obj as T;
+		}
 
-        private void CallGC()
-        {
-            Resources.UnloadUnusedAssets();
-            GC.Collect();
-        }
-    }
+		private void CallGC()
+		{
+			Resources.UnloadUnusedAssets();
+			GC.Collect();
+		}
+	}
 }

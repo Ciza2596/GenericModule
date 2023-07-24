@@ -14,10 +14,9 @@ namespace CizaAddressablesModule
 
 		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
 		{
-			AddRefCount(address);
 
-			if (_refCountMapByAddress[address] == 1)
-				await _addressablesModule.LoadAssetAsync<T>(address, cancellationToken);
+			await _addressablesModule.LoadAssetAsync<T>(address, cancellationToken);
+			AddRefCount(address);
 
 			return GetAsset<T>(address);
 		}
@@ -27,9 +26,8 @@ namespace CizaAddressablesModule
 
 		public void UnloadAsset<T>(string address) where T : Object
 		{
+			_addressablesModule.UnloadAsset<T>(address);
 			RemoveRefCount(address);
-			if (_refCountMapByAddress[address] <= 0)
-				_addressablesModule.UnloadAsset<T>(address);
 		}
 
 		public void UnloadAllAssets()

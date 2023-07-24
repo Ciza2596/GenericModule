@@ -165,8 +165,7 @@ namespace CizaAddressablesModule
 
 
         //private method
-        private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken)
-            where T : Object
+        private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken) where T : Object
         {
             var type = typeof(T);
             if (type.IsSubclassOf(typeof(Component)))

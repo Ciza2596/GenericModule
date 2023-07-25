@@ -23,17 +23,6 @@ namespace CizaAddressablesModule
 
 		//public method
 
-		public bool CheckIsAssetLoaded<T>(string address) where T : Object
-		{
-			var type = typeof(T);
-
-			if (!_objectMapByAddressMapByType.ContainsKey(type))
-				return false;
-
-			var objectMapByAddress = _objectMapByAddressMapByType[type];
-			return objectMapByAddress.ContainsKey(address);
-		}
-
 		//asset
 		public T GetAsset<T>(string address) where T : Object
 		{
@@ -195,7 +184,6 @@ namespace CizaAddressablesModule
 				}
 				catch
 				{
-					Debug.LogWarning($"[AddressablesModule::GetAssetHandleInfo] Asset {address} is canceled loaded.");
 					return null;
 				}
 			}

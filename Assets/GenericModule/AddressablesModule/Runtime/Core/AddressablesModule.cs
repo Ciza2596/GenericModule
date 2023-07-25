@@ -15,7 +15,7 @@ namespace CizaAddressablesModule
 	public class AddressablesModule
 	{
 		//private variable
-		private readonly Dictionary<Type, Dictionary<string, Object>> _typeAddressObjectMapMap =
+		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType =
 			new Dictionary<Type, Dictionary<string, Object>>();
 
 		private readonly Dictionary<string, SceneInstance> _addressSceneMap =
@@ -23,13 +23,24 @@ namespace CizaAddressablesModule
 
 		//public method
 
+		public bool CheckIsAssetLoaded<T>(string address) where T : Object
+		{
+			var type = typeof(T);
+
+			if (!_objectMapByAddressMapByType.ContainsKey(type))
+				return false;
+
+			var objectMapByAddress = _objectMapByAddressMapByType[type];
+			return objectMapByAddress.ContainsKey(address);
+		}
+
 		//asset
 		public T GetAsset<T>(string address) where T : Object
 		{
 			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::GetAsset] Address is null.");
 
 			var type                = typeof(T);
-			var hasAddressObjectMap = _typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap);
+			var hasAddressObjectMap = _objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap);
 			Assert.IsTrue(hasAddressObjectMap, $"[AddressablesModule::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
 
 			var hasObj = addressObjectMap.TryGetValue(address, out var obj);
@@ -57,7 +68,7 @@ namespace CizaAddressablesModule
 			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::UnloadAsset] Address is null.");
 			Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAsset] Type is null.");
 
-			if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
+			if (!_objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap))
 				return;
 
 			if (!addressObjectMap.TryGetValue(address, out var obj))
@@ -80,7 +91,7 @@ namespace CizaAddressablesModule
 		{
 			Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
 
-			var types = _typeAddressObjectMapMap.Keys.ToArray();
+			var types = _objectMapByAddressMapByType.Keys.ToArray();
 			foreach (var type in types)
 			{
 				foreach (var address in addressList)
@@ -92,13 +103,13 @@ namespace CizaAddressablesModule
 
 		public void UnloadAllAssets(Type type)
 		{
-			if (!_typeAddressObjectMapMap.ContainsKey(type))
+			if (!_objectMapByAddressMapByType.ContainsKey(type))
 			{
 				Debug.LogWarning($"[AddressablesModule::UnloadAllAssets] Not find {type} is loaded");
 				return;
 			}
 
-			var assetHandleInfo = _typeAddressObjectMapMap[type];
+			var assetHandleInfo = _objectMapByAddressMapByType[type];
 			var addressList     = assetHandleInfo.Keys.ToArray();
 			foreach (var address in addressList)
 				UnloadAsset(address, type);
@@ -110,11 +121,11 @@ namespace CizaAddressablesModule
 
 		public void UnloadAllAssets()
 		{
-			var types = _typeAddressObjectMapMap.Keys.ToArray();
+			var types = _objectMapByAddressMapByType.Keys.ToArray();
 
 			foreach (var type in types)
 			{
-				var assetHandleInfo = _typeAddressObjectMapMap[type];
+				var assetHandleInfo = _objectMapByAddressMapByType[type];
 
 				var addressList = assetHandleInfo.Keys.ToArray();
 				foreach (var address in addressList)
@@ -123,7 +134,7 @@ namespace CizaAddressablesModule
 				assetHandleInfo.Clear();
 			}
 
-			_typeAddressObjectMapMap.Clear();
+			_objectMapByAddressMapByType.Clear();
 
 			CallGC();
 		}
@@ -169,10 +180,10 @@ namespace CizaAddressablesModule
 				return null;
 			}
 
-			if (!_typeAddressObjectMapMap.TryGetValue(type, out var addressObjectMap))
+			if (!_objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap))
 			{
 				addressObjectMap = new Dictionary<string, Object>();
-				_typeAddressObjectMapMap.Add(type, addressObjectMap);
+				_objectMapByAddressMapByType.Add(type, addressObjectMap);
 			}
 
 			if (!addressObjectMap.TryGetValue(address, out var obj))
@@ -184,6 +195,7 @@ namespace CizaAddressablesModule
 				}
 				catch
 				{
+					Debug.LogWarning($"[AddressablesModule::GetAssetHandleInfo] Asset {address} is canceled loaded.");
 					return null;
 				}
 			}

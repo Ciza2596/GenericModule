@@ -64,9 +64,14 @@ namespace CizaAddressablesModule
 				return;
 
 			addressObjectMap.Remove(address);
-
-			if (obj != null)
+			try
+			{
 				Addressables.Release(obj);
+			}
+			catch (Exception e)
+			{
+				// ignored
+			}
 		}
 
 		public void UnloadAssets(string[] addressList, Type type)

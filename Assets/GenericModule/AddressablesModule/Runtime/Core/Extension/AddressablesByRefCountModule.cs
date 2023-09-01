@@ -25,8 +25,10 @@ namespace CizaAddressablesModule
 
 		public void UnloadAsset<T>(string address) where T : Object
 		{
-			_addressablesModule.UnloadAsset<T>(address);
 			RemoveRefCount(address);
+
+			if (!_refCountMapByAddress.ContainsKey(address))
+				_addressablesModule.UnloadAsset<T>(address);
 		}
 
 		public void UnloadAllAssets()

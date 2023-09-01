@@ -15,8 +15,7 @@ namespace CizaSceneModule.Example1
         public void Initialize()
         {
             _componentCollectionData.GoToSceneButton.onClick.AddListener(() =>
-                _sceneModule.ChangeScene(_transitionSceneData.TransitionInViewName, _transitionSceneData.CurrentSceneName, 
-                    _transitionSceneData.LoadingViewName, _transitionSceneData.TransitionOutViewName, _transitionSceneData.NextSceneName));
+                _sceneModule.ChangeScene(_transitionSceneData.TransitionInViewName, _transitionSceneData.CurrentSceneName, _transitionSceneData.LoadingViewName, _transitionSceneData.TransitionOutViewName, _transitionSceneData.NextSceneName));
         }
     }
 }

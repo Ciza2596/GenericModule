@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene1.unity
     guid: 2780e4694c8c5445d98784f2f21c6bbc
-  - enabled: 0
+  - enabled: 1
     path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/Scene2.unity
     guid: 6903b2a24bad0412f8a707a116532ca3
-  - enabled: 0
+  - enabled: 1
     path: Assets/Examples/SceneModule/Example1 WithAnimView/Scene/TransitionScene.unity
     guid: 93308f1aa9d0944ce9014f93f88e65fb
   - enabled: 1

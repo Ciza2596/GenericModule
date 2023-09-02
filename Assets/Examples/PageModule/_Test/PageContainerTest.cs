@@ -42,7 +42,7 @@ public class PageContainerTest
     public void _01_Create()
     {
         //act
-        _pageContainer.Create<FakePage>();
+        _pageContainer.Create<FakePage, FakePage>();
 
         //assert
         Check_Page_Is_Created<FakePage>();
@@ -376,7 +376,7 @@ public class PageContainerTest
 
     private void Create_And_Check_Page_Is_Created<T>() where T : MonoBehaviour
     {
-        _pageContainer.Create<T>();
+        _pageContainer.Create<T, T>();
         Check_Page_Is_Created<T>();
     }
 

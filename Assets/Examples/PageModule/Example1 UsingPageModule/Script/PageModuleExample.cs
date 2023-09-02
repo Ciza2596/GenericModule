@@ -16,8 +16,8 @@ namespace CizaPageModule.Example1
         private async void Awake()
         {
             PageModule = new PageModule(_pageModuleConfig);
-            PageModule.CreateAll();
-            
+            PageModule.Create<TitlePage>();
+
             await PageModule.Show<TitlePage>();
         }
     }

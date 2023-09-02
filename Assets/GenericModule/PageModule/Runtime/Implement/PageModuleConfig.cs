@@ -10,7 +10,7 @@ namespace CizaPageModule.Implement
     {
         [SerializeField] private string _pageGameObjectRootName = "[PageRoot]";
         [SerializeField] private bool _isDontDestroyOnLoad = false;
-        [Space] [SerializeField] private BasePage[] _pagePrefabs;
+        [Space] [SerializeField] private Page[] _pagePrefabs;
 
 
         public string PageGameObjectRootName => _pageGameObjectRootName;

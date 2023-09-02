@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace CizaPageModule.Example1
 {
-    public class TitlePage: BasePage, IShowingAnimated, IShowingComplete, IHidingStart
+    public class TitlePage: Page, IShowingAnimated, IShowingComplete, IHidingStart
     {
         //private variable
         [SerializeField]

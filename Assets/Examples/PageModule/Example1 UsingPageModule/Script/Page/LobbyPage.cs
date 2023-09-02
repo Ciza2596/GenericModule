@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace CizaPageModule.Example1
 {
-    public class LobbyPage : BasePage, IShowingAnimated, IShowingComplete, IHidingStart
+    public class LobbyPage : Page, IShowingAnimated, IShowingComplete, IHidingStart
     {
         //private variable
         [SerializeField] private Button _titleButton;

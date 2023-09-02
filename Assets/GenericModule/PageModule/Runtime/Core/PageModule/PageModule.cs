@@ -47,16 +47,16 @@ namespace CizaPageModule
 
 		public void Release() => _pageContainer.Release();
 
-		public bool CheckIsVisible<T>() where T : MonoBehaviour =>
+		public bool CheckIsVisible<T>() =>
 			_pageContainer.CheckIsVisible<T>();
 
-		public bool CheckIsShowing<T>() where T : MonoBehaviour =>
+		public bool CheckIsShowing<T>() =>
 			_pageContainer.CheckIsShowing<T>();
 
-		public bool CheckIsHiding<T>() where T : MonoBehaviour =>
+		public bool CheckIsHiding<T>() =>
 			_pageContainer.CheckIsHiding<T>();
 
-		public bool TryGetPage<T>(out T page) where T : MonoBehaviour =>
+		public bool TryGetPage<T>(out T page) where T : class =>
 			_pageContainer.TryGetPage<T>(out page);
 
 		public void Create<TRegisteredPage, TPage>(params object[] parameters) where TPage : MonoBehaviour =>
@@ -69,10 +69,10 @@ namespace CizaPageModule
 
 		public void DestroyAll() => _pageContainer.DestroyAll();
 
-		public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+		public async UniTask Show<T>(Action onComplete = null, params object[] parameters) =>
 			await _pageContainer.Show<T>(onComplete, parameters);
 
-		public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+		public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) =>
 			await _pageContainer.ShowImmediately<T>(onComplete, parameters);
 
 		public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
@@ -81,10 +81,10 @@ namespace CizaPageModule
 		public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
 			await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
 
-		public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour =>
+		public async UniTask Hide<T>(Action onComplete = null) =>
 			await _pageContainer.Hide<T>(onComplete);
 
-		public void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour =>
+		public void HideImmediately<T>(Action onComplete = null) =>
 			_pageContainer.HideImmediately<T>(onComplete);
 
 		public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>

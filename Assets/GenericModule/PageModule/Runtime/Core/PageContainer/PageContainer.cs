@@ -52,7 +52,7 @@ namespace CizaPageModule
 			DestroyOrImmediate(pageGameObjectRoot);
 		}
 
-		public bool CheckIsVisible<T>() where T : MonoBehaviour
+		public bool CheckIsVisible<T>()
 		{
 			var pageType = typeof(T);
 			if (!_pageDataMap.ContainsKey(pageType))
@@ -65,7 +65,7 @@ namespace CizaPageModule
 			return pageData.State is PageState.Visible;
 		}
 
-		public bool CheckIsShowing<T>() where T : MonoBehaviour
+		public bool CheckIsShowing<T>()
 		{
 			var pageType = typeof(T);
 			if (!_pageDataMap.ContainsKey(pageType))
@@ -78,7 +78,7 @@ namespace CizaPageModule
 			return pageData.State is PageState.Showing;
 		}
 
-		public bool CheckIsHiding<T>() where T : MonoBehaviour
+		public bool CheckIsHiding<T>()
 		{
 			var pageType = typeof(T);
 			if (!_pageDataMap.ContainsKey(pageType))
@@ -91,9 +91,9 @@ namespace CizaPageModule
 			return pageData.State is PageState.Hiding;
 		}
 
-		public bool TryGetPage<T>(out T page) where T : MonoBehaviour
+		public bool TryGetPage<T>(out T page) where T : class
 		{
-			page = null;
+			page = default;
 
 			var pageType = typeof(T);
 			if (!_pageDataMap.ContainsKey(pageType))
@@ -126,7 +126,7 @@ namespace CizaPageModule
 			}
 		}
 
-		public void Destroy<T>() where T : MonoBehaviour =>
+		public void Destroy<T>() =>
 			Destroy(typeof(T));
 
 		public void DestroyAll()
@@ -136,10 +136,10 @@ namespace CizaPageModule
 				Destroy(pageType);
 		}
 
-		public async UniTask Show<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+		public async UniTask Show<T>(Action onComplete = null, params object[] parameters) =>
 			await Show(typeof(T), false, onComplete, parameters);
 
-		public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) where T : MonoBehaviour =>
+		public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) =>
 			await Show(typeof(T), true, onComplete, parameters);
 
 		public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
@@ -148,10 +148,10 @@ namespace CizaPageModule
 		public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
 			await Show(pageTypes, true, parametersList, onComplete);
 
-		public async UniTask Hide<T>(Action onComplete = null) where T : MonoBehaviour =>
+		public async UniTask Hide<T>(Action onComplete = null) =>
 			await Hide(typeof(T), false, onComplete);
 
-		public async void HideImmediately<T>(Action onComplete = null) where T : MonoBehaviour =>
+		public async void HideImmediately<T>(Action onComplete = null) =>
 			await Hide(typeof(T), true, onComplete);
 
 		public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>
@@ -177,9 +177,15 @@ namespace CizaPageModule
 		{
 			Assert.IsTrue(_pagePrefabMap.ContainsKey(pageType), $"[PageContainer::Create] Not find pageType: {pageType} in pagePrefabComponentMap.");
 
-			if (_pageDataMap.ContainsKey(pageType))
+			if (_pageDataMap.ContainsKey(registeredPageType))
 			{
-				Debug.LogWarning($"[PageContainer::Create] PageType: {pageType} is created.");
+				Debug.LogWarning($"[PageContainer::Create] PageType: {registeredPageType} is created.");
+				return;
+			}
+
+			if (pageType.Name != registeredPageType.Name && !pageType.GetInterfaces().Contains(registeredPageType))
+			{
+				Debug.LogWarning($"[PageContainer::Create] {pageType.Name} doesn't inherit {registeredPageType.Name}.");
 				return;
 			}
 

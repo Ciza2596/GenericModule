@@ -5,31 +5,35 @@ using UnityEngine.Assertions;
 
 namespace CizaPageModule.Implement
 {
-    [CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModuleModule/PageModuleConfig")]
-    public class PageModuleConfig : ScriptableObject, IPageModuleConfig
-    {
-        [SerializeField] private string _pageGameObjectRootName = "[PageRoot]";
-        [SerializeField] private bool _isDontDestroyOnLoad = false;
-        [Space] [SerializeField] private Page[] _pagePrefabs;
+	[CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModuleModule/PageModuleConfig")]
+	public class PageModuleConfig : ScriptableObject, IPageModuleConfig
+	{
+		[SerializeField]
+		private string _pageGameObjectRootName = "[PageRoot]";
 
+		[SerializeField]
+		private bool _isDontDestroyOnLoad = false;
 
-        public string PageGameObjectRootName => _pageGameObjectRootName;
+		[Space]
+		[SerializeField]
+		private Page[] _pagePrefabs;
 
-        public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		public string PageGameObjectRootName => _pageGameObjectRootName;
 
-        public Dictionary<Type, MonoBehaviour> GetPagePrefabMap()
-        {
-            var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
+		public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-            foreach (var pagePrefab in _pagePrefabs)
-            {
-                Assert.IsNotNull(pagePrefab,
-                    "[PageModuleConig::GetPagePrefabMap] Please check _pagePrefabs. Lose a pagePrefab.");
-                var pageType = pagePrefab.GetType();
-                pagePrefabMap.Add(pageType, pagePrefab);
-            }
+		public Dictionary<Type, MonoBehaviour> GetPagePrefabMap()
+		{
+			var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
 
-            return pagePrefabMap;
-        }
-    }
+			foreach (var pagePrefab in _pagePrefabs)
+			{
+				Assert.IsNotNull(pagePrefab, "[PageModuleConfig::GetPagePrefabMap] Please check pagePrefabs. Lose a pagePrefab.");
+				var pageType = pagePrefab.GetType();
+				pagePrefabMap.Add(pageType, pagePrefab);
+			}
+
+			return pagePrefabMap;
+		}
+	}
 }

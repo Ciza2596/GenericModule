@@ -2,7 +2,7 @@
   "name": "com.ciza.pagemodule",
   "displayName": "PageModule",
   "description": "PageModule.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

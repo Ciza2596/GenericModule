@@ -14,7 +14,6 @@ namespace CizaLocalizationModule
 		public string[] SupportLocales { get; private set; }
 		public string   CurrentLocale  { get; private set; }
 		public string   SourceLocale   { get; private set; }
-		
 
 		public LocalizationModule(ILocalizationModuleConfig config)
 		{

@@ -3,172 +3,157 @@ using System.Collections.Generic;
 
 namespace DataType
 {
-    public class Array3DDataType : CollectionDataType
-    {
-        public Array3DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
-            IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper)
-        {
-        }
+	public class Array3DDataType : CollectionDataType
+	{
+		public Array3DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
+
+		public override void Write(object obj, IWriter writer)
+		{
+			var array = (Array)obj;
+
+			if (_elementDataType == null)
+				throw new ArgumentNullException("[Array3DDataType::Write] DataType argument cannot be null.");
 
 
-        public override void Write(object obj, IWriter writer)
-        {
-            var array = (Array)obj;
+			for (int i = 0; i < array.GetLength(0); i++)
+			{
+				writer.StartWriteCollectionItem(i);
+				writer.StartWriteCollection();
 
-            if (_elementDataType == null)
-                throw new ArgumentNullException("[Array3DDataType::Write] DataType argument cannot be null.");
+				for (int j = 0; j < array.GetLength(1); j++)
+				{
+					writer.StartWriteCollectionItem(j);
+					writer.StartWriteCollection();
 
+					for (int k = 0; k < array.GetLength(2); k++)
+					{
+						writer.StartWriteCollectionItem(k);
+						writer.Write(array.GetValue(i, j, k), _elementDataType);
+						writer.EndWriteCollectionItem(k);
+					}
 
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                writer.StartWriteCollectionItem(i);
-                writer.StartWriteCollection();
+					writer.EndWriteCollection();
+					writer.EndWriteCollectionItem(j);
+				}
 
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    writer.StartWriteCollectionItem(j);
-                    writer.StartWriteCollection();
+				writer.EndWriteCollection();
+				writer.EndWriteCollectionItem(i);
+			}
+		}
 
-                    for (int k = 0; k < array.GetLength(2); k++)
-                    {
-                        writer.StartWriteCollectionItem(k);
-                        writer.Write(array.GetValue(i, j, k), _elementDataType);
-                        writer.EndWriteCollectionItem(k);
-                    }
+		public override object Read<T>(IReader reader) =>
+			Read(reader);
 
-                    writer.EndWriteCollection();
-                    writer.EndWriteCollectionItem(j);
-                }
+		public override object Read(IReader reader)
+		{
+			if (reader.StartReadCollection())
+				return null;
 
-                writer.EndWriteCollection();
-                writer.EndWriteCollectionItem(i);
-            }
-        }
+			// Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
+			var items   = new List<object>();
+			var length1 = 0;
+			var length2 = 0;
 
-        public override object Read<T>(IReader reader)
-        {
-            return Read(reader);
-        }
+			// Iterate through each sub-array
+			while (true)
+			{
+				if (!reader.StartReadCollectionItem())
+					break;
+				reader.StartReadCollection();
 
-        public override object Read(IReader reader)
-        {
-            if (reader.StartReadCollection())
-                return null;
+				length1++;
 
-            // Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
-            var items = new List<object>();
-            var length1 = 0;
-            var length2 = 0;
+				while (true)
+				{
+					if (!reader.StartReadCollectionItem())
+						break;
 
-            // Iterate through each sub-array
-            while (true)
-            {
-                if (!reader.StartReadCollectionItem())
-                    break;
-                reader.StartReadCollection();
+					ReadICollection<object>(reader, items, _elementDataType);
+					length2++;
 
-                length1++;
+					if (reader.EndReadCollectionItem())
+						break;
+				}
 
-                while (true)
-                {
-                    if (!reader.StartReadCollectionItem())
-                        break;
+				reader.EndReadCollection();
+				if (reader.EndReadCollectionItem())
+					break;
+			}
 
-                    ReadICollection<object>(reader, items, _elementDataType);
-                    length2++;
+			reader.EndReadCollection();
 
-                    if (reader.EndReadCollectionItem())
-                        break;
-                }
+			length2 = length2 / length1;
+			var length3 = items.Count / length2 / length1;
 
-                reader.EndReadCollection();
-                if (reader.EndReadCollectionItem())
-                    break;
-            }
+			var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type,
+			                                                  new int[] { length1, length2, length3 });
 
-            reader.EndReadCollection();
+			for (int i = 0; i < length1; i++)
+				for (int j = 0; j < length2; j++)
+					for (int k = 0; k < length3; k++)
+						array.SetValue(items[i * (length2 * length3) + (j * length3) + k], i, j, k);
 
-            length2 = length2 / length1;
-            var length3 = items.Count / length2 / length1;
+			return array;
+		}
 
-            var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type,
-                new int[] { length1, length2, length3 });
+		public override void ReadInto<T>(IReader reader, object obj) =>
+			ReadInto(reader, obj);
 
-            for (int i = 0; i < length1; i++)
-            for (int j = 0; j < length2; j++)
-            for (int k = 0; k < length3; k++)
-                array.SetValue(items[i * (length2 * length3) + (j * length3) + k], i, j, k);
+		public override void ReadInto(IReader reader, object obj)
+		{
+			var array = (Array)obj;
 
-            return array;
-        }
+			if (reader.StartReadCollection())
+				throw new NullReferenceException("[Array3DDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-        public override void ReadInto<T>(IReader reader, object obj)
-        {
-            ReadInto(reader, obj);
-        }
+			bool iHasBeenRead = false;
 
-        public override void ReadInto(IReader reader, object obj)
-        {
-            var array = (Array)obj;
+			for (int i = 0; i < array.GetLength(0); i++)
+			{
+				bool jHasBeenRead = false;
 
-            if (reader.StartReadCollection())
-                throw new NullReferenceException(
-                    "[Array3DDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+				if (!reader.StartReadCollectionItem())
+					throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
 
-            bool iHasBeenRead = false;
+				reader.StartReadCollection();
 
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                bool jHasBeenRead = false;
+				for (int j = 0; j < array.GetLength(1); j++)
+				{
+					bool kHasBeenRead = false;
 
-                if (!reader.StartReadCollectionItem())
-                    throw new IndexOutOfRangeException(
-                        "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
+					if (!reader.StartReadCollectionItem())
+						throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
 
-                reader.StartReadCollection();
+					reader.StartReadCollection();
 
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    bool kHasBeenRead = false;
+					for (int k = 0; k < array.GetLength(2); k++)
+					{
+						if (!reader.StartReadCollectionItem())
+							throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
+						reader.ReadInto<object>(array.GetValue(i, j, k), _elementDataType);
+						kHasBeenRead = reader.EndReadCollectionItem();
+					}
 
-                    if (!reader.StartReadCollectionItem())
-                        throw new IndexOutOfRangeException(
-                            "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
+					if (!kHasBeenRead)
+						throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
-                    reader.StartReadCollection();
+					reader.EndReadCollection();
 
-                    for (int k = 0; k < array.GetLength(2); k++)
-                    {
-                        if (!reader.StartReadCollectionItem())
-                            throw new IndexOutOfRangeException(
-                                "[Array3DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
-                        reader.ReadInto<object>(array.GetValue(i, j, k), _elementDataType);
-                        kHasBeenRead = reader.EndReadCollectionItem();
-                    }
+					jHasBeenRead = reader.EndReadCollectionItem();
+				}
 
-                    if (!kHasBeenRead)
-                        throw new IndexOutOfRangeException(
-                            "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
+				if (!jHasBeenRead)
+					throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
-                    reader.EndReadCollection();
+				reader.EndReadCollection();
 
-                    jHasBeenRead = reader.EndReadCollectionItem();
-                }
+				iHasBeenRead = reader.EndReadCollectionItem();
+			}
 
-                if (!jHasBeenRead)
-                    throw new IndexOutOfRangeException(
-                        "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
+			if (!iHasBeenRead)
+				throw new IndexOutOfRangeException("[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
-                reader.EndReadCollection();
-
-                iHasBeenRead = reader.EndReadCollectionItem();
-            }
-
-            if (!iHasBeenRead)
-                throw new IndexOutOfRangeException(
-                    "[Array3DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
-
-            reader.EndReadCollection();
-        }
-    }
+			reader.EndReadCollection();
+		}
+	}
 }

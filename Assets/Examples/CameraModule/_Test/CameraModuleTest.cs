@@ -12,7 +12,6 @@ public class CameraModuleTest
     [SetUp]
     public void SetUp()
     {
-        
         _cameraModule = new CizaCameraModule.CameraModule();
 
         var cameraGameObject = new GameObject();

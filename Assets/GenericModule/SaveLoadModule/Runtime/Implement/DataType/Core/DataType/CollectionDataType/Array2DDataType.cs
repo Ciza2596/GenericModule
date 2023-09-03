@@ -3,121 +3,108 @@ using System.Collections.Generic;
 
 namespace DataType
 {
-    public class Array2DDataType : CollectionDataType
-    {
+	public class Array2DDataType : CollectionDataType
+	{
+		public Array2DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
 
-        public Array2DDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController,
-            IReflectionHelper reflectionHelper) : base(type,
-            elementDataType, dataTypeController, reflectionHelper)
-        {
-        }
+		public override void Write(object obj, IWriter writer)
+		{
+			var array = (Array)obj;
 
+			if (_elementDataType is null)
+				throw new ArgumentNullException("[Array2DDataType::Write] DataType argument cannot be null.");
 
-        public override void Write(object obj, IWriter writer)
-        {
-            var array = (Array)obj;
+			for (int i = 0; i < array.GetLength(0); i++)
+			{
+				writer.StartWriteCollectionItem(i);
+				writer.StartWriteCollection();
+				for (int j = 0; j < array.GetLength(1); j++)
+				{
+					writer.StartWriteCollectionItem(j);
+					writer.Write(array.GetValue(i, j), _elementDataType);
+					writer.EndWriteCollectionItem(j);
+				}
 
-            if (_elementDataType is null)
-                throw new ArgumentNullException("[Array2DDataType::Write] DataType argument cannot be null.");
+				writer.EndWriteCollection();
+				writer.EndWriteCollectionItem(i);
+			}
+		}
 
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                writer.StartWriteCollectionItem(i);
-                writer.StartWriteCollection();
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    writer.StartWriteCollectionItem(j);
-                    writer.Write(array.GetValue(i, j), _elementDataType);
-                    writer.EndWriteCollectionItem(j);
-                }
+		public override object Read<T>(IReader reader) => Read(reader);
 
-                writer.EndWriteCollection();
-                writer.EndWriteCollectionItem(i);
-            }
-        }
+		public override object Read(IReader reader)
+		{
+			if (reader.StartReadCollection())
+				return null;
 
-        public override object Read<T>(IReader reader) => Read(reader);
+			// Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
+			var items   = new List<object>();
+			var length1 = 0;
 
-        public override object Read(IReader reader)
-        {
-            if (reader.StartReadCollection())
-                return null;
+			// Iterate through each character until we reach the end of the array.
+			while (true)
+			{
+				if (!reader.StartReadCollectionItem())
+					break;
 
-            // Create a List to store the items as a 1D array, which we can work out the positions of by calculating the lengths of the two dimensions.
-            var items = new List<object>();
-            var length1 = 0;
+				ReadICollection<object>(reader, items, _elementDataType);
+				length1++;
 
-            // Iterate through each character until we reach the end of the array.
-            while (true)
-            {
-                if (!reader.StartReadCollectionItem())
-                    break;
+				if (reader.EndReadCollectionItem())
+					break;
+			}
 
-                ReadICollection<object>(reader, items, _elementDataType);
-                length1++;
+			var length2 = items.Count / length1;
 
-                if (reader.EndReadCollectionItem())
-                    break;
-            }
+			var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type, new int[] { length1, length2 });
 
-            var length2 = items.Count / length1;
+			for (var i = 0; i < length1; i++)
+				for (var j = 0; j < length2; j++)
+					array.SetValue(items[(i * length2) + j], i, j);
 
-            var array = _reflectionHelper.CreateArrayInstance(_elementDataType.Type, new int[] { length1, length2 });
+			return array;
+		}
 
-            for (var i = 0; i < length1; i++) 
-                for (var j = 0; j < length2; j++)
-                    array.SetValue(items[(i * length2) + j], i, j);
+		public override void ReadInto<T>(IReader reader, object obj) =>
+			ReadInto(reader, obj);
 
-            return array;
-        }
+		public override void ReadInto(IReader reader, object obj)
+		{
+			var array = (Array)obj;
 
-        public override void ReadInto<T>(IReader reader, object obj)
-        {
-            ReadInto(reader, obj);
-        }
+			if (reader.StartReadCollection())
+				throw new NullReferenceException("[Array2DDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
 
-        public override void ReadInto(IReader reader, object obj)
-        {
-            var array = (Array)obj;
+			var iHasBeenRead = false;
 
-            if (reader.StartReadCollection())
-                throw new NullReferenceException(
-                    "[Array2DDataType::ReadInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");
+			for (var i = 0; i < array.GetLength(0); i++)
+			{
+				var jHasBeenRead = false;
 
-            var iHasBeenRead = false;
+				if (!reader.StartReadCollectionItem())
+					throw new IndexOutOfRangeException("[Array2DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
 
-            for (var i = 0; i < array.GetLength(0); i++)
-            {
-               var jHasBeenRead = false;
+				reader.StartReadCollection();
+				for (var j = 0; j < array.GetLength(1); j++)
+				{
+					if (!reader.StartReadCollectionItem())
+						throw new IndexOutOfRangeException("[Array2DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
+					reader.ReadInto<object>(array.GetValue(i, j), _elementDataType);
+					jHasBeenRead = reader.EndReadCollectionItem();
+				}
 
-                if (!reader.StartReadCollectionItem())
-                    throw new IndexOutOfRangeException(
-                        "[Array2DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
+				if (!jHasBeenRead)
+					throw new IndexOutOfRangeException("[Array2DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
-                reader.StartReadCollection();
-                for (var j = 0; j < array.GetLength(1); j++)
-                {
-                    if (!reader.StartReadCollectionItem())
-                        throw new IndexOutOfRangeException(
-                            "[Array2DDataType::ReadInto] The collection we are loading is smaller than the collection provided as a parameter.");
-                    reader.ReadInto<object>(array.GetValue(i, j), _elementDataType);
-                    jHasBeenRead = reader.EndReadCollectionItem();
-                }
+				reader.EndReadCollection();
 
-                if (!jHasBeenRead)
-                    throw new IndexOutOfRangeException(
-                        "[Array2DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
+				iHasBeenRead = reader.EndReadCollectionItem();
+			}
 
-                reader.EndReadCollection();
+			if (!iHasBeenRead)
+				throw new IndexOutOfRangeException("[Array2DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
 
-                iHasBeenRead = reader.EndReadCollectionItem();
-            }
-
-            if (!iHasBeenRead)
-                throw new IndexOutOfRangeException(
-                    "[Array2DDataType::ReadInto] The collection we are loading is larger than the collection provided as a parameter.");
-
-            reader.EndReadCollection();
-        }
-    }
+			reader.EndReadCollection();
+		}
+	}
 }

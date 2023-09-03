@@ -5,193 +5,177 @@ using UnityEngine.Assertions;
 
 namespace CizaSaveLoadModule.Implement
 {
-    public abstract class BaseReader : IReader, DataType.IReader
-    {
-        //private variable
-        protected readonly IDataTypeController _dataTypeController;
+	public abstract class BaseReader : IReader, DataType.IReader
+	{
+		//private variable
+		protected readonly IDataTypeController _dataTypeController;
 
-        protected int _serializationDepth = 0;
+		protected int _serializationDepth = 0;
 
+		//public variable
 
-        //public variable
+		public IEnumerable<string> PropertyNames => new ReaderPropertyNameEnumerator(this);
 
-        public IEnumerable<string> PropertyNames => new ReaderPropertyNameEnumerator(this);
+		public string OverridePropertyName { get; private set; }
 
-        public string OverridePropertyName { get; private set; }
+		//constructor
+		protected BaseReader(IDataTypeController dataTypeController) =>
+			_dataTypeController = dataTypeController;
 
+		//SaveLoadModule IReader
+		public T Read<T>(string key)
+		{
+			Assert.IsTrue(TryGoTo(key), $"[BaseReader::Read] Cant find key: {key}");
 
-        //constructor
-        protected BaseReader(IDataTypeController dataTypeController) =>
-            _dataTypeController = dataTypeController;
+			var type     = ReadTypeFromHeader<T>();
+			var dataType = _dataTypeController.GetOrCreateDataType(type);
+			T   obj      = Read<T>(dataType);
 
+			return obj;
+		}
 
-        //SaveLoadModule IReader
-        public T Read<T>(string key)
-        {
-            Assert.IsTrue(TryGoTo(key), $"[BaseReader::Read] Cant find key: {key}");
+		public abstract void Dispose();
 
-            var type = ReadTypeFromHeader<T>();
-            var dataType = _dataTypeController.GetOrCreateDataType(type);
-            T obj = Read<T>(dataType);
+		//DataType IReader
+		public abstract Type ReadType();
 
-            return obj;
-        }
+		public abstract int ReadInt();
 
-        public abstract void Dispose();
+		public abstract bool ReadBool();
 
+		public abstract byte ReadByte();
 
-        //DataType IReader
-        public abstract Type ReadType();
+		public abstract char ReadChar();
 
-        public abstract int ReadInt();
+		public abstract decimal ReadDecimal();
 
-        public abstract bool ReadBool();
+		public abstract double ReadDouble();
 
-        public abstract byte ReadByte();
+		public abstract float ReadFloat();
 
-        public abstract char ReadChar();
+		public abstract long ReadLong();
 
-        public abstract decimal ReadDecimal();
+		public abstract sbyte ReadSbyte();
 
-        public abstract double ReadDouble();
+		public abstract short ReadShort();
 
-        public abstract float ReadFloat();
+		public abstract uint ReadUint();
 
-        public abstract long ReadLong();
+		public abstract ulong ReadUlong();
 
-        public abstract sbyte ReadSbyte();
+		public abstract ushort ReadUshort();
 
-        public abstract short ReadShort();
+		public abstract string ReadString();
 
-        public abstract uint ReadUint();
+		public void ReadInto<T>(object obj, DataType.DataType dataType)
+		{
+			if (dataType.IsCollection)
+				((CollectionDataType)dataType).ReadInto(this, obj);
+			else if (dataType.IsDictionary)
+				((DictionaryDataType)dataType).ReadInto(this, obj);
+			else
+				ReadObject<T>(obj, dataType);
+		}
 
-        public abstract ulong ReadUlong();
+		public abstract string ReadPropertyName();
 
-        public abstract ushort ReadUshort();
+		public T ReadProperty<T>(DataType.DataType dataType)
+		{
+			ReadPropertyName();
+			return Read<T>(dataType);
+		}
 
-        public abstract string ReadString();
+		public T Read<T>(DataType.DataType dataType)
+		{
+			if (dataType.IsPrimitive)
+				return (T)dataType.Read<T>(this);
 
-        public void ReadInto<T>(object obj, DataType.DataType dataType)
-        {
-            if (dataType.IsCollection)
-                ((CollectionDataType)dataType).ReadInto(this, obj);
-            else if (dataType.IsDictionary)
-                ((DictionaryDataType)dataType).ReadInto(this, obj);
-            else
-                ReadObject<T>(obj, dataType);
-        }
+			if (dataType.IsCollection)
+				return (T)((CollectionDataType)dataType).Read(this);
 
+			if (dataType.IsDictionary)
+				return (T)((DictionaryDataType)dataType).Read(this);
 
-        public abstract string ReadPropertyName();
+			return ReadObject<T>(dataType);
+		}
 
-        public T ReadProperty<T>(DataType.DataType dataType)
-        {
-            ReadPropertyName();
-            return Read<T>(dataType);
-        }
+		public abstract bool StartReadCollection();
+		public abstract void EndReadCollection();
 
-        public T Read<T>(DataType.DataType dataType)
-        {
-            if (dataType.IsPrimitive)
-                return (T)dataType.Read<T>(this);
+		public abstract bool StartReadCollectionItem();
+		public abstract bool EndReadCollectionItem();
 
-            if (dataType.IsCollection)
-                return (T)((CollectionDataType)dataType).Read(this);
-
-            if (dataType.IsDictionary)
-                return (T)((DictionaryDataType)dataType).Read(this);
-
-            return ReadObject<T>(dataType);
-        }
-
-
-        public abstract bool StartReadCollection();
-        public abstract void EndReadCollection();
-
-
-        public abstract bool StartReadCollectionItem();
-        public abstract bool EndReadCollectionItem();
-
-
-        public abstract bool StartReadDictionary();
-        public abstract void EndReadDictionary();
-
-
-        public abstract bool StartReadDictionaryKey();
-        public abstract void EndReadDictionaryKey();
-
-
-        public abstract void StartReadDictionaryValue();
-        public abstract bool EndReadDictionaryValue();
-
-
-        public void SetOverridePropertyName(string overridePropertyName) =>
-            OverridePropertyName = overridePropertyName;
-
-
-        public void Skip() => ReadElement(true);
-
-
-        //protected method
-        protected abstract byte[] ReadElement(bool skip = false);
-
-
-        protected abstract Type ReadKeyPrefix();
-        protected abstract void ReadKeySuffix();
-
-
-        protected virtual bool StartReadObject()
-        {
-            _serializationDepth++;
-            return false;
-        }
-
-        protected virtual void EndReadObject() =>
-            _serializationDepth--;
-
-
-        //private method
-        private bool TryGoTo(string key)
-        {
-            Assert.IsTrue(key != null, "[BaseReader::TryGoTo] Key cannot be NULL when loading data.");
-
-            string currentKey;
-            while ((currentKey = ReadPropertyName()) != key)
-            {
-                if (currentKey is null)
-                    return false;
-                Skip();
-            }
-
-            return true;
-        }
-
-        private void ReadObject<T>(object obj, DataType.DataType dataType)
-        {
-            // Check for null.
-            if (StartReadObject())
-                return;
-
-            dataType.ReadInto<T>(this, obj);
-
-            EndReadObject();
-        }
-
-        private T ReadObject<T>(DataType.DataType dataType)
-        {
-            if (StartReadObject())
-                return default;
-
-            var obj = dataType.Read<T>(this);
-
-            EndReadObject();
-            return (T)obj;
-        }
-
-        private Type ReadTypeFromHeader<T>()
-        {
-            var type = ReadKeyPrefix();
-            return type;
-        }
-    }
+		public abstract bool StartReadDictionary();
+		public abstract void EndReadDictionary();
+
+		public abstract bool StartReadDictionaryKey();
+		public abstract void EndReadDictionaryKey();
+
+		public abstract void StartReadDictionaryValue();
+		public abstract bool EndReadDictionaryValue();
+
+		public void SetOverridePropertyName(string overridePropertyName) =>
+			OverridePropertyName = overridePropertyName;
+
+		public void Skip() => ReadElement(true);
+
+		//protected method
+		protected abstract byte[] ReadElement(bool skip = false);
+
+		protected abstract Type ReadKeyPrefix();
+		protected abstract void ReadKeySuffix();
+
+		protected virtual bool StartReadObject()
+		{
+			_serializationDepth++;
+			return false;
+		}
+
+		protected virtual void EndReadObject() =>
+			_serializationDepth--;
+
+		//private method
+		private bool TryGoTo(string key)
+		{
+			Assert.IsTrue(key != null, "[BaseReader::TryGoTo] Key cannot be NULL when loading data.");
+
+			string currentKey;
+			while ((currentKey = ReadPropertyName()) != key)
+			{
+				if (currentKey is null)
+					return false;
+				Skip();
+			}
+
+			return true;
+		}
+
+		private void ReadObject<T>(object obj, DataType.DataType dataType)
+		{
+			// Check for null.
+			if (StartReadObject())
+				return;
+
+			dataType.ReadInto<T>(this, obj);
+
+			EndReadObject();
+		}
+
+		private T ReadObject<T>(DataType.DataType dataType)
+		{
+			if (StartReadObject())
+				return default;
+
+			var obj = dataType.Read<T>(this);
+
+			EndReadObject();
+			return (T)obj;
+		}
+
+		private Type ReadTypeFromHeader<T>()
+		{
+			var type = ReadKeyPrefix();
+			return type;
+		}
+	}
 }

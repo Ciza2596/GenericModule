@@ -4,24 +4,23 @@ using CizaSaveLoadModule.Implement;
 
 public class SaveLoadModuleInstaller
 {
+	private Io _io;
 
-    private Io _io;
-    
-    public CizaSaveLoadModule.SaveLoadModule CreateSaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig)
-    {
-        var fakeReflectionHelperConfig = new FakeReflectionHelperConfig();
-        var reflectionHelper = new ReflectionHelper(fakeReflectionHelperConfig);
-        
-        _io = new Io();
+	public SaveLoadModule CreateSaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig)
+	{
+		var fakeReflectionHelperConfig = new FakeReflectionHelperConfig();
+		var reflectionHelper           = new ReflectionHelper(fakeReflectionHelperConfig);
 
-        var dataTypeController = new DataTypeControllerAdapter(reflectionHelper);
+		_io = new Io();
 
-        var fileStreamProvider = new FileStreamProvider();
-        var jsonWriterProvider = new JsonWriterProvider(fileStreamProvider, dataTypeController, reflectionHelper);
-        var jsonReaderProvider = new JsonReaderProvider(fileStreamProvider, dataTypeController, reflectionHelper);
+		var dataTypeController = new DataTypeControllerAdapter(reflectionHelper);
 
-        return new CizaSaveLoadModule.SaveLoadModule(saveLoadModuleConfig, _io, jsonWriterProvider, jsonReaderProvider);
-    }
+		var fileStreamProvider = new FileStreamProvider();
+		var jsonWriterProvider = new JsonWriterProvider(fileStreamProvider, dataTypeController, reflectionHelper);
+		var jsonReaderProvider = new JsonReaderProvider(fileStreamProvider, dataTypeController, reflectionHelper);
 
-    public Io GetIo() => _io;
+		return new SaveLoadModule(saveLoadModuleConfig, _io, jsonWriterProvider, jsonReaderProvider);
+	}
+
+	public Io GetIo() => _io;
 }

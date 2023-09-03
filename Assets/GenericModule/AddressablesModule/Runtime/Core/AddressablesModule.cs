@@ -15,11 +15,8 @@ namespace CizaAddressablesModule
 	public class AddressablesModule
 	{
 		//private variable
-		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType =
-			new Dictionary<Type, Dictionary<string, Object>>();
-
-		private readonly Dictionary<string, SceneInstance> _addressSceneMap =
-			new Dictionary<string, SceneInstance>();
+		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType = new Dictionary<Type, Dictionary<string, Object>>();
+		private readonly Dictionary<string, SceneInstance>            _addressSceneMap             = new Dictionary<string, SceneInstance>();
 
 		//public method
 
@@ -143,9 +140,7 @@ namespace CizaAddressablesModule
 			scene.ActivateAsync();
 		}
 
-		public async UniTask<SceneInstance> LoadSceneAsync(string        address,
-		                                                   LoadSceneMode loadMode         = LoadSceneMode.Single,
-		                                                   bool          isActivateOnLoad = true)
+		public async UniTask<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool   isActivateOnLoad = true)
 		{
 			var scene = await Addressables.LoadSceneAsync(address, loadMode, false);
 			_addressSceneMap.Add(address, scene);

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 public class LogModuleTest
 {
-    private CizaLogModule.LogModule _logModule;
+    private LogModule _logModule;
     private FakeLogModuleConfig _fakeLogModuleConfig;
     private FakeLogPrinter _fakeLogPrinter;
 

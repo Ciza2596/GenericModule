@@ -11,10 +11,10 @@ namespace CizaPageModule
 	public class PageContainer
 	{
 		//private variable
+		private readonly Dictionary<Type, PageController> _pageDataMap = new Dictionary<Type, PageController>();
+
 		private Transform                       _pageGameObjectRootTransform;
 		private Dictionary<Type, MonoBehaviour> _pagePrefabMap;
-
-		private readonly Dictionary<Type, PageController> _pageDataMap = new Dictionary<Type, PageController>();
 
 		private Action<float> _tickHandle;
 		private Action<float> _fixedTickHandle;

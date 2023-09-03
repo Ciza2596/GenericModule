@@ -13,17 +13,12 @@ public class TimerModuleTest
     private TimerModule _timerModule;
 
     [SetUp]
-    public void SetUp()
-    {
+    public void SetUp() =>
         _timerModule = new TimerModule();
-    }
 
     [TearDown]
-    public void TearDown()
-    {
+    public void TearDown() =>
         _timerModule = null;
-    }
-
 
     [Test]
     public void _01_IsInitialized_Be_True_By_Initialize()
@@ -180,10 +175,8 @@ public class TimerModuleTest
         _timerModule.Tick(deltaTime);
         Assert.AreEqual(expectedCurrentValue_2Tick, currentValue, "2Tick is error.");
 
-        void OnTickValue(ITimerReadModel timerReadModel, float value)
-        {
+        void OnTickValue(ITimerReadModel timerReadModel, float value) =>
             currentValue = value;
-        }
     }
 
 

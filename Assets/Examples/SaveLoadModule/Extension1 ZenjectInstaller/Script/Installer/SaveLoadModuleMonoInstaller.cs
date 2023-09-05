@@ -11,7 +11,7 @@ public class SaveLoadModuleMonoInstaller : MonoInstaller
     
     public override void InstallBindings()
     {
-        Container.Bind<CizaSaveLoadModule.SaveLoadModule>().AsSingle().NonLazy();
+        Container.Bind<SaveLoadModule>().AsSingle().NonLazy();
         Container.Bind<ISaveLoadModuleConfig>().FromInstance(_saveLoadModuleConfig);
         
         Container.Bind<IIo>().To<Io>().AsSingle();

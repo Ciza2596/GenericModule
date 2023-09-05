@@ -1,11 +1,10 @@
-
 using System;
 
 namespace DataType.Implement
 {
-    public interface IReflectionHelperConfig
-    {
-        Type CustomSerializableAttributeType { get; }
-        Type CustomNonSerializableAttributeType { get; }
-    }
+	public interface IReflectionHelperConfig
+	{
+		Type[] CustomSerializableAttributeTypes    { get; }
+		Type[] CustomNonSerializableAttributeTypes { get; }
+	}
 }

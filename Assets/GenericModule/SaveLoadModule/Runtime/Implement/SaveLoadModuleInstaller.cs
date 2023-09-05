@@ -4,7 +4,7 @@ namespace CizaSaveLoadModule.Implement
 {
 	public class SaveLoadModuleInstaller
 	{
-		public SaveLoadModule Install(ISaveLoadModuleConfig saveLoadModuleConfig, IReflectionHelperConfig reflectionHelperConfig)
+		public static SaveLoadModule Install(ISaveLoadModuleConfig saveLoadModuleConfig, IReflectionHelperConfig reflectionHelperConfig)
 		{
 			var fileStreamProvider        = new FileStreamProvider();
 			var reflectionHelper          = new ReflectionHelper(reflectionHelperConfig);

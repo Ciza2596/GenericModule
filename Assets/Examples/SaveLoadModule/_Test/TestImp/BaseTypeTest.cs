@@ -3,8 +3,8 @@ using CizaSaveLoadModule.Implement;
 
 public abstract class BaseTypeTest
 {
-    protected const string FILE_PATH = "TypeTest.slmf";
-    protected const string SAVE_KEY = "KEY";
+    protected const string _filePath = "TypeTest.slmf";
+    protected const string _saveKey = "KEY";
 
     protected CizaSaveLoadModule.SaveLoadModule _saveLoadModule;
     protected FakeSaveLoadModuleConfig _saveLoadModuleConfig;
@@ -26,7 +26,7 @@ public abstract class BaseTypeTest
     [TearDown]
     public void TearDown()
     {
-        var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, FILE_PATH);
+        var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, _filePath);
         _io.DeleteFile(fullPath);
     }
 }

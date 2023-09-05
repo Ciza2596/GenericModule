@@ -61,11 +61,11 @@ public class UnityTypeTest: BaseTypeTest
     
     //private method
     private void Save_Data<T>(T saveValue) =>
-        _saveLoadModule.Save(SAVE_KEY, saveValue, FILE_PATH);
+        _saveLoadModule.Save(_saveKey, saveValue, _filePath);
 
     private void Check_LoadData_Result<T>(T expectedValue)
     {
-        var hasData = _saveLoadModule.TryLoad<T>(SAVE_KEY, out var value, FILE_PATH);
+        var hasData = _saveLoadModule.TryLoad<T>(_saveKey, out var value, _filePath);
         Assert.IsTrue(hasData, "Not find data on file path.");
         Assert.AreEqual(expectedValue, value, "ExpectedValue and loadData ia not match.");
     }

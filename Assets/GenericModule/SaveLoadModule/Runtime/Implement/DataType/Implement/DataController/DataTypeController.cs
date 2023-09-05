@@ -15,12 +15,11 @@ namespace DataType.Implement
 
 
         //public method
-        public DataTypeController(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper,
-            IDataTypeControllerInstaller[] dataTypeInstallers)
+        public DataTypeController(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper, IDataTypeControllerInstaller[] dataTypeInstallers)
         {
             _dataTypeController = dataTypeController;
             _reflectionHelper = reflectionHelper;
-            _reflectionHelper.Initialize(_dataTypeController);
+            //_reflectionHelper.Initialize(_dataTypeController);
 
             foreach (var dataTypeInstaller in dataTypeInstallers)
                 dataTypeInstaller.Install(_dataTypes, _dataTypeController, _reflectionHelper);

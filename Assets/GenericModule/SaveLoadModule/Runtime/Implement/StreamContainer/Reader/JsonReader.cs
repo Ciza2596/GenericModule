@@ -17,10 +17,7 @@ namespace CizaSaveLoadModule.Implement
 
 		private readonly int _bufferSize;
 
-		public JsonReader(Stream              stream,
-		                  int                 bufferSize,
-		                  IDataTypeController dataTypeController,
-		                  IReflectionHelper   reflectionHelper) : base(dataTypeController)
+		public JsonReader(Stream stream, int bufferSize, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(dataTypeController)
 		{
 			_streamReader     = new StreamReader(stream);
 			_reflectionHelper = reflectionHelper;

@@ -191,11 +191,11 @@ public class CollectionTypeTest : BaseTypeTest
     }
 
     private void Save_Data<T>(T saveValue) =>
-        _saveLoadModule.Save(SAVE_KEY, saveValue, FILE_PATH);
+        _saveLoadModule.Save(_saveKey, saveValue, _filePath);
 
     private T GetAndCheck_LoadData<T>()
     {
-        var hasData = _saveLoadModule.TryLoad<T>(SAVE_KEY, out var value, FILE_PATH);
+        var hasData = _saveLoadModule.TryLoad<T>(_saveKey, out var value, _filePath);
         Assert.IsTrue(hasData, "Not find data on file path.");
         return value;
     }

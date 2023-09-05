@@ -71,8 +71,10 @@ namespace CizaSaveLoadModule.Implement
 		{
 			if (dataType.IsCollection)
 				((CollectionDataType)dataType).ReadInto(this, obj);
+			
 			else if (dataType.IsDictionary)
 				((DictionaryDataType)dataType).ReadInto(this, obj);
+			
 			else
 				ReadObject<T>(obj, dataType);
 		}
@@ -144,6 +146,7 @@ namespace CizaSaveLoadModule.Implement
 			{
 				if (currentKey is null)
 					return false;
+				
 				Skip();
 			}
 

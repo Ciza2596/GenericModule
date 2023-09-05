@@ -6,27 +6,17 @@ using UnityEngine;
 
 namespace DataType.Implement
 {
+	[Serializable]
 	public class ReflectionHelper : IReflectionHelper
 	{
 		//private variable
-		// private readonly Type _serializeFieldAttributeType = typeof(SerializeField);
-		private readonly Type _obsoleteAttributeType = typeof(ObsoleteAttribute);
-
-		// private readonly Type _nonSerializedAttributeType  = typeof(NonSerializedAttribute);
-
-		// private readonly Type _customSerializableAttributeType;
-		// private readonly Type _customNonSerializableAttributeType;
-
 		private readonly Type[] _serializableAttributeTypes;
 		private readonly Type[] _nonSerializableAttributeTypes;
 
-		private IDataTypeController _dataTypeController;
+		//private IDataTypeController _dataTypeController;
 
 		public ReflectionHelper(IReflectionHelperConfig reflectionHelperConfig)
 		{
-			// _customSerializableAttributeType    = reflectionHelperConfig.CustomSerializableAttributeTypes;
-			// _customNonSerializableAttributeType = reflectionHelperConfig.CustomNonSerializableAttributeTypes;
-
 			_serializableAttributeTypes    = m_CreateAttributeTypes(new[] { typeof(SerializeField) }, reflectionHelperConfig.CustomSerializableAttributeTypes);
 			_nonSerializableAttributeTypes = m_CreateAttributeTypes(new[] { typeof(NonSerializedAttribute) }, reflectionHelperConfig.CustomNonSerializableAttributeTypes);
 
@@ -39,34 +29,47 @@ namespace DataType.Implement
 			}
 		}
 
-		public void Initialize(IDataTypeController dataTypeController) => _dataTypeController = dataTypeController;
+		// public void Initialize(IDataTypeController dataTypeController) =>
+		// 	_dataTypeController = dataTypeController;
 
-		public System.Object CreateInstance(Type type) => Activator.CreateInstance(type);
+		public System.Object CreateInstance(Type type) =>
+			Activator.CreateInstance(type);
 
-		public System.Object CreateInstance(Type type, params object[] args) => Activator.CreateInstance(type, args);
+		public System.Object CreateInstance(Type type, params object[] args) =>
+			Activator.CreateInstance(type, args);
 
-		public Array CreateArrayInstance(Type type, int length) => Array.CreateInstance(type, new int[] { length });
+		public Array CreateArrayInstance(Type type, int length) =>
+			Array.CreateInstance(type, new[] { length });
 
-		public Array CreateArrayInstance(Type type, int[] dimensions) => Array.CreateInstance(type, dimensions);
+		public Array CreateArrayInstance(Type type, int[] dimensions) =>
+			Array.CreateInstance(type, dimensions);
 
-		public Type MakeGenericType(Type type, Type genericArgs) => type.MakeGenericType(genericArgs);
+		public Type MakeGenericType(Type type, Type genericArgs) =>
+			type.MakeGenericType(genericArgs);
 
 		public MethodInfo[] GetMethods(Type type, string methodName) =>
 			type.GetMethods().Where(t => t.Name == methodName).ToArray();
 
-		public bool CheckIsEnum(Type type) => type.IsEnum;
+		public bool CheckIsEnum(Type type) =>
+			type.IsEnum;
 
 		public bool CheckIsImplementsInterface(Type type, Type interfaceType) =>
-			(type.GetInterface(interfaceType.Name) != null);
+			type.GetInterface(interfaceType.Name) != null;
 
-		public bool CheckIsArray(Type type) => type.IsArray;
+		public bool CheckIsArray(Type type) =>
+			type.IsArray;
 
-		public bool CheckIsGenericType(Type    type) => type.IsGenericType;
-		public bool CheckIsAssignableFrom(Type a, Type b) => a.IsAssignableFrom(b);
+		public bool CheckIsGenericType(Type type) =>
+			type.IsGenericType;
 
-		public int GetArrayRank(Type type) => type.GetArrayRank();
+		public bool CheckIsAssignableFrom(Type a, Type b) =>
+			a.IsAssignableFrom(b);
 
-		public Type GetGenericTypeDefinition(Type type) => type.GetGenericTypeDefinition();
+		public int GetArrayRank(Type type) =>
+			type.GetArrayRank();
+
+		public Type GetGenericTypeDefinition(Type type) =>
+			type.GetGenericTypeDefinition();
 
 		public string GetTypeName(Type type)
 		{
@@ -153,13 +156,16 @@ namespace DataType.Implement
 				return GetGenericArguments(type);
 
 			if (type.IsArray)
-				return new Type[] { GetElementType(type) };
+				return new[] { GetElementType(type) };
 
 			return null;
 		}
 
-		public Type[] GetGenericArguments(Type type) => type.GetGenericArguments();
-		public Type GetBaseType(Type           type) => type.BaseType;
+		public Type[] GetGenericArguments(Type type) =>
+			type.GetGenericArguments();
+
+		public Type GetBaseType(Type type) =>
+			type.BaseType;
 
 		public IProperty[] AddSerializableProperties(Type type, string[] propertyNames)
 		{
@@ -174,38 +180,40 @@ namespace DataType.Implement
 
 		//private method
 
-		private bool CheckIsValueType(Type type) => type.IsValueType;
+		private bool CheckIsValueType(Type type) =>
+			type.IsValueType;
 
 		private bool CheckIsPrimitive(Type type) =>
 			type.IsPrimitive || type == typeof(string) || type == typeof(decimal);
 
 		private bool CheckIsSerializable(Type type)
 		{
-			if (type == null)
-				return false;
-
-			if (CheckIsDefined(type, _nonSerializableAttributeTypes))
+			if (type is null)
 				return false;
 
 			if (CheckIsPrimitive(type) || CheckIsValueType(type))
 				return true;
 
-			var dataType = _dataTypeController.GetOrCreateDataType(type);
-
-			if (dataType != null && !dataType.IsUnsupported)
+			if (CheckIsDefined(type, typeof(SerializableAttribute)))
 				return true;
 
-			if (CheckIsArray(type))
-			{
-				if (CheckIsSerializable(type.GetElementType()))
-					return true;
-				return false;
-			}
 
-			var genericArgs = type.GetGenericArguments();
-			foreach (var genericArg in genericArgs)
-				if (!CheckIsSerializable(genericArg))
-					return false;
+			// var dataType = _dataTypeController.GetOrCreateDataType(type);
+			// if (dataType != null && !dataType.IsUnsupported)
+			// 	return true;
+			//
+			// if (CheckIsArray(type))
+			// {
+			// 	if (CheckIsSerializable(type.GetElementType()))
+			// 		return true;
+			//
+			// 	return false;
+			// }
+
+			// var genericArgs = type.GetGenericArguments();
+			// foreach (var genericArg in genericArgs)
+			// 	if (!CheckIsSerializable(genericArg))
+			// 		return false;
 
 			return false;
 		}
@@ -213,15 +221,20 @@ namespace DataType.Implement
 		private bool CheckIsDefined(MemberInfo info, Type[] attributeTypes)
 		{
 			foreach (var attributeType in attributeTypes)
-				if (Attribute.IsDefined(info, attributeType, true))
+				if (CheckIsDefined(info, attributeType))
 					return true;
+
 			return false;
 		}
 
 		private bool CheckIsDefined(MemberInfo info, Type attributeType) =>
 			Attribute.IsDefined(info, attributeType, true);
 
-		private Type GetElementType(Type type) => type.GetElementType();
+		private bool CheckIsDefined(Type type, Type attributeType) =>
+			Attribute.IsDefined(type, attributeType, true);
+
+		private Type GetElementType(Type type) =>
+			type.GetElementType();
 
 		private void AddSerializableFields(Type type, List<IProperty> serializableFields, string[] fieldNames = null, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
 		{
@@ -233,44 +246,20 @@ namespace DataType.Implement
 					continue;
 
 				// If a members array was provided as a parameter, only include the field if it's in the array.
-				var fieldName = fieldInfo.Name;
-				if (fieldNames != null)
-					if (!fieldNames.Contains(fieldName))
-						continue;
+				if (fieldNames != null && !fieldNames.Contains(fieldInfo.Name))
+					continue;
 
 				if (CheckIsDefined(fieldInfo, _nonSerializableAttributeTypes))
 					continue;
 
-				if (CheckIsDefined(fieldInfo, _serializableAttributeTypes))
-				{
-					var field = new Field(fieldInfo);
-					serializableFields.Add(field);
-				}
+				if (!CheckIsDefined(fieldInfo, _serializableAttributeTypes))
+					continue;
 
+				if (!CheckIsSerializable(type))
+					continue;
 
-				// // If the field is private, only serialize it if it's explicitly marked as serializable.
-				// if (!fieldInfo.IsPublic && !CheckIsDefined(fieldInfo, _serializeFieldAttributeType))
-				// 	continue;
-				//
-				//
-				// // Exclude const or readonly fields.
-				// if (fieldInfo.IsLiteral || fieldInfo.IsInitOnly)
-				// 	continue;
-				//
-				//
-				// // Don't store fields whose type is the same as the class the field is housed in unless it's stored by reference (to prevent cyclic references)
-				// var fieldType = fieldInfo.FieldType;
-				// if (fieldType == type && !CheckIsAssignableFrom(typeof(UnityEngine.Object), fieldType))
-				// 	continue;
-				//
-				// // If property is marked as obsolete or non-serialized, don't serialize it.
-				// if (CheckIsDefined(fieldInfo, _nonSerializedAttributeType) || CheckIsDefined(fieldInfo, _obsoleteAttributeType))
-				// 	continue;
-				//
-				// if (!CheckIsSerializable(fieldInfo.FieldType))
-				// 	continue;
-				//
-				// serializableFields.Add(field);
+				var field = new Field(fieldInfo);
+				serializableFields.Add(field);
 			}
 		}
 
@@ -285,46 +274,14 @@ namespace DataType.Implement
 				if (CheckIsDefined(propertyInfo, _nonSerializableAttributeTypes))
 					continue;
 
-				if (CheckIsDefined(propertyInfo, _serializableAttributeTypes))
-				{
-					var property = new Property(propertyInfo);
-					serializableProperties.Add(property);
-				}
+				if (!CheckIsDefined(propertyInfo, _serializableAttributeTypes))
+					continue;
 
-				// var propertyName = propertyInfo.Name;
-				//
-				// // If a members array was provided as a parameter, only include the property if it's in the array.
-				// if (propertyNames != null)
-				// 	if (!propertyNames.Contains(propertyName))
-				// 		continue;
-				//
-				// // If safe serialization is enabled, only get properties which are explicitly marked as serializable.
-				// if (!CheckIsDefined(propertyInfo, _serializeFieldAttributeType) && !CheckIsDefined(propertyInfo, _customSerializableAttributeType))
-				// 	continue;
-				//
-				// var propertyType = propertyInfo.PropertyType;
-				//
-				// // Don't store properties whose type is the same as the class the property is housed in unless it's stored by reference (to prevent cyclic references)
-				// if (propertyType == type && !CheckIsAssignableFrom(typeof(UnityEngine.Object), propertyType))
-				// 	continue;
-				//
-				// if (!propertyInfo.CanRead)
-				// 	continue;
-				//
-				// // Only support properties with indexing if they're an array.
-				// if (propertyInfo.GetIndexParameters().Length != 0 && !propertyType.IsArray)
-				// 	continue;
-				//
-				// // Check that the type of the property is one which we can serialize.
-				// // Also check whether an ES3Type exists for it.
-				// if (!CheckIsSerializable(propertyType))
-				// 	continue;
-				//
-				// // If property is marked as obsolete or non-serialized, don't serialize it.
-				// if (CheckIsDefined(propertyInfo, _obsoleteAttributeType) || CheckIsDefined(propertyInfo, _nonSerializedAttributeType))
-				// 	continue;
-				//
-				// serializableProperties.Add(property);
+				if (!CheckIsSerializable(type))
+					continue;
+
+				var property = new Property(propertyInfo);
+				serializableProperties.Add(property);
 			}
 
 			var baseType = GetBaseType(type);

@@ -54,7 +54,7 @@ public class ClassTypeTest : BaseTypeTest
 	public void _03_TryLoad_FakeClass_Without_Save()
 	{
 		// act
-		var isLoaded = _saveLoadModule.TryLoad<FakeClass>("123", out var data);
+		var isLoaded = _saveLoadModule.TryLoad<FakeClass>("Save/123", out var data);
 
 		Assert.IsFalse(isLoaded, "FakeClass should be false.");
 	}

@@ -22,7 +22,9 @@ namespace CizaSaveLoadModule
 		//public method
 		public void Save<T>(string key, T data, string filePath = null)
 		{
-			var fullPath   = GetFullPath(filePath);
+			var fullPath = GetFullPath(filePath);
+			_io.CreateDirectory(fullPath);
+			
 			var bufferSize = _saveLoadModuleConfig.BufferSize;
 			var encoding   = _saveLoadModuleConfig.Encoding;
 			var writer     = _writerProvider.CreateWriter(fullPath, bufferSize, encoding);

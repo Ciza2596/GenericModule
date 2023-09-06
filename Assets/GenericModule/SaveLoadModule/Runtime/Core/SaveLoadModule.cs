@@ -33,7 +33,13 @@ namespace CizaSaveLoadModule
 
 		public bool TryLoad<T>(string key, out T data, string filePath = null)
 		{
-			var fullPath   = GetFullPath(filePath);
+			var fullPath = GetFullPath(filePath);
+			if (!_io.CheckIsExist(fullPath))
+			{
+				data = default;
+				return false;
+			}
+
 			var bufferSize = _saveLoadModuleConfig.BufferSize;
 			var reader     = _readerProvider.CreateReader(fullPath, bufferSize);
 

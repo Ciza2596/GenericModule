@@ -66,10 +66,8 @@ namespace CizaSceneModule
 			IsViewName = false;
 
 			TransitionInViewName = transitionViewTag;
-			CurrentSceneName = string.IsNullOrWhiteSpace(currentSceneName)
-				                   ? _sceneManager.CurrentSceneName
-				                   : currentSceneName;
-			ReleasingTask = releasingTask;
+			CurrentSceneName     = string.IsNullOrWhiteSpace(currentSceneName) ? _sceneManager.CurrentSceneName : currentSceneName;
+			ReleasingTask        = releasingTask;
 
 			LoadingViewName = transitionViewTag;
 

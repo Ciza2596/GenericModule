@@ -40,9 +40,9 @@ namespace CizaSceneModule
 			var transitionOutView       = CreateView<ITransitionView>(viewParentTransform, transitionOutViewPrefab);
 			var transitionSceneName     = sceneModule.TransitionSceneName;
 
-			releasingTask?.Execute();
 			transitionInView.Play(() =>
 			{
+				releasingTask?.Execute();
 				UnloadScene(currentSceneName);
 
 				LoadSceneOnBackground(nextSceneName);

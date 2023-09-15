@@ -22,7 +22,7 @@ namespace CizaPageModule
 		public bool IsInitialized => _pageContainer.IsInitialized;
 
 		//public method
-		public void Initialize(Transform pageGameObjectRootParentTransform = null)
+		public void Initialize(Transform pageRootParentTransform = null)
 		{
 			Release();
 
@@ -33,8 +33,8 @@ namespace CizaPageModule
 			var isDontDestroyOnLoad = _pageModuleConfig.IsDontDestroyOnLoad;
 			if (isDontDestroyOnLoad)
 				Object.DontDestroyOnLoad(pageGameObjectRoot);
-			else if (pageGameObjectRootParentTransform != null)
-				pageGameObjectRootTransform.SetParent(pageGameObjectRootParentTransform);
+			else if (pageRootParentTransform != null)
+				pageGameObjectRootTransform.SetParent(pageRootParentTransform);
 
 			var pagePrefabs = _pageModuleConfig.GetPagePrefabs();
 

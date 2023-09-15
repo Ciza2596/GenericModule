@@ -67,17 +67,17 @@ namespace CizaPageModule
 
 		public void DestroyAll() => _pageContainer.DestroyAll();
 
-		public async UniTask Show(string key, Action onComplete = null) =>
-			await _pageContainer.Show(key, onComplete);
+		public async UniTask Show(string key, Action onComplete = null, params object[] parameters) =>
+			await _pageContainer.Show(key, onComplete, parameters);
 
-		public async UniTask ShowImmediately(string key, Action onComplete = null) =>
-			await _pageContainer.ShowImmediately(key, onComplete);
+		public async UniTask ShowImmediately(string key, Action onComplete = null, params object[] parameters) =>
+			await _pageContainer.ShowImmediately(key, onComplete, parameters);
 
-		public async UniTask Show(string[] keys, Action onComplete = null) =>
-			await _pageContainer.Show(keys, onComplete);
+		public async UniTask Show(string[] keys, object[][] parametersList, Action onComplete = null) =>
+			await _pageContainer.Show(keys, parametersList, onComplete);
 
-		public async UniTask ShowImmediately(string[] keys, Action onComplete = null) =>
-			await _pageContainer.ShowImmediately(keys, onComplete);
+		public async UniTask ShowImmediately(string[] keys, object[][] parametersList, Action onComplete = null) =>
+			await _pageContainer.ShowImmediately(keys, parametersList, onComplete);
 
 		public async UniTask Hide(string key, Action onComplete = null) =>
 			await _pageContainer.Hide(key, onComplete);

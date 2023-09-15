@@ -48,12 +48,12 @@ namespace CizaPageModule
 			return fixedTickable != null;
 		}
 
-		public async UniTask OnShowingStart()
+		public async UniTask OnShowingStart(params object[] parameters)
 		{
 			State = PageState.Showing;
 
 			if (Page is IShowingStart showingStart)
-				await showingStart.OnShowingStart();
+				await showingStart.OnShowingStart(parameters);
 
 			var pageGameObject = Page.gameObject;
 			pageGameObject.SetActive(true);

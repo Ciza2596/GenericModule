@@ -128,17 +128,17 @@ namespace CizaPageModule
 				Destroy(key);
 		}
 
-		public async UniTask Show(string key, Action onComplete = null) =>
-			await Show(key, false, onComplete);
+		public async UniTask Show(string key, Action onComplete = null, params object[] parameters) =>
+			await Show(key, false, onComplete, parameters);
 
-		public async UniTask ShowImmediately(string key, Action onComplete = null) =>
-			await Show(key, true, onComplete);
+		public async UniTask ShowImmediately(string key, Action onComplete = null, params object[] parameters) =>
+			await Show(key, true, onComplete, parameters);
 
-		public async UniTask Show(string[] keys, Action onComplete = null) =>
-			await Show(keys, false, onComplete);
+		public async UniTask Show(string[] keys, object[][] parameters, Action onComplete = null) =>
+			await Show(keys, false, onComplete, parameters);
 
-		public async UniTask ShowImmediately(string[] keys, Action onComplete = null) =>
-			await Show(keys, true, onComplete);
+		public async UniTask ShowImmediately(string[] keys, object[][] parameters, Action onComplete = null) =>
+			await Show(keys, true, onComplete, parameters);
 
 		public async UniTask Hide(string key, Action onComplete = null) =>
 			await Hide(key, false, onComplete);
@@ -183,7 +183,7 @@ namespace CizaPageModule
 			_pageControllerMapByKey.Add(key, pageController);
 		}
 
-		private async UniTask Show(string key, bool isImmediately, Action onComplete)
+		private async UniTask Show(string key, bool isImmediately, Action onComplete, params object[] parameters)
 		{
 			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::Show] Page: {key} doesnt be created.");
 
@@ -195,7 +195,7 @@ namespace CizaPageModule
 				return;
 			}
 
-			await pageController.OnShowingStart();
+			await pageController.OnShowingStart(parameters);
 
 			if (!isImmediately)
 				await pageController.PlayShowingAnimation();
@@ -206,7 +206,7 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		private async UniTask Show(string[] keys, bool isImmediately, Action onComplete)
+		private async UniTask Show(string[] keys, bool isImmediately, Action onComplete, object[][] parametersList)
 		{
 			var canShowPageControllers = new List<PageController>();
 			foreach (var key in keys)
@@ -224,17 +224,19 @@ namespace CizaPageModule
 				canShowPageControllers.Add(pageController);
 			}
 
-			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete);
+			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete, parametersList);
 
-			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete)
+			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, object[][] m_parametersList)
 			{
 				Func<UniTask> m_onShowingStart       = null;
 				Func<UniTask> m_playShowingAnimation = null;
 				Action        m_onShowingComplete    = null;
 
-				foreach (var m_pageController in m_pageControllers)
+				for (var i = 0; i < m_pageControllers.Length; i++)
 				{
-					m_onShowingStart       += async () => await m_pageController.OnShowingStart();
+					var m_pageController = m_pageControllers[i];
+					var m_parameters     = m_parametersList[i];
+					m_onShowingStart       += async () => await m_pageController.OnShowingStart(m_parameters);
 					m_playShowingAnimation += m_pageController.PlayShowingAnimation;
 					m_onShowingComplete    += m_pageController.OnShowingComplete;
 				}
@@ -372,7 +374,7 @@ namespace CizaPageModule
 					return true;
 				}
 			}
-			
+
 			mono = null;
 			return false;
 		}

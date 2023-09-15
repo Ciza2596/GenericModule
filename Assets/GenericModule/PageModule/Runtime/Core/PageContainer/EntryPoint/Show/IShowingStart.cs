@@ -4,6 +4,6 @@ namespace CizaPageModule
 {
 	public interface IShowingStart
 	{
-		UniTask OnShowingStart();
+		UniTask OnShowingStart(params object[] parameters);
 	}
 }

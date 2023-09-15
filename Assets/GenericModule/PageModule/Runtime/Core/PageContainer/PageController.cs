@@ -3,109 +3,110 @@ using UnityEngine;
 
 namespace CizaPageModule
 {
-    internal class PageController
-    {
-        //public variable
-        public Component Page { get; }
+	internal class PageController
+	{
+		//public variable
+		public string Key { get; }
 
-        public PageState State { get; private set; }
+		public Component Page { get; }
 
-        //constructor
-        public PageController(Component page) =>
-            Page = page;
+		public PageState State { get; private set; }
 
+		//constructor
+		public PageController(string key, Component page)
+		{
+			Key  = key;
+			Page = page;
+		}
 
-        //public method
-        public void Initialize(params object[] parameters)
-        {
-            var pageGameObject = Page.gameObject;
-            pageGameObject.SetActive(false);
-            if (Page is IInitializable initializable)
-                initializable.Initialize(parameters);
-        }
+		//public method
+		public async UniTask Initialize(params object[] parameters)
+		{
+			var pageGameObject = Page.gameObject;
+			pageGameObject.SetActive(false);
+			if (Page is IInitializable initializable)
+				await initializable.Initialize(parameters);
+		}
 
-        public void Release()
-        {
-            if (Page is IReleasable releasable)
-                releasable.Release();
+		public void Release()
+		{
+			if (Page is IReleasable releasable)
+				releasable.Release();
 
-            Destroy();
-        }
+			Destroy();
+		}
 
+		public bool TryGetTickable(out ITickable tickable)
+		{
+			tickable = Page as ITickable;
+			return tickable != null;
+		}
 
-        public bool TryGetTickable(out ITickable tickable)
-        {
-            tickable = Page as ITickable;
-            return tickable != null;
-        }
+		public bool TryGetFixedTickable(out IFixedTickable fixedTickable)
+		{
+			fixedTickable = Page as IFixedTickable;
+			return fixedTickable != null;
+		}
 
-        public bool TryGetFixedTickable(out IFixedTickable fixedTickable)
-        {
-            fixedTickable = Page as IFixedTickable;
-            return fixedTickable != null;
-        }
+		public async UniTask OnShowingStart()
+		{
+			State = PageState.Showing;
 
+			if (Page is IShowingStart showingStart)
+				await showingStart.OnShowingStart();
 
-        public async UniTask OnShowingStart(params object[] parameters)
-        {
-            State = PageState.Showing;
+			var pageGameObject = Page.gameObject;
+			pageGameObject.SetActive(true);
+		}
 
-            if (Page is IShowingStart showingStart)
-                await showingStart.OnShowingStart(parameters);
+		public async UniTask PlayShowingAnimation()
+		{
+			if (Page is IShowingAnimated showingAnimated)
+				await showingAnimated.PlayShowingAnimation();
+		}
 
-            var pageGameObject = Page.gameObject;
-            pageGameObject.SetActive(true);
-        }
+		public void OnShowingComplete()
+		{
+			if (Page is IShowingComplete showingComplete)
+				showingComplete.OnShowingComplete();
 
-        public async UniTask PlayShowingAnimation()
-        {
-            if (Page is IShowingAnimated showingAnimated)
-                await showingAnimated.PlayShowingAnimation();
-        }
+			State = PageState.Visible;
+		}
 
-        public void OnShowingComplete()
-        {
-            if (Page is IShowingComplete showingComplete)
-                showingComplete.OnShowingComplete();
+		public void OnHidingStart()
+		{
+			State = PageState.Hiding;
 
-            State = PageState.Visible;
-        }
+			if (Page is IHidingStart hidingStart)
+				hidingStart.OnHidingStart();
+		}
 
+		public async UniTask PlayHidingAnimation()
+		{
+			if (Page is IHidingAnimated hidingAnimated)
+				await hidingAnimated.PlayHidingAnimation();
+		}
 
-        public void OnHidingStart()
-        {
-            State = PageState.Hiding;
+		public void OnHidingComplete()
+		{
+			var pageGameObject = Page.gameObject;
+			pageGameObject.SetActive(false);
 
-            if (Page is IHidingStart hidingStart)
-                hidingStart.OnHidingStart();
-        }
+			if (Page is IHidingComplete hidingComplete)
+				hidingComplete.OnHidingComplete();
 
-        public async UniTask PlayHidingAnimation()
-        {
-            if (Page is IHidingAnimated hidingAnimated)
-                await hidingAnimated.PlayHidingAnimation();
-        }
+			State = PageState.Invisible;
+		}
 
-        public void OnHidingComplete()
-        {
-            var pageGameObject = Page.gameObject;
-            pageGameObject.SetActive(false);
-            
-            if (Page is IHidingComplete hidingComplete)
-                hidingComplete.OnHidingComplete();
+		//private method
+		private void Destroy()
+		{
+			var pageGameObject = Page.gameObject;
 
-            State = PageState.Invisible;
-        }
-
-        //private method
-        private void Destroy()
-        {
-            var pageGameObject = Page.gameObject;
-
-            if (Application.isPlaying)
-                Object.Destroy(pageGameObject);
-            else
-                Object.DestroyImmediate(pageGameObject);
-        }
-    }
+			if (Application.isPlaying)
+				Object.Destroy(pageGameObject);
+			else
+				Object.DestroyImmediate(pageGameObject);
+		}
+	}
 }

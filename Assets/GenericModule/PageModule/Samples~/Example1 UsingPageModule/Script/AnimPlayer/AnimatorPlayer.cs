@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace PageModule.Example1
+namespace CizaPageModule.Example1
 {
     public class AnimatorPlayer : BaseAnimPlayer
     {

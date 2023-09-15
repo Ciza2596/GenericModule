@@ -7,6 +7,8 @@ using Object = UnityEngine.Object;
 
 public class PageContainerTest
 {
+	private static readonly string _pageKey = nameof(FakePage);
+
 	private PageContainer _pageContainer;
 	private Transform     _pageGameObjectRootTransform;
 
@@ -30,437 +32,414 @@ public class PageContainerTest
 		_pageGameObjectRootTransform = null;
 		Object.DestroyImmediate(pageGameObjectRootTransform.gameObject);
 
-		var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAMEOBJECT_NAME);
+		var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME);
 		if (gameObject != null)
 			Object.DestroyImmediate(gameObject);
 	}
 
 	[Test]
-	public void _01_Create()
+	public async void _01_Create()
 	{
 		//act
-		_pageContainer.Create<FakePage, FakePage>();
+		await _pageContainer.Create<FakePage>(_pageKey);
 
 		//assert
-		Check_Page_Is_Created<FakePage>();
-		Check_IsPassInitialize<FakePage>(true);
+		Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_IsPassInitialize<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public void _02_CreateAll()
-	{
-		//act
-		_pageContainer.CreateAll();
-
-		//assert
-		Check_Page_Is_Created<FakePage>();
-		Check_IsPassInitialize<FakePage>(true);
-	}
-
-	[Test]
-	public void _03_Destroy()
+	public void _02_Destroy()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_IsPassRelease<FakePage>(false);
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_IsPassRelease(_pageKey, false);
 
 		//act
-		_pageContainer.Destroy<FakePage>();
+		_pageContainer.Destroy(_pageKey);
 
 		//assert
-		Check_Page_Is_Destroyed<FakePage>();
-		Check_IsPassRelease<FakePage>(true);
+		Check_Page_Is_Destroyed<FakePage>(_pageKey);
+		Check_IsPassRelease(_pageKey, true);
 	}
 
 	[Test]
-	public void _04_DestroyAll()
+	public void _03_DestroyAll()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_IsPassRelease<FakePage>(false);
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_IsPassRelease(_pageKey, false);
 
 		//act
 		_pageContainer.DestroyAll();
 
 		//assert
-		Check_Page_Is_Destroyed<FakePage>();
-		Check_IsPassRelease<FakePage>(true);
+		Check_Page_Is_Destroyed<FakePage>(_pageKey);
+		Check_IsPassRelease(_pageKey, true);
 	}
 
 	[Test]
-	public async void _05_Show_A_Page()
+	public async void _04_Show_A_Page()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(false);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(false);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Show<FakePage>();
+		await _pageContainer.Show(_pageKey);
 
 		//assert
-		Check_Page_Is_Visible<FakePage>();
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(true);
-		Check_IsPassPlayShowingAnimation<FakePage>(true);
-		Check_IsPassOnShowingComplete<FakePage>(true);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _06_ShowImmediately_A_Page()
+	public async void _05_ShowImmediately_A_Page()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(false);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(false);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.ShowImmediately<FakePage>();
+		await _pageContainer.ShowImmediately(_pageKey);
 
 		//assert
-		Check_Page_Is_Visible<FakePage>();
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(true);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(true);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _07_Show_Some_Pages()
+	public async void _06_Show_Some_Pages()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(false);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(false);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Show(new[] { typeof(FakePage) });
+		await _pageContainer.Show(new[] { _pageKey });
 
 		//assert
-		Check_Page_Is_Visible<FakePage>();
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(true);
-		Check_IsPassPlayShowingAnimation<FakePage>(true);
-		Check_IsPassOnShowingComplete<FakePage>(true);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _08_ShowImmediately_Some_Pages()
+	public async void _07_ShowImmediately_Some_Pages()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(false);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(false);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.ShowImmediately(new[] { typeof(FakePage) });
+		await _pageContainer.ShowImmediately(new[] { _pageKey });
 
 		//assert
-		Check_Page_Is_Visible<FakePage>();
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnShowingStart<FakePage>(true);
-		Check_IsPassPlayShowingAnimation<FakePage>(false);
-		Check_IsPassOnShowingComplete<FakePage>(true);
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _09_Hide_A_Page()
+	public async void _08_Hide_A_Page()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Hide<FakePage>();
+		await _pageContainer.Hide(nameof(FakePage));
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(true);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public void _10_HideImmediately_A_Page()
+	public void _09_HideImmediately_A_Page()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		_pageContainer.HideImmediately<FakePage>();
+		_pageContainer.HideImmediately(_pageKey);
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _11_Hide_Some_Pages()
+	public async void _10_Hide_Some_Pages()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Hide(new[] { typeof(FakePage) });
+		await _pageContainer.Hide(new[] { _pageKey });
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(true);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public void _12_HideImmediately_Some_Pages()
+	public void _11_HideImmediately_Some_Pages()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		_pageContainer.HideImmediately(new[] { typeof(FakePage) });
+		_pageContainer.HideImmediately(new[] { _pageKey });
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _13_HideAll()
+	public async void _12_HideAll()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
 		await _pageContainer.HideAll();
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(true);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public void _14_HideAllImmediately()
+	public void _13_HideAllImmediately()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		Show_Immediately_And_Check_Page_Is_Visible<FakePage>();
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(false);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(false);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
 		_pageContainer.HideAllImmediately();
 
 		//assert
-		Check_Page_Is_Invisible<FakePage>();
+		Check_Page_Is_Invisible(_pageKey);
 
-		Check_IsPassOnHidingStart<FakePage>(true);
-		Check_IsPassPlayHidingAnimation<FakePage>(false);
-		Check_IsPassOnHidingComplete<FakePage>(true);
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _15_Tick()
+	public async void _14_Tick()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		await _pageContainer.ShowImmediately(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
-		Check_Page_Is_Visible<FakePage>();
+		await _pageContainer.ShowImmediately(new[] { _pageKey });
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassTick<FakePage>(false);
+		Check_IsPassTick<FakePage>(_pageKey, false);
 
 		//act
 		_pageContainer.Tick(0);
 
 		//assert
-		Check_IsPassTick<FakePage>(true);
+		Check_IsPassTick<FakePage>(_pageKey, true);
 	}
 
 	[Test]
-	public async void _16_FixedTick()
+	public async void _15_FixedTick()
 	{
 		//arrange
-		Create_And_Check_Page_Is_Created<FakePage>();
-		Check_Page_Is_Invisible<FakePage>();
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
 
-		await _pageContainer.ShowImmediately(new[] { typeof(FakePage) }, new[] { Array.Empty<object>() });
-		Check_Page_Is_Visible<FakePage>();
+		await _pageContainer.ShowImmediately(new[] { _pageKey });
+		Check_Page_Is_Visible(_pageKey);
 
-		Check_IsPassFixedTick<FakePage>(false);
+		Check_IsPassFixedTick<FakePage>(_pageKey, false);
 
 		//act
 		_pageContainer.FixedTick(0);
 
 		//assert
-		Check_IsPassFixedTick<FakePage>(true);
+		Check_IsPassFixedTick<FakePage>(_pageKey, true);
 	}
 
 	//private method
-	private void Check_Page_Is_Created<T>() where T : MonoBehaviour
+	private void Check_Page_Is_Created<T>(string key) where T : MonoBehaviour =>
+		Assert.IsTrue(_pageContainer.TryGetPage<T>(key, out var page), $"Page: {key} doesnt be created.");
+
+	private void Create_And_Check_Page_Is_Created<T>(string key) where T : MonoBehaviour
 	{
-		var pageType = typeof(T);
-		Assert.IsTrue(_pageContainer.TryGetPage<T>(out var page), $"Page: {pageType} doesnt be created.");
+		_pageContainer.Create<T>(key);
+		Check_Page_Is_Created<T>(key);
 	}
 
-	private void Create_And_Check_Page_Is_Created<T>() where T : MonoBehaviour
+	private void Check_Page_Is_Destroyed<T>(string key) where T : MonoBehaviour =>
+		Assert.IsFalse(_pageContainer.TryGetPage<T>(key, out var page), $"Page: {key} doesnt be destroyed.");
+
+	private void Check_Page_Is_Visible(string key) =>
+		Assert.IsTrue(_pageContainer.CheckIsVisible(key), $"Page: {key} isnt visible.");
+
+	private void Check_Page_Is_Invisible(string key) =>
+		Assert.IsFalse(_pageContainer.CheckIsVisible(key), $"Page: {key} isnt invisible.");
+
+	private async void Show_Immediately_And_Check_Page_Is_Visible(string key)
 	{
-		_pageContainer.Create<T, T>();
-		Check_Page_Is_Created<T>();
+		await _pageContainer.ShowImmediately(key);
+		Check_Page_Is_Visible(key);
 	}
 
-	private void Check_Page_Is_Destroyed<T>() where T : MonoBehaviour
+	private void Check_IsPassInitialize<T>(string key, bool excepted) where T : FakePage
 	{
-		var pageType = typeof(T);
-		Assert.IsFalse(_pageContainer.TryGetPage<T>(out var page), $"Page: {pageType} doesnt be destroyed.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassInitialize, $"{key} IsPassInitialize doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_Page_Is_Visible<T>() where T : MonoBehaviour
+	private void Check_IsPassTick<T>(string key, bool excepted) where T : FakePage
 	{
-		var pageType = typeof(T);
-		Assert.IsTrue(_pageContainer.CheckIsVisible<T>(), $"Page: {pageType} isnt visible.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassTick, $"{key} IsPassTick doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_Page_Is_Invisible<T>() where T : MonoBehaviour
+	private void Check_IsPassFixedTick<T>(string key, bool excepted) where T : FakePage
 	{
-		var pageType = typeof(T);
-		Assert.IsFalse(_pageContainer.CheckIsVisible<T>(), $"Page: {pageType} isnt invisible.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassFixedTick, $"{key} IsPassFixedTick doesnt match excepted: {excepted}.");
 	}
 
-	private async void Show_Immediately_And_Check_Page_Is_Visible<T>() where T : MonoBehaviour
+	private void Check_IsPassRelease(string key, bool excepted)
 	{
-		await _pageContainer.ShowImmediately<T>();
-		Check_Page_Is_Visible<T>();
+		var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME);
+		Assert.AreEqual(excepted, gameObject != null, $"{key} IsPassRelease doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassInitialize<T>(bool excepted) where T : FakePage
+	private void Check_IsPassOnShowingStart<T>(string key, bool excepted) where T : FakePage
 	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassInitialize, $"{typeof(T)} IsPassInitialize doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassOnShowingStart, $"{key} IsPassOnShowingStart doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassTick<T>(bool excepted) where T : FakePage
+	private void Check_IsPassPlayShowingAnimation<T>(string key, bool excepted) where T : FakePage
 	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassTick, $"{typeof(T)} IsPassTick doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassPlayShowingAnimation, $"{key} IsPassPlayShowingAnimation doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassFixedTick<T>(bool excepted) where T : FakePage
+	private void Check_IsPassOnShowingComplete<T>(string key, bool excepted) where T : FakePage
 	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassFixedTick, $"{typeof(T)} IsPassFixedTick doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassOnShowingComplete, $"{key} IsPassOnShowingComplete doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassRelease<T>(bool excepted) where T : FakePage
+	private void Check_IsPassOnHidingStart<T>(string key, bool excepted) where T : FakePage
 	{
-		var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAMEOBJECT_NAME);
-		Assert.AreEqual(excepted, gameObject != null, $"{typeof(T)} IsPassRelease doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassOnHidingStart, $"{key} IsPassOnHidingStart doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassOnShowingStart<T>(bool excepted) where T : FakePage
+	private void Check_IsPassPlayHidingAnimation<T>(string key, bool excepted) where T : FakePage
 	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassOnShowingStart, $"{typeof(T)} IsPassOnShowingStart doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassPlayHidingAnimation, $"{key} IsPassPlayHidingAnimation doesnt match excepted: {excepted}.");
 	}
 
-	private void Check_IsPassPlayShowingAnimation<T>(bool excepted) where T : FakePage
+	private void Check_IsPassOnHidingComplete<T>(string key, bool excepted) where T : FakePage
 	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassPlayShowingAnimation, $"{typeof(T)} IsPassPlayShowingAnimation doesnt match excepted: {excepted}.");
-	}
-
-	private void Check_IsPassOnShowingComplete<T>(bool excepted) where T : FakePage
-	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassOnShowingComplete, $"{typeof(T)} IsPassOnShowingComplete doesnt match excepted: {excepted}.");
-	}
-
-	private void Check_IsPassOnHidingStart<T>(bool excepted) where T : FakePage
-	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassOnHidingStart, $"{typeof(T)} IsPassOnHidingStart doesnt match excepted: {excepted}.");
-	}
-
-	private void Check_IsPassPlayHidingAnimation<T>(bool excepted) where T : FakePage
-	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassPlayHidingAnimation, $"{typeof(T)} IsPassPlayHidingAnimation doesnt match excepted: {excepted}.");
-	}
-
-	private void Check_IsPassOnHidingComplete<T>(bool excepted) where T : FakePage
-	{
-		Check_Page_Is_Created<T>();
-		_pageContainer.TryGetPage<T>(out var page);
-		Assert.AreEqual(excepted, page.IsPassOnHidingComplete, $"{typeof(T)} IsPassOnHidingComplete doesnt match excepted: {excepted}.");
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassOnHidingComplete, $"{key} IsPassOnHidingComplete doesnt match excepted: {excepted}.");
 	}
 
 	private Dictionary<Type, MonoBehaviour> CreatePagePrefabMap(Type[] pageTypes)

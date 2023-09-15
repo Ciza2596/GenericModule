@@ -3,23 +3,22 @@ using UnityEngine;
 
 namespace CizaPageModule.Example1
 {
-    public class PageModuleExample : MonoBehaviour
-    {
-        //private variable
-        [SerializeField] private PageModuleConfig _pageModuleConfig;
-        
-        //public variable
-        public  PageModule PageModule { get; private set; }
+	public class PageModuleExample : MonoBehaviour
+	{
+		//private variable
+		[SerializeField]
+		private PageModuleConfig _pageModuleConfig;
 
-        
-        //unity callback
-        private async void Awake()
-        {
-            PageModule = new PageModule(_pageModuleConfig);
-            PageModule.Create<TitlePage>();
+		//public variable
+		public PageModule PageModule { get; private set; }
 
-            await PageModule.Show<TitlePage>();
-        }
-    }
+		//unity callback
+		private async void Awake()
+		{
+			PageModule = new PageModule(_pageModuleConfig);
+			PageModule.Create<TitlePage>(nameof(TitlePage));
+
+			await PageModule.Show(nameof(TitlePage));
+		}
+	}
 }
-

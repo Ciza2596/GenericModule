@@ -47,51 +47,49 @@ namespace CizaPageModule
 
 		public void Release() => _pageContainer.Release();
 
-		public bool CheckIsVisible<T>() =>
-			_pageContainer.CheckIsVisible<T>();
+		public bool CheckIsVisible(string key) =>
+			_pageContainer.CheckIsVisible(key);
 
-		public bool CheckIsShowing<T>() =>
-			_pageContainer.CheckIsShowing<T>();
+		public bool CheckIsShowing(string key) =>
+			_pageContainer.CheckIsShowing(key);
 
-		public bool CheckIsHiding<T>() =>
-			_pageContainer.CheckIsHiding<T>();
+		public bool CheckIsHiding(string key) =>
+			_pageContainer.CheckIsHiding(key);
 
-		public bool TryGetPage<T>(out T page) where T : class =>
-			_pageContainer.TryGetPage<T>(out page);
+		public bool TryGetPage<T>(string key, out T page) where T : class =>
+			_pageContainer.TryGetPage<T>(key, out page);
 
-		public void Create<TRegisteredPage, TPage>(params object[] parameters) where TPage : MonoBehaviour =>
-			_pageContainer.Create<TRegisteredPage, TPage>(parameters);
+		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : MonoBehaviour =>
+			_pageContainer.Create<TPage>(key, parameters);
 
-		public void Create<T>(params object[] parameters) where T : MonoBehaviour =>
-			_pageContainer.Create<T, T>(parameters);
-
-		public void Destroy<T>() where T : MonoBehaviour => _pageContainer.Destroy<T>();
+		public void Destroy(string key) =>
+			_pageContainer.Destroy(key);
 
 		public void DestroyAll() => _pageContainer.DestroyAll();
 
-		public async UniTask Show<T>(Action onComplete = null, params object[] parameters) =>
-			await _pageContainer.Show<T>(onComplete, parameters);
+		public async UniTask Show(string key, Action onComplete = null) =>
+			await _pageContainer.Show(key, onComplete);
 
-		public async UniTask ShowImmediately<T>(Action onComplete = null, params object[] parameters) =>
-			await _pageContainer.ShowImmediately<T>(onComplete, parameters);
+		public async UniTask ShowImmediately(string key, Action onComplete = null) =>
+			await _pageContainer.ShowImmediately(key, onComplete);
 
-		public async UniTask Show(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.Show(pageTypes, parametersList, onComplete);
+		public async UniTask Show(string[] keys, Action onComplete = null) =>
+			await _pageContainer.Show(keys, onComplete);
 
-		public async UniTask ShowImmediately(Type[] pageTypes, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.ShowImmediately(pageTypes, parametersList, onComplete);
+		public async UniTask ShowImmediately(string[] keys, Action onComplete = null) =>
+			await _pageContainer.ShowImmediately(keys, onComplete);
 
-		public async UniTask Hide<T>(Action onComplete = null) =>
-			await _pageContainer.Hide<T>(onComplete);
+		public async UniTask Hide(string key, Action onComplete = null) =>
+			await _pageContainer.Hide(key, onComplete);
 
-		public void HideImmediately<T>(Action onComplete = null) =>
-			_pageContainer.HideImmediately<T>(onComplete);
+		public void HideImmediately(string key, Action onComplete = null) =>
+			_pageContainer.HideImmediately(key, onComplete);
 
-		public async UniTask Hide(Type[] pageTypes, Action onComplete = null) =>
-			await _pageContainer.Hide(pageTypes, onComplete);
+		public async UniTask Hide(string[] keys, Action onComplete = null) =>
+			await _pageContainer.Hide(keys, onComplete);
 
-		public void HideImmediately(Type[] pageTypes, Action onComplete = null) =>
-			_pageContainer.HideImmediately(pageTypes, onComplete);
+		public void HideImmediately(string[] keys, Action onComplete = null) =>
+			_pageContainer.HideImmediately(keys, onComplete);
 
 		public async UniTask HideAll(Action onComplete = null) => await _pageContainer.HideAll(onComplete);
 

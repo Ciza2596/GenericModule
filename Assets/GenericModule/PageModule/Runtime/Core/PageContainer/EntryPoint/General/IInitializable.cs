@@ -1,8 +1,9 @@
+using Cysharp.Threading.Tasks;
 
 namespace CizaPageModule
 {
-    public interface IInitializable 
-    {
-        void Initialize(params object[] parameters);
-    }
+	public interface IInitializable
+	{
+		UniTask Initialize(params object[] parameters);
+	}
 }

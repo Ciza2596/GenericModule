@@ -56,10 +56,10 @@ namespace CizaPageModule
 		public bool CheckIsHiding(string key) =>
 			_pageContainer.CheckIsHiding(key);
 
-		public bool TryGetPage<T>(string key, out T page) where T : class =>
-			_pageContainer.TryGetPage<T>(key, out page);
+		public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
+			_pageContainer.TryGetPage<TPage>(key, out page);
 
-		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : MonoBehaviour =>
+		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : class =>
 			_pageContainer.Create<TPage>(key, parameters);
 
 		public void Destroy(string key) =>

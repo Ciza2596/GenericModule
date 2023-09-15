@@ -73,10 +73,10 @@ namespace CizaPageModule
 		public async UniTask ShowImmediately(string key, Action onComplete = null, params object[] parameters) =>
 			await _pageContainer.ShowImmediately(key, onComplete, parameters);
 
-		public async UniTask Show(string[] keys, object[][] parametersList, Action onComplete = null) =>
+		public async UniTask Show(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
 			await _pageContainer.Show(keys, parametersList, onComplete);
 
-		public async UniTask ShowImmediately(string[] keys, object[][] parametersList, Action onComplete = null) =>
+		public async UniTask ShowImmediately(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
 			await _pageContainer.ShowImmediately(keys, parametersList, onComplete);
 
 		public async UniTask Hide(string key, Action onComplete = null) =>

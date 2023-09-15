@@ -134,10 +134,10 @@ namespace CizaPageModule
 		public async UniTask ShowImmediately(string key, Action onComplete = null, params object[] parameters) =>
 			await Show(key, true, onComplete, parameters);
 
-		public async UniTask Show(string[] keys, object[][] parameters, Action onComplete = null) =>
+		public async UniTask Show(string[] keys, object[][] parameters = null, Action onComplete = null) =>
 			await Show(keys, false, onComplete, parameters);
 
-		public async UniTask ShowImmediately(string[] keys, object[][] parameters, Action onComplete = null) =>
+		public async UniTask ShowImmediately(string[] keys, object[][] parameters = null, Action onComplete = null) =>
 			await Show(keys, true, onComplete, parameters);
 
 		public async UniTask Hide(string key, Action onComplete = null) =>
@@ -224,7 +224,7 @@ namespace CizaPageModule
 				canShowPageControllers.Add(pageController);
 			}
 
-			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete, parametersList);
+			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete, parametersList ?? new object[canShowPageControllers.Count][]);
 
 			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, object[][] m_parametersList)
 			{

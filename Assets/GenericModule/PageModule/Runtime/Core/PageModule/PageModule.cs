@@ -36,11 +36,11 @@ namespace CizaPageModule
 			else if (pageGameObjectRootParentTransform != null)
 				pageGameObjectRootTransform.SetParent(pageGameObjectRootParentTransform);
 
-			var pagePrefabMap = _pageModuleConfig.GetPagePrefabMap();
+			var pagePrefabs = _pageModuleConfig.GetPagePrefabs();
 
-			_pageContainer.Initialize(pageGameObjectRootTransform, pagePrefabMap);
+			_pageContainer.Initialize(pageGameObjectRootTransform, pagePrefabs);
 
-			var pageModuleComponent = pageGameObjectRoot.AddComponent<PageModuleComponent>();
+			var pageModuleComponent = pageGameObjectRoot.AddComponent<PageModuleMono>();
 			pageModuleComponent.SetUpdateCallback(_pageContainer.Tick);
 			pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedTick);
 		}

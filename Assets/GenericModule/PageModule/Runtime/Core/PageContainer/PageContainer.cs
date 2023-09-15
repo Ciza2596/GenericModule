@@ -13,14 +13,14 @@ namespace CizaPageModule
 		//private variable
 		private readonly Dictionary<string, PageController> _pageControllerMapByKey = new Dictionary<string, PageController>();
 
-		private Transform                       _pageGameObjectRootTransform;
-		private Dictionary<Type, MonoBehaviour> _pagePrefabMap;
+		private Transform       _pageGameObjectRootTransform;
+		private MonoBehaviour[] _pagePrefabs;
 
 		private Action<float> _tickHandle;
 		private Action<float> _fixedTickHandle;
 
 		//public variable
-		public bool IsInitialized => _pageGameObjectRootTransform != null && _pagePrefabMap != null;
+		public bool IsInitialized => _pageGameObjectRootTransform != null && _pagePrefabs != null;
 
 		//Unity callback
 		public void Tick(float deltaTime) =>
@@ -30,12 +30,12 @@ namespace CizaPageModule
 			_fixedTickHandle?.Invoke(fixedDeltaTime);
 
 		//public method
-		public void Initialize(Transform pageGameObjectRootTransform, Dictionary<Type, MonoBehaviour> pagePrefabMap)
+		public void Initialize(Transform pageGameObjectRootTransform, MonoBehaviour[] pagePrefabs)
 		{
 			Release();
 
 			_pageGameObjectRootTransform = pageGameObjectRootTransform;
-			_pagePrefabMap               = pagePrefabMap;
+			_pagePrefabs                 = pagePrefabs;
 		}
 
 		public void Release()
@@ -45,7 +45,7 @@ namespace CizaPageModule
 
 			DestroyAll();
 
-			_pagePrefabMap = null;
+			_pagePrefabs = null;
 
 			var pageGameObjectRoot = _pageGameObjectRootTransform.gameObject;
 			_pageGameObjectRootTransform = null;
@@ -101,7 +101,7 @@ namespace CizaPageModule
 			return true;
 		}
 
-		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : MonoBehaviour =>
+		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : class =>
 			Create(key, typeof(TPage), parameters);
 
 		public void Destroy(string key)
@@ -161,15 +161,18 @@ namespace CizaPageModule
 		//private method
 		private async UniTask Create(string key, Type pageType, params object[] parameters)
 		{
-			Assert.IsTrue(_pagePrefabMap.ContainsKey(pageType), $"[PageContainer::Create] Not find pageType: {pageType} in pagePrefabMap.");
-
 			if (_pageControllerMapByKey.ContainsKey(key))
 			{
 				Debug.LogWarning($"[PageContainer::Create] Page: {key} is created.");
 				return;
 			}
 
-			var pagePrefab           = _pagePrefabMap[pageType];
+			if (!TryGetPrefab(pageType, out var pagePrefab))
+			{
+				Debug.LogWarning($"[PageContainer::Create] Not find pageType: {pageType} in pagePrefabs.");
+				return;
+			}
+
 			var pageGameObjectPrefab = pagePrefab.gameObject;
 			var pageGameObject       = Object.Instantiate(pageGameObjectPrefab, _pageGameObjectRootTransform);
 
@@ -357,6 +360,21 @@ namespace CizaPageModule
 				uniTasks.Add(((Func<UniTask>)invocation).Invoke());
 
 			await UniTask.WhenAll(uniTasks);
+		}
+
+		private bool TryGetPrefab(Type pageType, out MonoBehaviour mono)
+		{
+			foreach (var pagePrefab in _pagePrefabs)
+			{
+				if (pageType.IsInstanceOfType(pagePrefab))
+				{
+					mono = pagePrefab;
+					return true;
+				}
+			}
+			
+			mono = null;
+			return false;
 		}
 	}
 }

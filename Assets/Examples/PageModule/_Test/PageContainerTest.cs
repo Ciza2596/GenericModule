@@ -17,9 +17,10 @@ public class PageContainerTest
 	{
 		var pageGameObjectRoot = new GameObject();
 		_pageGameObjectRootTransform = pageGameObjectRoot.transform;
-		var pagePrefabMap = CreatePagePrefabMap(new[] { typeof(FakePage) });
+
 		_pageContainer = new PageContainer();
-		_pageContainer.Initialize(_pageGameObjectRootTransform, pagePrefabMap);
+
+		_pageContainer.Initialize(_pageGameObjectRootTransform, CreatePagePrefabs(new[] { typeof(FakePage) }));
 	}
 
 	[TearDown]
@@ -442,20 +443,20 @@ public class PageContainerTest
 		Assert.AreEqual(excepted, page.IsPassOnHidingComplete, $"{key} IsPassOnHidingComplete doesnt match excepted: {excepted}.");
 	}
 
-	private Dictionary<Type, MonoBehaviour> CreatePagePrefabMap(Type[] pageTypes)
+	private MonoBehaviour[] CreatePagePrefabs(Type[] pageTypes)
 	{
-		var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
+		var pagePrefabs = new List<MonoBehaviour>();
 
 		foreach (var pageType in pageTypes)
 		{
-			var page = CreatePagePrefabAndGetPage(pageType);
-			pagePrefabMap.Add(pageType, page);
+			var page = CreatePagePrefab(pageType);
+			pagePrefabs.Add(page);
 		}
 
-		return pagePrefabMap;
+		return pagePrefabs.ToArray();
 	}
 
-	private MonoBehaviour CreatePagePrefabAndGetPage(Type pageType)
+	private MonoBehaviour CreatePagePrefab(Type pageType)
 	{
 		var prefab = new GameObject(pageType.Name);
 		prefab.AddComponent(pageType);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -22,18 +21,17 @@ namespace CizaPageModule.Implement
 
 		public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-		public Dictionary<Type, MonoBehaviour> GetPagePrefabMap()
+		public MonoBehaviour[] GetPagePrefabs()
 		{
-			var pagePrefabMap = new Dictionary<Type, MonoBehaviour>();
+			var pagePrefabs = new List<MonoBehaviour>();
 
 			foreach (var pagePrefab in _pagePrefabs)
 			{
-				Assert.IsNotNull(pagePrefab, "[PageModuleConfig::GetPagePrefabMap] Please check pagePrefabs. Lose a pagePrefab.");
-				var pageType = pagePrefab.GetType();
-				pagePrefabMap.Add(pageType, pagePrefab);
+				Assert.IsNotNull(pagePrefab, "[PageModuleConfig::GetPagePrefabs] Please check pagePrefabs. Lose a pagePrefab.");
+				pagePrefabs.Add(pagePrefab);
 			}
 
-			return pagePrefabMap;
+			return pagePrefabs.ToArray();
 		}
 	}
 }

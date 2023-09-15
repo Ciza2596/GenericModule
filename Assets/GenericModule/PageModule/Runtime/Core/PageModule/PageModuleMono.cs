@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaPageModule
 {
-	internal class PageModuleComponent : MonoBehaviour
+	internal class PageModuleMono : MonoBehaviour
 	{
 		//private variable
 		private Action<float> _updateCallback;

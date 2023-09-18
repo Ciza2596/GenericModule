@@ -33,7 +33,7 @@ namespace CizaSceneModule
 			var loadingView       = CreateView<ILoadingView>(viewParentTransform, loadingViewPrefab);
 			var nextSceneName     = sceneModule.NextSceneName;
 			var loadingTask       = sceneModule.LoadingTask;
-
+			var initializingTask  = sceneModule.InitializingTask;
 
 			var transitionOutViewName   = sceneModule.TransitionOutViewName;
 			var transitionOutViewPrefab = transitionControllerConfig.GetTransitionOutPrefab(transitionOutViewName);
@@ -46,12 +46,7 @@ namespace CizaSceneModule
 				UnloadScene(currentSceneName);
 
 				LoadSceneOnBackground(nextSceneName);
-				loadingView.Loading(_loadSceneAsync, loadingTask,
-				                    () =>
-				                    {
-					                    ActivateScene();
-					                    transitionOutView.Play(() => UnloadScene(transitionSceneName));
-				                    });
+				loadingView.Loading(_loadSceneAsync, loadingTask, ActivateScene, initializingTask, () => { transitionOutView.Play(() => UnloadScene(transitionSceneName)); });
 			});
 		}
 

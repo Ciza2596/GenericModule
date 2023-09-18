@@ -19,9 +19,10 @@ namespace CizaSceneModule
 
 		public string LoadingViewName { get; private set; }
 
-		public string       TransitionOutViewName { get; private set; }
-		public string       NextSceneName         { get; private set; }
-		public ILoadingTask LoadingTask           { get; private set; }
+		public string            TransitionOutViewName { get; private set; }
+		public string            NextSceneName         { get; private set; }
+		public ILoadingTask      LoadingTask           { get; private set; }
+		public IInitializingTask InitializingTask      { get; private set; }
 
 		//public method
 		public SceneModule(ISceneModuleConfig sceneModuleConfig, ISceneManager sceneManager)
@@ -41,9 +42,18 @@ namespace CizaSceneModule
 		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null) =>
 			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask);
 
-		public void ChangeScene(string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null)
+		public void ChangeScene(string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
+			ChangeScene(true, transitionInViewName, currentSceneName, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
+
+		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null) =>
+			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask);
+
+		public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
+			ChangeScene(false, transitionViewTag, currentSceneName, transitionViewTag, transitionViewTag, nextSceneName, releasingTask, loadingTask, initializingTask);
+
+		private void ChangeScene(bool isViewName, string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask, ILoadingTask loadingTask, IInitializingTask initializingTask)
 		{
-			IsViewName = true;
+			IsViewName = isViewName;
 
 			TransitionInViewName = transitionInViewName;
 			CurrentSceneName     = string.IsNullOrWhiteSpace(currentSceneName) ? _sceneManager.CurrentSceneName : currentSceneName;
@@ -55,25 +65,7 @@ namespace CizaSceneModule
 			NextSceneName         = nextSceneName;
 			LoadingTask           = loadingTask;
 
-			LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
-		}
-
-		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null) =>
-			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask);
-
-		public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null)
-		{
-			IsViewName = false;
-
-			TransitionInViewName = transitionViewTag;
-			CurrentSceneName     = string.IsNullOrWhiteSpace(currentSceneName) ? _sceneManager.CurrentSceneName : currentSceneName;
-			ReleasingTask        = releasingTask;
-
-			LoadingViewName = transitionViewTag;
-
-			TransitionOutViewName = transitionViewTag;
-			NextSceneName         = nextSceneName;
-			LoadingTask           = loadingTask;
+			InitializingTask = initializingTask;
 
 			LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
 		}

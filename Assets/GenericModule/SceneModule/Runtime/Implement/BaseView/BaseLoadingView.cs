@@ -3,52 +3,77 @@ using UnityEngine;
 
 namespace CizaSceneModule.Implement
 {
-    public class BaseLoadingView : MonoBehaviour, ILoadingView
-    {
-        //private variable
-        [SerializeField] private float _defaultLoadingTime = 1;
+	public class BaseLoadingView : MonoBehaviour, ILoadingView
+	{
+		//private variable
+		[SerializeField]
+		private float _defaultLoadingTime = 1;
 
-        private ILoadSceneAsync _loadSceneAsync;
-        private ILoadingTask _loadingTask;
-        private Action _onComplete;
+		private ILoadSceneAsync   _loadSceneAsync;
+		private ILoadingTask      _loadingTask;
+		private Action            _activeScene;
+		private IInitializingTask _initializingTask;
+		private Action            _onComplete;
 
-        private float _loadingTime;
-        private bool _isOnce;
+		private float _loadingTime;
+		private bool  _isLoadScene;
 
+		private bool _isLoadInitializingTask;
 
-        //loadingView callback
-        public void Loading(ILoadSceneAsync loadSceneAsync, ILoadingTask loadingTask, Action onComplete)
-        {
-            gameObject.SetActive(true);
+		//loadingView callback
+		public void Loading(ILoadSceneAsync loadSceneAsync, ILoadingTask loadingTask, Action activeScene, IInitializingTask initializingTask, Action onComplete)
+		{
+			gameObject.SetActive(true);
 
-            _loadSceneAsync = loadSceneAsync;
-            _loadingTask = loadingTask;
-            _onComplete = onComplete;
+			_loadSceneAsync   = loadSceneAsync;
+			_loadingTask      = loadingTask;
+			_activeScene      = activeScene;
+			_initializingTask = initializingTask;
+			_onComplete       = onComplete;
 
-            loadingTask?.Execute();
+			loadingTask?.Execute();
 
-            _loadingTime = _defaultLoadingTime;
-            _isOnce = true;
-        }
+			_loadingTime = _defaultLoadingTime;
+			_isLoadScene = true;
+		}
 
+		//unity callback
+		private void Update()
+		{
+			LoadScene();
+			LoadInitializingTask();
 
-        //unity callback
-        private void Update()
-        {
-            if (!_isOnce)
-                return;
+			_loadingTime -= Time.deltaTime;
+		}
 
-            var isCompleteLoading = _loadingTask?.IsComplete ?? true;
+		private void LoadScene()
+		{
+			if (!_isLoadScene)
+				return;
 
-            if (_isOnce && _loadSceneAsync.IsDone && isCompleteLoading && _loadingTime <= 0)
-            {
-                _isOnce = false;
-                _onComplete?.Invoke();
-                gameObject.SetActive(false);
-                return;
-            }
+			var isCompleteLoading = _loadingTask?.IsComplete ?? true;
+			if (_loadSceneAsync.IsDone && isCompleteLoading)
+			{
+				_isLoadScene = false;
+				_activeScene.Invoke();
+				_isLoadInitializingTask = true;
+				return;
+			}
+		}
 
-            _loadingTime -= Time.deltaTime;
-        }
-    }
+		private void LoadInitializingTask()
+		{
+			if (!_isLoadInitializingTask)
+				return;
+
+			var isCompleteLoading = _initializingTask?.IsComplete ?? true;
+			if (isCompleteLoading && _loadingTime <= 0)
+			{
+				_isLoadInitializingTask = false;
+				_onComplete?.Invoke();
+				gameObject.SetActive(false);
+				return;
+			}
+		}
+	}
 }

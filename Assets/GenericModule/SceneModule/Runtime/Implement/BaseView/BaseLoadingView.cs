@@ -97,6 +97,7 @@ namespace CizaSceneModule.Implement
 			if (isComplete)
 			{
 				_isLoadInitializingTask = false;
+				_isInitialized          = false;
 				_onComplete?.Invoke();
 				gameObject.SetActive(false);
 				return;

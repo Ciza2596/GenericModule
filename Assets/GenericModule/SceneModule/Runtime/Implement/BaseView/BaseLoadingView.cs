@@ -40,10 +40,8 @@ namespace CizaSceneModule.Implement
 		//unity callback
 		private void Update()
 		{
-			LoadScene();
 			LoadInitializingTask();
-
-			_loadingTime -= Time.deltaTime;
+			LoadScene();
 		}
 
 		private void LoadScene()
@@ -51,14 +49,15 @@ namespace CizaSceneModule.Implement
 			if (!_isLoadScene)
 				return;
 
-			var isCompleteLoading = _loadingTask?.IsComplete ?? true;
-			if (_loadSceneAsync.IsDone && isCompleteLoading)
+			if (_loadSceneAsync.IsDone && (_loadingTask?.IsComplete ?? true) && _loadingTime <= 0)
 			{
 				_isLoadScene = false;
 				_activeScene.Invoke();
 				_isLoadInitializingTask = true;
 				return;
 			}
+
+			_loadingTime -= Time.deltaTime;
 		}
 
 		private void LoadInitializingTask()
@@ -66,8 +65,7 @@ namespace CizaSceneModule.Implement
 			if (!_isLoadInitializingTask)
 				return;
 
-			var isCompleteLoading = _initializingTask?.IsComplete ?? true;
-			if (isCompleteLoading && _loadingTime <= 0)
+			if (_initializingTask?.IsComplete ?? true)
 			{
 				_isLoadInitializingTask = false;
 				_onComplete?.Invoke();

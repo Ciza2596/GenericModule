@@ -53,6 +53,7 @@ namespace CizaSceneModule.Implement
 			{
 				_isLoadScene = false;
 				_activeScene.Invoke();
+				_initializingTask?.Execute();
 				_isLoadInitializingTask = true;
 				return;
 			}

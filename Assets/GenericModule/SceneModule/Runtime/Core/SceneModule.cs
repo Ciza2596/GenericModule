@@ -39,14 +39,14 @@ namespace CizaSceneModule
 		public void UnloadScene(string sceneName) =>
 			_sceneManager.UnloadScene(sceneName);
 
-		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null) =>
-			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask);
+		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
+			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
 
 		public void ChangeScene(string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
 			ChangeScene(true, transitionInViewName, currentSceneName, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
 
-		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null) =>
-			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask);
+		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
+			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask, initializingTask);
 
 		public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
 			ChangeScene(false, transitionViewTag, currentSceneName, transitionViewTag, transitionViewTag, nextSceneName, releasingTask, loadingTask, initializingTask);

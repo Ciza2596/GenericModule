@@ -18,13 +18,13 @@ namespace CizaSceneModule.Implement
 		private IInitializingTask _initializingTask;
 		private Action            _onComplete;
 
+		private bool _isInitialized;
+
 		private float _loadingTime;
 		private bool  _isLoadScene;
 
 		private float _waitingAddInitializingTaskTime;
 		private bool  _isLoadInitializingTask;
-
-		private bool _isInitialized;
 
 		//loadingView callback
 		public void Loading(ILoadSceneAsync loadSceneAsync, ILoadingTask loadingTask, Action activeScene, IInitializingTask initializingTask, Action onComplete)
@@ -64,9 +64,9 @@ namespace CizaSceneModule.Implement
 			var isComplete = _loadingTask != null ? _loadingTask.IsComplete : true;
 			if (_loadSceneAsync.IsDone && isComplete && _loadingTime < 0)
 			{
-				_isLoadScene = false;
 				_activeScene.Invoke();
 				_waitingAddInitializingTaskTime = _defaultWaitingAddInitializingTaskTime;
+				_isLoadScene                    = false;
 				return;
 			}
 
@@ -75,7 +75,7 @@ namespace CizaSceneModule.Implement
 
 		private void WaitingAddInitializingTask()
 		{
-			if (!_isLoadScene && !_isLoadInitializingTask)
+			if (_isLoadScene || _isLoadInitializingTask)
 				return;
 
 			if (_waitingAddInitializingTaskTime < 0)

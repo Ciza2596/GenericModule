@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace CizaPageModule.Implement
 {
-	[CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModuleModule/PageModuleConfig")]
+	[CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModule/PageModuleConfig")]
 	public class PageModuleConfig : ScriptableObject, IPageModuleConfig
 	{
 		[SerializeField]

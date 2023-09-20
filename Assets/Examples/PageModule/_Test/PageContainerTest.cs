@@ -42,7 +42,7 @@ public class PageContainerTest
 	public async void _01_Create()
 	{
 		//act
-		await _pageContainer.Create<FakePage>(_pageKey);
+		await _pageContainer.CreateAsync<FakePage>(_pageKey);
 
 		//assert
 		Check_Page_Is_Created<FakePage>(_pageKey);
@@ -91,7 +91,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Show(_pageKey);
+		await _pageContainer.ShowAsync(_pageKey);
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
@@ -113,7 +113,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.ShowImmediately(_pageKey);
+		await _pageContainer.ShowImmediatelyAsync(_pageKey);
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
@@ -135,7 +135,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Show(new[] { _pageKey });
+		await _pageContainer.ShowAsync(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
@@ -157,7 +157,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.ShowImmediately(new[] { _pageKey });
+		await _pageContainer.ShowImmediatelyAsync(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
@@ -181,7 +181,7 @@ public class PageContainerTest
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Hide(nameof(FakePage));
+		await _pageContainer.HideAsync(nameof(FakePage));
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -229,7 +229,7 @@ public class PageContainerTest
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.Hide(new[] { _pageKey });
+		await _pageContainer.HideAsync(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -277,7 +277,7 @@ public class PageContainerTest
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.HideAll();
+		await _pageContainer.HideAllAsync();
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -318,7 +318,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
-		await _pageContainer.ShowImmediately(new[] { _pageKey });
+		await _pageContainer.ShowImmediatelyAsync(new[] { _pageKey });
 		Check_Page_Is_Visible(_pageKey);
 
 		Check_IsPassTick<FakePage>(_pageKey, false);
@@ -337,7 +337,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
-		await _pageContainer.ShowImmediately(new[] { _pageKey });
+		await _pageContainer.ShowImmediatelyAsync(new[] { _pageKey });
 		Check_Page_Is_Visible(_pageKey);
 
 		Check_IsPassFixedTick<FakePage>(_pageKey, false);
@@ -355,7 +355,7 @@ public class PageContainerTest
 
 	private void Create_And_Check_Page_Is_Created<T>(string key) where T : MonoBehaviour
 	{
-		_pageContainer.Create<T>(key);
+		_pageContainer.CreateAsync<T>(key);
 		Check_Page_Is_Created<T>(key);
 	}
 
@@ -370,7 +370,7 @@ public class PageContainerTest
 
 	private async void Show_Immediately_And_Check_Page_Is_Visible(string key)
 	{
-		await _pageContainer.ShowImmediately(key);
+		await _pageContainer.ShowImmediatelyAsync(key);
 		Check_Page_Is_Visible(key);
 	}
 

@@ -60,7 +60,7 @@ namespace CizaPageModule
 			_pageContainer.TryGetPage<TPage>(key, out page);
 
 		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : class =>
-			_pageContainer.Create<TPage>(key, parameters);
+			_pageContainer.CreateAsync<TPage>(key, parameters);
 
 		public void Destroy(string key) =>
 			_pageContainer.Destroy(key);
@@ -68,30 +68,30 @@ namespace CizaPageModule
 		public void DestroyAll() => _pageContainer.DestroyAll();
 
 		public async UniTask Show(string key, Action onComplete = null, params object[] parameters) =>
-			await _pageContainer.Show(key, onComplete, parameters);
+			await _pageContainer.ShowAsync(key, onComplete, parameters);
 
 		public async UniTask ShowImmediately(string key, Action onComplete = null, params object[] parameters) =>
-			await _pageContainer.ShowImmediately(key, onComplete, parameters);
+			await _pageContainer.ShowImmediatelyAsync(key, onComplete, parameters);
 
 		public async UniTask Show(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.Show(keys, parametersList, onComplete);
+			await _pageContainer.ShowAsync(keys, parametersList, onComplete);
 
 		public async UniTask ShowImmediately(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.ShowImmediately(keys, parametersList, onComplete);
+			await _pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete);
 
 		public async UniTask Hide(string key, Action onComplete = null) =>
-			await _pageContainer.Hide(key, onComplete);
+			await _pageContainer.HideAsync(key, onComplete);
 
 		public void HideImmediately(string key, Action onComplete = null) =>
 			_pageContainer.HideImmediately(key, onComplete);
 
 		public async UniTask Hide(string[] keys, Action onComplete = null) =>
-			await _pageContainer.Hide(keys, onComplete);
+			await _pageContainer.HideAsync(keys, onComplete);
 
 		public void HideImmediately(string[] keys, Action onComplete = null) =>
 			_pageContainer.HideImmediately(keys, onComplete);
 
-		public async UniTask HideAll(Action onComplete = null) => await _pageContainer.HideAll(onComplete);
+		public async UniTask HideAll(Action onComplete = null) => await _pageContainer.HideAllAsync(onComplete);
 
 		public void HideAllImmediately(Action onComplete = null) => _pageContainer.HideAllImmediately(onComplete);
 	}

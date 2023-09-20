@@ -31,6 +31,6 @@ namespace CizaPageModule.Example1
 
 		//private method
 		private void OnLobbyButtonClick() =>
-			_pageModule.Hide(nameof(TitlePage), () => _pageModule.Show(nameof(LobbyPage)));
+			_pageModule.HideAsync(nameof(TitlePage), () => _pageModule.ShowAsync(nameof(LobbyPage)));
 	}
 }

@@ -18,7 +18,7 @@ namespace CizaPageModule.Example1
 			PageModule = new PageModule(_pageModuleConfig);
 			PageModule.Create<TitlePage>(nameof(TitlePage));
 
-			await PageModule.Show(nameof(TitlePage));
+			await PageModule.ShowAsync(nameof(TitlePage));
 		}
 	}
 }

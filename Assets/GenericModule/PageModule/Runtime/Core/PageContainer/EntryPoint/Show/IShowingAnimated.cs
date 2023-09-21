@@ -4,6 +4,6 @@ namespace CizaPageModule
 {
     public interface IShowingAnimated
     {
-        UniTask PlayShowingAnimation();
+        UniTask PlayShowingAnimationAsync();
     }
 }

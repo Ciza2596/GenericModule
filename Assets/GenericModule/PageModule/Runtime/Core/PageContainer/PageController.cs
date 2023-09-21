@@ -20,12 +20,12 @@ namespace CizaPageModule
 		}
 
 		//public method
-		public async UniTask Initialize(params object[] parameters)
+		public async UniTask InitializeAsync(params object[] parameters)
 		{
 			var pageGameObject = Page.gameObject;
 			pageGameObject.SetActive(false);
 			if (Page is IInitializable initializable)
-				await initializable.Initialize(parameters);
+				await initializable.InitializeAsync(parameters);
 		}
 
 		public void Release()
@@ -48,21 +48,21 @@ namespace CizaPageModule
 			return fixedTickable != null;
 		}
 
-		public async UniTask OnShowingStart(params object[] parameters)
+		public async UniTask OnShowingStartAsync(params object[] parameters)
 		{
 			State = PageState.Showing;
 
 			if (Page is IShowingStart showingStart)
-				await showingStart.OnShowingStart(parameters);
+				await showingStart.OnShowingStartAsync(parameters);
 
 			var pageGameObject = Page.gameObject;
 			pageGameObject.SetActive(true);
 		}
 
-		public async UniTask PlayShowingAnimation()
+		public async UniTask PlayShowingAnimationAsync()
 		{
 			if (Page is IShowingAnimated showingAnimated)
-				await showingAnimated.PlayShowingAnimation();
+				await showingAnimated.PlayShowingAnimationAsync();
 		}
 
 		public void OnShowingComplete()
@@ -81,10 +81,10 @@ namespace CizaPageModule
 				hidingStart.OnHidingStart();
 		}
 
-		public async UniTask PlayHidingAnimation()
+		public async UniTask PlayHidingAnimationAsync()
 		{
 			if (Page is IHidingAnimated hidingAnimated)
-				await hidingAnimated.PlayHidingAnimation();
+				await hidingAnimated.PlayHidingAnimationAsync();
 		}
 
 		public void OnHidingComplete()

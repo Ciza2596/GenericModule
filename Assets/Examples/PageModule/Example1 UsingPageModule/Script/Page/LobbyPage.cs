@@ -25,7 +25,7 @@ namespace CizaPageModule.Example1
 		}
 
 		//PageModule callback
-		public UniTask PlayShowingAnimation() => _showingAnimPlayer.Play();
+		public UniTask PlayShowingAnimationAsync() => _showingAnimPlayer.Play();
 		public void OnShowingComplete() => _titleButton.onClick.AddListener(OnTitleButtonClick);
 
 		public void OnHidingStart() => _titleButton.onClick.RemoveListener(OnTitleButtonClick);

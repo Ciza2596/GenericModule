@@ -179,7 +179,7 @@ namespace CizaPageModule
 			var page           = pageGameObject.GetComponent(pageType);
 			var pageController = new PageController(key, page);
 
-			await pageController.Initialize(parameters);
+			await pageController.InitializeAsync(parameters);
 			_pageControllerMapByKey.Add(key, pageController);
 		}
 
@@ -195,10 +195,10 @@ namespace CizaPageModule
 				return;
 			}
 
-			await pageController.OnShowingStart(parameters);
+			await pageController.OnShowingStartAsync(parameters);
 
 			if (!isImmediately)
-				await pageController.PlayShowingAnimation();
+				await pageController.PlayShowingAnimationAsync();
 
 			pageController.OnShowingComplete();
 			AddTickAndFixedTickHandle(pageController);
@@ -236,8 +236,8 @@ namespace CizaPageModule
 				{
 					var m_pageController = m_pageControllers[i];
 					var m_parameters     = m_parametersList[i];
-					m_onShowingStart       += async () => await m_pageController.OnShowingStart(m_parameters);
-					m_playShowingAnimation += m_pageController.PlayShowingAnimation;
+					m_onShowingStart       += async () => await m_pageController.OnShowingStartAsync(m_parameters);
+					m_playShowingAnimation += m_pageController.PlayShowingAnimationAsync;
 					m_onShowingComplete    += m_pageController.OnShowingComplete;
 				}
 
@@ -271,7 +271,7 @@ namespace CizaPageModule
 			pageController.OnHidingStart();
 
 			if (!isImmediately)
-				await pageController.PlayHidingAnimation();
+				await pageController.PlayHidingAnimationAsync();
 
 			pageController.OnHidingComplete();
 			onComplete?.Invoke();
@@ -308,7 +308,7 @@ namespace CizaPageModule
 				foreach (var m_canHidePageController in m_canHidePageControllers)
 				{
 					m_onHidingStart       += m_canHidePageController.OnHidingStart;
-					m_playHidingAnimation += m_canHidePageController.PlayHidingAnimation;
+					m_playHidingAnimation += m_canHidePageController.PlayHidingAnimationAsync;
 					m_onHidingComplete    += m_canHidePageController.OnHidingComplete;
 				}
 

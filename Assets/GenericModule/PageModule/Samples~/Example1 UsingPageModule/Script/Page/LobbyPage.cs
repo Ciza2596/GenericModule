@@ -25,13 +25,13 @@ namespace CizaPageModule.Example1
 		}
 
 		//PageModule callback
-		public UniTask PlayShowingAnimation() => _showingAnimPlayer.Play();
+		public UniTask PlayShowingAnimationAsync() => _showingAnimPlayer.Play();
 		public void OnShowingComplete() => _titleButton.onClick.AddListener(OnTitleButtonClick);
 
 		public void OnHidingStart() => _titleButton.onClick.RemoveListener(OnTitleButtonClick);
 
 		//private method
 		private void OnTitleButtonClick() =>
-			_pageModule.Hide(nameof(LobbyPage), () => _pageModule.Show(nameof(TitlePage)));
+			_pageModule.HideAsync(nameof(LobbyPage), () => _pageModule.ShowAsync(nameof(TitlePage)));
 	}
 }

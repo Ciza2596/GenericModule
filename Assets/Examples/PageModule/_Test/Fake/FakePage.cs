@@ -19,7 +19,7 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 	public bool IsPassOnHidingComplete    { get; private set; }
 
 	//public method
-	public UniTask Initialize(params object[] parameters)
+	public UniTask InitializeAsync(params object[] parameters)
 	{
 		IsPassInitialize = true;
 		return UniTask.CompletedTask;
@@ -34,13 +34,13 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 		new GameObject(IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME);
 	}
 
-	public UniTask OnShowingStart(params object[] parameters)
+	public UniTask OnShowingStartAsync(params object[] parameters)
 	{
 		IsPassOnShowingStart = true;
 		return UniTask.CompletedTask;
 	}
 
-	public UniTask PlayShowingAnimation()
+	public UniTask PlayShowingAnimationAsync()
 	{
 		IsPassPlayShowingAnimation = true;
 		return UniTask.CompletedTask;
@@ -50,7 +50,7 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 
 	public void OnHidingStart() => IsPassOnHidingStart = true;
 
-	public UniTask PlayHidingAnimation()
+	public UniTask PlayHidingAnimationAsync()
 	{
 		IsPassPlayHidingAnimation = true;
 		return UniTask.CompletedTask;

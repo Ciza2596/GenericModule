@@ -4,6 +4,6 @@ namespace CizaPageModule
 {
 	public interface IInitializable
 	{
-		UniTask Initialize(params object[] parameters);
+		UniTask InitializeAsync(params object[] parameters);
 	}
 }

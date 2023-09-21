@@ -59,7 +59,7 @@ namespace CizaPageModule
 		public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
 			_pageContainer.TryGetPage<TPage>(key, out page);
 
-		public UniTask Create<TPage>(string key, params object[] parameters) where TPage : class =>
+		public UniTask CreateAsync<TPage>(string key, params object[] parameters) where TPage : class =>
 			_pageContainer.CreateAsync<TPage>(key, parameters);
 
 		public void Destroy(string key) =>

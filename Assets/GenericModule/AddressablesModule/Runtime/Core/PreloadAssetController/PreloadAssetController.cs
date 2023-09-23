@@ -3,9 +3,9 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace CizaPreloadController
+namespace CizaPreloadAssetController
 {
-	public class PreloadController
+	public class PreloadAssetController
 	{
 		private readonly IAssetProvider _assetProvider;
 
@@ -14,7 +14,7 @@ namespace CizaPreloadController
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded  { get; private set; }
 
-		public PreloadController(IAssetProvider assetProvider) =>
+		public PreloadAssetController(IAssetProvider assetProvider) =>
 			_assetProvider = assetProvider;
 
 		public async UniTask LoadAssetAsync(IPreloadAssetInfo[] preloadAssetInfos, CancellationToken cancellationToken)

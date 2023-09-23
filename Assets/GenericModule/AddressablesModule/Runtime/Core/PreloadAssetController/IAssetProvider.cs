@@ -2,7 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace CizaPreloadController
+namespace CizaPreloadAssetController
 {
 	public interface IAssetProvider
 	{

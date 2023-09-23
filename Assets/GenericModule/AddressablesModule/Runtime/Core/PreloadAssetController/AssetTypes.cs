@@ -1,4 +1,4 @@
-namespace CizaPreloadController
+namespace CizaPreloadAssetController
 {
 	public enum AssetTypes
 	{

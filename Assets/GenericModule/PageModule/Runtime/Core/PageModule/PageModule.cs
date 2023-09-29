@@ -33,7 +33,8 @@ namespace CizaPageModule
 			var isDontDestroyOnLoad = _pageModuleConfig.IsDontDestroyOnLoad;
 			if (isDontDestroyOnLoad)
 				Object.DontDestroyOnLoad(pageRootGameObject);
-			else if (pageRootParentTransform != null)
+
+			if (pageRootParentTransform != null)
 				pageRoot.SetParent(pageRootParentTransform);
 
 			var pagePrefabs = _pageModuleConfig.GetPagePrefabs();

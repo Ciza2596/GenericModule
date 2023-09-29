@@ -26,21 +26,21 @@ namespace CizaPageModule
 		{
 			Release();
 
-			var pageGameObjectRootName      = _pageModuleConfig.PageGameObjectRootName;
-			var pageGameObjectRoot          = new GameObject(pageGameObjectRootName);
-			var pageGameObjectRootTransform = pageGameObjectRoot.transform;
+			var pageRootName       = _pageModuleConfig.PageRootName;
+			var pageRootGameObject = new GameObject(pageRootName);
+			var pageRoot           = pageRootGameObject.transform;
 
 			var isDontDestroyOnLoad = _pageModuleConfig.IsDontDestroyOnLoad;
 			if (isDontDestroyOnLoad)
-				Object.DontDestroyOnLoad(pageGameObjectRoot);
+				Object.DontDestroyOnLoad(pageRootGameObject);
 			else if (pageRootParentTransform != null)
-				pageGameObjectRootTransform.SetParent(pageRootParentTransform);
+				pageRoot.SetParent(pageRootParentTransform);
 
 			var pagePrefabs = _pageModuleConfig.GetPagePrefabs();
 
-			_pageContainer.Initialize(pageGameObjectRootTransform, pagePrefabs);
+			_pageContainer.Initialize(pageRoot, pagePrefabs);
 
-			var pageModuleComponent = pageGameObjectRoot.AddComponent<PageModuleMono>();
+			var pageModuleComponent = pageRootGameObject.AddComponent<PageModuleMono>();
 			pageModuleComponent.SetUpdateCallback(_pageContainer.Tick);
 			pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedTick);
 		}

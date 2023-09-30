@@ -12,6 +12,7 @@ module | Test | Samples |
 [ObjectPool](#objectpool) | ✔️ | ❌ |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
 [LocalizationModule](#localizationmodule) | ✔️ | ❌ |
+[TextModule](#textmodule) | ✔️ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AudioPlayerModule](#audioplayermodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
@@ -329,6 +330,14 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Localiza
 
 ### Manual:
 LocalizationModule manual.
+
+## TextModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TextModule
+```
+
+### Manual:
+TextModule manual.
 
 
 ## SceneModule

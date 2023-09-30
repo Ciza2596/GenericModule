@@ -7,11 +7,14 @@ namespace CizaLocalizationModule
 	public class LocalizationModule
 	{
 		private readonly ILocalizationModuleConfig _config;
-		private          string                    _defaultLocale;
-		private          Action<string>            _onChangeLocale;
+		private          string[]                  _supportLocales;
 
-		public bool     IsInitialized  { get; private set; }
-		public string[] SupportLocales { get; private set; }
+		public event Action<string> OnChangeLocale;
+
+		public bool IsInitialized { get; private set; }
+
+		public string   DefaultLocale  { get; private set; }
+		public string[] SupportLocales => _supportLocales != null ? _supportLocales.ToArray() : Array.Empty<string>();
 		public string   CurrentLocale  { get; private set; }
 		public string   SourceLocale   { get; private set; }
 
@@ -36,10 +39,10 @@ namespace CizaLocalizationModule
 
 			IsInitialized = true;
 
-			SupportLocales = _config.SupportLocales;
-			SourceLocale   = _config.SourceLocale;
-			_defaultLocale = _config.DefaultLocale;
-			CurrentLocale  = _defaultLocale;
+			_supportLocales = _config.SupportLocales;
+			SourceLocale    = _config.SourceLocale;
+			DefaultLocale   = _config.DefaultLocale;
+			CurrentLocale   = DefaultLocale;
 		}
 
 		public void Release()
@@ -50,46 +53,12 @@ namespace CizaLocalizationModule
 				return;
 			}
 
-			SupportLocales = null;
-			SourceLocale   = string.Empty;
-			CurrentLocale  = string.Empty;
-			_defaultLocale = string.Empty;
+			_supportLocales = null;
+			SourceLocale    = string.Empty;
+			CurrentLocale   = string.Empty;
+			DefaultLocale   = string.Empty;
 
-			RemoveAllOnChangeLocale();
 			IsInitialized = false;
-		}
-
-		public void AddOnChangeLocale(Action<string> onChangeLocale)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning($"[LocalizationModule::AddOnChangeLocale] LocalizationModule is not initialized.");
-				return;
-			}
-
-			_onChangeLocale += onChangeLocale;
-		}
-
-		public void RemoveOnChangeLocale(Action<string> onChangeLocale)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning($"[LocalizationModule::RemoveOnChangeLocale] LocalizationModule is not initialized.");
-				return;
-			}
-
-			_onChangeLocale -= onChangeLocale;
-		}
-
-		public void RemoveAllOnChangeLocale()
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning($"[LocalizationModule::RemoveAllOnChangeLocale] LocalizationModule is not initialized.");
-				return;
-			}
-
-			_onChangeLocale = null;
 		}
 
 		public void ChangeToDefaultLocale()
@@ -100,7 +69,7 @@ namespace CizaLocalizationModule
 				return;
 			}
 
-			CurrentLocale = _defaultLocale;
+			CurrentLocale = DefaultLocale;
 		}
 
 		public void ChangeLocale(string locale)
@@ -119,14 +88,14 @@ namespace CizaLocalizationModule
 
 			CurrentLocale = locale;
 
-			_onChangeLocale?.Invoke(CurrentLocale);
+			OnChangeLocale?.Invoke(CurrentLocale);
 		}
 
-		public string GetTextByAddLocalePrefix(string text)
+		public string GetTextWithLocalePrefix(string text)
 		{
 			if (!IsInitialized)
 			{
-				Debug.LogWarning($"[LocalizationModule::GetTextByAddLocalePrefix] LocalizationModule is not initialized.");
+				Debug.LogWarning($"[LocalizationModule::GetTextWithLocalePrefix] LocalizationModule is not initialized.");
 				return string.Empty;
 			}
 
@@ -134,6 +103,17 @@ namespace CizaLocalizationModule
 			var textByAddLocalePrefix = localePrefix + text;
 
 			return textByAddLocalePrefix;
+		}
+
+		public string GetLocaleText(string key)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning($"[LocalizationModule::GetLocaleText] LocalizationModule is not initialized.");
+				return string.Empty;
+			}
+
+			return string.Empty;
 		}
 	}
 }

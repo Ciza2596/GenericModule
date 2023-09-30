@@ -8,7 +8,7 @@ namespace CizaPageModule.Implement
 	public class PageModuleConfig : ScriptableObject, IPageModuleConfig
 	{
 		[SerializeField]
-		private string _pageRootName = "[PageRoot]";
+		private string _pageRootName = "[Page]";
 
 		[SerializeField]
 		private bool _isDontDestroyOnLoad = false;

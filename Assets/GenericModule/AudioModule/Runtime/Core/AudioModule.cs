@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using CizaTimerModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,7 +17,9 @@ namespace CizaAudioModule
 		private readonly IAssetProvider     _assetProvider;
 		private readonly AudioMixer         _audioMixer;
 
-		private          Transform                     _poolRoot;
+		private readonly TimerModule                _timerModule         = new TimerModule();
+		private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
+
 		private readonly Dictionary<string, Transform> _poolMapByPrefabDataId = new Dictionary<string, Transform>();
 
 		private readonly List<string> _loadedAudioDataIds    = new List<string>();
@@ -29,10 +32,11 @@ namespace CizaAudioModule
 		private readonly Dictionary<string, List<IAudio>> _idleAudiosMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
 		private readonly Dictionary<string, IAudio>       _playingAudioMapByAudioId     = new Dictionary<string, IAudio>();
 
+		private Transform                               _poolRoot;
 		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByClipDataId;
 
 		public event Action<string> OnStop;
-		public event Action         OnComplete;
+		public event Action<string> OnComplete;
 
 		public bool IsInitialized => _audioInfoMapByClipDataId != null && _poolRoot != null;
 
@@ -63,6 +67,16 @@ namespace CizaAudioModule
 			Assert.IsNotNull(_assetProvider, $"[AudioModule::AudioModule] {nameof(assetProvider)} is null.");
 
 			_audioMixer = audioMixer;
+
+			_timerModule.OnRemove += m_OnRemove;
+
+			OnStop += RemoveTimer;
+
+			void m_OnRemove(string timerId)
+			{
+				foreach (var m_pair in _timerIdMapByAudioId.Where(m_pair => m_pair.Value == timerId).ToArray())
+					RemoveTimer(m_pair.Key);
+			}
 		}
 
 		public void Initialize(Transform rootParent = null)
@@ -72,6 +86,8 @@ namespace CizaAudioModule
 				Debug.LogWarning("[AudioModule::Initialize] AudioModule is initialized.");
 				return;
 			}
+
+			_timerModule.Initialize();
 
 			_audioInfoMapByClipDataId = _config.CreateAudioInfoMap();
 
@@ -93,7 +109,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			await StopAllAsync(0, default);
+			await StopAllAsync();
 
 			foreach (var prefabAddress in _idleAudiosMapByPrefabAddress.Keys.ToArray())
 				m_DestroyIdleAudio(prefabAddress);
@@ -110,6 +126,8 @@ namespace CizaAudioModule
 			DestroyOrImmediate(poolRootGameObject);
 
 			_audioInfoMapByClipDataId = null;
+
+			_timerModule.Release();
 
 			void m_DestroyIdleAudio(string m_prefabAddress)
 			{
@@ -132,6 +150,27 @@ namespace CizaAudioModule
 				var poolGameObject = m_pool.gameObject;
 				DestroyOrImmediate(poolGameObject);
 				_poolMapByPrefabDataId.Remove(m_prefabDataId);
+			}
+		}
+
+		public async void Tick(float deltaTime)
+		{
+			foreach (var audio in _playingAudioMapByAudioId.Values.ToArray())
+			{
+				if (audio.IsComplete)
+				{
+					if (audio.IsLoop)
+					{
+						audio.Continue();
+						continue;
+					}
+
+					await StopAsync(audio.Id);
+					OnComplete?.Invoke(audio.Id);
+					continue;
+				}
+
+				audio.Tick(deltaTime);
 			}
 		}
 
@@ -234,7 +273,7 @@ namespace CizaAudioModule
 			}
 		}
 
-		public async UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, CancellationToken cancellationToken = default)
+		public async UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "PlayAsync", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -246,7 +285,14 @@ namespace CizaAudioModule
 
 			AddAudioToPlayingAudiosMap(audioId, audio, position);
 
-			audio.Play(audioId, audioDataId, clipAddress, audioClip, volume, isLoop);
+			if (fadeTime > 0)
+			{
+				audio.Play(audioId, audioDataId, clipAddress, audioClip, 0, isLoop);
+				await AddTimer(audioId, 0, volume, fadeTime);
+			}
+			else
+				audio.Play(audioId, audioDataId, clipAddress, audioClip, volume, isLoop);
+
 			audio.GameObject.name = clipAddress;
 
 			return audio.Id;
@@ -287,7 +333,24 @@ namespace CizaAudioModule
 			}
 		}
 
-		public async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float time, CancellationToken cancellationToken) { }
+		public async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float time)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[AudioModule::ModifyAsync] AudioModule is not initialized.");
+				return;
+			}
+
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+			{
+				Debug.LogWarning($"[AudioModule::ModifyAsync] Audio is not found by audioId: {audioId}.");
+				return;
+			}
+
+			playingAudio.SetIsLoop(isLoop);
+
+			await AddTimer(audioId, playingAudio.Volume, volume, time);
+		}
 
 		public void Pause(string audioId)
 		{
@@ -297,14 +360,13 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				Debug.LogWarning($"[AudioModule::Pause] Audio is not found by audioId: {audioId}.");
 				return;
 			}
 
-			var usingAudio = _playingAudioMapByAudioId[audioId];
-			usingAudio.Pause();
+			playingAudio.Pause();
 		}
 
 		public void Resume(string audioId)
@@ -315,17 +377,16 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				Debug.LogWarning($"[AudioModule::Resume] Audio is not found by audioId: {audioId}.");
 				return;
 			}
 
-			var playingAudio = _playingAudioMapByAudioId[audioId];
 			playingAudio.Resume();
 		}
 
-		public async UniTask StopAsync(string audioId, float fadeTime = 0, CancellationToken cancellationToken = default)
+		public async UniTask StopAsync(string audioId, float fadeTime = 0)
 		{
 			if (!IsInitialized)
 			{
@@ -333,21 +394,28 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+			{
+				Debug.LogWarning($"[AudioModule::Pause] Audio is not found by audioId: {audioId}.");
 				return;
+			}
 
-			var audio = _playingAudioMapByAudioId[audioId];
-			audio.Stop();
+			if (fadeTime > 0)
+				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
+
+			playingAudio.Stop();
 
 			_playingAudioMapByAudioId.Remove(audioId);
-			AddAudioToIdleAudiosMap(audio);
+			AddAudioToIdleAudiosMap(playingAudio);
+
+			OnStop?.Invoke(audioId);
 		}
 
-		public async UniTask StopAllAsync(float fadeTime = 0, CancellationToken cancellationToken = default)
+		public async UniTask StopAllAsync(float fadeTime = 0)
 		{
 			var uniTasks = new List<UniTask>();
 			foreach (var audioId in _playingAudioMapByAudioId.Keys.ToArray())
-				uniTasks.Add(StopAsync(audioId, fadeTime, cancellationToken));
+				uniTasks.Add(StopAsync(audioId, fadeTime));
 			await UniTask.WhenAll(uniTasks);
 		}
 
@@ -427,6 +495,28 @@ namespace CizaAudioModule
 
 		private bool HasValue(string value) =>
 			!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value);
+
+		private async UniTask AddTimer(string audioId, float startVolume, float endVolume, float duration)
+		{
+			if (_timerIdMapByAudioId.ContainsKey(audioId))
+				RemoveTimer(audioId);
+
+			var audio = _playingAudioMapByAudioId[audioId];
+
+			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (ITimerReadModel, value) => audio.SetVolume(value));
+			_timerIdMapByAudioId.Add(audioId, timerId);
+
+			while (_timerIdMapByAudioId.ContainsValue(timerId))
+				await UniTask.Yield();
+		}
+
+		private void RemoveTimer(string audioId)
+		{
+			if (!_timerIdMapByAudioId.TryGetValue(audioId, out var timerId))
+				return;
+
+			_timerModule.RemoveTimer(timerId);
+		}
 
 		//===========
 

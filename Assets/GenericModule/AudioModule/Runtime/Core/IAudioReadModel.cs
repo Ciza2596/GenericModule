@@ -8,7 +8,10 @@ namespace CizaAudioModule
 		string ClipAddress   { get; }
 		string PrefabAddress { get; }
 		
-		float  Volume   { get; }
-		float  Duration { get; }
+		bool IsComplete { get; }
+
+		bool  IsLoop   { get; }
+		float Volume   { get; }
+		float Duration { get; }
 	}
 }

@@ -21,14 +21,7 @@ namespace CizaAudioModule.Example1
 		private AudioModuleConfig _audioModuleConfig;
 
 		[SerializeField]
-		private AudioModuleAssetProvider _audioModuleAssetProvider;
-
-		[Space]
-		[SerializeField]
-		private Transform _parentTransform;
-
-		[SerializeField]
-		private bool _isLocalPosition;
+		private AssetProvider _assetProvider;
 
 		[SerializeField]
 		private Vector3 _position;
@@ -42,15 +35,18 @@ namespace CizaAudioModule.Example1
 		private readonly List<string> _audioIds = new();
 
 		// unity callback
-		private void Awake()
+		private async void Awake()
 		{
-			_audioModule = new AudioModule(_audioModuleConfig, _audioModuleAssetProvider, _audioMixer);
+			_audioModule = new AudioModule(_audioModuleConfig, _assetProvider, _audioMixer);
 			_audioModule.Initialize();
+
+			var audioDataIds = _audioModule.AudioDataIds;
+			foreach (var audioDataId in audioDataIds)
+				await _audioModule.LoadAudioAssetAsync(audioDataId);
 
 			_componentCollectionData.AudioMixerVolumeSlider.onValueChanged.AddListener(SetAudioMixerVolume);
 
-			var clipDataIds = _audioModule.ClipDataIds;
-			_componentCollectionData.SetClipDataIds(clipDataIds);
+			_componentCollectionData.SetClipDataIds(audioDataIds);
 			_componentCollectionData.PlayButton.onClick.AddListener(Play);
 
 			_componentCollectionData.VolumeSlider.onValueChanged.AddListener(SetVolume);
@@ -68,12 +64,12 @@ namespace CizaAudioModule.Example1
 
 		// private method
 		private void SetAudioMixerVolume(float volume) =>
-			_audioModule.SetAudioMixerVolume(volume);
+			_audioModule.SetVolume(volume);
 
-		private void Play()
+		private async void Play()
 		{
 			var clipDataId = _componentCollectionData.ClipDataId;
-			var isPlay     = _audioModule.TryPlay(clipDataId, out var audioId, position: _position, parentTransform: _parentTransform, isLocalPosition: _isLocalPosition);
+			var audioId    = await _audioModule.PlayAsync(clipDataId, position: _position);
 
 			_audioIds.Add(audioId);
 			UpdateAudioIds();
@@ -97,17 +93,17 @@ namespace CizaAudioModule.Example1
 			_audioModule.Resume(audioId);
 		}
 
-		private void Stop()
+		private async void Stop()
 		{
 			var audioId = _componentCollectionData.AudioId;
-			_audioModule.Stop(audioId);
+			await _audioModule.StopAsync(audioId);
 			_audioIds.Remove(audioId);
 			UpdateAudioIds();
 		}
 
-		private void StopAll()
+		private async void StopAll()
 		{
-			_audioModule.StopAll();
+			await _audioModule.StopAllAsync();
 			_audioIds.Clear();
 			UpdateAudioIds();
 		}

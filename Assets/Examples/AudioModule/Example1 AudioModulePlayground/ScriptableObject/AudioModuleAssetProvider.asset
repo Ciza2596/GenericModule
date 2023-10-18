@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf05edb9457c462183c56259dc5d191, type: 3}
   m_Name: AudioModuleAssetProvider
   m_EditorClassIdentifier: 
-  _clipMapDatas:
+  _clipMapInfos:
   - _audioClip: {fileID: 8300000, guid: 639e778eaba734dcfb491a3969858932, type: 3}
-  _prefabMapDatas:
+  _prefabMapInfos:
   - _audioPrefab: {fileID: 4949390170751236864, guid: 3af422905b4eb491dba735bad50ca03d, type: 3}

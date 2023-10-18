@@ -9,22 +9,22 @@ namespace CizaAudioPlayerModule.Implement
 	public class AudioDataOverview : ScriptableObject
 	{
 		[SerializeField]
-		private AudioData[] _audioDatas;
+		private AudioInfo[] _audioDatas;
 
-		public Dictionary<string, IAudioData> GetAudioDataMap()
+		public Dictionary<string, IAudioInfo> GetAudioDataMap()
 		{
 			Assert.IsNotNull(_audioDatas, "[AudioDataOverview::GetAudioDataMap] AudioDatas is null.");
 
-			var audioDataMap = new Dictionary<string, IAudioData>();
+			var audioDataMap = new Dictionary<string, IAudioInfo>();
 
 			foreach (var audioData in _audioDatas)
-				audioDataMap.Add(audioData.ClipDataId, audioData);
+				audioDataMap.Add(audioData.ClipAddress, audioData);
 
 			return audioDataMap;
 		}
 
 		[Serializable]
-		private class AudioData : IAudioData
+		private class AudioInfo : IAudioInfo
 		{
 			[SerializeField]
 			private string _clipDataId;
@@ -36,9 +36,10 @@ namespace CizaAudioPlayerModule.Implement
 			[SerializeField]
 			private float _spatialBlend;
 
-			public string ClipDataId   => _clipDataId;
-			public string PrefabDataId => _prefabDataId;
-			public float  SpatialBlend => _spatialBlend;
+			public string DataId        { get; }
+			public string ClipAddress   => _clipDataId;
+			public string PrefabAddress => _prefabDataId;
+			public float  SpatialBlend  => _spatialBlend;
 		}
 	}
 }

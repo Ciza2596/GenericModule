@@ -5,12 +5,14 @@ namespace CizaAudioModule
 {
     public interface IAudioModuleConfig
     {
-        string AudioMixerVolumeParameter { get; }
+        string AudioMixerGroupPath { get; }
 
         string PoolRootName { get; }
         string PoolPrefix { get; }
         string PoolSuffix { get; }
 
-        IReadOnlyDictionary<string, IAudioData> CreateAudioDataMap();
+        string DefaultPrefabAddress { get; }
+
+        IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMap();
     }
 }

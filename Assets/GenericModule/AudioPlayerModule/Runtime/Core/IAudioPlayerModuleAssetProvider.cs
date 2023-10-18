@@ -4,7 +4,7 @@ using CizaAudioModule;
 
 namespace CizaAudioPlayerModule
 {
-    public interface IAudioPlayerModuleAssetProvider: IAudioModuleAssetProvider
+    public interface IAudioPlayerModuleAssetProvider: IAssetProvider
     {
         
     }

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd1fb2ee0fc445fcaa2ddcf3a47f4d3, type: 3}
   m_Name: AudioModuleConfig
   m_EditorClassIdentifier: 
-  _audioMixer: {fileID: 24100000, guid: 1b4c83034f69440c78981273b31b33e5, type: 2}
-  _poolRootName: '[AudioModulePoolRoot]'
-  _poolPrefix: '['
-  _poolSuffix: s]
-  _masterVolumeParameter: Master
-  _bgmVolumeParameter: Bgm
-  _sfxVolumeParameter: Sfx
-  _voiceVolumeParameter: Voice
+  _audioMixerGroupPath: Master
+  _poolRootName: '[AudioModule]'
+  _poolPrefix: 
+  _poolSuffix: s
+  _defaultPrefabAddress: BGMAudio
+  _audioInfos:
+  - _dataId: wind_Bell
+    _clipDataId: wind_bell
+    _prefabDataId: 

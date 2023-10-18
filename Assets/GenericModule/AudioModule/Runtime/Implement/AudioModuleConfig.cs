@@ -9,54 +9,65 @@ namespace CizaAudioModule.Implement
 	public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
 	{
 		[SerializeField]
-		private string _audioMixerVolumeParameter = "Master";
+		private string _audioMixerGroupPath = "Master";
 
 		[Space]
 		[SerializeField]
-		private string _poolRootName = "[AudioModulePoolRoot]";
+		private string _poolRootName = "[AudioModule]";
 
 		[SerializeField]
-		private string _poolPrefix = "[";
+		private string _poolPrefix = "";
 
 		[SerializeField]
-		private string _poolSuffix = "s]";
+		private string _poolSuffix = "s";
 
 		[SerializeField]
-		private AudioData[] _audioDatas;
+		private string _defaultPrefabAddress;
 
-		public string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
-		public string PoolRootName              => _poolRootName;
-		public string PoolPrefix                => _poolPrefix;
-		public string PoolSuffix                => _poolSuffix;
+		[Space]
+		[SerializeField]
+		private AudioInfo[] _audioInfos;
 
-		public IReadOnlyDictionary<string, IAudioData> CreateAudioDataMap()
+		public string AudioMixerGroupPath => _audioMixerGroupPath;
+
+		public string PoolRootName => _poolRootName;
+		public string PoolPrefix   => _poolPrefix;
+		public string PoolSuffix   => _poolSuffix;
+
+		public string DefaultPrefabAddress => _defaultPrefabAddress;
+
+		public IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMap()
 		{
-			Assert.IsNotNull(_audioDatas, "[AudioModuleConfig::GetAudioDataMap] AudioDatas is null.");
+			Assert.IsNotNull(_audioInfos, "[AudioModuleConfig::GetAudioInfoMap] AudioInfos is null.");
 
-			var audioDataMap = new Dictionary<string, IAudioData>();
+			var audioInfoMap = new Dictionary<string, IAudioInfo>();
 
-			foreach (var audioData in _audioDatas)
-				audioDataMap.Add(audioData.ClipDataId, audioData);
+			if (_audioInfos is null)
+				return audioInfoMap;
 
-			return audioDataMap;
+			foreach (var audioInfo in _audioInfos)
+				audioInfoMap.Add(audioInfo.DataId, audioInfo);
+
+			return audioInfoMap;
 		}
 
 		[Serializable]
-		private class AudioData : IAudioData
+		private class AudioInfo : IAudioInfo
 		{
+			[SerializeField]
+			private string _dataId;
+
+			[Space]
 			[SerializeField]
 			private string _clipDataId;
 
 			[SerializeField]
 			private string _prefabDataId;
 
-			[Range(0, 1)]
-			[SerializeField]
-			private float _spatialBlend;
+			public string DataId => _dataId.ToLower();
 
-			public string ClipDataId   => _clipDataId;
-			public string PrefabDataId => _prefabDataId;
-			public float  SpatialBlend => _spatialBlend;
+			public string ClipAddress   => _clipDataId;
+			public string PrefabAddress => _prefabDataId;
 		}
 	}
 }

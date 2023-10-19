@@ -16,18 +16,23 @@ namespace CizaAudioModule.Implement
 		[SerializeField]
 		private PrefabMapInfo[] _prefabMapInfos;
 
-		public async UniTask<T> LoadAssetAsync<T>(string dataId, CancellationToken cancellationToken) where T : Object
+		public UniTask<T> LoadAssetAsync<T>(string dataId, CancellationToken cancellationToken) where T : Object
 		{
 			var type = typeof(T);
 			if (type == typeof(AudioClip))
-				return _clipMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioClip as T;
-
+			{
+				var clip = _clipMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioClip as T;
+				return UniTask.FromResult(clip);
+			}
 
 			if (type == typeof(GameObject))
-				return _prefabMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioPrefab as T;
+			{
+				var prefab = _prefabMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioPrefab as T;
+				return UniTask.FromResult(prefab);
+			}
 
 			Debug.LogError($"[AudioModuleExampleAssetProvider::GetAsset] Asset is not found by dataId: {dataId}");
-			return null;
+			return UniTask.FromResult<T>(null);
 		}
 
 		public void UnloadAsset<T>(string dataId) where T : Object { }

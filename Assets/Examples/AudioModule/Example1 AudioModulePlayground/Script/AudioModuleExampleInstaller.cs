@@ -50,6 +50,7 @@ namespace CizaAudioModule.Example1
 
 			_componentCollectionData.SetClipDataIds(audioDataIds);
 			_componentCollectionData.PlayButton.onClick.AddListener(Play);
+			UpdateAudioIds();
 
 			_componentCollectionData.VolumeSlider.onValueChanged.AddListener(SetVolume);
 			_componentCollectionData.PauseButton.onClick.AddListener(Pause);
@@ -92,10 +93,10 @@ namespace CizaAudioModule.Example1
 			await _audioModule.PlayAsync(clipDataId, fadeTime: 0.25f, position: _position);
 		}
 
-		private void SetVolume(float volume)
+		private async void SetVolume(float volume)
 		{
 			var audioId = _componentCollectionData.AudioId;
-			_audioModule.SetVolume(audioId, volume);
+			await _audioModule.ModifyAsync(audioId, volume, 0);
 		}
 
 		private void Pause()

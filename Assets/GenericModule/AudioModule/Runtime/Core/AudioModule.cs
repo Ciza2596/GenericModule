@@ -45,15 +45,27 @@ namespace CizaAudioModule
 
 		public bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
 		{
-			if (!IsInitialized)
+			if (_audioMixer is null)
 			{
-				Debug.LogWarning("[AudioModule::TryGetAudioMixerGroup] AudioModule is initialized.");
+				Debug.LogWarning("[AudioModule::TryGetAudioMixerGroup] AudioMixer is null.");
 				audioMixerGroup = null;
 				return false;
 			}
 
 			audioMixerGroup = _audioMixer.FindMatchingGroups(_config.AudioMixerGroupPath).First();
 			return audioMixerGroup != null;
+		}
+
+		public bool TryGetVolume(out float volume)
+		{
+			if (_audioMixer is null)
+			{
+				Debug.LogWarning("[AudioModule::TryGetVolume] AudioMixer is null.");
+				volume = 0;
+				return false;
+			}
+
+			return _audioMixer.GetFloat(_config.AudioMixerParameter, out volume);
 		}
 
 		public bool CheckIsAudioInfoLoaded(string audioDataId) =>
@@ -100,6 +112,8 @@ namespace CizaAudioModule
 				if (rootParent != null)
 					_poolRoot.SetParent(rootParent);
 			}
+
+			SetVolume(_config.DefaultVolume);
 		}
 
 		public async void Release()
@@ -123,7 +137,6 @@ namespace CizaAudioModule
 
 			var poolRootGameObject = _poolRoot.gameObject;
 			_poolRoot = null;
-
 			DestroyOrImmediate(poolRootGameObject);
 
 			_audioInfoMapByDataId = null;
@@ -182,9 +195,18 @@ namespace CizaAudioModule
 
 		public bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
 		{
-			audioReadModel = null;
-			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+			if (!IsInitialized)
+			{
+				audioReadModel = null;
+				Debug.LogWarning("[AudioModule::TryGetAudioReadModel] AudioModule is not initialized.");
 				return false;
+			}
+
+			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+			{
+				audioReadModel = null;
+				return false;
+			}
 
 			audioReadModel = _playingAudioMapByAudioId[audioId];
 			return true;
@@ -209,7 +231,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			_audioMixer.SetFloat(_config.AudioMixerGroupPath, m_GetLinearToLogarithmicScale(volume));
+			_audioMixer.SetFloat(_config.AudioMixerParameter, m_GetLinearToLogarithmicScale(volume));
 
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
@@ -355,8 +377,27 @@ namespace CizaAudioModule
 			}
 
 			playingAudio.SetIsLoop(isLoop);
+			await ModifyAsync(audioId, volume, time);
+		}
 
-			await AddTimer(audioId, playingAudio.Volume, volume, time);
+		public async UniTask ModifyAsync(string audioId, float volume, float time)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[AudioModule::ModifyAsync] AudioModule is not initialized.");
+				return;
+			}
+
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+			{
+				Debug.LogWarning($"[AudioModule::ModifyAsync] Audio is not found by audioId: {audioId}.");
+				return;
+			}
+
+			if (time > 0)
+				await AddTimer(audioId, playingAudio.Volume, volume, time);
+			else
+				playingAudio.SetVolume(volume);
 		}
 
 		public void Pause(string audioId)
@@ -430,7 +471,7 @@ namespace CizaAudioModule
 		{
 			if (!IsInitialized)
 			{
-				Debug.LogWarning($"[AudioModule::{methodName}] AudioModule is initialized.");
+				Debug.LogWarning($"[AudioModule::{methodName}] AudioModule is not initialized.");
 				clipAddress   = string.Empty;
 				prefabAddress = string.Empty;
 				return false;
@@ -524,26 +565,6 @@ namespace CizaAudioModule
 
 			_timerModule.RemoveTimer(timerId);
 			_timerIdMapByAudioId.Remove(timerId);
-		}
-
-		//===========
-
-		public void SetVolume(string audioId, float volume)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning("[AudioModule::SetVolume] AudioModule is not initialized.");
-				return;
-			}
-
-			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
-			{
-				Debug.LogWarning($"[AudioModule::SetVolume] Audio is not found by audioId: {audioId}.");
-				return;
-			}
-
-			var usingAudio = _playingAudioMapByAudioId[audioId];
-			usingAudio.SetVolume(volume);
 		}
 	}
 }

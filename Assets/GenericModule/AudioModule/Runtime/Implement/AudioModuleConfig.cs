@@ -9,36 +9,47 @@ namespace CizaAudioModule.Implement
 	public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
 	{
 		[SerializeField]
-		private string _audioMixerGroupPath = "Master";
-
-		[Space]
-		[SerializeField]
 		private string _poolRootName = "[AudioModule]";
 
+		[Space]
 		[SerializeField]
 		private string _poolPrefix = "";
 
 		[SerializeField]
 		private string _poolSuffix = "s";
 
+		[Space]
 		[SerializeField]
-		private string _defaultPrefabAddress;
+		private string _audioMixerGroupPath = "Master";
+
+		[SerializeField]
+		private string _audioMixerParameter = "Master";
+
+		[Range(0, 1)]
+		[SerializeField]
+		private float _defaultVolume = 0.7f;
 
 		[Space]
 		[SerializeField]
+		private string _defaultPrefabAddress;
+
+		[SerializeField]
 		private AudioInfo[] _audioInfos;
 
-		public string AudioMixerGroupPath => _audioMixerGroupPath;
-
 		public string PoolRootName => _poolRootName;
-		public string PoolPrefix   => _poolPrefix;
-		public string PoolSuffix   => _poolSuffix;
+
+		public string PoolPrefix => _poolPrefix;
+		public string PoolSuffix => _poolSuffix;
+
+		public string AudioMixerGroupPath => _audioMixerGroupPath;
+		public string AudioMixerParameter => _audioMixerParameter;
+		public float  DefaultVolume       => _defaultVolume;
 
 		public string DefaultPrefabAddress => _defaultPrefabAddress;
 
 		public IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId()
 		{
-			Assert.IsNotNull(_audioInfos, "[AudioModuleConfig::GetAudioInfoMap] AudioInfos is null.");
+			Assert.IsNotNull(_audioInfos, "[AudioModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
 
 			var audioInfoMap = new Dictionary<string, IAudioInfo>();
 

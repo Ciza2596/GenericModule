@@ -75,7 +75,7 @@ namespace CizaAudioModule
 			void m_OnRemove(string timerId)
 			{
 				foreach (var m_pair in _timerIdMapByAudioId.Where(m_pair => m_pair.Value == timerId).ToArray())
-					RemoveTimer(m_pair.Key);
+					_timerIdMapByAudioId.Remove(m_pair.Key);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			await StopAllAsync();
+			await StopAllAsync(0);
 
 			foreach (var prefabAddress in _idleAudiosMapByPrefabAddress.Keys.ToArray())
 				m_DestroyIdleAudio(prefabAddress);
@@ -155,6 +155,11 @@ namespace CizaAudioModule
 
 		public async void Tick(float deltaTime)
 		{
+			if (!IsInitialized)
+				return;
+
+			_timerModule.Tick(deltaTime);
+
 			foreach (var audio in _playingAudioMapByAudioId.Values.ToArray())
 			{
 				if (audio.IsComplete)
@@ -165,7 +170,7 @@ namespace CizaAudioModule
 						continue;
 					}
 
-					await StopAsync(audio.Id);
+					await StopAsync(audio.Id, 0);
 					OnComplete?.Invoke(audio.Id);
 					continue;
 				}
@@ -285,6 +290,8 @@ namespace CizaAudioModule
 
 			AddAudioToPlayingAudiosMap(audioId, audio, position);
 
+			audio.GameObject.name = clipAddress;
+
 			if (fadeTime > 0)
 			{
 				audio.Play(audioId, audioDataId, clipAddress, audioClip, 0, isLoop);
@@ -292,8 +299,6 @@ namespace CizaAudioModule
 			}
 			else
 				audio.Play(audioId, audioDataId, clipAddress, audioClip, volume, isLoop);
-
-			audio.GameObject.name = clipAddress;
 
 			return audio.Id;
 
@@ -503,7 +508,7 @@ namespace CizaAudioModule
 
 			var audio = _playingAudioMapByAudioId[audioId];
 
-			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (ITimerReadModel, value) => audio.SetVolume(value));
+			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (ITimerReadModel, value) => { audio.SetVolume(value); });
 			_timerIdMapByAudioId.Add(audioId, timerId);
 
 			while (_timerIdMapByAudioId.ContainsValue(timerId))
@@ -516,6 +521,7 @@ namespace CizaAudioModule
 				return;
 
 			_timerModule.RemoveTimer(timerId);
+			_timerIdMapByAudioId.Remove(timerId);
 		}
 
 		//===========

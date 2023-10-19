@@ -13,6 +13,6 @@ namespace CizaAudioModule
 
         string DefaultPrefabAddress { get; }
 
-        IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMap();
+        IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId();
     }
 }

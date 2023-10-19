@@ -20,7 +20,7 @@ namespace CizaAudioModule
 		private readonly TimerModule                _timerModule         = new TimerModule();
 		private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
 
-		private readonly Dictionary<string, Transform> _poolMapByPrefabDataId = new Dictionary<string, Transform>();
+		private readonly Dictionary<string, Transform> _poolMapByPrefabAddress = new Dictionary<string, Transform>();
 
 		private readonly List<string> _loadedAudioDataIds    = new List<string>();
 		private readonly List<string> _loadedClipAddresses   = new List<string>();
@@ -29,18 +29,18 @@ namespace CizaAudioModule
 		private readonly Dictionary<string, AudioClip>  _clipMapByAddress   = new Dictionary<string, AudioClip>();
 		private readonly Dictionary<string, GameObject> _prefabMapByAddress = new Dictionary<string, GameObject>();
 
-		private readonly Dictionary<string, List<IAudio>> _idleAudiosMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
-		private readonly Dictionary<string, IAudio>       _playingAudioMapByAudioId     = new Dictionary<string, IAudio>();
+		private readonly Dictionary<string, List<IAudio>> _idleAudioMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
+		private readonly Dictionary<string, IAudio>       _playingAudioMapByAudioId    = new Dictionary<string, IAudio>();
 
 		private Transform                               _poolRoot;
-		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByClipDataId;
+		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
 		public event Action<string> OnStop;
 		public event Action<string> OnComplete;
 
-		public bool IsInitialized => _audioInfoMapByClipDataId != null && _poolRoot != null;
+		public bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
 
-		public string[] AudioDataIds => _audioInfoMapByClipDataId != null ? _audioInfoMapByClipDataId.Keys.ToArray() : Array.Empty<string>();
+		public string[] AudioDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
 
 		public bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
 		{
@@ -89,7 +89,7 @@ namespace CizaAudioModule
 
 			_timerModule.Initialize();
 
-			_audioInfoMapByClipDataId = _config.CreateAudioInfoMap();
+			_audioInfoMapByDataId = _config.CreateAudioInfoMapDataId();
 
 			if (_poolRoot is null)
 			{
@@ -111,10 +111,10 @@ namespace CizaAudioModule
 
 			await StopAllAsync(0);
 
-			foreach (var prefabAddress in _idleAudiosMapByPrefabAddress.Keys.ToArray())
+			foreach (var prefabAddress in _idleAudioMapByPrefabAddress.Keys.ToArray())
 				m_DestroyIdleAudio(prefabAddress);
 
-			foreach (var prefabDataId in _poolMapByPrefabDataId.Keys.ToArray())
+			foreach (var prefabDataId in _poolMapByPrefabAddress.Keys.ToArray())
 				m_DestroyPool(prefabDataId);
 
 			foreach (var loadedAudioDataId in _loadedAudioDataIds.ToArray())
@@ -125,31 +125,31 @@ namespace CizaAudioModule
 
 			DestroyOrImmediate(poolRootGameObject);
 
-			_audioInfoMapByClipDataId = null;
+			_audioInfoMapByDataId = null;
 
 			_timerModule.Release();
 
 			void m_DestroyIdleAudio(string m_prefabAddress)
 			{
-				if (!_idleAudiosMapByPrefabAddress.ContainsKey(m_prefabAddress))
+				if (!_idleAudioMapByPrefabAddress.ContainsKey(m_prefabAddress))
 					return;
 
-				var m_idleAudios = _idleAudiosMapByPrefabAddress[m_prefabAddress];
+				var m_idleAudios = _idleAudioMapByPrefabAddress[m_prefabAddress];
 
 				var m_audios = m_idleAudios.ToArray();
 				m_idleAudios.Clear();
 				foreach (var m_audio in m_audios)
 					DestroyOrImmediate(m_audio.GameObject);
 
-				_idleAudiosMapByPrefabAddress.Remove(m_prefabAddress);
+				_idleAudioMapByPrefabAddress.Remove(m_prefabAddress);
 			}
 
 			void m_DestroyPool(string m_prefabDataId)
 			{
-				var m_pool         = _poolMapByPrefabDataId[m_prefabDataId];
+				var m_pool         = _poolMapByPrefabAddress[m_prefabDataId];
 				var poolGameObject = m_pool.gameObject;
 				DestroyOrImmediate(poolGameObject);
-				_poolMapByPrefabDataId.Remove(m_prefabDataId);
+				_poolMapByPrefabAddress.Remove(m_prefabDataId);
 			}
 		}
 
@@ -216,9 +216,9 @@ namespace CizaAudioModule
 
 		public async UniTask LoadAudioAssetAsync(string audioDataId, CancellationToken cancellationToken = default)
 		{
-			Assert.IsTrue(_audioInfoMapByClipDataId.ContainsKey(audioDataId), $"[AudioModule::LoadAudioAssetAsync] Not find audioInfo by audioDataId - {audioDataId}.");
+			Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::LoadAudioAssetAsync] Not find audioInfo by audioDataId - {audioDataId}.");
 
-			var audioInfo = _audioInfoMapByClipDataId[audioDataId];
+			var audioInfo = _audioInfoMapByDataId[audioDataId];
 
 			var clipAddress = audioInfo.ClipAddress;
 			Assert.IsTrue(HasValue(clipAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s clipAddress is null.");
@@ -239,8 +239,8 @@ namespace CizaAudioModule
 
 		public void UnloadAudioAsset(string audioDataId)
 		{
-			Assert.IsTrue(_audioInfoMapByClipDataId.ContainsKey(audioDataId), $"[AudioModule::UnloadAudioAsset] Not find audioInfo by audioDataId - {audioDataId}.");
-			var audioInfo = _audioInfoMapByClipDataId[audioDataId];
+			Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::UnloadAudioAsset] Not find audioInfo by audioDataId - {audioDataId}.");
+			var audioInfo = _audioInfoMapByDataId[audioDataId];
 
 			if (!_loadedAudioDataIds.Contains(audioDataId))
 			{
@@ -304,10 +304,10 @@ namespace CizaAudioModule
 
 			IAudio m_GetOrCreateAudio(string m_prefabAddress)
 			{
-				if (!_idleAudiosMapByPrefabAddress.ContainsKey(m_prefabAddress))
+				if (!_idleAudioMapByPrefabAddress.ContainsKey(m_prefabAddress))
 					m_CreatePool(m_prefabAddress);
 
-				var m_idleAudios = _idleAudiosMapByPrefabAddress[m_prefabAddress];
+				var m_idleAudios = _idleAudioMapByPrefabAddress[m_prefabAddress];
 				if (m_idleAudios.Count <= 0)
 				{
 					var m_prefab = _prefabMapByAddress[m_prefabAddress];
@@ -324,14 +324,14 @@ namespace CizaAudioModule
 
 			void m_CreatePool(string m_prefabAddress)
 			{
-				_idleAudiosMapByPrefabAddress.Add(m_prefabAddress, new List<IAudio>());
+				_idleAudioMapByPrefabAddress.Add(m_prefabAddress, new List<IAudio>());
 
 				var poolName      = mm_GetPoolName(m_prefabAddress);
 				var pool          = new GameObject(poolName);
 				var poolTransform = pool.transform;
 				poolTransform.SetParent(_poolRoot);
 
-				_poolMapByPrefabDataId.Add(m_prefabAddress, poolTransform);
+				_poolMapByPrefabAddress.Add(m_prefabAddress, poolTransform);
 
 				string mm_GetPoolName(string mm_prefabAddress) =>
 					_config.PoolPrefix + mm_prefabAddress + _config.PoolSuffix;
@@ -442,8 +442,8 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			Assert.IsTrue(_audioInfoMapByClipDataId.ContainsKey(audioDataId), $"[AudioModule::{methodName}] Not find audioInfo by audioDataId - {audioDataId}.");
-			var audioInfo = _audioInfoMapByClipDataId[audioDataId];
+			Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::{methodName}] Not find audioInfo by audioDataId - {audioDataId}.");
+			var audioInfo = _audioInfoMapByDataId[audioDataId];
 
 			clipAddress = audioInfo.ClipAddress;
 			if (!_clipMapByAddress.ContainsKey(clipAddress))
@@ -466,10 +466,10 @@ namespace CizaAudioModule
 		private void AddAudioToIdleAudiosMap(IAudio audio)
 		{
 			audio.GameObject.name = audio.PrefabAddress;
-			var pool = _poolMapByPrefabDataId[audio.PrefabAddress];
+			var pool = _poolMapByPrefabAddress[audio.PrefabAddress];
 			SetAudioTransform(audio, false, Vector3.zero, pool);
 
-			var idleAudios = _idleAudiosMapByPrefabAddress[audio.PrefabAddress];
+			var idleAudios = _idleAudioMapByPrefabAddress[audio.PrefabAddress];
 			idleAudios.Add(audio);
 		}
 

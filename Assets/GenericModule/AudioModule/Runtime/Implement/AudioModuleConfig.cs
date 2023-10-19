@@ -36,7 +36,7 @@ namespace CizaAudioModule.Implement
 
 		public string DefaultPrefabAddress => _defaultPrefabAddress;
 
-		public IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMap()
+		public IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId()
 		{
 			Assert.IsNotNull(_audioInfos, "[AudioModuleConfig::GetAudioInfoMap] AudioInfos is null.");
 

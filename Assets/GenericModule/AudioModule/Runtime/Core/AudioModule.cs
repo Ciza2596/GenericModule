@@ -35,6 +35,7 @@ namespace CizaAudioModule
 		private Transform                               _poolRoot;
 		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
+		public event Action<string> OnPlay;
 		public event Action<string> OnStop;
 		public event Action<string> OnComplete;
 
@@ -291,6 +292,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, position);
 
 			audio.GameObject.name = clipAddress;
+			OnPlay?.Invoke(audioId);
 
 			if (fadeTime > 0)
 			{

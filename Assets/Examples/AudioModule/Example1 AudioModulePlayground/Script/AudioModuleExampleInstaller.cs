@@ -39,6 +39,7 @@ namespace CizaAudioModule.Example1
 		{
 			_audioModule = new AudioModule(_audioModuleConfig, _assetProvider, _audioMixer);
 			_audioModule.Initialize();
+			_audioModule.OnPlay += m_OnPlay;
 			_audioModule.OnStop += m_OnStop;
 
 			var audioDataIds = _audioModule.AudioDataIds;
@@ -56,9 +57,15 @@ namespace CizaAudioModule.Example1
 			_componentCollectionData.StopButton.onClick.AddListener(Stop);
 			_componentCollectionData.StopAllButton.onClick.AddListener(StopAll);
 
-			void m_OnStop(string audioId)
+			void m_OnStop(string m_audioId)
 			{
-				_audioIds.Remove(audioId);
+				_audioIds.Remove(m_audioId);
+				UpdateAudioIds();
+			}
+
+			void m_OnPlay(string m_audioId)
+			{
+				_audioIds.Add(m_audioId);
 				UpdateAudioIds();
 			}
 		}
@@ -82,10 +89,7 @@ namespace CizaAudioModule.Example1
 		private async void Play()
 		{
 			var clipDataId = _componentCollectionData.ClipDataId;
-			var audioId    = await _audioModule.PlayAsync(clipDataId, fadeTime: 0.5f, position: _position);
-
-			_audioIds.Add(audioId);
-			UpdateAudioIds();
+			await _audioModule.PlayAsync(clipDataId, fadeTime: 0.25f, position: _position);
 		}
 
 		private void SetVolume(float volume)

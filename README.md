@@ -16,6 +16,7 @@ module | Test | Samples |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AudioPlayerModule](#audioplayermodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
+[LocaleAddressablesModule](#localeaddressablesmodule) | ❌ | ❌ |
 
 ## LogModule
 ```
@@ -328,6 +329,11 @@ GameObjectPoolModule manual.
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocalizationModule
 ```
 
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+
 ### Manual:
 LocalizationModule manual.
 
@@ -400,3 +406,19 @@ public class AddressablesModuleExample : MonoBehaviour
     4. Add Page:
     
        <img src="Document/LogModule/Image/LogModuleInspector.png"/>
+
+## LocaleAddressablesModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocaleAddressablesModule
+```
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
+```
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocalizationModule
+```
+       

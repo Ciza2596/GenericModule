@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UniTask = Cysharp.Threading.Tasks.UniTask;
 
 namespace CizaLocalizationModule
 {
@@ -9,9 +10,12 @@ namespace CizaLocalizationModule
 		private readonly ILocalizationModuleConfig _config;
 		private          string[]                  _supportLocales;
 
-		public event Action<string> OnChangeLocale;
+		public event Func<string, UniTask> OnChangedLocaleBefore;
+		public event Func<string, UniTask> OnChangedLocale;
 
 		public bool IsInitialized { get; private set; }
+
+		public bool IsChangingLocale { get; private set; }
 
 		public string   DefaultLocale  { get; private set; }
 		public string[] SupportLocales => _supportLocales != null ? _supportLocales.ToArray() : Array.Empty<string>();
@@ -33,7 +37,7 @@ namespace CizaLocalizationModule
 		{
 			if (IsInitialized)
 			{
-				Debug.LogWarning($"[LocalizationModule::Release] LocalizationModule is initialized.");
+				Debug.LogWarning($"[LocalizationModule::Initialize] LocalizationModule is initialized.");
 				return;
 			}
 
@@ -72,7 +76,7 @@ namespace CizaLocalizationModule
 			CurrentLocale = DefaultLocale;
 		}
 
-		public void ChangeLocale(string locale)
+		public async UniTask ChangeLocale(string locale)
 		{
 			if (!IsInitialized)
 			{
@@ -86,9 +90,25 @@ namespace CizaLocalizationModule
 				return;
 			}
 
+			if (IsChangingLocale)
+				return;
+
+			IsChangingLocale = true;
+
+			await m_OnChangedLocaleBefore();
+
 			CurrentLocale = locale;
 
-			OnChangeLocale?.Invoke(CurrentLocale);
+			await m_OnChangedLocale();
+
+			IsChangingLocale = false;
+
+
+			UniTask m_OnChangedLocaleBefore() =>
+				OnChangedLocaleBefore?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
+
+			UniTask m_OnChangedLocale() =>
+				OnChangedLocale?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
 		}
 
 		public string GetTextWithLocalePrefix(string text)
@@ -103,17 +123,6 @@ namespace CizaLocalizationModule
 			var textByAddLocalePrefix = localePrefix + text;
 
 			return textByAddLocalePrefix;
-		}
-
-		public string GetLocaleText(string key)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning($"[LocalizationModule::GetLocaleText] LocalizationModule is not initialized.");
-				return string.Empty;
-			}
-
-			return string.Empty;
 		}
 	}
 }

@@ -2,6 +2,7 @@ namespace CizaLocalizationModule
 {
 	public interface ILocalizationModuleConfig
 	{
+		
 		string[] SupportLocales { get; }
 
 		string SourceLocale { get; }

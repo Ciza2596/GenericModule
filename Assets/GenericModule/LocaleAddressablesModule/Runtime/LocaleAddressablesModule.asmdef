@@ -1,8 +1,10 @@
 {
-    "name": "LocalizationModule",
-    "rootNamespace": "CizaLocalizationModule",
+    "name": "LocaleAddressablesModule",
+    "rootNamespace": "CizaLocaleAddressablesModule",
     "references": [
-        "UniTask"
+        "UniTask",
+        "AddressablesModule",
+        "LocalizationModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -58,13 +58,13 @@ namespace CizaAudioModule.Example1
 			_componentCollectionData.StopButton.onClick.AddListener(Stop);
 			_componentCollectionData.StopAllButton.onClick.AddListener(StopAll);
 
-			void m_OnStop(string m_audioId)
+			void m_OnStop(string m_audioId, string m_audioDataId)
 			{
 				_audioIds.Remove(m_audioId);
 				UpdateAudioIds();
 			}
 
-			void m_OnPlay(string m_audioId)
+			void m_OnPlay(string m_audioId, string m_audioDataId)
 			{
 				_audioIds.Add(m_audioId);
 				UpdateAudioIds();

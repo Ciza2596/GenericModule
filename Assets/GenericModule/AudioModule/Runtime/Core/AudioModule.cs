@@ -35,9 +35,10 @@ namespace CizaAudioModule
 		private Transform                               _poolRoot;
 		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
-		public event Action<string> OnPlay;
-		public event Action<string> OnStop;
-		public event Action<string> OnComplete;
+		// Id, DataId
+		public event Action<string, string> OnPlay;
+		public event Action<string, string> OnStop;
+		public event Action<string, string> OnComplete;
 
 		public bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
 
@@ -83,13 +84,16 @@ namespace CizaAudioModule
 
 			_timerModule.OnRemove += m_OnRemove;
 
-			OnStop += RemoveTimer;
+			OnStop += m_OnStop;
 
 			void m_OnRemove(string timerId)
 			{
 				foreach (var m_pair in _timerIdMapByAudioId.Where(m_pair => m_pair.Value == timerId).ToArray())
 					_timerIdMapByAudioId.Remove(m_pair.Key);
 			}
+
+			void m_OnStop(string audioId, string audioDataId) =>
+				RemoveTimer(audioId);
 		}
 
 		public void Initialize(Transform rootParent = null)
@@ -185,7 +189,7 @@ namespace CizaAudioModule
 					}
 
 					await StopAsync(audio.Id, 0);
-					OnComplete?.Invoke(audio.Id);
+					OnComplete?.Invoke(audio.DataId, audio.Id);
 					continue;
 				}
 
@@ -314,7 +318,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, position);
 
 			audio.GameObject.name = clipAddress;
-			OnPlay?.Invoke(audioId);
+			OnPlay?.Invoke(audioId, audioDataId);
 
 			if (fadeTime > 0)
 			{
@@ -451,12 +455,13 @@ namespace CizaAudioModule
 			if (fadeTime > 0)
 				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
 
+			var audioDataId = playingAudio.DataId;
 			playingAudio.Stop();
 
 			_playingAudioMapByAudioId.Remove(audioId);
 			AddAudioToIdleAudiosMap(playingAudio);
 
-			OnStop?.Invoke(audioId);
+			OnStop?.Invoke(audioId, audioDataId);
 		}
 
 		public async UniTask StopAllAsync(float fadeTime = 0)
@@ -564,7 +569,7 @@ namespace CizaAudioModule
 				return;
 
 			_timerModule.RemoveTimer(timerId);
-			_timerIdMapByAudioId.Remove(timerId);
+			_timerIdMapByAudioId.Remove(audioId);
 		}
 	}
 }

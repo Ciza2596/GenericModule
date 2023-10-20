@@ -2,7 +2,7 @@
   "name": "com.ciza.audioplayermodule",
   "displayName": "AudioPlayerModule",
   "description": "AudioPlayerModule.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

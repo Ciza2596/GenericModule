@@ -19,17 +19,18 @@ namespace CizaAudioPlayerModule
 
 		private Transform _root;
 
-		public event Action<string> OnBgmPlay;
-		public event Action<string> OnBgmStop;
-		public event Action<string> OnBgmComplete;
+		// Id, DataId
+		public event Action<string, string> OnBgmPlay;
+		public event Action<string, string> OnBgmStop;
+		public event Action<string, string> OnBgmComplete;
 
-		public event Action<string> OnSfxPlay;
-		public event Action<string> OnSfxStop;
-		public event Action<string> OnSfxComplete;
+		public event Action<string, string> OnSfxPlay;
+		public event Action<string, string> OnSfxStop;
+		public event Action<string, string> OnSfxComplete;
 
-		public event Action<string> OnVoicePlay;
-		public event Action<string> OnVoiceStop;
-		public event Action<string> OnVoiceComplete;
+		public event Action<string, string> OnVoicePlay;
+		public event Action<string, string> OnVoiceStop;
+		public event Action<string, string> OnVoiceComplete;
 
 		public bool IsInitialized => _root != null && _bgmModule.IsInitialized && _sfxModule.IsInitialized && _voiceModule.IsInitialized;
 
@@ -84,17 +85,17 @@ namespace CizaAudioPlayerModule
 			_sfxModule   = new AudioModule(audioPlayerModuleConfig.SfxModuleConfig, assetProvider, audioPlayerModuleConfig.AudioMixer);
 			_voiceModule = new AudioModule(audioPlayerModuleConfig.VoiceModuleConfig, voiceAssetProvider, audioPlayerModuleConfig.AudioMixer);
 
-			_bgmModule.OnPlay     += bgmId => OnBgmPlay?.Invoke(bgmId);
-			_bgmModule.OnStop     += bgmId => OnBgmStop?.Invoke(bgmId);
-			_bgmModule.OnComplete += bgmId => OnBgmComplete?.Invoke(bgmId);
+			_bgmModule.OnPlay     += (bgmId, bgmDataId) => OnBgmPlay?.Invoke(bgmId, bgmDataId);
+			_bgmModule.OnStop     += (bgmId, bgmDataId) => OnBgmStop?.Invoke(bgmId, bgmDataId);
+			_bgmModule.OnComplete += (bgmId, bgmDataId) => OnBgmComplete?.Invoke(bgmId, bgmDataId);
 
-			_sfxModule.OnPlay     += seId => OnSfxPlay?.Invoke(seId);
-			_sfxModule.OnStop     += seId => OnSfxStop?.Invoke(seId);
-			_sfxModule.OnComplete += seId => OnSfxComplete?.Invoke(seId);
+			_sfxModule.OnPlay     += (sfxId, sfxDataId) => OnSfxPlay?.Invoke(sfxId, sfxDataId);
+			_sfxModule.OnStop     += (sfxId, sfxDataId) => OnSfxStop?.Invoke(sfxId, sfxDataId);
+			_sfxModule.OnComplete += (sfxId, sfxDataId) => OnSfxComplete?.Invoke(sfxId, sfxDataId);
 
-			_voiceModule.OnPlay     += voiceId => OnVoicePlay?.Invoke(voiceId);
-			_voiceModule.OnStop     += voiceId => OnVoiceStop?.Invoke(voiceId);
-			_voiceModule.OnComplete += voiceId => OnVoiceComplete?.Invoke(voiceId);
+			_voiceModule.OnPlay     += (voiceId, voiceDataId) => OnVoicePlay?.Invoke(voiceId, voiceDataId);
+			_voiceModule.OnStop     += (voiceId, voiceDataId) => OnVoiceStop?.Invoke(voiceId, voiceDataId);
+			_voiceModule.OnComplete += (voiceId, voiceDataId) => OnVoiceComplete?.Invoke(voiceId, voiceDataId);
 		}
 
 		public void Initialize(Transform rootParent = null)

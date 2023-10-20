@@ -110,6 +110,9 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioMod
 ```
 ### Dependency:
 ```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TimerModule
+```
+```
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 

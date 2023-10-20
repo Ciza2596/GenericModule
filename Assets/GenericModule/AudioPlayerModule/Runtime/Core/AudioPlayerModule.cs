@@ -19,6 +19,9 @@ namespace CizaAudioPlayerModule
 
 		private Transform _root;
 
+		public event Func<string, UniTask> OnChangedVoiceLocaleBefore;
+		public event Func<string, UniTask> OnChangedVoiceLocale;
+
 		// Id, DataId
 		public event Action<string, string> OnBgmPlay;
 		public event Action<string, string> OnBgmStop;
@@ -96,6 +99,15 @@ namespace CizaAudioPlayerModule
 			_voiceModule.OnPlay     += (voiceId, voiceDataId) => OnVoicePlay?.Invoke(voiceId, voiceDataId);
 			_voiceModule.OnStop     += (voiceId, voiceDataId) => OnVoiceStop?.Invoke(voiceId, voiceDataId);
 			_voiceModule.OnComplete += (voiceId, voiceDataId) => OnVoiceComplete?.Invoke(voiceId, voiceDataId);
+
+			voiceAssetProvider.OnChangedLocaleBefore += m_OnChangedLocaleBefore;
+			voiceAssetProvider.OnChangedLocale       += m_OnChangedLocale;
+
+			UniTask m_OnChangedLocaleBefore(string locale) =>
+				OnChangedVoiceLocaleBefore?.Invoke(locale) ?? UniTask.CompletedTask;
+
+			UniTask m_OnChangedLocale(string locale) =>
+				OnChangedVoiceLocale?.Invoke(locale) ?? UniTask.CompletedTask;
 		}
 
 		public void Initialize(Transform rootParent = null)

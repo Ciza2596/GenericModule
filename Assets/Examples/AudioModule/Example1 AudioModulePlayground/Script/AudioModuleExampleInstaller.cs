@@ -90,7 +90,7 @@ namespace CizaAudioModule.Example1
 		private async void Play()
 		{
 			var clipDataId = _componentCollectionData.ClipDataId;
-			await _audioModule.PlayAsync(clipDataId, fadeTime: 0.25f, position: _position);
+			await _audioModule.PlayAsync(clipDataId, fadeTime: 0.25f, position: _position, isLoop: true);
 		}
 
 		private async void SetVolume(float volume)

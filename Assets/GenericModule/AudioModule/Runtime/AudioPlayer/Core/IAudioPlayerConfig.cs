@@ -2,7 +2,7 @@ using UnityEngine.Audio;
 
 namespace CizaAudioModule
 {
-	public interface IAudioPlayerModuleConfig
+	public interface IAudioPlayerConfig
 	{
 		string RootName           { get; }
 		bool   IsDontDestroyOnLoad { get; }

@@ -8,9 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace CizaAudioModule
 {
-	public class AudioPlayerModule
+	public class AudioPlayer
 	{
-		private readonly IAudioPlayerModuleConfig _audioPlayerModuleConfig;
+		private readonly IAudioPlayerConfig _audioPlayerConfig;
 
 		private readonly AudioModule _bgmModule;
 		private readonly AudioModule _sfxModule;
@@ -38,14 +38,14 @@ namespace CizaAudioModule
 
 		public bool TryGetMasterMixerGroup(out AudioMixerGroup masterMixerGroup)
 		{
-			if (_audioPlayerModuleConfig.AudioMixer is null)
+			if (_audioPlayerConfig.AudioMixer is null)
 			{
 				Debug.LogWarning("[AudioModule::TryGetMasterMixerGroup] AudioMixer is null.");
 				masterMixerGroup = null;
 				return false;
 			}
 
-			masterMixerGroup = _audioPlayerModuleConfig.AudioMixer.FindMatchingGroups(_audioPlayerModuleConfig.MasterMixerGroupPath).First();
+			masterMixerGroup = _audioPlayerConfig.AudioMixer.FindMatchingGroups(_audioPlayerConfig.MasterMixerGroupPath).First();
 			return masterMixerGroup != null;
 		}
 
@@ -60,14 +60,14 @@ namespace CizaAudioModule
 
 		public bool TryGetMasterVolume(out float volume)
 		{
-			if (_audioPlayerModuleConfig.AudioMixer is null)
+			if (_audioPlayerConfig.AudioMixer is null)
 			{
 				Debug.LogWarning("[AudioModule::TryGetVolume] AudioMixer is null.");
 				volume = 0;
 				return false;
 			}
 
-			return _audioPlayerModuleConfig.AudioMixer.GetFloat(_audioPlayerModuleConfig.MasterMixerParameter, out volume);
+			return _audioPlayerConfig.AudioMixer.GetFloat(_audioPlayerConfig.MasterMixerParameter, out volume);
 		}
 
 		public bool TryGetBgmVolume(out float volume) =>
@@ -79,13 +79,13 @@ namespace CizaAudioModule
 		public bool TryGetVoiceVolume(out float volume) =>
 			_voiceModule.TryGetVolume(out volume);
 
-		public AudioPlayerModule(IAudioPlayerModuleConfig audioPlayerModuleConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
+		public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
 		{
-			_audioPlayerModuleConfig = audioPlayerModuleConfig;
+			_audioPlayerConfig = audioPlayerConfig;
 
-			_bgmModule   = new AudioModule(audioPlayerModuleConfig.BgmModuleConfig, assetProvider, assetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
-			_sfxModule   = new AudioModule(audioPlayerModuleConfig.SfxModuleConfig, assetProvider, assetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
-			_voiceModule = new AudioModule(audioPlayerModuleConfig.VoiceModuleConfig, voiceAssetProvider, assetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
+			_bgmModule   = new AudioModule(audioPlayerConfig.BgmModuleConfig, assetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
+			_sfxModule   = new AudioModule(audioPlayerConfig.SfxModuleConfig, assetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
+			_voiceModule = new AudioModule(audioPlayerConfig.VoiceModuleConfig, voiceAssetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 
 			_bgmModule.OnPlay     += (bgmId, bgmDataId) => OnBgmPlay?.Invoke(bgmId, bgmDataId);
 			_bgmModule.OnStop     += (bgmId, bgmDataId) => OnBgmStop?.Invoke(bgmId, bgmDataId);
@@ -117,8 +117,8 @@ namespace CizaAudioModule
 				return;
 			}
 
-			var rootGameObject = new GameObject(_audioPlayerModuleConfig.RootName);
-			if (_audioPlayerModuleConfig.IsDontDestroyOnLoad)
+			var rootGameObject = new GameObject(_audioPlayerConfig.RootName);
+			if (_audioPlayerConfig.IsDontDestroyOnLoad)
 				Object.DontDestroyOnLoad(rootGameObject);
 
 			_root = rootGameObject.transform;
@@ -130,7 +130,7 @@ namespace CizaAudioModule
 			_sfxModule.Initialize(_root);
 			_voiceModule.Initialize(_root);
 
-			SetMasterVolume(_audioPlayerModuleConfig.DefaultMasterVolume);
+			SetMasterVolume(_audioPlayerConfig.DefaultMasterVolume);
 		}
 
 		public void Release()
@@ -162,13 +162,13 @@ namespace CizaAudioModule
 
 		public void SetMasterVolume(float volume)
 		{
-			if (_audioPlayerModuleConfig.AudioMixer is null)
+			if (_audioPlayerConfig.AudioMixer is null)
 			{
 				Debug.LogWarning("[AudioPlayerModule::SetMasterVolume] AudioMixer is null.");
 				return;
 			}
 
-			_audioPlayerModuleConfig.AudioMixer.SetFloat(_audioPlayerModuleConfig.MasterMixerParameter, m_GetLinearToLogarithmicScale(volume));
+			_audioPlayerConfig.AudioMixer.SetFloat(_audioPlayerConfig.MasterMixerParameter, m_GetLinearToLogarithmicScale(volume));
 
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;

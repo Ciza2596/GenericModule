@@ -6,11 +6,11 @@ using UnityEngine.Audio;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "AudioPlayerModuleConfig", menuName = "Ciza/CizaAudioModule/AudioPlayerModuleConfig")]
-	public class AudioPlayerModuleConfig : ScriptableObject, IAudioPlayerModuleConfig
+	[CreateAssetMenu(fileName = "AudioPlayerConfig", menuName = "Ciza/AudioModule/AudioPlayerConfig")]
+	public class AudioPlayerConfig : ScriptableObject, IAudioPlayerConfig
 	{
 		[SerializeField]
-		private string _rootName = "[AudioPlayerModule]";
+		private string _rootName = "[AudioPlayer]";
 
 		[SerializeField]
 		private bool _isDontDestroyOnLoad = true;

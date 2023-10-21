@@ -14,7 +14,8 @@ namespace CizaAudioModule
 	public class AudioModule
 	{
 		private readonly IAudioModuleConfig _config;
-		private readonly IAssetProvider     _assetProvider;
+		private readonly IAssetProvider     _clipAssetProvider;
+		private readonly IAssetProvider     _prefabAssetProvider;
 		private readonly AudioMixer         _audioMixer;
 		private readonly bool               _isDontDestroyOnLoad;
 
@@ -74,12 +75,14 @@ namespace CizaAudioModule
 			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out var clipAddress, out var prefabAddress);
 
 		//public method
-		public AudioModule(IAudioModuleConfig config, IAssetProvider assetProvider, AudioMixer audioMixer, bool isDontDestroyOnLoad = false)
+		public AudioModule(IAudioModuleConfig config, IAssetProvider clipAssetProvider, IAssetProvider prefabAssetProvider, AudioMixer audioMixer, bool isDontDestroyOnLoad = false)
 		{
-			_config        = config;
-			_assetProvider = assetProvider;
+			_config              = config;
+			_clipAssetProvider   = clipAssetProvider;
+			_prefabAssetProvider = prefabAssetProvider;
 			Assert.IsNotNull(_config, $"[AudioModule::AudioModule] {nameof(IAudioModuleConfig)} is null.");
-			Assert.IsNotNull(_assetProvider, $"[AudioModule::AudioModule] {nameof(assetProvider)} is null.");
+			Assert.IsNotNull(_clipAssetProvider, $"[AudioModule::AudioModule] ClipAssetProvider is null.");
+			Assert.IsNotNull(_prefabAssetProvider, $"[AudioModule::AudioModule] PrefabAssetProvider is null.");
 
 			_audioMixer          = audioMixer;
 			_isDontDestroyOnLoad = isDontDestroyOnLoad;
@@ -258,11 +261,11 @@ namespace CizaAudioModule
 			var prefabAddress = HasValue(audioInfo.PrefabAddress) ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
 			Assert.IsTrue(HasValue(prefabAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s prefabAddress is null.");
 
-			var clip = await _assetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
+			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
 			_clipMapByAddress.TryAdd(clipAddress, clip);
 			_loadedClipAddresses.Add(clipAddress);
 
-			var prefab = await _assetProvider.LoadAssetAsync<GameObject>(prefabAddress, cancellationToken);
+			var prefab = await _prefabAssetProvider.LoadAssetAsync<GameObject>(prefabAddress, cancellationToken);
 			_prefabMapByAddress.TryAdd(prefabAddress, prefab);
 			_loadedPrefabAddresses.Add(clipAddress);
 
@@ -289,7 +292,7 @@ namespace CizaAudioModule
 			{
 				if (_loadedClipAddresses.Contains(clipAddress))
 				{
-					_assetProvider.UnloadAsset<AudioClip>(clipAddress);
+					_clipAssetProvider.UnloadAsset<AudioClip>(clipAddress);
 					_loadedClipAddresses.Remove(clipAddress);
 				}
 
@@ -301,7 +304,7 @@ namespace CizaAudioModule
 			{
 				if (_loadedPrefabAddresses.Contains(prefabAddress))
 				{
-					_assetProvider.UnloadAsset<GameObject>(prefabAddress);
+					_prefabAssetProvider.UnloadAsset<GameObject>(prefabAddress);
 					_loadedPrefabAddresses.Remove(prefabAddress);
 				}
 

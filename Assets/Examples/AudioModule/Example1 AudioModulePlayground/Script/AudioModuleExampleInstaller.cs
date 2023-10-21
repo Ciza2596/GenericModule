@@ -37,7 +37,7 @@ namespace CizaAudioModule.Example1
 		// unity callback
 		private async void Awake()
 		{
-			_audioModule = new AudioModule(_audioModuleConfig, _assetProvider, _audioMixer);
+			_audioModule = new AudioModule(_audioModuleConfig, _assetProvider, _assetProvider, _audioMixer);
 			_audioModule.Initialize();
 			_audioModule.OnPlay += m_OnPlay;
 			_audioModule.OnStop += m_OnStop;

@@ -14,7 +14,7 @@ namespace CizaAudioPlayerModule.Implement
 		private string _rootName = "[AudioPlayerModule]";
 
 		[SerializeField]
-		private bool _isDonDestroyOnLoad = true;
+		private bool _isDontDestroyOnLoad = true;
 
 		[Space]
 		[SerializeField]
@@ -41,7 +41,7 @@ namespace CizaAudioPlayerModule.Implement
 		private AudioModuleConfig _voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
 
 		public string RootName           => _rootName;
-		public bool   IsDonDestroyOnLoad => _isDonDestroyOnLoad;
+		public bool   IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
 		public AudioMixer AudioMixer           => _audioMixer;
 		public string     MasterMixerGroupPath => _masterMixerGroupPath;

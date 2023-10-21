@@ -84,9 +84,9 @@ namespace CizaAudioPlayerModule
 		{
 			_audioPlayerModuleConfig = audioPlayerModuleConfig;
 
-			_bgmModule   = new AudioModule(audioPlayerModuleConfig.BgmModuleConfig, assetProvider, audioPlayerModuleConfig.AudioMixer);
-			_sfxModule   = new AudioModule(audioPlayerModuleConfig.SfxModuleConfig, assetProvider, audioPlayerModuleConfig.AudioMixer);
-			_voiceModule = new AudioModule(audioPlayerModuleConfig.VoiceModuleConfig, voiceAssetProvider, audioPlayerModuleConfig.AudioMixer);
+			_bgmModule   = new AudioModule(audioPlayerModuleConfig.BgmModuleConfig, assetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
+			_sfxModule   = new AudioModule(audioPlayerModuleConfig.SfxModuleConfig, assetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
+			_voiceModule = new AudioModule(audioPlayerModuleConfig.VoiceModuleConfig, voiceAssetProvider, audioPlayerModuleConfig.AudioMixer, _audioPlayerModuleConfig.IsDontDestroyOnLoad);
 
 			_bgmModule.OnPlay     += (bgmId, bgmDataId) => OnBgmPlay?.Invoke(bgmId, bgmDataId);
 			_bgmModule.OnStop     += (bgmId, bgmDataId) => OnBgmStop?.Invoke(bgmId, bgmDataId);
@@ -119,7 +119,7 @@ namespace CizaAudioPlayerModule
 			}
 
 			var rootGameObject = new GameObject(_audioPlayerModuleConfig.RootName);
-			if (_audioPlayerModuleConfig.IsDonDestroyOnLoad)
+			if (_audioPlayerModuleConfig.IsDontDestroyOnLoad)
 				Object.DontDestroyOnLoad(rootGameObject);
 
 			_root = rootGameObject.transform;

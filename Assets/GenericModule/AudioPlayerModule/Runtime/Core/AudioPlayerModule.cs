@@ -119,6 +119,9 @@ namespace CizaAudioPlayerModule
 			}
 
 			var rootGameObject = new GameObject(_audioPlayerModuleConfig.RootName);
+			if (_audioPlayerModuleConfig.IsDonDestroyOnLoad)
+				Object.DontDestroyOnLoad(rootGameObject);
+
 			_root = rootGameObject.transform;
 
 			if (rootParent != null)

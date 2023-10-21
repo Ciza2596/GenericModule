@@ -5,8 +5,8 @@ namespace CizaAudioPlayerModule
 {
 	public interface IAudioPlayerModuleConfig
 	{
-		string RootName { get; }
-
+		string RootName           { get; }
+		bool   IsDonDestroyOnLoad { get; }
 
 		AudioMixer AudioMixer           { get; }
 		string     MasterMixerGroupPath { get; }

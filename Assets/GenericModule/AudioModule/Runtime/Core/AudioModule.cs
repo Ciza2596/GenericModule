@@ -16,6 +16,7 @@ namespace CizaAudioModule
 		private readonly IAudioModuleConfig _config;
 		private readonly IAssetProvider     _assetProvider;
 		private readonly AudioMixer         _audioMixer;
+		private readonly bool               _isDontDestroyOnLoad;
 
 		private readonly TimerModule                _timerModule         = new TimerModule();
 		private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
@@ -73,14 +74,15 @@ namespace CizaAudioModule
 			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out var clipAddress, out var prefabAddress);
 
 		//public method
-		public AudioModule(IAudioModuleConfig config, IAssetProvider assetProvider, AudioMixer audioMixer)
+		public AudioModule(IAudioModuleConfig config, IAssetProvider assetProvider, AudioMixer audioMixer, bool isDontDestroyOnLoad = false)
 		{
 			_config        = config;
 			_assetProvider = assetProvider;
 			Assert.IsNotNull(_config, $"[AudioModule::AudioModule] {nameof(IAudioModuleConfig)} is null.");
 			Assert.IsNotNull(_assetProvider, $"[AudioModule::AudioModule] {nameof(assetProvider)} is null.");
 
-			_audioMixer = audioMixer;
+			_audioMixer          = audioMixer;
+			_isDontDestroyOnLoad = isDontDestroyOnLoad;
 
 			_timerModule.OnRemove += m_OnRemove;
 
@@ -111,6 +113,9 @@ namespace CizaAudioModule
 			if (_poolRoot is null)
 			{
 				var poolRootGameObject = new GameObject(_config.PoolRootName);
+				if (_isDontDestroyOnLoad)
+					Object.DontDestroyOnLoad(poolRootGameObject);
+
 				_poolRoot = poolRootGameObject.transform;
 
 				if (rootParent != null)

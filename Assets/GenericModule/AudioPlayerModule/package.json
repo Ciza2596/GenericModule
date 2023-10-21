@@ -2,7 +2,7 @@
   "name": "com.ciza.audioplayermodule",
   "displayName": "AudioPlayerModule",
   "description": "AudioPlayerModule.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},
@@ -16,15 +16,15 @@
     "url": "https://github.com/Ciza2596/GenericModule.git"
   },
   "samples": [
-  {
-    "displayName": "Extension1 TweenImpAndZenjectInstaller",
-    "description": "Implement audioPlayerModule installer with zenject and ITween with TweenImp.",
-    "path": "Samples~/Extension1 TweenImpAndZenjectInstaller"
-  },
-  {
-    "displayName": "Example1 WithTweenImp",
-    "description": "Please import Extension1 TweenImpAndZenjectInstaller. Implement using audioPlayerModule include animation, prefab, scene, script, scriptableObject etc.",
-    "path": "Samples~/Example1 WithTweenImp"
-  }
-]
+    {
+      "displayName": "Extension1 TweenImpAndZenjectInstaller",
+      "description": "Implement audioPlayerModule installer with zenject and ITween with TweenImp.",
+      "path": "Samples~/Extension1 TweenImpAndZenjectInstaller"
+    },
+    {
+      "displayName": "Example1 WithTweenImp",
+      "description": "Please import Extension1 TweenImpAndZenjectInstaller. Implement using audioPlayerModule include animation, prefab, scene, script, scriptableObject etc.",
+      "path": "Samples~/Example1 WithTweenImp"
+    }
+  ]
 }

@@ -2,7 +2,7 @@
   "name": "com.ciza.audiomodule",
   "displayName": "AudioModule",
   "description": "AudioModule.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

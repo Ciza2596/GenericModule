@@ -14,7 +14,6 @@ module | Test | Samples |
 [LocalizationModule](#localizationmodule) | ✔️ | ❌ |
 [TextModule](#textmodule) | ✔️ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
-[AudioPlayerModule](#audioplayermodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
 [LocaleAddressablesModule](#localeaddressablesmodule) | ❌ | ❌ |
 
@@ -356,21 +355,6 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/SceneMod
 
 ### Manual:
 SceneModule manual.
-
-
-## AudioPlayerModule
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioPlayerModule
-```
-### Dependency:
-```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AudioModule
-```
-
-### Manual:
-Dependency [AudioModule](#audiomodule)
-
-AudioPlayerModule manual.
 
 ## AddressablesModule
 ```

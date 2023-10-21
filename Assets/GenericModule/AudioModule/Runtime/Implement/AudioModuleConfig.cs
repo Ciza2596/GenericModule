@@ -75,7 +75,7 @@ namespace CizaAudioModule.Implement
 			[SerializeField]
 			private string _prefabDataId;
 
-			public string DataId => _dataId.ToLower();
+			public string DataId => _dataId;
 
 			public string ClipAddress   => _clipDataId;
 			public string PrefabAddress => _prefabDataId;

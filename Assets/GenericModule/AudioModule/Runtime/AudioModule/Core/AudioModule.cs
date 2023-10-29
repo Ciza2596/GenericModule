@@ -24,7 +24,8 @@ namespace CizaAudioModule
 
 		private readonly Dictionary<string, Transform> _poolMapByPrefabAddress = new Dictionary<string, Transform>();
 
-		private readonly List<string> _loadedAudioDataIds    = new List<string>();
+		private readonly Dictionary<string, int> _loadedCountMapByDataId = new Dictionary<string, int>();
+		
 		private readonly List<string> _loadedClipAddresses   = new List<string>();
 		private readonly List<string> _loadedPrefabAddresses = new List<string>();
 
@@ -136,16 +137,12 @@ namespace CizaAudioModule
 				return;
 			}
 
-			await StopAllAsync(0);
-
-			foreach (var prefabAddress in _idleAudioMapByPrefabAddress.Keys.ToArray())
-				m_DestroyIdleAudio(prefabAddress);
-
-			foreach (var prefabDataId in _poolMapByPrefabAddress.Keys.ToArray())
-				m_DestroyPool(prefabDataId);
-
-			foreach (var loadedAudioDataId in _loadedAudioDataIds.ToArray())
-				UnloadAudioAsset(loadedAudioDataId);
+			foreach (var pair in _loadedCountMapByDataId.ToArray())
+			{
+				var audioDataId = pair.Key;
+				for (var i = 0; i < pair.Value; i++)
+					UnloadAudioAsset(audioDataId);
+			}
 
 			var poolRootGameObject = _poolRoot.gameObject;
 			_poolRoot = null;
@@ -154,29 +151,6 @@ namespace CizaAudioModule
 			_audioInfoMapByDataId = null;
 
 			_timerModule.Release();
-
-			void m_DestroyIdleAudio(string m_prefabAddress)
-			{
-				if (!_idleAudioMapByPrefabAddress.ContainsKey(m_prefabAddress))
-					return;
-
-				var m_idleAudios = _idleAudioMapByPrefabAddress[m_prefabAddress];
-
-				var m_audios = m_idleAudios.ToArray();
-				m_idleAudios.Clear();
-				foreach (var m_audio in m_audios)
-					DestroyOrImmediate(m_audio.GameObject);
-
-				_idleAudioMapByPrefabAddress.Remove(m_prefabAddress);
-			}
-
-			void m_DestroyPool(string m_prefabDataId)
-			{
-				var m_pool         = _poolMapByPrefabAddress[m_prefabDataId];
-				var poolGameObject = m_pool.gameObject;
-				DestroyOrImmediate(poolGameObject);
-				_poolMapByPrefabAddress.Remove(m_prefabDataId);
-			}
 		}
 
 		public async void Tick(float deltaTime)
@@ -251,9 +225,19 @@ namespace CizaAudioModule
 
 		public async UniTask LoadAudioAssetAsync(string audioDataId, CancellationToken cancellationToken = default)
 		{
-			Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::LoadAudioAssetAsync] Not find audioInfo by audioDataId - {audioDataId}.");
+			if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
+			{
+				Debug.LogError($"[AudioModule::LoadAudioAssetAsync] Not find audioInfo by dataId: {audioDataId}. Please check AudioModule config.");
+				return;
+			}
 
-			var audioInfo = _audioInfoMapByDataId[audioDataId];
+			if (_loadedCountMapByDataId.ContainsKey(audioDataId))
+			{
+				_loadedCountMapByDataId[audioDataId]++;
+				return;
+			}
+
+			_loadedCountMapByDataId.Add(audioDataId, 1);
 
 			var clipAddress = audioInfo.ClipAddress;
 			Assert.IsTrue(HasValue(clipAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s clipAddress is null.");
@@ -268,48 +252,70 @@ namespace CizaAudioModule
 			var prefab = await _prefabAssetProvider.LoadAssetAsync<GameObject>(prefabAddress, cancellationToken);
 			_prefabMapByAddress.TryAdd(prefabAddress, prefab);
 			_loadedPrefabAddresses.Add(clipAddress);
-
-			_loadedAudioDataIds.Add(audioInfo.DataId);
 		}
 
-		public void UnloadAudioAsset(string audioDataId)
+		public async void UnloadAudioAsset(string audioDataId)
 		{
-			Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::UnloadAudioAsset] Not find audioInfo by audioDataId - {audioDataId}.");
-			var audioInfo = _audioInfoMapByDataId[audioDataId];
-
-			if (!_loadedAudioDataIds.Contains(audioDataId))
+			if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
 			{
-				Debug.LogWarning($"[AudioModule::UnloadAudioAsset] AudioDataId - {audioDataId} is not loaded.");
+				Debug.LogError($"[AudioModule::UnloadAudioAsset] Not find audioInfo by dataId: {audioDataId}. Please check AudioModule config.");
 				return;
 			}
+
+			if (!_loadedCountMapByDataId.ContainsKey(audioDataId))
+				return;
+
+			_loadedCountMapByDataId[audioDataId]--;
+			if (_loadedCountMapByDataId[audioDataId] > 0)
+				return;
+
+			_loadedCountMapByDataId.Remove(audioDataId);
+
+			await StopByDataIdAsync(audioDataId, 0);
 
 			m_UnloadClip(audioInfo.ClipAddress);
 			m_UnloadPrefab(audioInfo.PrefabAddress);
 
-			_loadedAudioDataIds.Remove(audioInfo.DataId);
-
-			void m_UnloadClip(string clipAddress)
+			void m_UnloadClip(string m_clipAddress)
 			{
-				if (_loadedClipAddresses.Contains(clipAddress))
+				if (_loadedClipAddresses.Contains(m_clipAddress))
 				{
-					_clipAssetProvider.UnloadAsset<AudioClip>(clipAddress);
-					_loadedClipAddresses.Remove(clipAddress);
+					_clipAssetProvider.UnloadAsset<AudioClip>(m_clipAddress);
+					_loadedClipAddresses.Remove(m_clipAddress);
 				}
 
-				if (!_loadedClipAddresses.Contains(clipAddress) && _clipMapByAddress.ContainsKey(clipAddress))
-					_clipMapByAddress.Remove(clipAddress);
+				if (!_loadedClipAddresses.Contains(m_clipAddress) && _clipMapByAddress.ContainsKey(m_clipAddress))
+					_clipMapByAddress.Remove(m_clipAddress);
 			}
 
-			void m_UnloadPrefab(string prefabAddress)
+			void m_UnloadPrefab(string m_prefabAddress)
 			{
-				if (_loadedPrefabAddresses.Contains(prefabAddress))
+				if (_loadedPrefabAddresses.Contains(m_prefabAddress))
 				{
-					_prefabAssetProvider.UnloadAsset<GameObject>(prefabAddress);
-					_loadedPrefabAddresses.Remove(prefabAddress);
+					_prefabAssetProvider.UnloadAsset<GameObject>(m_prefabAddress);
+					_loadedPrefabAddresses.Remove(m_prefabAddress);
 				}
 
-				if (!_loadedPrefabAddresses.Contains(prefabAddress) && _prefabMapByAddress.ContainsKey(prefabAddress))
-					_prefabMapByAddress.Remove(prefabAddress);
+				if (!_loadedPrefabAddresses.Contains(m_prefabAddress) && _prefabMapByAddress.ContainsKey(m_prefabAddress))
+				{
+					_prefabMapByAddress.Remove(m_prefabAddress);
+					m_DestroyIdleAudioAndPool(m_prefabAddress);
+				}
+			}
+
+			void m_DestroyIdleAudioAndPool(string m_prefabAddress)
+			{
+				if (!_idleAudioMapByPrefabAddress.ContainsKey(m_prefabAddress))
+					return;
+
+				foreach (var m_audio in _idleAudioMapByPrefabAddress[m_prefabAddress].ToArray())
+					DestroyOrImmediate(m_audio.GameObject);
+				_idleAudioMapByPrefabAddress.Remove(m_prefabAddress);
+
+
+				var m_pool = _poolMapByPrefabAddress[m_prefabAddress];
+				_poolMapByPrefabAddress.Remove(m_prefabAddress);
+				DestroyOrImmediate(m_pool.gameObject);
 			}
 		}
 
@@ -472,6 +478,22 @@ namespace CizaAudioModule
 			OnStop?.Invoke(audioId, audioDataId);
 		}
 
+		public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[StopByDataIdAsync] AudioModule is not initialized.");
+				return UniTask.CompletedTask;
+			}
+
+			var uniTasks = new List<UniTask>();
+
+			foreach (var pair in _playingAudioMapByAudioId.Where(pair => pair.Value.DataId == audioDataId).ToArray())
+				uniTasks.Add(StopAsync(pair.Key, fadeTime));
+
+			return UniTask.WhenAll(uniTasks);
+		}
+
 		public async UniTask StopAllAsync(float fadeTime = 0)
 		{
 			var uniTasks = new List<UniTask>();
@@ -490,7 +512,7 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			if (!_loadedAudioDataIds.Contains(audioDataId))
+			if (!_loadedCountMapByDataId.ContainsKey(audioDataId))
 			{
 				Debug.LogWarning($"[AudioModule::CheckIsAudioInfoLoaded] AudioDataId - {audioDataId} is not loaded.");
 				clipAddress   = string.Empty;

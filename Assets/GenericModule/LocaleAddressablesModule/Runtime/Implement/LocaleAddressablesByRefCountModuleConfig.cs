@@ -17,11 +17,11 @@ namespace CizaLocaleAddressablesModule.Implement
 
 		[Space]
 		[SerializeField]
-		private char _prefixMark = '/';
+		private char _prefixTag = '/';
 
 		public string[] SupportLocales => _supportLocales;
 		public string   SourceLocale   => _sourceLocale;
 		public string   DefaultLocale  => _defaultLocale;
-		public char     PrefixMark     => _prefixMark;
+		public char     PrefixTag     => _prefixTag;
 	}
 }

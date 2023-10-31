@@ -119,7 +119,7 @@ namespace CizaLocalizationModule
 				return string.Empty;
 			}
 
-			var localePrefix          = CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixMark;
+			var localePrefix          = CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
 			var textByAddLocalePrefix = localePrefix + text;
 
 			return textByAddLocalePrefix;

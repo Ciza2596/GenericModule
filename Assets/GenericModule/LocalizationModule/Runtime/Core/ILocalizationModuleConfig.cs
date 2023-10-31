@@ -9,6 +9,6 @@ namespace CizaLocalizationModule
 
 		string DefaultLocale { get; }
 
-		char PrefixMark { get; }
+		char PrefixTag { get; }
 	}
 }

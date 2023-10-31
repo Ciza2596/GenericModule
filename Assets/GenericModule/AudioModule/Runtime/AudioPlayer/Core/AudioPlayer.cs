@@ -113,7 +113,7 @@ namespace CizaAudioModule
 		{
 			if (IsInitialized)
 			{
-				Debug.LogWarning("[AudioPlayerModule::Initialize] AudioPlayerModule is initialized.");
+				Debug.LogWarning("[AudioPlayer::Initialize] AudioPlayer is initialized.");
 				return;
 			}
 
@@ -137,7 +137,7 @@ namespace CizaAudioModule
 		{
 			if (!IsInitialized)
 			{
-				Debug.LogWarning("[AudioPlayerModule::Release] AudioPlayerModule is not initialized.");
+				Debug.LogWarning("[AudioPlayer::Release] AudioPlayer is not initialized.");
 				return;
 			}
 
@@ -164,7 +164,7 @@ namespace CizaAudioModule
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
-				Debug.LogWarning("[AudioPlayerModule::SetMasterVolume] AudioMixer is null.");
+				Debug.LogWarning("[AudioPlayer::SetMasterVolume] AudioMixer is null.");
 				return;
 			}
 

@@ -10,6 +10,8 @@ namespace CizaSceneModule
 		//public variable
 		public string TransitionSceneName { get; }
 
+		public bool CanChangeScene { get; private set; }
+
 		public bool IsViewName { get; private set; }
 
 		public string TransitionInViewName { get; private set; }
@@ -39,6 +41,12 @@ namespace CizaSceneModule
 		public void UnloadScene(string sceneName) =>
 			_sceneManager.UnloadScene(sceneName);
 
+		public void UnloadTransitionScene()
+		{
+			UnloadScene(TransitionSceneName);
+			CanChangeScene = true;
+		}
+
 		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
 			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
 
@@ -53,6 +61,8 @@ namespace CizaSceneModule
 
 		private void ChangeScene(bool isViewName, string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask, ILoadingTask loadingTask, IInitializingTask initializingTask)
 		{
+			CanChangeScene = false;
+
 			IsViewName = isViewName;
 
 			TransitionInViewName = transitionInViewName;

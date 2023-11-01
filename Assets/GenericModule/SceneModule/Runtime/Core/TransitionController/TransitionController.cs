@@ -38,7 +38,6 @@ namespace CizaSceneModule
 			var transitionOutViewName   = sceneModule.TransitionOutViewName;
 			var transitionOutViewPrefab = transitionControllerConfig.GetTransitionOutPrefab(transitionOutViewName);
 			var transitionOutView       = CreateView<ITransitionView>(viewParentTransform, transitionOutViewPrefab);
-			var transitionSceneName     = sceneModule.TransitionSceneName;
 
 			transitionInView.Play(() =>
 			{
@@ -46,7 +45,7 @@ namespace CizaSceneModule
 				UnloadScene(currentSceneName);
 
 				LoadSceneOnBackground(nextSceneName);
-				loadingView.Loading(_loadSceneAsync, loadingTask, ActivateScene, initializingTask, () => { transitionOutView.Play(() => UnloadScene(transitionSceneName)); });
+				loadingView.Loading(_loadSceneAsync, loadingTask, ActivateScene, initializingTask, () => { transitionOutView.Play(UnloadTransitionScene); });
 			});
 		}
 
@@ -59,6 +58,9 @@ namespace CizaSceneModule
 
 		private void UnloadScene(string sceneName) =>
 			_sceneModule.UnloadScene(sceneName);
+
+		private void UnloadTransitionScene() =>
+			_sceneModule.UnloadTransitionScene();
 
 		private T CreateView<T>(Transform viewParentTransform, GameObject viewPrefab)
 		{

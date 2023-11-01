@@ -9,9 +9,6 @@ namespace CizaSceneModule.Implement
 		[SerializeField]
 		private float _defaultLoadingTime = 1;
 
-		[SerializeField]
-		private float _defaultWaitingAddInitializingTaskTime = 0.05f;
-
 		private ILoadSceneAsync   _loadSceneAsync;
 		private ILoadingTask      _loadingTask;
 		private Action            _activeScene;
@@ -23,8 +20,7 @@ namespace CizaSceneModule.Implement
 		private float _loadingTime;
 		private bool  _isLoadScene;
 
-		private float _waitingAddInitializingTaskTime;
-		private bool  _isWaitingAddInitializingTask;
+		private bool _isWaitingAddInitializingTask;
 
 		private bool _isLoadInitializingTask;
 
@@ -48,17 +44,17 @@ namespace CizaSceneModule.Implement
 		}
 
 		//unity callback
-		private void Update()
+		private void FixedUpdate()
 		{
 			if (!_isInitialized)
 				return;
 
 			LoadInitializingTask();
 			WaitingAddInitializingTask();
-			LoadScene();
+			LoadScene(Time.fixedTime);
 		}
 
-		private void LoadScene()
+		private void LoadScene(float deltaTime)
 		{
 			if (!_isLoadScene)
 				return;
@@ -67,13 +63,12 @@ namespace CizaSceneModule.Implement
 			if (_loadSceneAsync.IsDone && isComplete && _loadingTime < 0)
 			{
 				_activeScene.Invoke();
-				_waitingAddInitializingTaskTime = _defaultWaitingAddInitializingTaskTime;
-				_isLoadScene                    = false;
-				_isWaitingAddInitializingTask   = true;
+				_isLoadScene                  = false;
+				_isWaitingAddInitializingTask = true;
 				return;
 			}
 
-			_loadingTime -= Time.deltaTime;
+			_loadingTime -= deltaTime;
 		}
 
 		private void WaitingAddInitializingTask()
@@ -81,15 +76,13 @@ namespace CizaSceneModule.Implement
 			if (!_isWaitingAddInitializingTask)
 				return;
 
-			if (_waitingAddInitializingTaskTime < 0)
-			{
-				_isWaitingAddInitializingTask = false;
-				_isLoadInitializingTask       = true;
-				_initializingTask?.Execute();
+			var hasInitializingTask = _initializingTask != null ? _initializingTask.HasTask : true;
+			if (!hasInitializingTask)
 				return;
-			}
 
-			_waitingAddInitializingTaskTime -= Time.deltaTime;
+			_isWaitingAddInitializingTask = false;
+			_isLoadInitializingTask       = true;
+			_initializingTask?.Execute();
 		}
 
 		private void LoadInitializingTask()
@@ -98,14 +91,14 @@ namespace CizaSceneModule.Implement
 				return;
 
 			var isComplete = _initializingTask != null ? _initializingTask.IsComplete : true;
-			if (isComplete)
-			{
-				_isInitialized          = false;
-				_isLoadInitializingTask = false;
-				_onComplete?.Invoke();
-				gameObject.SetActive(false);
+			if (!isComplete)
 				return;
-			}
+
+			_isInitialized          = false;
+			_isLoadInitializingTask = false;
+			_onComplete?.Invoke();
+			gameObject.SetActive(false);
+			return;
 		}
 	}
 }

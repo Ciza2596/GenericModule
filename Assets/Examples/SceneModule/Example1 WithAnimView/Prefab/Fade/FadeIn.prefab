@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1898140811156689268}
   - component: {fileID: 4581916160338229354}
   - component: {fileID: 7374822033476545615}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Cover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5689044457855531409}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -88,7 +87,7 @@ GameObject:
   - component: {fileID: 1589669401187185518}
   - component: {fileID: 8734728584739140879}
   - component: {fileID: 199702479645636596}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: FadeIn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +108,6 @@ RectTransform:
   m_Children:
   - {fileID: 1898140811156689268}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -141,9 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 829b1e0439736423ba58aa7b20d15909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idleStateName: Idle
   _playStateName: Play
   _normalizedTime: 0.95
+  _idleStateName: Idle
   _animator: {fileID: 199702479645636596}
 --- !u!95 &199702479645636596
 Animator:
@@ -165,3 +163,4 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

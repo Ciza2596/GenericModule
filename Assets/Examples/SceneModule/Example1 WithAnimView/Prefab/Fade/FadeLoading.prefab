@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7629289651992169010}
   - component: {fileID: 2705868998632856178}
   - component: {fileID: 5643190701166659799}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: LoadingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1065510410288986303}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -145,7 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1065510410288986303}
   - component: {fileID: 5751853274543041798}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: FadeLoading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +166,6 @@ RectTransform:
   - {fileID: 2977454924172036314}
   - {fileID: 7629289651992169010}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -187,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultLoadingTime: 1
+  _defaultWaitingAddInitializingTaskTime: 0.05
 --- !u!1 &6626810069544404072
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +197,7 @@ GameObject:
   - component: {fileID: 2977454924172036314}
   - component: {fileID: 3079269470693452801}
   - component: {fileID: 6610108700952077468}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: CoverImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +217,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1065510410288986303}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

@@ -20,7 +20,7 @@ namespace CizaSceneModule.Implement
 		private float _loadingTime;
 		private bool  _isLoadScene;
 
-		private bool _isWaitingAddInitializingTask;
+		private bool _isCheckHasInitializingTask;
 
 		private bool _isLoadInitializingTask;
 
@@ -50,7 +50,7 @@ namespace CizaSceneModule.Implement
 				return;
 
 			LoadInitializingTask();
-			WaitingAddInitializingTask();
+			CheckHasInitializingTask();
 			LoadScene(Time.fixedTime);
 		}
 
@@ -62,27 +62,27 @@ namespace CizaSceneModule.Implement
 			var isComplete = _loadingTask != null ? _loadingTask.IsComplete : true;
 			if (_loadSceneAsync.IsDone && isComplete && _loadingTime < 0)
 			{
-				_activeScene.Invoke();
 				_isLoadScene                  = false;
-				_isWaitingAddInitializingTask = true;
+				_isCheckHasInitializingTask = true;
+				_activeScene.Invoke();
 				return;
 			}
 
 			_loadingTime -= deltaTime;
 		}
 
-		private void WaitingAddInitializingTask()
+		private void CheckHasInitializingTask()
 		{
-			if (!_isWaitingAddInitializingTask)
+			if (!_isCheckHasInitializingTask)
 				return;
 
 			var hasInitializingTask = _initializingTask != null ? _initializingTask.HasTask : true;
 			if (!hasInitializingTask)
 				return;
 
-			_isWaitingAddInitializingTask = false;
-			_isLoadInitializingTask       = true;
+			_isCheckHasInitializingTask = false;
 			_initializingTask?.Execute();
+			_isLoadInitializingTask       = true;
 		}
 
 		private void LoadInitializingTask()

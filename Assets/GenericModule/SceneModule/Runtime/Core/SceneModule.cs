@@ -10,7 +10,7 @@ namespace CizaSceneModule
 		//public variable
 		public string TransitionSceneName { get; }
 
-		public bool CanChangeScene { get; private set; }
+		public bool CanChangeScene { get; private set; } = true;
 
 		public bool IsViewName { get; private set; }
 
@@ -61,6 +61,9 @@ namespace CizaSceneModule
 
 		private void ChangeScene(bool isViewName, string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask, ILoadingTask loadingTask, IInitializingTask initializingTask)
 		{
+			if (!CanChangeScene)
+				return;
+
 			CanChangeScene = false;
 
 			IsViewName = isViewName;

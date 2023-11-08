@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ciza.gamecore": "https://github.com/Ciza2596/CizaGameCore.git?path=Assets/GameCore",
+    "com.ciza.cizacore": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.unity.addressables": "1.21.17",
     "com.unity.ai.navigation": "1.1.4",

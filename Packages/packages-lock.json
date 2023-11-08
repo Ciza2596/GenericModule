@@ -1,13 +1,11 @@
 {
   "dependencies": {
-    "com.ciza.gamecore": {
-      "version": "https://github.com/Ciza2596/CizaGameCore.git?path=Assets/GameCore",
+    "com.ciza.cizacore": {
+      "version": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",
       "depth": 0,
       "source": "git",
-      "dependencies": {
-        "com.svermeulen.extenject": "9.2.0-stcf3"
-      },
-      "hash": "077636cbc7ac9c56985f973490d5f639bd067ecd"
+      "dependencies": {},
+      "hash": "8b6c28166dddf44dbb2a8da420dcb4d19b709d01"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -15,13 +13,6 @@
       "source": "git",
       "dependencies": {},
       "hash": "73d86259ce31ce7f4dfe1d028ea1c3edf96c23e4"
-    },
-    "com.svermeulen.extenject": {
-      "version": "9.2.0-stcf3",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
     },
     "com.unity.2d.animation": {
       "version": "9.0.3",

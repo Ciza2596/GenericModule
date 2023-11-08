@@ -13,6 +13,7 @@ module | Test | Samples |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
 [LocalizationModule](#localizationmodule) | ✔️ | ❌ |
 [TextModule](#textmodule) | ✔️ | ❌ |
+[OptionModule](#optionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
 [LocaleAddressablesModule](#localeaddressablesmodule) | ❌ | ❌ |
@@ -346,6 +347,26 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TextModu
 
 ### Manual:
 TextModule manual.
+
+
+## OptionModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/OptionModule
+```
+
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+```
+https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
+```
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
+```
+
+### Manual:
+OptionModule manual.
 
 
 ## SceneModule

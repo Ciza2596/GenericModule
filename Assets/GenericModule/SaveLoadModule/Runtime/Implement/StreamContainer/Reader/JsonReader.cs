@@ -359,13 +359,18 @@ namespace CizaSaveLoadModule.Implement
 					return true;
 			}
 
-			if (c != expectedChar && !IsQuotationMark(c))
+			// # need remove !IsQuotationMark(c)
+			if (c != expectedChar)
 			{
 				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
+				string cAfter = string.Empty;
+				for (var i = 0; i < 50; i++)
+					cAfter += ReadCharIgnoreWhiteSpace();
+
 				var readThing = isObject ? "Object" : "Collection";
-				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}. read {readThing}.");
+				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}. read {readThing}.Afterstring {cAfter}.");
 			}
 
 			return false;

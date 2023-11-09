@@ -6,6 +6,7 @@ using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public abstract class BaseReader : IReader, DataType.IReader
 	{
 		//private variable
@@ -139,6 +140,7 @@ namespace CizaSaveLoadModule.Implement
 			_serializationDepth--;
 
 		//private method
+		[Preserve]
 		private bool TryGoTo(string key)
 		{
 			Assert.IsTrue(key != null, "[BaseReader::TryGoTo] Key cannot be NULL when loading data.");

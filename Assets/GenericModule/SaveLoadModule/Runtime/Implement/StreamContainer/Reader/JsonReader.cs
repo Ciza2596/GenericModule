@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using DataType;
 using UnityEngine.Assertions;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
@@ -16,6 +17,7 @@ namespace CizaSaveLoadModule.Implement
 
 		private readonly int _bufferSize;
 
+		[Preserve]
 		public JsonReader(Stream stream, int bufferSize, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(dataTypeController)
 		{
 			_streamReader     = new StreamReader(stream);
@@ -169,7 +171,7 @@ namespace CizaSaveLoadModule.Implement
 			return propertyName;
 		}
 
-		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE, false);
+		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE);
 
 		public override void EndReadCollection() { }
 
@@ -223,7 +225,7 @@ namespace CizaSaveLoadModule.Implement
 		protected override bool StartReadObject()
 		{
 			base.StartReadObject();
-			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE, true);
+			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE);
 		}
 
 		protected override void EndReadObject()
@@ -346,7 +348,7 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
-		private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar, bool isObject)
+		private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar)
 		{
 			var c = ReadCharIgnoreWhiteSpace();
 
@@ -365,12 +367,7 @@ namespace CizaSaveLoadModule.Implement
 				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
-				string cAfter = string.Empty;
-				for (var i = 0; i < 50; i++)
-					cAfter += ReadCharIgnoreWhiteSpace();
-
-				var readThing = isObject ? "Object" : "Collection";
-				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}. read {readThing}.Afterstring {cAfter}.");
+				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
 			}
 
 			return false;

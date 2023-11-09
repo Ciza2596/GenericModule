@@ -22,10 +22,10 @@ public abstract class BaseTypeTest
 		_io = saveLoadModuleInstaller.GetIo();
 	}
 
-	[TearDown]
-	public void TearDown()
-	{
-		var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, _filePath);
-		_io.DeleteFile(fullPath);
-	}
+	// [TearDown]
+	// public void TearDown()
+	// {
+	// 	var fullPath = _io.GetFullPath(_saveLoadModuleConfig.ApplicationDataPath, _filePath);
+	// 	_io.DeleteFile(fullPath);
+	// }
 }

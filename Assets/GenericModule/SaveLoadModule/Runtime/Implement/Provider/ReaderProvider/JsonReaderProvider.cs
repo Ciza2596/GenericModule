@@ -1,6 +1,7 @@
 using System.IO;
 using DataType;
 using UnityEngine.Assertions;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
@@ -12,6 +13,7 @@ namespace CizaSaveLoadModule.Implement
 		private readonly IReflectionHelper   _reflectionHelper;
 
 		//public method
+		[Preserve]
 		public JsonReaderProvider(IStreamProvider streamProvider, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
 		{
 			_streamProvider     = streamProvider;

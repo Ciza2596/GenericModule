@@ -1,3 +1,5 @@
+using UnityEngine.Scripting;
+
 namespace CizaSaveLoadModule
 {
 	public class SaveLoadModule
@@ -10,6 +12,7 @@ namespace CizaSaveLoadModule
 		private readonly IReaderProvider _readerProvider;
 
 		//public constructor
+		[Preserve]
 		public SaveLoadModule(ISaveLoadModuleConfig saveLoadModuleConfig, IIo io, IWriterProvider writerProvider, IReaderProvider readerProvider)
 		{
 			_saveLoadModuleConfig = saveLoadModuleConfig;

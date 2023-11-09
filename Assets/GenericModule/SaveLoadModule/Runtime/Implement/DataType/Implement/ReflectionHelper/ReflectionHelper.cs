@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CizaSaveLoadModule.Implement;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
@@ -13,8 +15,7 @@ namespace DataType.Implement
 		private readonly Type[] _serializableAttributeTypes;
 		private readonly Type[] _nonSerializableAttributeTypes;
 
-		//private IDataTypeController _dataTypeController;
-
+		[Preserve]
 		public ReflectionHelper(IReflectionHelperConfig reflectionHelperConfig)
 		{
 			_serializableAttributeTypes    = m_CreateAttributeTypes(new[] { typeof(SerializeField) }, reflectionHelperConfig.CustomSerializableAttributeTypes);
@@ -28,9 +29,6 @@ namespace DataType.Implement
 				return m_attributeTypes.ToArray();
 			}
 		}
-
-		// public void Initialize(IDataTypeController dataTypeController) =>
-		// 	_dataTypeController = dataTypeController;
 
 		public System.Object CreateInstance(Type type) =>
 			Activator.CreateInstance(type);
@@ -73,81 +71,93 @@ namespace DataType.Implement
 
 		public string GetTypeName(Type type)
 		{
-			if (type == typeof(bool))
-				return "bool";
-			if (type == typeof(byte))
-				return "byte";
-			if (type == typeof(sbyte))
-				return "sbyte";
-			if (type == typeof(char))
-				return "char";
-			if (type == typeof(decimal))
-				return "decimal";
-			if (type == typeof(double))
-				return "double";
-			if (type == typeof(float))
-				return "float";
-			if (type == typeof(int))
-				return "int";
-			if (type == typeof(uint))
-				return "uint";
-			if (type == typeof(long))
-				return "long";
-			if (type == typeof(ulong))
-				return "ulong";
-			if (type == typeof(short))
-				return "short";
-			if (type == typeof(ushort))
-				return "ushort";
-			if (type == typeof(string))
-				return "string";
-			if (type == typeof(Vector2))
-				return "Vector2";
-			if (type == typeof(Vector3))
-				return "Vector3";
+			if (type == TagUtils.BoolType)
+				return TagUtils.BoolType.Name;
+
+			if (type == TagUtils.ByteType)
+				return TagUtils.ByteType.Name;
+
+			if (type == TagUtils.SbyteType)
+				return TagUtils.SbyteType.Name;
+
+			if (type == TagUtils.CharType)
+				return TagUtils.CharType.Name;
+
+			if (type == TagUtils.DecimalType)
+				return TagUtils.DecimalType.Name;
+
+			if (type == TagUtils.DoubleType)
+				return TagUtils.DoubleType.Name;
+
+			if (type == TagUtils.FloatType)
+				return TagUtils.FloatType.Name;
+
+			if (type == TagUtils.IntType)
+				return TagUtils.IntType.Name;
+
+			if (type == TagUtils.UintType)
+				return TagUtils.UintType.Name;
+
+			if (type == TagUtils.LongType)
+				return TagUtils.LongType.Name;
+
+			if (type == TagUtils.UlongType)
+				return TagUtils.UlongType.Name;
+
+			if (type == TagUtils.ShortType)
+				return TagUtils.ShortType.Name;
+
+			if (type == TagUtils.UshortType)
+				return TagUtils.UshortType.Name;
+
+			if (type == TagUtils.StringType)
+				return TagUtils.StringType.Name;
+
+			if (type == TagUtils.Vector2Type)
+				return TagUtils.Vector2Type.Name;
+
+			if (type == TagUtils.Vector3Type)
+				return TagUtils.Vector3Type.Name;
 
 			return GetAssemblyTypeName(type);
 		}
 
 		public Type GetType(string typeString)
 		{
-			switch (typeString)
-			{
-				case "bool":
-					return typeof(bool);
-				case "byte":
-					return typeof(byte);
-				case "sbyte":
-					return typeof(sbyte);
-				case "char":
-					return typeof(char);
-				case "decimal":
-					return typeof(decimal);
-				case "double":
-					return typeof(double);
-				case "float":
-					return typeof(float);
-				case "int":
-					return typeof(int);
-				case "uint":
-					return typeof(uint);
-				case "long":
-					return typeof(long);
-				case "ulong":
-					return typeof(ulong);
-				case "short":
-					return typeof(short);
-				case "ushort":
-					return typeof(ushort);
-				case "string":
-					return typeof(string);
-				case "Vector2":
-					return typeof(Vector2);
-				case "Vector3":
-					return typeof(Vector3);
-				default:
-					return Type.GetType(typeString);
-			}
+			if (typeString == TagUtils.BoolType.Name)
+				return TagUtils.BoolType;
+			if (typeString == TagUtils.ByteType.Name)
+				return TagUtils.ByteType;
+			if (typeString == TagUtils.SbyteType.Name)
+				return TagUtils.SbyteType;
+			if (typeString == TagUtils.CharType.Name)
+				return TagUtils.CharType;
+			if (typeString == TagUtils.DecimalType.Name)
+				return TagUtils.DecimalType;
+			if (typeString == TagUtils.DoubleType.Name)
+				return TagUtils.DoubleType;
+			if (typeString == TagUtils.FloatType.Name)
+				return TagUtils.FloatType;
+			if (typeString == TagUtils.IntType.Name)
+				return TagUtils.IntType;
+			if (typeString == TagUtils.UintType.Name)
+				return TagUtils.UintType;
+			if (typeString == TagUtils.LongType.Name)
+				return TagUtils.LongType;
+			if (typeString == TagUtils.UlongType.Name)
+				return TagUtils.UlongType;
+			if (typeString == TagUtils.ShortType.Name)
+				return TagUtils.ShortType;
+			if (typeString == TagUtils.UshortType.Name)
+				return TagUtils.UshortType;
+			if (typeString == TagUtils.StringType.Name)
+				return TagUtils.StringType;
+			if (typeString == TagUtils.Vector2Type.Name)
+				return TagUtils.Vector2Type;
+			if (typeString == TagUtils.Vector3Type.Name)
+				return TagUtils.Vector3Type;
+
+			return Type.GetType(typeString);
 		}
 
 		public Type[] GetElementTypes(Type type)
@@ -196,24 +206,6 @@ namespace DataType.Implement
 
 			if (CheckIsDefined(type, typeof(SerializableAttribute)))
 				return true;
-
-
-			// var dataType = _dataTypeController.GetOrCreateDataType(type);
-			// if (dataType != null && !dataType.IsUnsupported)
-			// 	return true;
-			//
-			// if (CheckIsArray(type))
-			// {
-			// 	if (CheckIsSerializable(type.GetElementType()))
-			// 		return true;
-			//
-			// 	return false;
-			// }
-
-			// var genericArgs = type.GetGenericArguments();
-			// foreach (var genericArg in genericArgs)
-			// 	if (!CheckIsSerializable(genericArg))
-			// 		return false;
 
 			return false;
 		}
@@ -293,7 +285,7 @@ namespace DataType.Implement
 		{
 			if (CheckIsPrimitive(type))
 				return type.ToString();
-			return type.FullName + "," + type.Assembly.GetName().Name;
+			return type.FullName + TagUtils.COMMA_TAG + type.Assembly.GetName().Name;
 		}
 	}
 }

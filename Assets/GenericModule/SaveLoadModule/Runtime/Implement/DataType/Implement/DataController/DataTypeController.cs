@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
@@ -15,11 +16,11 @@ namespace DataType.Implement
 
 
         //public method
+        [Preserve]
         public DataTypeController(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper, IDataTypeControllerInstaller[] dataTypeInstallers)
         {
             _dataTypeController = dataTypeController;
             _reflectionHelper = reflectionHelper;
-            //_reflectionHelper.Initialize(_dataTypeController);
 
             foreach (var dataTypeInstaller in dataTypeInstallers)
                 dataTypeInstaller.Install(_dataTypes, _dataTypeController, _reflectionHelper);

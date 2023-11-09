@@ -18,10 +18,7 @@ namespace CizaSaveLoadModule.Implement
 
 		private bool _isFirstProperty = true;
 
-		public JsonWriter(Stream               stream,
-		                  System.Text.Encoding encoding,
-		                  IDataTypeController  dataTypeController,
-		                  IReflectionHelper    reflectionHelper) : base(dataTypeController, reflectionHelper)
+		public JsonWriter(Stream stream, System.Text.Encoding encoding, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(dataTypeController, reflectionHelper)
 		{
 			_streamWriter = new StreamWriter(stream);
 			_encoding     = encoding;
@@ -31,35 +28,34 @@ namespace CizaSaveLoadModule.Implement
 
 		public override void WritePrimitive(string value)
 		{
-			_streamWriter.Write("\"");
+			_streamWriter.Write(TagUtils.SLASH_WITH_QUOTATION_TAG);
 
 			// Escape any quotation marks within the string.
 			foreach (var c in value)
 			{
 				switch (c)
 				{
-					case '\"':
-					case '“':
-					case '”':
-					case '\\':
-					case '/':
-						_streamWriter.Write('\\');
+					case TagUtils.SLASH_WITH_QUOTATION_TAG:
+					case TagUtils.QUOTATION_TAG:
+					case TagUtils.DOUBLE_SLASH_TAG:
+					case TagUtils.REVERSE_SLASH_TAG:
+						_streamWriter.Write(TagUtils.DOUBLE_SLASH_TAG);
 						_streamWriter.Write(c);
 						break;
-					case '\b':
-						_streamWriter.Write("\\b");
+					case TagUtils.LOWER_B_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.LOWER_B_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case '\f':
-						_streamWriter.Write("\\f");
+					case TagUtils.LOWER_F_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.LOWER_F_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case '\n':
-						_streamWriter.Write("\\n");
+					case TagUtils.LOWER_N_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.LOWER_N_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case '\r':
-						_streamWriter.Write("\\r");
+					case TagUtils.LOWER_R_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.LOWER_R_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case '\t':
-						_streamWriter.Write("\\t");
+					case TagUtils.LOWER_T_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.LOWER_T_TAG_WITH_DOUBLE_SLASH);
 						break;
 					default:
 						_streamWriter.Write(c);
@@ -110,7 +106,7 @@ namespace CizaSaveLoadModule.Implement
 			_streamWriter.Write(Convert.ToInt32(value));
 
 		public override void WriteNull() =>
-			_streamWriter.Write("null");
+			_streamWriter.Write(TagUtils.NULL);
 
 		public override void Dispose() =>
 			_streamWriter.Dispose();
@@ -119,7 +115,7 @@ namespace CizaSaveLoadModule.Implement
 		{
 			base.StartWriteCollection();
 
-			_streamWriter.Write('[');
+			_streamWriter.Write(TagUtils.LEFT_SQUARE_BRACE);
 			WriteNewLineAndTabs();
 		}
 
@@ -128,13 +124,13 @@ namespace CizaSaveLoadModule.Implement
 			base.EndWriteCollection();
 
 			WriteNewLineAndTabs();
-			_streamWriter.Write(']');
+			_streamWriter.Write(TagUtils.RIGHT_SQUARE_BRACE);
 		}
 
 		public override void StartWriteCollectionItem(int index)
 		{
 			if (index != 0)
-				_streamWriter.Write(',');
+				_streamWriter.Write(TagUtils.COMMA_TAG);
 		}
 
 		public override void EndWriteCollectionItem(int index) { }
@@ -142,11 +138,11 @@ namespace CizaSaveLoadModule.Implement
 		public override void StartWriteDictionaryKey(int index)
 		{
 			if (index != 0)
-				_streamWriter.Write(',');
+				_streamWriter.Write(TagUtils.COMMA_TAG);
 		}
 
 		public override void EndWriteDictionaryKey(int index) =>
-			_streamWriter.Write(':');
+			_streamWriter.Write(TagUtils.COLON_TAG);
 
 		public override void StartWriteDictionaryValue(int index) { }
 
@@ -154,7 +150,7 @@ namespace CizaSaveLoadModule.Implement
 
 		protected sealed override void StartWriteFile()
 		{
-			_streamWriter.Write('{');
+			_streamWriter.Write(TagUtils.LEFT_CURLY_BRACE);
 
 			base.StartWriteFile();
 		}
@@ -164,7 +160,7 @@ namespace CizaSaveLoadModule.Implement
 			base.EndWriteFile();
 
 			WriteNewLineAndTabs();
-			_streamWriter.Write('}');
+			_streamWriter.Write(TagUtils.RIGHT_CURLY_BRACE);
 		}
 
 		protected override void StartWriteObject(string name)
@@ -172,7 +168,7 @@ namespace CizaSaveLoadModule.Implement
 			base.StartWriteObject(name);
 
 			_isFirstProperty = true;
-			_streamWriter.Write('{');
+			_streamWriter.Write(TagUtils.LEFT_CURLY_BRACE);
 		}
 
 		protected override void EndWriteObject(string name)
@@ -181,7 +177,7 @@ namespace CizaSaveLoadModule.Implement
 
 			_isFirstProperty = false;
 			WriteNewLineAndTabs();
-			_streamWriter.Write('}');
+			_streamWriter.Write(TagUtils.RIGHT_CURLY_BRACE);
 		}
 
 		protected override void StartWriteProperty(string name)
@@ -190,17 +186,15 @@ namespace CizaSaveLoadModule.Implement
 			WriteCommaIfRequired();
 			Write(name);
 
-			_streamWriter.Write(' ');
-			_streamWriter.Write(':');
-			_streamWriter.Write(' ');
+			_streamWriter.Write(TagUtils.SPACE_TAG);
+			_streamWriter.Write(TagUtils.COLON_TAG);
+			_streamWriter.Write(TagUtils.SPACE_TAG);
 		}
 
 		protected override void EndWriteProperty(string name) { }
 
-		protected override void StartWriteDictionary()
-		{
+		protected override void StartWriteDictionary() =>
 			StartWriteObject(null);
-		}
 
 		protected override void EndWriteDictionary() { }
 
@@ -208,13 +202,13 @@ namespace CizaSaveLoadModule.Implement
 		{
 			_streamWriter.Write(Environment.NewLine);
 			for (var i = 0; i < _serializationDepth; i++)
-				_streamWriter.Write('\t');
+				_streamWriter.Write(TagUtils.LOWER_T_TAG_WITH_SLASH);
 		}
 
 		private void WriteCommaIfRequired()
 		{
 			if (!_isFirstProperty)
-				_streamWriter.Write(',');
+				_streamWriter.Write(TagUtils.COMMA_TAG);
 			else
 				_isFirstProperty = false;
 

@@ -9,8 +9,7 @@ namespace CizaSaveLoadModule.Implement
 {
 	public class JsonReader : BaseReader
 	{
-		private const    char            END_OF_STREAM_CHAR = (char)65535;
-		private readonly IFormatProvider INVARIANT_CULTURE  = CultureInfo.InvariantCulture;
+		private readonly IFormatProvider INVARIANT_CULTURE = CultureInfo.InvariantCulture;
 
 		private readonly StreamReader      _streamReader;
 		private readonly IReflectionHelper _reflectionHelper;
@@ -123,7 +122,7 @@ namespace CizaSaveLoadModule.Implement
 			while (!IsQuotationMark(c = (char)_streamReader.Read()))
 			{
 				// If escape mark is found, generate correct escaped character.
-				if (c == '\\')
+				if (c == TagUtils.DOUBLE_SLASH_TAG)
 				{
 					c = (char)_streamReader.Read();
 					if (IsEndOfStream(c))
@@ -131,20 +130,20 @@ namespace CizaSaveLoadModule.Implement
 
 					switch (c)
 					{
-						case 'b':
-							c = '\b';
+						case TagUtils.LOWER_B_TAG:
+							c = TagUtils.LOWER_B_TAG_WITH_SLASH;
 							break;
-						case 'f':
-							c = '\f';
+						case TagUtils.LOWER_F_TAG:
+							c = TagUtils.LOWER_F_TAG_WITH_SLASH;
 							break;
-						case 'n':
-							c = '\n';
+						case TagUtils.LOWER_N_TAG:
+							c = TagUtils.LOWER_N_TAG_WITH_SLASH;
 							break;
-						case 'r':
-							c = '\r';
+						case TagUtils.LOWER_R_TAG:
+							c = TagUtils.LOWER_R_TAG_WITH_SLASH;
 							break;
-						case 't':
-							c = '\t';
+						case TagUtils.LOWER_T_TAG:
+							c = TagUtils.LOWER_T_TAG_WITH_SLASH;
 							break;
 					}
 				}
@@ -162,21 +161,21 @@ namespace CizaSaveLoadModule.Implement
 			if (IsTerminator(c))
 				return null;
 
-			if (c == ',')
+			if (c == TagUtils.COMMA_TAG)
 				ReadCharIgnoreWhiteSpace();
 
 			var propertyName = ReadString();
-			ReadCharIgnoreWhiteSpace(':');
+			ReadCharIgnoreWhiteSpace(TagUtils.COLON_TAG);
 			return propertyName;
 		}
 
-		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace('[');
+		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE);
 
 		public override void EndReadCollection() { }
 
 		public override bool StartReadCollectionItem()
 		{
-			if (PeekCharIgnoreWhiteSpace() == ']')
+			if (PeekCharIgnoreWhiteSpace() == TagUtils.RIGHT_SQUARE_BRACE)
 			{
 				ReadCharIgnoreWhiteSpace();
 				return false;
@@ -188,7 +187,7 @@ namespace CizaSaveLoadModule.Implement
 		public override bool EndReadCollectionItem()
 		{
 			var c = ReadCharIgnoreWhiteSpace();
-			return c == ']';
+			return c == TagUtils.RIGHT_SQUARE_BRACE;
 		}
 
 		public override bool StartReadDictionary() =>
@@ -198,7 +197,7 @@ namespace CizaSaveLoadModule.Implement
 
 		public override bool StartReadDictionaryKey()
 		{
-			if (PeekCharIgnoreWhiteSpace() == '}')
+			if (PeekCharIgnoreWhiteSpace() == TagUtils.RIGHT_CURLY_BRACE)
 			{
 				ReadCharIgnoreWhiteSpace();
 				return false;
@@ -208,14 +207,14 @@ namespace CizaSaveLoadModule.Implement
 		}
 
 		public override void EndReadDictionaryKey() =>
-			ReadCharIgnoreWhiteSpace(':');
+			ReadCharIgnoreWhiteSpace(TagUtils.COLON_TAG);
 
 		public override void StartReadDictionaryValue() { }
 
 		public override bool EndReadDictionaryValue()
 		{
 			var c = ReadCharIgnoreWhiteSpace();
-			return c == '}';
+			return c == TagUtils.RIGHT_CURLY_BRACE;
 		}
 
 		public override void Dispose() =>
@@ -224,12 +223,12 @@ namespace CizaSaveLoadModule.Implement
 		protected override bool StartReadObject()
 		{
 			base.StartReadObject();
-			return ReadNullOrCharIgnoreWhiteSpace('{');
+			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE);
 		}
 
 		protected override void EndReadObject()
 		{
-			ReadCharIgnoreWhiteSpace('}');
+			ReadCharIgnoreWhiteSpace(TagUtils.RIGHT_CURLY_BRACE);
 			base.EndReadObject();
 		}
 
@@ -244,7 +243,7 @@ namespace CizaSaveLoadModule.Implement
 			if (!IsOpeningBrace(c))
 			{
 				// If we're skipping a string, use SkipString().
-				if (c == '\"')
+				if (c == TagUtils.SLASH_WITH_QUOTATION_TAG)
 				{
 					// Skip initial quotation mark as SkipString() requires this.
 					ReadOrSkipChar(writer, skip);
@@ -270,9 +269,8 @@ namespace CizaSaveLoadModule.Implement
 			{
 				c = ReadOrSkipChar(writer, skip);
 
-				if (c == END_OF_STREAM_CHAR) // Detect premature end of stream, which denotes missing closing brace.
-					throw new FormatException(
-					                          "Missing closing brace detected, as end of stream was reached before finding it.");
+				if (c == TagUtils.END_OF_STREAM_TAG) // Detect premature end of stream, which denotes missing closing brace.
+					throw new FormatException("Missing closing brace detected, as end of stream was reached before finding it.");
 
 				// Handle quoted strings.
 				// According to the RFC, only '\' and '"' must be escaped in strings.
@@ -285,12 +283,12 @@ namespace CizaSaveLoadModule.Implement
 				// Handle braces and other characters.
 				switch (c)
 				{
-					case '{': // Entered another level of nesting.
-					case '[':
+					case TagUtils.LEFT_CURLY_BRACE: // Entered another level of nesting.
+					case TagUtils.LEFT_SQUARE_BRACE:
 						nesting++;
 						break;
-					case '}': // Exited a level of nesting.
-					case ']':
+					case TagUtils.RIGHT_CURLY_BRACE: // Exited a level of nesting.
+					case TagUtils.RIGHT_SQUARE_BRACE:
 						nesting--;
 
 						// If nesting < 1, we've come to the end of the object.
@@ -330,7 +328,7 @@ namespace CizaSaveLoadModule.Implement
 		private void SkipOpeningBraceOfFile()
 		{
 			var firstChar = ReadCharIgnoreWhiteSpace();
-			Assert.IsTrue(firstChar is '{', $"[JsonReader::SkipOpeningBraceOfFile] File is not valid JSON. Expected '{{' at beginning of file, but found '{firstChar}'.");
+			Assert.IsTrue(firstChar is TagUtils.LEFT_CURLY_BRACE, $"[JsonReader::SkipOpeningBraceOfFile] File is not valid JSON. Expected '{{' at beginning of file, but found '{firstChar}'.");
 		}
 
 		private char ReadCharIgnoreWhiteSpace(bool isIgnoreTrailingWhitespace = true)
@@ -353,17 +351,17 @@ namespace CizaSaveLoadModule.Implement
 			var c = ReadCharIgnoreWhiteSpace();
 
 			// Check for null
-			if (c == 'n')
+			if (c == TagUtils.LOWER_N_TAG)
 			{
 				var chars = new char[3];
 				_streamReader.ReadBlock(chars, 0, 3);
-				if (chars[0] == 'u' && chars[1] == 'l' && chars[2] == 'l')
+				if (chars[0] == TagUtils.LOWER_U_TAG && chars[1] == TagUtils.LOWER_L_TAG && chars[2] == TagUtils.LOWER_L_TAG)
 					return true;
 			}
 
 			if (c != expectedChar)
 			{
-				if (c == END_OF_STREAM_CHAR)
+				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
 				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
@@ -377,7 +375,7 @@ namespace CizaSaveLoadModule.Implement
 			char c = ReadCharIgnoreWhiteSpace();
 			if (c != expectedChar)
 			{
-				if (c == END_OF_STREAM_CHAR)
+				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
 				throw new FormatException($"[JsonReader::ReadCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
@@ -390,16 +388,16 @@ namespace CizaSaveLoadModule.Implement
 		{
 			var c = ReadCharIgnoreWhiteSpace(false); // Don't read trailing whitespace as this is the value.
 
-			if (c == 'n')
+			if (c == TagUtils.LOWER_N_TAG)
 			{
 				var chars = new char[3];
 				_streamReader.ReadBlock(chars, 0, 3);
-				if (chars[0] == 'u' && chars[1] == 'l' && chars[2] == 'l')
+				if (chars[0] == TagUtils.LOWER_U_TAG && chars[1] == TagUtils.LOWER_L_TAG && chars[2] == TagUtils.LOWER_L_TAG)
 					return true;
 			}
 			else if (!IsQuotationMark(c))
 			{
-				if (c == END_OF_STREAM_CHAR)
+				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException("[JsonReader::ReadQuotationMarkOrNullIgnoreWhitespace] End of stream reached when expecting quotation mark.");
 
 				throw new FormatException($"[JsonReader::ReadQuotationMarkOrNullIgnoreWhitespace] Expected quotation mark, found \'{c}\'.");
@@ -418,21 +416,23 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
-		private bool IsWhiteSpace(char c) => (c == ' ' || c == '\t' || c == '\n' || c == '\r');
+		private bool IsWhiteSpace(char c) =>
+			(c == TagUtils.SPACE_TAG || c == TagUtils.LOWER_T_TAG_WITH_SLASH || c == TagUtils.LOWER_N_TAG_WITH_SLASH || c == TagUtils.LOWER_R_TAG_WITH_SLASH);
 
 		private bool IsOpeningBrace(char c) =>
-			(c == '{' || c == '[');
+			(c == TagUtils.LEFT_CURLY_BRACE || c == TagUtils.LEFT_SQUARE_BRACE);
 
 		private bool IsEndOfValue(char c) =>
-			(c == '}'  || c == ' ' || c == '\t' || c == ']' || c == ',' || c == ':' || c == END_OF_STREAM_CHAR ||
-			 c == '\n' || c == '\r');
+			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.SPACE_TAG || c == TagUtils.LOWER_T_TAG_WITH_SLASH || c == TagUtils.RIGHT_SQUARE_BRACE || c == TagUtils.COMMA_TAG || c == TagUtils.COLON_TAG || c == TagUtils.END_OF_STREAM_TAG || c == TagUtils.LOWER_N_TAG_WITH_SLASH || c == TagUtils.LOWER_R_TAG_WITH_SLASH);
 
 		private bool IsTerminator(char c) =>
-			(c == '}' || c == ']');
+			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.RIGHT_SQUARE_BRACE);
 
-		private bool IsQuotationMark(char c) => c == '\"' || c == '“' || c == '”';
+		private bool IsQuotationMark(char c) =>
+			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG || c == TagUtils.QUOTATION_TAG;
 
-		private bool IsEndOfStream(char c) => c == END_OF_STREAM_CHAR;
+		private bool IsEndOfStream(char c) =>
+			c == TagUtils.END_OF_STREAM_TAG;
 
 		private string GetValueString()
 		{
@@ -465,9 +465,9 @@ namespace CizaSaveLoadModule.Implement
 				char c = ReadOrSkipChar(writer, skip);
 				switch (c)
 				{
-					case END_OF_STREAM_CHAR:
+					case TagUtils.END_OF_STREAM_TAG:
 						throw new FormatException("[JsonReader::ReadString] String without closing quotation mark detected.");
-					case '\\':
+					case TagUtils.DOUBLE_SLASH_TAG:
 						ReadOrSkipChar(writer, skip);
 						break;
 					default:

@@ -1,6 +1,7 @@
 using System;
 using DataType;
 using DataType.Implement;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
@@ -8,6 +9,7 @@ namespace CizaSaveLoadModule.Implement
 	{
 		private readonly DataTypeController _dataTypeController;
 
+		[Preserve]
 		public DataTypeControllerAdapter(IReflectionHelper reflectionHelper) =>
 			_dataTypeController = new DataTypeController(this, reflectionHelper, new IDataTypeControllerInstaller[] { new PrimitiveDataTypeControllerInstaller(), new UnityDataTypeControllerInstaller() });
 

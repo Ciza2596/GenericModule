@@ -156,6 +156,7 @@ namespace CizaSaveLoadModule.Implement
 			return stringBuilder.ToString();
 		}
 
+		[Preserve]
 		public override string ReadPropertyName()
 		{
 			var c = PeekCharIgnoreWhiteSpace();
@@ -234,6 +235,7 @@ namespace CizaSaveLoadModule.Implement
 			base.EndReadObject();
 		}
 
+		[Preserve]
 		protected override byte[] ReadElement(bool skip = false)
 		{
 			var writer  = skip ? null : new StreamWriter(new MemoryStream(_bufferSize));

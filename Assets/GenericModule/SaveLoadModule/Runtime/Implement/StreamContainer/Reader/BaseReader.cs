@@ -26,6 +26,7 @@ namespace CizaSaveLoadModule.Implement
 			_dataTypeController = dataTypeController;
 
 		//SaveLoadModule IReader
+		[Preserve]
 		public T Read<T>(string key)
 		{
 			Assert.IsTrue(TryGoTo(key), $"[BaseReader::Read] Cant find key: {key}");
@@ -82,6 +83,7 @@ namespace CizaSaveLoadModule.Implement
 				ReadObject<T>(obj, dataType);
 		}
 
+		[Preserve]
 		public abstract string ReadPropertyName();
 
 		public T ReadProperty<T>(BaseDataType dataType)
@@ -122,9 +124,11 @@ namespace CizaSaveLoadModule.Implement
 		public void SetOverridePropertyName(string overridePropertyName) =>
 			OverridePropertyName = overridePropertyName;
 
+		[Preserve]
 		public void Skip() => ReadElement(true);
 
 		//protected method
+		[Preserve]
 		protected abstract byte[] ReadElement(bool skip = false);
 
 		protected abstract Type ReadKeyPrefix();

@@ -186,6 +186,7 @@ namespace CizaAddressablesModule
 				}
 				catch
 				{
+					Debug.LogWarning($"[AddressablesModule::GetAssetHandleInfo] Not find object or be cancel by address: {address}.");
 					return null;
 				}
 			}

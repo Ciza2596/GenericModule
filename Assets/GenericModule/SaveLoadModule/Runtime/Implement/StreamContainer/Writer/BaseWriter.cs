@@ -38,10 +38,10 @@ namespace CizaSaveLoadModule.Implement
 		public void WriteType(Type type)
 		{
 			var typeString = _reflectionHelper.GetTypeName(type);
-			WriteProperty(DataType.DataType.TYPE_TAG, typeString);
+			WriteProperty(TagUtils.TYPE_TAG, typeString);
 		}
 
-		public void WriteProperty(string name, object value, DataType.DataType dataType)
+		public void WriteProperty(string name, object value, DataType.BaseDataType dataType)
 		{
 			StartWriteProperty(name);
 			Write(value, dataType);
@@ -86,7 +86,7 @@ namespace CizaSaveLoadModule.Implement
 
 		public abstract void EndWriteCollectionItem(int index);
 
-		public void Write(object value, DataType.DataType dataType)
+		public void Write(object value, DataType.BaseDataType dataType)
 		{
 			// Note that we have to check UnityEngine.Object types for null by casting it first, otherwise
 			// it will always return false.

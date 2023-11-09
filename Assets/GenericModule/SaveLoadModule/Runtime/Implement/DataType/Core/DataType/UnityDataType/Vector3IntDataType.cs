@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	public class Vector3IntDataType : DataType
+	[Preserve]
+	public class Vector3IntDataType : BaseDataType
 	{
 		private readonly IntDataType _intDataType;
 
@@ -13,9 +14,9 @@ namespace DataType
 		public override void Write(object obj, IWriter writer)
 		{
 			var vector3Int = (Vector3Int)obj;
-			writer.WriteProperty("x", vector3Int.x, _intDataType);
-			writer.WriteProperty("y", vector3Int.y, _intDataType);
-			writer.WriteProperty("z", vector3Int.z, _intDataType);
+			writer.WriteProperty(TagUtils.X_TAG, vector3Int.x, _intDataType);
+			writer.WriteProperty(TagUtils.Y_TAG, vector3Int.y, _intDataType);
+			writer.WriteProperty(TagUtils.Z_TAG, vector3Int.z, _intDataType);
 		}
 
 		public override object Read<T>(IReader reader) =>

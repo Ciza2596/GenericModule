@@ -5,7 +5,7 @@ namespace DataType.Implement
 {
     public interface IDataTypeControllerInstaller
     {
-        public void Install(Dictionary<Type, DataType> dataTypes, IDataTypeController dataTypeController,
+        public void Install(Dictionary<Type, BaseDataType> dataTypes, IDataTypeController dataTypeController,
             IReflectionHelper reflectionHelper);
     }
 }

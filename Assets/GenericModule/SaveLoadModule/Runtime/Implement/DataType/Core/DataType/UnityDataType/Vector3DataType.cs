@@ -3,7 +3,7 @@
 namespace DataType
 {
 	[UnityEngine.Scripting.Preserve]
-	public class Vector3DataType : DataType
+	public class Vector3DataType : BaseDataType
 	{
 		private readonly FloatDataType _floatDataType;
 
@@ -13,9 +13,9 @@ namespace DataType
 		public override void Write(object obj, IWriter writer)
 		{
 			var vector3 = (Vector3)obj;
-			writer.WriteProperty("x", vector3.x, _floatDataType);
-			writer.WriteProperty("y", vector3.y, _floatDataType);
-			writer.WriteProperty("z", vector3.z, _floatDataType);
+			writer.WriteProperty(TagUtils.X_TAG, vector3.x, _floatDataType);
+			writer.WriteProperty(TagUtils.Y_TAG, vector3.y, _floatDataType);
+			writer.WriteProperty(TagUtils.Z_TAG, vector3.z, _floatDataType);
 		}
 
 		public override object Read<T>(IReader reader) =>

@@ -1,17 +1,18 @@
 ﻿using System;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	public class DateTimeDataType : DataType
+	public class DateTimeDataType : BaseDataType
 	{
 		private readonly LongDataType _longDataType;
 
+		[Preserve]
 		public DateTimeDataType(LongDataType longDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(DateTime), dataTypeController, reflectionHelper) =>
 			_longDataType = longDataType;
 
 		public override void Write(object obj, IWriter writer) =>
-			writer.WriteProperty("ticks", ((DateTime)obj).Ticks, _longDataType);
+			writer.WriteProperty(TagUtils.TICKS_TAG, ((DateTime)obj).Ticks, _longDataType);
 
 		public override object Read<T>(IReader reader)
 		{
@@ -22,6 +23,7 @@ namespace DataType
 
 	public class DateTimeArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public DateTimeArrayDataType(DateTimeDataType dateTimeElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(DateTime[]),
 		                                                                                                                                                          dateTimeElementDataType, dataTypeController, reflectionHelper) { }
 	}

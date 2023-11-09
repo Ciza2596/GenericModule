@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
 	public class QueueDataType : CollectionDataType
 	{
-		public QueueDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
+		[Preserve]
+		public QueueDataType(Type type, BaseDataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
 
 		public override void Write(object obj, IWriter writer)
 		{

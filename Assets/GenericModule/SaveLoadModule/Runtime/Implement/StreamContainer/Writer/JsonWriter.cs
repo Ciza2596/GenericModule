@@ -42,20 +42,20 @@ namespace CizaSaveLoadModule.Implement
 						_streamWriter.Write(TagUtils.DOUBLE_SLASH_TAG);
 						_streamWriter.Write(c);
 						break;
-					case TagUtils.LOWER_B_TAG_WITH_SLASH:
-						_streamWriter.Write(TagUtils.LOWER_B_TAG_WITH_DOUBLE_SLASH);
+					case TagUtils.B_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.B_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case TagUtils.LOWER_F_TAG_WITH_SLASH:
-						_streamWriter.Write(TagUtils.LOWER_F_TAG_WITH_DOUBLE_SLASH);
+					case TagUtils.F_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.F_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case TagUtils.LOWER_N_TAG_WITH_SLASH:
-						_streamWriter.Write(TagUtils.LOWER_N_TAG_WITH_DOUBLE_SLASH);
+					case TagUtils.N_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.N_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case TagUtils.LOWER_R_TAG_WITH_SLASH:
-						_streamWriter.Write(TagUtils.LOWER_R_TAG_WITH_DOUBLE_SLASH);
+					case TagUtils.R_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.R_TAG_WITH_DOUBLE_SLASH);
 						break;
-					case TagUtils.LOWER_T_TAG_WITH_SLASH:
-						_streamWriter.Write(TagUtils.LOWER_T_TAG_WITH_DOUBLE_SLASH);
+					case TagUtils.T_TAG_WITH_SLASH:
+						_streamWriter.Write(TagUtils.T_TAG_WITH_DOUBLE_SLASH);
 						break;
 					default:
 						_streamWriter.Write(c);
@@ -202,7 +202,7 @@ namespace CizaSaveLoadModule.Implement
 		{
 			_streamWriter.Write(Environment.NewLine);
 			for (var i = 0; i < _serializationDepth; i++)
-				_streamWriter.Write(TagUtils.LOWER_T_TAG_WITH_SLASH);
+				_streamWriter.Write(TagUtils.T_TAG_WITH_SLASH);
 		}
 
 		private void WriteCommaIfRequired()

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-    [UnityEngine.Scripting.Preserve]
-    public class DictionaryDataType : DataType
+    public class DictionaryDataType : BaseDataType
     {
-        private readonly DataType _keyDataType;
-        private readonly DataType _valueDataType;
+        private readonly BaseDataType _keyDataType;
+        private readonly BaseDataType _valueDataType;
 
-        public DictionaryDataType(Type type, DataType keyDataType, DataType valueDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
+        [Preserve]
+        public DictionaryDataType(Type type, BaseDataType keyDataType, BaseDataType valueDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
         {
             _keyDataType = keyDataType;
             _valueDataType = valueDataType;

@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
 	public class StackDataType : CollectionDataType
 	{
-		public StackDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
+		[Preserve]
+		public StackDataType(Type type, BaseDataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
 
 		public override void Write(object obj, IWriter writer)
 		{

@@ -5,6 +5,6 @@ namespace DataType
 {
     public interface IDataTypeController
     {
-        DataType GetOrCreateDataType(Type key);
+        BaseDataType GetOrCreateDataType(Type key);
     }
 }

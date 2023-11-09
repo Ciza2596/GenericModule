@@ -3,7 +3,7 @@
 namespace DataType
 {
 	[UnityEngine.Scripting.Preserve]
-	public class Vector2IntDataType : DataType
+	public class Vector2IntDataType : BaseDataType
 	{
 		private readonly IntDataType _intDataType;
 
@@ -13,8 +13,8 @@ namespace DataType
 		public override void Write(object obj, IWriter writer)
 		{
 			var vector2Int = (Vector2Int)obj;
-			writer.WriteProperty("x", vector2Int.x, _intDataType);
-			writer.WriteProperty("y", vector2Int.y, _intDataType);
+			writer.WriteProperty(TagUtils.X_TAG, vector2Int.x, _intDataType);
+			writer.WriteProperty(TagUtils.Y_TAG, vector2Int.y, _intDataType);
 		}
 
 		public override object Read<T>(IReader reader) =>

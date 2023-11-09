@@ -1,10 +1,11 @@
 ﻿using System;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	public abstract class ObjectType : DataType
+	public abstract class ObjectType : BaseDataType
 	{
+		[Preserve]
 		protected ObjectType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper) { }
 
 		protected abstract void WriteObject(object      obj, IWriter writer);
@@ -24,7 +25,7 @@ namespace DataType
 
 					// If it's a Dictionary or Collection, we need to write it as a field with a property name.
 					if (dataType != null && (dataType.IsDictionary || dataType.IsCollection))
-						writer.WriteProperty("_Values", obj, dataType);
+						writer.WriteProperty(TagUtils.VALUE_TAG, obj, dataType);
 				}
 
 				WriteObject(obj, writer);
@@ -37,7 +38,7 @@ namespace DataType
 			{
 				var propertyName = ReadPropertyName(reader);
 
-				if (propertyName == TYPE_TAG)
+				if (propertyName == TagUtils.TYPE_TAG)
 					return _dataTypeController.GetOrCreateDataType(reader.ReadType()).Read<T>(reader);
 
 				reader.SetOverridePropertyName(propertyName);
@@ -51,7 +52,7 @@ namespace DataType
 			{
 				var propertyName = ReadPropertyName(reader);
 
-				if (propertyName == TYPE_TAG)
+				if (propertyName == TagUtils.TYPE_TAG)
 				{
 					var readType = reader.ReadType();
 					var dataType = _dataTypeController.GetOrCreateDataType(readType);

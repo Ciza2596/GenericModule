@@ -67,7 +67,7 @@ namespace CizaSaveLoadModule.Implement
 
 		public abstract string ReadString();
 
-		public void ReadInto<T>(object obj, DataType.DataType dataType)
+		public void ReadInto<T>(object obj, BaseDataType dataType)
 		{
 			if (dataType.IsCollection)
 				((CollectionDataType)dataType).ReadInto(this, obj);
@@ -81,13 +81,13 @@ namespace CizaSaveLoadModule.Implement
 
 		public abstract string ReadPropertyName();
 
-		public T ReadProperty<T>(DataType.DataType dataType)
+		public T ReadProperty<T>(BaseDataType dataType)
 		{
 			ReadPropertyName();
 			return Read<T>(dataType);
 		}
 
-		public T Read<T>(DataType.DataType dataType)
+		public T Read<T>(BaseDataType dataType)
 		{
 			if (dataType.IsPrimitive)
 				return (T)dataType.Read<T>(this);
@@ -153,7 +153,7 @@ namespace CizaSaveLoadModule.Implement
 			return true;
 		}
 
-		private void ReadObject<T>(object obj, DataType.DataType dataType)
+		private void ReadObject<T>(object obj, BaseDataType dataType)
 		{
 			// Check for null.
 			if (StartReadObject())
@@ -164,7 +164,7 @@ namespace CizaSaveLoadModule.Implement
 			EndReadObject();
 		}
 
-		private T ReadObject<T>(DataType.DataType dataType)
+		private T ReadObject<T>(BaseDataType dataType)
 		{
 			if (StartReadObject())
 				return default;

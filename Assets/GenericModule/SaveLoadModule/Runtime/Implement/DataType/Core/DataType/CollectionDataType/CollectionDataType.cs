@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	public abstract class CollectionDataType : DataType
+	public abstract class CollectionDataType : BaseDataType
 	{
-		protected readonly DataType _elementDataType;
+		protected readonly BaseDataType _elementDataType;
 		
-		protected CollectionDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
+		[Preserve]
+		protected CollectionDataType(Type type, BaseDataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper)
 		{
 			_elementDataType = elementDataType;
 			IsCollection = true;
@@ -22,7 +24,7 @@ namespace DataType
         public abstract void ReadInto(IReader reader, object obj);
         public abstract override void Write(object obj, IWriter writer);
 
-        protected virtual bool ReadICollection<T>(IReader reader, ICollection<T> collection, DataType elementType)
+        protected virtual bool ReadICollection<T>(IReader reader, ICollection<T> collection, BaseDataType elementType)
 		{
 			if(reader.StartReadCollection())
 				return false;
@@ -43,7 +45,7 @@ namespace DataType
 			return true;
 		}
 
-        protected virtual void ReadICollectionInto(IReader reader, ICollection collection, DataType dataType)
+        protected virtual void ReadICollectionInto(IReader reader, ICollection collection, BaseDataType dataType)
 		{
 			if(reader.StartReadCollection())
 				throw new NullReferenceException("[CollectionDataType::ReadICollectionInto] The Collection we are trying to load is stored as null, which is not allowed when using ReadInto methods.");

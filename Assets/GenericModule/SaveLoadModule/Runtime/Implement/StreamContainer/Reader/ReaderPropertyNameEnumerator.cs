@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
@@ -7,6 +8,7 @@ namespace CizaSaveLoadModule.Implement
 	{
 		private DataType.IReader _reader;
 
+		[Preserve]
 		public ReaderPropertyNameEnumerator(DataType.IReader reader) =>
 			_reader = reader;
 

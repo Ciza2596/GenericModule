@@ -1,10 +1,11 @@
 ﻿using System;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	internal class ReflectedDataType : DataType
+	internal class ReflectedDataType : BaseDataType
 	{
+		[Preserve]
 		public ReflectedDataType(Type type, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, dataTypeController, reflectionHelper) { }
 
 		public override void Write(object obj, IWriter writer)
@@ -48,7 +49,7 @@ namespace DataType
 			var propertyName = reader.ReadPropertyName();
 
 			// If we're loading a derived type, use it's specific ES3Type.
-			if (propertyName == TYPE_TAG)
+			if (propertyName == TagUtils.TYPE_TAG)
 			{
 				var type     = reader.ReadType();
 				var dataType = _dataTypeController.GetOrCreateDataType(type);
@@ -75,7 +76,7 @@ namespace DataType
 			string propertyName = reader.ReadPropertyName();
 
 			// If we're loading a derived type, use it's specific ES3Type.
-			if (propertyName == TYPE_TAG)
+			if (propertyName == TagUtils.TYPE_TAG)
 			{
 				var type     = reader.ReadType();
 				var dataType = _dataTypeController.GetOrCreateDataType(type);

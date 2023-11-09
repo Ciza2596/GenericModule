@@ -31,12 +31,12 @@ namespace DataType
         ulong ReadUlong();
         ushort ReadUshort();
         string ReadString();
-        void ReadInto<T>(object obj, DataType dataType);
+        void ReadInto<T>(object obj, BaseDataType dataType);
         
         
         string ReadPropertyName();
-        T ReadProperty<T>(DataType dataType);
-        T Read<T>(DataType dataType);
+        T ReadProperty<T>(BaseDataType dataType);
+        T Read<T>(BaseDataType dataType);
         
         
         

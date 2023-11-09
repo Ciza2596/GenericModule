@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
@@ -10,6 +11,7 @@ namespace DataType.Implement
         
 
         //constructor
+        [Preserve]
         public Field(FieldInfo fieldInfo) =>
             _fieldInfo = fieldInfo;
         

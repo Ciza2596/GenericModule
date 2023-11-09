@@ -1,8 +1,10 @@
-﻿namespace DataType
+﻿using UnityEngine.Scripting;
+
+namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	public class StringDataType : DataType
+	public class StringDataType : BaseDataType
 	{
+		[Preserve]
 		public StringDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
 		                                                                                                         typeof(string), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
@@ -15,6 +17,7 @@
 
 	public class StringArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public StringArrayDataType(StringDataType stringElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
 		                                                                                                                                                    typeof(string[]), stringElementDataType, dataTypeController, reflectionHelper) { }
 	}

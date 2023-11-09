@@ -1,8 +1,10 @@
-﻿namespace DataType
+﻿using UnityEngine.Scripting;
+
+namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
-	public class ShortDataType : DataType
+	public class ShortDataType : BaseDataType
 	{
+		[Preserve]
 		public ShortDataType(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(short), dataTypeController, reflectionHelper) => IsPrimitive = true;
 
 		public override void Write(object obj, IWriter writer) =>
@@ -14,6 +16,7 @@
 
 	public class ShortArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public ShortArrayDataType(ShortDataType shortElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(
 		                                                                                                                                                 typeof(short[]), shortElementDataType, dataTypeController, reflectionHelper) { }
 	}

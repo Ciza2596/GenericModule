@@ -130,20 +130,20 @@ namespace CizaSaveLoadModule.Implement
 
 					switch (c)
 					{
-						case TagUtils.LOWER_B_TAG:
-							c = TagUtils.LOWER_B_TAG_WITH_SLASH;
+						case TagUtils.B_TAG:
+							c = TagUtils.B_TAG_WITH_SLASH;
 							break;
-						case TagUtils.LOWER_F_TAG:
-							c = TagUtils.LOWER_F_TAG_WITH_SLASH;
+						case TagUtils.F_TAG:
+							c = TagUtils.F_TAG_WITH_SLASH;
 							break;
-						case TagUtils.LOWER_N_TAG:
-							c = TagUtils.LOWER_N_TAG_WITH_SLASH;
+						case TagUtils.N_TAG:
+							c = TagUtils.N_TAG_WITH_SLASH;
 							break;
-						case TagUtils.LOWER_R_TAG:
-							c = TagUtils.LOWER_R_TAG_WITH_SLASH;
+						case TagUtils.R_TAG:
+							c = TagUtils.R_TAG_WITH_SLASH;
 							break;
-						case TagUtils.LOWER_T_TAG:
-							c = TagUtils.LOWER_T_TAG_WITH_SLASH;
+						case TagUtils.T_TAG:
+							c = TagUtils.T_TAG_WITH_SLASH;
 							break;
 					}
 				}
@@ -310,7 +310,7 @@ namespace CizaSaveLoadModule.Implement
 			StartReadObject();
 
 			var propertyName = ReadPropertyName();
-			if (propertyName == DataType.DataType.TYPE_TAG)
+			if (propertyName == TagUtils.TYPE_TAG)
 			{
 				var typeString = ReadString();
 				var type       = _reflectionHelper.GetType(typeString);
@@ -351,11 +351,11 @@ namespace CizaSaveLoadModule.Implement
 			var c = ReadCharIgnoreWhiteSpace();
 
 			// Check for null
-			if (c == TagUtils.LOWER_N_TAG)
+			if (c == TagUtils.N_TAG)
 			{
 				var chars = new char[3];
 				_streamReader.ReadBlock(chars, 0, 3);
-				if (chars[0] == TagUtils.LOWER_U_TAG && chars[1] == TagUtils.LOWER_L_TAG && chars[2] == TagUtils.LOWER_L_TAG)
+				if (chars[0] == TagUtils.U_TAG && chars[1] == TagUtils.L_TAG && chars[2] == TagUtils.L_TAG)
 					return true;
 			}
 
@@ -388,11 +388,11 @@ namespace CizaSaveLoadModule.Implement
 		{
 			var c = ReadCharIgnoreWhiteSpace(false); // Don't read trailing whitespace as this is the value.
 
-			if (c == TagUtils.LOWER_N_TAG)
+			if (c == TagUtils.N_TAG)
 			{
 				var chars = new char[3];
 				_streamReader.ReadBlock(chars, 0, 3);
-				if (chars[0] == TagUtils.LOWER_U_TAG && chars[1] == TagUtils.LOWER_L_TAG && chars[2] == TagUtils.LOWER_L_TAG)
+				if (chars[0] == TagUtils.U_TAG && chars[1] == TagUtils.L_TAG && chars[2] == TagUtils.L_TAG)
 					return true;
 			}
 			else if (!IsQuotationMark(c))
@@ -417,19 +417,19 @@ namespace CizaSaveLoadModule.Implement
 		}
 
 		private bool IsWhiteSpace(char c) =>
-			(c == TagUtils.SPACE_TAG || c == TagUtils.LOWER_T_TAG_WITH_SLASH || c == TagUtils.LOWER_N_TAG_WITH_SLASH || c == TagUtils.LOWER_R_TAG_WITH_SLASH);
+			(c == TagUtils.SPACE_TAG || c == TagUtils.T_TAG_WITH_SLASH || c == TagUtils.N_TAG_WITH_SLASH || c == TagUtils.R_TAG_WITH_SLASH);
 
 		private bool IsOpeningBrace(char c) =>
 			(c == TagUtils.LEFT_CURLY_BRACE || c == TagUtils.LEFT_SQUARE_BRACE);
 
 		private bool IsEndOfValue(char c) =>
-			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.SPACE_TAG || c == TagUtils.LOWER_T_TAG_WITH_SLASH || c == TagUtils.RIGHT_SQUARE_BRACE || c == TagUtils.COMMA_TAG || c == TagUtils.COLON_TAG || c == TagUtils.END_OF_STREAM_TAG || c == TagUtils.LOWER_N_TAG_WITH_SLASH || c == TagUtils.LOWER_R_TAG_WITH_SLASH);
+			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.SPACE_TAG || c == TagUtils.T_TAG_WITH_SLASH || c == TagUtils.RIGHT_SQUARE_BRACE || c == TagUtils.COMMA_TAG || c == TagUtils.COLON_TAG || c == TagUtils.END_OF_STREAM_TAG || c == TagUtils.N_TAG_WITH_SLASH || c == TagUtils.R_TAG_WITH_SLASH);
 
 		private bool IsTerminator(char c) =>
 			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.RIGHT_SQUARE_BRACE);
 
 		private bool IsQuotationMark(char c) =>
-			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG || c == TagUtils.QUOTATION_TAG;
+			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG;
 
 		private bool IsEndOfStream(char c) =>
 			c == TagUtils.END_OF_STREAM_TAG;

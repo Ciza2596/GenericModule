@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
 	public class ListDataType : CollectionDataType
 	{
-		public ListDataType(Type type, DataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
+		[Preserve]
+		public ListDataType(Type type, BaseDataType elementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(type, elementDataType, dataTypeController, reflectionHelper) { }
 
 		public override void Write(object obj, IWriter writer)
 		{

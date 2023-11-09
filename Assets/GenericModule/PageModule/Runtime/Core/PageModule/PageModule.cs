@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
 namespace CizaPageModule
@@ -12,6 +13,7 @@ namespace CizaPageModule
 		private readonly IPageModuleConfig _pageModuleConfig;
 
 		//constructor
+		[Preserve]
 		public PageModule(IPageModuleConfig pageModuleConfig)
 		{
 			_pageContainer    = new PageContainer();

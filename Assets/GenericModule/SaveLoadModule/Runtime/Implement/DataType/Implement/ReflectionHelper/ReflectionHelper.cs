@@ -8,7 +8,7 @@ using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
-	[Serializable]
+	[Preserve]
 	public class ReflectionHelper : IReflectionHelper
 	{
 		//private variable

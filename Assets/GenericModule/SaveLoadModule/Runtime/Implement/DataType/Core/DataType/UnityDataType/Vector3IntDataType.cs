@@ -8,6 +8,7 @@ namespace DataType
 	{
 		private readonly IntDataType _intDataType;
 
+		[Preserve]
 		public Vector3IntDataType(IntDataType intDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector3Int), dataTypeController, reflectionHelper) =>
 			_intDataType = intDataType;
 
@@ -23,8 +24,10 @@ namespace DataType
 			new Vector3Int(reader.ReadProperty<int>(_intDataType), reader.ReadProperty<int>(_intDataType), reader.ReadProperty<int>(_intDataType));
 	}
 
+	[Preserve]
 	public class Vector3IntArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public Vector3IntArrayDataType(Vector3IntDataType vector3IntElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector3Int[]), vector3IntElementDataType, dataTypeController, reflectionHelper) { }
 	}
 }

@@ -4,6 +4,7 @@ using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class ReaderPropertyNameEnumerator : IEnumerable<string>
 	{
 		private DataType.IReader _reader;

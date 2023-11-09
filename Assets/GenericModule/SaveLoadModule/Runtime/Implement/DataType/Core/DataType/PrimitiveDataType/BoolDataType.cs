@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class BoolDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadBool();
 	}
 
+	[Preserve]
 	public class BoolArrayDataType : ArrayDataType
 	{
 		[Preserve]

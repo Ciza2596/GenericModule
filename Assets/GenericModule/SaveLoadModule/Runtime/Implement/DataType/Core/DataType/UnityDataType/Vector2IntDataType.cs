@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
+	[Preserve]
 	public class Vector2IntDataType : BaseDataType
 	{
 		private readonly IntDataType _intDataType;
 
+		[Preserve]
 		public Vector2IntDataType(IntDataType intDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector2Int), dataTypeController, reflectionHelper) =>
 			_intDataType = intDataType;
 
@@ -21,8 +23,10 @@ namespace DataType
 			new Vector2Int(reader.ReadProperty<int>(_intDataType), reader.ReadProperty<int>(_intDataType));
 	}
 
+	[Preserve]
 	public class Vector2IntArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public Vector2IntArrayDataType(Vector2IntDataType vector2IntElementDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector2Int[]), vector2IntElementDataType, dataTypeController, reflectionHelper) { }
 	}
 }

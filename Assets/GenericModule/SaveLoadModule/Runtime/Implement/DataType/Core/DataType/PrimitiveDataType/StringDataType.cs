@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class StringDataType : BaseDataType
 	{
 		[Preserve]
@@ -15,6 +16,7 @@ namespace DataType
 			reader.ReadString();
 	}
 
+	[Preserve]
 	public class StringArrayDataType : ArrayDataType
 	{
 		[Preserve]

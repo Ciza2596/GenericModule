@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class TagUtils
 	{
 		public const string TYPE_TAG  = "@type";

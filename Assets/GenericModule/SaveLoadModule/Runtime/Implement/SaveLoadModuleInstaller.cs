@@ -1,7 +1,9 @@
 using DataType.Implement;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class SaveLoadModuleInstaller
 	{
 		public static SaveLoadModule Install(ISaveLoadModuleConfig saveLoadModuleConfig, IReflectionHelperConfig reflectionHelperConfig)

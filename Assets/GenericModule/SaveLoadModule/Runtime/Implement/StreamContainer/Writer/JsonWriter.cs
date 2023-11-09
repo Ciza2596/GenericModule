@@ -2,9 +2,11 @@ using System;
 using System.Globalization;
 using System.IO;
 using DataType;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class JsonWriter : BaseWriter
 	{
 		private const string TRUE_NAME  = "true";
@@ -18,6 +20,7 @@ namespace CizaSaveLoadModule.Implement
 
 		private bool _isFirstProperty = true;
 
+		[Preserve]
 		public JsonWriter(Stream stream, System.Text.Encoding encoding, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(dataTypeController, reflectionHelper)
 		{
 			_streamWriter = new StreamWriter(stream);

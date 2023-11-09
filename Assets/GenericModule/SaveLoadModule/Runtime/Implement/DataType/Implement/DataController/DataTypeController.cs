@@ -7,6 +7,7 @@ using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
+	[Preserve]
 	public class DataTypeController
 	{
 		//private variable

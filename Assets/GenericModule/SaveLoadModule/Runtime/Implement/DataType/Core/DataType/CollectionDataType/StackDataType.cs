@@ -6,6 +6,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class StackDataType : CollectionDataType
 	{
 		[Preserve]

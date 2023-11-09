@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DataType
 {
-	[UnityEngine.Scripting.Preserve]
+	[Preserve]
 	public class Vector3DataType : BaseDataType
 	{
 		private readonly FloatDataType _floatDataType;
 
+		[Preserve]
 		public Vector3DataType(FloatDataType floatDataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector3), dataTypeController, reflectionHelper) =>
 			_floatDataType = floatDataType;
 
@@ -22,8 +24,10 @@ namespace DataType
 			new Vector3(reader.ReadProperty<float>(_floatDataType), reader.ReadProperty<float>(_floatDataType), reader.ReadProperty<float>(_floatDataType));
 	}
 
+	[Preserve]
 	public class Vector3ArrayDataType : ArrayDataType
 	{
+		[Preserve]
 		public Vector3ArrayDataType(Vector3DataType vector3DataType, IDataTypeController dataTypeController, IReflectionHelper reflectionHelper) : base(typeof(Vector3[]), vector3DataType, dataTypeController, reflectionHelper) { }
 	}
 }

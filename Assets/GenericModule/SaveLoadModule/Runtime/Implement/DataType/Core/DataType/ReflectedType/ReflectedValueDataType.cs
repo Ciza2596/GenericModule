@@ -3,6 +3,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	internal class ReflectedValueDataType : BaseDataType
 	{
 		[Preserve]

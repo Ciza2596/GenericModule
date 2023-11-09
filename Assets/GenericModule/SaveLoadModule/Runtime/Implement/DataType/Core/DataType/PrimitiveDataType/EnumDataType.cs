@@ -3,6 +3,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class EnumDataType : BaseDataType
 	{
 		//private variable

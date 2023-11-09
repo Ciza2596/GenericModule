@@ -5,6 +5,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class HashSetDataType : CollectionDataType
 	{
 		[Preserve]

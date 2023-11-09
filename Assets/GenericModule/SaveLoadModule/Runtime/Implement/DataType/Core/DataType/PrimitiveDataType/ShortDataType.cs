@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class ShortDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadShort();
 	}
 
+	[Preserve]
 	public class ShortArrayDataType : ArrayDataType
 	{
 		[Preserve]

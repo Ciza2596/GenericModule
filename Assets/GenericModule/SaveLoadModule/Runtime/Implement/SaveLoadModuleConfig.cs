@@ -1,9 +1,11 @@
 using System.Text;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
 	[CreateAssetMenu(fileName = "SaveLoadModuleConfig", menuName = "Ciza/SaveLoadModule/SaveLoadModuleConfig")]
+	[Preserve]
 	public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig
 	{
 		private enum Directories

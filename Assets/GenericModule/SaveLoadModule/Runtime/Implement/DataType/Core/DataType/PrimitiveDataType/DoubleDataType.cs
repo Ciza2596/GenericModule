@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class DoubleDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadDouble();
 	}
 
+	[Preserve]
 	public class DoubleArrayDataType : ArrayDataType
 	{
 		[Preserve]

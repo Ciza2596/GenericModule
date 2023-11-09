@@ -4,6 +4,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public abstract class BaseDataType
 	{
 		//protected variable

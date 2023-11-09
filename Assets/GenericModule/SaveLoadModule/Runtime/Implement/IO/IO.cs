@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class Io : IIo
 	{
 		public bool CheckIsExist(string fullPath) =>

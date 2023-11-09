@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using DataType;
 using UnityEngine.Assertions;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public abstract class BaseWriter : IWriter, DataType.IWriter
 	{
 		private const string VALUE_TAG = "@value";
@@ -16,6 +18,7 @@ namespace CizaSaveLoadModule.Implement
 		protected        int             _serializationDepth;
 
 		//constructor
+		[Preserve]
 		protected BaseWriter(IDataTypeController dataTypeController, IReflectionHelper reflectionHelper)
 		{
 			_dataTypeController = dataTypeController;

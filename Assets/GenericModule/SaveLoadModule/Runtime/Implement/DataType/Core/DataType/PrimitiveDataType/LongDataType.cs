@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class LongDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadLong();
 	}
 
+	[Preserve]
 	public class LongArrayDataType : ArrayDataType
 	{
 		[Preserve]

@@ -3,6 +3,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public abstract class ObjectType : BaseDataType
 	{
 		[Preserve]

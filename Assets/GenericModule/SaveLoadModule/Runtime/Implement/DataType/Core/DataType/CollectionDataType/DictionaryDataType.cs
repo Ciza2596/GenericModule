@@ -5,6 +5,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+    [Preserve]
     public class DictionaryDataType : BaseDataType
     {
         private readonly BaseDataType _keyDataType;

@@ -1,6 +1,7 @@
 
 
 using System;
+using UnityEngine.Scripting;
 
 namespace DataType
 {

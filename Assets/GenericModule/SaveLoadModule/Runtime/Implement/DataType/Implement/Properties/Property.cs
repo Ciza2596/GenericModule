@@ -4,6 +4,7 @@ using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
+    [Preserve]
     public class Property : IProperty
     {
         //private variable

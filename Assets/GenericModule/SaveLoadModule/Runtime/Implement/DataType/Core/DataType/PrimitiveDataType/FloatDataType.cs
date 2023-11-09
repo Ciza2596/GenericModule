@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class FloatDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadFloat();
 	}
 
+	[Preserve]
 	public class FloatArrayDataType : ArrayDataType
 	{
 		[Preserve]

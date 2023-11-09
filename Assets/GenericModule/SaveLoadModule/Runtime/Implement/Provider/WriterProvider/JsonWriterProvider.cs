@@ -5,6 +5,7 @@ using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class JsonWriterProvider : IWriterProvider
 	{
 		//private variable

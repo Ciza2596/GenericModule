@@ -3,6 +3,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class DateTimeDataType : BaseDataType
 	{
 		private readonly LongDataType _longDataType;
@@ -21,6 +22,7 @@ namespace DataType
 		}
 	}
 
+	[Preserve]
 	public class DateTimeArrayDataType : ArrayDataType
 	{
 		[Preserve]

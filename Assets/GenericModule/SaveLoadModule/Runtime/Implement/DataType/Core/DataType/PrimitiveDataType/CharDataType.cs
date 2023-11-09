@@ -2,6 +2,7 @@
 
 namespace DataType
 {
+	[Preserve]
 	public class CharDataType : BaseDataType
 	{
 		[Preserve]
@@ -14,6 +15,7 @@ namespace DataType
 			(T)(object)reader.ReadChar();
 	}
 
+	[Preserve]
 	public class CharArrayDataType : ArrayDataType
 	{
 		[Preserve]

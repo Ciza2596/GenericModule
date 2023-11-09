@@ -4,6 +4,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public class Array3DDataType : CollectionDataType
 	{
 		[Preserve]

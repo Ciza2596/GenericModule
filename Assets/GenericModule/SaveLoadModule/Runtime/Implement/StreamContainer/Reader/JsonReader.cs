@@ -8,13 +8,19 @@ using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
+	[Preserve]
 	public class JsonReader : BaseReader
 	{
+		[Preserve]
 		private readonly IFormatProvider INVARIANT_CULTURE = CultureInfo.InvariantCulture;
 
-		private readonly StreamReader      _streamReader;
+		[Preserve]
+		private readonly StreamReader _streamReader;
+
+		[Preserve]
 		private readonly IReflectionHelper _reflectionHelper;
 
+		[Preserve]
 		private readonly int _bufferSize;
 
 		[Preserve]
@@ -27,6 +33,7 @@ namespace CizaSaveLoadModule.Implement
 			SkipOpeningBraceOfFile();
 		}
 
+		[Preserve]
 		public override Type ReadType()
 		{
 			var dataType   = _dataTypeController.GetOrCreateDataType(typeof(string));
@@ -34,84 +41,98 @@ namespace CizaSaveLoadModule.Implement
 			return _reflectionHelper.GetType(typeString);
 		}
 
+		[Preserve]
 		public override int ReadInt()
 		{
 			var valueString = GetValueString();
 			return int.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override bool ReadBool()
 		{
 			var valueString = GetValueString();
 			return bool.Parse(valueString);
 		}
 
+		[Preserve]
 		public override byte ReadByte()
 		{
 			var valueString = GetValueString();
 			return byte.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override char ReadChar()
 		{
 			var readString = ReadString();
 			return char.Parse(readString);
 		}
 
+		[Preserve]
 		public override decimal ReadDecimal()
 		{
 			var valueString = GetValueString();
 			return decimal.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override double ReadDouble()
 		{
 			var valueString = GetValueString();
 			return double.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override float ReadFloat()
 		{
 			var valueString = GetValueString();
 			return float.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override long ReadLong()
 		{
 			var valueString = GetValueString();
 			return long.Parse(valueString, INVARIANT_CULTURE);
 		}
 
+		[Preserve]
 		public override sbyte ReadSbyte()
 		{
 			var valueString = GetValueString();
 			return sbyte.Parse(valueString);
 		}
 
+		[Preserve]
 		public override short ReadShort()
 		{
 			var valueString = GetValueString();
 			return short.Parse(valueString);
 		}
 
+		[Preserve]
 		public override uint ReadUint()
 		{
 			var valueString = GetValueString();
 			return uint.Parse(valueString);
 		}
 
+		[Preserve]
 		public override ulong ReadUlong()
 		{
 			var valueString = GetValueString();
 			return ulong.Parse(valueString);
 		}
 
+		[Preserve]
 		public override ushort ReadUshort()
 		{
 			var valueString = GetValueString();
 			return ushort.Parse(valueString);
 		}
 
+		[Preserve]
 		public override string ReadString()
 		{
 			if (ReadQuotationMarkOrNullIgnoreWhitespace())
@@ -172,10 +193,13 @@ namespace CizaSaveLoadModule.Implement
 			return propertyName;
 		}
 
+		[Preserve]
 		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE);
 
+		[Preserve]
 		public override void EndReadCollection() { }
 
+		[Preserve]
 		public override bool StartReadCollectionItem()
 		{
 			if (PeekCharIgnoreWhiteSpace() == TagUtils.RIGHT_SQUARE_BRACE)
@@ -187,17 +211,21 @@ namespace CizaSaveLoadModule.Implement
 			return true;
 		}
 
+		[Preserve]
 		public override bool EndReadCollectionItem()
 		{
 			var c = ReadCharIgnoreWhiteSpace();
 			return c == TagUtils.RIGHT_SQUARE_BRACE;
 		}
 
+		[Preserve]
 		public override bool StartReadDictionary() =>
 			StartReadObject();
 
+		[Preserve]
 		public override void EndReadDictionary() { }
 
+		[Preserve]
 		public override bool StartReadDictionaryKey()
 		{
 			if (PeekCharIgnoreWhiteSpace() == TagUtils.RIGHT_CURLY_BRACE)
@@ -209,26 +237,32 @@ namespace CizaSaveLoadModule.Implement
 			return true;
 		}
 
+		[Preserve]
 		public override void EndReadDictionaryKey() =>
 			ReadCharIgnoreWhiteSpace(TagUtils.COLON_TAG);
 
+		[Preserve]
 		public override void StartReadDictionaryValue() { }
 
+		[Preserve]
 		public override bool EndReadDictionaryValue()
 		{
 			var c = ReadCharIgnoreWhiteSpace();
 			return c == TagUtils.RIGHT_CURLY_BRACE;
 		}
 
+		[Preserve]
 		public override void Dispose() =>
 			_streamReader.Dispose();
 
+		[Preserve]
 		protected override bool StartReadObject()
 		{
 			base.StartReadObject();
 			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE);
 		}
 
+		[Preserve]
 		protected override void EndReadObject()
 		{
 			ReadCharIgnoreWhiteSpace(TagUtils.RIGHT_CURLY_BRACE);
@@ -309,6 +343,7 @@ namespace CizaSaveLoadModule.Implement
 			}
 		}
 
+		[Preserve]
 		protected override Type ReadKeyPrefix()
 		{
 			StartReadObject();
@@ -325,16 +360,19 @@ namespace CizaSaveLoadModule.Implement
 			return null;
 		}
 
+		[Preserve]
 		protected override void ReadKeySuffix() =>
 			EndReadObject();
 
 		//private method
+		[Preserve]
 		private void SkipOpeningBraceOfFile()
 		{
 			var firstChar = ReadCharIgnoreWhiteSpace();
 			Assert.IsTrue(firstChar is TagUtils.LEFT_CURLY_BRACE, $"[JsonReader::SkipOpeningBraceOfFile] File is not valid JSON. Expected '{{' at beginning of file, but found '{firstChar}'.");
 		}
 
+		[Preserve]
 		private char ReadCharIgnoreWhiteSpace(bool isIgnoreTrailingWhitespace = true)
 		{
 			char c;
@@ -350,6 +388,7 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
+		[Preserve]
 		private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar)
 		{
 			var c = ReadCharIgnoreWhiteSpace();
@@ -375,6 +414,7 @@ namespace CizaSaveLoadModule.Implement
 			return false;
 		}
 
+		[Preserve]
 		private char ReadCharIgnoreWhiteSpace(char expectedChar)
 		{
 			char c = ReadCharIgnoreWhiteSpace();
@@ -389,6 +429,7 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
+		[Preserve]
 		private bool ReadQuotationMarkOrNullIgnoreWhitespace()
 		{
 			var c = ReadCharIgnoreWhiteSpace(false); // Don't read trailing whitespace as this is the value.
@@ -411,6 +452,7 @@ namespace CizaSaveLoadModule.Implement
 			return false;
 		}
 
+		[Preserve]
 		private char PeekCharIgnoreWhiteSpace()
 		{
 			char c;
@@ -421,24 +463,31 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
+		[Preserve]
 		private bool IsWhiteSpace(char c) =>
 			(c == TagUtils.SPACE_TAG || c == TagUtils.T_TAG_WITH_SLASH || c == TagUtils.N_TAG_WITH_SLASH || c == TagUtils.R_TAG_WITH_SLASH);
 
+		[Preserve]
 		private bool IsOpeningBrace(char c) =>
 			(c == TagUtils.LEFT_CURLY_BRACE || c == TagUtils.LEFT_SQUARE_BRACE);
 
+		[Preserve]
 		private bool IsEndOfValue(char c) =>
 			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.SPACE_TAG || c == TagUtils.T_TAG_WITH_SLASH || c == TagUtils.RIGHT_SQUARE_BRACE || c == TagUtils.COMMA_TAG || c == TagUtils.COLON_TAG || c == TagUtils.END_OF_STREAM_TAG || c == TagUtils.N_TAG_WITH_SLASH || c == TagUtils.R_TAG_WITH_SLASH);
 
+		[Preserve]
 		private bool IsTerminator(char c) =>
 			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.RIGHT_SQUARE_BRACE);
 
+		[Preserve]
 		private bool IsQuotationMark(char c) =>
 			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG_1 || c == TagUtils.QUOTATION_TAG_2;
 
+		[Preserve]
 		private bool IsEndOfStream(char c) =>
 			c == TagUtils.END_OF_STREAM_TAG;
 
+		[Preserve]
 		private string GetValueString()
 		{
 			var stringBuilder = new StringBuilder();
@@ -451,6 +500,7 @@ namespace CizaSaveLoadModule.Implement
 			return stringBuilder.ToString();
 		}
 
+		[Preserve]
 		private char ReadOrSkipChar(StreamWriter writer, bool skip)
 		{
 			var c = (char)_streamReader.Read();
@@ -460,6 +510,7 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
+		[Preserve]
 		private void ReadString(StreamWriter writer, bool skip = false)
 		{
 			bool isEndOfString = false;

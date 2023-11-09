@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-
+using UnityEngine.Scripting;
 
 namespace DataType.Implement
 {
+    [Preserve]
     public class PrimitiveDataTypeControllerInstaller : IDataTypeControllerInstaller
     {
         private Dictionary<Type, BaseDataType> _dataTypes;

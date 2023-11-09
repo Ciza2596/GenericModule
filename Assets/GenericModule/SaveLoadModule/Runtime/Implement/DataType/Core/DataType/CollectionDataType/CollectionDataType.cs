@@ -5,6 +5,7 @@ using UnityEngine.Scripting;
 
 namespace DataType
 {
+	[Preserve]
 	public abstract class CollectionDataType : BaseDataType
 	{
 		protected readonly BaseDataType _elementDataType;

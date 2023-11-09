@@ -140,7 +140,7 @@ namespace CizaAddressablesModule
 			scene.ActivateAsync();
 		}
 
-		public async UniTask<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool   isActivateOnLoad = true)
+		public async UniTask<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool isActivateOnLoad = true)
 		{
 			var scene = await Addressables.LoadSceneAsync(address, loadMode, false);
 			_addressSceneMap.Add(address, scene);
@@ -186,7 +186,6 @@ namespace CizaAddressablesModule
 				}
 				catch
 				{
-					Debug.LogWarning($"[AddressablesModule::GetAssetHandleInfo] Not find object or be cancel by address: {address}.");
 					return null;
 				}
 			}

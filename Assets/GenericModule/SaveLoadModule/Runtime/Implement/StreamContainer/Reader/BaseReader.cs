@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DataType;
 using UnityEngine.Assertions;
+using UnityEngine.Scripting;
 
 namespace CizaSaveLoadModule.Implement
 {
@@ -19,6 +20,7 @@ namespace CizaSaveLoadModule.Implement
 		public string OverridePropertyName { get; private set; }
 
 		//constructor
+		[Preserve]
 		protected BaseReader(IDataTypeController dataTypeController) =>
 			_dataTypeController = dataTypeController;
 
@@ -71,10 +73,10 @@ namespace CizaSaveLoadModule.Implement
 		{
 			if (dataType.IsCollection)
 				((CollectionDataType)dataType).ReadInto(this, obj);
-			
+
 			else if (dataType.IsDictionary)
 				((DictionaryDataType)dataType).ReadInto(this, obj);
-			
+
 			else
 				ReadObject<T>(obj, dataType);
 		}
@@ -146,7 +148,7 @@ namespace CizaSaveLoadModule.Implement
 			{
 				if (currentKey is null)
 					return false;
-				
+
 				Skip();
 			}
 

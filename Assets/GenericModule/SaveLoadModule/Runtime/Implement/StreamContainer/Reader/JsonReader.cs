@@ -169,7 +169,7 @@ namespace CizaSaveLoadModule.Implement
 			return propertyName;
 		}
 
-		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE);
+		public override bool StartReadCollection() => ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_SQUARE_BRACE, false);
 
 		public override void EndReadCollection() { }
 
@@ -223,7 +223,7 @@ namespace CizaSaveLoadModule.Implement
 		protected override bool StartReadObject()
 		{
 			base.StartReadObject();
-			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE);
+			return ReadNullOrCharIgnoreWhiteSpace(TagUtils.LEFT_CURLY_BRACE, true);
 		}
 
 		protected override void EndReadObject()
@@ -346,7 +346,7 @@ namespace CizaSaveLoadModule.Implement
 			return c;
 		}
 
-		private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar)
+		private bool ReadNullOrCharIgnoreWhiteSpace(char expectedChar, bool isObject)
 		{
 			var c = ReadCharIgnoreWhiteSpace();
 
@@ -364,7 +364,8 @@ namespace CizaSaveLoadModule.Implement
 				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
 
-				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}.");
+				var readThing = isObject ? "Object" : "Collection";
+				throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] ExpectedChar {expectedChar}, but found {c}. read {readThing}.");
 			}
 
 			return false;

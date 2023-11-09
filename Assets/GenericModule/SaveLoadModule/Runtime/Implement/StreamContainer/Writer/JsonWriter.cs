@@ -36,7 +36,8 @@ namespace CizaSaveLoadModule.Implement
 				switch (c)
 				{
 					case TagUtils.SLASH_WITH_QUOTATION_TAG:
-					case TagUtils.QUOTATION_TAG:
+					case TagUtils.QUOTATION_TAG_1:
+					case TagUtils.QUOTATION_TAG_2:
 					case TagUtils.DOUBLE_SLASH_TAG:
 					case TagUtils.REVERSE_SLASH_TAG:
 						_streamWriter.Write(TagUtils.DOUBLE_SLASH_TAG);

@@ -359,7 +359,7 @@ namespace CizaSaveLoadModule.Implement
 					return true;
 			}
 
-			if (c != expectedChar)
+			if (c != expectedChar && !IsQuotationMark(c))
 			{
 				if (c == TagUtils.END_OF_STREAM_TAG)
 					throw new FormatException($"[JsonReader::ReadNullOrCharIgnoreWhiteSpace] End of stream reached when expecting expectedChar: {expectedChar}.");
@@ -430,7 +430,7 @@ namespace CizaSaveLoadModule.Implement
 			(c == TagUtils.RIGHT_CURLY_BRACE || c == TagUtils.RIGHT_SQUARE_BRACE);
 
 		private bool IsQuotationMark(char c) =>
-			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG;
+			c == TagUtils.SLASH_WITH_QUOTATION_TAG || c == TagUtils.QUOTATION_TAG_1 || c == TagUtils.QUOTATION_TAG_2;
 
 		private bool IsEndOfStream(char c) =>
 			c == TagUtils.END_OF_STREAM_TAG;

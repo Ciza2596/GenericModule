@@ -12,7 +12,7 @@ namespace DataType
 
 		public const string X_TAG = "x";
 		public const string Y_TAG = "y";
-		public const string Z_TAG  = "z";
+		public const string Z_TAG = "z";
 
 		public const string TICKS_TAG = "ticks";
 
@@ -54,7 +54,8 @@ namespace DataType
 		public const char SPACE_TAG = ' ';
 		public const char COLON_TAG = ':';
 
-		public const char QUOTATION_TAG            = '”';
+		public const char QUOTATION_TAG_1          = '“';
+		public const char QUOTATION_TAG_2          = '”';
 		public const char SLASH_WITH_QUOTATION_TAG = '\"';
 		public const char DOUBLE_SLASH_TAG         = '\\';
 
@@ -77,18 +78,15 @@ namespace DataType
 		public static readonly Type Vector2Type = typeof(Vector2);
 		public static readonly Type Vector3Type = typeof(Vector3);
 
+		public static readonly Type ListDataType = typeof(ListDataType);
 
-		public static readonly Type ListDataType    = typeof(ListDataType);
-		
 		public static readonly Type   QueueDataType    = typeof(QueueDataType);
 		public static readonly string QueueEnqueueName = nameof(Queue.Enqueue);
-		
+
 		public static readonly Type   StackDataType = typeof(StackDataType);
-		public static readonly string StackPushName     = nameof(Stack.Push);
-		
+		public static readonly string StackPushName = nameof(Stack.Push);
+
 		public static readonly Type   HashSetDataType = typeof(HashSetDataType);
-		public static readonly string HashSetAddName      = nameof(HashSet<object>.Add);
-		
-		
+		public static readonly string HashSetAddName  = nameof(HashSet<object>.Add);
 	}
 }

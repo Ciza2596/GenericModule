@@ -340,7 +340,32 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _15_HideImmediately_Some_Pages()
+	public async void _15_Hide_Some_Pages_With_Two_Step()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
+
+		//act
+		_pageContainer.OnlyCallHidingStart(_pageKey);
+		await _pageContainer.HideAsync(new[] { _pageKey });
+
+		//assert
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public void _16_HideImmediately_Some_Pages()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -364,7 +389,32 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _16_HideAll()
+	public void _17_HideImmediately_Some_Pages_With_Two_Step()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
+
+		//act
+		_pageContainer.OnlyCallHidingStart(_pageKey);
+		_pageContainer.HideImmediately(new[] { _pageKey });
+
+		//assert
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public async void _18_HideAll()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -388,7 +438,32 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _17_HideAllImmediately()
+	public async void _19_HideAll_With_Two_Step()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
+
+		//act
+		_pageContainer.OnlyCallHidingStart(_pageKey);
+		await _pageContainer.HideAllAsync();
+
+		//assert
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public void _20_HideAllImmediately()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -412,7 +487,32 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _18_Tick()
+	public void _21_HideAllImmediately_With_Two_Step()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Show_Immediately_And_Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
+
+		//act
+		_pageContainer.OnlyCallHidingStart(_pageKey);
+		_pageContainer.HideAllImmediately();
+
+		//assert
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public async void _22_Tick()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -431,7 +531,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _19_FixedTick()
+	public async void _23_FixedTick()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);

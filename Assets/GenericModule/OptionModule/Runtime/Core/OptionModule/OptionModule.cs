@@ -121,7 +121,7 @@ namespace CizaOptionModule
 				await _pageModule.HideAsync(CurrentPageIndex.ToString());
 
 			CurrentPageIndex = index;
-			await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, coordinate, isAutoTurnOffIsNew);
+			await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
 
 			IsChangingPage = false;
 

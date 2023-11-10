@@ -128,11 +128,32 @@ namespace CizaPageModule
 				Destroy(key);
 		}
 
-		public async UniTask ShowAsync(string key, Action onComplete = null, params object[] parameters) =>
-			await ShowAsync(key, false, onComplete, parameters);
+		public async UniTask ShowAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
+			await ShowAsync(key, false, onComplete, isIncludeShowingComplete, "ShowAsync", parameters);
 
-		public async UniTask ShowImmediatelyAsync(string key, Action onComplete = null, params object[] parameters) =>
-			await ShowAsync(key, true, onComplete, parameters);
+		public async UniTask ShowImmediatelyAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
+			await ShowAsync(key, true, onComplete, isIncludeShowingComplete, "ShowAsync", parameters);
+
+		public void OnlyCallShowingComplete(string key, Action onComplete = null)
+		{
+			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::OnlyCallShowingComplete] Page: {key} doesnt be created.");
+
+			var pageController = _pageControllerMapByKey[key];
+			var state          = pageController.State;
+			if (state == PageState.Showing)
+			{
+				Debug.LogWarning($"[PageContainer::OnlyCallShowingComplete] Page: {key} should be visible. Current state is {state}.");
+				return;
+			}
+
+			if (!pageController.CanCallShowingComplete)
+				return;
+
+			pageController.OnShowingComplete();
+			AddTickAndFixedTickHandle(pageController);
+
+			onComplete?.Invoke();
+		}
 
 		public async UniTask ShowAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
 			await ShowAsync(keys, false, onComplete, parameters);
@@ -140,11 +161,33 @@ namespace CizaPageModule
 		public async UniTask ShowImmediatelyAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
 			await ShowAsync(keys, true, onComplete, parameters);
 
-		public async UniTask HideAsync(string key, Action onComplete = null) =>
-			await HideAsync(key, false, onComplete);
+		public void OnlyCallHidingStart(string key, Action onComplete = null)
+		{
+			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::OnlyCallHidingStart] Page: {key} doesnt be created.");
 
-		public async void HideImmediately(string key, Action onComplete = null) =>
-			await HideAsync(key, true, onComplete);
+			var pageController = _pageControllerMapByKey[key];
+			var state          = pageController.State;
+
+			if (state != PageState.Visible)
+			{
+				Debug.LogWarning($"[PageContainer::OnlyCallHidingStart] Page: {key} should be Visible. Current state is {state}.");
+				return;
+			}
+
+			if (pageController.IsAlreadyCallHidingStart)
+				return;
+
+			pageController.OnHidingStart();
+			RemoveTickAndFixedTickHandle(pageController);
+
+			onComplete?.Invoke();
+		}
+
+		public async UniTask HideAsync(string key, Action onComplete = null, bool isIncludeHidingStart = true) =>
+			await HideAsync(key, false, onComplete, "HideAsync");
+
+		public async void HideImmediately(string key, Action onComplete = null, bool isIncludeHidingStart = true) =>
+			await HideAsync(key, true, onComplete, "HideAsync");
 
 		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
 			await HideAsync(keys, false, onComplete, true);
@@ -183,15 +226,15 @@ namespace CizaPageModule
 			_pageControllerMapByKey.Add(key, pageController);
 		}
 
-		private async UniTask ShowAsync(string key, bool isImmediately, Action onComplete, params object[] parameters)
+		private async UniTask ShowAsync(string key, bool isImmediately, Action onComplete, bool isIncludeShowingComplete, string methodName, params object[] parameters)
 		{
-			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::Show] Page: {key} doesnt be created.");
+			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::{methodName}] Page: {key} doesnt be created.");
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 			if (state != PageState.Invisible)
 			{
-				Debug.LogWarning($"[PageContainer::Show] Page: {key} is not Invisible. Current state is {state}.");
+				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be Invisible. Current state is {state}.");
 				return;
 			}
 
@@ -200,8 +243,13 @@ namespace CizaPageModule
 			if (!isImmediately)
 				await pageController.PlayShowingAnimationAsync();
 
-			pageController.OnShowingComplete();
-			AddTickAndFixedTickHandle(pageController);
+			if (isIncludeShowingComplete)
+			{
+				pageController.OnShowingComplete();
+				AddTickAndFixedTickHandle(pageController);
+			}
+			else
+				pageController.EnableCanCallShowingComplete();
 
 			onComplete?.Invoke();
 		}
@@ -255,20 +303,24 @@ namespace CizaPageModule
 			}
 		}
 
-		private async UniTask HideAsync(string key, bool isImmediately, Action onComplete)
+		private async UniTask HideAsync(string key, bool isImmediately, Action onComplete, string methodName)
 		{
-			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::Hide] Page: {key} doesnt be created.");
+			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::{methodName}] Page: {key} doesnt be created.");
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (state != PageState.Visible)
+
+			if (!(state == PageState.Visible && pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
 			{
-				Debug.LogWarning($"[PageContainer::Hide] Page: {key} is not Visible. Current state is {state}.");
+				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be Visible. Current state is {state}.");
 				return;
 			}
 
-			RemoveTickAndFixedTickHandle(pageController);
-			pageController.OnHidingStart();
+			if (!pageController.IsAlreadyCallHidingStart)
+			{
+				pageController.OnHidingStart();
+				RemoveTickAndFixedTickHandle(pageController);
+			}
 
 			if (!isImmediately)
 				await pageController.PlayHidingAnimationAsync();

@@ -12,6 +12,9 @@ namespace CizaPageModule
 
 		public PageState State { get; private set; }
 
+		public bool CanCallShowingComplete   { get; private set; }
+		public bool IsAlreadyCallHidingStart { get; private set; }
+
 		//constructor
 		public PageController(string key, Component page)
 		{
@@ -65,17 +68,22 @@ namespace CizaPageModule
 				await showingAnimated.PlayShowingAnimationAsync();
 		}
 
+		public void EnableCanCallShowingComplete() =>
+			CanCallShowingComplete = true;
+
 		public void OnShowingComplete()
 		{
 			if (Page is IShowingComplete showingComplete)
 				showingComplete.OnShowingComplete();
 
-			State = PageState.Visible;
+			State                  = PageState.Visible;
+			CanCallShowingComplete = false;
 		}
 
 		public void OnHidingStart()
 		{
-			State = PageState.Hiding;
+			State                    = PageState.Hiding;
+			IsAlreadyCallHidingStart = true;
 
 			if (Page is IHidingStart hidingStart)
 				hidingStart.OnHidingStart();
@@ -95,7 +103,8 @@ namespace CizaPageModule
 			if (Page is IHidingComplete hidingComplete)
 				hidingComplete.OnHidingComplete();
 
-			State = PageState.Invisible;
+			State                    = PageState.Invisible;
+			IsAlreadyCallHidingStart = false;
 		}
 
 		//private method

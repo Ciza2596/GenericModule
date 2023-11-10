@@ -94,6 +94,9 @@ namespace CizaPageModule
 		public void HideImmediately(string key, Action onComplete = null) =>
 			_pageContainer.HideImmediately(key, onComplete);
 
+		public void OnlyCallHidingComplete(string key, Action onComplete) =>
+			_pageContainer.OnlyCallHidingComplete(key, onComplete);
+
 		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
 			await _pageContainer.HideAsync(keys, onComplete);
 

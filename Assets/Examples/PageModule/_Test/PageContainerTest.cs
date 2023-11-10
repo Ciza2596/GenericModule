@@ -102,7 +102,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _05_Show_A_Page_With_Two_Step()
+	public async void _05_Show_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -113,6 +113,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
+		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
 		await _pageContainer.ShowAsync(_pageKey, isIncludeShowingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(_pageKey);
 
@@ -147,7 +148,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _07_ShowImmediately_A_Page_With_Two_Step()
+	public async void _07_ShowImmediately_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -158,6 +159,7 @@ public class PageContainerTest
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
+		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
 		await _pageContainer.ShowImmediatelyAsync(_pageKey, isIncludeShowingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(_pageKey);
 
@@ -238,7 +240,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _11_Hide_A_Page_With_Two_Step()
+	public async void _11_Hide_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -252,7 +254,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		await _pageContainer.HideAsync(_pageKey);
+		await _pageContainer.HideAsync(_pageKey, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallHidingComplete(_pageKey);
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -287,7 +290,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _13_HideImmediately_A_Page_With_Two_Step()
+	public void _13_HideImmediately_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -301,7 +304,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		_pageContainer.HideImmediately(_pageKey);
+		_pageContainer.HideImmediately(_pageKey, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallHidingComplete(_pageKey);
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);

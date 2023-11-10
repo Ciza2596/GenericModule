@@ -12,8 +12,13 @@ namespace CizaPageModule
 
 		public PageState State { get; private set; }
 
-		public bool CanCallShowingComplete   { get; private set; }
+		public bool IsAlreadyCallShowingStartAsync { get; private set; }
+
+		public bool IsWorkingShowingStartAsync { get; private set; }
+		public bool CanCallShowingComplete     { get; private set; }
+
 		public bool IsAlreadyCallHidingStart { get; private set; }
+		public bool CanCallHidingComplete    { get; private set; }
 
 		//constructor
 		public PageController(string key, Component page)
@@ -53,13 +58,18 @@ namespace CizaPageModule
 
 		public async UniTask OnShowingStartAsync(params object[] parameters)
 		{
-			State = PageState.Showing;
+			State                          = PageState.Showing;
+			IsAlreadyCallShowingStartAsync = true;
+
+			IsWorkingShowingStartAsync = true;
 
 			if (Page is IShowingStart showingStart)
 				await showingStart.OnShowingStartAsync(parameters);
 
 			var pageGameObject = Page.gameObject;
 			pageGameObject.SetActive(true);
+
+			IsWorkingShowingStartAsync = false;
 		}
 
 		public async UniTask PlayShowingAnimationAsync()
@@ -76,8 +86,9 @@ namespace CizaPageModule
 			if (Page is IShowingComplete showingComplete)
 				showingComplete.OnShowingComplete();
 
-			State                  = PageState.Visible;
-			CanCallShowingComplete = false;
+			State                          = PageState.Visible;
+			CanCallShowingComplete         = false;
+			IsAlreadyCallShowingStartAsync = false;
 		}
 
 		public void OnHidingStart()
@@ -95,6 +106,9 @@ namespace CizaPageModule
 				await hidingAnimated.PlayHidingAnimationAsync();
 		}
 
+		public void EnableCanCallHidingComplete() =>
+			CanCallHidingComplete = true;
+
 		public void OnHidingComplete()
 		{
 			var pageGameObject = Page.gameObject;
@@ -104,6 +118,7 @@ namespace CizaPageModule
 				hidingComplete.OnHidingComplete();
 
 			State                    = PageState.Invisible;
+			CanCallHidingComplete    = false;
 			IsAlreadyCallHidingStart = false;
 		}
 

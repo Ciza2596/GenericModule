@@ -176,10 +176,10 @@ namespace CizaPageModule
 		}
 
 		public async UniTask ShowAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
-			await ShowAsync(keys, false, onComplete, parameters);
+			await ShowAsync(keys, false, onComplete, "ShowAsync", parameters);
 
 		public async UniTask ShowImmediatelyAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
-			await ShowAsync(keys, true, onComplete, parameters);
+			await ShowAsync(keys, true, onComplete, "ShowImmediatelyAsync", parameters);
 
 		public void OnlyCallHidingStart(string key, Action onComplete = null)
 		{
@@ -298,18 +298,20 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		private async UniTask ShowAsync(string[] keys, bool isImmediately, Action onComplete, object[][] parametersList)
+		private async UniTask ShowAsync(string[] keys, bool isImmediately, Action onComplete, string methodName, object[][] parametersList)
 		{
 			var canShowPageControllers = new List<PageController>();
 			foreach (var key in keys)
 			{
-				Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::Show] Page: {key} doesnt be created.");
+				Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::{methodName}] Page: {key} doesnt be created.");
 
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
-				if (state != PageState.Invisible)
+
+				if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingStartAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingStartAsync))
 				{
-					Debug.LogWarning($"[Container::Show] Page: {key} is not invisible. Current state is {state}.");
+					var expectedState = !pageController.IsAlreadyCallShowingStartAsync ? PageState.Invisible : PageState.Showing;
+					Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 					continue;
 				}
 
@@ -394,10 +396,14 @@ namespace CizaPageModule
 
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
-				if (state != PageState.Visible)
+
+				if (!(state == PageState.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
 				{
 					if (isShowLog)
-						Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} is not Visible. Current state is {state}.");
+					{
+						var expectedState = !pageController.IsAlreadyCallHidingStart ? PageState.Visible : PageState.Hiding;
+						Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
+					}
 
 					continue;
 				}

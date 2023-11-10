@@ -190,16 +190,16 @@ namespace CizaPageModule
 			await HideAsync(key, true, onComplete, "HideAsync");
 
 		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
-			await HideAsync(keys, false, onComplete, true);
+			await HideAsync(keys, false, onComplete, "HideAsync", true);
 
 		public async void HideImmediately(string[] keys, Action onComplete = null) =>
-			await HideAsync(keys, true, onComplete, true);
+			await HideAsync(keys, true, onComplete, "HideImmediately", true);
 
 		public async UniTask HideAllAsync(Action onComplete = null) =>
-			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), false, onComplete, false);
+			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), false, onComplete, "HideAllAsync", false);
 
 		public async void HideAllImmediately(Action onComplete = null) =>
-			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), true, onComplete, false);
+			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), true, onComplete, "HideAllImmediately", false);
 
 		//private method
 		private async UniTask CreateAsync(string key, Type pageType, params object[] parameters)
@@ -329,19 +329,19 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		private async UniTask HideAsync(string[] keys, bool isImmediately, Action onComplete, bool isShowLog)
+		private async UniTask HideAsync(string[] keys, bool isImmediately, Action onComplete, string methodName, bool isShowLog)
 		{
 			var canHidePageControllers = new List<PageController>();
 			foreach (var key in keys)
 			{
-				Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::Hide] Page: {key} doesnt be created.");
+				Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::{methodName}] Page: {key} doesnt be created.");
 
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
 				if (state != PageState.Visible)
 				{
 					if (isShowLog)
-						Debug.LogWarning($"[PageContainer::Hide] Page: {key} is not Visible. Current state is {state}.");
+						Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} is not Visible. Current state is {state}.");
 
 					continue;
 				}
@@ -359,7 +359,14 @@ namespace CizaPageModule
 
 				foreach (var m_canHidePageController in m_canHidePageControllers)
 				{
-					m_onHidingStart       += m_canHidePageController.OnHidingStart;
+					m_onHidingStart += () =>
+					{
+						if (!m_canHidePageController.IsAlreadyCallHidingStart)
+						{
+							m_canHidePageController.OnHidingStart();
+							RemoveTickAndFixedTickHandle(m_canHidePageController);
+						}
+					};
 					m_playHidingAnimation += m_canHidePageController.PlayHidingAnimationAsync;
 					m_onHidingComplete    += m_canHidePageController.OnHidingComplete;
 				}
@@ -370,9 +377,6 @@ namespace CizaPageModule
 					await WhenAll(m_playHidingAnimation);
 
 				m_onHidingComplete?.Invoke();
-
-				foreach (var m_canHidePageController in m_canHidePageControllers)
-					RemoveTickAndFixedTickHandle(m_canHidePageController);
 
 				m_onComplete?.Invoke();
 			}

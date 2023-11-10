@@ -68,7 +68,8 @@ namespace CizaPageModule
 		public void Destroy(string key) =>
 			_pageContainer.Destroy(key);
 
-		public void DestroyAll() => _pageContainer.DestroyAll();
+		public void DestroyAll() =>
+			_pageContainer.DestroyAll();
 
 		public UniTask OnlyCallShowingStartAsync(string key, Action onComplete = null, params object[] parameters) =>
 			_pageContainer.OnlyCallShowingStartAsync(key, onComplete, parameters);
@@ -88,6 +89,9 @@ namespace CizaPageModule
 		public UniTask ShowImmediatelyAsync(string[] keys, object[][] parametersList = null, Action onComplete = null, bool isIncludeHidingComplete = true) =>
 			_pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete, isIncludeHidingComplete);
 
+		public void OnlyCallShowingComplete(string[] keys, Action onComplete = null) =>
+			_pageContainer.OnlyCallShowingComplete(keys, onComplete);
+
 		public void OnlyCallHidingStart(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingStart(key, onComplete);
 
@@ -97,7 +101,7 @@ namespace CizaPageModule
 		public void HideImmediately(string key, Action onComplete = null, bool isIncludeHidingComplete = true) =>
 			_pageContainer.HideImmediately(key, onComplete, isIncludeHidingComplete);
 
-		public void OnlyCallHidingComplete(string key, Action onComplete) =>
+		public void OnlyCallHidingComplete(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingComplete(key, onComplete);
 
 		public UniTask HideAsync(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
@@ -106,7 +110,7 @@ namespace CizaPageModule
 		public void HideImmediately(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
 			_pageContainer.HideImmediately(keys, onComplete, isIncludeHidingComplete);
 
-		public void OnlyCallHidingComplete(string[] keys, Action onComplete) =>
+		public void OnlyCallHidingComplete(string[] keys, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingComplete(keys, onComplete);
 
 		public UniTask HideAllAsync(Action onComplete = null, bool isIncludeHidingComplete = true) =>
@@ -115,7 +119,7 @@ namespace CizaPageModule
 		public void HideAllImmediately(Action onComplete = null, bool isIncludeHidingComplete = true) =>
 			_pageContainer.HideAllImmediately(onComplete, isIncludeHidingComplete);
 
-		public void OnlyCallAllHidingComplete(Action onComplete) =>
+		public void OnlyCallAllHidingComplete(Action onComplete = null) =>
 			_pageContainer.OnlyCallAllHidingComplete(onComplete);
 	}
 }

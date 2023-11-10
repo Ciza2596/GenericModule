@@ -140,9 +140,9 @@ namespace CizaPageModule
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (state == PageState.Showing)
+			if (state != PageState.Showing)
 			{
-				Debug.LogWarning($"[PageContainer::OnlyCallShowingComplete] Page: {key} should be visible. Current state is {state}.");
+				Debug.LogWarning($"[PageContainer::OnlyCallShowingComplete] Page: {key} should be showing. Current state is {state}.");
 				return;
 			}
 
@@ -183,10 +183,10 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		public async UniTask HideAsync(string key, Action onComplete = null, bool isIncludeHidingStart = true) =>
+		public async UniTask HideAsync(string key, Action onComplete = null) =>
 			await HideAsync(key, false, onComplete, "HideAsync");
 
-		public async void HideImmediately(string key, Action onComplete = null, bool isIncludeHidingStart = true) =>
+		public async void HideImmediately(string key, Action onComplete = null) =>
 			await HideAsync(key, true, onComplete, "HideAsync");
 
 		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
@@ -310,7 +310,7 @@ namespace CizaPageModule
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 
-			if (!(state == PageState.Visible && pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
+			if (!(state == PageState.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
 			{
 				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be Visible. Current state is {state}.");
 				return;

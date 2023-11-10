@@ -175,11 +175,18 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		public async UniTask ShowAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
-			await ShowAsync(keys, false, onComplete, "ShowAsync", parameters);
+		public async UniTask ShowAsync(string[] keys, object[][] parameters = null, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await ShowAsync(keys, false, onComplete, isIncludeHidingComplete, "ShowAsync", parameters);
 
-		public async UniTask ShowImmediatelyAsync(string[] keys, object[][] parameters = null, Action onComplete = null) =>
-			await ShowAsync(keys, true, onComplete, "ShowImmediatelyAsync", parameters);
+		public async UniTask ShowImmediatelyAsync(string[] keys, object[][] parameters = null, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await ShowAsync(keys, true, onComplete, isIncludeHidingComplete, "ShowImmediatelyAsync", parameters);
+
+		public void OnlyCallShowingComplete(string[] keys, Action onComplete = null)
+		{
+			foreach (var key in keys)
+				OnlyCallShowingComplete(key);
+			onComplete?.Invoke();
+		}
 
 		public void OnlyCallHidingStart(string key, Action onComplete = null)
 		{
@@ -228,17 +235,31 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
-			await HideAsync(keys, false, onComplete, "HideAsync", true);
+		public async UniTask HideAsync(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await HideAsync(keys, false, onComplete, isIncludeHidingComplete, "HideAsync", true);
 
-		public async void HideImmediately(string[] keys, Action onComplete = null) =>
-			await HideAsync(keys, true, onComplete, "HideImmediately", true);
+		public async void HideImmediately(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await HideAsync(keys, true, onComplete, isIncludeHidingComplete, "HideImmediately", true);
 
-		public async UniTask HideAllAsync(Action onComplete = null) =>
-			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), false, onComplete, "HideAllAsync", false);
+		public void OnlyCallHidingComplete(string[] keys, Action onComplete = null)
+		{
+			foreach (var key in keys)
+				OnlyCallHidingComplete(key);
+			onComplete?.Invoke();
+		}
 
-		public async void HideAllImmediately(Action onComplete = null) =>
-			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), true, onComplete, "HideAllImmediately", false);
+		public async UniTask HideAllAsync(Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), false, onComplete, isIncludeHidingComplete, "HideAllAsync", false);
+
+		public async void HideAllImmediately(Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			await HideAsync(_pageControllerMapByKey.Keys.ToArray(), true, onComplete, isIncludeHidingComplete, "HideAllImmediately", false);
+
+		public void OnlyCallAllHidingComplete(Action onComplete = null)
+		{
+			foreach (var pair in _pageControllerMapByKey.Where(pair => pair.Value.State == PageState.Hiding).ToArray())
+				OnlyCallHidingComplete(pair.Key);
+			onComplete?.Invoke();
+		}
 
 		//private method
 		private async UniTask CreateAsync(string key, Type pageType, params object[] parameters)
@@ -298,7 +319,7 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		private async UniTask ShowAsync(string[] keys, bool isImmediately, Action onComplete, string methodName, object[][] parametersList)
+		private async UniTask ShowAsync(string[] keys, bool isImmediately, Action onComplete, bool isIncludeShowingComplete, string methodName, object[][] parametersList)
 		{
 			var canShowPageControllers = new List<PageController>();
 			foreach (var key in keys)
@@ -318,9 +339,9 @@ namespace CizaPageModule
 				canShowPageControllers.Add(pageController);
 			}
 
-			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete, parametersList ?? new object[canShowPageControllers.Count][]);
+			await m_Show(canShowPageControllers.ToArray(), isImmediately, onComplete, isIncludeShowingComplete, parametersList ?? new object[canShowPageControllers.Count][]);
 
-			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, object[][] m_parametersList)
+			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, bool m_isIncludeShowingComplete, object[][] m_parametersList)
 			{
 				Func<UniTask> m_onShowingStart       = null;
 				Func<UniTask> m_playShowingAnimation = null;
@@ -339,7 +360,14 @@ namespace CizaPageModule
 							await UniTask.Yield();
 					};
 					m_playShowingAnimation += m_pageController.PlayShowingAnimationAsync;
-					m_onShowingComplete    += m_pageController.OnShowingComplete;
+					m_onShowingComplete += () =>
+					{
+						if (m_isIncludeShowingComplete)
+							m_pageController.OnShowingComplete();
+
+						else
+							m_pageController.EnableCanCallShowingComplete();
+					};
 				}
 
 				await WhenAll(m_onShowingStart);
@@ -387,7 +415,7 @@ namespace CizaPageModule
 			onComplete?.Invoke();
 		}
 
-		private async UniTask HideAsync(string[] keys, bool isImmediately, Action onComplete, string methodName, bool isShowLog)
+		private async UniTask HideAsync(string[] keys, bool isImmediately, Action onComplete, bool isIncludeHidingComplete, string methodName, bool isShowLog)
 		{
 			var canHidePageControllers = new List<PageController>();
 			foreach (var key in keys)
@@ -411,9 +439,9 @@ namespace CizaPageModule
 				canHidePageControllers.Add(pageController);
 			}
 
-			await m_Hide(canHidePageControllers.ToArray(), isImmediately, onComplete);
+			await m_Hide(canHidePageControllers.ToArray(), isImmediately, onComplete, isIncludeHidingComplete);
 
-			async UniTask m_Hide(PageController[] m_canHidePageControllers, bool m_isImmediately, Action m_onComplete)
+			async UniTask m_Hide(PageController[] m_canHidePageControllers, bool m_isImmediately, Action m_onComplete, bool m_isIncludeHidingComplete)
 			{
 				Action        m_onHidingStart       = null;
 				Func<UniTask> m_playHidingAnimation = null;
@@ -430,7 +458,13 @@ namespace CizaPageModule
 						}
 					};
 					m_playHidingAnimation += m_canHidePageController.PlayHidingAnimationAsync;
-					m_onHidingComplete    += m_canHidePageController.OnHidingComplete;
+					m_onHidingComplete += () =>
+					{
+						if (m_isIncludeHidingComplete)
+							m_canHidePageController.OnHidingComplete();
+						else
+							m_canHidePageController.EnableCanCallHidingComplete();
+					};
 				}
 
 				m_onHidingStart?.Invoke();

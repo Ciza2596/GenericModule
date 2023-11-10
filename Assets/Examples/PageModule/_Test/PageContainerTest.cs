@@ -194,7 +194,55 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _09_ShowImmediately_Some_Pages()
+	public async void _09_Show_Some_Pages_With_Three_Step()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
+
+		//act
+		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.ShowAsync(new[] { _pageKey }, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallShowingComplete(new[] { _pageKey });
+
+		//assert
+		Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public async void _10_ShowImmediately_Some_Pages()
+	{
+		//arrange
+		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
+		Check_Page_Is_Invisible(_pageKey);
+
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
+
+		//act
+		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.ShowImmediatelyAsync(new[] { _pageKey }, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallShowingComplete(new[] { _pageKey });
+
+		//assert
+		Check_Page_Is_Visible(_pageKey);
+
+		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
+	}
+
+	[Test]
+	public async void _11_ShowImmediately_Some_Pages_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -216,7 +264,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _10_Hide_A_Page()
+	public async void _12_Hide_A_Page()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -240,7 +288,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _11_Hide_A_Page_With_Three_Step()
+	public async void _13_Hide_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -266,7 +314,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _12_HideImmediately_A_Page()
+	public void _14_HideImmediately_A_Page()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -290,7 +338,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _13_HideImmediately_A_Page_With_Three_Step()
+	public void _15_HideImmediately_A_Page_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -316,7 +364,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _14_Hide_Some_Pages()
+	public async void _16_Hide_Some_Pages()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -340,7 +388,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _15_Hide_Some_Pages_With_Two_Step()
+	public async void _17_Hide_Some_Pages_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -354,7 +402,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		await _pageContainer.HideAsync(new[] { _pageKey });
+		await _pageContainer.HideAsync(new[] { _pageKey }, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallHidingComplete(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -365,7 +414,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _16_HideImmediately_Some_Pages()
+	public void _18_HideImmediately_Some_Pages()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -389,7 +438,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _17_HideImmediately_Some_Pages_With_Two_Step()
+	public void _19_HideImmediately_Some_Pages_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -403,7 +452,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		_pageContainer.HideImmediately(new[] { _pageKey });
+		_pageContainer.HideImmediately(new[] { _pageKey }, isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallHidingComplete(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -414,7 +464,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _18_HideAll()
+	public async void _20_HideAll()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -438,7 +488,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _19_HideAll_With_Two_Step()
+	public async void _21_HideAll_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -452,7 +502,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		await _pageContainer.HideAllAsync();
+		await _pageContainer.HideAllAsync(isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallAllHidingComplete();
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -463,7 +514,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _20_HideAllImmediately()
+	public void _22_HideAllImmediately()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -487,7 +538,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public void _21_HideAllImmediately_With_Two_Step()
+	public void _23_HideAllImmediately_With_Three_Step()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -501,7 +552,8 @@ public class PageContainerTest
 
 		//act
 		_pageContainer.OnlyCallHidingStart(_pageKey);
-		_pageContainer.HideAllImmediately();
+		_pageContainer.HideAllImmediately(isIncludeHidingComplete: false);
+		_pageContainer.OnlyCallAllHidingComplete();
 
 		//assert
 		Check_Page_Is_Invisible(_pageKey);
@@ -512,7 +564,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _22_Tick()
+	public async void _24_Tick()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
@@ -531,7 +583,7 @@ public class PageContainerTest
 	}
 
 	[Test]
-	public async void _23_FixedTick()
+	public async void _25_FixedTick()
 	{
 		//arrange
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);

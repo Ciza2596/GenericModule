@@ -82,11 +82,11 @@ namespace CizaPageModule
 		public void OnlyCallShowingComplete(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallShowingComplete(key, onComplete);
 
-		public UniTask ShowAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			_pageContainer.ShowAsync(keys, parametersList, onComplete);
+		public UniTask ShowAsync(string[] keys, object[][] parametersList = null, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.ShowAsync(keys, parametersList, onComplete, isIncludeHidingComplete);
 
-		public UniTask ShowImmediatelyAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			_pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete);
+		public UniTask ShowImmediatelyAsync(string[] keys, object[][] parametersList = null, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete, isIncludeHidingComplete);
 
 		public void OnlyCallHidingStart(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingStart(key, onComplete);
@@ -100,16 +100,22 @@ namespace CizaPageModule
 		public void OnlyCallHidingComplete(string key, Action onComplete) =>
 			_pageContainer.OnlyCallHidingComplete(key, onComplete);
 
-		public UniTask HideAsync(string[] keys, Action onComplete = null) =>
-			_pageContainer.HideAsync(keys, onComplete);
+		public UniTask HideAsync(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideAsync(keys, onComplete, isIncludeHidingComplete);
 
-		public void HideImmediately(string[] keys, Action onComplete = null) =>
-			_pageContainer.HideImmediately(keys, onComplete);
+		public void HideImmediately(string[] keys, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideImmediately(keys, onComplete, isIncludeHidingComplete);
 
-		public UniTask HideAllAsync(Action onComplete = null) =>
-			_pageContainer.HideAllAsync(onComplete);
+		public void OnlyCallHidingComplete(string[] keys, Action onComplete) =>
+			_pageContainer.OnlyCallHidingComplete(keys, onComplete);
 
-		public void HideAllImmediately(Action onComplete = null) =>
-			_pageContainer.HideAllImmediately(onComplete);
+		public UniTask HideAllAsync(Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideAllAsync(onComplete, isIncludeHidingComplete);
+
+		public void HideAllImmediately(Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideAllImmediately(onComplete, isIncludeHidingComplete);
+
+		public void OnlyCallAllHidingComplete(Action onComplete) =>
+			_pageContainer.OnlyCallAllHidingComplete(onComplete);
 	}
 }

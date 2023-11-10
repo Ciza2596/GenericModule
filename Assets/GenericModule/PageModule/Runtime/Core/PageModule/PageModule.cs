@@ -91,11 +91,11 @@ namespace CizaPageModule
 		public void OnlyCallHidingStart(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingStart(key, onComplete);
 
-		public UniTask HideAsync(string key, Action onComplete = null) =>
-			_pageContainer.HideAsync(key, onComplete);
+		public UniTask HideAsync(string key, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideAsync(key, onComplete, isIncludeHidingComplete);
 
-		public void HideImmediately(string key, Action onComplete = null) =>
-			_pageContainer.HideImmediately(key, onComplete);
+		public void HideImmediately(string key, Action onComplete = null, bool isIncludeHidingComplete = true) =>
+			_pageContainer.HideImmediately(key, onComplete, isIncludeHidingComplete);
 
 		public void OnlyCallHidingComplete(string key, Action onComplete) =>
 			_pageContainer.OnlyCallHidingComplete(key, onComplete);

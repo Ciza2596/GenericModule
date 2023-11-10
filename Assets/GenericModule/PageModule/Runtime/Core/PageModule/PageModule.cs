@@ -60,7 +60,7 @@ namespace CizaPageModule
 			_pageContainer.CheckIsHiding(key);
 
 		public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
-			_pageContainer.TryGetPage<TPage>(key, out page);
+			_pageContainer.TryGetPage(key, out page);
 
 		public UniTask CreateAsync<TPage>(string key, params object[] parameters) where TPage : class =>
 			_pageContainer.CreateAsync<TPage>(key, parameters);
@@ -70,26 +70,29 @@ namespace CizaPageModule
 
 		public void DestroyAll() => _pageContainer.DestroyAll();
 
-		public async UniTask ShowAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
-			await _pageContainer.ShowAsync(key, onComplete, isIncludeShowingComplete, parameters);
+		public UniTask OnlyCallShowingStartAsync(string key, Action onComplete = null, params object[] parameters) =>
+			_pageContainer.OnlyCallShowingStartAsync(key, onComplete, parameters);
 
-		public async UniTask ShowImmediatelyAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
-			await _pageContainer.ShowImmediatelyAsync(key, onComplete, isIncludeShowingComplete, parameters);
+		public UniTask ShowAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
+			_pageContainer.ShowAsync(key, onComplete, isIncludeShowingComplete, parameters);
+
+		public UniTask ShowImmediatelyAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
+			_pageContainer.ShowImmediatelyAsync(key, onComplete, isIncludeShowingComplete, parameters);
 
 		public void OnlyCallShowingComplete(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallShowingComplete(key, onComplete);
 
-		public async UniTask ShowAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.ShowAsync(keys, parametersList, onComplete);
+		public UniTask ShowAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
+			_pageContainer.ShowAsync(keys, parametersList, onComplete);
 
-		public async UniTask ShowImmediatelyAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
-			await _pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete);
+		public UniTask ShowImmediatelyAsync(string[] keys, object[][] parametersList = null, Action onComplete = null) =>
+			_pageContainer.ShowImmediatelyAsync(keys, parametersList, onComplete);
 
 		public void OnlyCallHidingStart(string key, Action onComplete = null) =>
 			_pageContainer.OnlyCallHidingStart(key, onComplete);
 
-		public async UniTask HideAsync(string key, Action onComplete = null) =>
-			await _pageContainer.HideAsync(key, onComplete);
+		public UniTask HideAsync(string key, Action onComplete = null) =>
+			_pageContainer.HideAsync(key, onComplete);
 
 		public void HideImmediately(string key, Action onComplete = null) =>
 			_pageContainer.HideImmediately(key, onComplete);
@@ -97,14 +100,16 @@ namespace CizaPageModule
 		public void OnlyCallHidingComplete(string key, Action onComplete) =>
 			_pageContainer.OnlyCallHidingComplete(key, onComplete);
 
-		public async UniTask HideAsync(string[] keys, Action onComplete = null) =>
-			await _pageContainer.HideAsync(keys, onComplete);
+		public UniTask HideAsync(string[] keys, Action onComplete = null) =>
+			_pageContainer.HideAsync(keys, onComplete);
 
 		public void HideImmediately(string[] keys, Action onComplete = null) =>
 			_pageContainer.HideImmediately(keys, onComplete);
 
-		public async UniTask HideAllAsync(Action onComplete = null) => await _pageContainer.HideAllAsync(onComplete);
+		public UniTask HideAllAsync(Action onComplete = null) =>
+			_pageContainer.HideAllAsync(onComplete);
 
-		public void HideAllImmediately(Action onComplete = null) => _pageContainer.HideAllImmediately(onComplete);
+		public void HideAllImmediately(Action onComplete = null) =>
+			_pageContainer.HideAllImmediately(onComplete);
 	}
 }

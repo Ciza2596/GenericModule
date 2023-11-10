@@ -282,7 +282,7 @@ namespace CizaPageModule
 				await pageController.OnShowingStartAsync(parameters);
 
 			while (pageController.IsWorkingShowingStartAsync)
-				UniTask.Yield();
+				await UniTask.Yield();
 
 			if (!isImmediately)
 				await pageController.PlayShowingAnimationAsync();
@@ -334,7 +334,7 @@ namespace CizaPageModule
 							await m_pageController.OnShowingStartAsync(m_parameters);
 
 						while (m_pageController.IsWorkingShowingStartAsync)
-							UniTask.Yield();
+							await UniTask.Yield();
 					};
 					m_playShowingAnimation += m_pageController.PlayShowingAnimationAsync;
 					m_onShowingComplete    += m_pageController.OnShowingComplete;

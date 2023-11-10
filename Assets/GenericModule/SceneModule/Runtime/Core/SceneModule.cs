@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Assertions;
 
 namespace CizaSceneModule
@@ -6,6 +7,8 @@ namespace CizaSceneModule
 	{
 		//private variable
 		private readonly ISceneManager _sceneManager;
+
+		private event Action _onComplete;
 
 		//public variable
 		public string TransitionSceneName { get; }
@@ -35,6 +38,12 @@ namespace CizaSceneModule
 			_sceneManager = sceneManager;
 		}
 
+		public void ExecuteOnComplete()
+		{
+			_onComplete?.Invoke();
+			_onComplete = null;
+		}
+
 		public ILoadSceneAsync LoadSceneAsync(string sceneName, LoadModes loadMode, bool isActivateOnLoad = true) =>
 			_sceneManager.LoadScene(sceneName, loadMode, isActivateOnLoad);
 
@@ -47,19 +56,19 @@ namespace CizaSceneModule
 			CanChangeScene = true;
 		}
 
-		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
-			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
+		public void ChangeScene(string transitionInViewName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null, Action onComplete = null) =>
+			ChangeScene(transitionInViewName, null, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask, onComplete);
 
-		public void ChangeScene(string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
-			ChangeScene(true, transitionInViewName, currentSceneName, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask);
+		public void ChangeScene(string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null, Action onComplete = null) =>
+			ChangeScene(true, transitionInViewName, currentSceneName, loadingViewName, transitionOutViewName, nextSceneName, releasingTask, loadingTask, initializingTask, onComplete);
 
-		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
-			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask, initializingTask);
+		public void ChangeScene(string transitionViewTag, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null, Action onComplete = null) =>
+			ChangeScene(transitionViewTag, null, nextSceneName, releasingTask, loadingTask, initializingTask, onComplete);
 
-		public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null) =>
-			ChangeScene(false, transitionViewTag, currentSceneName, transitionViewTag, transitionViewTag, nextSceneName, releasingTask, loadingTask, initializingTask);
+		public void ChangeScene(string transitionViewTag, string currentSceneName, string nextSceneName, IReleasingTask releasingTask = null, ILoadingTask loadingTask = null, IInitializingTask initializingTask = null, Action onComplete = null) =>
+			ChangeScene(false, transitionViewTag, currentSceneName, transitionViewTag, transitionViewTag, nextSceneName, releasingTask, loadingTask, initializingTask, onComplete);
 
-		private void ChangeScene(bool isViewName, string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask, ILoadingTask loadingTask, IInitializingTask initializingTask)
+		private void ChangeScene(bool isViewName, string transitionInViewName, string currentSceneName, string loadingViewName, string transitionOutViewName, string nextSceneName, IReleasingTask releasingTask, ILoadingTask loadingTask, IInitializingTask initializingTask, Action onComplete)
 		{
 			if (!CanChangeScene)
 				return;
@@ -79,6 +88,8 @@ namespace CizaSceneModule
 			LoadingTask           = loadingTask;
 
 			InitializingTask = initializingTask;
+
+			_onComplete = onComplete;
 
 			LoadSceneAsync(TransitionSceneName, LoadModes.Additive);
 		}

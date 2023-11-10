@@ -59,8 +59,11 @@ namespace CizaSceneModule
 		private void UnloadScene(string sceneName) =>
 			_sceneModule.UnloadScene(sceneName);
 
-		private void UnloadTransitionScene() =>
+		private void UnloadTransitionScene()
+		{
 			_sceneModule.UnloadTransitionScene();
+			_sceneModule.ExecuteOnComplete();
+		}
 
 		private T CreateView<T>(Transform viewParentTransform, GameObject viewPrefab)
 		{

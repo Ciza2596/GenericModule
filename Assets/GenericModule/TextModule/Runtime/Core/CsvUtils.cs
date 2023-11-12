@@ -21,9 +21,15 @@ namespace CizaTextModule
 			foreach (var rowText in rowTexts)
 			{
 				var columns = rowText.Split(COMMA_TAG).ToList();
+				if (columns.Count != (categories.Length + 1))
+					continue;
+
+				var key = columns[0].Trim();
+				if (string.IsNullOrWhiteSpace(key) || string.IsNullOrEmpty(key))
+					continue;
 
 				var textMapByCategory = new Dictionary<string, string>();
-				textMapByCategoryByKey.Add(columns[0].Trim(), textMapByCategory);
+				textMapByCategoryByKey.Add(key, textMapByCategory);
 
 				columns.RemoveAt(0);
 

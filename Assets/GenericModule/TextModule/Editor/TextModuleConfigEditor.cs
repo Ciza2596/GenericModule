@@ -8,7 +8,7 @@ namespace CizaTextModule.Editor
 	public class TextModuleConfigEditor : UnityEditor.Editor
 	{
 		private SerializedProperty _isCustomDefaultCategory;
-		private SerializedProperty _defaultCategory;
+		private SerializedProperty _customCustomDefaultCategory;
 
 		private SerializedProperty _csvTextAsset;
 
@@ -16,8 +16,8 @@ namespace CizaTextModule.Editor
 
 		private void OnEnable()
 		{
-			_isCustomDefaultCategory = serializedObject.FindProperty(nameof(_isCustomDefaultCategory));
-			_defaultCategory         = serializedObject.FindProperty(nameof(_defaultCategory));
+			_isCustomDefaultCategory     = serializedObject.FindProperty(nameof(_isCustomDefaultCategory));
+			_customCustomDefaultCategory = serializedObject.FindProperty(nameof(_customCustomDefaultCategory));
 
 			_csvTextAsset = serializedObject.FindProperty(nameof(_csvTextAsset));
 
@@ -30,7 +30,7 @@ namespace CizaTextModule.Editor
 
 			EditorGUILayout.PropertyField(_isCustomDefaultCategory);
 			if (_isCustomDefaultCategory.boolValue)
-				EditorGUILayout.PropertyField(_defaultCategory);
+				EditorGUILayout.PropertyField(_customCustomDefaultCategory);
 
 			EditorGUILayout.PropertyField(_csvTextAsset);
 

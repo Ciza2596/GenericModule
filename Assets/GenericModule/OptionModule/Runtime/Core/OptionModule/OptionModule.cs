@@ -62,7 +62,7 @@ namespace CizaOptionModule
 			return optionModulePage.TryGetOption(key, out option);
 		}
 
-		public TOption[] GetAllOptions<TOption>() where TOption : Option
+		public TOption[] GetAllOptions<TOption>() where TOption : class
 		{
 			var options = new List<TOption>();
 			foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
@@ -73,7 +73,7 @@ namespace CizaOptionModule
 			return options.ToArray();
 		}
 
-		public TSubOption[] GetAllSubOptions<TSubOption>() where TSubOption : MonoBehaviour
+		public TSubOption[] GetAllSubOptions<TSubOption>() where TSubOption : class
 		{
 			var subOptions = new List<TSubOption>();
 			foreach (var option in GetAllOptions<Option>())

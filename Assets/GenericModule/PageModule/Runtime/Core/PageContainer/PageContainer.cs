@@ -93,7 +93,7 @@ namespace CizaPageModule
 			var pages = new List<TPage>();
 
 			foreach (var pageController in _pageControllerMapByKey.Values.ToArray())
-				if (pageController is TPage page)
+				if (pageController.Page is TPage page)
 					pages.Add(page);
 
 			return pages.ToArray();

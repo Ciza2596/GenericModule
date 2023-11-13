@@ -59,6 +59,9 @@ namespace CizaPageModule
 		public bool CheckIsHiding(string key) =>
 			_pageContainer.CheckIsHiding(key);
 
+		public TPage[] GetAllPage<TPage>() where TPage : class =>
+			_pageContainer.GetAllPage<TPage>();
+		
 		public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
 			_pageContainer.TryGetPage(key, out page);
 

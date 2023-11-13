@@ -16,6 +16,8 @@ namespace CizaOptionModule
 		int MaxColumnIndex { get; }
 		int MaxRowIndex    { get; }
 
+		Option[] GetAllOptions();
+
 		bool TryGetOption(string optionKey, out Option option);
 
 		bool TrySetCurrentCoordinate(Vector2Int coordinate);

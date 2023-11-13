@@ -75,6 +75,9 @@ namespace CizaOptionModule
 		public void Release() =>
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
 
+		public Option[] GetAllOptions() =>
+			_optionView.Options.ToArray();
+
 		public bool TryGetOption(string optionKey, out Option option)
 		{
 			option = _optionView.Options.FirstOrDefault(m_option => m_option.Key == optionKey);

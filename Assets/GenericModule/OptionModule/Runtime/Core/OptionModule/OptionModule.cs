@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CizaCore;
 using CizaPageModule;
 using Cysharp.Threading.Tasks;
@@ -59,6 +60,27 @@ namespace CizaOptionModule
 			}
 
 			return optionModulePage.TryGetOption(key, out option);
+		}
+
+		public TOption[] GetAllOptions<TOption>() where TOption : Option
+		{
+			var options = new List<TOption>();
+			foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
+				foreach (var option in optionModulePage.GetAllOptions())
+					if (option is TOption tOption)
+						options.Add(tOption);
+
+			return options.ToArray();
+		}
+
+		public TSubOption[] GetAllSubOptions<TSubOption>() where TSubOption : MonoBehaviour
+		{
+			var subOptions = new List<TSubOption>();
+			foreach (var option in GetAllOptions<Option>())
+				if (option.TryGetComponent<TSubOption>(out var subOption))
+					subOptions.Add(subOption);
+
+			return subOptions.ToArray();
 		}
 
 		public OptionModule(IOptionModuleConfig optionModuleConfig) =>

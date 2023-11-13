@@ -88,6 +88,17 @@ namespace CizaPageModule
 			return pageController.State is PageState.Hiding;
 		}
 
+		public TPage[] GetAllPage<TPage>() where TPage : class
+		{
+			var pages = new List<TPage>();
+
+			foreach (var pageController in _pageControllerMapByKey.Values.ToArray())
+				if (pageController is TPage page)
+					pages.Add(page);
+
+			return pages.ToArray();
+		}
+
 		public bool TryGetPage<T>(string key, out T page) where T : class
 		{
 			if (!_pageControllerMapByKey.ContainsKey(key))

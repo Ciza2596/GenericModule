@@ -6,28 +6,43 @@ namespace CizaOptionModule
 {
 	public abstract class Option : MonoBehaviour, IOptionReadModel
 	{
-		private event Action<string, bool> _onConfirm;
-		private event Action<string>       _onPointerEnter;
+		// PlayerIndex, OptionKey, IsUnlock
+		private event Action<int, string, bool> _onConfirm;
+
+		// PlayerIndex, OptionKey
+		private event Action<int, string> _onPointerEnter;
 
 		public event Action<object[]> OnInitialize;
 
-		public event Action<string>       OnSelect;
-		public event Action<string>       OnUnselect;
+		// OptionKey
+		public event Action<string> OnSelect;
+
+		// OptionKey
+		public event Action<string> OnUnselect;
+
+		// OptionKey
 		public event Action<string, bool> OnConfirm;
-		public event Action<string>       OnPointerEnter;
+
+		// OptionKey
+		public event Action<string> OnPointerEnter;
+
+		// OptionKey, IsNew
 		public event Action<string, bool> OnIsNew;
+
+		public int PlayerIndex { get; protected set; }
 
 		public string Key      { get; protected set; }
 		public bool   IsEnable { get; protected set; }
 		public bool   IsUnlock { get; protected set; }
 		public bool   IsNew    { get; protected set; }
 
-		public virtual void Initialize(string key, bool isEnable, bool isUnlock, bool isNew, Action<string, bool> onConfirm, Action<string> onPointerEnter, object[] parameters)
+		public virtual void Initialize(int playerIndex, string key, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
 		{
-			Key      = key;
-			IsEnable = isEnable;
-			IsUnlock = isUnlock;
-			IsNew    = isNew;
+			PlayerIndex = playerIndex;
+			Key         = key;
+			IsEnable    = isEnable;
+			IsUnlock    = isUnlock;
+			IsNew       = isNew;
 
 			_onConfirm      = onConfirm;
 			_onPointerEnter = onPointerEnter;
@@ -43,8 +58,8 @@ namespace CizaOptionModule
 		public virtual void Select(bool isAutoTurnOffIsNew)
 		{
 			OnSelect?.Invoke(Key);
-			
-			if(isAutoTurnOffIsNew) 
+
+			if (isAutoTurnOffIsNew)
 				IsNew = false;
 		}
 
@@ -54,12 +69,15 @@ namespace CizaOptionModule
 			OnIsNew?.Invoke(Key, IsNew);
 		}
 
-		public virtual bool TryConfirm()
+		public virtual bool TryConfirm() =>
+			TryConfirm(PlayerIndex);
+
+		public virtual bool TryConfirm(int playerIndex)
 		{
 			if (!IsEnable)
 				return false;
 
-			_onConfirm?.Invoke(Key, IsUnlock);
+			_onConfirm?.Invoke(playerIndex, Key, IsUnlock);
 			OnConfirm?.Invoke(Key, IsUnlock);
 
 			return true;
@@ -67,7 +85,7 @@ namespace CizaOptionModule
 
 		public virtual void PointerEnter()
 		{
-			_onPointerEnter?.Invoke(Key);
+			_onPointerEnter?.Invoke(PlayerIndex, Key);
 			OnPointerEnter?.Invoke(Key);
 		}
 	}

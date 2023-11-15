@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using CizaCore;
 using CizaPageModule;
 using CizaPageModule.Implement;
 using Cysharp.Threading.Tasks;
@@ -22,20 +21,20 @@ namespace CizaOptionModule
 		protected bool _isAutoTurnOffIsNew;
 		protected bool _localIsAutoTurnOffIsNew;
 
-		public event Action<string, string> OnSelect;
-		public event Action<string, bool>   OnConfirm;
+		public event Action<int, string, string> OnSelect;
+		public event Action<int, string, bool>   OnConfirm;
 
-		public string OptionKey => _selectOptionLogic.CurrentOptionKey;
-
-		public int        PageIndex         { get; private set; }
-		public Vector2Int CurrentCoordinate => _selectOptionLogic.CurrentCoordinate;
+		public int PageIndex { get; private set; }
 
 		public int MaxColumnIndex => _selectOptionLogic.MaxColumnLength - 1;
 		public int MaxRowIndex    => _selectOptionLogic.MaxRowLength    - 1;
 
 		public virtual UniTask InitializeAsync(params object[] parameters)
 		{
-			var optionModulePageInfo = parameters[0] as IOptionModulePageInfo;
+			var playerCount = (int)parameters[0];
+			var optionDefaultPlayerIndex = (int)parameters[1];
+			
+			var optionModulePageInfo = parameters[2] as IOptionModulePageInfo;
 			Assert.IsNotNull(optionModulePageInfo, $"[{GetType().Name}::Initialize] OptionModulePageInfo is not found.");
 
 			PageIndex = int.Parse(optionModulePageInfo.PageIndexString);
@@ -43,10 +42,10 @@ namespace CizaOptionModule
 			var optionViewGameObject = Instantiate(optionModulePageInfo.OptionViewPrefab, _parentTransform);
 			_optionView = optionViewGameObject.GetComponent<IOptionView>();
 
-			var optionInfos = parameters[1] as IOptionInfo[];
-			_optionView.OptionsIncludeNull.InitializeOptions(optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, OnPointerEnter, GetType().Name);
+			var optionInfos = parameters[3] as IOptionInfo[];
+			_optionView.OptionsIncludeNull.InitializeOptions(optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, OnPointerEnter, GetType().Name);
 
-			_selectOptionLogic.Initialize(_optionView.OptionColumns, _optionView.Options, _optionView.ColumnInfo, _optionView.RowInfo);
+			_selectOptionLogic.Initialize(playerCount, _optionView.OptionColumns, _optionView.Options, _optionView.ColumnInfo, _optionView.RowInfo);
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
 
 			return UniTask.CompletedTask;
@@ -63,14 +62,14 @@ namespace CizaOptionModule
 		{
 			_optionView.UnSelectAll();
 			_localIsAutoTurnOffIsNew = true;
-			_selectOptionLogic.TrySetCurrentCoordinate(_onShowingStartCoordinate);
+
+			for (var i = 0; i < _selectOptionLogic.PlayerCount; i++)
+				_selectOptionLogic.TrySetCurrentCoordinate(i, _onShowingStartCoordinate);
 			return UniTask.CompletedTask;
 		}
 
-		public virtual void OnHidingStart()
-		{
+		public virtual void OnHidingStart() =>
 			_localIsAutoTurnOffIsNew = false;
-		}
 
 		public void Release() =>
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
@@ -84,41 +83,61 @@ namespace CizaOptionModule
 			return option != null;
 		}
 
-		public bool TrySetCurrentCoordinate(Vector2Int coordinate) =>
-			_selectOptionLogic.TrySetCurrentCoordinate(coordinate);
+		public bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate) =>
+			_selectOptionLogic.TryGetCurrentCoordinate(playerIndex, out currentCoordinate);
 
-		public bool TryConfirm()
+		public bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey) =>
+			_selectOptionLogic.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
+
+		public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
+			_selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
+
+		public bool TryConfirm(int playerIndex)
 		{
-			if (!_selectOptionLogic.TryGetOption(_selectOptionLogic.CurrentCoordinate, out var option))
+			if (!_selectOptionLogic.TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
 				return false;
 
-			return option.TryConfirm();
+			if (!_selectOptionLogic.TryGetOption(currentCoordinate, out var option))
+				return false;
+
+			return option.TryConfirm(playerIndex);
 		}
 
-		public virtual bool TryMoveToLeft() =>
-			_selectOptionLogic.TryMoveToLeft(true);
+		public virtual bool TryMoveToLeft(int playerIndex) =>
+			_selectOptionLogic.TryMoveToLeft(playerIndex, true);
 
-		public virtual bool TryMoveToRight() =>
-			_selectOptionLogic.TryMoveToRight(true);
+		public virtual bool TryMoveToRight(int playerIndex) =>
+			_selectOptionLogic.TryMoveToRight(playerIndex, true);
 
-		public virtual bool TryMoveToUp() =>
-			_selectOptionLogic.TryMoveToUp(true);
+		public virtual bool TryMoveToUp(int playerIndex) =>
+			_selectOptionLogic.TryMoveToUp(playerIndex, true);
 
-		public virtual bool TryMoveToDown() =>
-			_selectOptionLogic.TryMoveToDown(true);
+		public virtual bool TryMoveToDown(int playerIndex) =>
+			_selectOptionLogic.TryMoveToDown(playerIndex, true);
 
-		protected virtual void OnConfirmImp(string optionKey, bool isUnlock) =>
-			OnConfirm?.Invoke(optionKey, isUnlock);
+		protected virtual void OnConfirmImp(int playerIndex, string optionKey, bool isUnlock) =>
+			OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
 
-		protected virtual void OnPointerEnter(string optionKey) =>
-			_selectOptionLogic.TrySetCurrentCoordinate(optionKey);
+		protected virtual void OnPointerEnter(int playerIndex, string optionKey) =>
+			_selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
 
-		protected virtual void OnSetCurrentCoordinate(Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
+		protected virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
 		{
-			previousOption?.Unselect();
+			if (!CheckIsAnyPlayerOnCoordinate(previousCoordinate))
+				previousOption?.Unselect();
+
 			currentOption?.Select(_isAutoTurnOffIsNew && _localIsAutoTurnOffIsNew);
 
-			OnSelect?.Invoke(previousOption != null ? previousOption.Key : string.Empty, currentOption != null ? currentOption.Key : string.Empty);
+			OnSelect?.Invoke(playerIndex, previousOption != null ? previousOption.Key : string.Empty, currentOption != null ? currentOption.Key : string.Empty);
+		}
+
+		protected bool CheckIsAnyPlayerOnCoordinate(Vector2Int coordinate)
+		{
+			for (var i = 0; i < _selectOptionLogic.PlayerCount; i++)
+				if (TryGetCurrentCoordinate(i, out var currentCoordinate) && currentCoordinate == coordinate)
+					return true;
+
+			return false;
 		}
 	}
 }

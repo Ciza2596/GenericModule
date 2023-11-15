@@ -16,10 +16,16 @@ namespace CizaOptionModule
 
 		public const int NotInitialPageIndex = -1;
 
-		public event Action<string, string> OnSelect;
-		public event Action<string, bool>   OnConfirm;
+		// PlayerIndex, PreviousCoordinate, PreviousOption, CurrentCoordinate, CurrentOption
+		public event Action<int, string, string> OnSelect;
+
+		// PlayerIndex, OptionKey, IsUnlock
+		public event Action<int, string, bool> OnConfirm;
 
 		public bool IsInitialized => _pageModule.IsInitialized;
+
+		public int PlayerCount              { get; private set; }
+		public int OptionDefaultPlayerIndex { get; private set; }
 
 		public bool IsPageCircle { get; private set; }
 
@@ -29,26 +35,26 @@ namespace CizaOptionModule
 
 		public int CurrentPageIndex { get; private set; } = NotInitialPageIndex;
 
-		public Vector2Int CurrentCoordinate
+		public bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate)
 		{
-			get
+			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 			{
-				if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
-					return Vector2Int.zero;
-
-				return optionModulePage.CurrentCoordinate;
+				currentCoordinate = Vector2Int.zero;
+				return false;
 			}
+
+			return optionModulePage.TryGetCurrentCoordinate(playerIndex, out currentCoordinate);
 		}
 
-		public string OptionKey
+		public bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey)
 		{
-			get
+			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 			{
-				if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
-					return string.Empty;
-
-				return optionModulePage.OptionKey;
+				currentOptionKey = string.Empty;
+				return false;
 			}
+
+			return optionModulePage.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
 		}
 
 		public bool TryGetOptionFromCurrentPage(string key, out Option option)
@@ -86,26 +92,28 @@ namespace CizaOptionModule
 		public OptionModule(IOptionModuleConfig optionModuleConfig) =>
 			_pageModule = new PageModule(optionModuleConfig);
 
-		public async UniTask InitializeAsync(Transform optionModulePageRootParentTransform, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, params object[] parameters)
+		public async UniTask InitializeAsync(int playerCount, Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0, params object[] parameters)
 		{
 			if (IsInitialized)
 				return;
+
+			PlayerCount              = playerCount;
+			OptionDefaultPlayerIndex = optionDefaultPlayerIndex;
 
 			_maxIndex        = optionModulePageInfos.Length - 1;
 			IsPageCircle     = isColumnCircle;
 			IsAutoChangePage = isAutoChangePage;
 
-			_pageModule.Initialize(optionModulePageRootParentTransform);
+			_pageModule.Initialize(parent);
 			foreach (var optionModulePageInfo in optionModulePageInfos)
 			{
-				await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, optionModulePageInfo, optionInfos, parameters);
+				await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, PlayerCount, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
 				if (_pageModule.TryGetPage<IOptionModulePage>(optionModulePageInfo.PageIndexString, out var optionModulePage))
 				{
 					optionModulePage.OnSelect  += Select;
 					optionModulePage.OnConfirm += Confirm;
 				}
 			}
-
 
 			if (!await TrySetPageIndexAsync(pageIndex, coordinate, false))
 				await TrySetPageIndexAsync(0, coordinate, false);
@@ -121,20 +129,20 @@ namespace CizaOptionModule
 			IsChangingPage   = false;
 		}
 
-		public bool TryConfirm()
+		public bool TryConfirm(int playerIndex)
 		{
-			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			return optionModulePage.TryConfirm();
+			return optionModulePage.TryConfirm(playerIndex);
 		}
 
-		public async UniTask<bool> TrySetPageIndexAsync(int index, Vector2Int coordinate, bool isAutoTurnOffIsNew = true)
+		public async UniTask<bool> TrySetPageIndexAsync(int pageIndex, Vector2Int coordinate, bool isAutoTurnOffIsNew = true)
 		{
 			if (!IsInitialized)
 				return false;
 
-			if (index < _minIndex && index > _maxIndex)
+			if (pageIndex < _minIndex && pageIndex > _maxIndex)
 				return false;
 
 			IsChangingPage = true;
@@ -142,7 +150,7 @@ namespace CizaOptionModule
 			if (CurrentPageIndex != NotInitialPageIndex)
 				await _pageModule.HideAsync(CurrentPageIndex.ToString());
 
-			CurrentPageIndex = index;
+			CurrentPageIndex = pageIndex;
 			await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
 
 			IsChangingPage = false;
@@ -150,19 +158,22 @@ namespace CizaOptionModule
 			return true;
 		}
 
-		public bool TrySetCoordinateAsync(Vector2Int coordinate)
+		public bool TrySetCoordinateAsync(int playerIndex, Vector2Int coordinate)
 		{
-			if (!IsInitialized)
+			if (!IsInitialized || !ValidatePlayerIndex(playerIndex))
 				return false;
 
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			return optionModulePage.TrySetCurrentCoordinate(coordinate);
+			return optionModulePage.TrySetCurrentCoordinate(playerIndex, coordinate);
 		}
 
-		public async UniTask<bool> TryMovePageToLeftAsync()
+		public async UniTask<bool> TryMovePageToLeftAsync(int playerIndex)
 		{
+			if (!TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
+				return false;
+
 			var nextPageIndex = (CurrentPageIndex - 1).ToClamp(_minIndex, _maxIndex, IsPageCircle);
 			if (nextPageIndex == CurrentPageIndex)
 				return false;
@@ -170,12 +181,15 @@ namespace CizaOptionModule
 			if (!TryGetOptionModulePage(nextPageIndex, out var nextOptionModulePage))
 				return false;
 
-			var coordinate = IsAutoChangePage ? new Vector2Int(nextOptionModulePage.MaxColumnIndex, CurrentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : CurrentCoordinate;
+			var coordinate = IsAutoChangePage ? new Vector2Int(nextOptionModulePage.MaxColumnIndex, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
 			return await TrySetPageIndexAsync(nextPageIndex, coordinate);
 		}
 
-		public async UniTask<bool> TryMovePageToRightAsync()
+		public async UniTask<bool> TryMovePageToRightAsync(int playerIndex)
 		{
+			if (!TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
+				return false;
+
 			var nextPageIndex = (CurrentPageIndex + 1).ToClamp(_minIndex, _maxIndex, IsPageCircle);
 			if (nextPageIndex == CurrentPageIndex)
 				return false;
@@ -183,46 +197,46 @@ namespace CizaOptionModule
 			if (!TryGetOptionModulePage(nextPageIndex, out var nextOptionModulePage))
 				return false;
 
-			var coordinate = IsAutoChangePage ? new Vector2Int(0, CurrentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : CurrentCoordinate;
+			var coordinate = IsAutoChangePage ? new Vector2Int(0, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
 			return await TrySetPageIndexAsync(nextPageIndex, coordinate);
 		}
 
-		public async UniTask<bool> TryMoveOptionToLeftAsync()
+		public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex)
 		{
-			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			if (!optionModulePage.TryMoveToLeft())
-				return IsAutoChangePage && await TryMovePageToLeftAsync();
+			if (!optionModulePage.TryMoveToLeft(playerIndex))
+				return IsAutoChangePage && await TryMovePageToLeftAsync(playerIndex);
 
 			return true;
 		}
 
-		public async UniTask<bool> TryMoveOptionToRightAsync()
+		public async UniTask<bool> TryMoveOptionToRightAsync(int playerIndex)
 		{
-			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			if (!optionModulePage.TryMoveToRight())
-				return IsAutoChangePage && await TryMovePageToRightAsync();
+			if (!optionModulePage.TryMoveToRight(playerIndex))
+				return IsAutoChangePage && await TryMovePageToRightAsync(playerIndex);
 
 			return true;
 		}
 
-		public bool TryMoveOptionToUp()
+		public bool TryMoveOptionToUp(int playerIndex)
 		{
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			return optionModulePage.TryMoveToUp();
+			return optionModulePage.TryMoveToUp(playerIndex);
 		}
 
-		public bool TryMoveOptionToDown()
+		public bool TryMoveOptionToDown(int playerIndex)
 		{
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
-			return optionModulePage.TryMoveToDown();
+			return optionModulePage.TryMoveToDown(playerIndex);
 		}
 
 		private bool TryGetOptionModulePage(int pageIndex, out IOptionModulePage optionModulePage)
@@ -239,10 +253,13 @@ namespace CizaOptionModule
 			return true;
 		}
 
-		private void Select(string previousOptionKey, string currentOptionKey) =>
-			OnSelect?.Invoke(previousOptionKey, currentOptionKey);
+		private void Select(int playerIndex, string previousOptionKey, string currentOptionKey) =>
+			OnSelect?.Invoke(playerIndex, previousOptionKey, currentOptionKey);
 
-		private void Confirm(string optionKey, bool isUnlock) =>
-			OnConfirm?.Invoke(optionKey, isUnlock);
+		private void Confirm(int playerIndex, string optionKey, bool isUnlock) =>
+			OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
+
+		private bool ValidatePlayerIndex(int playerIndex) =>
+			playerIndex < PlayerCount;
 	}
 }

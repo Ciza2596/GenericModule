@@ -5,13 +5,10 @@ namespace CizaOptionModule
 {
 	public interface IOptionModulePage
 	{
-		event Action<string, string> OnSelect;
-		event Action<string, bool>   OnConfirm;
+		event Action<int, string, string> OnSelect;
+		event Action<int, string, bool>   OnConfirm;
 
-		string OptionKey { get; }
-
-		int        PageIndex         { get; }
-		Vector2Int CurrentCoordinate { get; }
+		int PageIndex { get; }
 
 		int MaxColumnIndex { get; }
 		int MaxRowIndex    { get; }
@@ -20,16 +17,19 @@ namespace CizaOptionModule
 
 		bool TryGetOption(string optionKey, out Option option);
 
-		bool TrySetCurrentCoordinate(Vector2Int coordinate);
+		bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate);
+		bool TryGetCurrentOptionKey(int  playerIndex, out string     currentOptionKey);
 
-		bool TryConfirm();
+		bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
 
-		bool TryMoveToLeft();
+		bool TryConfirm(int playerIndex);
 
-		bool TryMoveToRight();
+		bool TryMoveToLeft(int playerIndex);
 
-		bool TryMoveToUp();
+		bool TryMoveToRight(int playerIndex);
 
-		bool TryMoveToDown();
+		bool TryMoveToUp(int playerIndex);
+
+		bool TryMoveToDown(int playerIndex);
 	}
 }

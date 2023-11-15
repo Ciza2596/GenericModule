@@ -6,6 +6,7 @@ namespace CizaOptionModule.Implement
 {
 	public class OptionConfirmButton : OptionSubMono
 	{
+		
 		[SerializeField]
 		private Button _button;
 

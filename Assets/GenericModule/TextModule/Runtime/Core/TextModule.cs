@@ -44,6 +44,12 @@ namespace CizaTextModule
 
 		public bool TryGetText(string key, out string text)
 		{
+			if (string.IsNullOrEmpty(key) || string.IsNullOrWhiteSpace(key))
+			{
+				text = string.Empty;
+				return false;
+			}
+			
 			if (!_textMapByCategoryByKey.TryGetValue(key, out var textMapByCategory))
 			{
 				text = string.Empty;

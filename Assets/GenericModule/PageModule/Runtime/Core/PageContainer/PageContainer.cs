@@ -316,6 +316,8 @@ namespace CizaPageModule
 			while (pageController.IsWorkingShowingStartAsync)
 				await UniTask.Yield();
 
+			pageController.EnablePage();
+
 			if (!isImmediately)
 				await pageController.PlayShowingAnimationAsync();
 			else
@@ -356,9 +358,13 @@ namespace CizaPageModule
 
 			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, bool m_isIncludeShowingComplete, object[][] m_parametersList)
 			{
-				Func<UniTask> m_onShowingStart       = null;
-				Func<UniTask> m_playShowingAnimation = null;
-				Action        m_onShowingComplete    = null;
+				Func<UniTask> m_onShowingStart = null;
+				Action        m_EnablePage     = null;
+
+				Func<UniTask> m_playShowingAnimation            = null;
+				Action        m_playShowingAnimationImmediately = null;
+
+				Action m_onShowingComplete = null;
 
 				for (var i = 0; i < m_pageControllers.Length; i++)
 				{
@@ -372,7 +378,12 @@ namespace CizaPageModule
 						while (m_pageController.IsWorkingShowingStartAsync)
 							await UniTask.Yield();
 					};
-					m_playShowingAnimation += m_pageController.PlayShowingAnimationAsync;
+
+					m_EnablePage += m_pageController.EnablePage;
+
+					m_playShowingAnimation            += m_pageController.PlayShowingAnimationAsync;
+					m_playShowingAnimationImmediately += m_pageController.PlayShowingAnimationImmediately;
+
 					m_onShowingComplete += () =>
 					{
 						if (m_isIncludeShowingComplete)
@@ -385,8 +396,12 @@ namespace CizaPageModule
 
 				await WhenAll(m_onShowingStart);
 
+				m_EnablePage?.Invoke();
+
 				if (!m_isImmediately)
 					await WhenAll(m_playShowingAnimation);
+				else
+					m_playShowingAnimationImmediately?.Invoke();
 
 				m_onShowingComplete?.Invoke();
 
@@ -458,9 +473,12 @@ namespace CizaPageModule
 
 			async UniTask m_Hide(PageController[] m_canHidePageControllers, bool m_isImmediately, Action m_onComplete, bool m_isIncludeHidingComplete)
 			{
-				Action        m_onHidingStart       = null;
-				Func<UniTask> m_playHidingAnimation = null;
-				Action        m_onHidingComplete    = null;
+				Action m_onHidingStart = null;
+
+				Func<UniTask> m_playHidingAnimation            = null;
+				Action        m_playHidingAnimationImmediately = null;
+
+				Action m_onHidingComplete = null;
 
 				foreach (var m_canHidePageController in m_canHidePageControllers)
 				{
@@ -472,7 +490,10 @@ namespace CizaPageModule
 							RemoveTickAndFixedTickHandle(m_canHidePageController);
 						}
 					};
-					m_playHidingAnimation += m_canHidePageController.PlayHidingAnimationAsync;
+
+					m_playHidingAnimation            += m_canHidePageController.PlayHidingAnimationAsync;
+					m_playHidingAnimationImmediately += m_canHidePageController.PlayHidingAnimationImmediately;
+
 					m_onHidingComplete += () =>
 					{
 						if (m_isIncludeHidingComplete)
@@ -486,6 +507,8 @@ namespace CizaPageModule
 
 				if (!m_isImmediately)
 					await WhenAll(m_playHidingAnimation);
+				else
+					m_playHidingAnimationImmediately?.Invoke();
 
 				m_onHidingComplete?.Invoke();
 

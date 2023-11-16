@@ -88,6 +88,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -98,6 +99,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -110,6 +112,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -122,6 +125,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -134,6 +138,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -144,6 +149,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -156,6 +162,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -168,6 +175,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -180,6 +188,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -190,6 +199,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -202,6 +212,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -214,6 +225,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -226,6 +238,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -238,6 +251,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -250,6 +264,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -260,6 +275,7 @@ public class PageContainerTest
 
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -274,6 +290,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -284,6 +301,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -298,6 +316,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -310,6 +329,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -324,6 +344,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -334,6 +355,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -348,6 +370,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -360,6 +383,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -374,6 +398,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -384,6 +409,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -398,6 +424,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -410,6 +437,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -424,6 +452,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -434,6 +463,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -448,6 +478,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -460,6 +491,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -474,6 +506,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -484,6 +517,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -498,6 +532,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -510,6 +545,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, true);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -524,6 +560,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -534,6 +571,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -548,6 +586,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, false);
 
 		//act
@@ -560,6 +599,7 @@ public class PageContainerTest
 
 		Check_IsPassOnHidingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayHidingAnimation<FakePage>(_pageKey, false);
+		Check_IsPassPlayHidingAnimationImmediately<FakePage>(_pageKey, true);
 		Check_IsPassOnHidingComplete<FakePage>(_pageKey, true);
 	}
 
@@ -667,6 +707,13 @@ public class PageContainerTest
 		Assert.AreEqual(excepted, page.IsPassPlayShowingAnimation, $"{key} IsPassPlayShowingAnimation doesnt match excepted: {excepted}.");
 	}
 
+	private void Check_IsPassPlayShowingAnimationImmediately<T>(string key, bool excepted) where T : FakePage
+	{
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassPlayShowingAnimationImmediately, $"{key} IsPassPlayShowingAnimationImmediately doesnt match excepted: {excepted}.");
+	}
+
 	private void Check_IsPassOnShowingComplete<T>(string key, bool excepted) where T : FakePage
 	{
 		Check_Page_Is_Created<T>(key);
@@ -686,6 +733,13 @@ public class PageContainerTest
 		Check_Page_Is_Created<T>(key);
 		_pageContainer.TryGetPage<T>(key, out var page);
 		Assert.AreEqual(excepted, page.IsPassPlayHidingAnimation, $"{key} IsPassPlayHidingAnimation doesnt match excepted: {excepted}.");
+	}
+
+	private void Check_IsPassPlayHidingAnimationImmediately<T>(string key, bool excepted) where T : FakePage
+	{
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassPlayHidingAnimationImmediately, $"{key} IsPassPlayHidingAnimationImmediately doesnt match excepted: {excepted}.");
 	}
 
 	private void Check_IsPassOnHidingComplete<T>(string key, bool excepted) where T : FakePage

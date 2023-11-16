@@ -66,11 +66,11 @@ namespace CizaPageModule
 			if (Page is IShowingStart showingStart)
 				await showingStart.OnShowingStartAsync(parameters);
 
-			var pageGameObject = Page.gameObject;
-			pageGameObject.SetActive(true);
-
 			IsWorkingShowingStartAsync = false;
 		}
+
+		public void EnablePage() =>
+			Page.gameObject.SetActive(true);
 
 		public async UniTask PlayShowingAnimationAsync()
 		{

@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using CizaPageModule;
 using UnityEngine;
 
-public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable, IReleasable, IShowingStart, IShowingAnimated, IShowingComplete, IHidingStart, IHidingAnimated, IHidingComplete
+public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable, IReleasable, IShowingStart, IShowingAnimated, IShowingAnimatedImmediately, IShowingComplete, IHidingStart, IHidingAnimated, IHidingAnimatedImmediately, IHidingComplete
 {
 	//public variable
 	public       bool   IsPassInitialize { get; private set; }
@@ -10,13 +10,17 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 	public       bool   IsPassFixedTick  { get; private set; }
 	public const string IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME = "FakeIsReleased";
 
-	public bool IsPassOnShowingStart       { get; private set; }
-	public bool IsPassPlayShowingAnimation { get; private set; }
-	public bool IsPassOnShowingComplete    { get; private set; }
+	public bool IsPassOnShowingStart { get; private set; }
 
-	public bool IsPassOnHidingStart       { get; private set; }
-	public bool IsPassPlayHidingAnimation { get; private set; }
-	public bool IsPassOnHidingComplete    { get; private set; }
+	public bool IsPassPlayShowingAnimation            { get; private set; }
+	public bool IsPassPlayShowingAnimationImmediately { get; private set; }
+
+	public bool IsPassOnShowingComplete { get; private set; }
+
+	public bool IsPassOnHidingStart                  { get; private set; }
+	public bool IsPassPlayHidingAnimation            { get; private set; }
+	public bool IsPassPlayHidingAnimationImmediately { get; private set; }
+	public bool IsPassOnHidingComplete               { get; private set; }
 
 	//public method
 	public UniTask InitializeAsync(params object[] parameters)
@@ -46,9 +50,14 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 		return UniTask.CompletedTask;
 	}
 
-	public void OnShowingComplete() => IsPassOnShowingComplete = true;
+	public void PlayShowingAnimationImmediately() =>
+		IsPassPlayShowingAnimationImmediately = true;
 
-	public void OnHidingStart() => IsPassOnHidingStart = true;
+	public void OnShowingComplete() =>
+		IsPassOnShowingComplete = true;
+
+	public void OnHidingStart() =>
+		IsPassOnHidingStart = true;
 
 	public UniTask PlayHidingAnimationAsync()
 	{
@@ -56,5 +65,9 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 		return UniTask.CompletedTask;
 	}
 
-	public void OnHidingComplete() => IsPassOnHidingComplete = true;
+	public void PlayHidingAnimationImmediately() =>
+		IsPassPlayHidingAnimationImmediately = true;
+
+	public void OnHidingComplete() =>
+		IsPassOnHidingComplete = true;
 }

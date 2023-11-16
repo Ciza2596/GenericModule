@@ -15,29 +15,36 @@ namespace CizaAddressablesModule
 	public class AddressablesModule
 	{
 		//private variable
+		private readonly string _className;
+
 		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType = new Dictionary<Type, Dictionary<string, Object>>();
 		private readonly Dictionary<string, SceneInstance>            _addressSceneMap             = new Dictionary<string, SceneInstance>();
+
+		public AddressablesModule() : this("AddressablesModule") { }
+
+		public AddressablesModule(string className) =>
+			_className = className;
 
 		//public method
 
 		//asset
 		public T GetAsset<T>(string address) where T : Object
 		{
-			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::GetAsset] Address is null.");
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[{_className}::GetAsset] Address is null.");
 
 			var type                = typeof(T);
 			var hasAddressObjectMap = _objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap);
-			Assert.IsTrue(hasAddressObjectMap, $"[AddressablesModule::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
+			Assert.IsTrue(hasAddressObjectMap, $"[{_className}::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
 
 			var hasObj = addressObjectMap.TryGetValue(address, out var obj);
-			Assert.IsTrue(hasObj, $"[AddressablesModule::GetAsset] Address: {address} doesnt exist in assetHandleInfos.");
+			Assert.IsTrue(hasObj, $"[{_className}::GetAsset] Address: {address} doesnt exist in assetHandleInfos.");
 
 			return obj as T;
 		}
 
 		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
 		{
-			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::LoadAssetAsync] Address is null.");
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[{_className}::LoadAssetAsync] Address is null.");
 
 			var obj = await GetAssetHandleInfo<T>(address, cancellationToken);
 			return obj;
@@ -51,8 +58,8 @@ namespace CizaAddressablesModule
 
 		public void UnloadAsset(string address, Type type)
 		{
-			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[AddressablesModule::UnloadAsset] Address is null.");
-			Assert.IsTrue(type != null, $"[AddressablesModule::UnloadAsset] Type is null.");
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[{_className}::UnloadAsset] Address is null.");
+			Assert.IsTrue(type != null, $"[{_className}::UnloadAsset] Type is null.");
 
 			if (!_objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap))
 				return;
@@ -73,8 +80,8 @@ namespace CizaAddressablesModule
 
 		public void UnloadAssets(string[] addressList, Type type)
 		{
-			Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
-			Assert.IsTrue(type        != null, $"[AddressablesModule::UnloadAssets] Type is null.");
+			Assert.IsTrue(addressList != null, $"[{_className}::UnloadAssets] AddressList is null.");
+			Assert.IsTrue(type        != null, $"[{_className}::UnloadAssets] Type is null.");
 
 			foreach (var address in addressList)
 				UnloadAsset(address, type);
@@ -82,7 +89,7 @@ namespace CizaAddressablesModule
 
 		public void UnloadAssets(string[] addressList)
 		{
-			Assert.IsTrue(addressList != null, $"[AddressablesModule::UnloadAssets] AddressList is null.");
+			Assert.IsTrue(addressList != null, $"[{_className}::UnloadAssets] AddressList is null.");
 
 			var types = _objectMapByAddressMapByType.Keys.ToArray();
 			foreach (var type in types)
@@ -98,7 +105,7 @@ namespace CizaAddressablesModule
 		{
 			if (!_objectMapByAddressMapByType.ContainsKey(type))
 			{
-				Debug.LogWarning($"[AddressablesModule::UnloadAllAssets] Not find {type} is loaded");
+				Debug.LogWarning($"[{_className}::UnloadAllAssets] Not find {type} is loaded");
 				return;
 			}
 
@@ -135,7 +142,7 @@ namespace CizaAddressablesModule
 		//scene
 		public void ActivateScene(string address)
 		{
-			Assert.IsTrue(_addressSceneMap.ContainsKey(address), $"[AddressablesModule::ActivateScene] Address: {address} not find info.");
+			Assert.IsTrue(_addressSceneMap.ContainsKey(address), $"[{_className}::ActivateScene] Address: {address} not find info.");
 			var scene = _addressSceneMap[address];
 			scene.ActivateAsync();
 		}
@@ -153,7 +160,7 @@ namespace CizaAddressablesModule
 
 		public async UniTask UnloadSceneAsync(string address)
 		{
-			Assert.IsTrue(_addressSceneMap.ContainsKey(address), "[AddressablesModule::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
+			Assert.IsTrue(_addressSceneMap.ContainsKey(address), $"[{_className}::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
 
 			var scene = _addressSceneMap[address];
 			_addressSceneMap.Remove(address);
@@ -167,7 +174,7 @@ namespace CizaAddressablesModule
 			var type = typeof(T);
 			if (type.IsSubclassOf(typeof(Component)))
 			{
-				Debug.LogError($"[AddressablesModule::GetAssetHandleInfo] Get asset form ass just support Object type, not support component.");
+				Debug.LogError($"[{_className}::GetAssetHandleInfo] Get asset form ass just support Object type, not support component.");
 				return null;
 			}
 

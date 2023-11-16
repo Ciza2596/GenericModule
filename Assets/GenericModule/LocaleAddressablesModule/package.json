@@ -2,7 +2,7 @@
   "name": "com.ciza.localeaddressablesmodule",
   "displayName": "LocaleAddressablesModule",
   "description": "LocaleAddressablesModule.",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

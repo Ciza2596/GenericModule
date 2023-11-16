@@ -7,10 +7,13 @@ namespace CizaAddressablesModule
 {
 	public class AddressablesByRefCountModule
 	{
-		private readonly AddressablesModule      _addressablesModule   = new AddressablesModule();
+		private readonly AddressablesModule      _addressablesModule;
 		private readonly Dictionary<string, int> _refCountMapByAddress = new Dictionary<string, int>();
 
 		public IReadOnlyDictionary<string, int> RefCountMapByAddress => _refCountMapByAddress;
+
+		public AddressablesByRefCountModule(string className) =>
+			_addressablesModule = new AddressablesModule(className);
 
 		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
 		{

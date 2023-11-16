@@ -9,7 +9,7 @@ namespace CizaLocaleAddressablesModule
 {
 	public class LocaleAddressablesByRefCountModule
 	{
-		private readonly AddressablesByRefCountModule _addressablesByRefCountModule = new AddressablesByRefCountModule();
+		private readonly AddressablesByRefCountModule _addressablesByRefCountModule;
 		private readonly LocalizationModule           _localizationModule;
 
 		public event Func<string, UniTask> OnChangedLocaleBefore;
@@ -24,9 +24,10 @@ namespace CizaLocaleAddressablesModule
 		public string   CurrentLocale  => _localizationModule.CurrentLocale;
 		public string   SourceLocale   => _localizationModule.SourceLocale;
 
-		public LocaleAddressablesByRefCountModule(ILocaleAddressablesByRefCountModuleConfig localeAddressablesByRefCountModuleConfig)
+		public LocaleAddressablesByRefCountModule(string className, ILocaleAddressablesByRefCountModuleConfig localeAddressablesByRefCountModuleConfig)
 		{
-			_localizationModule = new LocalizationModule(localeAddressablesByRefCountModuleConfig);
+			_addressablesByRefCountModule = new AddressablesByRefCountModule(className);
+			_localizationModule           = new LocalizationModule(className, localeAddressablesByRefCountModuleConfig);
 
 			_localizationModule.OnChangedLocaleBefore += m_OnChangedLocaleBefore;
 			_localizationModule.OnChangedLocale       += m_OnChangedLocale;

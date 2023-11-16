@@ -127,7 +127,6 @@ namespace CizaOptionModule
 				previousOption?.Unselect();
 
 			currentOption?.Select(_isAutoTurnOffIsNew && _localIsAutoTurnOffIsNew);
-
 			OnSelect?.Invoke(playerIndex, previousOption != null ? previousOption.Key : string.Empty, currentOption != null ? currentOption.Key : string.Empty);
 		}
 

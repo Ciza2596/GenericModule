@@ -47,8 +47,7 @@ namespace CizaOptionModule
 			_onConfirm      = onConfirm;
 			_onPointerEnter = onPointerEnter;
 
-			var optionSubMons = gameObject.GetComponentsInChildren<IOptionSubMon>();
-			foreach (var optionSubMon in optionSubMons)
+			foreach (var optionSubMon in gameObject.GetComponentsInChildren<IOptionSubMon>())
 				optionSubMon.Initialize(this);
 
 			OnInitialize?.Invoke(parameters);
@@ -79,7 +78,6 @@ namespace CizaOptionModule
 
 			_onConfirm?.Invoke(playerIndex, Key, IsUnlock);
 			OnConfirm?.Invoke(Key, IsUnlock);
-
 			return true;
 		}
 

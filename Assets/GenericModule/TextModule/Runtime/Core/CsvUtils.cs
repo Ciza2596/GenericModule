@@ -9,12 +9,22 @@ namespace CizaTextModule
 		public const char COMMA_TAG        = ',';
 		public const char N_TAG_WITH_SLASH = '\n';
 
+		public const string DOUBLE_QUOTATION_TAG = "\"\"";
+		public const string QUOTATION_TAG        = "\"";
+
+		public const string LESS_THAN_WITH_QUOTATION_TAG = "\"<";
+		public const string LESS_THAN                    = "<";
+
+		public const string GREATER_THAN_WITH_QUOTATION_TAG = ">\"";
+		public const string GREATER_THAN                    = ">";
+
 		public static Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
 		{
-			var categories = GetCategories(csvText, className);
+			var filterText = FilterText(csvText);
+			var categories = GetCategories(filterText, className);
 
 			var textMapByCategoryByKey = new Dictionary<string, Dictionary<string, string>>();
-			var rowTexts               = GetRowTexts(csvText, className, "CreateTextMapByCategoryByKey").ToList();
+			var rowTexts               = GetRowTexts(filterText, className, "CreateTextMapByCategoryByKey").ToList();
 			Assert.IsTrue(rowTexts.Count > 1, $"[{className}::CreateTextMapByCategoryByKey] Only had categories row, hasn't value rows.");
 			rowTexts.RemoveAt(0);
 
@@ -46,7 +56,8 @@ namespace CizaTextModule
 
 		public static string[] GetCategories(string csvText, string className)
 		{
-			var rowTexts = GetRowTexts(csvText, className, "GetCategories");
+			var filterText = FilterText(csvText);
+			var rowTexts   = GetRowTexts(filterText, className, "GetCategories");
 
 			var categories = rowTexts[0].Split(COMMA_TAG).ToList();
 			Assert.IsTrue(categories.Count > 1, $"[{className}::GetCategories] Only has key column.");
@@ -57,9 +68,18 @@ namespace CizaTextModule
 
 		public static string[] GetRowTexts(string csvText, string className, string methodName)
 		{
-			var rowTexts = csvText.Split(N_TAG_WITH_SLASH);
+			var filterText = FilterText(csvText);
+			var rowTexts   = filterText.Split(N_TAG_WITH_SLASH);
 			Assert.IsTrue(rowTexts.Length > 0, $"[{className}::{methodName}] Hasn't categories row.");
 			return rowTexts;
+		}
+
+		public static string FilterText(string text)
+		{
+			var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG);
+			newText = newText.Replace(LESS_THAN_WITH_QUOTATION_TAG, LESS_THAN);
+			newText = newText.Replace(GREATER_THAN_WITH_QUOTATION_TAG, GREATER_THAN);
+			return newText;
 		}
 	}
 }

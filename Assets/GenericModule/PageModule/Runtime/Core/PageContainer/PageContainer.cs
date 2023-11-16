@@ -318,6 +318,8 @@ namespace CizaPageModule
 
 			if (!isImmediately)
 				await pageController.PlayShowingAnimationAsync();
+			else
+				pageController.PlayShowingAnimationImmediately();
 
 			if (isIncludeShowingComplete)
 			{
@@ -417,6 +419,8 @@ namespace CizaPageModule
 
 			if (!isImmediately)
 				await pageController.PlayHidingAnimationAsync();
+			else
+				pageController.PlayHidingAnimationImmediately();
 
 			if (isIncludeHidingComplete)
 				pageController.OnHidingComplete();

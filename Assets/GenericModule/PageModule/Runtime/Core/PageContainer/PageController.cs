@@ -78,6 +78,12 @@ namespace CizaPageModule
 				await showingAnimated.PlayShowingAnimationAsync();
 		}
 
+		public void PlayShowingAnimationImmediately()
+		{
+			if (Page is IShowingAnimatedImmediately showingAnimatedImmediately)
+				showingAnimatedImmediately.PlayShowingAnimationImmediately();
+		}
+
 		public void EnableCanCallShowingComplete() =>
 			CanCallShowingComplete = true;
 
@@ -104,6 +110,12 @@ namespace CizaPageModule
 		{
 			if (Page is IHidingAnimated hidingAnimated)
 				await hidingAnimated.PlayHidingAnimationAsync();
+		}
+
+		public void PlayHidingAnimationImmediately()
+		{
+			if (Page is IHidingAnimatedImmediately hidingAnimatedImmediately)
+				hidingAnimatedImmediately.PlayHidingAnimationImmediately();
 		}
 
 		public void EnableCanCallHidingComplete() =>

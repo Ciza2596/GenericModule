@@ -86,7 +86,7 @@ namespace CizaLocalizationModule
 
 			if (!SupportLocales.Contains(locale))
 			{
-				Debug.LogWarning($"[LocalizationModule::ChangeLocale] LocalizationModule is not initialized.");
+				Debug.LogError($"[LocalizationModule::ChangeLocale] Locale: {locale} is not support.");
 				return;
 			}
 

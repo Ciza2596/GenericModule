@@ -47,6 +47,7 @@ namespace CizaOptionModule
 			_onConfirm      = onConfirm;
 			_onPointerEnter = onPointerEnter;
 
+			ClearEvents();
 			foreach (var optionSubMon in gameObject.GetComponentsInChildren<IOptionSubMon>())
 				optionSubMon.Initialize(this);
 
@@ -85,6 +86,19 @@ namespace CizaOptionModule
 		{
 			_onPointerEnter?.Invoke(PlayerIndex, Key);
 			OnPointerEnter?.Invoke(Key);
+		}
+
+		private void ClearEvents()
+		{
+			OnInitialize = null;
+
+			OnSelect   = null;
+			OnUnselect = null;
+
+			OnConfirm      = null;
+			OnPointerEnter = null;
+
+			OnIsNew = null;
 		}
 	}
 }

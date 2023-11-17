@@ -56,6 +56,17 @@ namespace CizaOptionModule
 
 			return optionModulePage.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
 		}
+		
+		public bool TryGetCurrentOption(int playerIndex, out Option currentOption)
+		{
+			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !TryGetCurrentOptionKey(playerIndex, out var currentOptionKey))
+			{
+				currentOption = null;
+				return false;
+			}
+
+			return optionModulePage.TryGetOption(currentOptionKey, out currentOption);
+		}
 
 		public bool TryGetOptionFromCurrentPage(string key, out Option option)
 		{

@@ -13,8 +13,10 @@ namespace CizaOptionModule.Implement
 		public override void Initialize(Option option)
 		{
 			base.Initialize(option);
+			
+			_button.onClick.RemoveAllListeners();
+			
 			_button.onClick.AddListener(OnClick);
-
 			Assert.IsNotNull(_button, $"[{GetType().Name}::Awake] Button is not referenced.");
 		}
 

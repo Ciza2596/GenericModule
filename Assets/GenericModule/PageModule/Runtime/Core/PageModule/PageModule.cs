@@ -132,16 +132,10 @@ namespace CizaPageModule
 		public void OnlyCallAllHidingComplete(Action onComplete = null) =>
 			_pageContainer.OnlyCallAllHidingComplete(onComplete);
 
-		private void OnEnablePageImp(string pageKey)
-		{
+		private void OnEnablePageImp(string pageKey) =>
 			OnEnablePage?.Invoke(pageKey);
-			Canvas.ForceUpdateCanvases();
-		}
 
-		private void OnDisablePageImp(string pageKey)
-		{
+		private void OnDisablePageImp(string pageKey) =>
 			OnDisablePage?.Invoke(pageKey);
-			Canvas.ForceUpdateCanvases();
-		}
 	}
 }

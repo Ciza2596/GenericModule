@@ -58,13 +58,6 @@ namespace CizaOptionModule
 			return UniTask.CompletedTask;
 		}
 
-		public virtual UniTask OnShowingStart(params object[] parameters)
-		{
-			_onShowingStartCoordinate = (Vector2Int)parameters[0];
-			_isAutoTurnOffIsNew       = (bool)parameters[1];
-			return UniTask.CompletedTask;
-		}
-
 		public void OnShowingStart()
 		{
 			_optionView.UnSelectAll();

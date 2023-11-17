@@ -86,6 +86,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -97,6 +98,7 @@ public class PageContainerTest
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -110,19 +112,21 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.OnlyCallShowingPrepareAsync(_pageKey);
 		await _pageContainer.ShowAsync(_pageKey, isIncludeShowingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(_pageKey);
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -136,6 +140,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -147,6 +152,7 @@ public class PageContainerTest
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
@@ -160,19 +166,21 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.OnlyCallShowingPrepareAsync(_pageKey);
 		await _pageContainer.ShowImmediatelyAsync(_pageKey, isIncludeShowingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(_pageKey);
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
@@ -186,6 +194,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -197,6 +206,7 @@ public class PageContainerTest
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -210,19 +220,21 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.OnlyCallShowingPrepareAsync(_pageKey);
 		await _pageContainer.ShowAsync(new[] { _pageKey }, isIncludeHidingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -236,19 +248,21 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingComplete<FakePage>(_pageKey, false);
 
 		//act
-		await _pageContainer.OnlyCallShowingStartAsync(_pageKey);
+		await _pageContainer.OnlyCallShowingPrepareAsync(_pageKey);
 		await _pageContainer.ShowImmediatelyAsync(new[] { _pageKey }, isIncludeHidingComplete: false);
 		_pageContainer.OnlyCallShowingComplete(new[] { _pageKey });
 
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
@@ -262,6 +276,7 @@ public class PageContainerTest
 		Create_And_Check_Page_Is_Created<FakePage>(_pageKey);
 		Check_Page_Is_Invisible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, false);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, false);
@@ -273,6 +288,7 @@ public class PageContainerTest
 		//assert
 		Check_Page_Is_Visible(_pageKey);
 
+		Check_IsPassOnShowingPrepare<FakePage>(_pageKey, true);
 		Check_IsPassOnShowingStart<FakePage>(_pageKey, true);
 		Check_IsPassPlayShowingAnimation<FakePage>(_pageKey, false);
 		Check_IsPassPlayShowingAnimationImmediately<FakePage>(_pageKey, true);
@@ -691,6 +707,13 @@ public class PageContainerTest
 	{
 		var gameObject = GameObject.Find(FakePage.IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME);
 		Assert.AreEqual(excepted, gameObject != null, $"{key} IsPassRelease doesnt match excepted: {excepted}.");
+	}
+
+	private void Check_IsPassOnShowingPrepare<T>(string key, bool excepted) where T : FakePage
+	{
+		Check_Page_Is_Created<T>(key);
+		_pageContainer.TryGetPage<T>(key, out var page);
+		Assert.AreEqual(excepted, page.IsPassOnShowingPrepare, $"{key} IsPassOnShowingPrepare doesnt match excepted: {excepted}.");
 	}
 
 	private void Check_IsPassOnShowingStart<T>(string key, bool excepted) where T : FakePage

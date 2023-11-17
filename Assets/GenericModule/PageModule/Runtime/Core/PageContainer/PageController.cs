@@ -12,9 +12,9 @@ namespace CizaPageModule
 
 		public PageState State { get; private set; }
 
-		public bool IsAlreadyCallShowingStartAsync { get; private set; }
+		public bool IsAlreadyCallShowingPrepareAsync { get; private set; }
 
-		public bool IsWorkingShowingStartAsync { get; private set; }
+		public bool IsWorkingShowingPrepareAsync { get; private set; }
 		public bool CanCallShowingComplete     { get; private set; }
 
 		public bool IsAlreadyCallHidingStart { get; private set; }
@@ -56,17 +56,24 @@ namespace CizaPageModule
 			return fixedTickable != null;
 		}
 
-		public async UniTask OnShowingStartAsync(params object[] parameters)
+		public async UniTask OnShowingPrepareAsync(params object[] parameters)
 		{
 			State                          = PageState.Showing;
-			IsAlreadyCallShowingStartAsync = true;
+			IsAlreadyCallShowingPrepareAsync = true;
 
-			IsWorkingShowingStartAsync = true;
+			IsWorkingShowingPrepareAsync = true;
 
+			if (Page is IShowingPrepare showingPrepare)
+				await showingPrepare.OnShowingPrepareAsync(parameters);
+
+			IsWorkingShowingPrepareAsync = false;
+		}
+		
+		
+		public void OnShowingStart()
+		{
 			if (Page is IShowingStart showingStart)
-				await showingStart.OnShowingStartAsync(parameters);
-
-			IsWorkingShowingStartAsync = false;
+				showingStart.OnShowingStart();
 		}
 
 		public void EnablePage() =>
@@ -94,7 +101,7 @@ namespace CizaPageModule
 
 			State                          = PageState.Visible;
 			CanCallShowingComplete         = false;
-			IsAlreadyCallShowingStartAsync = false;
+			IsAlreadyCallShowingPrepareAsync = false;
 		}
 
 		public void OnHidingStart()

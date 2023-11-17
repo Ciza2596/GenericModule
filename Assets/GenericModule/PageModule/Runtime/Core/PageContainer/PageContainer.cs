@@ -139,23 +139,23 @@ namespace CizaPageModule
 				Destroy(key);
 		}
 
-		public async UniTask OnlyCallShowingStartAsync(string key, Action onComplete = null, params object[] parameters)
+		public async UniTask OnlyCallShowingPrepareAsync(string key, Action onComplete = null, params object[] parameters)
 		{
-			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::OnlyCallShowingStartAsync] Page: {key} doesnt be created.");
+			Assert.IsTrue(_pageControllerMapByKey.ContainsKey(key), $"[PageContainer::OnlyCallShowingPrepareAsync] Page: {key} doesnt be created.");
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 
 			if (state != PageState.Invisible)
 			{
-				Debug.LogWarning($"[PageContainer::OnlyCallShowingStartAsync] Page: {key} should be Visible. Current state is {state}.");
+				Debug.LogWarning($"[PageContainer::OnlyCallShowingPrepareAsync] Page: {key} should be Visible. Current state is {state}.");
 				return;
 			}
 
-			if (pageController.IsAlreadyCallShowingStartAsync)
+			if (pageController.IsAlreadyCallShowingPrepareAsync)
 				return;
 
-			await pageController.OnShowingStartAsync(parameters);
+			await pageController.OnShowingPrepareAsync(parameters);
 			onComplete?.Invoke();
 		}
 
@@ -303,20 +303,22 @@ namespace CizaPageModule
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingStartAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingStartAsync))
+			if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
 			{
-				var expectedState = !pageController.IsAlreadyCallShowingStartAsync ? PageState.Invisible : PageState.Showing;
+				var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageState.Invisible : PageState.Showing;
 				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 				return;
 			}
 
-			if (!pageController.IsAlreadyCallShowingStartAsync)
-				await pageController.OnShowingStartAsync(parameters);
+			if (!pageController.IsAlreadyCallShowingPrepareAsync)
+				await pageController.OnShowingPrepareAsync(parameters);
 
-			while (pageController.IsWorkingShowingStartAsync)
+			while (pageController.IsWorkingShowingPrepareAsync)
 				await UniTask.Yield();
 
 			pageController.EnablePage();
+
+			pageController.OnShowingStart();
 
 			if (!isImmediately)
 				await pageController.PlayShowingAnimationAsync();
@@ -344,9 +346,9 @@ namespace CizaPageModule
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
 
-				if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingStartAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingStartAsync))
+				if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
 				{
-					var expectedState = !pageController.IsAlreadyCallShowingStartAsync ? PageState.Invisible : PageState.Showing;
+					var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageState.Invisible : PageState.Showing;
 					Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 					continue;
 				}
@@ -358,8 +360,11 @@ namespace CizaPageModule
 
 			async UniTask m_Show(PageController[] m_pageControllers, bool m_isImmediately, Action m_onComplete, bool m_isIncludeShowingComplete, object[][] m_parametersList)
 			{
-				Func<UniTask> m_onShowingStart = null;
-				Action        m_EnablePage     = null;
+				Func<UniTask> m_onShowingPrepare = null;
+
+				Action m_EnablePage = null;
+
+				Action m_onShowingStart = null;
 
 				Func<UniTask> m_playShowingAnimation            = null;
 				Action        m_playShowingAnimationImmediately = null;
@@ -370,16 +375,18 @@ namespace CizaPageModule
 				{
 					var m_pageController = m_pageControllers[i];
 					var m_parameters     = m_parametersList[i];
-					m_onShowingStart += async () =>
+					m_onShowingPrepare += async () =>
 					{
-						if (!m_pageController.IsAlreadyCallShowingStartAsync)
-							await m_pageController.OnShowingStartAsync(m_parameters);
+						if (!m_pageController.IsAlreadyCallShowingPrepareAsync)
+							await m_pageController.OnShowingPrepareAsync(m_parameters);
 
-						while (m_pageController.IsWorkingShowingStartAsync)
+						while (m_pageController.IsWorkingShowingPrepareAsync)
 							await UniTask.Yield();
 					};
 
 					m_EnablePage += m_pageController.EnablePage;
+
+					m_onShowingStart += m_pageController.OnShowingStart;
 
 					m_playShowingAnimation            += m_pageController.PlayShowingAnimationAsync;
 					m_playShowingAnimationImmediately += m_pageController.PlayShowingAnimationImmediately;
@@ -394,9 +401,11 @@ namespace CizaPageModule
 					};
 				}
 
-				await WhenAll(m_onShowingStart);
+				await WhenAll(m_onShowingPrepare);
 
 				m_EnablePage?.Invoke();
+
+				m_onShowingStart?.Invoke();
 
 				if (!m_isImmediately)
 					await WhenAll(m_playShowingAnimation);

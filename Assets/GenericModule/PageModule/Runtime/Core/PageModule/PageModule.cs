@@ -74,8 +74,8 @@ namespace CizaPageModule
 		public void DestroyAll() =>
 			_pageContainer.DestroyAll();
 
-		public UniTask OnlyCallShowingStartAsync(string key, Action onComplete = null, params object[] parameters) =>
-			_pageContainer.OnlyCallShowingStartAsync(key, onComplete, parameters);
+		public UniTask OnlyCallShowingPrepareAsync(string key, Action onComplete = null, params object[] parameters) =>
+			_pageContainer.OnlyCallShowingPrepareAsync(key, onComplete, parameters);
 
 		public UniTask ShowAsync(string key, Action onComplete = null, bool isIncludeShowingComplete = true, params object[] parameters) =>
 			_pageContainer.ShowAsync(key, onComplete, isIncludeShowingComplete, parameters);

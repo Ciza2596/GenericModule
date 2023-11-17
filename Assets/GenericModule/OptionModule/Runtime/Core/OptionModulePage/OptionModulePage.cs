@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 
 namespace CizaOptionModule
 {
-	public abstract class OptionModulePage : Page, IOptionModulePage, IInitializable, IShowingStart, IShowingAnimated, IHidingStart, IReleasable
+	public abstract class OptionModulePage : Page, IOptionModulePage, IInitializable, IShowingPrepare, IShowingStart, IHidingStart, IReleasable
 	{
 		[SerializeField]
 		protected Transform _parentTransform;
@@ -31,9 +31,9 @@ namespace CizaOptionModule
 
 		public virtual UniTask InitializeAsync(params object[] parameters)
 		{
-			var playerCount = (int)parameters[0];
+			var playerCount              = (int)parameters[0];
 			var optionDefaultPlayerIndex = (int)parameters[1];
-			
+
 			var optionModulePageInfo = parameters[2] as IOptionModulePageInfo;
 			Assert.IsNotNull(optionModulePageInfo, $"[{GetType().Name}::Initialize] OptionModulePageInfo is not found.");
 
@@ -51,21 +51,27 @@ namespace CizaOptionModule
 			return UniTask.CompletedTask;
 		}
 
-		public virtual UniTask OnShowingStartAsync(params object[] parameters)
+		public UniTask OnShowingPrepareAsync(params object[] parameters)
 		{
 			_onShowingStartCoordinate = (Vector2Int)parameters[0];
 			_isAutoTurnOffIsNew       = (bool)parameters[1];
 			return UniTask.CompletedTask;
 		}
 
-		public UniTask PlayShowingAnimationAsync()
+		public virtual UniTask OnShowingStart(params object[] parameters)
+		{
+			_onShowingStartCoordinate = (Vector2Int)parameters[0];
+			_isAutoTurnOffIsNew       = (bool)parameters[1];
+			return UniTask.CompletedTask;
+		}
+
+		public void OnShowingStart()
 		{
 			_optionView.UnSelectAll();
 			_localIsAutoTurnOffIsNew = true;
 
 			for (var i = 0; i < _selectOptionLogic.PlayerCount; i++)
 				_selectOptionLogic.TrySetCurrentCoordinate(i, _onShowingStartCoordinate);
-			return UniTask.CompletedTask;
 		}
 
 		public virtual void OnHidingStart() =>

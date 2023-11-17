@@ -12,16 +12,23 @@ namespace CizaPageModule
 		private readonly PageContainer     _pageContainer;
 		private readonly IPageModuleConfig _pageModuleConfig;
 
+		public event Action<string> OnEnablePage;
+		public event Action<string> OnDisablePage;
+
+		//public variable
+		public bool IsInitialized => _pageContainer.IsInitialized;
+
 		//constructor
 		[Preserve]
 		public PageModule(IPageModuleConfig pageModuleConfig)
 		{
 			_pageContainer    = new PageContainer();
 			_pageModuleConfig = pageModuleConfig;
-		}
 
-		//public variable
-		public bool IsInitialized => _pageContainer.IsInitialized;
+
+			_pageContainer.OnEnablePage  += OnEnablePageImp;
+			_pageContainer.OnDisablePage += OnDisablePageImp;
+		}
 
 		//public method
 		public void Initialize(Transform pageRootParentTransform = null)
@@ -61,7 +68,7 @@ namespace CizaPageModule
 
 		public TPage[] GetAllPage<TPage>() where TPage : class =>
 			_pageContainer.GetAllPage<TPage>();
-		
+
 		public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
 			_pageContainer.TryGetPage(key, out page);
 
@@ -124,5 +131,17 @@ namespace CizaPageModule
 
 		public void OnlyCallAllHidingComplete(Action onComplete = null) =>
 			_pageContainer.OnlyCallAllHidingComplete(onComplete);
+
+		private void OnEnablePageImp(string pageKey)
+		{
+			OnEnablePage?.Invoke(pageKey);
+			Canvas.ForceUpdateCanvases();
+		}
+
+		private void OnDisablePageImp(string pageKey)
+		{
+			OnDisablePage?.Invoke(pageKey);
+			Canvas.ForceUpdateCanvases();
+		}
 	}
 }

@@ -1,10 +1,15 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CizaPageModule
 {
 	internal class PageController
 	{
+		private event Action<string> _onEnablePage;
+		private event Action<string> _onDisablePage;
+
 		//public variable
 		public string Key { get; }
 
@@ -15,16 +20,19 @@ namespace CizaPageModule
 		public bool IsAlreadyCallShowingPrepareAsync { get; private set; }
 
 		public bool IsWorkingShowingPrepareAsync { get; private set; }
-		public bool CanCallShowingComplete     { get; private set; }
+		public bool CanCallShowingComplete       { get; private set; }
 
 		public bool IsAlreadyCallHidingStart { get; private set; }
 		public bool CanCallHidingComplete    { get; private set; }
 
 		//constructor
-		public PageController(string key, Component page)
+		public PageController(string key, Component page, Action<string> onEnablePage, Action<string> onDisablePage)
 		{
 			Key  = key;
 			Page = page;
+
+			_onEnablePage  = onEnablePage;
+			_onDisablePage = onDisablePage;
 		}
 
 		//public method
@@ -58,7 +66,7 @@ namespace CizaPageModule
 
 		public async UniTask OnShowingPrepareAsync(params object[] parameters)
 		{
-			State                          = PageState.Showing;
+			State                            = PageState.Showing;
 			IsAlreadyCallShowingPrepareAsync = true;
 
 			IsWorkingShowingPrepareAsync = true;
@@ -68,11 +76,13 @@ namespace CizaPageModule
 
 			IsWorkingShowingPrepareAsync = false;
 		}
-		
-		public void EnablePage() =>
+
+		public void EnablePage()
+		{
 			Page.gameObject.SetActive(true);
-		
-		
+			_onEnablePage?.Invoke(Key);
+		}
+
 		public void OnShowingStart()
 		{
 			if (Page is IShowingStart showingStart)
@@ -99,8 +109,8 @@ namespace CizaPageModule
 			if (Page is IShowingComplete showingComplete)
 				showingComplete.OnShowingComplete();
 
-			State                          = PageState.Visible;
-			CanCallShowingComplete         = false;
+			State                            = PageState.Visible;
+			CanCallShowingComplete           = false;
 			IsAlreadyCallShowingPrepareAsync = false;
 		}
 
@@ -130,8 +140,8 @@ namespace CizaPageModule
 
 		public void OnHidingComplete()
 		{
-			var pageGameObject = Page.gameObject;
-			pageGameObject.SetActive(false);
+			Page.gameObject.SetActive(false);
+			_onDisablePage?.Invoke(Key);
 
 			if (Page is IHidingComplete hidingComplete)
 				hidingComplete.OnHidingComplete();

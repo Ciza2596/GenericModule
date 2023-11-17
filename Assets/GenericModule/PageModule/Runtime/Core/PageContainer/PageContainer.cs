@@ -20,6 +20,10 @@ namespace CizaPageModule
 		private Action<float> _fixedTickHandle;
 
 		//public variable
+		// PageKey
+		public event Action<string> OnEnablePage;
+		public event Action<string> OnDisablePage;
+
 		public bool IsInitialized => _pageGameObjectRootTransform != null && _pagePrefabs != null;
 
 		//Unity callback
@@ -291,7 +295,7 @@ namespace CizaPageModule
 			var pageGameObject       = Object.Instantiate(pageGameObjectPrefab, _pageGameObjectRootTransform);
 
 			var page           = pageGameObject.GetComponent(pageType);
-			var pageController = new PageController(key, page);
+			var pageController = new PageController(key, page, OnEnablePageImp, OnDisablePageImp);
 
 			await pageController.InitializeAsync(parameters);
 			_pageControllerMapByKey.Add(key, pageController);
@@ -577,5 +581,11 @@ namespace CizaPageModule
 			mono = null;
 			return false;
 		}
+
+		private void OnEnablePageImp(string pageKey) =>
+			OnEnablePage?.Invoke(pageKey);
+
+		private void OnDisablePageImp(string pageKey) =>
+			OnDisablePage?.Invoke(pageKey);
 	}
 }

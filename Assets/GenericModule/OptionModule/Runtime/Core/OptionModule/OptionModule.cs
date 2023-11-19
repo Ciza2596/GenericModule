@@ -295,7 +295,7 @@ namespace CizaOptionModule
 
 		public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex)
 		{
-			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			if (!optionModulePage.TryMoveToLeft(playerIndex))
@@ -306,7 +306,7 @@ namespace CizaOptionModule
 
 		public async UniTask<bool> TryMoveOptionToRightAsync(int playerIndex)
 		{
-			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			if (!optionModulePage.TryMoveToRight(playerIndex))
@@ -317,7 +317,7 @@ namespace CizaOptionModule
 
 		public bool TryMoveOptionToUp(int playerIndex)
 		{
-			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			return optionModulePage.TryMoveToUp(playerIndex);
@@ -325,7 +325,7 @@ namespace CizaOptionModule
 
 		public bool TryMoveOptionToDown(int playerIndex)
 		{
-			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			return optionModulePage.TryMoveToDown(playerIndex);

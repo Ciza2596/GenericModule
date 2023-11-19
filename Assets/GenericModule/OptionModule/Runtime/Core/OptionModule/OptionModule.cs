@@ -371,10 +371,8 @@ namespace CizaOptionModule
 
 			public bool CanConfirm { get; private set; }
 
-			public Player(int index)
-			{
+			public Player(int index) =>
 				Index = index;
-			}
 
 			public void EnableCanSelect() =>
 				CanSelect = true;

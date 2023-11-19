@@ -31,10 +31,11 @@ namespace CizaOptionModule
 
 		public virtual UniTask InitializeAsync(params object[] parameters)
 		{
-			var playerCount              = (int)parameters[0];
-			var optionDefaultPlayerIndex = (int)parameters[1];
+			var optionModule             = parameters[0] as OptionModule;
+			var playerCount              = (int)parameters[1];
+			var optionDefaultPlayerIndex = (int)parameters[2];
 
-			var optionModulePageInfo = parameters[2] as IOptionModulePageInfo;
+			var optionModulePageInfo = parameters[3] as IOptionModulePageInfo;
 			Assert.IsNotNull(optionModulePageInfo, $"[{GetType().Name}::Initialize] OptionModulePageInfo is not found.");
 
 			PageIndex = int.Parse(optionModulePageInfo.PageIndexString);
@@ -42,8 +43,8 @@ namespace CizaOptionModule
 			var optionViewGameObject = Instantiate(optionModulePageInfo.OptionViewPrefab, _parentTransform);
 			_optionView = optionViewGameObject.GetComponent<IOptionView>();
 
-			var optionInfos = parameters[3] as IOptionInfo[];
-			_optionView.OptionsIncludeNull.InitializeOptions(optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, OnPointerEnter, GetType().Name);
+			var optionInfos = parameters[4] as IOptionInfo[];
+			_optionView.OptionsIncludeNull.InitializeOptions(optionModule, optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, GetType().Name);
 
 			_selectOptionLogic.Initialize(playerCount, _optionView.OptionColumns, _optionView.Options, _optionView.ColumnInfo, _optionView.RowInfo);
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
@@ -91,6 +92,9 @@ namespace CizaOptionModule
 		public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
 			_selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
 
+		public bool TrySetCurrentCoordinate(int playerIndex, string optionKey) =>
+			_selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
+
 		public bool TryConfirm(int playerIndex)
 		{
 			if (!_selectOptionLogic.TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
@@ -116,9 +120,6 @@ namespace CizaOptionModule
 
 		protected virtual void OnConfirmImp(int playerIndex, string optionKey, bool isUnlock) =>
 			OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
-
-		protected virtual void OnPointerEnter(int playerIndex, string optionKey) =>
-			_selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
 
 		protected virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
 		{

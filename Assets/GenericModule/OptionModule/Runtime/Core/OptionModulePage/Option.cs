@@ -6,11 +6,10 @@ namespace CizaOptionModule
 {
 	public abstract class Option : MonoBehaviour, IOptionReadModel
 	{
+		private OptionModule _optionModule;
+
 		// PlayerIndex, OptionKey, IsUnlock
 		private event Action<int, string, bool> _onConfirm;
-
-		// PlayerIndex, OptionKey
-		private event Action<int, string> _onPointerEnter;
 
 		public event Action<object[]> OnInitialize;
 
@@ -23,9 +22,6 @@ namespace CizaOptionModule
 		// OptionKey
 		public event Action<string, bool> OnConfirm;
 
-		// OptionKey
-		public event Action<string> OnPointerEnter;
-
 		// OptionKey, IsNew
 		public event Action<string, bool> OnIsNew;
 
@@ -36,16 +32,17 @@ namespace CizaOptionModule
 		public bool   IsUnlock { get; protected set; }
 		public bool   IsNew    { get; protected set; }
 
-		public virtual void Initialize(int playerIndex, string key, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
+		public virtual void Initialize(OptionModule optionModule, int playerIndex, string key, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, object[] parameters)
 		{
+			_optionModule = optionModule;
+
 			PlayerIndex = playerIndex;
 			Key         = key;
 			IsEnable    = isEnable;
 			IsUnlock    = isUnlock;
 			IsNew       = isNew;
 
-			_onConfirm      = onConfirm;
-			_onPointerEnter = onPointerEnter;
+			_onConfirm = onConfirm;
 
 			ClearEvents();
 			foreach (var optionSubMon in gameObject.GetComponentsInChildren<IOptionSubMon>())
@@ -70,7 +67,7 @@ namespace CizaOptionModule
 		}
 
 		public virtual bool TryConfirm() =>
-			TryConfirm(PlayerIndex);
+			_optionModule.TryConfirm(PlayerIndex);
 
 		public virtual bool TryConfirm(int playerIndex)
 		{
@@ -82,11 +79,8 @@ namespace CizaOptionModule
 			return true;
 		}
 
-		public virtual void PointerEnter()
-		{
-			_onPointerEnter?.Invoke(PlayerIndex, Key);
-			OnPointerEnter?.Invoke(Key);
-		}
+		public virtual void PointerEnter() =>
+			_optionModule.TrySetCurrentCoordinate(PlayerIndex, Key, false);
 
 		private void ClearEvents()
 		{
@@ -95,8 +89,7 @@ namespace CizaOptionModule
 			OnSelect   = null;
 			OnUnselect = null;
 
-			OnConfirm      = null;
-			OnPointerEnter = null;
+			OnConfirm = null;
 
 			OnIsNew = null;
 		}

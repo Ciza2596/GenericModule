@@ -86,7 +86,7 @@ namespace CizaOptionModule
 			return optionModulePage.TryGetOption(currentOptionKey, out currentOption);
 		}
 
-		public bool TryGetOptionFromCurrentPage(string key, out Option option)
+		public bool TryGetOptionFromCurrentPage(string optionKey, out Option option)
 		{
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 			{
@@ -94,7 +94,7 @@ namespace CizaOptionModule
 				return false;
 			}
 
-			return optionModulePage.TryGetOption(key, out option);
+			return optionModulePage.TryGetOption(optionKey, out option);
 		}
 
 		public TOption[] GetAllOptions<TOption>() where TOption : class
@@ -136,7 +136,7 @@ namespace CizaOptionModule
 			_pageModule.Initialize(parent);
 			foreach (var optionModulePageInfo in optionModulePageInfos)
 			{
-				await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, PlayerCount, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
+				await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, this, PlayerCount, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
 				if (_pageModule.TryGetPage<IOptionModulePage>(optionModulePageInfo.PageIndexString, out var optionModulePage))
 				{
 					optionModulePage.OnSelect  += Select;
@@ -194,15 +194,26 @@ namespace CizaOptionModule
 			return true;
 		}
 
-		public bool TrySetCoordinateAsync(int playerIndex, Vector2Int coordinate)
+		public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate, bool isIgnoreCanSelect)
 		{
-			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || (!isIgnoreCanSelect && !player.CanSelect))
 				return false;
 
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			return optionModulePage.TrySetCurrentCoordinate(playerIndex, coordinate);
+		}
+
+		public bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isIgnoreCanSelect)
+		{
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || (!isIgnoreCanSelect && !player.CanSelect))
+				return false;
+
+			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+				return false;
+
+			return optionModulePage.TrySetCurrentCoordinate(playerIndex, optionKey);
 		}
 
 		public async UniTask<bool> TryMovePageToLeftAsync(int playerIndex)

@@ -14,13 +14,14 @@ namespace CizaOptionModule
 		int MaxRowIndex    { get; }
 
 		Option[] GetAllOptions();
-
-		bool TryGetOption(string optionKey, out Option option);
+		
+		bool TryGetOption(string     optionKey, out Option     option);
 
 		bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate);
 		bool TryGetCurrentOptionKey(int  playerIndex, out string     currentOptionKey);
 
 		bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
+		bool TrySetCurrentCoordinate(int playerIndex, string optionKey);
 
 		bool TryConfirm(int playerIndex);
 
@@ -30,6 +31,6 @@ namespace CizaOptionModule
 
 		bool TryMoveToUp(int playerIndex);
 
-		bool TryMoveToDown(int playerIndex);
+		bool TryMoveToDown(int       playerIndex);
 	}
 }

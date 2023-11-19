@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CizaCore;
 using CizaPageModule;
 using Cysharp.Threading.Tasks;
@@ -9,10 +10,11 @@ namespace CizaOptionModule
 {
 	public class OptionModule
 	{
-		private readonly PageModule _pageModule;
+		private readonly PageModule              _pageModule;
+		private readonly Dictionary<int, Player> _playerMapByIndex = new Dictionary<int, Player>();
 
-		private readonly int _minIndex = 0;
-		private          int _maxIndex;
+		private const int _minIndex = 0;
+		private       int _maxIndex;
 
 		public const int NotInitialPageIndex = -1;
 
@@ -24,7 +26,7 @@ namespace CizaOptionModule
 
 		public bool IsInitialized => _pageModule.IsInitialized;
 
-		public int PlayerCount              { get; private set; }
+		public int PlayerCount              => _playerMapByIndex.Count;
 		public int OptionDefaultPlayerIndex { get; private set; }
 
 		public bool IsPageCircle { get; private set; }
@@ -34,6 +36,22 @@ namespace CizaOptionModule
 		public bool IsChangingPage { get; private set; }
 
 		public int CurrentPageIndex { get; private set; } = NotInitialPageIndex;
+
+		public bool CheckCanSelect(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return false;
+
+			return player.CanSelect;
+		}
+
+		public bool CheckCanConfirm(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return false;
+
+			return player.CanConfirm;
+		}
 
 		public bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate)
 		{
@@ -56,7 +74,7 @@ namespace CizaOptionModule
 
 			return optionModulePage.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
 		}
-		
+
 		public bool TryGetCurrentOption(int playerIndex, out Option currentOption)
 		{
 			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !TryGetCurrentOptionKey(playerIndex, out var currentOptionKey))
@@ -108,7 +126,7 @@ namespace CizaOptionModule
 			if (IsInitialized)
 				return;
 
-			PlayerCount              = playerCount;
+			CreatePlayers(playerCount);
 			OptionDefaultPlayerIndex = optionDefaultPlayerIndex;
 
 			_maxIndex        = optionModulePageInfos.Length - 1;
@@ -128,6 +146,9 @@ namespace CizaOptionModule
 
 			if (!await TrySetPageIndexAsync(pageIndex, coordinate, false))
 				await TrySetPageIndexAsync(0, coordinate, false);
+
+			EnableAllCanSelect();
+			EnableAllCanConfirm();
 		}
 
 		public void Release()
@@ -135,6 +156,10 @@ namespace CizaOptionModule
 			if (!IsInitialized)
 				return;
 
+			DisableAllCanSelect();
+			DisableAllCanConfirm();
+
+			ClearPlayers();
 			_pageModule.Release();
 			CurrentPageIndex = NotInitialPageIndex;
 			IsChangingPage   = false;
@@ -212,6 +237,62 @@ namespace CizaOptionModule
 			return await TrySetPageIndexAsync(nextPageIndex, coordinate);
 		}
 
+		public void EnableAllCanSelect()
+		{
+			foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+				EnableCanSelect(playerIndex);
+		}
+
+		public void DisableAllCanSelect()
+		{
+			foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+				DisableCanSelect(playerIndex);
+		}
+
+		public void EnableCanSelect(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return;
+
+			player.EnableCanSelect();
+		}
+
+		public void DisableCanSelect(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return;
+
+			player.DisableCanSelect();
+		}
+
+		public void EnableAllCanConfirm()
+		{
+			foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+				EnableCanConfirm(playerIndex);
+		}
+
+		public void DisableAllCanConfirm()
+		{
+			foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+				DisableCanConfirm(playerIndex);
+		}
+
+		public void EnableCanConfirm(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return;
+
+			player.EnableCanConfirm();
+		}
+
+		public void DisableCanConfirm(int playerIndex)
+		{
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+				return;
+
+			player.DisableCanConfirm();
+		}
+
 		public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex)
 		{
 			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
@@ -272,5 +353,40 @@ namespace CizaOptionModule
 
 		private bool ValidatePlayerIndex(int playerIndex) =>
 			playerIndex < PlayerCount;
+
+		private void CreatePlayers(int playerCount)
+		{
+			for (var i = 0; i < playerCount; i++)
+				_playerMapByIndex.Add(i, new Player(i));
+		}
+
+		private void ClearPlayers() =>
+			_playerMapByIndex.Clear();
+
+		private class Player
+		{
+			public int Index { get; }
+
+			public bool CanSelect { get; private set; }
+
+			public bool CanConfirm { get; private set; }
+
+			public Player(int index)
+			{
+				Index = index;
+			}
+
+			public void EnableCanSelect() =>
+				CanSelect = true;
+
+			public void DisableCanSelect() =>
+				CanSelect = false;
+
+			public void EnableCanConfirm() =>
+				CanConfirm = true;
+
+			public void DisableCanConfirm() =>
+				CanConfirm = false;
+		}
 	}
 }

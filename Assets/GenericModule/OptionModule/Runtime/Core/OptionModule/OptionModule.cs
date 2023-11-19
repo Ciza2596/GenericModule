@@ -39,7 +39,7 @@ namespace CizaOptionModule
 
 		public bool CheckCanSelect(int playerIndex)
 		{
-			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
 				return false;
 
 			return player.CanSelect;
@@ -47,7 +47,7 @@ namespace CizaOptionModule
 
 		public bool CheckCanConfirm(int playerIndex)
 		{
-			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
 				return false;
 
 			return player.CanConfirm;
@@ -55,7 +55,7 @@ namespace CizaOptionModule
 
 		public bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate)
 		{
-			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 			{
 				currentCoordinate = Vector2Int.zero;
 				return false;
@@ -66,7 +66,7 @@ namespace CizaOptionModule
 
 		public bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey)
 		{
-			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 			{
 				currentOptionKey = string.Empty;
 				return false;
@@ -77,7 +77,7 @@ namespace CizaOptionModule
 
 		public bool TryGetCurrentOption(int playerIndex, out Option currentOption)
 		{
-			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !TryGetCurrentOptionKey(playerIndex, out var currentOptionKey))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !TryGetCurrentOptionKey(playerIndex, out var currentOptionKey))
 			{
 				currentOption = null;
 				return false;
@@ -167,7 +167,7 @@ namespace CizaOptionModule
 
 		public bool TryConfirm(int playerIndex)
 		{
-			if (!IsInitialized || !ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm)
 				return false;
 
 			return optionModulePage.TryConfirm(playerIndex);
@@ -196,7 +196,7 @@ namespace CizaOptionModule
 
 		public bool TrySetCoordinateAsync(int playerIndex, Vector2Int coordinate)
 		{
-			if (!IsInitialized || !ValidatePlayerIndex(playerIndex))
+			if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
 				return false;
 
 			if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
@@ -295,7 +295,7 @@ namespace CizaOptionModule
 
 		public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex)
 		{
-			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			if (!optionModulePage.TryMoveToLeft(playerIndex))
@@ -306,7 +306,7 @@ namespace CizaOptionModule
 
 		public async UniTask<bool> TryMoveOptionToRightAsync(int playerIndex)
 		{
-			if (!ValidatePlayerIndex(playerIndex) || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+			if (!_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
 				return false;
 
 			if (!optionModulePage.TryMoveToRight(playerIndex))
@@ -350,9 +350,6 @@ namespace CizaOptionModule
 
 		private void Confirm(int playerIndex, string optionKey, bool isUnlock) =>
 			OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
-
-		private bool ValidatePlayerIndex(int playerIndex) =>
-			playerIndex < PlayerCount;
 
 		private void CreatePlayers(int playerCount)
 		{

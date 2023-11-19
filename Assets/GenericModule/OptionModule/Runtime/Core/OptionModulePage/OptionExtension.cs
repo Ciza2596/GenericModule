@@ -7,7 +7,7 @@ namespace CizaOptionModule
 {
 	public static class OptionExtension
 	{
-		public static void InitializeOptions(this Option[] options, OptionModule optionModule, int playerIndex, string[] optionKeys, IOptionInfo[] optionInfos, Action<int, string, bool> onConfirm, string logName)
+		public static void InitializeOptions(this Option[] options, OptionModule optionModule, int playerIndex, string[] optionKeys, IOptionInfo[] optionInfos, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, string logName)
 		{
 			Assert.IsTrue(optionKeys.Length <= options.Length, $"[{logName}::InitializeOptions] optionsLength: {options.Length} should be equal optionKeysLength: {optionKeys.Length}.");
 			for (var i = 0; i < optionKeys.Length; i++)
@@ -23,15 +23,15 @@ namespace CizaOptionModule
 				if (option is null)
 					continue;
 
-				option.Initialize(optionModule, playerIndex, optionKey, optionInfo.IsEnable, optionInfo.IsUnlock, optionInfo.IsNew, onConfirm, optionInfo.Parameters);
+				option.Initialize(optionModule, playerIndex, optionKey, optionInfo.IsEnable, optionInfo.IsUnlock, optionInfo.IsNew, onConfirm, onPointerEnter, optionInfo.Parameters);
 			}
 		}
 
-		public static void InitializeOptions(this Option[] options, int playerIndex, string[] isReadOptionKeys, Action<int, string, bool> onConfirm, string logName)
+		public static void InitializeOptions(this Option[] options, int playerIndex, string[] isReadOptionKeys, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, string logName)
 		{
 			Assert.IsNotNull(options, $"[{logName}::InitializeOptions] options is null.");
 			foreach (var option in options)
-				option.Initialize(null, playerIndex, option.Key, option.IsEnable, option.IsEnable, !isReadOptionKeys.Contains(option.Key), onConfirm, Array.Empty<object>());
+				option.Initialize(null, playerIndex, option.Key, option.IsEnable, option.IsEnable, !isReadOptionKeys.Contains(option.Key), onConfirm, onPointerEnter, Array.Empty<object>());
 		}
 	}
 }

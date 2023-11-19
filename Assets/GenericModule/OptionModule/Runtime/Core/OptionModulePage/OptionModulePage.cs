@@ -44,7 +44,7 @@ namespace CizaOptionModule
 			_optionView = optionViewGameObject.GetComponent<IOptionView>();
 
 			var optionInfos = parameters[4] as IOptionInfo[];
-			_optionView.OptionsIncludeNull.InitializeOptions(optionModule, optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, GetType().Name);
+			_optionView.OptionsIncludeNull.InitializeOptions(optionModule, optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, null, GetType().Name);
 
 			_selectOptionLogic.Initialize(playerCount, _optionView.OptionColumns, _optionView.Options, _optionView.ColumnInfo, _optionView.RowInfo);
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;

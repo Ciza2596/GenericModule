@@ -2,7 +2,7 @@
   "name": "com.ciza.optionmodule",
   "displayName": "OptionModule",
   "description": "OptionModule.",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

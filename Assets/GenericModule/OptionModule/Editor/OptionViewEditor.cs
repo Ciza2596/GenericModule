@@ -1,8 +1,9 @@
+using CizaOptionModule.Implement;
 using UnityEditor;
 
 namespace OptionModule.Editor
 {
-	[CustomEditor(typeof(OptionViewEditor))]
+	[CustomEditor(typeof(OptionView))]
 	[CanEditMultipleObjects]
 	public class OptionViewEditor : UnityEditor.Editor
 	{

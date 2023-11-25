@@ -189,7 +189,7 @@ namespace CizaOptionModule
 			return optionModulePage.TryConfirm(playerIndex);
 		}
 
-		public async UniTask<bool> TrySetPageIndexAsync(int pageIndex, Vector2Int coordinate, bool isAutoTurnOffIsNew = true, bool isImmediately = true)
+		public async UniTask<bool> TrySetPageIndexAsync(int pageIndex, Vector2Int coordinate, bool isAutoTurnOffIsNew = true, bool isHideImmediately = true, bool isShowImmediately = true)
 		{
 			if (!IsInitialized || (pageIndex < _minIndex && pageIndex > _maxIndex))
 				return false;
@@ -201,7 +201,7 @@ namespace CizaOptionModule
 
 			if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsVisible(previousCurrentPageIndex.ToString()))
 			{
-				if (isImmediately)
+				if (isHideImmediately)
 					_pageModule.HideImmediately(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
 				else
 					await _pageModule.HideAsync(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
@@ -213,9 +213,8 @@ namespace CizaOptionModule
 			if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsHiding(previousCurrentPageIndex.ToString()))
 				_pageModule.OnlyCallHidingComplete(previousCurrentPageIndex.ToString());
 
-			if (isImmediately)
+			if (isShowImmediately)
 				await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
-
 			else
 				await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
 
@@ -259,7 +258,7 @@ namespace CizaOptionModule
 				return false;
 
 			var coordinate = IsAutoChangePage ? new Vector2Int(nextOptionModulePage.MaxColumnIndex, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
-			return await TrySetPageIndexAsync(nextPageIndex, coordinate, isImmediately: isImmediately);
+			return await TrySetPageIndexAsync(nextPageIndex, coordinate, isHideImmediately: isImmediately, isShowImmediately: isImmediately);
 		}
 
 		public async UniTask<bool> TryMovePageToRightAsync(int playerIndex, bool isImmediately = true)
@@ -275,7 +274,7 @@ namespace CizaOptionModule
 				return false;
 
 			var coordinate = IsAutoChangePage ? new Vector2Int(0, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
-			return await TrySetPageIndexAsync(nextPageIndex, coordinate, isImmediately: isImmediately);
+			return await TrySetPageIndexAsync(nextPageIndex, coordinate, isHideImmediately: isImmediately, isShowImmediately: isImmediately);
 		}
 
 		public void EnableAllCanSelect()

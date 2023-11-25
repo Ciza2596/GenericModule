@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 
 namespace CizaOptionModule
 {
-	public abstract class OptionModulePage : Page, IOptionModulePage, IInitializable, IShowingPrepare, IShowingStart, IHidingStart, IReleasable
+	public abstract class OptionModulePage : Page, IOptionModulePage, IInitializable, IShowingPrepare, IShowingStart, IShowingAnimated, IShowingAnimatedImmediately, IHidingStart, IHidingAnimated, IReleasable
 	{
 		[SerializeField]
 		protected Transform _parentTransform;
@@ -61,6 +61,8 @@ namespace CizaOptionModule
 
 		public void OnShowingStart()
 		{
+			_optionView.Refresh();
+
 			_optionView.UnSelectAll();
 			_localIsAutoTurnOffIsNew = true;
 
@@ -68,8 +70,17 @@ namespace CizaOptionModule
 				_selectOptionLogic.TrySetCurrentCoordinate(i, _onShowingStartCoordinate);
 		}
 
+		public UniTask PlayShowingAnimationAsync() =>
+			_optionView.PlayShowAsync();
+
+		public void PlayShowingAnimationImmediately() =>
+			_optionView.PlayShowComplete();
+
 		public virtual void OnHidingStart() =>
 			_localIsAutoTurnOffIsNew = false;
+
+		public UniTask PlayHidingAnimationAsync() =>
+			_optionView.PlayHideAsync();
 
 		public void Release() =>
 			_selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;

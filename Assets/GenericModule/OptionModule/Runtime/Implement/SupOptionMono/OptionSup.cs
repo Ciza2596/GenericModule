@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 
 namespace CizaOptionModule.Implement
 {
-	public abstract class OptionSubMono : MonoBehaviour, IOptionSubMon
+	public abstract class OptionSup : MonoBehaviour, IOptionSup
 	{
 		protected Option _option;
 

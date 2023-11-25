@@ -1,4 +1,5 @@
 using CizaCore;
+using Cysharp.Threading.Tasks;
 
 namespace CizaOptionModule
 {
@@ -12,5 +13,13 @@ namespace CizaOptionModule
 		IRowInfo    RowInfo    { get; }
 
 		void UnSelectAll();
+
+		void Refresh();
+
+		UniTask PlayShowAsync();
+
+		void PlayShowComplete();
+
+		UniTask PlayHideAsync();
 	}
 }

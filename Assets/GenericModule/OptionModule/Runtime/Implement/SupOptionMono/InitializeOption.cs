@@ -1,6 +1,6 @@
 namespace CizaOptionModule.Implement
 {
-	public abstract class InitializeOption : OptionSubMono
+	public abstract class InitializeOption : OptionSup
 	{
 		public override void Initialize(Option option)
 		{

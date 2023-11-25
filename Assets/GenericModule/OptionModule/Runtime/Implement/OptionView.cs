@@ -1,5 +1,6 @@
 using System;
 using CizaCore;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CizaOptionModule.Implement
@@ -8,6 +9,13 @@ namespace CizaOptionModule.Implement
 	{
 		[SerializeField]
 		private CollectionSettings _collectionSettings;
+
+		[Space]
+		[SerializeField]
+		private bool _isUseAnim;
+
+		[SerializeField]
+		private AnimSettings _animSettings;
 
 		[Serializable]
 		private class CollectionSettings : OptionSettings<Option>
@@ -32,6 +40,34 @@ namespace CizaOptionModule.Implement
 		{
 			foreach (var option in Options)
 				option.Unselect();
+		}
+
+		public void Refresh()
+		{
+			if (!_isUseAnim)
+				return;
+			_animSettings.Refresh();
+		}
+
+		public UniTask PlayShowAsync()
+		{
+			if (!_isUseAnim)
+				return UniTask.CompletedTask;
+			return _animSettings.PlayShowAsync(default);
+		}
+
+		public void PlayShowComplete()
+		{
+			if (!_isUseAnim)
+				return;
+			_animSettings.PlayShowComplete();
+		}
+
+		public UniTask PlayHideAsync()
+		{
+			if (!_isUseAnim)
+				return UniTask.CompletedTask;
+			return _animSettings.PlayHideAsync(default);
 		}
 
 		[Serializable]

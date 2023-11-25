@@ -1,6 +1,6 @@
 namespace CizaOptionModule.Implement
 {
-	public class OptionIsNewMark : OptionSubMono
+	public class OptionIsNewMark : OptionSup
 	{
 		public override void Initialize(Option option)
 		{

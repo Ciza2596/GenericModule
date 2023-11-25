@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace CizaOptionModule.Implement
 {
-	public class OptionConfirmButton : OptionSubMono
+	public class OptionConfirmButton : OptionSup
 	{
 		
 		[SerializeField]

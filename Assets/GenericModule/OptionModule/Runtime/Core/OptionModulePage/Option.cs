@@ -52,7 +52,7 @@ namespace CizaOptionModule
 			_onPointerEnter = onPointerEnter;
 
 			ClearEvents();
-			foreach (var optionSubMon in gameObject.GetComponentsInChildren<IOptionSubMon>())
+			foreach (var optionSubMon in gameObject.GetComponentsInChildren<IOptionSup>())
 				optionSubMon.Initialize(this);
 
 			OnInitialize?.Invoke(parameters);

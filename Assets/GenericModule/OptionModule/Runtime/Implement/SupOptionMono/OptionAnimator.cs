@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 
 namespace CizaOptionModule.Implement
 {
-	public class OptionAnimator : OptionSubMono
+	public class OptionAnimator : OptionSup
 	{
 		[SerializeField]
 		private Animator _animator;

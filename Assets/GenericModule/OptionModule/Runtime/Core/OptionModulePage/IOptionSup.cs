@@ -1,6 +1,6 @@
 namespace CizaOptionModule
 {
-	public interface IOptionSubMon
+	public interface IOptionSup
 	{
 		void Initialize(Option option);
 	}

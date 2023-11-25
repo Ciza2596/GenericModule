@@ -165,6 +165,22 @@ namespace CizaOptionModule
 			IsChangingPage   = false;
 		}
 
+		public async UniTask HideCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+		{
+			if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || !_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
+				return;
+
+			if (isImmediately)
+				_pageModule.HideImmediately(CurrentPageIndex.ToString(), isIncludeHidingComplete: false);
+			else
+				await _pageModule.HideAsync(CurrentPageIndex.ToString(), isIncludeHidingComplete: false);
+
+			if (onCompleteBefore != null)
+				await (UniTask)onCompleteBefore?.Invoke();
+			
+			_pageModule.OnlyCallHidingComplete(CurrentPageIndex.ToString());
+		}
+
 		public bool TryConfirm(int playerIndex)
 		{
 			if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm)
@@ -175,10 +191,7 @@ namespace CizaOptionModule
 
 		public async UniTask<bool> TrySetPageIndexAsync(int pageIndex, Vector2Int coordinate, bool isAutoTurnOffIsNew = true, bool isImmediately = true)
 		{
-			if (!IsInitialized)
-				return false;
-
-			if (pageIndex < _minIndex && pageIndex > _maxIndex)
+			if (!IsInitialized || (pageIndex < _minIndex && pageIndex > _maxIndex))
 				return false;
 
 			IsChangingPage = true;
@@ -186,7 +199,7 @@ namespace CizaOptionModule
 			var previousCurrentPageIndex = CurrentPageIndex;
 			CurrentPageIndex = pageIndex;
 
-			if (previousCurrentPageIndex != NotInitialPageIndex)
+			if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsVisible(previousCurrentPageIndex.ToString()))
 			{
 				if (isImmediately)
 					_pageModule.HideImmediately(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
@@ -195,7 +208,9 @@ namespace CizaOptionModule
 			}
 
 			await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
-			_pageModule.OnlyCallHidingComplete(previousCurrentPageIndex.ToString());
+
+			if (_pageModule.CheckIsHiding(previousCurrentPageIndex.ToString()))
+				_pageModule.OnlyCallHidingComplete(previousCurrentPageIndex.ToString());
 
 			if (isImmediately)
 				await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);

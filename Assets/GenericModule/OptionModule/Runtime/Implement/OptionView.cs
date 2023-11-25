@@ -44,14 +44,14 @@ namespace CizaOptionModule.Implement
 
 		public void Refresh()
 		{
-			if (!_isUseAnim)
+			if (!_isUseAnim || !_animSettings.IsActiveAndEnabled)
 				return;
 			_animSettings.Refresh();
 		}
 
 		public void PlayShowStartAndPause()
 		{
-			if (!_isUseAnim)
+			if (!_isUseAnim || !_animSettings.IsActiveAndEnabled)
 				return;
 			
 			_animSettings.PlayShowStartAndPause();
@@ -59,21 +59,21 @@ namespace CizaOptionModule.Implement
 		
 		public UniTask PlayShowAsync()
 		{
-			if (!_isUseAnim)
+			if (!_isUseAnim || !_animSettings.IsActiveAndEnabled)
 				return UniTask.CompletedTask;
 			return _animSettings.PlayShowAsync(default);
 		}
 
 		public void PlayShowComplete()
 		{
-			if (!_isUseAnim)
+			if (!_isUseAnim || !_animSettings.IsActiveAndEnabled)
 				return;
 			_animSettings.PlayShowComplete();
 		}
 
 		public UniTask PlayHideAsync()
 		{
-			if (!_isUseAnim)
+			if (!_isUseAnim || !_animSettings.IsActiveAndEnabled)
 				return UniTask.CompletedTask;
 			return _animSettings.PlayHideAsync(default);
 		}

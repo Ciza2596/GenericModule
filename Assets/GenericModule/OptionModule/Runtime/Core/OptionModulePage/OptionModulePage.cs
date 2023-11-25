@@ -61,7 +61,7 @@ namespace CizaOptionModule
 
 		public void OnShowingStart()
 		{
-			_optionView.Refresh();
+			_optionView.PlayShowStartAndPause();
 
 			_optionView.UnSelectAll();
 			_localIsAutoTurnOffIsNew = true;

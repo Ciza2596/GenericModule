@@ -49,6 +49,14 @@ namespace CizaOptionModule.Implement
 			_animSettings.Refresh();
 		}
 
+		public void PlayShowStartAndPause()
+		{
+			if (!_isUseAnim)
+				return;
+			
+			_animSettings.PlayShowStartAndPause();
+		}
+		
 		public UniTask PlayShowAsync()
 		{
 			if (!_isUseAnim)

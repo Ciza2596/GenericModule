@@ -14,7 +14,7 @@ namespace CizaOptionModule
 
 		void UnSelectAll();
 
-		void Refresh();
+		void PlayShowStartAndPause();
 
 		UniTask PlayShowAsync();
 

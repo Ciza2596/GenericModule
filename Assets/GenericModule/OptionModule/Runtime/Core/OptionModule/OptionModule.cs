@@ -207,10 +207,10 @@ namespace CizaOptionModule
 					await _pageModule.HideAsync(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
 			}
 
-			if (previousCurrentPageIndex != NotInitialPageIndex && previousCurrentPageIndex != CurrentPageIndex)
+			if (previousCurrentPageIndex != CurrentPageIndex)
 				await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, coordinate, isAutoTurnOffIsNew);
 
-			if (_pageModule.CheckIsHiding(previousCurrentPageIndex.ToString()))
+			if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsHiding(previousCurrentPageIndex.ToString()))
 				_pageModule.OnlyCallHidingComplete(previousCurrentPageIndex.ToString());
 
 			if (isImmediately)

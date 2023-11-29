@@ -162,6 +162,9 @@ namespace CizaAudioModule
 
 			foreach (var audio in _playingAudioMapByAudioId.Values.ToArray())
 			{
+				if (audio.IsSopping)
+					continue;
+
 				if (audio.IsComplete)
 				{
 					if (audio.IsLoop)
@@ -466,15 +469,21 @@ namespace CizaAudioModule
 				return;
 			}
 
+			if (playingAudio.IsSopping)
+				return;
+
+			playingAudio.EnableIsStopping();
+
 			if (fadeTime > 0)
 				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
 
 			OnStop?.Invoke(audioId, playingAudio.DataId);
-			
+
 			_playingAudioMapByAudioId.Remove(audioId);
 			AddAudioToIdleAudiosMap(playingAudio);
 
 			playingAudio.Stop();
+			playingAudio.DisableIsStopping();
 		}
 
 		public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)

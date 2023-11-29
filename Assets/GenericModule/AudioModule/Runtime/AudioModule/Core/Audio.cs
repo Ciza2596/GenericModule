@@ -16,6 +16,9 @@ namespace CizaAudioModule
 		public string PrefabAddress { get; private set; }
 
 		public bool  IsComplete => _time >= Duration;
+		
+		public bool  IsSopping  { get; private set; }
+		
 		public bool  IsLoop     { get; private set; }
 		public float Volume     => _audioSource.volume;
 		public float Duration   { get; private set; }
@@ -68,6 +71,13 @@ namespace CizaAudioModule
 
 		public void SetIsLoop(bool isLoop) =>
 			IsLoop = isLoop;
+
+
+		public void EnableIsStopping() =>
+			IsSopping = true;
+		
+		public void DisableIsStopping() =>
+			IsSopping = false;
 
 		// private method
 		private void SetParameter(string id = null, string dataId = null, string clipAddress = null, AudioClip audioClip = null, float volume = 0, bool isLoop = false)

@@ -17,8 +17,5 @@ namespace CizaAudioModule
 		void Pause();
 		void SetVolume(float volume);
 		void SetIsLoop(bool  isLoop);
-
-		void EnableIsStopping();
-		void DisableIsStopping();
 	}
 }

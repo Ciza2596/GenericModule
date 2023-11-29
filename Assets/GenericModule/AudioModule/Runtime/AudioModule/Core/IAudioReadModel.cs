@@ -9,7 +9,6 @@ namespace CizaAudioModule
 		string PrefabAddress { get; }
 
 		bool IsComplete { get; }
-		bool IsSopping  { get; }
 
 		bool  IsLoop   { get; }
 		float Volume   { get; }

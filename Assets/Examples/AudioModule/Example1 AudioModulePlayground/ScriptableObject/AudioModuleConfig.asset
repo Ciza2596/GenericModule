@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd1fb2ee0fc445fcaa2ddcf3a47f4d3, type: 3}
   m_Name: AudioModuleConfig
   m_EditorClassIdentifier: 
-  _audioMixerGroupPath: Master
   _poolRootName: '[AudioModule]'
   _poolPrefix: 
   _poolSuffix: s
+  _audioMixerGroupPath: Master
+  _audioMixerParameter: Master
+  _defaultVolume: 0.7
   _defaultPrefabAddress: BGMAudio
   _audioInfos:
-  - _dataId: wind_Bell
-    _clipDataId: wind_bell
-    _prefabDataId: 
+  - _dataId: wind_bell
+    _clipAddress: wind_bell
+    _prefabAddress: 

@@ -163,9 +163,6 @@ namespace CizaAudioModule
 
 			foreach (var audio in _playingAudioMapByAudioId.Values.ToArray())
 			{
-				if (audio.IsSopping)
-					continue;
-
 				if (audio.IsComplete)
 				{
 					if (audio.IsLoop)
@@ -250,6 +247,8 @@ namespace CizaAudioModule
 			Assert.IsTrue(HasValue(prefabAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s prefabAddress is null.");
 
 			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
+			Assert.IsNotNull(clip, $"[AudioModule::LoadAudioAssetAsync] clip not found by address: {clipAddress}.");
+			
 			_clipMapByAddress.TryAdd(clipAddress, clip);
 			_loadedClipAddresses.Add(clipAddress);
 
@@ -473,21 +472,15 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (playingAudio.IsSopping)
-				return;
-
-			playingAudio.EnableIsStopping();
-
 			if (fadeTime > 0)
 				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
 
-			OnStop?.Invoke(audioId, playingAudio.DataId);
-
+			playingAudio.Stop();
+			
 			_playingAudioMapByAudioId.Remove(audioId);
 			AddAudioToIdleAudiosMap(playingAudio);
-
-			playingAudio.Stop();
-			playingAudio.DisableIsStopping();
+			
+			OnStop?.Invoke(audioId, playingAudio.DataId);
 		}
 
 		public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)

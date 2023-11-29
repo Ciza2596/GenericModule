@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using CizaTimerModule;
 using Cysharp.Threading.Tasks;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Audio;
@@ -462,6 +463,9 @@ namespace CizaAudioModule
 				Debug.LogWarning("[AudioModule::StopAsync] AudioModule is not initialized.");
 				return;
 			}
+			
+			if(string.IsNullOrEmpty(audioId) || string.IsNullOrWhiteSpace(audioId))
+				return;
 
 			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{

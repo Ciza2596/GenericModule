@@ -53,7 +53,6 @@ namespace CizaAudioModule
 		{
 			if (_audioMixer is null)
 			{
-				Debug.LogWarning("[AudioModule::TryGetAudioMixerGroup] AudioMixer is null.");
 				audioMixerGroup = null;
 				return false;
 			}
@@ -66,7 +65,6 @@ namespace CizaAudioModule
 		{
 			if (_audioMixer is null)
 			{
-				Debug.LogWarning("[AudioModule::TryGetVolume] AudioMixer is null.");
 				volume = 0;
 				return false;
 			}
@@ -357,7 +355,11 @@ namespace CizaAudioModule
 				{
 					var m_prefab = _prefabMapByAddress[m_prefabAddress];
 					var m_audio  = Object.Instantiate(m_prefab).GetComponent<IAudio>();
-					m_audio.Initialize(prefabAddress);
+
+					if (!TryGetAudioMixerGroup(out var audioMixerGroup))
+						Debug.LogWarning($"[AudioModule::PlayAsync] audioMixerGroup is not found by {_config.AudioMixerGroupPath}.");
+
+					m_audio.Initialize(prefabAddress, audioMixerGroup);
 
 					AddAudioToIdleAudiosMap(m_audio);
 				}
@@ -523,7 +525,6 @@ namespace CizaAudioModule
 
 			if (!_loadedCountMapByDataId.ContainsKey(audioDataId))
 			{
-				Debug.LogWarning($"[AudioModule::CheckIsAudioInfoLoaded] AudioDataId - {audioDataId} is not loaded.");
 				clipAddress   = string.Empty;
 				prefabAddress = string.Empty;
 				return false;
@@ -535,17 +536,14 @@ namespace CizaAudioModule
 			clipAddress = audioInfo.ClipAddress;
 			if (!_clipMapByAddress.ContainsKey(clipAddress))
 			{
-				Debug.LogWarning($"[AudioModule::{methodName}] AudioInfo - {audioDataId}'s ClipAddress: {clipAddress} is unloaded.");
 				prefabAddress = string.Empty;
 				return false;
 			}
 
 			prefabAddress = HasValue(audioInfo.PrefabAddress) ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
 			if (!_prefabMapByAddress.ContainsKey(prefabAddress))
-			{
-				Debug.LogWarning($"[AudioModule::{methodName}] AudioInfo - {audioDataId}'s PrefabAddress: {prefabAddress} is unloaded.");
 				return false;
-			}
+
 
 			return true;
 		}

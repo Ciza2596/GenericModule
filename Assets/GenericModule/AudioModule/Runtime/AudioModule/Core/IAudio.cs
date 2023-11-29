@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace CizaAudioModule
 {
 	public interface IAudio : IAudioReadModel
 	{
 		GameObject GameObject { get; }
-		void Initialize(string prefabAddress);
+		void Initialize(string prefabAddress, AudioMixerGroup audioMixerGroup);
 
 		void Tick(float deltaTime);
 

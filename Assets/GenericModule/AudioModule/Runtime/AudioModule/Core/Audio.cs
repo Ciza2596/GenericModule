@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Audio;
 
 namespace CizaAudioModule
 {
@@ -27,11 +28,12 @@ namespace CizaAudioModule
 
 		public GameObject GameObject => gameObject;
 
-		public void Initialize(string prefabAddress)
+		public void Initialize(string prefabAddress, AudioMixerGroup audioMixerGroup)
 		{
 			PrefabAddress = prefabAddress;
 
-			_audioSource      = GetComponentInChildren<AudioSource>();
+			_audioSource                       = GetComponentInChildren<AudioSource>();
+			_audioSource.outputAudioMixerGroup = audioMixerGroup;
 			_audioSource.loop = false;
 			Assert.IsNotNull(_audioSource, $"[Audio::Initialize] AudioSource is not found. Please check prefabDataId: {PrefabAddress}.");
 		}

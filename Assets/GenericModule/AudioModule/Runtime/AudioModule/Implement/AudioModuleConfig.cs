@@ -70,15 +70,15 @@ namespace CizaAudioModule.Implement
 
 			[Space]
 			[SerializeField]
-			private string _clipDataId;
+			private string _clipAddress;
 
 			[SerializeField]
-			private string _prefabDataId;
+			private string _prefabAddress;
 
 			public string DataId => _dataId;
 
-			public string ClipAddress   => _clipDataId;
-			public string PrefabAddress => _prefabDataId;
+			public string ClipAddress   => _clipAddress;
+			public string PrefabAddress => _prefabAddress;
 		}
 	}
 }

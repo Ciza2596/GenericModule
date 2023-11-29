@@ -25,7 +25,7 @@ namespace CizaAudioModule
 		private readonly Dictionary<string, Transform> _poolMapByPrefabAddress = new Dictionary<string, Transform>();
 
 		private readonly Dictionary<string, int> _loadedCountMapByDataId = new Dictionary<string, int>();
-		
+
 		private readonly List<string> _loadedClipAddresses   = new List<string>();
 		private readonly List<string> _loadedPrefabAddresses = new List<string>();
 
@@ -469,13 +469,12 @@ namespace CizaAudioModule
 			if (fadeTime > 0)
 				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
 
-			var audioDataId = playingAudio.DataId;
-			playingAudio.Stop();
-
+			OnStop?.Invoke(audioId, playingAudio.DataId);
+			
 			_playingAudioMapByAudioId.Remove(audioId);
 			AddAudioToIdleAudiosMap(playingAudio);
 
-			OnStop?.Invoke(audioId, audioDataId);
+			playingAudio.Stop();
 		}
 
 		public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)

@@ -14,7 +14,7 @@ namespace CizaAudioModule
 
 		public string ClipAddress   { get; private set; }
 		public string PrefabAddress { get; private set; }
-		
+
 		public bool  IsComplete => _time >= Duration;
 		public bool  IsLoop     { get; private set; }
 		public float Volume     => _audioSource.volume;
@@ -39,7 +39,6 @@ namespace CizaAudioModule
 			SetParameter(id, dataId, clipAddress, audioClip, volume, isLoop);
 			_time = 0;
 			_audioSource.Play();
-
 		}
 
 		public void Continue()

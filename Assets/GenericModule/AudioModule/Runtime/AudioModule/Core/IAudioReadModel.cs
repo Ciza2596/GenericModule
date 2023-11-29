@@ -5,6 +5,8 @@ namespace CizaAudioModule
 		string Id     { get; }
 		string DataId { get; }
 
+		string CallerId { get; }
+
 		string ClipAddress   { get; }
 		string PrefabAddress { get; }
 

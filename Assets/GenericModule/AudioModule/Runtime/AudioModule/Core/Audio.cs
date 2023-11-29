@@ -7,19 +7,23 @@ namespace CizaAudioModule
 	{
 		private AudioSource _audioSource;
 
+		private string _callerId;
+
 		private float _time;
 
 		public string Id     { get; private set; }
 		public string DataId { get; private set; }
 
+		public string CallerId => !string.IsNullOrEmpty(_callerId) ? _callerId : string.Empty;
+
 		public string ClipAddress   { get; private set; }
 		public string PrefabAddress { get; private set; }
 
-		public bool  IsComplete => _time >= Duration;
-		
-		public bool  IsLoop     { get; private set; }
-		public float Volume     => _audioSource.volume;
-		public float Duration   { get; private set; }
+		public bool IsComplete => _time >= Duration;
+
+		public bool  IsLoop   { get; private set; }
+		public float Volume   => _audioSource.volume;
+		public float Duration { get; private set; }
 
 		public GameObject GameObject => gameObject;
 
@@ -35,9 +39,9 @@ namespace CizaAudioModule
 		public void Tick(float deltaTime) =>
 			_time += deltaTime;
 
-		public void Play(string id, string dataId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		public void Play(string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
 		{
-			SetParameter(id, dataId, clipAddress, audioClip, volume, isLoop);
+			SetParameter(id, dataId, callerId, clipAddress, audioClip, volume, isLoop);
 			_time = 0;
 			_audioSource.Play();
 		}
@@ -66,13 +70,14 @@ namespace CizaAudioModule
 
 		public void SetIsLoop(bool isLoop) =>
 			IsLoop = isLoop;
-		
 
 		// private method
-		private void SetParameter(string id, string dataId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		private void SetParameter(string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
 		{
 			Id     = id;
 			DataId = dataId;
+
+			_callerId = callerId;
 
 			ClipAddress       = clipAddress;
 			_audioSource.clip = audioClip;

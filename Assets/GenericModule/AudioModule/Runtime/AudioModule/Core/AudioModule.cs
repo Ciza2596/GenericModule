@@ -505,12 +505,13 @@ namespace CizaAudioModule
 				await AddTimer(audioId, playingAudio.Volume, 0, fadeTime);
 
 			_playingAudioMapByAudioId.Remove(audioId);
-
+			var callerId    = playingAudio.CallerId;
+			var audioDataId = playingAudio.DataId;
 			playingAudio.Stop();
-			OnStop?.Invoke(playingAudio.CallerId, playingAudio.Id, playingAudio.DataId);
-			onComplete?.Invoke(playingAudio.CallerId, playingAudio.Id, playingAudio.DataId);
-
 			AddAudioToIdleAudiosMap(playingAudio);
+
+			OnStop?.Invoke(callerId, audioId, audioDataId);
+			onComplete?.Invoke(callerId, audioId, audioDataId);
 		}
 
 		private bool CheckIsAudioInfoLoaded(string audioDataId, string methodName, out string clipAddress, out string prefabAddress)

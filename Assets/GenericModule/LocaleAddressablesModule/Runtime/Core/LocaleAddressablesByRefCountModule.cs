@@ -12,8 +12,8 @@ namespace CizaLocaleAddressablesModule
 		private readonly AddressablesByRefCountModule _addressablesByRefCountModule;
 		private readonly LocalizationModule           _localizationModule;
 
-		public event Func<string, UniTask> OnChangedLocaleBefore;
-		public event Func<string, UniTask> OnChangedLocale;
+		public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
+		public event Func<string, UniTask> OnChangedLocaleAsync;
 
 		public bool IsInitialized => _localizationModule.IsInitialized;
 
@@ -29,15 +29,15 @@ namespace CizaLocaleAddressablesModule
 			_addressablesByRefCountModule = new AddressablesByRefCountModule(className);
 			_localizationModule           = new LocalizationModule(className, localeAddressablesByRefCountModuleConfig);
 
-			_localizationModule.OnChangedLocaleBefore += m_OnChangedLocaleBefore;
-			_localizationModule.OnChangedLocale       += m_OnChangedLocale;
+			_localizationModule.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
+			_localizationModule.OnChangedLocaleAsync       += m_OnChangedLocaleAsync;
 
 
-			UniTask m_OnChangedLocaleBefore(string locale) =>
-				OnChangedLocaleBefore?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleBeforeAsync(string locale) =>
+				OnChangedLocaleBeforeAsync?.Invoke(locale) ?? UniTask.CompletedTask;
 
-			UniTask m_OnChangedLocale(string locale) =>
-				OnChangedLocale?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleAsync(string locale) =>
+				OnChangedLocaleAsync?.Invoke(locale) ?? UniTask.CompletedTask;
 		}
 
 		public void Initialize()
@@ -83,7 +83,7 @@ namespace CizaLocaleAddressablesModule
 				return UniTask.CompletedTask;
 			}
 
-			return _localizationModule.ChangeLocale(locale);
+			return _localizationModule.ChangeLocaleAsync(locale);
 		}
 
 		#endregion

@@ -12,8 +12,8 @@ namespace CizaLocalizationModule
 		private readonly ILocalizationModuleConfig _config;
 		private          string[]                  _supportLocales;
 
-		public event Func<string, UniTask> OnChangedLocaleBefore;
-		public event Func<string, UniTask> OnChangedLocale;
+		public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
+		public event Func<string, UniTask> OnChangedLocaleAsync;
 
 		public bool IsInitialized { get; private set; }
 
@@ -83,7 +83,7 @@ namespace CizaLocalizationModule
 			CurrentLocale = DefaultLocale;
 		}
 
-		public async UniTask ChangeLocale(string locale)
+		public async UniTask ChangeLocaleAsync(string locale)
 		{
 			if (!IsInitialized)
 			{
@@ -102,20 +102,20 @@ namespace CizaLocalizationModule
 
 			IsChangingLocale = true;
 
-			await m_OnChangedLocaleBefore();
+			await m_OnChangedLocaleBeforeAsync();
 
 			CurrentLocale = locale;
 
-			await m_OnChangedLocale();
+			await m_OnChangedLocaleAsync();
 
 			IsChangingLocale = false;
 
 
-			UniTask m_OnChangedLocaleBefore() =>
-				OnChangedLocaleBefore?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleBeforeAsync() =>
+				OnChangedLocaleBeforeAsync?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
 
-			UniTask m_OnChangedLocale() =>
-				OnChangedLocale?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleAsync() =>
+				OnChangedLocaleAsync?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
 		}
 
 		public string GetTextWithLocalePrefix(string text)

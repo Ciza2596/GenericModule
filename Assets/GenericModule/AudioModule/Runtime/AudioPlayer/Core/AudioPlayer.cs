@@ -18,8 +18,8 @@ namespace CizaAudioModule
 
 		private Transform _root;
 
-		public event Func<string, UniTask> OnChangedVoiceLocaleBefore;
-		public event Func<string, UniTask> OnChangedVoiceLocale;
+		public event Func<string, UniTask> OnChangedVoiceLocaleBeforeAsync;
+		public event Func<string, UniTask> OnChangedVoiceLocaleAsync;
 
 		// CallerId, Id, DataId
 		public event Action<string, string, string> OnBgmPlay;
@@ -99,14 +99,14 @@ namespace CizaAudioModule
 			_voiceModule.OnStop     += (callerId, voiceId, voiceDataId) => OnVoiceStop?.Invoke(callerId, voiceId, voiceDataId);
 			_voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 
-			voiceAssetProvider.OnChangedLocaleBefore += m_OnChangedLocaleBefore;
-			voiceAssetProvider.OnChangedLocale       += m_OnChangedLocale;
+			voiceAssetProvider.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
+			voiceAssetProvider.OnChangedLocaleAsync       += m_OnChangedLocaleAsync;
 
-			UniTask m_OnChangedLocaleBefore(string locale) =>
-				OnChangedVoiceLocaleBefore?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleBeforeAsync(string locale) =>
+				OnChangedVoiceLocaleBeforeAsync?.Invoke(locale) ?? UniTask.CompletedTask;
 
-			UniTask m_OnChangedLocale(string locale) =>
-				OnChangedVoiceLocale?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleAsync(string locale) =>
+				OnChangedVoiceLocaleAsync?.Invoke(locale) ?? UniTask.CompletedTask;
 		}
 
 		public void Initialize(Transform rootParent = null)

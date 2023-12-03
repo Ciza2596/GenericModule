@@ -18,7 +18,7 @@ namespace CizaOptionModule
 
 		public const int NotInitialPageIndex = -1;
 
-		// PlayerIndex, PreviousCoordinate, PreviousOption, CurrentCoordinate, CurrentOption
+		// PlayerIndex, PreviousOptionKey, CurrentOptionKey
 		public event Action<int, string, string> OnSelect;
 
 		// PlayerIndex, OptionKey, IsUnlock

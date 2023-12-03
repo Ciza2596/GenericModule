@@ -1,4 +1,4 @@
-namespace CizaPreloadAssetController
+namespace CizaAddressablesModule.PreloadAssetController
 {
 	public interface IPreloadAssetInfo
 	{
@@ -6,6 +6,6 @@ namespace CizaPreloadAssetController
 
 		string Address { get; }
 
-		AssetTypes AssetType { get; }
+		AssetKinds AssetKind { get; }
 	}
 }

@@ -6,16 +6,13 @@ namespace CizaSceneModule
 	{
 		//private variable
 		private readonly SceneModule     _sceneModule;
-		private readonly AudioListener   _audioListener;
 		private          ILoadSceneAsync _loadSceneAsync;
 
 		//public method
 
-		public TransitionController(SceneModule sceneModule, AudioListener audioListener, ITransitionControllerConfig transitionControllerConfig)
+		public TransitionController(SceneModule sceneModule, ITransitionControllerConfig transitionControllerConfig)
 		{
 			_sceneModule   = sceneModule;
-			_audioListener = audioListener;
-			DisableAudioListener();
 
 			var viewParentPrefab     = transitionControllerConfig.GetViewParentPrefab();
 			var viewParentGameObject = Object.Instantiate(viewParentPrefab);
@@ -44,7 +41,6 @@ namespace CizaSceneModule
 			transitionInView.Play(() =>
 			{
 				releasingTask?.Execute();
-				EnableAudioListener();
 				UnloadScene(currentSceneName);
 
 				LoadSceneOnBackground(nextSceneName);
@@ -56,7 +52,6 @@ namespace CizaSceneModule
 		private void ActivateScene()
 		{
 			_loadSceneAsync.Activate();
-			DisableAudioListener();
 		}
 
 		private void LoadSceneOnBackground(string sceneName) =>
@@ -78,11 +73,5 @@ namespace CizaSceneModule
 			var view = viewGameObject.GetComponent<T>();
 			return view;
 		}
-
-		private void EnableAudioListener() =>
-			_audioListener.enabled = true;
-
-		private void DisableAudioListener() =>
-			_audioListener.enabled = false;
 	}
 }

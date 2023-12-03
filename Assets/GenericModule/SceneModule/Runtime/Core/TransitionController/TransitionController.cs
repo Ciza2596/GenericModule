@@ -6,13 +6,16 @@ namespace CizaSceneModule
 	{
 		//private variable
 		private readonly SceneModule     _sceneModule;
+		private readonly AudioListener   _audioListener;
 		private          ILoadSceneAsync _loadSceneAsync;
 
 		//public method
 
-		public TransitionController(SceneModule sceneModule, ITransitionControllerConfig transitionControllerConfig)
+		public TransitionController(SceneModule sceneModule, AudioListener audioListener, ITransitionControllerConfig transitionControllerConfig)
 		{
-			_sceneModule = sceneModule;
+			_sceneModule   = sceneModule;
+			_audioListener = audioListener;
+			DisableAudioListener();
 
 			var viewParentPrefab     = transitionControllerConfig.GetViewParentPrefab();
 			var viewParentGameObject = Object.Instantiate(viewParentPrefab);
@@ -26,7 +29,6 @@ namespace CizaSceneModule
 			var transitionInView       = CreateView<ITransitionView>(viewParentTransform, transitionInViewPrefab);
 			var currentSceneName       = sceneModule.CurrentSceneName;
 			var releasingTask          = sceneModule.ReleasingTask;
-
 
 			var loadingViewName   = sceneModule.LoadingViewName;
 			var loadingViewPrefab = transitionControllerConfig.GetLoadingViewPrefab(loadingViewName);
@@ -43,6 +45,7 @@ namespace CizaSceneModule
 			{
 				releasingTask?.Execute();
 				UnloadScene(currentSceneName);
+				EnableAudioListener();
 
 				LoadSceneOnBackground(nextSceneName);
 				loadingView.Loading(_loadSceneAsync, loadingTask, ActivateScene, initializingTask, () => { transitionOutView.Play(UnloadTransitionScene); });
@@ -50,8 +53,11 @@ namespace CizaSceneModule
 		}
 
 		//private method
-		private void ActivateScene() =>
+		private void ActivateScene()
+		{
 			_loadSceneAsync.Activate();
+			DisableAudioListener();
+		}
 
 		private void LoadSceneOnBackground(string sceneName) =>
 			_loadSceneAsync = _sceneModule.LoadSceneAsync(sceneName, LoadModes.Additive, false);
@@ -72,5 +78,11 @@ namespace CizaSceneModule
 			var view = viewGameObject.GetComponent<T>();
 			return view;
 		}
+
+		private void EnableAudioListener() =>
+			_audioListener.enabled = true;
+
+		private void DisableAudioListener() =>
+			_audioListener.enabled = false;
 	}
 }

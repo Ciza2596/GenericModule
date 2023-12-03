@@ -13,16 +13,16 @@ namespace CizaAddressablesModule.Preload
 		private IPreloadAssetInfo[] _preloadAssetInfos;
 
 		// BgmDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadBgm;
-		public event Action<string>                           OnUnloadBgm;
+		public event Func<string, CancellationToken, UniTask> OnLoadBgmAssetAsync;
+		public event Action<string>                           OnUnloadBgmAsset;
 
 		// SfxDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadSfx;
-		public event Action<string>                           OnUnloadSfx;
+		public event Func<string, CancellationToken, UniTask> OnLoadSfxAssetAsync;
+		public event Action<string>                           OnUnloadSfxAsset;
 
 		// VoiceDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadVoice;
-		public event Action<string>                           OnUnloadVoice;
+		public event Func<string, CancellationToken, UniTask> OnLoadVoiceAssetAsync;
+		public event Action<string>                           OnUnloadVoiceAsset;
 
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded  { get; private set; }
@@ -44,14 +44,14 @@ namespace CizaAddressablesModule.Preload
 				if (!preloadAssetInfo.IsPreLoad)
 					continue;
 
-				if (preloadAssetInfo.AssetKind == AssetKinds.Bgm && OnLoadBgm != null)
-					unitaks.Add(OnLoadBgm.Invoke(preloadAssetInfo.Address, cancellationToken));
+				if (preloadAssetInfo.AssetKind == AssetKinds.Bgm && OnLoadBgmAssetAsync != null)
+					unitaks.Add(OnLoadBgmAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
 
-				else if (preloadAssetInfo.AssetKind == AssetKinds.Sfx && OnLoadSfx != null)
-					unitaks.Add(OnLoadSfx.Invoke(preloadAssetInfo.Address, cancellationToken));
+				else if (preloadAssetInfo.AssetKind == AssetKinds.Sfx && OnLoadSfxAssetAsync != null)
+					unitaks.Add(OnLoadSfxAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
 
-				else if (preloadAssetInfo.AssetKind == AssetKinds.Voice && OnLoadVoice != null)
-					unitaks.Add(OnLoadVoice.Invoke(preloadAssetInfo.Address, cancellationToken));
+				else if (preloadAssetInfo.AssetKind == AssetKinds.Voice && OnLoadVoiceAssetAsync != null)
+					unitaks.Add(OnLoadVoiceAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
 
 				else
 					unitaks.Add(LoadAssetAsync(preloadAssetInfo.Address, preloadAssetInfo.AssetKind, cancellationToken));
@@ -74,13 +74,13 @@ namespace CizaAddressablesModule.Preload
 					continue;
 
 				if (preloadAssetInfo.AssetKind == AssetKinds.Bgm)
-					OnUnloadBgm?.Invoke(preloadAssetInfo.Address);
+					OnUnloadBgmAsset?.Invoke(preloadAssetInfo.Address);
 
 				else if (preloadAssetInfo.AssetKind == AssetKinds.Sfx)
-					OnUnloadSfx?.Invoke(preloadAssetInfo.Address);
+					OnUnloadSfxAsset?.Invoke(preloadAssetInfo.Address);
 
 				else if (preloadAssetInfo.AssetKind == AssetKinds.Voice)
-					OnUnloadVoice?.Invoke(preloadAssetInfo.Address);
+					OnUnloadVoiceAsset?.Invoke(preloadAssetInfo.Address);
 
 				else
 					UnloadAsset(preloadAssetInfo.Address, preloadAssetInfo.AssetKind);

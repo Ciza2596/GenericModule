@@ -2,7 +2,7 @@
   "name": "com.ciza.addressablesmodule",
   "displayName": "AddressablesModule",
   "description": "AddressablesModule.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {

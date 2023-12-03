@@ -4,7 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace CizaAddressablesModule.PreloadAssetController
+namespace CizaAddressablesModule.Preload
 {
 	public class PreloadAssetController
 	{

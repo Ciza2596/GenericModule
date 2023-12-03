@@ -1,4 +1,4 @@
-namespace CizaAddressablesModule.PreloadAssetController
+namespace CizaAddressablesModule.Preload
 {
 	public enum AssetKinds
 	{

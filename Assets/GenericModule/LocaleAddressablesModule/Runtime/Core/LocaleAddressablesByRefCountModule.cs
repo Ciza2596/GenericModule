@@ -75,7 +75,7 @@ namespace CizaLocaleAddressablesModule
 			_localizationModule.ChangeToDefaultLocale();
 		}
 
-		public UniTask ChangeLocale(string locale)
+		public UniTask ChangeLocaleAsync(string locale)
 		{
 			if (!IsInitialized)
 			{

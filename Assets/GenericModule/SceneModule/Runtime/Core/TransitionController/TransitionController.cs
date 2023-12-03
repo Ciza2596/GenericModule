@@ -44,8 +44,8 @@ namespace CizaSceneModule
 			transitionInView.Play(() =>
 			{
 				releasingTask?.Execute();
-				UnloadScene(currentSceneName);
 				EnableAudioListener();
+				UnloadScene(currentSceneName);
 
 				LoadSceneOnBackground(nextSceneName);
 				loadingView.Loading(_loadSceneAsync, loadingTask, ActivateScene, initializingTask, () => { transitionOutView.Play(UnloadTransitionScene); });

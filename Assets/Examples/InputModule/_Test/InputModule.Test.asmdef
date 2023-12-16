@@ -1,0 +1,18 @@
+{
+    "name": "InputModule.Test",
+    "rootNamespace": "",
+    "references": [
+        "InputModule"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

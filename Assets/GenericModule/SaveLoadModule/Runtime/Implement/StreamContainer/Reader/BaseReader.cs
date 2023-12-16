@@ -36,8 +36,6 @@ namespace CizaSaveLoadModule.Implement
 		{
 			if (!TryGoTo(key))
 				Debug.LogError($"[BaseReader::Read] Cant find key: {key}");
-			else
-				Debug.Log($"[BaseReader::Read] Key: {key} is found.");
 
 			var type     = ReadTypeFromHeader<T>();
 			var dataType = _dataTypeController.GetOrCreateDataType(type);

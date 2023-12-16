@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CizaTimerModule;
+using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
@@ -18,6 +19,8 @@ namespace CizaInputModule
 			_rumbleInputs        = rumbleInputs;
 
 			_timerModule.Initialize();
+
+			_rumbleInputs.OnPlayerLeft += OnPlayerLeftImp;
 		}
 
 		public void Tick(float deltaTime) =>
@@ -43,7 +46,7 @@ namespace CizaInputModule
 		{
 			if (!_timerIdMapByIndex.ContainsKey(index))
 				return;
-			
+
 			RemoveTimerIdAndResetHaptics(index);
 		}
 
@@ -60,10 +63,7 @@ namespace CizaInputModule
 		{
 			RemoveTimer(index);
 
-			var timerId = _timerModule.AddOnceTimer(duration, timerReadModel =>
-			{
-				RemoveTimerIdAndResetHaptics(index);
-			});
+			var timerId = _timerModule.AddOnceTimer(duration, timerReadModel => { RemoveTimerIdAndResetHaptics(index); });
 			_timerIdMapByIndex.Add(index, timerId);
 		}
 
@@ -81,5 +81,8 @@ namespace CizaInputModule
 			_rumbleInputs.ResetHaptics(index);
 			_timerIdMapByIndex.Remove(index);
 		}
+
+		private void OnPlayerLeftImp(PlayerInput playerInput, InputModule inputModule) =>
+			Stop(playerInput.playerIndex);
 	}
 }

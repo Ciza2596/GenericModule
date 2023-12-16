@@ -13,43 +13,39 @@ namespace CizaInputModule.Example
 		[SerializeField]
 		private PlayerInput _playerInput;
 
-
 		private float _currentDuration;
-		
+
 		private void Update()
 		{
-			if(!_playerInput.TryGetDevices<Gamepad>(out var gamepads))
+			_playerInput.onControlsChanged += m_PlayerInput => Debug.Log($"ControlsChanged: {m_PlayerInput.currentControlScheme}.");
+
+			if (!_playerInput.TryGetDevices<Gamepad>(out var gamepads))
 				return;
-			
-			var current = _playerInput.GetDevice<Gamepad>();
-			if (current != null)
-			{
-				if (current.buttonSouth.wasPressedThisFrame)
-				{
-					Debug.Log("Shake");
-					current.ResetHaptics();
-					_currentDuration = _settings.Duration;
-					current.SetMotorSpeeds(_settings.LowFrequency, _settings.HighFrequency);
-				}
-			
-				if (_currentDuration > 0)
-				{
-					_currentDuration -= Time.deltaTime;
-					if (_currentDuration <= 0)
-					{
-						Debug.Log("Stop Shake");
-						current.ResetHaptics();
-					}
-				}
-			}
+
+			// var current = _playerInput.GetDevice<Gamepad>();
+			// if (current != null)
+			// {
+			// 	if (current.buttonSouth.wasPressedThisFrame)
+			// 	{
+			// 		Debug.Log("Shake");
+			// 		current.ResetHaptics();
+			// 		_currentDuration = _settings.Duration;
+			// 		current.SetMotorSpeeds(_settings.LowFrequency, _settings.HighFrequency);
+			// 	}
+			//
+			// 	if (_currentDuration > 0)
+			// 	{
+			// 		_currentDuration -= Time.deltaTime;
+			// 		if (_currentDuration <= 0)
+			// 		{
+			// 			Debug.Log("Stop Shake");
+			// 			current.ResetHaptics();
+			// 		}
+			// 	}
+			// }
 		}
 
-		private void Rumble(Gamepad[] gamepads)
-		{
-			
-		}
-
-
+		private void Rumble(Gamepad[] gamepads) { }
 
 		[Serializable]
 		private class Settings

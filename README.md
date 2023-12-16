@@ -13,6 +13,7 @@ module | Test | Samples |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
 [LocalizationModule](#localizationmodule) | ✔️ | ❌ |
 [TextModule](#textmodule) | ✔️ | ❌ |
+[InputModule](#inputModule) | ✔️ | ❌ |
 [OptionModule](#optionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
@@ -347,6 +348,22 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TextModu
 
 ### Manual:
 TextModule manual.
+
+## InputModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/InputModule
+```
+
+### Dependency:
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TimerModule
+```
+```
+Unity.InputSystem
+```
+
+### Manual:
+InputModule manual.
 
 
 ## OptionModule

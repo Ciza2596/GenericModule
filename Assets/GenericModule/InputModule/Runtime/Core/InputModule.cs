@@ -23,6 +23,8 @@ namespace CizaInputModule
 
 		public const float WaitingTime = 0.25f;
 
+		public event Action<PlayerInput> OnControlsChanged;
+
 		public event Action<PlayerInput, InputModule> OnPlayerJoined;
 		public event Action<PlayerInput, InputModule> OnPlayerLeft;
 
@@ -237,6 +239,9 @@ namespace CizaInputModule
 
 			_playerInputs.Add(_playerInput);
 			OnPlayerJoined?.Invoke(_playerInput, this);
+
+			OnControlsChangedImp(_playerInput);
+			_playerInput.onControlsChanged += OnControlsChangedImp;
 		}
 
 		private void DestroyPlayerInput()
@@ -288,5 +293,8 @@ namespace CizaInputModule
 			_playerInputs.Remove(playerInput);
 			OnPlayerLeft?.Invoke(playerInput, this);
 		}
+
+		private void OnControlsChangedImp(PlayerInput playerInput) =>
+			OnControlsChanged?.Invoke(playerInput);
 	}
 }

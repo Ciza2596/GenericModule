@@ -78,14 +78,14 @@ namespace CizaInputModule
             if (!IsInitialized)
                 return;
 
-            IsInitialized = false;
-
             Clear();
             _timerModule.Release();
 
             var root = _root;
             _root = null;
             Object.Destroy(root.gameObject);
+
+            IsInitialized = false;
         }
 
         public void Tick(float deltaTime) =>

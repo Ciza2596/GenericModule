@@ -40,7 +40,17 @@ namespace CizaInputModule
 
         public string CurrentActionMapDataId => !string.IsNullOrEmpty(_currentActionMapDataId) ? _currentActionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
 
-        public int PlayerCount => IsSinglePlayer || _playerInputManager is null ? 1 : _playerInputManager.playerCount;
+        public int PlayerCount
+        {
+            get
+            {
+                if (IsSinglePlayer)
+                    return _playerInput != null ? 1 : 0;
+
+                return _playerInputManager != null ? _playerInputManager.playerCount : 0;
+            }
+        }
+
         public int MaxPlayerCount { get; private set; }
 
         public bool TryGetPlayerInput(int index, out PlayerInput playerInput)

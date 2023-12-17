@@ -55,7 +55,7 @@ namespace CizaInputModule
         public InputModule(IInputModuleConfig inputModuleConfig) =>
             _inputModuleConfig = inputModuleConfig;
 
-        public void Initialize(Transform parent)
+        public void Initialize(Transform parent = null)
         {
             if (IsInitialized)
                 return;

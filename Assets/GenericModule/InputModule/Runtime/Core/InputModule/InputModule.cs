@@ -181,13 +181,13 @@ namespace CizaInputModule
             SwitchAllActionMap();
         }
 
-        public void HandlePlayerInputsEvent(Action<InputActionAsset> handleEvent)
+        public void HandleActionEvent(Action<InputActionAsset> handleEvent)
         {
             foreach (var playerInput in _playerInputs)
-                HandlePlayerInputEvent(playerInput.playerIndex, handleEvent);
+                HandleActionEvent(playerInput.playerIndex, handleEvent);
         }
 
-        public void HandlePlayerInputEvent(int index, Action<InputActionAsset> handleEvent)
+        public void HandleActionEvent(int index, Action<InputActionAsset> handleEvent)
         {
             if (!TryGetPlayerInput(index, out var playerInput))
                 return;
@@ -262,7 +262,7 @@ namespace CizaInputModule
 
             OnControlsChangedImp(_playerInput);
             _playerInput.onControlsChanged += OnControlsChangedImp;
-            
+
             SwitchActionMap(_playerInput.playerIndex);
         }
 
@@ -279,7 +279,7 @@ namespace CizaInputModule
 
             Object.Destroy(playerInput.gameObject);
         }
-        
+
         private void SwitchActionMap(int index)
         {
             if (!TryGetPlayerInput(index, out var playerInput))
@@ -313,7 +313,7 @@ namespace CizaInputModule
             playerInput.transform.SetParent(_playerInputManager.transform);
             _playerInputs.Add(playerInput);
             OnPlayerJoined?.Invoke(playerInput);
-            
+
             SwitchActionMap(playerInput.playerIndex);
         }
 

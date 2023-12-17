@@ -95,6 +95,12 @@ namespace CizaInputModule
         public void SetMaxPlayerCount(int maxPlayerCount) =>
             MaxPlayerCount = maxPlayerCount;
 
+        public void StartJoining(int maxPlayerCount)
+        {
+            SetMaxPlayerCount(maxPlayerCount);
+            StartJoining();
+        }
+
         public void StartJoining()
         {
             if (!IsInitialized)

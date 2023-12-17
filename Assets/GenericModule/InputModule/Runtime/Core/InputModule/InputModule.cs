@@ -181,18 +181,18 @@ namespace CizaInputModule
             SwitchAllActionMap();
         }
 
-        public void HandlePlayerInputsEvent(Action<PlayerInput> handleEvent)
+        public void HandlePlayerInputsEvent(Action<InputActionAsset> handleEvent)
         {
             foreach (var playerInput in _playerInputs)
                 HandlePlayerInputEvent(playerInput.playerIndex, handleEvent);
         }
 
-        public void HandlePlayerInputEvent(int index, Action<PlayerInput> handleEvent)
+        public void HandlePlayerInputEvent(int index, Action<InputActionAsset> handleEvent)
         {
             if (!TryGetPlayerInput(index, out var playerInput))
                 return;
 
-            handleEvent?.Invoke(playerInput);
+            handleEvent?.Invoke(playerInput.actions);
         }
 
         public void ResetHaptics(int index)

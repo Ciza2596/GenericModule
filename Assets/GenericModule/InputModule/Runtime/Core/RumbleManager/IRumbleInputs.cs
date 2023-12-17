@@ -3,14 +3,17 @@ using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
-	public interface IRumbleInputs
-	{
-		event Action<PlayerInput, InputModule> OnPlayerLeft;
+    public interface IRumbleInputs
+    {
+        public static IRumbleInputs Create(InputModule inputModule) =>
+            new RumbleInputsImp(inputModule);
 
-		int PlayerCount { get; }
+        event Action<PlayerInput> OnPlayerLeft;
 
-		void ResetHaptics(int index);
+        int PlayerCount { get; }
 
-		void SetMotorSpeeds(int index, float lowFrequency, float highFrequency);
-	}
+        void ResetHaptics(int index);
+
+        void SetMotorSpeeds(int index, float lowFrequency, float highFrequency);
+    }
 }

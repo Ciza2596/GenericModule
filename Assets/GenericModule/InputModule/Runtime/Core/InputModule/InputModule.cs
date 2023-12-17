@@ -26,8 +26,8 @@ namespace CizaInputModule
 
         public event Action<PlayerInput> OnControlsChanged;
 
-        public event Action<PlayerInput, InputModule> OnPlayerJoined;
-        public event Action<PlayerInput, InputModule> OnPlayerLeft;
+        public event Action<PlayerInput> OnPlayerJoined;
+        public event Action<PlayerInput> OnPlayerLeft;
 
         public bool IsInitialized { get; private set; }
 
@@ -77,10 +77,10 @@ namespace CizaInputModule
                 return;
 
             IsInitialized = false;
-            
+
             Clear();
             _timerModule.Release();
-            
+
             var root = _root;
             _root = null;
             Object.Destroy(root.gameObject);
@@ -250,7 +250,7 @@ namespace CizaInputModule
                 _playerInput.actions.Disable();
 
             _playerInputs.Add(_playerInput);
-            OnPlayerJoined?.Invoke(_playerInput, this);
+            OnPlayerJoined?.Invoke(_playerInput);
 
             OnControlsChangedImp(_playerInput);
             _playerInput.onControlsChanged += OnControlsChangedImp;
@@ -265,7 +265,7 @@ namespace CizaInputModule
             _playerInput = null;
 
             _playerInputs.Remove(playerInput);
-            OnPlayerLeft?.Invoke(playerInput, this);
+            OnPlayerLeft?.Invoke(playerInput);
 
             Object.Destroy(playerInput.gameObject);
         }
@@ -288,7 +288,7 @@ namespace CizaInputModule
 
             playerInput.transform.SetParent(_playerInputManager.transform);
             _playerInputs.Add(playerInput);
-            OnPlayerJoined?.Invoke(playerInput, this);
+            OnPlayerJoined?.Invoke(playerInput);
         }
 
         private void OnPlayerLeftImp(PlayerInput playerInput)
@@ -303,7 +303,7 @@ namespace CizaInputModule
             }
 
             _playerInputs.Remove(playerInput);
-            OnPlayerLeft?.Invoke(playerInput, this);
+            OnPlayerLeft?.Invoke(playerInput);
         }
 
         private void OnControlsChangedImp(PlayerInput playerInput) =>

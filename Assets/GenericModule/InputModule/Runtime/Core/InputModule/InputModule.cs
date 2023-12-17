@@ -23,6 +23,7 @@ namespace CizaInputModule
         private PlayerInput _playerInput;
 
         private string _currentActionMapDataId;
+        private string _previousControlScheme;
 
         public event Action<PlayerInput> OnControlsChanged;
 
@@ -260,6 +261,9 @@ namespace CizaInputModule
             _playerInputs.Add(_playerInput);
             OnPlayerJoined?.Invoke(_playerInput);
 
+            if (TryGetPreviousControlScheme(out var previousControlScheme))
+                _playerInput.SwitchCurrentControlScheme(previousControlScheme);
+
             OnControlsChangedImp(_playerInput);
             _playerInput.onControlsChanged += OnControlsChangedImp;
 
@@ -332,7 +336,23 @@ namespace CizaInputModule
             OnPlayerLeft?.Invoke(playerInput);
         }
 
-        private void OnControlsChangedImp(PlayerInput playerInput) =>
+        private void OnControlsChangedImp(PlayerInput playerInput)
+        {
             OnControlsChanged?.Invoke(playerInput);
+            _previousControlScheme = playerInput.currentControlScheme;
+        }
+
+
+        private bool TryGetPreviousControlScheme(out string previousControlScheme)
+        {
+            if (string.IsNullOrEmpty(_previousControlScheme) || string.IsNullOrWhiteSpace(_previousControlScheme))
+            {
+                previousControlScheme = string.Empty;
+                return false;
+            }
+
+            previousControlScheme = _previousControlScheme;
+            return true;
+        }
     }
 }

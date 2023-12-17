@@ -12,9 +12,6 @@ namespace CizaInputModule
     {
         private readonly IInputModuleConfig _inputModuleConfig;
 
-        private PlayerInputManager _playerInputManager;
-        private PlayerInput _playerInput;
-
         private readonly HashSet<PlayerInput> _playerInputs = new HashSet<PlayerInput>();
         private readonly Dictionary<int, string> _timerIdMapByIndex = new Dictionary<int, string>();
 
@@ -22,7 +19,10 @@ namespace CizaInputModule
 
         private Transform _root;
 
-        public const float WaitingTime = 0.25f;
+        private PlayerInputManager _playerInputManager;
+        private PlayerInput _playerInput;
+
+        private string _currentActionMapDataId;
 
         public event Action<PlayerInput> OnControlsChanged;
 
@@ -36,6 +36,8 @@ namespace CizaInputModule
         public bool IsEnableInput { get; private set; }
 
         public bool IsSinglePlayer { get; private set; }
+
+        public string CurrentActionMapDataId => !string.IsNullOrEmpty(_currentActionMapDataId) ? _currentActionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
 
         public int PlayerCount => IsSinglePlayer || _playerInputManager is null ? 1 : _playerInputManager.playerCount;
         public int MaxPlayerCount { get; private set; }
@@ -173,6 +175,12 @@ namespace CizaInputModule
             }
         }
 
+        public void SetCurrentActionMapDataId(string actionMapDataId)
+        {
+            _currentActionMapDataId = actionMapDataId;
+            SwitchAllActionMap();
+        }
+
         public void HandlePlayerInputsEvent(Action<PlayerInput> handleEvent)
         {
             foreach (var playerInput in _playerInputs)
@@ -254,6 +262,8 @@ namespace CizaInputModule
 
             OnControlsChangedImp(_playerInput);
             _playerInput.onControlsChanged += OnControlsChangedImp;
+            
+            SwitchActionMap(_playerInput.playerIndex);
         }
 
         private void DestroyPlayerInput()
@@ -269,6 +279,20 @@ namespace CizaInputModule
 
             Object.Destroy(playerInput.gameObject);
         }
+        
+        private void SwitchActionMap(int index)
+        {
+            if (!TryGetPlayerInput(index, out var playerInput))
+                return;
+
+            playerInput.SwitchCurrentActionMap(CurrentActionMapDataId);
+        }
+
+        private void SwitchAllActionMap()
+        {
+            for (var i = 0; i < _playerInputs.Count; i++)
+                SwitchActionMap(i);
+        }
 
         private void OnPlayerJoinedImp(PlayerInput playerInput)
         {
@@ -276,7 +300,7 @@ namespace CizaInputModule
                 _playerInputManager.DisableJoining();
 
             playerInput.actions.Disable();
-            var timerId = _timerModule.AddOnceTimer(WaitingTime, timerReadModel =>
+            var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>
             {
                 if (IsEnableInput)
                     playerInput.actions.Enable();
@@ -289,6 +313,8 @@ namespace CizaInputModule
             playerInput.transform.SetParent(_playerInputManager.transform);
             _playerInputs.Add(playerInput);
             OnPlayerJoined?.Invoke(playerInput);
+            
+            SwitchActionMap(playerInput.playerIndex);
         }
 
         private void OnPlayerLeftImp(PlayerInput playerInput)

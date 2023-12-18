@@ -2,7 +2,7 @@
   "name": "com.ciza.textmodule",
   "displayName": "TextModule",
   "description": "TextModule.",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

@@ -8,18 +8,18 @@ namespace CizaTextModule
     {
         public static readonly string EMPTY = string.Empty;
 
-        public const string COMMA_TAG = ",";
-        public const string R_TAG_WITH_SLASH = "\r";
-        public const string N_TAG_WITH_SLASH = "\n";
+        public const char COMMA_TAG = ',';
+        public const char R_TAG_WITH_SLASH = '\r';
+        public const char N_TAG_WITH_SLASH = '\n';
 
         public const string DOUBLE_QUOTATION_TAG = "\"\"";
-        public const string QUOTATION_TAG = "\"";
+        public const char QUOTATION_TAG = '\"';
 
-        public const string LESS_THAN_WITH_QUOTATION_TAG = "\"<";
-        public const string LESS_THAN = "<";
+        // public const string LESS_THAN_WITH_QUOTATION_TAG = "\"<";
+        // public const string LESS_THAN = "<";
 
-        public const string GREATER_THAN_WITH_QUOTATION_TAG = ">\"";
-        public const string GREATER_THAN = ">";
+        // public const string GREATER_THAN_WITH_QUOTATION_TAG = ">\"";
+        // public const string GREATER_THAN = ">";
 
         public static Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
         {
@@ -50,7 +50,16 @@ namespace CizaTextModule
                 {
                     var category = categories[i].Trim();
                     var text = i < columns.Count ? columns[i].Trim() : string.Empty;
-                    textMapByCategory.Add(category, text);
+                    if (text.Length > 2)
+                    {
+                        if (text[0] == QUOTATION_TAG)
+                            text = text.Substring(0);
+
+                        if (text[^1] == QUOTATION_TAG)
+                            text = text.Substring(text.Length - 1);
+                    }
+
+                    textMapByCategory.Add(category, text.Trim());
                 }
             }
 
@@ -79,11 +88,18 @@ namespace CizaTextModule
 
         public static string FilterText(string text)
         {
-            var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG);
-            newText = newText.Replace(LESS_THAN_WITH_QUOTATION_TAG, LESS_THAN);
-            newText = newText.Replace(GREATER_THAN_WITH_QUOTATION_TAG, GREATER_THAN);
-            newText = newText.Replace(R_TAG_WITH_SLASH, EMPTY);
+            var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG.ToString());
+            newText = newText.Replace(R_TAG_WITH_SLASH.ToString(), EMPTY);
             return newText;
         }
+
+        // public static string FilterText(string text)
+        // {
+        //     var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG);
+        //     newText = newText.Replace(LESS_THAN_WITH_QUOTATION_TAG, LESS_THAN);
+        //     newText = newText.Replace(GREATER_THAN_WITH_QUOTATION_TAG, GREATER_THAN);
+        //     newText = newText.Replace(R_TAG_WITH_SLASH, EMPTY);
+        //     return newText;
+        // }
     }
 }

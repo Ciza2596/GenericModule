@@ -11,7 +11,7 @@ namespace CizaTextModule.Implement
         [SerializeField]
         private bool _isFollowLocalKey = true;
 
-        [TextArea]
+        [TextArea(6, 10)]
         [SerializeField]
         private string _localKey;
 

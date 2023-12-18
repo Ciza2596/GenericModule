@@ -13,6 +13,8 @@ namespace CizaInputModule
         private readonly Dictionary<int, string> _timerIdMapByIndex = new Dictionary<int, string>();
         private readonly TimerModule _timerModule = new TimerModule();
 
+        public string[] AllDataIds => _rumbleManagerConfig.AllDataIds;
+
         public RumbleManager(IRumbleManagerConfig rumbleManagerConfig, IRumbleInputs rumbleInputs)
         {
             _rumbleManagerConfig = rumbleManagerConfig;

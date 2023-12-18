@@ -6,6 +6,15 @@ namespace CizaTextModule.Implement
     {
         private readonly TextMapLogic _textMapLogic;
 
+        public bool TryGetCategories(string dataId, out string[] categories) =>
+            _textMapLogic.TryGetCategories(dataId, out categories);
+
+        public bool TryGetDefaultCategory(string dataId, out string defaultCategory) =>
+            _textMapLogic.TryGetDefaultCategory(dataId, out defaultCategory);
+
+        public bool TryGetCurrentCategory(string dataId, out string currentCategory) =>
+            _textMapLogic.TryGetCurrentCategory(dataId, out currentCategory);
+
         public TextModuleWithTextMap(Map[] maps, string className)
         {
             var textModules = new List<TextMapLogic.ITextModule>();

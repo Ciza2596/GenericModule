@@ -14,8 +14,12 @@ namespace CizaTextModule
             event Action<string> OnChangeCategory;
 
             string DataId { get; }
-
             string KeyPattern { get; }
+
+            string[] Categories { get; }
+
+            string DefaultCategory { get; }
+            string CurrentCategory { get; }
 
             bool TryChangeCategory(string category);
 
@@ -39,9 +43,12 @@ namespace CizaTextModule
                 public event Action<string> OnChangeCategory;
 
                 public string DataId { get; }
-
                 public string KeyPattern { get; }
 
+                public string[] Categories => _textModule.Categories;
+
+                public string DefaultCategory => _textModule.DefaultCategory;
+                public string CurrentCategory => _textModule.CurrentCategory;
 
                 public bool TryChangeCategory(string category) =>
                     _textModule.TryChangeCategory(category);
@@ -62,6 +69,42 @@ namespace CizaTextModule
 
         private readonly HashSet<ITextMap> _textMaps = new HashSet<ITextMap>();
 
+        public bool TryGetCategories(string dataId, out string[] categories)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+            {
+                categories = Array.Empty<string>();
+                return false;
+            }
+
+            categories = textModule.Categories;
+            return true;
+        }
+
+        public bool TryGetDefaultCategory(string dataId, out string defaultCategory)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+            {
+                defaultCategory = string.Empty;
+                return false;
+            }
+
+            defaultCategory = textModule.DefaultCategory;
+            return true;
+        }
+
+        public bool TryGetCurrentCategory(string dataId, out string currentCategory)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+            {
+                currentCategory = string.Empty;
+                return false;
+            }
+
+            currentCategory = textModule.CurrentCategory;
+            return true;
+        }
+        
         public TextMapLogic(ITextModule[] textModules, string className)
         {
             _textModuleMapByDataId = new Dictionary<string, ITextModule>();
@@ -74,6 +117,7 @@ namespace CizaTextModule
             foreach (var textModule in textModules)
                 textModule.OnChangeCategory += OnChangeCategoryImp;
         }
+
 
         public bool TryChangeCategory(string dataId, string category)
         {

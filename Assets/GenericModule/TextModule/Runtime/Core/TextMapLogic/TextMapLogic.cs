@@ -80,7 +80,13 @@ namespace CizaTextModule
             if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
                 return false;
 
-            return textModule.TryChangeCategory(category);
+            if (textModule.TryChangeCategory(category))
+            {
+                RefreshAllTextMap();
+                return true;
+            }
+
+            return false;
         }
 
         public bool TryGetText(string dataId, string key, out string text)
@@ -114,6 +120,12 @@ namespace CizaTextModule
         {
             foreach (var textMap in textMaps)
                 RemoveTextMap(textMap);
+        }
+
+        public void RefreshAllTextMap()
+        {
+            foreach (var textMap in _textMaps.ToArray())
+                SetTextMap(textMap);
         }
 
         private void OnChangeCategoryImp(string currentCategory)

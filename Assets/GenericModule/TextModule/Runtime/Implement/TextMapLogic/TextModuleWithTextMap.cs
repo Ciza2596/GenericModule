@@ -1,21 +1,25 @@
+using System.Collections.Generic;
+
 namespace CizaTextModule.Implement
 {
     public class TextModuleWithTextMap
     {
-        private readonly TextModule _textModule;
         private readonly TextMapLogic _textMapLogic;
 
-        public TextModuleWithTextMap(ITextModuleConfig textModuleConfig, string className, string keyPattern)
+        public TextModuleWithTextMap(Map[] maps, string className)
         {
-            _textModule = new TextModule(textModuleConfig);
-            _textMapLogic = new TextMapLogic(TextMapLogic.ITextModule.CreateTextModule(_textModule), className, keyPattern);
+            var textModules = new List<TextMapLogic.ITextModule>();
+            foreach (var map in maps)
+                textModules.Add(TextMapLogic.ITextModule.CreateTextModule(map.DataId, new TextModule(map.TextModuleConfig), map.KeyPattern));
+
+            _textMapLogic = new TextMapLogic(textModules.ToArray(), className);
         }
 
-        public bool TryChangeCategory(string category) =>
-            _textModule.TryChangeCategory(category);
+        public bool TryChangeCategory(string dataId, string category) =>
+            _textMapLogic.TryChangeCategory(dataId, category);
 
-        public bool TryGetText(string key, out string text) =>
-            _textModule.TryGetText(key, out text);
+        public bool TryGetText(string dataId, string key, out string text) =>
+            _textMapLogic.TryGetText(dataId, key, out text);
 
         public void AddTextMap(ITextMap textMap) =>
             _textMapLogic.AddTextMap(textMap);
@@ -28,5 +32,21 @@ namespace CizaTextModule.Implement
 
         public void RemoveTextMaps(ITextMap[] textMaps) =>
             _textMapLogic.RemoveTextMaps(textMaps);
+
+        public class Map
+        {
+            public string DataId { get; }
+
+            public ITextModuleConfig TextModuleConfig { get; }
+
+            public string KeyPattern { get; }
+
+            public Map(string dataId, ITextModuleConfig textModuleConfig, string keyPattern)
+            {
+                DataId = dataId;
+                TextModuleConfig = textModuleConfig;
+                KeyPattern = keyPattern;
+            }
+        }
     }
 }

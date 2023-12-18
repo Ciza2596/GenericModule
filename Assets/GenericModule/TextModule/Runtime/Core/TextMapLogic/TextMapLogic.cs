@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CizaTextModule
 {
@@ -7,10 +8,16 @@ namespace CizaTextModule
     {
         public interface ITextModule
         {
-            public static ITextModule CreateTextModule(TextModule textModule) =>
-                new TextModuleImp(textModule);
+            public static ITextModule CreateTextModule(string dataId, TextModule textModule, string keyPattern) =>
+                new TextModuleImp(dataId, textModule, keyPattern);
 
             event Action<string> OnChangeCategory;
+
+            string DataId { get; }
+
+            string KeyPattern { get; }
+
+            bool TryChangeCategory(string category);
 
             bool TryGetText(string key, out string text);
             bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey);
@@ -20,13 +27,24 @@ namespace CizaTextModule
             {
                 private readonly TextModule _textModule;
 
-                public TextModuleImp(TextModule textModule)
+                public TextModuleImp(string dataId, TextModule textModule, string keyPattern)
                 {
+                    DataId = dataId;
                     _textModule = textModule;
+                    KeyPattern = keyPattern;
+
                     _textModule.OnChangeCategory += OnChangeCategoryImp;
                 }
 
                 public event Action<string> OnChangeCategory;
+
+                public string DataId { get; }
+
+                public string KeyPattern { get; }
+
+
+                public bool TryChangeCategory(string category) =>
+                    _textModule.TryChangeCategory(category);
 
                 public bool TryGetText(string key, out string text) =>
                     _textModule.TryGetText(key, out text);
@@ -39,20 +57,43 @@ namespace CizaTextModule
             }
         }
 
-        private readonly ITextModule _textModule;
+        private readonly Dictionary<string, ITextModule> _textModuleMapByDataId;
         private readonly string _className;
 
         private readonly HashSet<ITextMap> _textMaps = new HashSet<ITextMap>();
 
-        public string KeyPattern { get; }
-
-        public TextMapLogic(ITextModule textModule, string className, string keyPattern)
+        public TextMapLogic(ITextModule[] textModules, string className)
         {
-            _textModule = textModule;
+            _textModuleMapByDataId = new Dictionary<string, ITextModule>();
+
+            foreach (var textModule in textModules)
+                _textModuleMapByDataId.Add(textModule.DataId, textModule);
+
             _className = className;
-            KeyPattern = keyPattern;
-            _textModule.OnChangeCategory += OnChangeCategoryImp;
+
+            foreach (var textModule in textModules)
+                textModule.OnChangeCategory += OnChangeCategoryImp;
         }
+
+        public bool TryChangeCategory(string dataId, string category)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+                return false;
+
+            return textModule.TryChangeCategory(category);
+        }
+
+        public bool TryGetText(string dataId, string key, out string text)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+            {
+                text = string.Empty;
+                return false;
+            }
+
+            return textModule.TryGetText(key, out text);
+        }
+
 
         public void AddTextMap(ITextMap textMap)
         {
@@ -96,11 +137,12 @@ namespace CizaTextModule
 
         private bool TrySetTextMapByKey(ITextMap textMap)
         {
-            if (_textModule.TryGetText(textMap.Key, out var text))
-            {
-                textMap.SetText(text);
-                return true;
-            }
+            foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
+                if (textModule.TryGetText(textMap.Key, out var text))
+                {
+                    textMap.SetText(text);
+                    return true;
+                }
 
             return false;
         }
@@ -108,9 +150,13 @@ namespace CizaTextModule
         private bool TrySetTextMapByKeyWithPattern(ITextMap textMap)
         {
             var text = textMap.Key;
-            var keys = textMap.Key.GetKeys(KeyPattern);
-            if (_textModule.TryGetTexts(keys, out var textMapByKey))
-                text = text.Replace(KeyPattern, textMapByKey, _className, "TrySetTextMapByKeyWithPattern");
+
+            foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
+            {
+                var keys = text.GetKeys(textModule.KeyPattern);
+                if (textModule.TryGetTexts(keys, out var textMapByKey))
+                    text = text.Replace(textModule.KeyPattern, textMapByKey, _className, "TrySetTextMapByKeyWithPattern");
+            }
 
             if (!string.IsNullOrEmpty(text) && text != textMap.Key)
             {

@@ -6,8 +6,11 @@ namespace CizaTextModule
 {
     public class CsvUtils
     {
-        public const char COMMA_TAG = ',';
-        public const char N_TAG_WITH_SLASH = '\n';
+        public static readonly string EMPTY = string.Empty;
+
+        public const string COMMA_TAG = ",";
+        public const string R_TAG_WITH_SLASH = "\r";
+        public const string N_TAG_WITH_SLASH = "\n";
 
         public const string DOUBLE_QUOTATION_TAG = "\"\"";
         public const string QUOTATION_TAG = "\"";
@@ -79,6 +82,7 @@ namespace CizaTextModule
             var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG);
             newText = newText.Replace(LESS_THAN_WITH_QUOTATION_TAG, LESS_THAN);
             newText = newText.Replace(GREATER_THAN_WITH_QUOTATION_TAG, GREATER_THAN);
+            newText = newText.Replace(R_TAG_WITH_SLASH, EMPTY);
             return newText;
         }
     }

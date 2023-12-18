@@ -50,14 +50,9 @@ namespace CizaTextModule
                 {
                     var category = categories[i].Trim();
                     var text = i < columns.Count ? columns[i].Trim() : string.Empty;
-                    if (text.Length > 2)
-                    {
-                        if (text[0] == QUOTATION_TAG)
-                            text = text.Substring(0);
 
-                        if (text[^1] == QUOTATION_TAG)
-                            text = text.Substring(text.Length - 1);
-                    }
+                    if (text.Length > 2)
+                        text = text.Substring(1, text.Length - 2);
 
                     textMapByCategory.Add(category, text.Trim());
                 }

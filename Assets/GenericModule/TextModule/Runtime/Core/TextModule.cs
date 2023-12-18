@@ -69,14 +69,14 @@ namespace CizaTextModule
             {
                 text = string.Empty;
                 if (_textModuleConfig.IsShowWarningLog)
-                    Debug.LogError($"[TextModule::TryGetText] Not find textRecordMapByCategory by key: {key}.");
+                    Debug.LogWarning($"[TextModule::TryGetText] Not find textRecordMapByCategory by key: {key}.");
                 return false;
             }
 
             if (!textMapByCategory.TryGetValue(CurrentCategory, out text))
             {
                 if (_textModuleConfig.IsShowWarningLog)
-                    Debug.LogError($"[TextModule::TryGetText] Not find textRecord by key: {key}.");
+                    Debug.LogWarning($"[TextModule::TryGetText] Not find textRecord by key: {key}.");
                 return false;
             }
 

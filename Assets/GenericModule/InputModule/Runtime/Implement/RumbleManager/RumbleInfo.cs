@@ -1,43 +1,51 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace CizaInputModule.Implement
+namespace CizaInputModule
 {
-	[Serializable]
-	public class RumbleInfo : IRumbleInfo
-	{
-		[SerializeField]
-		private string _dataId;
+    [Serializable]
+    public class RumbleInfo : IRumbleInfo
+    {
+        [SerializeField]
+        private string _dataId;
 
-		[Space]
-		[SerializeField]
-		private float _duration;
+        [Space]
+        [SerializeField]
+        private float _duration;
 
-		[Space]
-		[SerializeField]
-		private float _lowFrequency;
+        [Space]
+        [SerializeField]
+        private ControlSchemeInfo[] _controlSchemeInfos;
 
-		[SerializeField]
-		private float _highFrequency;
 
-		[Preserve]
-		public RumbleInfo() { }
+        public string DataId => _dataId;
+        public float Duration => _duration;
 
-		[Preserve]
-		public RumbleInfo(string dataId, float duration, float lowFrequency, float highFrequency)
-		{
-			_dataId        = dataId;
-			_duration      = duration;
-			_lowFrequency  = lowFrequency;
-			_highFrequency = highFrequency;
-		}
+        public bool TryGetControlSchemeInfo(string dataId, out IControlSchemeInfo controlSchemeInfo)
+        {
+            if (_controlSchemeInfos == null || _controlSchemeInfos.Length <= 0)
+            {
+                controlSchemeInfo = null;
+                return false;
+            }
 
-		public string DataId => _dataId;
+            var chosenControlSchemeInfo = _controlSchemeInfos.FirstOrDefault(m_controlSchemeInfo => m_controlSchemeInfo.DataId == dataId);
+            controlSchemeInfo = chosenControlSchemeInfo != null ? chosenControlSchemeInfo : _controlSchemeInfos[0];
+            return true;
+        }
 
-		public float Duration => _duration;
 
-		public float LowFrequency  => _lowFrequency;
-		public float HighFrequency => _highFrequency;
-	}
+        [Preserve]
+        public RumbleInfo() { }
+
+        [Preserve]
+        public RumbleInfo(string dataId, float duration, ControlSchemeInfo[] controlSchemeInfos)
+        {
+            _dataId = dataId;
+            _duration = duration;
+            _controlSchemeInfos = controlSchemeInfos;
+        }
+    }
 }

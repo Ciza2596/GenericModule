@@ -12,6 +12,8 @@ namespace CizaInputModule
 
         int PlayerCount { get; }
 
+        bool TryGetCurrentControlScheme(int index, out string currentControlScheme);
+        
         void ResetHaptics(int index);
 
         void SetMotorSpeeds(int index, float lowFrequency, float highFrequency);

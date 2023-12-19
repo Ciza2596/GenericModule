@@ -30,11 +30,10 @@ namespace CizaInputModule
 
         public void Rumble(int index, string dataId)
         {
-            if (!CheckHasPlayer(index) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo))
+            if (!CheckHasPlayer(index) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo) || !_rumbleInputs.TryGetCurrentControlScheme(index, out var currentControlScheme) || !rumbleInfo.TryGetControlSchemeInfo(currentControlScheme, out var controlSchemeInfo))
                 return;
 
-            _rumbleInputs.SetMotorSpeeds(index, rumbleInfo.LowFrequency, rumbleInfo.HighFrequency);
-
+            _rumbleInputs.SetMotorSpeeds(index, controlSchemeInfo.LowFrequency, controlSchemeInfo.HighFrequency);
             AddTimer(index, rumbleInfo.Duration);
         }
 

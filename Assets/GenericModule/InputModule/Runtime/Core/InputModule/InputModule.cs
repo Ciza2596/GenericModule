@@ -59,6 +59,19 @@ namespace CizaInputModule
             return playerInput != null;
         }
 
+        public bool TryGetCurrentControlScheme(int index, out string currentControlScheme)
+        {
+            var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == index);
+            if (playerInput == null)
+            {
+                currentControlScheme = string.Empty;
+                return false;
+            }
+
+            currentControlScheme = playerInput.currentControlScheme;
+            return true;
+        }
+
         public bool GetIsInitialized(int index) =>
             !_timerIdMapByIndex.ContainsKey(index);
 

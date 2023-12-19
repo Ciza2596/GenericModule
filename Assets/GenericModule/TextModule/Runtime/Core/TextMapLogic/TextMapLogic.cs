@@ -104,7 +104,18 @@ namespace CizaTextModule
             currentCategory = textModule.CurrentCategory;
             return true;
         }
-        
+
+        public bool TryGetText(string dataId, string key, out string text)
+        {
+            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+            {
+                text = string.Empty;
+                return false;
+            }
+
+            return textModule.TryGetText(key, out text);
+        }
+
         public TextMapLogic(ITextModule[] textModules, string className)
         {
             _textModuleMapByDataId = new Dictionary<string, ITextModule>();
@@ -126,24 +137,18 @@ namespace CizaTextModule
 
             if (textModule.TryChangeCategory(category))
             {
-                RefreshAllTextMap();
+                RefreshAllTextMaps();
                 return true;
             }
 
             return false;
         }
 
-        public bool TryGetText(string dataId, string key, out string text)
+        public void RefreshAllTextMaps()
         {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-            {
-                text = string.Empty;
-                return false;
-            }
-
-            return textModule.TryGetText(key, out text);
+            foreach (var textMap in _textMaps.ToArray())
+                SetTextMap(textMap);
         }
-
 
         public void AddTextMap(ITextMap textMap)
         {
@@ -164,12 +169,6 @@ namespace CizaTextModule
         {
             foreach (var textMap in textMaps)
                 RemoveTextMap(textMap);
-        }
-
-        public void RefreshAllTextMap()
-        {
-            foreach (var textMap in _textMaps.ToArray())
-                SetTextMap(textMap);
         }
 
         private void OnChangeCategoryImp(string currentCategory)

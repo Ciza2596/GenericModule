@@ -7,13 +7,6 @@ namespace CizaTextModule.Implement
 
         private readonly TextModuleWithTextMap _textModuleWithTextMap;
 
-        public LocaleAndControllerTextModule(ITextModuleConfig localeTextModuleConfig, ITextModuleConfig controllerTextModuleConfig)
-        {
-            var maps = new[] { new TextModuleWithTextMap.Map(LocaleTextModuleDataId, localeTextModuleConfig, StringExtension.LocaleTextKeyPattern), new TextModuleWithTextMap.Map(ControllerTextModuleDataId, controllerTextModuleConfig, StringExtension.ControllerTextKeyPattern) };
-            _textModuleWithTextMap = new TextModuleWithTextMap(maps, "LocaleAndControllerTextModule");
-        }
-
-
         public string[] LocaleCategories
         {
             get
@@ -69,17 +62,26 @@ namespace CizaTextModule.Implement
             }
         }
 
+        public bool TryGetLocaleText(string localeTextKey, out string localeText) =>
+            _textModuleWithTextMap.TryGetText(LocaleTextModuleDataId, localeTextKey, out localeText);
+
+        public bool TryGetControllerText(string controllerTextKey, out string controllerText) =>
+            _textModuleWithTextMap.TryGetText(ControllerTextModuleDataId, controllerTextKey, out controllerText);
+
+        public LocaleAndControllerTextModule(ITextModuleConfig localeTextModuleConfig, ITextModuleConfig controllerTextModuleConfig)
+        {
+            var maps = new[] { new TextModuleWithTextMap.Map(LocaleTextModuleDataId, localeTextModuleConfig, StringExtension.LocaleTextKeyPattern), new TextModuleWithTextMap.Map(ControllerTextModuleDataId, controllerTextModuleConfig, StringExtension.ControllerTextKeyPattern) };
+            _textModuleWithTextMap = new TextModuleWithTextMap(maps, "LocaleAndControllerTextModule");
+        }
+
         public bool TryChangeLocaleCategory(string category) =>
             _textModuleWithTextMap.TryChangeCategory(LocaleTextModuleDataId, category);
 
         public bool TryChangeControllerCategory(string category) =>
             _textModuleWithTextMap.TryChangeCategory(ControllerTextModuleDataId, category);
 
-        public bool TryGetLocaleText(string localeTextKey, out string localeText) =>
-            _textModuleWithTextMap.TryGetText(LocaleTextModuleDataId, localeTextKey, out localeText);
-
-        public bool TryGetControllerText(string controllerTextKey, out string controllerText) =>
-            _textModuleWithTextMap.TryGetText(ControllerTextModuleDataId, controllerTextKey, out controllerText);
+        public void RefreshAllTextMaps() =>
+            _textModuleWithTextMap.RefreshAllTextMaps();
 
         public void AddTextMap(ITextMap textMap) =>
             _textModuleWithTextMap.AddTextMap(textMap);

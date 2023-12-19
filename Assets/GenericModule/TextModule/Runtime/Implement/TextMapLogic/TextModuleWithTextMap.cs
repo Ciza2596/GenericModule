@@ -15,6 +15,9 @@ namespace CizaTextModule.Implement
         public bool TryGetCurrentCategory(string dataId, out string currentCategory) =>
             _textMapLogic.TryGetCurrentCategory(dataId, out currentCategory);
 
+        public bool TryGetText(string dataId, string key, out string text) =>
+            _textMapLogic.TryGetText(dataId, key, out text);
+
         public TextModuleWithTextMap(Map[] maps, string className)
         {
             var textModules = new List<TextMapLogic.ITextModule>();
@@ -27,8 +30,8 @@ namespace CizaTextModule.Implement
         public bool TryChangeCategory(string dataId, string category) =>
             _textMapLogic.TryChangeCategory(dataId, category);
 
-        public bool TryGetText(string dataId, string key, out string text) =>
-            _textMapLogic.TryGetText(dataId, key, out text);
+        public void RefreshAllTextMaps() =>
+            _textMapLogic.RefreshAllTextMaps();
 
         public void AddTextMap(ITextMap textMap) =>
             _textMapLogic.AddTextMap(textMap);

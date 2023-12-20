@@ -51,6 +51,7 @@ namespace CizaOptionModule
             _selectOptionLogic.Initialize(playerCount, OptionView.OptionColumns, OptionView.Options, OptionView.ColumnInfo, OptionView.RowInfo);
             _selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
 
+            OptionView.Initialize();
             return UniTask.CompletedTask;
         }
 
@@ -89,8 +90,11 @@ namespace CizaOptionModule
         public virtual UniTask PlayHidingAnimationAsync() =>
             OptionView.PlayHideAsync();
 
-        public virtual void Release() =>
-            _selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
+        public virtual void Release()
+        {
+            OptionView.Release();
+            _selectOptionLogic.OnSetCurrentCoordinate -= OnSetCurrentCoordinate;
+        }
 
         public Option[] GetAllOptions() =>
             OptionView.Options.ToArray();
@@ -141,7 +145,7 @@ namespace CizaOptionModule
 
         protected virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
         {
-            OptionView.OnSetCurrentCoordinate(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, IsImmediately);
+            OptionView.SetCurrentCoordinate(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, IsImmediately);
 
             if (!CheckIsAnyPlayerOnCoordinate(previousCoordinate))
                 previousOption?.Unselect();

@@ -13,6 +13,8 @@ namespace CizaOptionModule
 		IColumnInfo ColumnInfo { get; }
 		IRowInfo    RowInfo    { get; }
 
+		void Initialize();
+		
 		void UnSelectAll();
 
 		void PlayShowStartAndPause();
@@ -25,6 +27,8 @@ namespace CizaOptionModule
 
 		UniTask PlayHideAsync();
 
-		void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately);
+		void Release();
+		
+		void SetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately);
 	}
 }

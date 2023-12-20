@@ -17,6 +17,16 @@ namespace CizaOptionModule.Implement
         [SerializeField]
         private AnimSettings _animSettings;
 
+        [Space]
+        [SerializeField]
+        private OptionViewSup[] _optionViewSups;
+
+        public event Action<float> OnTick;
+
+        // playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately
+        public event Action<int, Vector2Int, Option, Vector2Int, Option, bool> OnSetCurrentCoordinate;
+
+
         [Serializable]
         private class CollectionSettings : OptionSettings<Option>
         {
@@ -35,6 +45,14 @@ namespace CizaOptionModule.Implement
         public Option[] OptionsIncludeNull => _collectionSettings.OptionsIncludeNull;
         public IColumnInfo ColumnInfo => _collectionSettings.ColumnInfo;
         public IRowInfo RowInfo => _collectionSettings.RowInfo;
+
+        public void Initialize()
+        {
+            if (_optionViewSups is null)
+                return;
+            foreach (var optionViewSup in _optionViewSups)
+                optionViewSup.Initialize();
+        }
 
         public void UnSelectAll()
         {
@@ -64,7 +82,8 @@ namespace CizaOptionModule.Implement
             _animSettings.PlayShowComplete();
         }
 
-        public virtual void Tick(float deltaTime) { }
+        public void Tick(float deltaTime) =>
+            OnTick?.Invoke(deltaTime);
 
         public UniTask PlayHideAsync()
         {
@@ -73,8 +92,16 @@ namespace CizaOptionModule.Implement
             return _animSettings.PlayHideAsync(default);
         }
 
-        public virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately) { }
+        public void Release()
+        {
+            if (_optionViewSups is null)
+                return;
+            foreach (var optionViewSup in _optionViewSups)
+                optionViewSup.Release();
+        }
 
+        public void SetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately) =>
+            OnSetCurrentCoordinate?.Invoke(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately);
 
         [Serializable]
         private class ColumnInfoImp : IColumnInfo

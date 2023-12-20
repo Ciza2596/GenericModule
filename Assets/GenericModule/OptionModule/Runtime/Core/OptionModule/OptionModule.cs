@@ -37,6 +37,8 @@ namespace CizaOptionModule
 
         public int CurrentPageIndex { get; private set; } = NotInitialPageIndex;
 
+        public bool CanConfirm { get; private set; } = true;
+
         public bool CheckCanSelect(int playerIndex)
         {
             if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
@@ -181,9 +183,12 @@ namespace CizaOptionModule
             _pageModule.OnlyCallHidingComplete(CurrentPageIndex.ToString());
         }
 
+        public void SetCanConfirm(bool canConfirm) =>
+            CanConfirm = canConfirm;
+        
         public bool TryConfirm(int playerIndex)
         {
-            if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm)
+            if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm || !CanConfirm)
                 return false;
 
             return optionModulePage.TryConfirm(playerIndex);

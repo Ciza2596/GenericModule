@@ -6,7 +6,13 @@ namespace CizaOptionModule.Implement
 		{
 			base.Initialize(option);
 
-			_option.OnInitialize += OnInitialize;
+			Option.OnInitialize += OnInitialize;
+		}
+
+		public override void Release(Option option)
+		{
+			base.Release(option);
+			Option.OnInitialize -= OnInitialize;
 		}
 
 		protected abstract void OnInitialize(object[] parameters);

@@ -3,14 +3,23 @@ using UnityEngine.Assertions;
 
 namespace CizaOptionModule.Implement
 {
-	public abstract class OptionSup : MonoBehaviour, IOptionSup
-	{
-		protected Option _option;
+    public abstract class OptionSup : MonoBehaviour, IOptionSup
+    {
+        protected Option Option { get; private set; }
 
-		public virtual void Initialize(Option option)
-		{
-			_option = option;
-			Assert.IsNotNull(_option, $"[{GetType().Name}::Awake] Option should be found.");
-		}
-	}
+        public bool IsInitialized { get; private set; }
+
+        public virtual void Initialize(Option option)
+        {
+            IsInitialized = true;
+
+            Option = option;
+            Assert.IsNotNull(Option, $"[{GetType().Name}::Awake] Option should be found.");
+        }
+
+        public virtual void Release(Option option)
+        {
+            IsInitialized = false;
+        }
+    }
 }

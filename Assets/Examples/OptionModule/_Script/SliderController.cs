@@ -1,15 +1,15 @@
 using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace CizaOptionModule.Implement
+namespace CizaInputModule.Example
 {
-    public class OptionSlider : OptionSup
+    public class SliderController : MonoBehaviour
     {
         [SerializeField]
         private Slider _slider;
 
+        // value
         public event Action<float> OnValueChanged;
 
         public float Value => _slider.value;
@@ -22,21 +22,15 @@ namespace CizaOptionModule.Implement
                 _slider.SetValueWithoutNotify(value);
         }
 
-        public override void Initialize(Option option)
-        {
-            base.Initialize(option);
 
-            Assert.IsNotNull(_slider, $"[OptionSlider::Initialize] Option: {name} is not set slider.");
+        private void Awake()
+        {
             _slider.onValueChanged.AddListener(OnValueChangedImp);
         }
 
-        public override void Release(Option option)
+        private void OnValueChangedImp(float value)
         {
-            base.Release(option);
-            _slider.onValueChanged.RemoveListener(OnValueChangedImp);
-        }
-
-        private void OnValueChangedImp(float value) =>
             OnValueChanged?.Invoke(value);
+        }
     }
 }

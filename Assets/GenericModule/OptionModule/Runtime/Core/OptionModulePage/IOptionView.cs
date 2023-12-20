@@ -1,5 +1,6 @@
 using CizaCore;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace CizaOptionModule
 {
@@ -19,7 +20,11 @@ namespace CizaOptionModule
 		UniTask PlayShowAsync();
 
 		void PlayShowComplete();
+		
+		void Tick(float deltaTime);
 
 		UniTask PlayHideAsync();
+
+		void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately);
 	}
 }

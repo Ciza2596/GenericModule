@@ -1,3 +1,5 @@
+using System;
+
 namespace CizaTextModule.Implement
 {
     public class LocaleAndControllerTextModule
@@ -6,6 +8,9 @@ namespace CizaTextModule.Implement
         public const string ControllerTextModuleDataId = "ControllerTextModule";
 
         private readonly TextModuleWithTextMap _textModuleWithTextMap;
+
+        public event Action<string> OnChangeLocaleCategory;
+        public event Action<string> OnChangeControllerCategory;
 
         public string[] LocaleCategories
         {
@@ -72,6 +77,8 @@ namespace CizaTextModule.Implement
         {
             var maps = new[] { new TextModuleWithTextMap.Map(LocaleTextModuleDataId, localeTextModuleConfig, StringExtension.LocaleTextKeyPattern), new TextModuleWithTextMap.Map(ControllerTextModuleDataId, controllerTextModuleConfig, StringExtension.ControllerTextKeyPattern) };
             _textModuleWithTextMap = new TextModuleWithTextMap(maps, "LocaleAndControllerTextModule");
+
+            _textModuleWithTextMap.OnChangeCategory += OnChangeCategoryImp;
         }
 
         public bool TryChangeLocaleCategory(string category) =>
@@ -94,5 +101,14 @@ namespace CizaTextModule.Implement
 
         public void RemoveTextMaps(ITextMap[] textMaps) =>
             _textModuleWithTextMap.RemoveTextMaps(textMaps);
+
+        private void OnChangeCategoryImp(string dataId, string category)
+        {
+            if (dataId == LocaleTextModuleDataId)
+                OnChangeLocaleCategory?.Invoke(category);
+
+            else if (dataId == ControllerTextModuleDataId)
+                OnChangeControllerCategory?.Invoke(category);
+        }
     }
 }

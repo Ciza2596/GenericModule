@@ -69,6 +69,9 @@ namespace CizaTextModule
 
         private readonly HashSet<ITextMap> _textMaps = new HashSet<ITextMap>();
 
+        // dataId, category
+        public event Action<string, string> OnChangeCategory;
+
         public bool TryGetCategories(string dataId, out string[] categories)
         {
             if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
@@ -138,6 +141,7 @@ namespace CizaTextModule
             if (textModule.TryChangeCategory(category))
             {
                 RefreshAllTextMaps();
+                OnChangeCategory?.Invoke(dataId, category);
                 return true;
             }
 

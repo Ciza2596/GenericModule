@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CizaTextModule.Implement
@@ -5,6 +6,9 @@ namespace CizaTextModule.Implement
     public class TextModuleWithTextMap
     {
         private readonly TextMapLogic _textMapLogic;
+
+        // dataId, category
+        public event Action<string, string> OnChangeCategory;
 
         public bool TryGetCategories(string dataId, out string[] categories) =>
             _textMapLogic.TryGetCategories(dataId, out categories);
@@ -25,6 +29,8 @@ namespace CizaTextModule.Implement
                 textModules.Add(TextMapLogic.ITextModule.CreateTextModule(map.DataId, new TextModule(map.TextModuleConfig), map.KeyPattern));
 
             _textMapLogic = new TextMapLogic(textModules.ToArray(), className);
+
+            _textMapLogic.OnChangeCategory += OnChangeCategoryImp;
         }
 
         public bool TryChangeCategory(string dataId, string category) =>
@@ -44,6 +50,10 @@ namespace CizaTextModule.Implement
 
         public void RemoveTextMaps(ITextMap[] textMaps) =>
             _textMapLogic.RemoveTextMaps(textMaps);
+
+        private void OnChangeCategoryImp(string dataId, string category) =>
+            OnChangeCategory?.Invoke(dataId, category);
+
 
         public class Map
         {

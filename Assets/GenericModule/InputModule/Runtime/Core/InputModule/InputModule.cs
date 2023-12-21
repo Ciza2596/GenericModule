@@ -19,6 +19,8 @@ namespace CizaInputModule
 
         private Transform _root;
 
+        private GameObject _eventSystem;
+
         private PlayerInputManager _playerInputManager;
         private PlayerInput _playerInput;
 
@@ -32,6 +34,8 @@ namespace CizaInputModule
 
         public bool IsInitialized { get; private set; }
 
+        public bool CanEnableEventSystem { get; private set; }
+        public bool IsEnableEventSystem => _eventSystem != null ? _eventSystem.activeSelf : false;
         public bool IsEnableJoining { get; private set; }
 
         public bool IsEnableInput { get; private set; }
@@ -94,6 +98,12 @@ namespace CizaInputModule
             else if (_inputModuleConfig.IsDontDestroyOnLoad)
                 Object.DontDestroyOnLoad(_root.gameObject);
 
+            _eventSystem = Object.Instantiate(_inputModuleConfig.EventSystemPrefab, _root);
+            SetCanEnableEventSystem(_inputModuleConfig.CanEnableEventSystem);
+
+            if (_inputModuleConfig.IsAutoEnableEventSystem)
+                EnableEventSystem();
+
             _timerModule.Initialize();
         }
 
@@ -105,6 +115,10 @@ namespace CizaInputModule
             Clear();
             _timerModule.Release();
 
+            var eventSystem = _eventSystem;
+            _eventSystem = null;
+            Object.Destroy(eventSystem);
+
             var root = _root;
             _root = null;
             Object.Destroy(root.gameObject);
@@ -114,6 +128,29 @@ namespace CizaInputModule
 
         public void Tick(float deltaTime) =>
             _timerModule.Tick(deltaTime);
+
+        public void SetCanEnableEventSystem(bool canEnableEventSystem)
+        {
+            CanEnableEventSystem = canEnableEventSystem;
+            if (!CanEnableEventSystem && IsEnableEventSystem)
+                DisableEventSystem();
+        }
+
+        public void EnableEventSystem()
+        {
+            if (!IsInitialized || !CanEnableEventSystem || IsEnableEventSystem)
+                return;
+
+            _eventSystem.SetActive(true);
+        }
+
+        public void DisableEventSystem()
+        {
+            if (!IsInitialized || !IsEnableEventSystem)
+                return;
+
+            _eventSystem.SetActive(false);
+        }
 
         public void SetMaxPlayerCount(int maxPlayerCount) =>
             MaxPlayerCount = maxPlayerCount;

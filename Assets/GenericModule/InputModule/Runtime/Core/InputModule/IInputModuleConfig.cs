@@ -7,8 +7,11 @@ namespace CizaInputModule
         string RootName { get; }
         bool IsDontDestroyOnLoad { get; }
 
-        GameObject PlayerInputManagerPrefab { get; }
+        GameObject EventSystemPrefab { get; }
+        bool CanEnableEventSystem { get; }
+        bool IsAutoEnableEventSystem { get; }
 
+        GameObject PlayerInputManagerPrefab { get; }
         float JoinedWaitingTime { get; }
 
         string DefaultActionMapDataId { get; }

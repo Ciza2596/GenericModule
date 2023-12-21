@@ -13,9 +13,18 @@ namespace CizaInputModule.Implement
 
         [Space]
         [SerializeField]
-        private GameObject _playerInputManagerPrefab;
+        private GameObject _eventSystemPrefab;
+
+        [SerializeField]
+        private bool _canEnableEventSystem = true;
+
+        [SerializeField]
+        private bool _isAutoEnableEventSystem;
 
         [Space]
+        [SerializeField]
+        private GameObject _playerInputManagerPrefab;
+
         [SerializeField]
         private float _joinedWaitingTime = 0.25f;
 
@@ -27,8 +36,11 @@ namespace CizaInputModule.Implement
         public string RootName => _rootName;
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-        public GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
+        public GameObject EventSystemPrefab => _eventSystemPrefab;
+        public bool CanEnableEventSystem => _canEnableEventSystem;
+        public bool IsAutoEnableEventSystem => _isAutoEnableEventSystem;
 
+        public GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
         public float JoinedWaitingTime => _joinedWaitingTime;
 
         public string DefaultActionMapDataId => _defaultActionMapDataId;

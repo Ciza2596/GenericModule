@@ -14,13 +14,14 @@ namespace CizaOptionModule.Implement
 
         public bool IsOn => _switch.IsOn;
 
-        public void SetIsOn(bool isOn)
-        {
-            if (isOn)
-                _switch.TurnOn();
-            else
-                _switch.TurnOff();
-        }
+        public void SetIsOn(bool isOn) =>
+            _switch.SetIsOn(isOn);
+
+        public void TurnOn() =>
+            _switch.TurnOn();
+
+        public void TurnOff() =>
+            _switch.TurnOff();
 
         public override void Initialize(Option option)
         {

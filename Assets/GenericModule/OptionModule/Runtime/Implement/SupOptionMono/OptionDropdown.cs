@@ -13,6 +13,11 @@ namespace CizaOptionModule.Implement
         // index
         public event Action<int> OnOptionChanged;
 
+        public event Action OnShow;
+        public event Action OnHide;
+
+        public string[] Options => _dropdown.Options;
+
         public bool IsShow => _dropdown.IsShow;
 
         public int Index => _dropdown.Index;
@@ -59,15 +64,27 @@ namespace CizaOptionModule.Implement
 
             Assert.IsNotNull(_dropdown, $"[OptionDropdown::Initialize] Option: {name} is not set dropdown.");
             _dropdown.OnIndexChanged += OnOptionChangedImp;
+
+            _dropdown.OnShow += OnShowImp;
+            _dropdown.OnHide += OnHideImp;
         }
 
         public override void Release(Option option)
         {
             base.Release(option);
             _dropdown.OnIndexChanged -= OnOptionChangedImp;
+
+            _dropdown.OnShow -= OnShowImp;
+            _dropdown.OnHide -= OnHideImp;
         }
 
         private void OnOptionChangedImp(int index) =>
             OnOptionChanged?.Invoke(index);
+
+        private void OnShowImp() =>
+            OnShow?.Invoke();
+
+        private void OnHideImp() =>
+            OnHide?.Invoke();
     }
 }

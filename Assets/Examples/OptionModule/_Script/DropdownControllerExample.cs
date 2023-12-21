@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CizaInputModule.Example
@@ -13,6 +14,7 @@ namespace CizaInputModule.Example
         private void Awake()
         {
             _dropdownController.SetOptions(_options);
+            _dropdownController.Show();
         }
     }
 }

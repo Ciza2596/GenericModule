@@ -4,8 +4,7 @@
     "references": [
         "UniTask",
         "CizaCore",
-        "PageModule",
-        "Unity.TextMeshPro"
+        "PageModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

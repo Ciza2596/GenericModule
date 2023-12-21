@@ -9,7 +9,7 @@ namespace CizaInputModule
 
         GameObject EventSystemPrefab { get; }
         bool CanEnableEventSystem { get; }
-        bool IsAutoEnableEventSystem { get; }
+        bool IsDefaultEnableEventSystem { get; }
 
         GameObject PlayerInputManagerPrefab { get; }
         float JoinedWaitingTime { get; }

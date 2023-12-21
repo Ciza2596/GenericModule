@@ -101,8 +101,10 @@ namespace CizaInputModule
             _eventSystem = Object.Instantiate(_inputModuleConfig.EventSystemPrefab, _root);
             SetCanEnableEventSystem(_inputModuleConfig.CanEnableEventSystem);
 
-            if (_inputModuleConfig.IsAutoEnableEventSystem)
+            if (_inputModuleConfig.IsDefaultEnableEventSystem)
                 EnableEventSystem();
+            else
+                DisableEventSystem();
 
             _timerModule.Initialize();
         }

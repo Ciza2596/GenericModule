@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ namespace CizaPopupModule.Implement
 {
     public class PopupOption : MonoBehaviour, IPointerEnterHandler
     {
+        [SerializeField]
+        private TMP_Text _text;
+
         [SerializeField]
         private Button _button;
 
@@ -40,6 +44,9 @@ namespace CizaPopupModule.Implement
             Index = index;
             _onSelect = onSelect;
         }
+
+        public void SetText(string text) =>
+            _text.text = text;
 
         public void Select() =>
             Play(_select);

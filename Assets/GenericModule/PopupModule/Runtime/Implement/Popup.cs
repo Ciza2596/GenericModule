@@ -3,6 +3,7 @@ using CizaCore;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CizaPopupModule.Implement
 {
@@ -13,11 +14,7 @@ namespace CizaPopupModule.Implement
 
         [Space]
         [SerializeField]
-        private TextSettings _textSettings;
-
-        [Space]
-        [SerializeField]
-        private ButtonSettings _optionSettings;
+        private Settings _settings;
 
         private Func<string, UniTask> _onConfirmPopupAsync;
         private Func<string, UniTask> _onCancelPopupAsync;
@@ -49,26 +46,30 @@ namespace CizaPopupModule.Implement
             _onConfirmPopupAsync = onConfirmPopupAsync;
             _onCancelPopupAsync = onCancelPopupAsync;
 
-            _optionSettings.ConfirmOption.Initialize(Key, PopupModule.ConfrimIndex, onSelect);
-            _optionSettings.CancelOption.Initialize(Key, PopupModule.CancelIndex, onSelect);
+            _settings.Initialize();
 
-            _optionSettings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
-            _optionSettings.CancelOption.Button.onClick.AddListener(OnCancelClick);
+            _settings.ConfirmOption.Initialize(Key, PopupModule.ConfrimIndex, onSelect);
+            _settings.CancelOption.Initialize(Key, PopupModule.CancelIndex, onSelect);
+
+            _settings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
+            _settings.CancelOption.Button.onClick.AddListener(OnCancelClick);
 
             gameObject.name = key;
 
-            _optionSettings.ConfirmOption.gameObject.SetActive(true);
-            _optionSettings.CancelOption.gameObject.SetActive(HasCancel);
+            _settings.ConfirmOption.gameObject.SetActive(true);
+            _settings.CancelOption.gameObject.SetActive(HasCancel);
         }
 
         public void Release()
         {
-            _optionSettings.ConfirmOption.Button.onClick.RemoveListener(OnConfirmClick);
-            _optionSettings.CancelOption.Button.onClick.RemoveListener(OnCancelClick);
+            _settings.ConfirmOption.Button.onClick.RemoveListener(OnConfirmClick);
+            _settings.CancelOption.Button.onClick.RemoveListener(OnCancelClick);
+
+            _settings.Release();
         }
 
         public void SetText(string contentText, string confirmText, string cancelText) =>
-            _textSettings.SetText(contentText, confirmText, cancelText);
+            _settings.SetText(contentText, confirmText, cancelText);
 
         public void SetState(PopupStates state) =>
             State = state;
@@ -103,10 +104,10 @@ namespace CizaPopupModule.Implement
         }
 
         public void Confirm() =>
-            _optionSettings.ConfirmOption.Confirm();
+            _settings.ConfirmOption.Confirm();
 
         public void Cancel() =>
-            _optionSettings.CancelOption.Confirm();
+            _settings.CancelOption.Confirm();
 
         private async void OnConfirmClick() =>
             await _onConfirmPopupAsync.Invoke(Key);
@@ -118,46 +119,59 @@ namespace CizaPopupModule.Implement
         private PopupOption GetPopupOption(int index)
         {
             if (index == PopupModule.ConfrimIndex)
-                return _optionSettings.ConfirmOption;
+                return _settings.ConfirmOption;
 
-            return _optionSettings.CancelOption;
+            return _settings.CancelOption;
         }
 
 
         [Serializable]
-        private class TextSettings
+        private class Settings
         {
             [SerializeField]
             private TMP_Text _contentText;
 
             [Space]
             [SerializeField]
-            private TMP_Text _confirmText;
+            private Transform _optionParent;
 
             [SerializeField]
-            private TMP_Text _cancelText;
+            private GameObject _template;
 
+            [SerializeField]
+            private GameObject _optionPrefab;
+
+            public PopupOption ConfirmOption { get; private set; }
+            public PopupOption CancelOption { get; private set; }
+
+            public void Initialize()
+            {
+                _template.SetActive(false);
+
+                ConfirmOption = Instantiate(_optionPrefab, _optionParent).GetComponent<PopupOption>();
+                CancelOption = Instantiate(_optionPrefab, _optionParent).GetComponent<PopupOption>();
+            }
+
+            public void Release()
+            {
+                DestroyOrImmediate(ConfirmOption.gameObject);
+                DestroyOrImmediate(CancelOption.gameObject);
+            }
 
             public void SetText(string contentText, string confirmText, string cancelText)
             {
                 _contentText.text = contentText;
-                _confirmText.text = confirmText;
-                _cancelText.text = cancelText;
+                ConfirmOption.SetText(confirmText);
+                CancelOption.SetText(cancelText);
             }
-        }
 
-        [Serializable]
-        private class ButtonSettings
-        {
-            [SerializeField]
-            private PopupOption _confirmOption;
-
-            [SerializeField]
-            private PopupOption _cancelOption;
-
-            public PopupOption ConfirmOption => _confirmOption;
-
-            public PopupOption CancelOption => _cancelOption;
+            private void DestroyOrImmediate(Object obj)
+            {
+                if (Application.isPlaying)
+                    Destroy(obj);
+                else
+                    DestroyImmediate(obj);
+            }
         }
     }
 }

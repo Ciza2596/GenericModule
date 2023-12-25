@@ -13,7 +13,6 @@ public class LocalizationModuleTest
     public static readonly string DefaultLocale = Tc;
     public static readonly char PrefixTag = '/';
 
-
     private LocalizationModule _localizationModule;
     private ILocalizationModuleConfig _localizationModuleConfig;
 
@@ -23,6 +22,7 @@ public class LocalizationModuleTest
     {
         _localizationModuleConfig = Substitute.For<ILocalizationModuleConfig>();
         SetConfig(SupportLocales, SourceLocale, DefaultLocale, PrefixTag);
+        
         _localizationModule = new LocalizationModule(_localizationModuleConfig);
     }
 

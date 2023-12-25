@@ -35,8 +35,7 @@ namespace CizaPageModule
         {
             Release();
 
-            var pageRootName = _pageModuleConfig.PageRootName;
-            var pageRootGameObject = new GameObject(pageRootName);
+            var pageRootGameObject = new GameObject(_pageModuleConfig.PageRootName);
             var pageRoot = pageRootGameObject.transform;
 
             if (parent != null)

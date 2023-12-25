@@ -2,6 +2,7 @@
     "name": "PopupModule.Test",
     "rootNamespace": "",
     "references": [
+        "UniTask",
         "PopupModule"
     ],
     "includePlatforms": [

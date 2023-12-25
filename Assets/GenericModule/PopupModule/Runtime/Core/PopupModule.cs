@@ -115,6 +115,17 @@ namespace CizaPopupModule
         public async UniTask HideAsync(string key) =>
             await HideAsync(key, false);
 
+        public void Select(string key, int index)
+        {
+            if (!IsInitialized)
+                return;
+
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
+                return;
+
+            Select(popup, index);
+        }
+
         public void MoveToPrevious(string key)
         {
             if (!IsInitialized)
@@ -154,16 +165,6 @@ namespace CizaPopupModule
             return UniTask.CompletedTask;
         }
 
-        private void Select(string key, int index)
-        {
-            if (!IsInitialized)
-                return;
-
-            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
-                return;
-
-            Select(popup, index);
-        }
 
         private UniTask ConfirmPopupAsync(string key)
         {

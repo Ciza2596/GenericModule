@@ -36,7 +36,7 @@ namespace CizaPopupModule.Implement
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
+        public void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
         {
             Key = key;
             DataId = dataId;
@@ -48,6 +48,9 @@ namespace CizaPopupModule.Implement
 
             _onConfirmPopupAsync = onConfirmPopupAsync;
             _onCancelPopupAsync = onCancelPopupAsync;
+
+            _optionSettings.ConfirmOption.Initialize(Key, PopupModule.ConfrimIndex, onSelect);
+            _optionSettings.CancelOption.Initialize(Key, PopupModule.CancelIndex, onSelect);
 
             _optionSettings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
             _optionSettings.CancelOption.Button.onClick.AddListener(OnCancelClick);
@@ -91,8 +94,13 @@ namespace CizaPopupModule.Implement
         public void SetIsConfirm(bool isConfirm) =>
             IsConfirm = isConfirm;
 
-        public void SetIndex(int index) =>
+        public void Select(int index)
+        {
+            GetPopupOption(Index).Unselect();
+
             Index = index;
+            GetPopupOption(Index).Select();
+        }
 
         public void Confirm() =>
             _optionSettings.ConfirmOption.Confirm();
@@ -105,6 +113,15 @@ namespace CizaPopupModule.Implement
 
         private async void OnCancelClick() =>
             await _onCancelPopupAsync.Invoke(Key);
+
+
+        private PopupOption GetPopupOption(int index)
+        {
+            if (index == PopupModule.ConfrimIndex)
+                return _optionSettings.ConfirmOption;
+
+            return _optionSettings.CancelOption;
+        }
 
 
         [Serializable]

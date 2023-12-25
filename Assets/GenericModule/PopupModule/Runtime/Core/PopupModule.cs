@@ -114,27 +114,15 @@ namespace CizaPopupModule
         public async UniTask HideAsync(string key) =>
             await HideAsync(key, false);
 
-        public void Select(string key, int index)
+        private void Select(string key, int index)
         {
             if (!IsInitialized)
                 return;
 
-            if (!TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return;
 
-            var maxIndex = popup.HasCancel ? CancelIndex : ConfrimIndex;
-            int selectedIndex;
-
-            if (index < 0)
-                selectedIndex = 0;
-
-            else if (index > maxIndex)
-                selectedIndex = maxIndex;
-
-            else
-                selectedIndex = index;
-
-            popup.SetIndex(selectedIndex);
+            Select(popup, index);
         }
 
         public void MoveToForward(string key)
@@ -142,7 +130,7 @@ namespace CizaPopupModule
             if (!IsInitialized)
                 return;
 
-            if (!TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return;
 
             Select(key, popup.Index - 1);
@@ -153,7 +141,7 @@ namespace CizaPopupModule
             if (!IsInitialized)
                 return;
 
-            if (!TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return;
 
             Select(key, popup.Index + 1);
@@ -164,7 +152,7 @@ namespace CizaPopupModule
             if (!IsInitialized)
                 return UniTask.CompletedTask;
 
-            if (!TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
             if (popup.Index == ConfrimIndex)
@@ -178,7 +166,7 @@ namespace CizaPopupModule
 
         private UniTask ConfirmPopupAsync(string key)
         {
-            if (!TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
             popup.SetIsConfirm(true);
@@ -190,7 +178,7 @@ namespace CizaPopupModule
 
         private UniTask CancelPopupAsync(string key)
         {
-            if (TryGetIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
             popup.SetIsConfirm(true);
@@ -220,7 +208,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(key, dataId, hasCancel, contentTip, confirmTip, cancelTip, ConfirmPopupAsync, CancelPopupAsync);
+            popup.Initialize(key, dataId, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
 
             _popupMapByKey.Add(key, popup);
 
@@ -242,14 +230,14 @@ namespace CizaPopupModule
 
             popup.GameObject.SetActive(true);
             popup.SetIsConfirm(false);
-            Select(key, CancelIndex);
-
-            popup.SetState(PopupStates.Showing);
+            Select(popup, CancelIndex);
             
+            popup.SetState(PopupStates.Showing);
+
             OnShowingStart?.Invoke(popup.Key);
             await popup.ShowAsync(isImmediately);
             OnShowingComplete?.Invoke(popup.Key);
-            
+
             popup.SetState(PopupStates.Visible);
 
             string m_GetTranslateText(string m_tip) =>
@@ -265,19 +253,36 @@ namespace CizaPopupModule
                 return;
 
             popup.SetState(PopupStates.Hiding);
-            
+
             OnHidingStart?.Invoke(popup.Key);
             await popup.HideAsync(isImmediately);
             OnHidingComplete?.Invoke(popup.Key);
-            
+
             popup.SetState(PopupStates.Invisible);
 
             popup.GameObject.SetActive(false);
         }
 
-        private bool TryGetIsNotConfirmPopup(string key, out IPopup popup)
+        private void Select(IPopup popup, int index)
         {
-            if (!_popupMapByKey.TryGetValue(key, out popup) || popup.State != PopupStates.Visible || popup.IsConfirm)
+            var maxIndex = popup.HasCancel ? CancelIndex : ConfrimIndex;
+            int selectedIndex;
+
+            if (index < 0)
+                selectedIndex = 0;
+
+            else if (index > maxIndex)
+                selectedIndex = maxIndex;
+
+            else
+                selectedIndex = index;
+
+            popup.Select(selectedIndex);
+        }
+
+        private bool TryGetIsVisibleAndIsNotConfirmPopup(string key, out IPopup popup)
+        {
+            if (!TryGetIsVisiblePopup(key, out popup) || popup.IsConfirm)
                 return false;
 
             return true;

@@ -14,6 +14,7 @@ module | Test | Samples |
 [LocalizationModule](#localizationmodule) | ✔️ | ❌ |
 [TextModule](#textmodule) | ✔️ | ❌ |
 [InputModule](#inputModule) | ✔️ | ❌ |
+[PopupModule](#popupmodule) | ✔️ | ❌ |
 [OptionModule](#optionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
@@ -364,6 +365,23 @@ Unity.InputSystem
 
 ### Manual:
 InputModule manual.
+
+
+## PopupModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PopupModule
+```
+
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+```
+https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
+```
+
+### Manual:
+PopupModule manual.
 
 
 ## OptionModule

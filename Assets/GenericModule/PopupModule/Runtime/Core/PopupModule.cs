@@ -9,6 +9,9 @@ namespace CizaPopupModule
 {
     public class PopupModule
     {
+        public const int ConfrimIndex = 0;
+        public const int CancelIndex = 1;
+
         private readonly IPopupModuleConfig _popupModuleConfig;
 
         private readonly Dictionary<string, IPopup> _popupMapByKey = new Dictionary<string, IPopup>();
@@ -106,7 +109,19 @@ namespace CizaPopupModule
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
-            popup.Select(index);
+            var maxIndex = popup.HasCancel ? CancelIndex : ConfrimIndex;
+            int selectedIndex;
+
+            if (index < 0)
+                selectedIndex = 0;
+
+            else if (index > maxIndex)
+                selectedIndex = maxIndex;
+
+            else
+                selectedIndex = index;
+
+            popup.SetIndex(selectedIndex);
         }
 
         public void MoveToForward(string key)
@@ -114,7 +129,7 @@ namespace CizaPopupModule
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
-            popup.Select(popup.Index - 1);
+            Select(key, popup.Index - 1);
         }
 
         public void MoveToBackward(string key)
@@ -122,7 +137,7 @@ namespace CizaPopupModule
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
-            popup.Select(popup.Index + 1);
+            Select(key, popup.Index + 1);
         }
 
         public UniTask ConfirmByIndexAsync(string key)
@@ -130,8 +145,13 @@ namespace CizaPopupModule
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
-            popup.Confirm(popup.Index);
-            return HideAsync(key);
+            if (popup.Index == ConfrimIndex)
+                return ConfirmAsync(key);
+
+            if (popup.Index == CancelIndex)
+                return CancelAsync(key);
+
+            return UniTask.CompletedTask;
         }
 
         public UniTask ConfirmAsync(string key)
@@ -139,6 +159,7 @@ namespace CizaPopupModule
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
+            popup.SetIsConfirm(true);
             popup.Confirm();
             OnConfirm?.Invoke(key);
 
@@ -150,6 +171,7 @@ namespace CizaPopupModule
             if (TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
+            popup.SetIsConfirm(true);
             popup.Cancel();
             OnCancel?.Invoke(key);
 
@@ -173,7 +195,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(key, dataId, hasCancel, contentTip, confirmTip, cancelTip);
+            popup.Initialize(this, key, dataId, hasCancel, contentTip, confirmTip, cancelTip);
 
             _popupMapByKey.Add(key, popup);
 
@@ -191,7 +213,8 @@ namespace CizaPopupModule
             popup.SetText(contentText, confirmText, cancelText);
 
             popup.GameObject.SetActive(true);
-            Select(key, 1);
+            popup.SetIsConfirm(false);
+            Select(key, CancelIndex);
             await popup.ShowAsync(isImmediately);
             OnShowingComplete?.Invoke(popup.Key);
 

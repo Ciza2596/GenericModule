@@ -20,7 +20,7 @@ namespace CizaPopupModule
 
         GameObject GameObject { get; }
 
-        void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip);
+        void Initialize(PopupModule popupModule, string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip);
         void Release();
 
         void SetText(string contentText, string confirmText, string cancelText);
@@ -28,9 +28,9 @@ namespace CizaPopupModule
         UniTask ShowAsync(bool isImmediately);
         UniTask HideAsync(bool isImmediately);
 
-        void Select(int index);
+        void SetIsConfirm(bool isConfirm);
         
-        void Confirm(int index);
+        void SetIndex(int index);
         
         void Confirm();
         void Cancel();

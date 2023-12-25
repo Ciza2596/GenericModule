@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace CizaPopupModule.Implement
 {
@@ -12,8 +11,10 @@ namespace CizaPopupModule.Implement
         private TextSettings _textSettings;
 
         [SerializeField]
-        private ButtonSettings _buttonSettings;
+        private ButtonSettings _optionSettings;
 
+
+        private PopupModule _popupModule;
 
         public string Key { get; private set; }
         public string DataId { get; private set; }
@@ -29,8 +30,10 @@ namespace CizaPopupModule.Implement
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
+        public void Initialize(PopupModule popupModule, string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
         {
+            _popupModule = popupModule;
+
             Key = key;
             DataId = dataId;
             HasCancel = hasCancel;
@@ -38,9 +41,16 @@ namespace CizaPopupModule.Implement
             ContentTip = contentTip;
             ConfirmTip = confirmTip;
             CancelTip = cancelTip;
+
+            _optionSettings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
+            _optionSettings.CancelOption.Button.onClick.AddListener(OnCancelClick);
         }
 
-        public void Release() { }
+        public void Release()
+        {
+            _optionSettings.ConfirmOption.Button.onClick.RemoveListener(OnConfirmClick);
+            _optionSettings.CancelOption.Button.onClick.RemoveListener(OnCancelClick);
+        }
 
         public void SetText(string contentText, string confirmText, string cancelText) =>
             _textSettings.SetText(contentText, confirmText, cancelText);
@@ -55,23 +65,24 @@ namespace CizaPopupModule.Implement
             return UniTask.CompletedTask;
         }
 
-        public void Select(int index) =>
+        public void SetIsConfirm(bool isConfirm) =>
+            IsConfirm = isConfirm;
+
+        public void SetIndex(int index) =>
             Index = index;
 
-        public void Confirm(int index)
-        {
-            throw new NotImplementedException();
-        }
+        public void Confirm() =>
+            _optionSettings.ConfirmOption.Confirm();
 
-        public void Confirm()
-        {
-            throw new NotImplementedException();
-        }
+        public void Cancel() =>
+            _optionSettings.CancelOption.Confirm();
 
-        public void Cancel()
-        {
-            throw new NotImplementedException();
-        }
+        private void OnConfirmClick() =>
+            _popupModule.ConfirmAsync(Key);
+
+        private void OnCancelClick() =>
+            _popupModule.CancelAsync(Key);
+
 
         [Serializable]
         private class TextSettings
@@ -79,6 +90,7 @@ namespace CizaPopupModule.Implement
             [SerializeField]
             private TMP_Text _contentText;
 
+            [Space]
             [SerializeField]
             private TMP_Text _confirmText;
 
@@ -98,14 +110,14 @@ namespace CizaPopupModule.Implement
         private class ButtonSettings
         {
             [SerializeField]
-            private Button _confirmButton;
+            private PopupOption _confirmOption;
 
             [SerializeField]
-            private Button _cancelButton;
+            private PopupOption _cancelOption;
 
-            public Button ConfirmButton => _confirmButton;
-            
-            public Button CancelButton => _cancelButton;
+            public PopupOption ConfirmOption => _confirmOption;
+
+            public PopupOption CancelOption => _cancelOption;
         }
     }
 }

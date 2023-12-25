@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 424830999}
   - component: {fileID: 424831000}
   m_Layer: 5
-  m_Name: Bar
+  m_Name: OptionBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,9 +669,9 @@ MonoBehaviour:
     _contentText: {fileID: 1919906756}
     _confirmText: {fileID: 1326669218}
     _cancelText: {fileID: 1118244247}
-  _buttonSettings:
-    _confirmButton: {fileID: 1675823708}
-    _cancelButton: {fileID: 1735202029}
+  _optionSettings:
+    _confirmOption: {fileID: 1675823712}
+    _cancelOption: {fileID: 1735202033}
 --- !u!1 &1326669216
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,11 +815,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1675823707}
+  - component: {fileID: 1675823712}
+  - component: {fileID: 1675823711}
   - component: {fileID: 1675823710}
   - component: {fileID: 1675823709}
   - component: {fileID: 1675823708}
   m_Layer: 5
-  m_Name: ConfirmButton
+  m_Name: ConfirmOption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -927,6 +929,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675823706}
   m_CullTransparentMesh: 1
+--- !u!95 &1675823711
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675823706}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1675823712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675823706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d814d63142a54aeba6145dd8c2bf7531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 1675823708}
+  _animator: {fileID: 1675823711}
+  _select: Select
+  _unselect: Unselect
+  _confirm: Confirm
 --- !u!1 &1735202027
 GameObject:
   m_ObjectHideFlags: 0
@@ -936,11 +976,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1735202028}
+  - component: {fileID: 1735202033}
+  - component: {fileID: 1735202032}
   - component: {fileID: 1735202031}
   - component: {fileID: 1735202030}
   - component: {fileID: 1735202029}
   m_Layer: 5
-  m_Name: CancelButton
+  m_Name: CancelOption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1048,6 +1090,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735202027}
   m_CullTransparentMesh: 1
+--- !u!95 &1735202032
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735202027}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1735202033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735202027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d814d63142a54aeba6145dd8c2bf7531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 1735202029}
+  _animator: {fileID: 1735202032}
+  _select: Select
+  _unselect: Unselect
+  _confirm: Confirm
 --- !u!1 &1873893641
 GameObject:
   m_ObjectHideFlags: 0

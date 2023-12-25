@@ -41,6 +41,8 @@ namespace CizaPopupModule
 
         public bool IsInitialized { get; private set; }
 
+        public bool TryGetPopup(string key, out IPopup popup) =>
+            _popupMapByKey.TryGetValue(key, out popup);
 
         public PopupModule(IPopupModuleConfig popupModuleConfig) =>
             _popupModuleConfig = popupModuleConfig;
@@ -101,7 +103,6 @@ namespace CizaPopupModule
                 DestroyPopup(key);
         }
 
-
         public async void ShowImmediately(string key) =>
             await ShowAsync(key, true);
 
@@ -114,18 +115,7 @@ namespace CizaPopupModule
         public async UniTask HideAsync(string key) =>
             await HideAsync(key, false);
 
-        private void Select(string key, int index)
-        {
-            if (!IsInitialized)
-                return;
-
-            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
-                return;
-
-            Select(popup, index);
-        }
-
-        public void MoveToForward(string key)
+        public void MoveToPrevious(string key)
         {
             if (!IsInitialized)
                 return;
@@ -136,7 +126,7 @@ namespace CizaPopupModule
             Select(key, popup.Index - 1);
         }
 
-        public void MoveToBackward(string key)
+        public void MoveToNext(string key)
         {
             if (!IsInitialized)
                 return;
@@ -162,6 +152,17 @@ namespace CizaPopupModule
                 return CancelPopupAsync(key);
 
             return UniTask.CompletedTask;
+        }
+
+        private void Select(string key, int index)
+        {
+            if (!IsInitialized)
+                return;
+
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
+                return;
+
+            Select(popup, index);
         }
 
         private UniTask ConfirmPopupAsync(string key)
@@ -231,7 +232,7 @@ namespace CizaPopupModule
             popup.GameObject.SetActive(true);
             popup.SetIsConfirm(false);
             Select(popup, CancelIndex);
-            
+
             popup.SetState(PopupStates.Showing);
 
             OnShowingStart?.Invoke(popup.Key);

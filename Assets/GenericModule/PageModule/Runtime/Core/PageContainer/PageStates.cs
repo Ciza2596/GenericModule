@@ -1,6 +1,6 @@
 namespace CizaPageModule
 {
-    internal enum PageState
+    internal enum PageStates
     {
         Invisible,
         Showing,

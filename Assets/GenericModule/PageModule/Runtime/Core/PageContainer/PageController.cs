@@ -15,7 +15,7 @@ namespace CizaPageModule
 
 		public Component Page { get; }
 
-		public PageState State { get; private set; }
+		public PageStates State { get; private set; }
 
 		public bool IsAlreadyCallShowingPrepareAsync { get; private set; }
 
@@ -66,7 +66,7 @@ namespace CizaPageModule
 
 		public async UniTask OnShowingPrepareAsync(params object[] parameters)
 		{
-			State                            = PageState.Showing;
+			State                            = PageStates.Showing;
 			IsAlreadyCallShowingPrepareAsync = true;
 
 			IsWorkingShowingPrepareAsync = true;
@@ -109,14 +109,14 @@ namespace CizaPageModule
 			if (Page is IShowingComplete showingComplete)
 				showingComplete.OnShowingComplete();
 
-			State                            = PageState.Visible;
+			State                            = PageStates.Visible;
 			CanCallShowingComplete           = false;
 			IsAlreadyCallShowingPrepareAsync = false;
 		}
 
 		public void OnHidingStart()
 		{
-			State                    = PageState.Hiding;
+			State                    = PageStates.Hiding;
 			IsAlreadyCallHidingStart = true;
 
 			if (Page is IHidingStart hidingStart)
@@ -146,7 +146,7 @@ namespace CizaPageModule
 			if (Page is IHidingComplete hidingComplete)
 				hidingComplete.OnHidingComplete();
 
-			State                    = PageState.Invisible;
+			State                    = PageStates.Invisible;
 			CanCallHidingComplete    = false;
 			IsAlreadyCallHidingStart = false;
 		}

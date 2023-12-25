@@ -65,7 +65,7 @@ namespace CizaPageModule
 			}
 
 			var pageController = _pageControllerMapByKey[key];
-			return pageController.State is PageState.Visible;
+			return pageController.State is PageStates.Visible;
 		}
 
 		public bool CheckIsShowing(string key)
@@ -77,7 +77,7 @@ namespace CizaPageModule
 			}
 
 			var pageController = _pageControllerMapByKey[key];
-			return pageController.State is PageState.Showing;
+			return pageController.State is PageStates.Showing;
 		}
 
 		public bool CheckIsHiding(string key)
@@ -89,7 +89,7 @@ namespace CizaPageModule
 			}
 
 			var pageController = _pageControllerMapByKey[key];
-			return pageController.State is PageState.Hiding;
+			return pageController.State is PageStates.Hiding;
 		}
 
 		public TPage[] GetAllPage<TPage>() where TPage : class
@@ -130,7 +130,7 @@ namespace CizaPageModule
 			var pageController = _pageControllerMapByKey[key];
 			_pageControllerMapByKey.Remove(key);
 
-			if (pageController.State is PageState.Invisible)
+			if (pageController.State is PageStates.Invisible)
 				RemoveTickAndFixedTickHandle(pageController);
 
 			pageController.Release();
@@ -150,7 +150,7 @@ namespace CizaPageModule
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 
-			if (state != PageState.Invisible)
+			if (state != PageStates.Invisible)
 			{
 				Debug.LogWarning($"[PageContainer::OnlyCallShowingPrepareAsync] Page: {key} should be Visible. Current state is {state}.");
 				return;
@@ -175,7 +175,7 @@ namespace CizaPageModule
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (state != PageState.Showing)
+			if (state != PageStates.Showing)
 			{
 				Debug.LogWarning($"[PageContainer::OnlyCallShowingComplete] Page: {key} should be showing. Current state is {state}.");
 				return;
@@ -210,7 +210,7 @@ namespace CizaPageModule
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 
-			if (state != PageState.Visible)
+			if (state != PageStates.Visible)
 			{
 				Debug.LogWarning($"[PageContainer::OnlyCallHidingStart] Page: {key} should be Visible. Current state is {state}.");
 				return;
@@ -237,7 +237,7 @@ namespace CizaPageModule
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (state != PageState.Hiding)
+			if (state != PageStates.Hiding)
 			{
 				Debug.LogWarning($"[PageContainer::OnlyCallHidingComplete] Page: {key} should be hiding. Current state is {state}.");
 				return;
@@ -271,7 +271,7 @@ namespace CizaPageModule
 
 		public void OnlyCallAllHidingComplete(Action onComplete = null)
 		{
-			foreach (var pair in _pageControllerMapByKey.Where(pair => pair.Value.State == PageState.Hiding).ToArray())
+			foreach (var pair in _pageControllerMapByKey.Where(pair => pair.Value.State == PageStates.Hiding).ToArray())
 				OnlyCallHidingComplete(pair.Key);
 			onComplete?.Invoke();
 		}
@@ -307,9 +307,9 @@ namespace CizaPageModule
 
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
-			if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
+			if (!(state == PageStates.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageStates.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
 			{
-				var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageState.Invisible : PageState.Showing;
+				var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageStates.Invisible : PageStates.Showing;
 				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 				return;
 			}
@@ -350,9 +350,9 @@ namespace CizaPageModule
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
 
-				if (!(state == PageState.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageState.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
+				if (!(state == PageStates.Invisible && !pageController.IsAlreadyCallShowingPrepareAsync) && !(state == PageStates.Showing && pageController.IsAlreadyCallShowingPrepareAsync))
 				{
-					var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageState.Invisible : PageState.Showing;
+					var expectedState = !pageController.IsAlreadyCallShowingPrepareAsync ? PageStates.Invisible : PageStates.Showing;
 					Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 					continue;
 				}
@@ -432,9 +432,9 @@ namespace CizaPageModule
 			var pageController = _pageControllerMapByKey[key];
 			var state          = pageController.State;
 
-			if (!(state == PageState.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
+			if (!(state == PageStates.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageStates.Hiding && pageController.IsAlreadyCallHidingStart))
 			{
-				var expectedState = !pageController.IsAlreadyCallHidingStart ? PageState.Visible : PageState.Hiding;
+				var expectedState = !pageController.IsAlreadyCallHidingStart ? PageStates.Visible : PageStates.Hiding;
 				Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 				return;
 			}
@@ -468,11 +468,11 @@ namespace CizaPageModule
 				var pageController = _pageControllerMapByKey[key];
 				var state          = pageController.State;
 
-				if (!(state == PageState.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageState.Hiding && pageController.IsAlreadyCallHidingStart))
+				if (!(state == PageStates.Visible && !pageController.IsAlreadyCallHidingStart) && !(state == PageStates.Hiding && pageController.IsAlreadyCallHidingStart))
 				{
 					if (isShowLog)
 					{
-						var expectedState = !pageController.IsAlreadyCallHidingStart ? PageState.Visible : PageState.Hiding;
+						var expectedState = !pageController.IsAlreadyCallHidingStart ? PageStates.Visible : PageStates.Hiding;
 						Debug.LogWarning($"[PageContainer::{methodName}] Page: {key} should be {expectedState.ToString()}. Current state is {state}.");
 					}
 

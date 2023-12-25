@@ -6,7 +6,7 @@ module | Test | Samples |
 [LogModule](#logmodule) | ✔️ | ❌ |
 [PageModule](#pagemodule) | ✔️ | ❌ |
 [TimerModule](#timermodule) | ✔️ | ❌ |
-[AudioModule](#audiomodule) | ✔️ | ✔️ |
+[AudioModule](#audiomodule) | ❌ | ❌ |
 [EventModule](#eventmodule) | ✔️ | ❌ |
 [SaveLoadModule](#saveloadmodule) | ✔️ | ❌ |
 [ObjectPool](#objectpool) | ✔️ | ❌ |

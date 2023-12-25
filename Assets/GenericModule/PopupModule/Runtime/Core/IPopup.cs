@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace CizaPopupModule
 
         GameObject GameObject { get; }
 
-        void Initialize(PopupModule popupModule, string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip);
+        void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync);
         void Release();
 
         void SetText(string contentText, string confirmText, string cancelText);
@@ -29,9 +30,9 @@ namespace CizaPopupModule
         UniTask HideAsync(bool isImmediately);
 
         void SetIsConfirm(bool isConfirm);
-        
+
         void SetIndex(int index);
-        
+
         void Confirm();
         void Cancel();
     }

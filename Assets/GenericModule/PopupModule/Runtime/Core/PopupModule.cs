@@ -19,13 +19,16 @@ namespace CizaPopupModule
         private Transform _root;
 
         // key
+        public event Action<string> OnShowingStart;
+
+        // key
         public event Action<string> OnShowingComplete;
 
         // Key
         public event Action<string> OnHidingStart;
 
         // Key
-        public event Action<string> OnHidingComplet;
+        public event Action<string> OnHidingComplete;
 
         // Key
         public event Action<string> OnConfirm;
@@ -46,6 +49,8 @@ namespace CizaPopupModule
         {
             if (IsInitialized)
                 return;
+
+            IsInitialized = true;
 
             var rootGameObject = Object.Instantiate(_popupModuleConfig.CanvasPrefab);
             rootGameObject.name = _popupModuleConfig.RootName;
@@ -68,6 +73,8 @@ namespace CizaPopupModule
             var root = _root;
             _root = null;
             DestroyOrImmediate(root.gameObject);
+
+            IsInitialized = false;
         }
 
         public void CreatePopup(string key, string dataId, string contentTip, string confirmTip) =>
@@ -78,6 +85,9 @@ namespace CizaPopupModule
 
         public void DestroyPopup(string key)
         {
+            if (!IsInitialized)
+                return;
+
             if (!_popupMapByKey.Remove(key, out var popup))
                 return;
 
@@ -106,6 +116,9 @@ namespace CizaPopupModule
 
         public void Select(string key, int index)
         {
+            if (!IsInitialized)
+                return;
+
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
@@ -126,6 +139,9 @@ namespace CizaPopupModule
 
         public void MoveToForward(string key)
         {
+            if (!IsInitialized)
+                return;
+
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
@@ -134,27 +150,33 @@ namespace CizaPopupModule
 
         public void MoveToBackward(string key)
         {
+            if (!IsInitialized)
+                return;
+
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return;
 
             Select(key, popup.Index + 1);
         }
 
-        public UniTask ConfirmByIndexAsync(string key)
+        public UniTask ConfirmAsync(string key)
         {
+            if (!IsInitialized)
+                return UniTask.CompletedTask;
+
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
             if (popup.Index == ConfrimIndex)
-                return ConfirmAsync(key);
+                return ConfirmPopupAsync(key);
 
             if (popup.Index == CancelIndex)
-                return CancelAsync(key);
+                return CancelPopupAsync(key);
 
             return UniTask.CompletedTask;
         }
 
-        public UniTask ConfirmAsync(string key)
+        private UniTask ConfirmPopupAsync(string key)
         {
             if (!TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
@@ -166,7 +188,7 @@ namespace CizaPopupModule
             return HideAsync(key);
         }
 
-        public UniTask CancelAsync(string key)
+        private UniTask CancelPopupAsync(string key)
         {
             if (TryGetIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
@@ -180,6 +202,9 @@ namespace CizaPopupModule
 
         private void CreatePopup(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
         {
+            if (!IsInitialized)
+                return;
+
             if (!_popupModuleConfig.TryGetPopupPrefab(dataId, out var popupPrefab))
             {
                 Debug.LogError($"[PopupModule::CreatePopup] Not find popupPrefab by DataId: {dataId}.");
@@ -195,7 +220,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(this, key, dataId, hasCancel, contentTip, confirmTip, cancelTip);
+            popup.Initialize(key, dataId, hasCancel, contentTip, confirmTip, cancelTip, ConfirmPopupAsync, CancelPopupAsync);
 
             _popupMapByKey.Add(key, popup);
 
@@ -204,6 +229,9 @@ namespace CizaPopupModule
 
         private async UniTask ShowAsync(string key, bool isImmediately)
         {
+            if (!IsInitialized)
+                return;
+
             if (!TryGetIsInvisiblePopup(key, out var popup))
                 return;
 
@@ -215,6 +243,8 @@ namespace CizaPopupModule
             popup.GameObject.SetActive(true);
             popup.SetIsConfirm(false);
             Select(key, CancelIndex);
+
+            OnShowingStart?.Invoke(popup.Key);
             await popup.ShowAsync(isImmediately);
             OnShowingComplete?.Invoke(popup.Key);
 
@@ -224,13 +254,17 @@ namespace CizaPopupModule
 
         private async UniTask HideAsync(string key, bool isImmediately)
         {
+            if (!IsInitialized)
+                return;
+
             if (!TryGetIsVisiblePopup(key, out var popup))
                 return;
 
             OnHidingStart?.Invoke(popup.Key);
             await popup.HideAsync(isImmediately);
+            OnHidingComplete?.Invoke(popup.Key);
+
             popup.GameObject.SetActive(false);
-            OnHidingComplet?.Invoke(popup.Key);
         }
 
         private bool TryGetIsNotConfirmPopup(string key, out IPopup popup)

@@ -13,8 +13,8 @@ namespace CizaPopupModule.Implement
         [SerializeField]
         private ButtonSettings _optionSettings;
 
-
-        private PopupModule _popupModule;
+        private Func<string, UniTask> _onConfirmPopupAsync;
+        private Func<string, UniTask> _onCancelPopupAsync;
 
         public string Key { get; private set; }
         public string DataId { get; private set; }
@@ -30,10 +30,8 @@ namespace CizaPopupModule.Implement
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(PopupModule popupModule, string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
+        public void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
         {
-            _popupModule = popupModule;
-
             Key = key;
             DataId = dataId;
             HasCancel = hasCancel;
@@ -41,6 +39,9 @@ namespace CizaPopupModule.Implement
             ContentTip = contentTip;
             ConfirmTip = confirmTip;
             CancelTip = cancelTip;
+
+            _onConfirmPopupAsync = onConfirmPopupAsync;
+            _onCancelPopupAsync = onCancelPopupAsync;
 
             _optionSettings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
             _optionSettings.CancelOption.Button.onClick.AddListener(OnCancelClick);
@@ -77,11 +78,11 @@ namespace CizaPopupModule.Implement
         public void Cancel() =>
             _optionSettings.CancelOption.Confirm();
 
-        private void OnConfirmClick() =>
-            _popupModule.ConfirmAsync(Key);
+        private async void OnConfirmClick() =>
+            await _onConfirmPopupAsync.Invoke(Key);
 
-        private void OnCancelClick() =>
-            _popupModule.CancelAsync(Key);
+        private async void OnCancelClick() =>
+            await _onCancelPopupAsync.Invoke(Key);
 
 
         [Serializable]

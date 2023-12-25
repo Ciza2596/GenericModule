@@ -45,7 +45,7 @@ namespace CizaPopupModule
         public PopupModule(IPopupModuleConfig popupModuleConfig) =>
             _popupModuleConfig = popupModuleConfig;
 
-        public void Initialize(Transform parent)
+        public void Initialize(Transform parent = null)
         {
             if (IsInitialized)
                 return;
@@ -244,9 +244,13 @@ namespace CizaPopupModule
             popup.SetIsConfirm(false);
             Select(key, CancelIndex);
 
+            popup.SetState(PopupStates.Showing);
+            
             OnShowingStart?.Invoke(popup.Key);
             await popup.ShowAsync(isImmediately);
             OnShowingComplete?.Invoke(popup.Key);
+            
+            popup.SetState(PopupStates.Visible);
 
             string m_GetTranslateText(string m_tip) =>
                 OnTranslate != null ? OnTranslate.Invoke(m_tip) : m_tip;
@@ -260,9 +264,13 @@ namespace CizaPopupModule
             if (!TryGetIsVisiblePopup(key, out var popup))
                 return;
 
+            popup.SetState(PopupStates.Hiding);
+            
             OnHidingStart?.Invoke(popup.Key);
             await popup.HideAsync(isImmediately);
             OnHidingComplete?.Invoke(popup.Key);
+            
+            popup.SetState(PopupStates.Invisible);
 
             popup.GameObject.SetActive(false);
         }

@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace CizaPopupModule.Implement
 {
-    [CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "Ciza/PopupModule/PopupModuleConfig", order = -1)]
+    [CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "PopupModule/PopupModuleConfig")]
     public class PopupModuleConfig : ScriptableObject, IPopupModuleConfig
     {
         [SerializeField]
@@ -23,7 +24,14 @@ namespace CizaPopupModule.Implement
         public string RootName => _rootName;
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-        public GameObject CanvasPrefab => _canvasPrefab;
+        public GameObject CanvasPrefab
+        {
+            get
+            {
+                Assert.IsNotNull(_canvasPrefab, $"[PopupModuleConfig::CanvasPrefab] CanvasPrefab is null. Please check popupModuleConfig: {name}.");
+                return _canvasPrefab;
+            }
+        }
 
         public bool TryGetPopupPrefab(string dataId, out GameObject popupPrefab)
         {

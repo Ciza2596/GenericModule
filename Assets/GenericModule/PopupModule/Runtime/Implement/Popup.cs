@@ -1,4 +1,5 @@
 using System;
+using CizaCore;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -8,8 +9,13 @@ namespace CizaPopupModule.Implement
     public class Popup : MonoBehaviour, IPopup
     {
         [SerializeField]
+        private AnimSettings _animSettings;
+
+        [Space]
+        [SerializeField]
         private TextSettings _textSettings;
 
+        [Space]
         [SerializeField]
         private ButtonSettings _optionSettings;
 
@@ -45,6 +51,11 @@ namespace CizaPopupModule.Implement
 
             _optionSettings.ConfirmOption.Button.onClick.AddListener(OnConfirmClick);
             _optionSettings.CancelOption.Button.onClick.AddListener(OnCancelClick);
+
+            gameObject.name = key;
+
+            _optionSettings.ConfirmOption.gameObject.SetActive(true);
+            _optionSettings.CancelOption.gameObject.SetActive(HasCancel);
         }
 
         public void Release()
@@ -56,14 +67,25 @@ namespace CizaPopupModule.Implement
         public void SetText(string contentText, string confirmText, string cancelText) =>
             _textSettings.SetText(contentText, confirmText, cancelText);
 
-        public UniTask ShowAsync(bool isImmediately)
+        public void SetState(PopupStates state) =>
+            State = state;
+
+        public async UniTask ShowAsync(bool isImmediately)
         {
-            return UniTask.CompletedTask;
+            if (isImmediately)
+                _animSettings.PlayShowComplete();
+
+            else
+                await _animSettings.PlayShowAsync(default);
         }
 
-        public UniTask HideAsync(bool isImmediately)
+        public async UniTask HideAsync(bool isImmediately)
         {
-            return UniTask.CompletedTask;
+            if (isImmediately)
+                _animSettings.PlayHideComplete();
+
+            else
+                await _animSettings.PlayHideAsync(default);
         }
 
         public void SetIsConfirm(bool isConfirm) =>

@@ -26,6 +26,7 @@ namespace CizaPopupModule
 
         void SetText(string contentText, string confirmText, string cancelText);
 
+        void SetState(PopupStates state);
         UniTask ShowAsync(bool isImmediately);
         UniTask HideAsync(bool isImmediately);
 

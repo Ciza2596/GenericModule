@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace CizaPopupModule.Implement
 {
-    [CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "PopupModule/PopupModuleConfig")]
+    [CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "Ciza/PopupModule/PopupModuleConfig")]
     public class PopupModuleConfig : ScriptableObject, IPopupModuleConfig
     {
         [SerializeField]

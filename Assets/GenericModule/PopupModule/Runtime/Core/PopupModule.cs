@@ -41,6 +41,28 @@ namespace CizaPopupModule
 
         public bool IsInitialized { get; private set; }
 
+        public bool TryGetIsVisiblePopup(out IPopup popup)
+        {
+            if (!TryGetIsVisiblePopups(out var popups))
+            {
+                popup = null;
+                return false;
+            }
+
+            popup = popups[0];
+            return true;
+        }
+
+        public bool TryGetIsVisiblePopups(out IPopup[] popups)
+        {
+            var isVisiblePopups = new HashSet<IPopup>();
+            foreach (var popup in _popupMapByKey.Values.ToArray())
+                if (popup.State == PopupStates.Visible)
+                    isVisiblePopups.Add(popup);
+            popups = isVisiblePopups.ToArray();
+            return popups.Length > 0;
+        }
+
         public bool TryGetPopup(string key, out IPopup popup) =>
             _popupMapByKey.TryGetValue(key, out popup);
 
@@ -163,6 +185,17 @@ namespace CizaPopupModule
                 return CancelPopupAsync(key);
 
             return UniTask.CompletedTask;
+        }
+
+        public UniTask CancelAsync(string key)
+        {
+            if (!IsInitialized)
+                return UniTask.CompletedTask;
+
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
+                return UniTask.CompletedTask;
+
+            return CancelPopupAsync(key);
         }
 
 

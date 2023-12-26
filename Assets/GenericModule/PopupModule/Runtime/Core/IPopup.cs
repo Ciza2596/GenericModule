@@ -8,6 +8,8 @@ namespace CizaPopupModule
     {
         string Key { get; }
         string DataId { get; }
+
+        bool IsAutoHide { get; }
         bool HasCancel { get; }
 
         string ContentTip { get; }
@@ -21,7 +23,7 @@ namespace CizaPopupModule
 
         GameObject GameObject { get; }
 
-        void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync);
+        void Initialize(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync);
         void Release();
 
         void SetText(string contentText, string confirmText, string cancelText);

@@ -79,11 +79,11 @@ namespace CizaPopupModule
             IsInitialized = false;
         }
 
-        public void CreatePopup(string key, string dataId, string contentTip, string confirmTip) =>
-            CreatePopup(key, dataId, false, contentTip, confirmTip, string.Empty);
+        public void CreatePopup(string key, string dataId, bool isAutoHide, string contentTip, string confirmTip) =>
+            CreatePopup(key, dataId, isAutoHide, false, contentTip, confirmTip, string.Empty);
 
-        public void CreatePopup(string key, string dataId, string contentTip, string confirmTip, string cancelTip) =>
-            CreatePopup(key, dataId, true, contentTip, confirmTip, cancelTip);
+        public void CreatePopup(string key, string dataId, bool isAutoHide, string contentTip, string confirmTip, string cancelTip) =>
+            CreatePopup(key, dataId, isAutoHide, true, contentTip, confirmTip, cancelTip);
 
         public void DestroyPopup(string key)
         {
@@ -175,7 +175,10 @@ namespace CizaPopupModule
             popup.Confirm();
             OnConfirm?.Invoke(key);
 
-            return HideAsync(key);
+            if (popup.IsAutoHide)
+                return HideAsync(key);
+
+            return UniTask.CompletedTask;
         }
 
         private UniTask CancelPopupAsync(string key)
@@ -187,10 +190,13 @@ namespace CizaPopupModule
             popup.Cancel();
             OnCancel?.Invoke(key);
 
-            return HideAsync(key);
+            if (popup.IsAutoHide)
+                return HideAsync(key);
+
+            return UniTask.CompletedTask;
         }
 
-        private void CreatePopup(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
+        private void CreatePopup(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
         {
             if (!IsInitialized)
                 return;
@@ -210,7 +216,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(key, dataId, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
+            popup.Initialize(key, dataId, isAutoHide, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
 
             _popupMapByKey.Add(key, popup);
 

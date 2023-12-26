@@ -25,9 +25,9 @@ namespace CizaPopupModule.Example
             foreach (var popupInfo in _popupInfos.ToArray())
             {
                 if (popupInfo.HasCancel)
-                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, popupInfo.ContentTip, popupInfo.ConfirmTip, popupInfo.CancelTip);
+                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, true, popupInfo.ContentTip, popupInfo.ConfirmTip, popupInfo.CancelTip);
                 else
-                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, popupInfo.ContentTip, popupInfo.ConfirmTip);
+                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, true, popupInfo.ContentTip, popupInfo.ConfirmTip);
             }
         }
 
@@ -35,7 +35,7 @@ namespace CizaPopupModule.Example
         [Button]
         private async void Show(string key) =>
             await _popupModule.ShowAsync(key);
-        
+
         [Button]
         private async void Hide(string key) =>
             await _popupModule.HideAsync(key);

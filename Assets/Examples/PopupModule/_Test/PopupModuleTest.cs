@@ -13,6 +13,7 @@ public class PopupModuleTest
 
     public const string Key = "Default_Key";
     public const string DataId = "Default_DataId";
+    public const bool IsAutoHide = true;
 
     public const string ContentTip = "ContentTip";
     public const string ConfirmTip = "ConfirmTip";
@@ -66,7 +67,7 @@ public class PopupModuleTest
         Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
 
         // act
-        _popupModule.CreatePopup(Key, DataId, ContentTip, ConfirmTip);
+        _popupModule.CreatePopup(Key, DataId, IsAutoHide, ContentTip, ConfirmTip);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
@@ -81,7 +82,7 @@ public class PopupModuleTest
         Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
 
         // act
-        _popupModule.CreatePopup(Key, DataId, ContentTip, ConfirmTip, CancelTip);
+        _popupModule.CreatePopup(Key, DataId, IsAutoHide, ContentTip, ConfirmTip, CancelTip);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");

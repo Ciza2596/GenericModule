@@ -21,6 +21,8 @@ namespace CizaPopupModule.Implement
 
         public string Key { get; private set; }
         public string DataId { get; private set; }
+
+        public bool IsAutoHide { get; private set; }
         public bool HasCancel { get; private set; }
 
         public string ContentTip { get; private set; }
@@ -33,10 +35,12 @@ namespace CizaPopupModule.Implement
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(string key, string dataId, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
+        public void Initialize(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
         {
             Key = key;
             DataId = dataId;
+
+            IsAutoHide = isAutoHide;
             HasCancel = hasCancel;
 
             ContentTip = contentTip;

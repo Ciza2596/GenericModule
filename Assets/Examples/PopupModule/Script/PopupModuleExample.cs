@@ -27,7 +27,7 @@ namespace CizaPopupModule.Example
                 if (popupInfo.HasCancel)
                     _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, true, popupInfo.ContentTip, popupInfo.ConfirmTip, popupInfo.CancelTip);
                 else
-                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, true, popupInfo.ContentTip, popupInfo.ConfirmTip);
+                    _popupModule.CreatePopup(popupInfo.Key, popupInfo.DataId, popupInfo.ContentTip, popupInfo.ConfirmTip);
             }
         }
 

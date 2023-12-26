@@ -13,7 +13,7 @@ public class PopupModuleTest
 
     public const string Key = "Default_Key";
     public const string DataId = "Default_DataId";
-    public const bool IsAutoHide = true;
+    public const bool IsAutoHideWhenConfirm = true;
 
     public const string ContentTip = "ContentTip";
     public const string ConfirmTip = "ConfirmTip";
@@ -67,7 +67,7 @@ public class PopupModuleTest
         Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
 
         // act
-        _popupModule.CreatePopup(Key, DataId, IsAutoHide, ContentTip, ConfirmTip);
+        _popupModule.CreatePopup(Key, DataId, ContentTip, ConfirmTip);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
@@ -82,7 +82,7 @@ public class PopupModuleTest
         Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
 
         // act
-        _popupModule.CreatePopup(Key, DataId, IsAutoHide, ContentTip, ConfirmTip, CancelTip);
+        _popupModule.CreatePopup(Key, DataId, IsAutoHideWhenConfirm, ContentTip, ConfirmTip, CancelTip);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
@@ -232,14 +232,14 @@ public class PopupModuleTest
         _popupModule.Select(Key, PopupModule.ConfrimIndex);
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
         Assert.AreEqual(PopupModule.ConfrimIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
-        Assert.IsFalse(popup.IsConfirm, $"Popup Key: {Key} should not be confirm.");
+        Assert.IsFalse(popup.HasConfirm, $"Popup Key: {Key} should not be confirm.");
 
         // act
         await _popupModule.ConfirmAsync(Key);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.IsTrue(popup.IsConfirm, $"Popup Key: {Key} should be confirm.");
+        Assert.IsTrue(popup.HasConfirm, $"Popup Key: {Key} should be confirm.");
     }
 
     [Test]
@@ -251,14 +251,14 @@ public class PopupModuleTest
         _popupModule.Select(Key, PopupModule.CancelIndex);
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
         Assert.AreEqual(PopupModule.CancelIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
-        Assert.IsFalse(popup.IsConfirm, $"Popup Key: {Key} should not be confirm.");
+        Assert.IsFalse(popup.HasConfirm, $"Popup Key: {Key} should not be confirm.");
 
         // act
         await _popupModule.ConfirmAsync(Key);
 
         // act
         Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.IsTrue(popup.IsConfirm, $"Popup Key: {Key} should be confirm.");
+        Assert.IsTrue(popup.HasConfirm, $"Popup Key: {Key} should be confirm.");
     }
 
     private void SetConfig()

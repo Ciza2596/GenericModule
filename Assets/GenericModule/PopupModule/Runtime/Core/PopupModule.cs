@@ -79,11 +79,11 @@ namespace CizaPopupModule
             IsInitialized = false;
         }
 
-        public void CreatePopup(string key, string dataId, bool isAutoHide, string contentTip, string confirmTip) =>
-            CreatePopup(key, dataId, isAutoHide, false, contentTip, confirmTip, string.Empty);
+        public void CreatePopup(string key, string dataId, string contentTip, string confirmTip) =>
+            CreatePopup(key, dataId, true, false, contentTip, confirmTip, string.Empty);
 
-        public void CreatePopup(string key, string dataId, bool isAutoHide, string contentTip, string confirmTip, string cancelTip) =>
-            CreatePopup(key, dataId, isAutoHide, true, contentTip, confirmTip, cancelTip);
+        public void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, string contentTip, string confirmTip, string cancelTip) =>
+            CreatePopup(key, dataId, isAutoHideWhenConfirm, true, contentTip, confirmTip, cancelTip);
 
         public void DestroyPopup(string key)
         {
@@ -171,11 +171,11 @@ namespace CizaPopupModule
             if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
-            popup.SetIsConfirm(true);
+            popup.SetHasConfirm(true);
             popup.Confirm();
             OnConfirm?.Invoke(key);
 
-            if (popup.IsAutoHide)
+            if (popup.IsAutoHideWhenConfirm)
                 return HideAsync(key);
 
             return UniTask.CompletedTask;
@@ -186,17 +186,14 @@ namespace CizaPopupModule
             if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return UniTask.CompletedTask;
 
-            popup.SetIsConfirm(true);
+            popup.SetHasConfirm(true);
             popup.Cancel();
             OnCancel?.Invoke(key);
 
-            if (popup.IsAutoHide)
-                return HideAsync(key);
-
-            return UniTask.CompletedTask;
+            return HideAsync(key);
         }
 
-        private void CreatePopup(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
+        private void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
         {
             if (!IsInitialized)
                 return;
@@ -216,7 +213,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(key, dataId, isAutoHide, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
+            popup.Initialize(key, dataId, isAutoHideWhenConfirm, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
 
             _popupMapByKey.Add(key, popup);
 
@@ -237,7 +234,7 @@ namespace CizaPopupModule
             popup.SetText(contentText, confirmText, cancelText);
 
             popup.GameObject.SetActive(true);
-            popup.SetIsConfirm(false);
+            popup.SetHasConfirm(false);
             Select(popup, CancelIndex);
 
             popup.SetState(PopupStates.Showing);
@@ -290,7 +287,7 @@ namespace CizaPopupModule
 
         private bool TryGetIsVisibleAndIsNotConfirmPopup(string key, out IPopup popup)
         {
-            if (!TryGetIsVisiblePopup(key, out popup) || popup.IsConfirm)
+            if (!TryGetIsVisiblePopup(key, out popup) || popup.HasConfirm)
                 return false;
 
             return true;

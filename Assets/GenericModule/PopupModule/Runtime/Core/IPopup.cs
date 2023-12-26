@@ -9,7 +9,7 @@ namespace CizaPopupModule
         string Key { get; }
         string DataId { get; }
 
-        bool IsAutoHide { get; }
+        bool IsAutoHideWhenConfirm { get; }
         bool HasCancel { get; }
 
         string ContentTip { get; }
@@ -19,11 +19,11 @@ namespace CizaPopupModule
         PopupStates State { get; }
 
         int Index { get; }
-        bool IsConfirm { get; }
+        bool HasConfirm { get; }
 
         GameObject GameObject { get; }
 
-        void Initialize(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync);
+        void Initialize(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync);
         void Release();
 
         void SetText(string contentText, string confirmText, string cancelText);
@@ -32,7 +32,7 @@ namespace CizaPopupModule
         UniTask ShowAsync(bool isImmediately);
         UniTask HideAsync(bool isImmediately);
 
-        void SetIsConfirm(bool isConfirm);
+        void SetHasConfirm(bool hasConfirm);
 
         void Select(int index);
 

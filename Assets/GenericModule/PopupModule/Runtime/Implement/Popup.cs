@@ -22,7 +22,7 @@ namespace CizaPopupModule.Implement
         public string Key { get; private set; }
         public string DataId { get; private set; }
 
-        public bool IsAutoHide { get; private set; }
+        public bool IsAutoHideWhenConfirm { get; private set; }
         public bool HasCancel { get; private set; }
 
         public string ContentTip { get; private set; }
@@ -31,16 +31,16 @@ namespace CizaPopupModule.Implement
 
         public PopupStates State { get; private set; } = PopupStates.Visible;
         public int Index { get; private set; }
-        public bool IsConfirm { get; private set; }
+        public bool HasConfirm { get; private set; }
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(string key, string dataId, bool isAutoHide, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
+        public void Initialize(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
         {
             Key = key;
             DataId = dataId;
 
-            IsAutoHide = isAutoHide;
+            IsAutoHideWhenConfirm = isAutoHideWhenConfirm;
             HasCancel = hasCancel;
 
             ContentTip = contentTip;
@@ -96,8 +96,8 @@ namespace CizaPopupModule.Implement
                 await _animSettings.PlayHideAsync(default);
         }
 
-        public void SetIsConfirm(bool isConfirm) =>
-            IsConfirm = isConfirm;
+        public void SetHasConfirm(bool hasConfirm) =>
+            HasConfirm = hasConfirm;
 
         public void Select(int index)
         {

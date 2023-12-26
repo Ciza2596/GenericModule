@@ -64,14 +64,14 @@ public class PopupModuleTest
     {
         // arrange
         _01_Initialize();
-        Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
+        Assert.IsFalse(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should not be created.");
 
         // act
         _popupModule.CreatePopup(Key, DataId, ContentTip, ConfirmTip);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(popup.State, PopupStates.Invisible, $"Popup Key: {Key} should be invisible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(popupReadModel.State, PopupStates.Invisible, $"Popup Key: {Key} should be invisible.");
     }
 
     [Test]
@@ -79,14 +79,14 @@ public class PopupModuleTest
     {
         // arrange
         _01_Initialize();
-        Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
+        Assert.IsFalse(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should not be created.");
 
         // act
         _popupModule.CreatePopup(Key, DataId, IsAutoHideWhenConfirm, ContentTip, ConfirmTip, CancelTip);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(popup.State, PopupStates.Invisible, $"Popup Key: {Key} should be invisible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(popupReadModel.State, PopupStates.Invisible, $"Popup Key: {Key} should be invisible.");
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class PopupModuleTest
         _popupModule.DestroyPopup(Key);
 
         // act
-        Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
+        Assert.IsFalse(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should not be created.");
     }
 
     [Test]
@@ -112,7 +112,7 @@ public class PopupModuleTest
         _popupModule.DestroyAllPopups();
 
         // act
-        Assert.IsFalse(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should not be created.");
+        Assert.IsFalse(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should not be created.");
     }
 
     [Test]
@@ -125,8 +125,8 @@ public class PopupModuleTest
         _popupModule.ShowImmediately(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupStates.Visible, popup.State, $"Popup Key: {Key} should be visible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupStates.Visible, popupReadModel.State, $"Popup Key: {Key} should be visible.");
     }
 
     [Test]
@@ -139,8 +139,8 @@ public class PopupModuleTest
         await _popupModule.ShowAsync(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupStates.Visible, popup.State, $"Popup Key: {Key} should be visible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupStates.Visible, popupReadModel.State, $"Popup Key: {Key} should be visible.");
     }
 
     [Test]
@@ -153,8 +153,8 @@ public class PopupModuleTest
         _popupModule.HideImmediately(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupStates.Invisible, popup.State, $"Popup Key: {Key} should be invisible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupStates.Invisible, popupReadModel.State, $"Popup Key: {Key} should be invisible.");
     }
 
     [Test]
@@ -167,8 +167,8 @@ public class PopupModuleTest
         await _popupModule.HideAsync(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupStates.Invisible, popup.State, $"Popup Key: {Key} should be invisible.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupStates.Invisible, popupReadModel.State, $"Popup Key: {Key} should be invisible.");
     }
 
     [Test]
@@ -177,15 +177,15 @@ public class PopupModuleTest
         // arrange
         _07_ShowImmediately();
 
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.CancelIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.CancelIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
 
         // act
         _popupModule.Select(Key, PopupModule.ConfrimIndex);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.ConfrimIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.ConfrimIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
     }
 
     [Test]
@@ -194,15 +194,15 @@ public class PopupModuleTest
         // arrange
         _07_ShowImmediately();
 
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.CancelIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.CancelIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
 
         // act
         _popupModule.MoveToPrevious(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.ConfrimIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.ConfrimIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
     }
 
     [Test]
@@ -212,15 +212,15 @@ public class PopupModuleTest
         _07_ShowImmediately();
 
         _popupModule.Select(Key, PopupModule.ConfrimIndex);
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.ConfrimIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.ConfrimIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
 
         // act
         _popupModule.MoveToNext(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.CancelIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.CancelIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
     }
 
     [Test]
@@ -230,16 +230,16 @@ public class PopupModuleTest
         _07_ShowImmediately();
 
         _popupModule.Select(Key, PopupModule.ConfrimIndex);
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.ConfrimIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
-        Assert.IsFalse(popup.HasConfirm, $"Popup Key: {Key} should not be confirm.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.ConfrimIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.ConfrimIndex}.");
+        Assert.IsFalse(popupReadModel.HasConfirm, $"Popup Key: {Key} should not be confirm.");
 
         // act
         await _popupModule.ConfirmAsync(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.IsTrue(popup.HasConfirm, $"Popup Key: {Key} should be confirm.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.IsTrue(popupReadModel.HasConfirm, $"Popup Key: {Key} should be confirm.");
     }
 
     [Test]
@@ -249,16 +249,16 @@ public class PopupModuleTest
         _07_ShowImmediately();
 
         _popupModule.Select(Key, PopupModule.CancelIndex);
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out var popup), $"Popup Key: {Key} should be created.");
-        Assert.AreEqual(PopupModule.CancelIndex, popup.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
-        Assert.IsFalse(popup.HasConfirm, $"Popup Key: {Key} should not be confirm.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out var popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.AreEqual(PopupModule.CancelIndex, popupReadModel.Index, $"Popup Key: {Key} should be index: {PopupModule.CancelIndex}.");
+        Assert.IsFalse(popupReadModel.HasConfirm, $"Popup Key: {Key} should not be confirm.");
 
         // act
         await _popupModule.ConfirmAsync(Key);
 
         // act
-        Assert.IsTrue(_popupModule.TryGetPopup(Key, out popup), $"Popup Key: {Key} should be created.");
-        Assert.IsTrue(popup.HasConfirm, $"Popup Key: {Key} should be confirm.");
+        Assert.IsTrue(_popupModule.TryGetPopupReadModel(Key, out popupReadModel), $"Popup Key: {Key} should be created.");
+        Assert.IsTrue(popupReadModel.HasConfirm, $"Popup Key: {Key} should be confirm.");
     }
 
     private void SetConfig()

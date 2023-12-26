@@ -41,30 +41,39 @@ namespace CizaPopupModule
 
         public bool IsInitialized { get; private set; }
 
-        public bool TryGetIsVisiblePopup(out IPopup popup)
+        public bool TryGetIsVisiblePopupReadModel(out IPopupReadModel popupReadModel)
         {
-            if (!TryGetIsVisiblePopups(out var popups))
+            if (!TryGetIsVisiblePopupReadModels(out var popups))
             {
-                popup = null;
+                popupReadModel = null;
                 return false;
             }
 
-            popup = popups[0];
+            popupReadModel = popups[0];
             return true;
         }
 
-        public bool TryGetIsVisiblePopups(out IPopup[] popups)
+        public bool TryGetIsVisiblePopupReadModels(out IPopupReadModel[] popupReadModels)
         {
-            var isVisiblePopups = new HashSet<IPopup>();
+            var isVisiblePopupReadModels = new HashSet<IPopupReadModel>();
             foreach (var popup in _popupMapByKey.Values.ToArray())
                 if (popup.State == PopupStates.Visible)
-                    isVisiblePopups.Add(popup);
-            popups = isVisiblePopups.ToArray();
-            return popups.Length > 0;
+                    isVisiblePopupReadModels.Add(popup);
+            popupReadModels = isVisiblePopupReadModels.ToArray();
+            return popupReadModels.Length > 0;
         }
 
-        public bool TryGetPopup(string key, out IPopup popup) =>
-            _popupMapByKey.TryGetValue(key, out popup);
+        public bool TryGetPopupReadModel(string key, out IPopupReadModel popupReadModel)
+        {
+            if (!_popupMapByKey.TryGetValue(key, out var popup))
+            {
+                popupReadModel = null;
+                return false;
+            }
+
+            popupReadModel = popup;
+            return true;
+        }
 
         public PopupModule(IPopupModuleConfig popupModuleConfig) =>
             _popupModuleConfig = popupModuleConfig;

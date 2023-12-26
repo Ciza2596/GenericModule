@@ -10,7 +10,7 @@ namespace CizaPopupModule.Editor
         public const string PopupCanvas = "PopupCanvas";
         
         [MenuItem("GameObject/Ciza/PopupModule/PopupCanvas", false, 10)]
-        public static void CreateVerticalScrollView()
+        public static void CreatePopupCanvas()
         {
             CreateUIObject(PopupCanvas);
         }
@@ -18,7 +18,7 @@ namespace CizaPopupModule.Editor
         public const string Popup = "Popup";
         
         [MenuItem("GameObject/Ciza/PopupModule/Popup", false, 10)]
-        public static void CreateDropdown()
+        public static void CreatePopup()
         {
             CreateUIObject(Popup);
         }

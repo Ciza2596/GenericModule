@@ -175,7 +175,7 @@ namespace CizaOptionModule
             if (!TryGetCurrentCoordinate(0, out var currentCoordinate))
                 return;
 
-            if (!_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
+            if (_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
                 _pageModule.HideImmediately(CurrentPageIndex.ToString());
 
             if (isImmediately)

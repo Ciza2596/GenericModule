@@ -184,7 +184,7 @@ namespace CizaOptionModule
                 await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, false, currentCoordinate, false);
 
             if (onCompleteBefore != null)
-                await (UniTask)onCompleteBefore?.Invoke();
+                await onCompleteBefore.Invoke();
 
             _pageModule.OnlyCallShowingComplete(CurrentPageIndex.ToString());
         }
@@ -200,7 +200,7 @@ namespace CizaOptionModule
                 await _pageModule.HideAsync(CurrentPageIndex.ToString(), isIncludeHidingComplete: false);
 
             if (onCompleteBefore != null)
-                await (UniTask)onCompleteBefore?.Invoke();
+                await onCompleteBefore.Invoke();
 
             _pageModule.OnlyCallHidingComplete(CurrentPageIndex.ToString());
         }

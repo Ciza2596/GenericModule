@@ -179,9 +179,9 @@ namespace CizaOptionModule
                 _pageModule.HideImmediately(CurrentPageIndex.ToString());
 
             if (isImmediately)
-                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, currentCoordinate, false);
+                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, false, currentCoordinate, false);
             else
-                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, currentCoordinate, false);
+                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, false, currentCoordinate, false);
 
             if (onCompleteBefore != null)
                 await (UniTask)onCompleteBefore?.Invoke();

@@ -167,6 +167,28 @@ namespace CizaOptionModule
             IsChangingPage = false;
         }
 
+        public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+        {
+            if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || _pageModule.CheckIsShowing(CurrentPageIndex.ToString()) || _pageModule.CheckIsHiding(CurrentPageIndex.ToString()))
+                return;
+
+            if (!TryGetCurrentCoordinate(0, out var currentCoordinate))
+                return;
+
+            if (!_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
+                _pageModule.HideImmediately(CurrentPageIndex.ToString());
+
+            if (isImmediately)
+                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, currentCoordinate, false);
+            else
+                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, currentCoordinate, false);
+
+            if (onCompleteBefore != null)
+                await (UniTask)onCompleteBefore?.Invoke();
+
+            _pageModule.OnlyCallShowingComplete(CurrentPageIndex.ToString());
+        }
+
         public async UniTask HideCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {
             if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || !_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
@@ -185,7 +207,7 @@ namespace CizaOptionModule
 
         public void SetCanConfirm(bool canConfirm) =>
             CanConfirm = canConfirm;
-        
+
         public bool TryConfirm(int playerIndex)
         {
             if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm || !CanConfirm)

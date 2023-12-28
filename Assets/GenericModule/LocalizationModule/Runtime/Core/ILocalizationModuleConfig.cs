@@ -1,14 +1,14 @@
 namespace CizaLocalizationModule
 {
-	public interface ILocalizationModuleConfig
-	{
-		
-		string[] SupportLocales { get; }
+    public interface ILocalizationModuleConfig
+    {
+        string[] SupportLocales { get; }
 
-		string SourceLocale { get; }
+        bool IsIgnoreSourceLocale { get; }
+        string SourceLocale { get; }
 
-		string DefaultLocale { get; }
+        string DefaultLocale { get; }
 
-		char PrefixTag { get; }
-	}
+        char PrefixTag { get; }
+    }
 }

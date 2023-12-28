@@ -5,6 +5,8 @@ using Assert = UnityEngine.Assertions.Assert;
 
 public class LocalizationModuleTest
 {
+    public const string Text = "Text";
+
     public const string Tc = "tc";
     public const string En = "en";
 
@@ -22,7 +24,7 @@ public class LocalizationModuleTest
     {
         _localizationModuleConfig = Substitute.For<ILocalizationModuleConfig>();
         SetConfig(SupportLocales, SourceLocale, DefaultLocale, PrefixTag);
-        
+
         _localizationModule = new LocalizationModule(_localizationModuleConfig);
     }
 
@@ -80,6 +82,37 @@ public class LocalizationModuleTest
 
         // assert
         Assert.AreEqual(En, _localizationModule.CurrentLocale, $"LocalizationModule should be locale: {En}.");
+    }
+
+    [Test]
+    public void _05_GetTextWithLocalePrefix_When_isIgnoreSourceLocale_True()
+    {
+        // arrange
+        _01_Initialize();
+        Assert.AreEqual(DefaultLocale, _localizationModule.CurrentLocale, $"LocalizationModule should be locale: {DefaultLocale}.");
+        _localizationModuleConfig.IsIgnoreSourceLocale.Returns(true);
+
+        // act
+        var text = _localizationModule.GetTextWithLocalePrefix(Text);
+
+        // assert
+        Assert.AreEqual(Text, text, $"LocalizationModule should be locale: {Text}.");
+    }
+
+    [Test]
+    public void _06_GetTextWithLocalePrefix_When_isIgnoreSourceLocale_False()
+    {
+        // arrange
+        _01_Initialize();
+        Assert.AreEqual(DefaultLocale, _localizationModule.CurrentLocale, $"LocalizationModule should be locale: {DefaultLocale}.");
+        _localizationModuleConfig.IsIgnoreSourceLocale.Returns(false);
+
+        // act
+        var text = _localizationModule.GetTextWithLocalePrefix(Text);
+
+        // assert
+        var expectedText = DefaultLocale + PrefixTag + Text;
+        Assert.AreEqual(expectedText, text, $"LocalizationModule should be locale: {expectedText}.");
     }
 
     private void SetConfig(string[] supportLocales, string sourceLocale, string defaultLocale, char prefixTag)

@@ -44,9 +44,9 @@ namespace CizaOptionModule
 
             PlayerIndex = playerIndex;
             Key = key;
-            IsEnable = isEnable;
-            IsUnlock = isUnlock;
-            IsNew = isNew;
+            SetIsEnable(isEnable);
+            SetIsUnlock(isUnlock);
+            SetIsNew(isNew);
 
             _onConfirm = onConfirm;
             _onPointerEnter = onPointerEnter;
@@ -62,6 +62,15 @@ namespace CizaOptionModule
             OnInitialize?.Invoke(parameters);
             OnIsNew?.Invoke(Key, IsNew);
         }
+
+        public void SetIsEnable(bool isEnable) =>
+            IsEnable = isEnable;
+
+        public void SetIsUnlock(bool isUnlock) =>
+            IsUnlock = isUnlock;
+
+        public void SetIsNew(bool isNew) =>
+            IsNew = isNew;
 
         public virtual void Select(bool isAutoTurnOffIsNew)
         {

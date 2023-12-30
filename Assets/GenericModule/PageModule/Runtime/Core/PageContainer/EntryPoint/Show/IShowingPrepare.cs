@@ -4,6 +4,6 @@ namespace CizaPageModule
 {
 	public interface IShowingPrepare
 	{
-		UniTask OnShowingPrepareAsync(params object[] parameters);
+		UniTask ShowingPrepareAsync(params object[] parameters);
 	}
 }

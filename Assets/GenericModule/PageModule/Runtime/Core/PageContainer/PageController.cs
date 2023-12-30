@@ -64,7 +64,7 @@ namespace CizaPageModule
 			return fixedTickable != null;
 		}
 
-		public async UniTask OnShowingPrepareAsync(params object[] parameters)
+		public async UniTask ShowingPrepareAsync(params object[] parameters)
 		{
 			State                            = PageStates.Showing;
 			IsAlreadyCallShowingPrepareAsync = true;
@@ -72,7 +72,7 @@ namespace CizaPageModule
 			IsWorkingShowingPrepareAsync = true;
 
 			if (Page is IShowingPrepare showingPrepare)
-				await showingPrepare.OnShowingPrepareAsync(parameters);
+				await showingPrepare.ShowingPrepareAsync(parameters);
 
 			IsWorkingShowingPrepareAsync = false;
 		}
@@ -83,10 +83,10 @@ namespace CizaPageModule
 			_onEnablePage?.Invoke(Key);
 		}
 
-		public void OnShowingStart()
+		public void ShowingStart()
 		{
 			if (Page is IShowingStart showingStart)
-				showingStart.OnShowingStart();
+				showingStart.ShowingStart();
 		}
 
 		public async UniTask PlayShowingAnimationAsync()
@@ -104,23 +104,23 @@ namespace CizaPageModule
 		public void EnableCanCallShowingComplete() =>
 			CanCallShowingComplete = true;
 
-		public void OnShowingComplete()
+		public void ShowingComplete()
 		{
 			if (Page is IShowingComplete showingComplete)
-				showingComplete.OnShowingComplete();
+				showingComplete.ShowingComplete();
 
 			State                            = PageStates.Visible;
 			CanCallShowingComplete           = false;
 			IsAlreadyCallShowingPrepareAsync = false;
 		}
 
-		public void OnHidingStart()
+		public void HidingStart()
 		{
 			State                    = PageStates.Hiding;
 			IsAlreadyCallHidingStart = true;
 
 			if (Page is IHidingStart hidingStart)
-				hidingStart.OnHidingStart();
+				hidingStart.HidingStart();
 		}
 
 		public async UniTask PlayHidingAnimationAsync()
@@ -138,13 +138,13 @@ namespace CizaPageModule
 		public void EnableCanCallHidingComplete() =>
 			CanCallHidingComplete = true;
 
-		public void OnHidingComplete()
+		public void HidingComplete()
 		{
 			Page.gameObject.SetActive(false);
 			_onDisablePage?.Invoke(Key);
 
 			if (Page is IHidingComplete hidingComplete)
-				hidingComplete.OnHidingComplete();
+				hidingComplete.HidingComplete();
 
 			State                    = PageStates.Invisible;
 			CanCallHidingComplete    = false;

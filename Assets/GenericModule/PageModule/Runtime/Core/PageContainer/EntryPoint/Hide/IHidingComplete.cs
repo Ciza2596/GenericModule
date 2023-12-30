@@ -2,6 +2,6 @@ namespace CizaPageModule
 {
     public interface IHidingComplete
     {
-        void OnHidingComplete();
+        void HidingComplete();
     }
 }

@@ -159,7 +159,7 @@ namespace CizaPageModule
             if (pageController.IsAlreadyCallShowingPrepareAsync)
                 return;
 
-            await pageController.OnShowingPrepareAsync(parameters);
+            await pageController.ShowingPrepareAsync(parameters);
             onComplete?.Invoke();
         }
 
@@ -184,7 +184,7 @@ namespace CizaPageModule
             if (!pageController.CanCallShowingComplete)
                 return;
 
-            pageController.OnShowingComplete();
+            pageController.ShowingComplete();
             AddTickAndFixedTickHandle(pageController);
 
             onComplete?.Invoke();
@@ -219,7 +219,7 @@ namespace CizaPageModule
             if (pageController.IsAlreadyCallHidingStart)
                 return;
 
-            pageController.OnHidingStart();
+            pageController.HidingStart();
             RemoveTickAndFixedTickHandle(pageController);
 
             onComplete?.Invoke();
@@ -246,7 +246,7 @@ namespace CizaPageModule
             if (!pageController.CanCallHidingComplete)
                 return;
 
-            pageController.OnHidingComplete();
+            pageController.HidingComplete();
             onComplete?.Invoke();
         }
 
@@ -315,14 +315,14 @@ namespace CizaPageModule
             }
 
             if (!pageController.IsAlreadyCallShowingPrepareAsync)
-                await pageController.OnShowingPrepareAsync(parameters);
+                await pageController.ShowingPrepareAsync(parameters);
 
             while (pageController.IsWorkingShowingPrepareAsync)
                 await UniTask.Yield();
 
             pageController.EnablePage();
 
-            pageController.OnShowingStart();
+            pageController.ShowingStart();
 
             if (!isImmediately)
                 await pageController.PlayShowingAnimationAsync();
@@ -331,7 +331,7 @@ namespace CizaPageModule
 
             if (isIncludeShowingComplete)
             {
-                pageController.OnShowingComplete();
+                pageController.ShowingComplete();
                 AddTickAndFixedTickHandle(pageController);
             }
             else
@@ -382,7 +382,7 @@ namespace CizaPageModule
                     m_onShowingPrepare += async () =>
                     {
                         if (!m_pageController.IsAlreadyCallShowingPrepareAsync)
-                            await m_pageController.OnShowingPrepareAsync(m_parameters);
+                            await m_pageController.ShowingPrepareAsync(m_parameters);
 
                         while (m_pageController.IsWorkingShowingPrepareAsync)
                             await UniTask.Yield();
@@ -390,7 +390,7 @@ namespace CizaPageModule
 
                     m_EnablePage += m_pageController.EnablePage;
 
-                    m_onShowingStart += m_pageController.OnShowingStart;
+                    m_onShowingStart += m_pageController.ShowingStart;
 
                     m_playShowingAnimation += m_pageController.PlayShowingAnimationAsync;
                     m_playShowingAnimationImmediately += m_pageController.PlayShowingAnimationImmediately;
@@ -398,7 +398,7 @@ namespace CizaPageModule
                     m_onShowingComplete += () =>
                     {
                         if (m_isIncludeShowingComplete)
-                            m_pageController.OnShowingComplete();
+                            m_pageController.ShowingComplete();
 
                         else
                             m_pageController.EnableCanCallShowingComplete();
@@ -441,7 +441,7 @@ namespace CizaPageModule
 
             if (!pageController.IsAlreadyCallHidingStart)
             {
-                pageController.OnHidingStart();
+                pageController.HidingStart();
                 RemoveTickAndFixedTickHandle(pageController);
             }
 
@@ -451,7 +451,7 @@ namespace CizaPageModule
                 pageController.PlayHidingAnimationImmediately();
 
             if (isIncludeHidingComplete)
-                pageController.OnHidingComplete();
+                pageController.HidingComplete();
             else
                 pageController.EnableCanCallHidingComplete();
 
@@ -499,7 +499,7 @@ namespace CizaPageModule
                     {
                         if (!m_canHidePageController.IsAlreadyCallHidingStart)
                         {
-                            m_canHidePageController.OnHidingStart();
+                            m_canHidePageController.HidingStart();
                             RemoveTickAndFixedTickHandle(m_canHidePageController);
                         }
                     };
@@ -510,7 +510,7 @@ namespace CizaPageModule
                     m_onHidingComplete += () =>
                     {
                         if (m_isIncludeHidingComplete)
-                            m_canHidePageController.OnHidingComplete();
+                            m_canHidePageController.HidingComplete();
                         else
                             m_canHidePageController.EnableCanCallHidingComplete();
                     };

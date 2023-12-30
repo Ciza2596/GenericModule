@@ -55,14 +55,14 @@ namespace CizaOptionModule
             return UniTask.CompletedTask;
         }
 
-        public virtual UniTask OnShowingPrepareAsync(params object[] parameters)
+        public virtual UniTask ShowingPrepareAsync(params object[] parameters)
         {
             OnShowingStartCoordinate = (Vector2Int)parameters[0];
             IsAutoTurnOffIsNew = (bool)parameters[1];
             return UniTask.CompletedTask;
         }
 
-        public virtual void OnShowingStart()
+        public virtual void ShowingStart()
         {
             IsImmediately = true;
             OptionView.PlayShowStartAndPause();
@@ -84,7 +84,7 @@ namespace CizaOptionModule
         public void Tick(float deltaTime) =>
             OptionView.Tick(deltaTime);
 
-        public virtual void OnHidingStart() =>
+        public virtual void HidingStart() =>
             LocalIsAutoTurnOffIsNew = false;
 
         public virtual UniTask PlayHidingAnimationAsync() =>

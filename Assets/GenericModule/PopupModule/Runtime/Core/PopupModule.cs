@@ -85,8 +85,7 @@ namespace CizaPopupModule
 
             IsInitialized = true;
 
-            var rootGameObject = Object.Instantiate(_popupModuleConfig.CanvasPrefab);
-            rootGameObject.name = _popupModuleConfig.RootName;
+            var rootGameObject = new GameObject(_popupModuleConfig.RootName);
             _root = rootGameObject.transform;
 
             if (parent != null)

@@ -6,8 +6,7 @@ using UnityEngine;
 public class PopupModuleTest
 {
     public const string ResourcePath = "PopupModule/";
-    public const string PopupCanvas = "TestPopupCanvas";
-    public const string Popup = "TestPopup";
+    public const string PopupPrefab = "PopupTest";
 
     public const string RootName = "[PopupModule]";
 
@@ -266,7 +265,6 @@ public class PopupModuleTest
         _popupModuleConfig.RootName.Returns(RootName);
         _popupModuleConfig.IsDontDestroyOnLoad.Returns(false);
 
-        _popupModuleConfig.CanvasPrefab.Returns(GetCanvasPrefab());
         _popupModuleConfig.TryGetPopupPrefab(DataId, out var popupPrefab).Returns(x =>
         {
             x[1] = GetPopupPrefab();
@@ -274,12 +272,8 @@ public class PopupModuleTest
         });
     }
 
-
-    private GameObject GetCanvasPrefab() =>
-        GetResourcesGameObject(PopupCanvas);
-
     private GameObject GetPopupPrefab() =>
-        GetResourcesGameObject(Popup);
+        GetResourcesGameObject(PopupPrefab);
 
     private GameObject GetResourcesGameObject(string dataId) =>
         Resources.Load<GameObject>(ResourcePath + dataId);

@@ -110,9 +110,9 @@ namespace CizaPopupModule
         }
 
         public void CreatePopup(string key, string dataId, string contentTip, string confirmTip) =>
-            CreatePopup(key, dataId, true, false, contentTip, confirmTip, string.Empty, 0);
+            CreatePopup(key, dataId, true, false, contentTip, confirmTip, string.Empty, ConfrimIndex);
 
-        public void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, string contentTip, string confirmTip, string cancelTip, int defaultButtonIndex = 1) =>
+        public void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, string contentTip, string confirmTip, string cancelTip, int defaultButtonIndex = CancelIndex) =>
             CreatePopup(key, dataId, isAutoHideWhenConfirm, true, contentTip, confirmTip, cancelTip, defaultButtonIndex);
 
         public void DestroyPopup(string key)

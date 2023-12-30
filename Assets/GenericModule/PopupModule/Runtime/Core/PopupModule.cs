@@ -110,10 +110,10 @@ namespace CizaPopupModule
         }
 
         public void CreatePopup(string key, string dataId, string contentTip, string confirmTip) =>
-            CreatePopup(key, dataId, true, false, contentTip, confirmTip, string.Empty);
+            CreatePopup(key, dataId, true, false, contentTip, confirmTip, string.Empty, 0);
 
-        public void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, string contentTip, string confirmTip, string cancelTip) =>
-            CreatePopup(key, dataId, isAutoHideWhenConfirm, true, contentTip, confirmTip, cancelTip);
+        public void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, string contentTip, string confirmTip, string cancelTip, int defaultButtonIndex = 1) =>
+            CreatePopup(key, dataId, isAutoHideWhenConfirm, true, contentTip, confirmTip, cancelTip, defaultButtonIndex);
 
         public void DestroyPopup(string key)
         {
@@ -234,7 +234,7 @@ namespace CizaPopupModule
             return HideAsync(key);
         }
 
-        private void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip)
+        private void CreatePopup(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip, int defaultButtonIndex)
         {
             if (!IsInitialized)
                 return;
@@ -254,7 +254,7 @@ namespace CizaPopupModule
             var popupGameObject = Object.Instantiate(popupPrefab, _root);
             var popup = popupGameObject.GetComponent<IPopup>();
 
-            popup.Initialize(key, dataId, isAutoHideWhenConfirm, hasCancel, contentTip, confirmTip, cancelTip, Select, ConfirmPopupAsync, CancelPopupAsync);
+            popup.Initialize(key, dataId, isAutoHideWhenConfirm, hasCancel, contentTip, confirmTip, cancelTip, defaultButtonIndex, Select, ConfirmPopupAsync, CancelPopupAsync);
 
             _popupMapByKey.Add(key, popup);
 
@@ -276,7 +276,7 @@ namespace CizaPopupModule
 
             popup.GameObject.SetActive(true);
             popup.SetHasConfirm(false);
-            Select(popup, CancelIndex);
+            Select(popup, popup.DefaultButtonIndex);
 
             popup.SetState(PopupStates.Showing);
 

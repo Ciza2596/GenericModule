@@ -12,6 +12,8 @@ namespace CizaPopupModule
         string ConfirmTip { get; }
         string CancelTip { get; }
 
+        int DefaultButtonIndex { get; }
+
         PopupStates State { get; }
 
         int Index { get; }

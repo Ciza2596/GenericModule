@@ -29,13 +29,15 @@ namespace CizaPopupModule.Implement
         public string ConfirmTip { get; private set; }
         public string CancelTip { get; private set; }
 
+        public int DefaultButtonIndex { get; private set; }
+
         public PopupStates State { get; private set; } = PopupStates.Visible;
         public int Index { get; private set; }
         public bool HasConfirm { get; private set; }
 
         public GameObject GameObject => gameObject;
 
-        public void Initialize(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
+        public void Initialize(string key, string dataId, bool isAutoHideWhenConfirm, bool hasCancel, string contentTip, string confirmTip, string cancelTip, int defaultButtonIndex, Action<string, int> onSelect, Func<string, UniTask> onConfirmPopupAsync, Func<string, UniTask> onCancelPopupAsync)
         {
             Key = key;
             DataId = dataId;
@@ -46,6 +48,8 @@ namespace CizaPopupModule.Implement
             ContentTip = contentTip;
             ConfirmTip = confirmTip;
             CancelTip = cancelTip;
+
+            DefaultButtonIndex = defaultButtonIndex;
 
             _onConfirmPopupAsync = onConfirmPopupAsync;
             _onCancelPopupAsync = onCancelPopupAsync;

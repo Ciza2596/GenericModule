@@ -6,7 +6,7 @@ namespace CizaOptionModule
 {
     public abstract class Option : MonoBehaviour, IOptionReadModel
     {
-        private OptionModule _optionModule;
+        protected OptionModule OptionModule { get; private set; }
 
         // PlayerIndex, OptionKey, IsUnlock
         private event Action<int, string, bool> _onConfirm;
@@ -31,19 +31,20 @@ namespace CizaOptionModule
         // OptionKey, IsNew
         public event Action<string, bool> OnIsNew;
 
-        public int PlayerIndex { get; protected set; }
+        public int PlayerIndex { get; private set; }
+        public string Key { get; private set; }
 
-        public string Key { get; protected set; }
-        public bool IsEnable { get; protected set; }
-        public bool IsUnlock { get; protected set; }
-        public bool IsNew { get; protected set; }
+        public bool IsEnable { get; private set; }
+        public bool IsUnlock { get; private set; }
+        public bool IsNew { get; private set; }
 
         public virtual void Initialize(OptionModule optionModule, int playerIndex, string key, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
         {
-            _optionModule = optionModule;
+            SetOptionModule(optionModule);
 
-            PlayerIndex = playerIndex;
-            Key = key;
+            SetPlayerIndex(playerIndex);
+            SetKey(key);
+
             SetIsEnable(isEnable);
             SetIsUnlock(isUnlock);
             SetIsNew(isNew);
@@ -62,6 +63,15 @@ namespace CizaOptionModule
             OnInitialize?.Invoke(parameters);
             OnIsNew?.Invoke(Key, IsNew);
         }
+
+        public virtual void SetOptionModule(OptionModule optionModule) =>
+            OptionModule = optionModule;
+
+        public virtual void SetPlayerIndex(int playerIndex) =>
+            PlayerIndex = playerIndex;
+
+        public virtual void SetKey(string key) =>
+            Key = key;
 
         public virtual void SetIsEnable(bool isEnable) =>
             IsEnable = isEnable;
@@ -88,8 +98,8 @@ namespace CizaOptionModule
 
         public virtual bool TryConfirm()
         {
-            if (_optionModule != null)
-                return _optionModule.TryConfirm(PlayerIndex);
+            if (OptionModule != null)
+                return OptionModule.TryConfirm(PlayerIndex);
 
             return TryConfirm(PlayerIndex, Key, IsUnlock);
         }
@@ -99,8 +109,8 @@ namespace CizaOptionModule
 
         public virtual void PointerEnter()
         {
-            if (_optionModule != null)
-                _optionModule.TrySetCurrentCoordinate(PlayerIndex, Key, false);
+            if (OptionModule != null)
+                OptionModule.TrySetCurrentCoordinate(PlayerIndex, Key, false);
 
             else
                 PointerEnter(PlayerIndex, Key);

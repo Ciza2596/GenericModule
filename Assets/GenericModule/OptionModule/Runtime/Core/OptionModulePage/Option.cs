@@ -63,13 +63,13 @@ namespace CizaOptionModule
             OnIsNew?.Invoke(Key, IsNew);
         }
 
-        public void SetIsEnable(bool isEnable) =>
+        public virtual void SetIsEnable(bool isEnable) =>
             IsEnable = isEnable;
 
-        public void SetIsUnlock(bool isUnlock) =>
+        public virtual void SetIsUnlock(bool isUnlock) =>
             IsUnlock = isUnlock;
 
-        public void SetIsNew(bool isNew) =>
+        public virtual void SetIsNew(bool isNew) =>
             IsNew = isNew;
 
         public virtual void Select(bool isAutoTurnOffIsNew)

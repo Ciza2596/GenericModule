@@ -123,7 +123,10 @@ namespace CizaOptionModule
         public OptionModule(IOptionModuleConfig optionModuleConfig) =>
             _pageModule = new PageModule(optionModuleConfig);
 
-        public async UniTask InitializeAsync(int playerCount, Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0, params object[] parameters)
+        public async UniTask InitializeAsync(Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0) =>
+            InitializeAsync(0, parent, optionModulePageInfos, optionInfos, isColumnCircle, pageIndex, coordinate, isAutoChangePage, optionDefaultPlayerIndex);
+
+        public async UniTask InitializeAsync(int playerCount, Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0)
         {
             if (IsInitialized)
                 return;
@@ -137,7 +140,7 @@ namespace CizaOptionModule
             _pageModule.Initialize(parent);
             foreach (var optionModulePageInfo in optionModulePageInfos)
             {
-                await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, this, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
+                await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, this, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos);
                 if (_pageModule.TryGetPage<IOptionModulePage>(optionModulePageInfo.PageIndexString, out var optionModulePage))
                 {
                     optionModulePage.OnSelect += Select;
@@ -149,7 +152,7 @@ namespace CizaOptionModule
                 await TrySetPageIndexAsync(0, coordinate, false);
 
             ResetPlayers(playerCount);
-            
+
             EnableAllCanSelect();
             EnableAllCanConfirm();
         }

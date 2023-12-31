@@ -171,7 +171,7 @@ namespace CizaOptionModule
         {
             ClearPlayers();
             for (var i = 0; i < playerCount; i++)
-                AddPlayer(i);
+                AddPlayer(i, Vector2Int.zero);
         }
 
         public void ClearPlayers()
@@ -180,7 +180,7 @@ namespace CizaOptionModule
                 RemovePlayer(playerIndex);
         }
 
-        public void AddPlayer(int playerIndex)
+        public void AddPlayer(int playerIndex, Vector2Int coordinate)
         {
             if (_playerMapByIndex.ContainsKey(playerIndex))
                 return;
@@ -189,6 +189,8 @@ namespace CizaOptionModule
 
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
                 optionModulePage.AddPlayer(playerIndex);
+
+            TrySetCurrentCoordinate(playerIndex, coordinate, true);
         }
 
         public void RemovePlayer(int playerIndex)

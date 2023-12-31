@@ -128,7 +128,6 @@ namespace CizaOptionModule
             if (IsInitialized)
                 return;
 
-            ResetPlayers(playerCount);
             OptionDefaultPlayerIndex = optionDefaultPlayerIndex;
 
             _maxIndex = optionModulePageInfos.Length - 1;
@@ -138,7 +137,7 @@ namespace CizaOptionModule
             _pageModule.Initialize(parent);
             foreach (var optionModulePageInfo in optionModulePageInfos)
             {
-                await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, this, PlayerCount, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
+                await _pageModule.CreateAsync<IOptionModulePage>(optionModulePageInfo.PageIndexString, this, OptionDefaultPlayerIndex, optionModulePageInfo, optionInfos, parameters);
                 if (_pageModule.TryGetPage<IOptionModulePage>(optionModulePageInfo.PageIndexString, out var optionModulePage))
                 {
                     optionModulePage.OnSelect += Select;
@@ -149,6 +148,8 @@ namespace CizaOptionModule
             if (!await TrySetPageIndexAsync(pageIndex, coordinate, false))
                 await TrySetPageIndexAsync(0, coordinate, false);
 
+            ResetPlayers(playerCount);
+            
             EnableAllCanSelect();
             EnableAllCanConfirm();
         }

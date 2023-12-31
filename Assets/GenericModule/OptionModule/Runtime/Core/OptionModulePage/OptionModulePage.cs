@@ -34,10 +34,9 @@ namespace CizaOptionModule
         public virtual UniTask InitializeAsync(params object[] parameters)
         {
             var optionModule = parameters[0] as OptionModule;
-            var playerCount = (int)parameters[1];
-            var optionDefaultPlayerIndex = (int)parameters[2];
+            var optionDefaultPlayerIndex = (int)parameters[1];
 
-            var optionModulePageInfo = parameters[3] as IOptionModulePageInfo;
+            var optionModulePageInfo = parameters[2] as IOptionModulePageInfo;
             Assert.IsNotNull(optionModulePageInfo, $"[{GetType().Name}::Initialize] OptionModulePageInfo is not found.");
 
             PageIndex = int.Parse(optionModulePageInfo.PageIndexString);
@@ -45,10 +44,10 @@ namespace CizaOptionModule
             var optionViewGameObject = Instantiate(optionModulePageInfo.OptionViewPrefab, _parentTransform);
             OptionView = optionViewGameObject.GetComponent<IOptionView>();
 
-            var optionInfos = parameters[4] as IOptionInfo[];
+            var optionInfos = parameters[3] as IOptionInfo[];
             OptionView.OptionsIncludeNull.InitializeOptions(optionModule, optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, null, GetType().Name);
 
-            _selectOptionLogic.Initialize(playerCount, OptionView.OptionColumns, OptionView.Options, OptionView.ColumnInfo, OptionView.RowInfo);
+            _selectOptionLogic.Initialize(OptionView.OptionColumns, OptionView.Options, OptionView.ColumnInfo, OptionView.RowInfo);
             _selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
 
             OptionView.Initialize();

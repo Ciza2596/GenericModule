@@ -122,7 +122,7 @@ namespace CizaOptionModule
 
         public OptionModule(IOptionModuleConfig optionModuleConfig) =>
             _pageModule = new PageModule(optionModuleConfig);
-        
+
         public async UniTask InitializeAsync(int playerCount, Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0)
         {
             if (IsInitialized)
@@ -149,9 +149,6 @@ namespace CizaOptionModule
                 await TrySetPageIndexAsync(0, coordinate, false);
 
             ResetPlayers(playerCount);
-
-            EnableAllCanSelect();
-            EnableAllCanConfirm();
         }
 
         public void Release()
@@ -181,7 +178,7 @@ namespace CizaOptionModule
                 RemovePlayer(playerIndex);
         }
 
-        public void AddPlayer(int playerIndex, Vector2Int coordinate)
+        public void AddPlayer(int playerIndex, Vector2Int coordinate, bool isEnableInput = true)
         {
             if (_playerMapByIndex.ContainsKey(playerIndex))
                 return;
@@ -192,6 +189,12 @@ namespace CizaOptionModule
                 optionModulePage.AddPlayer(playerIndex);
 
             TrySetCurrentCoordinate(playerIndex, coordinate, true);
+
+            if (isEnableInput)
+            {
+                EnableAllCanSelect();
+                EnableAllCanConfirm();
+            }
         }
 
         public void RemovePlayer(int playerIndex)

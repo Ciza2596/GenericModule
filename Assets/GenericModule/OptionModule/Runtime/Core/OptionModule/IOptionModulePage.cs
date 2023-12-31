@@ -20,6 +20,9 @@ namespace CizaOptionModule
 		bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate);
 		bool TryGetCurrentOptionKey(int  playerIndex, out string     currentOptionKey);
 
+		void AddPlayer(int playerIndex);
+		void RemovePlayer(int playerIndex);
+
 		bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
 		bool TrySetCurrentCoordinate(int playerIndex, string optionKey);
 

@@ -111,6 +111,13 @@ namespace CizaOptionModule
         public bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey) =>
             _selectOptionLogic.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
 
+        public void AddPlayer(int playerIndex) =>
+            _selectOptionLogic.AddPlayer(playerIndex);
+
+        public void RemovePlayer(int playerIndex) =>
+            _selectOptionLogic.RemovePlayer(playerIndex);
+
+
         public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
             _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
 

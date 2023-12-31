@@ -103,9 +103,9 @@ namespace CizaOptionModule
         {
             var options = new List<TOption>();
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
-            foreach (var option in optionModulePage.GetAllOptions())
-                if (option is TOption tOption)
-                    options.Add(tOption);
+                foreach (var option in optionModulePage.GetAllOptions())
+                    if (option is TOption tOption)
+                        options.Add(tOption);
 
             return options.ToArray();
         }
@@ -128,7 +128,7 @@ namespace CizaOptionModule
             if (IsInitialized)
                 return;
 
-            CreatePlayers(playerCount);
+            ResetPlayers(playerCount);
             OptionDefaultPlayerIndex = optionDefaultPlayerIndex;
 
             _maxIndex = optionModulePageInfos.Length - 1;
@@ -165,6 +165,41 @@ namespace CizaOptionModule
             _pageModule.Release();
             CurrentPageIndex = NotInitialPageIndex;
             IsChangingPage = false;
+        }
+
+        public void ResetPlayers(int playerCount)
+        {
+            ClearPlayers();
+            for (var i = 0; i < playerCount; i++)
+                AddPlayer(i);
+        }
+
+        public void ClearPlayers()
+        {
+            foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+                RemovePlayer(playerIndex);
+        }
+
+        public void AddPlayer(int playerIndex)
+        {
+            if (_playerMapByIndex.ContainsKey(playerIndex))
+                return;
+
+            _playerMapByIndex.Add(playerIndex, new Player(playerIndex));
+
+            foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
+                optionModulePage.AddPlayer(playerIndex);
+        }
+
+        public void RemovePlayer(int playerIndex)
+        {
+            if (!_playerMapByIndex.ContainsKey(playerIndex))
+                return;
+
+            _playerMapByIndex.Remove(playerIndex);
+
+            foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
+                optionModulePage.RemovePlayer(playerIndex);
         }
 
         public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
@@ -418,14 +453,6 @@ namespace CizaOptionModule
         private void Confirm(int playerIndex, string optionKey, bool isUnlock) =>
             OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
 
-        private void CreatePlayers(int playerCount)
-        {
-            for (var i = 0; i < playerCount; i++)
-                _playerMapByIndex.Add(i, new Player(i));
-        }
-
-        private void ClearPlayers() =>
-            _playerMapByIndex.Clear();
 
         private class Player
         {

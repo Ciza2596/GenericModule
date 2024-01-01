@@ -24,6 +24,8 @@ namespace CizaOptionModule
         // PlayerIndex, OptionKey, IsUnlock
         public event Action<int, string, bool> OnConfirm;
 
+        public event Action<float> OnTick;
+
         public bool IsInitialized => _pageModule.IsInitialized;
 
         public int PlayerCount => _playerMapByIndex.Count;
@@ -38,6 +40,8 @@ namespace CizaOptionModule
         public int CurrentPageIndex { get; private set; } = NotInitialPageIndex;
 
         public bool CanConfirm { get; private set; } = true;
+
+        public float RollingIntervalTime { get; private set; } = RollingLogic.RollingIntervalTime;
 
         public bool CheckCanSelect(int playerIndex)
         {
@@ -120,8 +124,11 @@ namespace CizaOptionModule
             return supOptions.ToArray();
         }
 
-        public OptionModule(IOptionModuleConfig optionModuleConfig) =>
+        public OptionModule(IOptionModuleConfig optionModuleConfig)
+        {
             _pageModule = new PageModule(optionModuleConfig);
+            _pageModule.OnTick += Tick;
+        }
 
         public async UniTask InitializeAsync(int playerCount, Transform parent, IOptionModulePageInfo[] optionModulePageInfos, IOptionInfo[] optionInfos, bool isColumnCircle, int pageIndex = 0, Vector2Int coordinate = default, bool isAutoChangePage = false, int optionDefaultPlayerIndex = 0)
         {
@@ -207,6 +214,9 @@ namespace CizaOptionModule
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
                 optionModulePage.RemovePlayer(playerIndex);
         }
+
+        public void SetRollingIntervalTime(float rollingIntervalTime) =>
+            RollingIntervalTime = rollingIntervalTime;
 
         public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {
@@ -459,6 +469,8 @@ namespace CizaOptionModule
         private void Confirm(int playerIndex, string optionKey, bool isUnlock) =>
             OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
 
+        private void Tick(float deltaTime) =>
+            OnTick?.Invoke(deltaTime);
 
         private class Player
         {

@@ -15,6 +15,8 @@ namespace CizaPageModule
         public event Action<string> OnEnablePage;
         public event Action<string> OnDisablePage;
 
+        public event Action<float> OnTick;
+
         //public variable
         public bool IsInitialized => _pageContainer.IsInitialized;
 
@@ -25,9 +27,10 @@ namespace CizaPageModule
             _pageContainer = new PageContainer();
             _pageModuleConfig = pageModuleConfig;
 
-
             _pageContainer.OnEnablePage += OnEnablePageImp;
             _pageContainer.OnDisablePage += OnDisablePageImp;
+
+            _pageContainer.OnTick += OnTickImp;
         }
 
         //public method
@@ -53,7 +56,8 @@ namespace CizaPageModule
             pageModuleComponent.SetFixedUpdateCallback(_pageContainer.FixedTick);
         }
 
-        public void Release() => _pageContainer.Release();
+        public void Release() =>
+            _pageContainer.Release();
 
         public bool CheckIsVisible(string key) =>
             _pageContainer.CheckIsVisible(key);
@@ -135,5 +139,8 @@ namespace CizaPageModule
 
         private void OnDisablePageImp(string pageKey) =>
             OnDisablePage?.Invoke(pageKey);
+
+        private void OnTickImp(float deltaTime) =>
+            OnTick?.Invoke(deltaTime);
     }
 }

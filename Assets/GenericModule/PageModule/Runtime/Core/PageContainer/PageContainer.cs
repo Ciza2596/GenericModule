@@ -24,11 +24,16 @@ namespace CizaPageModule
         public event Action<string> OnEnablePage;
         public event Action<string> OnDisablePage;
 
+        public event Action<float> OnTick;
+
         public bool IsInitialized => _pageRoot != null && _pagePrefabs != null;
 
         //Unity callback
-        public void Tick(float deltaTime) =>
+        public void Tick(float deltaTime)
+        {
             _tickHandle?.Invoke(deltaTime);
+            OnTick?.Invoke(deltaTime);
+        }
 
         public void FixedTick(float fixedDeltaTime) =>
             _fixedTickHandle?.Invoke(fixedDeltaTime);

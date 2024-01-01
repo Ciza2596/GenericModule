@@ -18,6 +18,12 @@ namespace CizaOptionModule
 
         public const int NotInitialPageIndex = -1;
 
+        // PlayerIndex
+        public event Action<int> OnAddPlayer;
+
+        // PlayerIndex
+        public event Action<int> OnRemovePlayer;
+
         // PlayerIndex, PreviousOptionKey, CurrentOptionKey
         public event Action<int, string, string> OnSelect;
 
@@ -200,6 +206,8 @@ namespace CizaOptionModule
                 EnableAllCanSelect();
                 EnableAllCanConfirm();
             }
+
+            OnAddPlayer?.Invoke(playerIndex);
         }
 
         public void RemovePlayer(int playerIndex)
@@ -211,6 +219,8 @@ namespace CizaOptionModule
 
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
                 optionModulePage.RemovePlayer(playerIndex);
+
+            OnRemovePlayer?.Invoke(playerIndex);
         }
 
         public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)

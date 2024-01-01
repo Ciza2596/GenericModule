@@ -202,10 +202,7 @@ namespace CizaOptionModule
             TrySetCurrentCoordinate(playerIndex, coordinate, true);
 
             if (isEnableInput)
-            {
-                EnableAllCanSelect();
-                EnableAllCanConfirm();
-            }
+                EnableInput(playerIndex);
 
             OnAddPlayer?.Invoke(playerIndex);
         }
@@ -358,6 +355,31 @@ namespace CizaOptionModule
 
             var coordinate = IsAutoChangePage ? new Vector2Int(0, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
             return await TrySetPageIndexAsync(nextPageIndex, coordinate, isHideImmediately: isImmediately, isShowImmediately: isImmediately);
+        }
+
+        public void EnableAllInput()
+        {
+            EnableAllCanSelect();
+            EnableAllCanConfirm();
+        }
+
+        public void DisableAllInput()
+        {
+            DisableAllCanSelect();
+            DisableAllCanConfirm();
+        }
+
+
+        public void EnableInput(int playerIndex)
+        {
+            EnableCanSelect(playerIndex);
+            EnableCanConfirm(playerIndex);
+        }
+
+        public void DisableInput(int playerIndex)
+        {
+            DisableCanSelect(playerIndex);
+            DisableCanConfirm(playerIndex);
         }
 
         public void EnableAllCanSelect()

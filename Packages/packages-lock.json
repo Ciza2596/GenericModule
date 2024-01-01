@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "788c4e9e80940f61c3544e2a36b36d66cb76ab7b"
+      "hash": "801ad788229104ba48c285c295501ce81537b2fb"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",

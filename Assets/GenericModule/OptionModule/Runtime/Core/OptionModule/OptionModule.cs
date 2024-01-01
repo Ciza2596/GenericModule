@@ -41,8 +41,6 @@ namespace CizaOptionModule
 
         public bool CanConfirm { get; private set; } = true;
 
-        public float RollingIntervalTime { get; private set; } = RollingLogic.RollingIntervalTime;
-
         public bool CheckCanSelect(int playerIndex)
         {
             if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
@@ -214,9 +212,6 @@ namespace CizaOptionModule
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>().ToArray())
                 optionModulePage.RemovePlayer(playerIndex);
         }
-
-        public void SetRollingIntervalTime(float rollingIntervalTime) =>
-            RollingIntervalTime = rollingIntervalTime;
 
         public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {

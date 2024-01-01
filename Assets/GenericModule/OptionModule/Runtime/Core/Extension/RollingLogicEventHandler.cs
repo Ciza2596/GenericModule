@@ -18,7 +18,7 @@ namespace CizaOptionModule
             _optionModule.OnTick += _rollingLogic.Tick;
             _optionModule.OnAddPlayer += _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer += _rollingLogic.RemovePlayer;
-            _rollingLogic.OnMovement += OnMovement;
+            _rollingLogic.OnMovementAsync += _optionModule.MovementAsync;
 
             _rollingLogic.ResetPlayerCount(_optionModule.PlayerCount);
         }
@@ -28,7 +28,7 @@ namespace CizaOptionModule
             _optionModule.OnTick -= _rollingLogic.Tick;
             _optionModule.OnAddPlayer -= _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer -= _rollingLogic.RemovePlayer;
-            _rollingLogic.OnMovement -= OnMovement;
+            _rollingLogic.OnMovementAsync -= _optionModule.MovementAsync;
         }
 
         public void MovementStart(int playerIndex, Vector2 direction, float rollingIntervalTime = RollingLogic.RollingIntervalTime) =>
@@ -36,8 +36,5 @@ namespace CizaOptionModule
 
         public void MovementCancel(int playerIndex) =>
             _rollingLogic.TurnOff(playerIndex);
-
-        private async void OnMovement(int playerIndex, Vector2 direction) =>
-            await _optionModule.MovementAsync(playerIndex, direction);
     }
 }

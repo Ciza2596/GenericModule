@@ -24,6 +24,8 @@ namespace CizaOptionModule.Implement
 
         public int Index => _dropdown.Index;
 
+        public int SelectIndex => _dropdown.SelectIndex;
+
         public void SetIndex(int index) =>
             _dropdown.Confirm(index);
 

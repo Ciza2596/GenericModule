@@ -36,6 +36,9 @@ namespace CizaPopupModule
         // Key
         public event Action<string> OnCancel;
 
+        // Key
+        public event Action<string> OnSelect;
+
         // Tip
         public event Func<string, string> OnTranslate;
 
@@ -324,6 +327,7 @@ namespace CizaPopupModule
                 selectedIndex = index;
 
             popup.Select(selectedIndex);
+            OnSelect?.Invoke(popup.Key);
         }
 
         private bool TryGetIsVisibleAndIsNotConfirmPopup(string key, out IPopup popup)

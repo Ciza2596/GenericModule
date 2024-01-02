@@ -20,6 +20,8 @@ namespace CizaOptionModule.Implement
 
         public bool IsShow => _dropdown.IsShow;
 
+        public int MaxIndex => _dropdown.MaxIndex;
+
         public int Index => _dropdown.Index;
 
         public void SetIndex(int index) =>

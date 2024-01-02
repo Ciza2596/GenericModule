@@ -8,20 +8,14 @@ namespace CizaOptionModule
 {
     public static class OptionModuleExtension
     {
-        public static bool TryGetRandomOptionKey(this OptionModule optionModule, out string optionKey) =>
-            optionModule.TryGetRandomOptionKey(string.Empty, out optionKey);
+        public static bool TryGetRandomOptionKey(this Option[] options, out string optionKey) =>
+            options.TryGetRandomOptionKey(string.Empty, out optionKey);
 
-        public static bool TryGetRandomOptionKey(this OptionModule optionModule, string withoutOptionKey, out string optionKey) =>
-            optionModule.TryGetRandomOptionKey(new[] { withoutOptionKey }, out optionKey);
+        public static bool TryGetRandomOptionKey(this Option[] options, string withoutOptionKey, out string optionKey) =>
+            options.TryGetRandomOptionKey(new[] { withoutOptionKey }, out optionKey);
 
-        public static bool TryGetRandomOptionKey(this OptionModule optionModule, string[] withoutOptionKeys, out string optionKey)
+        public static bool TryGetRandomOptionKey(this Option[] options, string[] withoutOptionKeys, out string optionKey)
         {
-            if (!optionModule.TryGetIsUnlockedOptions(out var options))
-            {
-                optionKey = string.Empty;
-                return false;
-            }
-
             var allOptionKeys = options.ToKeys().ToArrayWithoutSomeItems(withoutOptionKeys);
             if (allOptionKeys.Length <= 0)
             {

@@ -121,15 +121,15 @@ namespace CizaOptionModule
             if (!IsEnable)
                 return false;
 
-            _onConfirm?.Invoke(playerIndex, key, isUnlock);
             OnConfirm?.Invoke(key, isUnlock);
+            _onConfirm?.Invoke(playerIndex, key, isUnlock);
             return true;
         }
 
         protected virtual void PointerEnter(int playerIndex, string key)
         {
-            _onPointerEnter?.Invoke(playerIndex, key);
             OnPointerEnter?.Invoke(key);
+            _onPointerEnter?.Invoke(playerIndex, key);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CizaCore;
 using Cysharp.Threading.Tasks;
@@ -7,12 +8,21 @@ namespace CizaOptionModule
 {
     public static class OptionModuleExtension
     {
+        public static bool TryGetRandomOptionKey(this OptionModule optionModule, out string optionKey) =>
+            optionModule.TryGetRandomOptionKey(string.Empty, out optionKey);
+
         public static bool TryGetRandomOptionKey(this OptionModule optionModule, string withoutOptionKey, out string optionKey) =>
             optionModule.TryGetRandomOptionKey(new[] { withoutOptionKey }, out optionKey);
 
         public static bool TryGetRandomOptionKey(this OptionModule optionModule, string[] withoutOptionKeys, out string optionKey)
         {
-            var allOptionKeys = optionModule.GetAllOptions<Option>().ToKeys().ToArrayWithoutSomeItems(withoutOptionKeys);
+            if (!optionModule.TryGetIsUnlockedOptions(out var options))
+            {
+                optionKey = string.Empty;
+                return false;
+            }
+
+            var allOptionKeys = options.ToKeys().ToArrayWithoutSomeItems(withoutOptionKeys);
             if (allOptionKeys.Length <= 0)
             {
                 optionKey = string.Empty;
@@ -21,6 +31,20 @@ namespace CizaOptionModule
 
             optionKey = allOptionKeys[Random.Range(0, allOptionKeys.Length)];
             return true;
+        }
+
+        public static bool TryGetIsUnlockedOptions(this OptionModule optionModule, out Option[] options)
+        {
+            var isUnlockedOptions = new HashSet<Option>();
+
+            foreach (var option in optionModule.GetAllOptions<Option>())
+            {
+                if (option.IsUnlock)
+                    isUnlockedOptions.Add(option);
+            }
+
+            options = isUnlockedOptions.ToArray();
+            return options.Length > 0;
         }
 
         public static UniTask MovePageToLeftAsync(this OptionModule optionModule, int playerIndex)

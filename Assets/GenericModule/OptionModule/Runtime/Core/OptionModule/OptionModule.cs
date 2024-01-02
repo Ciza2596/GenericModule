@@ -107,6 +107,7 @@ namespace CizaOptionModule
             return optionModulePage.TryGetOption(optionKey, out option);
         }
 
+        
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {
             var options = new List<TOption>();

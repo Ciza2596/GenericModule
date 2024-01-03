@@ -6,32 +6,32 @@ namespace CizaAudioModule.Implement
     public class OptionSfxControllerConfig : ScriptableObject, IOptionSfxControllerConfig
     {
         [SerializeField]
-        private string _selectSfxDataId;
+        private string _selectSfxDataId = "UI_Select";
 
         [Space]
         [SerializeField]
-        private string _confirmSfxDataId;
+        private string _confirmSfxDataId= "UI_Confirm";
 
         [SerializeField]
-        private string _cantConfirmSfxDataId;
-
-        [Space]
-        [SerializeField]
-        private string _cancelSfxDataId;
+        private string _cantConfirmSfxDataId= "UI_CantConfirm";
 
         [Space]
         [SerializeField]
-        private string _settingsShowSfxDataId;
-
-        [SerializeField]
-        private string _settingsHideSfxDataId;
+        private string _cancelSfxDataId= "UI_Cancel";
 
         [Space]
         [SerializeField]
-        private string _dialogContinueSfxDataId;
+        private string _settingsShowSfxDataId= "UI_SettingsShow";
 
         [SerializeField]
-        private string _dialogFunctionSfxDataId;
+        private string _settingsHideSfxDataId= "UI_SettingsHide";
+
+        [Space]
+        [SerializeField]
+        private string _dialogContinueSfxDataId= "UI_DialogContinue";
+
+        [SerializeField]
+        private string _dialogFunctionSfxDataId= "UI_DialogFunction";
 
 
         public bool TryGetSelectSfxDataId(out string selectSfxDataId) =>

@@ -8,7 +8,7 @@ namespace CizaAudioModule.Implement
     public class BgmControllerConfig : ScriptableObject, IBgmControllerConfig
     {
         [SerializeField]
-        private float _fadeTime = 0.25f;
+        private float _fadeTime = 0.5f;
 
         [Space]
         [SerializeField]

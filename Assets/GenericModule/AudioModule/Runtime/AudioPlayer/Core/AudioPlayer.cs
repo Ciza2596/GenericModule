@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace CizaAudioModule
 {
-	public class AudioPlayer
+	public class AudioPlayer: OptionSfxController.IAudioPlayer
 	{
 		private readonly IAudioPlayerConfig _audioPlayerConfig;
 

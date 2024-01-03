@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "OptionSfxControllerConfig", menuName = "Ciza/AudioModule/OptionSfxControllerConfig")]
+    [CreateAssetMenu(fileName = "OptionSfxControllerConfig", menuName = "Ciza/AudioModule/OptionSfxControllerConfig", order = 11)]
     public class OptionSfxControllerConfig : ScriptableObject, IOptionSfxControllerConfig
     {
         [SerializeField]
@@ -65,7 +65,7 @@ namespace CizaAudioModule.Implement
 
         private bool TryGetSfxDataId(string value, out string sfxDataId)
         {
-            if (!CheckHasValue(value))
+            if (!value.HasValue())
             {
                 sfxDataId = string.Empty;
                 return false;
@@ -74,8 +74,5 @@ namespace CizaAudioModule.Implement
             sfxDataId = value;
             return true;
         }
-
-        private bool CheckHasValue(string value) =>
-            !string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value);
     }
 }

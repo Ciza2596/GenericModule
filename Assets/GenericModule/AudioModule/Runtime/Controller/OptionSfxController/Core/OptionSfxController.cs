@@ -131,13 +131,6 @@ namespace CizaAudioModule
                 PlaySfx(dialogFunctionSfxDataId, "PlayDialogFunctionSfx");
         }
 
-
-        private async UniTask LoadSfxAssetAsync(string sfxDataId, CancellationToken cancellationToken)
-        {
-            await _audioPlayer.LoadSfxAssetAsync(sfxDataId, cancellationToken);
-            _loadedSfxDataIds.Add(sfxDataId);
-        }
-
         private async void PlaySfx(string sfxDataId, string methodName)
         {
             if (IsEnable && CheckIsLoadedSfx(sfxDataId, methodName))
@@ -151,6 +144,12 @@ namespace CizaAudioModule
 
             Debug.LogWarning($"[OptionSfxController::{methodName}] Sfx: {sfxDataId} is not loaded.");
             return false;
+        }
+        
+        private async UniTask LoadSfxAssetAsync(string sfxDataId, CancellationToken cancellationToken)
+        {
+            await _audioPlayer.LoadSfxAssetAsync(sfxDataId, cancellationToken);
+            _loadedSfxDataIds.Add(sfxDataId);
         }
     }
 }

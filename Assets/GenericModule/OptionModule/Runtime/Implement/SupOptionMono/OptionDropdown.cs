@@ -11,7 +11,8 @@ namespace CizaOptionModule.Implement
         private Dropdown _dropdown;
 
         // index
-        public event Action<int> OnOptionChanged;
+        public event Action<int> OnIndexChanged;
+        public event Action OnCancel;
 
         public event Action OnShow;
         public event Action OnHide;
@@ -25,9 +26,6 @@ namespace CizaOptionModule.Implement
         public int Index => _dropdown.Index;
 
         public int SelectIndex => _dropdown.SelectIndex;
-
-        public void SetIndex(int index) =>
-            _dropdown.Confirm(index);
 
         public void SetOptions(string[] options) =>
             _dropdown.SetOptions(options);
@@ -54,20 +52,20 @@ namespace CizaOptionModule.Implement
             _dropdown.Select(_dropdown.SelectIndex + 1, false);
         }
 
-        public void Confirm()
-        {
-            if (!_dropdown.IsShow)
-                return;
+        public void Confirm(int index) =>
+            _dropdown.Confirm(index);
 
+        public void Confirm() =>
             _dropdown.Confirm();
-        }
+
 
         public override void Initialize(Option option)
         {
             base.Initialize(option);
 
             Assert.IsNotNull(_dropdown, $"[OptionDropdown::Initialize] Option: {name} is not set dropdown.");
-            _dropdown.OnIndexChanged += OnOptionChangedImp;
+            _dropdown.OnIndexChanged += OnIndexChangedImp;
+            _dropdown.OnCancel += OnCancelImp;
 
             _dropdown.OnShow += OnShowImp;
             _dropdown.OnHide += OnHideImp;
@@ -76,14 +74,18 @@ namespace CizaOptionModule.Implement
         public override void Release(Option option)
         {
             base.Release(option);
-            _dropdown.OnIndexChanged -= OnOptionChangedImp;
+            _dropdown.OnIndexChanged -= OnIndexChangedImp;
+            _dropdown.OnCancel -= OnCancelImp;
 
             _dropdown.OnShow -= OnShowImp;
             _dropdown.OnHide -= OnHideImp;
         }
 
-        private void OnOptionChangedImp(int index) =>
-            OnOptionChanged?.Invoke(index);
+        private void OnIndexChangedImp(int index) =>
+            OnIndexChanged?.Invoke(index);
+
+        private void OnCancelImp() =>
+            OnCancel?.Invoke();
 
         private void OnShowImp() =>
             OnShow?.Invoke();

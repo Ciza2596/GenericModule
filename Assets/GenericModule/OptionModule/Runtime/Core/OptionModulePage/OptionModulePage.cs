@@ -127,7 +127,6 @@ namespace CizaOptionModule
 
         public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate)
         {
-            _isFromPointerEnterMapByPlayerIndex[playerIndex] = false;
             return _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
         }
 
@@ -172,6 +171,8 @@ namespace CizaOptionModule
 
             currentOption?.Select(IsAutoTurnOffIsNew && LocalIsAutoTurnOffIsNew);
             OnSelect?.Invoke(playerIndex, previousOption != null ? previousOption.Key : string.Empty, currentOption != null ? currentOption.Key : string.Empty);
+
+            _isFromPointerEnterMapByPlayerIndex[playerIndex] = false;
         }
 
         protected bool CheckIsAnyPlayerOnCoordinate(Vector2Int coordinate)

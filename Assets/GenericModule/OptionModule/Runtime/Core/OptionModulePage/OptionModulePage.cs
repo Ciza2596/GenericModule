@@ -125,14 +125,15 @@ namespace CizaOptionModule
         }
 
 
-        public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
-            _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
+        public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate)
+        {
+            _isFromPointerEnterMapByPlayerIndex[playerIndex] = false;
+            return _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
+        }
 
         public bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter)
         {
-            if (_isFromPointerEnterMapByPlayerIndex.ContainsKey(playerIndex))
-                _isFromPointerEnterMapByPlayerIndex[playerIndex] = isFromPointerEnter;
-
+            _isFromPointerEnterMapByPlayerIndex[playerIndex] = isFromPointerEnter;
             return _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
         }
 

@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "AudioPlayerConfig", menuName = "Ciza/AudioModule/AudioPlayerConfig")]
+	[CreateAssetMenu(fileName = "AudioPlayerConfig", menuName = "Ciza/AudioModule/AudioPlayerConfig", order = 100)]
 	public class AudioPlayerConfig : ScriptableObject, IAudioPlayerConfig
 	{
 		[SerializeField]

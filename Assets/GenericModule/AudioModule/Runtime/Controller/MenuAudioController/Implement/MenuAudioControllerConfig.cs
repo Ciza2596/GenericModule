@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "MenuAudioControllerConfig", menuName = "Ciza/AudioModule/MenuAudioControllerConfig", order = 10)]
+    [CreateAssetMenu(fileName = "MenuAudioControllerConfig", menuName = "Ciza/AudioModule/MenuAudioControllerConfig", order = 100)]
     public class MenuAudioControllerConfig : ScriptableObject, IMenuAudioControllerConfig
     {
         [SerializeField]

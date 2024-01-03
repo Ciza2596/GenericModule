@@ -18,6 +18,10 @@ namespace CizaAudioModule
 
         private Transform _root;
 
+        public event Action OnInitialize;
+        public event Action OnRelease;
+
+
         public event Func<string, UniTask> OnChangedVoiceLocaleBeforeAsync;
         public event Func<string, UniTask> OnChangedVoiceLocaleAsync;
 
@@ -131,6 +135,8 @@ namespace CizaAudioModule
             _voiceModule.Initialize(_root);
 
             SetMasterVolume(_audioPlayerConfig.DefaultMasterVolume);
+
+            OnInitialize?.Invoke();
         }
 
         public void Release()
@@ -140,6 +146,8 @@ namespace CizaAudioModule
                 Debug.LogWarning("[AudioPlayer::Release] AudioPlayer is not initialized.");
                 return;
             }
+
+            OnRelease?.Invoke();
 
             _bgmModule.Release();
             _sfxModule.Release();

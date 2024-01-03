@@ -59,10 +59,10 @@ namespace CizaAudioModule
 
         #region OptionSfx
 
-        public void EnableCanPlaySfx() =>
+        public void EnableCanPlayOptionSfx() =>
             _optionSfxController.Enable();
 
-        public void DisableCanPlaySfx() =>
+        public void DisableCanPlayOptionSfx() =>
             _optionSfxController.Disable();
 
 

@@ -34,6 +34,8 @@ namespace CizaAudioModule
 
         private string _currentBgmDataId = string.Empty;
 
+        public string[] LoadedBgmDataIds => _loadedBgmDataIds.ToHashSet().ToArray();
+
         public string CurrentBgmDataId => _currentBgmDataId;
 
 

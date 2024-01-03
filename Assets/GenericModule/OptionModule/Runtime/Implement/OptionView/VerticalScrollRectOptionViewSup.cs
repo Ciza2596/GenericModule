@@ -25,7 +25,11 @@ namespace CizaOptionModule.Implement
             _optionView.OnSetCurrentCoordinate -= OnSetCurrentCoordinate;
         }
 
-        private void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately) =>
+        private void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately, bool isFromPointerEnter)
+        {
+            if (isFromPointerEnter)
+                return;
             _verticalScrollView.SetIndex(currentCoordinate.y, isImmediately);
+        }
     }
 }

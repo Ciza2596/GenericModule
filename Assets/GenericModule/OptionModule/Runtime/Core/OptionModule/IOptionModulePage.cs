@@ -24,7 +24,7 @@ namespace CizaOptionModule
 		void RemovePlayer(int playerIndex);
 
 		bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
-		bool TrySetCurrentCoordinate(int playerIndex, string optionKey);
+		bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter);
 
 		bool TryConfirm(int playerIndex);
 

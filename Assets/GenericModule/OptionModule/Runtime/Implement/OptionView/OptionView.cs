@@ -23,8 +23,8 @@ namespace CizaOptionModule.Implement
 
         public event Action<float> OnTick;
 
-        // playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately
-        public event Action<int, Vector2Int, Option, Vector2Int, Option, bool> OnSetCurrentCoordinate;
+        // playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately, isFromPointerEnter
+        public event Action<int, Vector2Int, Option, Vector2Int, Option, bool, bool> OnSetCurrentCoordinate;
 
 
         [Serializable]
@@ -100,8 +100,8 @@ namespace CizaOptionModule.Implement
                 optionViewSup.Release();
         }
 
-        public void SetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately) =>
-            OnSetCurrentCoordinate?.Invoke(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately);
+        public void SetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption, bool isImmediately, bool isFromPointerEnter) =>
+            OnSetCurrentCoordinate?.Invoke(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, isImmediately, isFromPointerEnter);
 
         [Serializable]
         private class ColumnInfoImp : IColumnInfo

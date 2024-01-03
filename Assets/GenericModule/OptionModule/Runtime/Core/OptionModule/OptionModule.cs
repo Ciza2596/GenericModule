@@ -107,7 +107,7 @@ namespace CizaOptionModule
             return optionModulePage.TryGetOption(optionKey, out option);
         }
 
-        
+
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {
             var options = new List<TOption>();
@@ -323,7 +323,7 @@ namespace CizaOptionModule
             if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
                 return false;
 
-            return optionModulePage.TrySetCurrentCoordinate(playerIndex, optionKey);
+            return optionModulePage.TrySetCurrentCoordinate(playerIndex, optionKey, false);
         }
 
         public async UniTask<bool> TryMovePageToLeftAsync(int playerIndex, bool isImmediately = true)
@@ -475,6 +475,17 @@ namespace CizaOptionModule
                 return false;
 
             return optionModulePage.TryMoveToDown(playerIndex);
+        }
+
+        internal bool TrySetCurrentCoordinateFromPointerEnter(int playerIndex, string optionKey, bool isIgnoreCanSelect)
+        {
+            if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || (!isIgnoreCanSelect && !player.CanSelect))
+                return false;
+
+            if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
+                return false;
+
+            return optionModulePage.TrySetCurrentCoordinate(playerIndex, optionKey, true);
         }
 
         private bool TryGetOptionModulePage(int pageIndex, out IOptionModulePage optionModulePage)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CizaPageModule;
 using CizaPageModule.Implement;
@@ -13,6 +14,7 @@ namespace CizaOptionModule
         [SerializeField]
         protected Transform _parentTransform;
 
+        protected readonly Dictionary<int, bool> _isFromPointerEnterMapByPlayerIndex = new Dictionary<int, bool>();
         protected readonly SelectOptionLogic _selectOptionLogic = new SelectOptionLogic();
 
         protected IOptionView OptionView { get; private set; }
@@ -110,18 +112,29 @@ namespace CizaOptionModule
         public bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey) =>
             _selectOptionLogic.TryGetCurrentOptionKey(playerIndex, out currentOptionKey);
 
-        public void AddPlayer(int playerIndex) =>
+        public void AddPlayer(int playerIndex)
+        {
+            _isFromPointerEnterMapByPlayerIndex.Add(playerIndex, false);
             _selectOptionLogic.AddPlayer(playerIndex);
+        }
 
-        public void RemovePlayer(int playerIndex) =>
+        public void RemovePlayer(int playerIndex)
+        {
             _selectOptionLogic.RemovePlayer(playerIndex);
+            _isFromPointerEnterMapByPlayerIndex.Remove(playerIndex);
+        }
 
 
         public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
             _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
 
-        public bool TrySetCurrentCoordinate(int playerIndex, string optionKey) =>
-            _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
+        public bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter)
+        {
+            if (_isFromPointerEnterMapByPlayerIndex.ContainsKey(playerIndex))
+                _isFromPointerEnterMapByPlayerIndex[playerIndex] = isFromPointerEnter;
+
+            return _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, optionKey);
+        }
 
         public bool TryConfirm(int playerIndex)
         {
@@ -151,7 +164,7 @@ namespace CizaOptionModule
 
         protected virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
         {
-            OptionView.SetCurrentCoordinate(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, IsImmediately);
+            OptionView.SetCurrentCoordinate(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, IsImmediately, _isFromPointerEnterMapByPlayerIndex[playerIndex]);
 
             if (!CheckIsAnyPlayerOnCoordinate(previousCoordinate))
                 previousOption?.Unselect();

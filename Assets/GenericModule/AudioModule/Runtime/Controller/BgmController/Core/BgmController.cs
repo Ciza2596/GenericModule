@@ -68,6 +68,14 @@ namespace CizaAudioModule
             _audioPlayer.OnBgmStop -= OnBgmStop;
         }
 
+        public UniTask PlayBgmAsync(IBgmSettings bgmSettings)
+        {
+            if (bgmSettings.TryGetBgmInfo(out var bgmDataId, out var volume))
+                return PlayBgmAsync(bgmDataId, volume);
+
+            return UniTask.CompletedTask;
+        }
+
         public UniTask PlayBgmAsync(string bgmDataId) =>
             PlayBgmAsync(bgmDataId, 1);
 

@@ -43,6 +43,9 @@ namespace CizaAudioModule
 
         #region Bgm
 
+        public UniTask PlayBgmAsync(IBgmSettings bgmSettings) =>
+            _bgmController.PlayBgmAsync(bgmSettings);
+
         public UniTask PlayBgmAsync(string bgmDataId) =>
             _bgmController.PlayBgmAsync(bgmDataId);
 

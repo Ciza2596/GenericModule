@@ -110,7 +110,7 @@ namespace CizaOptionModule
         public virtual void PointerEnter()
         {
             if (OptionModule != null)
-                OptionModule.TrySetCurrentCoordinate(PlayerIndex, Key, false);
+                OptionModule.TrySetCurrentCoordinateFromPointerEnter(PlayerIndex, Key, false);
 
             else
                 PointerEnter(PlayerIndex, Key);

@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "AudioModuleAssetProvider", menuName = "Ciza/AudioModule/AssetProvider")]
+    [CreateAssetMenu(fileName = "AudioModuleAssetProvider", menuName = "Ciza/AudioModule/AssetProvider", order = 1)]
     public class AssetProvider : ScriptableObject, IAssetProvider
     {
         [SerializeField]

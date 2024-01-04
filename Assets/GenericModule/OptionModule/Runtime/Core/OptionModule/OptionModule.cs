@@ -107,6 +107,18 @@ namespace CizaOptionModule
             return optionModulePage.TryGetOption(optionKey, out option);
         }
 
+        public bool TryGetSupOptionFromCurrentPage<TSupOption>(string optionKey, out TSupOption supOption) where TSupOption : class
+        {
+            if (!TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
+            {
+                supOption = null;
+                return false;
+            }
+
+            supOption = option.GetComponent<TSupOption>();
+            return supOption != null;
+        }
+
 
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {

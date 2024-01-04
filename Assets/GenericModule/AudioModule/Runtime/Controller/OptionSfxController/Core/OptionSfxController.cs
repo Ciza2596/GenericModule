@@ -19,11 +19,16 @@ namespace CizaAudioModule
         private readonly IOptionSfxControllerConfig _config;
         private readonly IAudioPlayer _audioPlayer;
 
+        private readonly Dictionary<int, Player> _playerMapByIndex = new Dictionary<int, Player>();
         private readonly List<string> _loadedSfxDataIds = new List<string>();
 
         public string[] LoadedSfxDataIds => _loadedSfxDataIds.ToHashSet().ToArray();
 
         public bool IsEnable { get; private set; }
+
+        public bool CheckIsEnable(int playerIndex) =>
+            IsEnable && _playerMapByIndex.TryGetValue(playerIndex, out var player) && player.IsEnable;
+
 
         public OptionSfxController(IOptionSfxControllerConfig config, IAudioPlayer audioPlayer)
         {
@@ -78,64 +83,103 @@ namespace CizaAudioModule
         public void Disable() =>
             IsEnable = false;
 
+        public void Enable(int playerIndex)
+        {
+            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+                return;
 
-        public void PlaySelectSfx()
+            player.Enable();
+        }
+
+        public void Disable(int playerIndex)
+        {
+            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+                return;
+
+            player.Disable();
+        }
+
+        public void ResetPlayerCount(int playerCount)
+        {
+            _playerMapByIndex.Clear();
+
+            for (var i = 0; i < playerCount; i++)
+                AddPlayer(i);
+        }
+
+        public void AddPlayer(int playerIndex)
+        {
+            if (_playerMapByIndex.ContainsKey(playerIndex))
+                return;
+
+            _playerMapByIndex.Add(playerIndex, new Player(playerIndex));
+        }
+
+        public void RemovePlayer(int playerIndex)
+        {
+            if (!_playerMapByIndex.ContainsKey(playerIndex))
+                return;
+
+            _playerMapByIndex.Remove(playerIndex);
+        }
+
+        public void PlaySelectSfx(int playerIndex)
         {
             if (_config.TryGetSelectSfxDataId(out var selectSfxDataId))
-                PlaySfx(selectSfxDataId, "PlaySelectSfx");
+                PlaySfx(playerIndex, selectSfxDataId, "PlaySelectSfx");
         }
 
 
-        public void PlayConfirmSfx()
+        public void PlayConfirmSfx(int playerIndex)
         {
             if (_config.TryGetConfirmSfxDataId(out var confirmSfxDataId))
-                PlaySfx(confirmSfxDataId, "PlayConfirmSfx");
+                PlaySfx(playerIndex, confirmSfxDataId, "PlayConfirmSfx");
         }
 
-        public void PlayCantConfirmSfx()
+        public void PlayCantConfirmSfx(int playerIndex)
         {
             if (_config.TryGetCantConfirmSfxDataId(out var cantConfirmSfxDataId))
-                PlaySfx(cantConfirmSfxDataId, "CantConfirmSfx");
+                PlaySfx(playerIndex, cantConfirmSfxDataId, "CantConfirmSfx");
         }
 
 
-        public void PlayCancelSfx()
+        public void PlayCancelSfx(int playerIndex)
         {
             if (_config.TryGetCancelSfxDataId(out var cancelSfxDataId))
-                PlaySfx(cancelSfxDataId, "PlayCancelSfx");
+                PlaySfx(playerIndex, cancelSfxDataId, "PlayCancelSfx");
         }
 
 
-        public void PlaySettingsShowSfx()
+        public void PlaySettingsShowSfx(int playerIndex)
         {
             if (_config.TryGetSettingsShowSfxDataId(out var settingsShowSfxDataId))
-                PlaySfx(settingsShowSfxDataId, "PlaySettingsShowSfx");
+                PlaySfx(playerIndex, settingsShowSfxDataId, "PlaySettingsShowSfx");
         }
 
-        public void PlaySettingsHideSfx()
+        public void PlaySettingsHideSfx(int playerIndex)
         {
             if (_config.TryGetSettingsHideSfxDataId(out var settingsHideSfxDataId))
-                PlaySfx(settingsHideSfxDataId, "PlaySettingsHideSfx");
+                PlaySfx(playerIndex, settingsHideSfxDataId, "PlaySettingsHideSfx");
         }
 
-
-        public void PlayDialogContinueSfx()
+        public void PlayDialogContinueSfx(int playerIndex)
         {
             if (_config.TryGetDialogContinueSfxDataId(out var dialogContinueSfxDataId))
-                PlaySfx(dialogContinueSfxDataId, "PlayDialogContinueSfx");
+                PlaySfx(playerIndex, dialogContinueSfxDataId, "PlayDialogContinueSfx");
         }
 
-        public void PlayDialogFunctionSfx()
+        public void PlayDialogFunctionSfx(int playerIndex)
         {
             if (_config.TryGetDialogFunctionSfxDataId(out var dialogFunctionSfxDataId))
-                PlaySfx(dialogFunctionSfxDataId, "PlayDialogFunctionSfx");
+                PlaySfx(playerIndex, dialogFunctionSfxDataId, "PlayDialogFunctionSfx");
         }
 
-        private async void PlaySfx(string sfxDataId, string methodName)
+        private async void PlaySfx(int playerIndex, string sfxDataId, string methodName)
         {
-            if (IsEnable && CheckIsLoadedSfx(sfxDataId, methodName))
+            if (CheckIsEnable(playerIndex) && CheckIsLoadedSfx(sfxDataId, methodName))
                 await _audioPlayer.PlaySfxAsync(sfxDataId);
         }
+
 
         private bool CheckIsLoadedSfx(string sfxDataId, string methodName)
         {
@@ -145,11 +189,32 @@ namespace CizaAudioModule
             Debug.LogWarning($"[OptionSfxController::{methodName}] Sfx: {sfxDataId} is not loaded.");
             return false;
         }
-        
+
         private async UniTask LoadSfxAssetAsync(string sfxDataId, CancellationToken cancellationToken)
         {
             await _audioPlayer.LoadSfxAssetAsync(sfxDataId, cancellationToken);
             _loadedSfxDataIds.Add(sfxDataId);
+        }
+
+        private class Player
+        {
+            public int Index { get; private set; }
+            public bool IsEnable { get; private set; }
+
+            public Player(int index)
+            {
+                Index = index;
+                Enable();
+            }
+
+            public void Enable() =>
+                SetIsEnable(true);
+
+            public void Disable() =>
+                SetIsEnable(false);
+
+            private void SetIsEnable(bool isEnable) =>
+                IsEnable = isEnable;
         }
     }
 }

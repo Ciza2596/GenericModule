@@ -12,13 +12,12 @@ namespace CizaAudioModule
         private readonly OptionSfxController _optionSfxController;
 
         public string[] LoadedBgmDataIds => _bgmController.LoadedBgmDataIds;
-
         public string CurrentBgmDataId => _bgmController.CurrentBgmDataId;
 
 
         public string[] LoadedSfxDataIds => _optionSfxController.LoadedSfxDataIds;
-
         public bool CanPlaySfx => _optionSfxController.IsEnable;
+        public bool CheckIsEnable(int playerIndex) => _optionSfxController.CheckIsEnable(playerIndex);
 
 
         public MenuAudioController(IMenuAudioControllerConfig menuAudioControllerConfig, IAudioPlayer audioPlayer)
@@ -66,32 +65,32 @@ namespace CizaAudioModule
             _optionSfxController.Disable();
 
 
-        public void PlaySelectSfx() =>
-            _optionSfxController.PlaySelectSfx();
+        public void PlaySelectSfx(int playerIndex) =>
+            _optionSfxController.PlaySelectSfx(playerIndex);
 
-        public void PlayConfirmSfx() =>
-            _optionSfxController.PlayConfirmSfx();
-
-
-        public void PlayCantConfirmSfx() =>
-            _optionSfxController.PlayCantConfirmSfx();
-
-        public void PlayCancelSfx() =>
-            _optionSfxController.PlayCancelSfx();
+        public void PlayConfirmSfx(int playerIndex) =>
+            _optionSfxController.PlayConfirmSfx(playerIndex);
 
 
-        public void PlaySettingsShowSfx() =>
-            _optionSfxController.PlaySettingsShowSfx();
+        public void PlayCantConfirmSfx(int playerIndex) =>
+            _optionSfxController.PlayCantConfirmSfx(playerIndex);
 
-        public void PlaySettingsHideSfx() =>
-            _optionSfxController.PlaySettingsHideSfx();
+        public void PlayCancelSfx(int playerIndex) =>
+            _optionSfxController.PlayCancelSfx(playerIndex);
 
 
-        public void PlayDialogContinueSfx() =>
-            _optionSfxController.PlayDialogContinueSfx();
+        public void PlaySettingsShowSfx(int playerIndex) =>
+            _optionSfxController.PlaySettingsShowSfx(playerIndex);
 
-        public void PlayDialogFunctionSfx() =>
-            _optionSfxController.PlayDialogFunctionSfx();
+        public void PlaySettingsHideSfx(int playerIndex) =>
+            _optionSfxController.PlaySettingsHideSfx(playerIndex);
+
+
+        public void PlayDialogContinueSfx(int playerIndex) =>
+            _optionSfxController.PlayDialogContinueSfx(playerIndex);
+
+        public void PlayDialogFunctionSfx(int playerIndex) =>
+            _optionSfxController.PlayDialogFunctionSfx(playerIndex);
 
         #endregion
     }

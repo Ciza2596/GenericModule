@@ -72,6 +72,18 @@ namespace CizaPageModule
             var pageController = _pageControllerMapByKey[key];
             return pageController.State is PageStates.Visible;
         }
+        
+        public bool CheckIsInvisible(string key)
+        {
+            if (!_pageControllerMapByKey.ContainsKey(key))
+            {
+                Debug.Log($"[PageContainer::CheckIsInvisible] Not find page: {key} in pageControllerMapByKey. Please check it is created.");
+                return false;
+            }
+
+            var pageController = _pageControllerMapByKey[key];
+            return pageController.State is PageStates.Invisible;
+        }
 
         public bool CheckIsShowing(string key)
         {

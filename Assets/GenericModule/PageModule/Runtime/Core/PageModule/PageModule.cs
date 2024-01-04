@@ -61,6 +61,9 @@ namespace CizaPageModule
 
         public bool CheckIsVisible(string key) =>
             _pageContainer.CheckIsVisible(key);
+        
+        public bool CheckIsInvisible(string key) =>
+            _pageContainer.CheckIsInvisible(key);
 
         public bool CheckIsShowing(string key) =>
             _pageContainer.CheckIsShowing(key);

@@ -17,7 +17,7 @@ namespace CizaAudioModule
 
         public string[] LoadedSfxDataIds => _optionSfxController.LoadedSfxDataIds;
         public bool CanPlaySfx => _optionSfxController.IsEnable;
-        public bool CheckIsEnable(int playerIndex) => _optionSfxController.CheckIsEnable(playerIndex);
+        public bool CheckCanPlaySfx(int playerIndex) => _optionSfxController.CheckIsEnable(playerIndex);
 
 
         public MenuAudioController(IMenuAudioControllerConfig menuAudioControllerConfig, IAudioPlayer audioPlayer)
@@ -58,11 +58,28 @@ namespace CizaAudioModule
 
         #region OptionSfx
 
-        public void EnableCanPlayOptionSfx() =>
+        public void EnableCanPlaySfx() =>
             _optionSfxController.Enable();
 
-        public void DisableCanPlayOptionSfx() =>
+        public void DisableCanPlaySfx() =>
             _optionSfxController.Disable();
+
+
+        public void EnableCanPlaySfx(int playerIndex) =>
+            _optionSfxController.Enable(playerIndex);
+
+        public void DisableCanPlaySfx(int playerIndex) =>
+            _optionSfxController.Disable(playerIndex);
+
+
+        public void ResetPlayerCount(int playerCount) =>
+            _optionSfxController.ResetPlayerCount(playerCount);
+
+        public void AddPlayer(int playerIndex) =>
+            _optionSfxController.AddPlayer(playerIndex);
+
+        public void RemovePlayer(int playerIndex) =>
+            _optionSfxController.RemovePlayer(playerIndex);
 
 
         public void PlaySelectSfx(int playerIndex) =>

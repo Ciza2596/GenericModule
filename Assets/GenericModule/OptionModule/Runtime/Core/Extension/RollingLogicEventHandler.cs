@@ -29,7 +29,6 @@ namespace CizaOptionModule
             _optionModule.OnAddPlayer += _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer += _rollingLogic.RemovePlayer;
 
-            _rollingLogic.OnFirstMovementAsync += OnOptionModuleFirstMovementAsync;
             _rollingLogic.OnMovementAsync += OnOptionModuleMovementAsync;
 
             _rollingLogic.ResetPlayerCount(_optionModule.PlayerCount);
@@ -41,7 +40,6 @@ namespace CizaOptionModule
             _optionModule.OnAddPlayer -= _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer -= _rollingLogic.RemovePlayer;
 
-            _rollingLogic.OnFirstMovementAsync -= OnOptionModuleFirstMovementAsync;
             _rollingLogic.OnMovementAsync -= OnOptionModuleMovementAsync;
         }
 
@@ -59,14 +57,13 @@ namespace CizaOptionModule
             _rollingLogic.TurnOff(playerIndex);
 
 
-        private UniTask OnOptionModuleFirstMovementAsync(int playerIndex, Vector2 direction) =>
-            _optionModule.MovementAsync(playerIndex, direction);
-
-        private UniTask OnOptionModuleMovementAsync(int playerIndex, Vector2 direction)
+        private UniTask OnOptionModuleMovementAsync(int playerIndex, bool isFirst, Vector2 direction)
         {
-            if (IsRollingHorizontal && IsRollingVertical)
+            if (isFirst)
                 return _optionModule.MovementAsync(playerIndex, direction);
 
+            if (IsRollingHorizontal && IsRollingVertical)
+                return _optionModule.MovementAsync(playerIndex, direction);
 
             if (IsRollingHorizontal)
                 return _optionModule.HorizontalMovementAsync(playerIndex, direction);

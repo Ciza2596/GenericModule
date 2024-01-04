@@ -65,12 +65,37 @@ namespace CizaAudioModule
             _optionSfxController.Disable();
 
 
-        public void EnableCanPlaySfx(int playerIndex) =>
-            _optionSfxController.Enable(playerIndex);
+        public void PlaySelectSfx() =>
+            _optionSfxController.PlaySelectSfx();
 
-        public void DisableCanPlaySfx(int playerIndex) =>
-            _optionSfxController.Disable(playerIndex);
 
+        public void PlayConfirmSfx() =>
+            _optionSfxController.PlayConfirmSfx();
+
+        public void PlayCantConfirmSfx() =>
+            _optionSfxController.PlayCantConfirmSfx();
+
+
+        public void PlayCancelSfx() =>
+            _optionSfxController.PlayCancelSfx();
+
+
+        public void PlaySettingsShowSfx() =>
+            _optionSfxController.PlaySettingsShowSfx();
+
+        public void PlaySettingsHideSfx() =>
+            _optionSfxController.PlaySettingsHideSfx();
+
+
+        public void PlayDialogContinueSfx() =>
+            _optionSfxController.PlayDialogContinueSfx();
+
+        public void PlayDialogFunctionSfx() =>
+            _optionSfxController.PlayDialogFunctionSfx();
+
+        #endregion
+
+        #region OptionSfx with player
 
         public void ResetPlayerCount(int playerCount) =>
             _optionSfxController.ResetPlayerCount(playerCount);
@@ -82,15 +107,23 @@ namespace CizaAudioModule
             _optionSfxController.RemovePlayer(playerIndex);
 
 
+        public void EnableCanPlaySfx(int playerIndex) =>
+            _optionSfxController.Enable(playerIndex);
+
+        public void DisableCanPlaySfx(int playerIndex) =>
+            _optionSfxController.Disable(playerIndex);
+
+
         public void PlaySelectSfx(int playerIndex) =>
             _optionSfxController.PlaySelectSfx(playerIndex);
+
 
         public void PlayConfirmSfx(int playerIndex) =>
             _optionSfxController.PlayConfirmSfx(playerIndex);
 
-
         public void PlayCantConfirmSfx(int playerIndex) =>
             _optionSfxController.PlayCantConfirmSfx(playerIndex);
+
 
         public void PlayCancelSfx(int playerIndex) =>
             _optionSfxController.PlayCancelSfx(playerIndex);

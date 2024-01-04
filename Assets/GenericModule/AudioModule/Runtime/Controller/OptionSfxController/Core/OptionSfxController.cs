@@ -22,13 +22,14 @@ namespace CizaAudioModule
         private readonly Dictionary<int, Player> _playerMapByIndex = new Dictionary<int, Player>();
         private readonly List<string> _loadedSfxDataIds = new List<string>();
 
+        private const int DefaultPlayerIndex = 0;
+
         public string[] LoadedSfxDataIds => _loadedSfxDataIds.ToHashSet().ToArray();
 
         public bool IsEnable { get; private set; }
 
         public bool CheckIsEnable(int playerIndex) =>
-            IsEnable && _playerMapByIndex.TryGetValue(playerIndex, out var player) && player.IsEnable;
-
+            CheckIsEnable(playerIndex, false);
 
         public OptionSfxController(IOptionSfxControllerConfig config, IAudioPlayer audioPlayer)
         {
@@ -83,21 +84,36 @@ namespace CizaAudioModule
         public void Disable() =>
             IsEnable = false;
 
-        public void Enable(int playerIndex)
-        {
-            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
-                return;
+        public void PlaySelectSfx() =>
+            PlaySelectSfx(DefaultPlayerIndex, true);
 
-            player.Enable();
-        }
 
-        public void Disable(int playerIndex)
-        {
-            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
-                return;
+        public void PlayConfirmSfx() =>
+            PlayConfirmSfx(DefaultPlayerIndex, true);
 
-            player.Disable();
-        }
+        public void PlayCantConfirmSfx() =>
+            PlayCantConfirmSfx(DefaultPlayerIndex, true);
+
+
+        public void PlayCancelSfx() =>
+            PlayCancelSfx(DefaultPlayerIndex, true);
+
+
+        public void PlaySettingsShowSfx() =>
+            PlaySettingsShowSfx(DefaultPlayerIndex, true);
+
+        public void PlaySettingsHideSfx() =>
+            PlaySettingsHideSfx(DefaultPlayerIndex, true);
+
+
+        public void PlayDialogContinueSfx() =>
+            PlayDialogContinueSfx(DefaultPlayerIndex, true);
+
+
+        public void PlayDialogFunctionSfx() =>
+            PlayDialogFunctionSfx(DefaultPlayerIndex, true);
+
+        #region Player
 
         public void ResetPlayerCount(int playerCount)
         {
@@ -123,63 +139,118 @@ namespace CizaAudioModule
             _playerMapByIndex.Remove(playerIndex);
         }
 
-        public void PlaySelectSfx(int playerIndex)
+
+        public void Enable(int playerIndex)
+        {
+            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+                return;
+
+            player.Enable();
+        }
+
+        public void Disable(int playerIndex)
+        {
+            if (!_playerMapByIndex.TryGetValue(playerIndex, out var player))
+                return;
+
+            player.Disable();
+        }
+
+        public void PlaySelectSfx(int playerIndex) =>
+            PlaySelectSfx(playerIndex, false);
+
+
+        public void PlayConfirmSfx(int playerIndex) =>
+            PlayConfirmSfx(playerIndex, false);
+
+        public void PlayCantConfirmSfx(int playerIndex) =>
+            PlayCantConfirmSfx(playerIndex, false);
+
+
+        public void PlayCancelSfx(int playerIndex) =>
+            PlayCancelSfx(playerIndex, false);
+
+
+        public void PlaySettingsShowSfx(int playerIndex) =>
+            PlaySettingsShowSfx(playerIndex, false);
+
+        public void PlaySettingsHideSfx(int playerIndex) =>
+            PlaySettingsHideSfx(playerIndex, false);
+
+
+        public void PlayDialogContinueSfx(int playerIndex) =>
+            PlayDialogContinueSfx(playerIndex, false);
+
+
+        public void PlayDialogFunctionSfx(int playerIndex) =>
+            PlayDialogFunctionSfx(playerIndex, false);
+
+        #endregion
+
+        private void PlaySelectSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetSelectSfxDataId(out var selectSfxDataId))
-                PlaySfx(playerIndex, selectSfxDataId, "PlaySelectSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, selectSfxDataId, "PlaySelectSfx");
         }
 
 
-        public void PlayConfirmSfx(int playerIndex)
+        private void PlayConfirmSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetConfirmSfxDataId(out var confirmSfxDataId))
-                PlaySfx(playerIndex, confirmSfxDataId, "PlayConfirmSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, confirmSfxDataId, "PlayConfirmSfx");
         }
 
-        public void PlayCantConfirmSfx(int playerIndex)
+        private void PlayCantConfirmSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetCantConfirmSfxDataId(out var cantConfirmSfxDataId))
-                PlaySfx(playerIndex, cantConfirmSfxDataId, "CantConfirmSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, cantConfirmSfxDataId, "CantConfirmSfx");
         }
 
 
-        public void PlayCancelSfx(int playerIndex)
+        private void PlayCancelSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetCancelSfxDataId(out var cancelSfxDataId))
-                PlaySfx(playerIndex, cancelSfxDataId, "PlayCancelSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, cancelSfxDataId, "PlayCancelSfx");
         }
 
 
-        public void PlaySettingsShowSfx(int playerIndex)
+        private void PlaySettingsShowSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetSettingsShowSfxDataId(out var settingsShowSfxDataId))
-                PlaySfx(playerIndex, settingsShowSfxDataId, "PlaySettingsShowSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, settingsShowSfxDataId, "PlaySettingsShowSfx");
         }
 
-        public void PlaySettingsHideSfx(int playerIndex)
+        private void PlaySettingsHideSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetSettingsHideSfxDataId(out var settingsHideSfxDataId))
-                PlaySfx(playerIndex, settingsHideSfxDataId, "PlaySettingsHideSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, settingsHideSfxDataId, "PlaySettingsHideSfx");
         }
 
-        public void PlayDialogContinueSfx(int playerIndex)
+        private void PlayDialogContinueSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetDialogContinueSfxDataId(out var dialogContinueSfxDataId))
-                PlaySfx(playerIndex, dialogContinueSfxDataId, "PlayDialogContinueSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, dialogContinueSfxDataId, "PlayDialogContinueSfx");
         }
 
-        public void PlayDialogFunctionSfx(int playerIndex)
+        private void PlayDialogFunctionSfx(int playerIndex, bool isIgnorePlayer)
         {
             if (_config.TryGetDialogFunctionSfxDataId(out var dialogFunctionSfxDataId))
-                PlaySfx(playerIndex, dialogFunctionSfxDataId, "PlayDialogFunctionSfx");
+                PlaySfx(playerIndex, isIgnorePlayer, dialogFunctionSfxDataId, "PlayDialogFunctionSfx");
         }
 
-        private async void PlaySfx(int playerIndex, string sfxDataId, string methodName)
+        private async void PlaySfx(int playerIndex, bool isIgnorePlayer, string sfxDataId, string methodName)
         {
-            if (CheckIsEnable(playerIndex) && CheckIsLoadedSfx(sfxDataId, methodName))
+            if (CheckIsEnable(playerIndex, isIgnorePlayer) && CheckIsLoadedSfx(sfxDataId, methodName))
                 await _audioPlayer.PlaySfxAsync(sfxDataId);
         }
 
+        private bool CheckIsEnable(int playerIndex, bool isIgnorePlayer)
+        {
+            if (isIgnorePlayer)
+                return IsEnable;
+
+            return IsEnable && _playerMapByIndex.TryGetValue(playerIndex, out var player) && player.IsEnable;
+        }
 
         private bool CheckIsLoadedSfx(string sfxDataId, string methodName)
         {

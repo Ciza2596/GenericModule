@@ -2,7 +2,7 @@
   "name": "com.ciza.popupmodule",
   "displayName": "PopupModule",
   "description": "PopupModule.",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

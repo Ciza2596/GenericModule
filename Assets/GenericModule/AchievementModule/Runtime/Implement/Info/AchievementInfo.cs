@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace CizaAchievementModule
+namespace CizaAchievementModule.Implement
 {
     [Serializable]
     public class AchievementInfo : IAchievementInfo

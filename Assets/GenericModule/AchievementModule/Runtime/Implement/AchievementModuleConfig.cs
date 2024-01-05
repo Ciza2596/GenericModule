@@ -16,7 +16,6 @@ namespace CizaAchievementModule.Implement
         public Type StatType => typeof(Stat);
 
         public IStatInfo[] StatInfos => _statInfos != null ? _statInfos.Cast<IStatInfo>().ToArray() : Array.Empty<IStatInfo>();
-
         public IAchievementInfo[] AchievementInfos => _achievementInfos != null ? _achievementInfos.Cast<IAchievementInfo>().ToArray() : Array.Empty<IAchievementInfo>();
     }
 }

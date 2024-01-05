@@ -9,7 +9,8 @@ namespace CizaAchievementModule
     {
         private readonly IAchievementModuleConfig _config;
 
-        private readonly Dictionary<string, IStat> _statMapByDataId = new Dictionary<string, IStat>();
+        private readonly Dictionary<string, IStat> _statMapByStatDataId = new Dictionary<string, IStat>();
+        private readonly Dictionary<string, bool> _isUnlockedMapByAchievementDataId = new Dictionary<string, bool>();
 
         // AchievementDataId
         public event Action<string> OnAchievementUnlocked;
@@ -19,9 +20,9 @@ namespace CizaAchievementModule
 
         public bool IsInitialized => _isInitialized && !_isInitializing;
 
-        public bool TryGetStatReadModel(string dataId, out IStatReadModel statReadModel)
+        public bool TryGetStatReadModel(string statDataId, out IStatReadModel statReadModel)
         {
-            if (!_statMapByDataId.TryGetValue(dataId, out var stat))
+            if (!_statMapByStatDataId.TryGetValue(statDataId, out var stat))
             {
                 statReadModel = null;
                 return false;
@@ -30,6 +31,9 @@ namespace CizaAchievementModule
             statReadModel = stat;
             return true;
         }
+
+        public bool TryGetIsAchievementUnlocked(string achievementDataId, out bool isUnlocked) =>
+            _isUnlockedMapByAchievementDataId.TryGetValue(achievementDataId, out isUnlocked);
 
         public AchievementModule(IAchievementModuleConfig achievementModuleConfig) =>
             _config = achievementModuleConfig;
@@ -46,8 +50,14 @@ namespace CizaAchievementModule
             {
                 var stat = Activator.CreateInstance(_config.StatType, statInfo.DataId, statInfo.Min, statInfo.Max) as IStat;
                 Assert.IsNotNull(stat, "[AchievementModule::Initialize] Stat is null. Please check config statType.");
-                Assert.IsFalse(_statMapByDataId.ContainsKey(stat.DataId), $"[AchievementModule::Initialize] Stat: {stat.DataId} is already created.");
-                _statMapByDataId.Add(statInfo.DataId, stat);
+                Assert.IsFalse(_statMapByStatDataId.ContainsKey(stat.DataId), $"[AchievementModule::Initialize] Stat: {stat.DataId} is already created.");
+                _statMapByStatDataId.Add(statInfo.DataId, stat);
+            }
+
+            foreach (var achievementInfo in _config.AchievementInfos)
+            {
+                Assert.IsFalse(_isUnlockedMapByAchievementDataId.ContainsKey(achievementInfo.DataId), $"[AchievementModule::Initialize] IsUnlocked: {achievementInfo.DataId} is already created.");
+                _isUnlockedMapByAchievementDataId.Add(achievementInfo.DataId, false);
             }
 
             _isInitializing = false;
@@ -58,20 +68,17 @@ namespace CizaAchievementModule
             if (!_isInitialized)
                 return;
 
-            _statMapByDataId.Clear();
+            _statMapByStatDataId.Clear();
             _isInitialized = false;
         }
 
         // StatDataId, Current 
-        public Dictionary<string, ExportedStat> Export()
+        public ExportedAchievement Export()
         {
-            var exportedStatMapByDataId = new Dictionary<string, ExportedStat>();
             if (!IsInitialized)
-                return exportedStatMapByDataId;
+                return new ExportedAchievement();
 
-            foreach (var statReadModel in _statMapByDataId.Values.ToArray())
-                exportedStatMapByDataId.Add(statReadModel.DataId, new ExportedStat(statReadModel.DataId, statReadModel.Current, statReadModel.IsUnlocked));
-            return exportedStatMapByDataId;
+            return new ExportedAchievement(CreateExportedStatMapByDataId(), CreateExportedIsUnlockedMapByAchievementDataId());
         }
 
         public void Import(Dictionary<string, ExportedStat> exportedStatMapByDataId)
@@ -81,43 +88,65 @@ namespace CizaAchievementModule
 
             foreach (var exportedStat in exportedStatMapByDataId.Values.ToArray())
             {
-                if (!_statMapByDataId.TryGetValue(exportedStat.DataId, out var stat))
+                if (!_statMapByStatDataId.TryGetValue(exportedStat.DataId, out var stat))
                     continue;
 
                 stat.SetCurrent(exportedStat.Current);
-                stat.SetIsUnlocked(exportedStat.IsUnlocked);
             }
         }
 
         public void SetStat(string statDataId, float value)
         {
-            if (!IsInitialized || !_statMapByDataId.TryGetValue(statDataId, out var stat))
+            if (!IsInitialized || !_statMapByStatDataId.TryGetValue(statDataId, out var stat))
                 return;
 
             stat.SetCurrent(value);
 
-            if (CheckIsFirstUnlocked(stat, out var achievementDataId))
-                OnAchievementUnlocked?.Invoke(achievementDataId);
+            CheckAnyIsAchievementUnlocked();
         }
 
         public void AddStat(string statDataId, float value)
         {
-            if (!IsInitialized || !_statMapByDataId.TryGetValue(statDataId, out var stat))
+            if (!IsInitialized || !_statMapByStatDataId.TryGetValue(statDataId, out var stat))
                 return;
 
             SetStat(stat.DataId, stat.Current + value);
         }
 
-        private bool CheckIsFirstUnlocked(IStat stat, out string achievementDataId)
+        private void CheckAnyIsAchievementUnlocked()
         {
-            if (stat.IsUnlocked)
-            {
-                achievementDataId = string.Empty;
-                return false;
-            }
+            foreach (var achievementDataId in _isUnlockedMapByAchievementDataId.Keys.ToArray())
+                CheckIsAchievementUnlocked(achievementDataId);
+        }
 
-            achievementDataId = string.Empty;
+        private void CheckIsAchievementUnlocked(string achievementDataId)
+        {
+            if (CheckIsFirstUnlocked(achievementDataId))
+                OnAchievementUnlocked?.Invoke(achievementDataId);
+        }
+
+        private bool CheckIsFirstUnlocked(string achievementDataId)
+        {
+            // if (stat.IsUnlocked)
+            // {
+            //     achievementDataId = string.Empty;
+            //     return false;
+            // }
+
+            // achievementDataId = string.Empty;
             return true;
         }
+
+
+        private Dictionary<string, ExportedStat> CreateExportedStatMapByDataId()
+        {
+            var exportedStatMapByDataId = new Dictionary<string, ExportedStat>();
+            foreach (var statReadModel in _statMapByStatDataId.Values.ToArray())
+                exportedStatMapByDataId.Add(statReadModel.DataId, new ExportedStat(statReadModel.DataId, statReadModel.Current));
+            return exportedStatMapByDataId;
+        }
+
+        private Dictionary<string, bool> CreateExportedIsUnlockedMapByAchievementDataId() =>
+            _isUnlockedMapByAchievementDataId.ToDictionary(pair => pair.Key, pair => pair.Value);
     }
 }

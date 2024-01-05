@@ -13,8 +13,6 @@ namespace CizaAchievementModule
 
         public float Current { get; private set; }
 
-        public bool IsUnlocked { get; private set; }
-
         [Preserve]
         public Stat(string dataId, float min, float max)
         {
@@ -26,8 +24,5 @@ namespace CizaAchievementModule
 
         public void SetCurrent(float value) =>
             Current = value;
-
-        public void SetIsUnlocked(bool isUnlocked) =>
-            IsUnlocked = isUnlocked;
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace CizaAchievementModule
+namespace CizaAchievementModule.Implement
 {
     [Serializable]
     public class ConditionInfo : IConditionInfo

@@ -8,8 +8,5 @@ namespace CizaAchievementModule
         float Max { get; }
 
         float Current { get; }
-
-
-        bool IsUnlocked { get; }
     }
 }

@@ -7,6 +7,7 @@ namespace CizaAchievementModule
     {
         Type StatType { get; }
 
+
         IStatInfo[] StatInfos { get; }
 
         IAchievementInfo[] AchievementInfos { get; }

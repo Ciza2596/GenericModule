@@ -81,7 +81,7 @@ namespace CizaAchievementModule
             return new ExportedAchievement(CreateExportedStatMapByDataId(), CreateExportedIsUnlockedMapByAchievementDataId());
         }
 
-        public void Import(ExportedAchievement exportedAchievement)
+        public void Import(IExportedAchievement exportedAchievement)
         {
             if (!IsInitialized)
                 return;

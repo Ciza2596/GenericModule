@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 namespace CizaAchievementModule
 {
     [Serializable]
-    public class ExportedAchievement
+    public class ExportedAchievement: IExportedAchievement
     {
         [SerializeField]
         private Dictionary<string, ExportedStat> _exportedStatMapByStatDataId;

@@ -81,17 +81,25 @@ namespace CizaAchievementModule
             return new ExportedAchievement(CreateExportedStatMapByDataId(), CreateExportedIsUnlockedMapByAchievementDataId());
         }
 
-        public void Import(Dictionary<string, ExportedStat> exportedStatMapByDataId)
+        public void Import(ExportedAchievement exportedAchievement)
         {
             if (!IsInitialized)
                 return;
 
-            foreach (var exportedStat in exportedStatMapByDataId.Values.ToArray())
+            foreach (var exportedStat in exportedAchievement.ExportedStatMapByStatDataId.Values.ToArray())
             {
                 if (!_statMapByStatDataId.TryGetValue(exportedStat.DataId, out var stat))
                     continue;
 
                 stat.SetCurrent(exportedStat.Current);
+            }
+
+            foreach (var pair in exportedAchievement.IsUnlockedMapByAchievementDataId)
+            {
+                if (!_isUnlockedMapByAchievementDataId.TryGetValue(pair.Key, out var isUnlocked))
+                    continue;
+
+                _isUnlockedMapByAchievementDataId[pair.Key] = isUnlocked;
             }
         }
 
@@ -141,8 +149,8 @@ namespace CizaAchievementModule
         private Dictionary<string, ExportedStat> CreateExportedStatMapByDataId()
         {
             var exportedStatMapByDataId = new Dictionary<string, ExportedStat>();
-            foreach (var statReadModel in _statMapByStatDataId.Values.ToArray())
-                exportedStatMapByDataId.Add(statReadModel.DataId, new ExportedStat(statReadModel.DataId, statReadModel.Current));
+            foreach (var stat in _statMapByStatDataId.Values.ToArray())
+                exportedStatMapByDataId.Add(stat.DataId, new ExportedStat(stat.DataId, stat.Current));
             return exportedStatMapByDataId;
         }
 

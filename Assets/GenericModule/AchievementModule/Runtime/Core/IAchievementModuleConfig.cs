@@ -1,12 +1,14 @@
-using System.Collections.Generic;
+using System;
+
 
 namespace CizaAchievementModule
 {
     public interface IAchievementModuleConfig
     {
-        string[] DefinedDataIds { get; }
+        Type StatType { get; }
 
+        IStatInfo[] StatInfos { get; }
 
-        IDictionary<string, IAchievementInfo> CreateAchievementInfoMapByAchievementDataId();
+        IAchievementInfo[] AchievementInfos { get; }
     }
 }

@@ -5,5 +5,6 @@ namespace CizaAchievementModule
         bool IsEnable { get; }
 
         string StatDataId { get; }
+        float Value { get; }
     }
 }

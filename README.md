@@ -15,6 +15,7 @@ module | Test | Samples |
 [TextModule](#textmodule) | ✔️ | ❌ |
 [InputModule](#inputModule) | ✔️ | ❌ |
 [PopupModule](#popupmodule) | ✔️ | ❌ |
+[AchievementModule](#achievementModule) | ✔️ | ❌ |
 [OptionModule](#optionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
@@ -382,6 +383,15 @@ https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
 
 ### Manual:
 PopupModule manual.
+
+
+## AchievementModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AchievementModule
+```
+
+### Manual:
+AchievementModule manual.
 
 
 ## OptionModule

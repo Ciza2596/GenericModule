@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace CizaAchievementModule
@@ -23,6 +24,6 @@ namespace CizaAchievementModule
         }
 
         public void SetCurrent(float value) =>
-            Current = value;
+            Current = Mathf.Clamp(value, Min, Max);
     }
 }

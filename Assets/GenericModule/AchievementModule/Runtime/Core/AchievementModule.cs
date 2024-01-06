@@ -7,18 +7,24 @@ namespace CizaAchievementModule
 {
     public class AchievementModule
     {
+        public const float True = 1;
+        public const float False = 0;
+
         private readonly IAchievementModuleConfig _config;
 
         private readonly Dictionary<string, IStat> _statMapByStatDataId = new Dictionary<string, IStat>();
         private readonly Dictionary<string, bool> _isUnlockedMapByAchievementDataId = new Dictionary<string, bool>();
 
         // AchievementDataId
-        public event Action<string> OnAchievementUnlocked;
+        public event Action<string> OnUnlocked;
 
         private bool _isInitializing;
         private bool _isInitialized;
 
         public bool IsInitialized => _isInitialized && !_isInitializing;
+
+        public string[] AllStatDataIds => _statMapByStatDataId.Keys.ToArray();
+        public string[] AllAchievementDataIds => _isUnlockedMapByAchievementDataId.Keys.ToArray();
 
         public bool TryGetStatReadModel(string statDataId, out IStatReadModel statReadModel)
         {
@@ -96,10 +102,10 @@ namespace CizaAchievementModule
 
             foreach (var pair in exportedAchievement.IsUnlockedMapByAchievementDataId)
             {
-                if (!_isUnlockedMapByAchievementDataId.TryGetValue(pair.Key, out var isUnlocked))
+                if (!_isUnlockedMapByAchievementDataId.ContainsKey(pair.Key))
                     continue;
 
-                _isUnlockedMapByAchievementDataId[pair.Key] = isUnlocked;
+                _isUnlockedMapByAchievementDataId[pair.Key] = pair.Value;
             }
         }
 
@@ -121,6 +127,12 @@ namespace CizaAchievementModule
             SetStat(stat.DataId, stat.Current + value);
         }
 
+        public void SetStatBeTrue(string statDataId) =>
+            SetStat(statDataId, True);
+
+        public void SetStatBeFalse(string statDataId) =>
+            SetStat(statDataId, False);
+
         private void CheckAnyIsAchievementUnlocked()
         {
             foreach (var achievementDataId in _isUnlockedMapByAchievementDataId.Keys.ToArray())
@@ -130,19 +142,44 @@ namespace CizaAchievementModule
         private void CheckIsAchievementUnlocked(string achievementDataId)
         {
             if (CheckIsFirstUnlocked(achievementDataId))
-                OnAchievementUnlocked?.Invoke(achievementDataId);
+            {
+                _isUnlockedMapByAchievementDataId[achievementDataId] = true;
+                OnUnlocked?.Invoke(achievementDataId);
+            }
         }
 
         private bool CheckIsFirstUnlocked(string achievementDataId)
         {
-            // if (stat.IsUnlocked)
-            // {
-            //     achievementDataId = string.Empty;
-            //     return false;
-            // }
+            if (!_isUnlockedMapByAchievementDataId.TryGetValue(achievementDataId, out var isUnlocked) || isUnlocked)
+                return false;
 
-            // achievementDataId = string.Empty;
-            return true;
+            foreach (var achievementInfo in _config.AchievementInfos)
+            {
+                foreach (var ruleInfo in achievementInfo.RuleInfos)
+                {
+                    if (!ruleInfo.IsEnable)
+                        continue;
+
+                    var isConditionCompletedCount = 0;
+                    var isConditionEnableCount = 0;
+
+                    foreach (var conditionInfo in ruleInfo.ConditionInfos)
+                    {
+                        if (!conditionInfo.IsEnable)
+                            continue;
+
+                        isConditionEnableCount++;
+
+                        if (TryGetStatReadModel(conditionInfo.StatDataId, out var statReadModel) && statReadModel.Current >= conditionInfo.Value)
+                            isConditionCompletedCount++;
+                    }
+
+                    if (isConditionCompletedCount == isConditionEnableCount)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
 

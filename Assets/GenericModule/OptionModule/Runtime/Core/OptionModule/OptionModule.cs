@@ -18,6 +18,8 @@ namespace CizaOptionModule
 
         public const int NotInitialPageIndex = -1;
 
+        public const int PercentRate = 100;
+
         // PlayerIndex
         public event Action<int> OnAddPlayer;
 
@@ -60,8 +62,8 @@ namespace CizaOptionModule
                     if (option.IsUnlock)
                         unlockedOptions.Add(option);
 
-                var unlockedOptionPercent = (float)unlockedOptions.Count / (float)allOptions.Length * 100;
-                return (float)Math.Round(unlockedOptionPercent, 2);
+                var unlockedOptionPercent = (float)unlockedOptions.Count / (float)allOptions.Length * PercentRate;
+                return (float)Math.Round(Mathf.Clamp(unlockedOptionPercent, 0, PercentRate), 2);
             }
         }
 

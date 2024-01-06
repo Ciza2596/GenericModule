@@ -47,6 +47,24 @@ namespace CizaOptionModule
 
         public bool CanConfirm { get; private set; } = true;
 
+        public float UnlockedOptionPercent
+        {
+            get
+            {
+                var allOptions = GetAllOptions<Option>();
+                if (allOptions.Length <= 0)
+                    return 0;
+
+                var unlockedOptions = new HashSet<Option>();
+                foreach (var option in allOptions)
+                    if (option.IsUnlock)
+                        unlockedOptions.Add(option);
+
+                var unlockedOptionPercent = (float)unlockedOptions.Count / (float)allOptions.Length * 100;
+                return (float)Math.Round(unlockedOptionPercent, 2);
+            }
+        }
+
         public bool CheckCanSelect(int playerIndex)
         {
             if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player))
@@ -122,7 +140,7 @@ namespace CizaOptionModule
 
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {
-            var options = new List<TOption>();
+            var options = new HashSet<TOption>();
             foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
                 foreach (var option in optionModulePage.GetAllOptions())
                     if (option is TOption tOption)
@@ -133,7 +151,7 @@ namespace CizaOptionModule
 
         public TSupOption[] GetAllSupOptions<TSupOption>() where TSupOption : class
         {
-            var supOptions = new List<TSupOption>();
+            var supOptions = new HashSet<TSupOption>();
             foreach (var option in GetAllOptions<Option>())
                 if (option.TryGetComponent<TSupOption>(out var supOption))
                     supOptions.Add(supOption);

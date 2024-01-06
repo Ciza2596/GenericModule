@@ -70,7 +70,10 @@ namespace CizaOptionModule
 
 
             if (IsRollingVertical)
-                return _optionModule.VerticalMovementAsync(playerIndex, direction);
+            {
+                _optionModule.VerticalMovement(playerIndex, direction);
+                return UniTask.CompletedTask;
+            }
 
             return UniTask.CompletedTask;
         }

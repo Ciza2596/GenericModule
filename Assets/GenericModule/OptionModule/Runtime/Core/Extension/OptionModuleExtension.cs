@@ -74,7 +74,7 @@ namespace CizaOptionModule
             }
         }
 
-        public static async UniTask VerticalMovementAsync(this OptionModule optionModule, int playerIndex, Vector2 direction)
+        public static void VerticalMovement(this OptionModule optionModule, int playerIndex, Vector2 direction)
         {
             if (optionModule.IsChangingPage)
                 return;

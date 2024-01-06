@@ -89,7 +89,7 @@ namespace CizaSaveLoadModule.Implement
 
 		public abstract void EndWriteCollectionItem(int index);
 
-		public void Write(object value, DataType.BaseDataType dataType)
+		public void Write(object value, BaseDataType dataType)
 		{
 			// Note that we have to check UnityEngine.Object types for null by casting it first, otherwise
 			// it will always return false.

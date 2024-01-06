@@ -102,8 +102,43 @@ public class CollectionTypeTest : BaseTypeTest
         Check_Value_Match(expectedValueValues, loadDataValues);
     }
 
+
     [Test]
-    public void _05_Save_HashSet_Type()
+    public void _05_Save_Dictionary_Array_Type()
+    {
+        //arrange
+        var dictionary = new Dictionary<string, int>();
+        dictionary.Add("Key_1", 1);
+        dictionary.Add("Key_2", 2);
+        dictionary.Add("Key_3", 3);
+
+        var dictionary1 = new Dictionary<string, int>();
+        dictionary1.Add("Key_4", 4);
+        dictionary1.Add("Key_5", 5);
+        dictionary1.Add("Key_6", 6);
+
+        var saveValue = new Dictionary<string, int>[] { dictionary, dictionary1 };
+        var expectedValue = saveValue;
+
+
+        //act
+        Save_Data(saveValue);
+
+
+        //assert
+        var loadData = GetAndCheck_LoadData<Dictionary<string, int>[]>();
+
+        var loadDataKeys = loadData[0].Keys.ToArray();
+        var expectedValueKeys = expectedValue[0].Keys.ToArray();
+        Check_Value_Match(expectedValueKeys, loadDataKeys);
+
+        var loadDataValues = loadData[1].Values.ToArray();
+        var expectedValueValues = expectedValue[1].Values.ToArray();
+        Check_Value_Match(expectedValueValues, loadDataValues);
+    }
+
+    [Test]
+    public void _06_Save_HashSet_Type()
     {
         //arrange
         var saveValue = new HashSet<int>() { 1, 2, 3 };
@@ -120,7 +155,7 @@ public class CollectionTypeTest : BaseTypeTest
     }
 
     [Test]
-    public void _06_Save_List_Type()
+    public void _07_Save_List_Type()
     {
         //arrange
         var saveValue = new List<int>() { 1, 2, 3 };
@@ -137,14 +172,14 @@ public class CollectionTypeTest : BaseTypeTest
     }
 
     [Test]
-    public void _07_Save_Queue_Type()
+    public void _08_Save_Queue_Type()
     {
         //arrange
         var saveValue = new Queue<int>();
         saveValue.Enqueue(1);
         saveValue.Enqueue(2);
         saveValue.Enqueue(3);
-        
+
         var expectedValue = saveValue;
 
 
@@ -155,18 +190,17 @@ public class CollectionTypeTest : BaseTypeTest
         //assert
         var loadData = GetAndCheck_LoadData<Queue<int>>();
         Check_Value_Match(expectedValue.ToArray(), loadData.ToArray());
-        
     }
 
     [Test]
-    public void _08_Save_Stack_Type()
+    public void _09_Save_Stack_Type()
     {
         //arrange
         var saveValue = new Stack<int>();
         saveValue.Push(1);
         saveValue.Push(2);
         saveValue.Push(3);
-        
+
         var expectedValue = saveValue;
 
 
@@ -177,7 +211,6 @@ public class CollectionTypeTest : BaseTypeTest
         //assert
         var loadData = GetAndCheck_LoadData<Stack<int>>();
         Check_Value_Match(expectedValue.ToArray(), loadData.ToArray());
-
     }
 
     private void Check_Value_Match<T>(T[] exceptedValues, T[] values)

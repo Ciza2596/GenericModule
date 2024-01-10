@@ -452,16 +452,9 @@ namespace CizaInputModule
             return true;
         }
 
-        private InputActionAsset CloneInputActionAsset()
-        {
-            var inputActionAsset = ScriptableObject.CreateInstance<InputActionAsset>();
+        private InputActionAsset CloneInputActionAsset() =>
+            InputActionAsset.FromJson(GetPlayerInputPrefab().actions.ToJson());
 
-            var inputActionAssetPrefab = GetPlayerInputPrefab().actions;
-            var json = JsonUtility.ToJson(inputActionAssetPrefab);
-            JsonUtility.FromJsonOverwrite(json, inputActionAsset);
-
-            return inputActionAsset;
-        }
 
         private PlayerInput GetPlayerInputPrefab() =>
             _inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();

@@ -348,7 +348,7 @@ namespace CizaInputModule
                 DestroyPlayerInput();
 
             _playerInput = Object.Instantiate(GetPlayerInputPrefab().gameObject, _root).GetComponent<PlayerInput>();
-            _playerInput.actions = CloneInputActionAsset();
+            _playerInput.actions = GetAndCloneInputActionAsset();
 
             if (IsEnableInput)
                 _playerInput.actions.Enable();
@@ -400,7 +400,7 @@ namespace CizaInputModule
             if (_playerInputManager.playerCount >= MaxPlayerCount)
                 _playerInputManager.DisableJoining();
 
-            playerInput.actions = CloneInputActionAsset();
+            playerInput.actions = GetAndCloneInputActionAsset();
             
             playerInput.actions.Disable();
             var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>
@@ -454,10 +454,9 @@ namespace CizaInputModule
             return true;
         }
 
-        private InputActionAsset CloneInputActionAsset() =>
+        private InputActionAsset GetAndCloneInputActionAsset() =>
             InputActionAsset.FromJson(GetPlayerInputPrefab().actions.ToJson());
-
-
+        
         private PlayerInput GetPlayerInputPrefab() =>
             _inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();
     }

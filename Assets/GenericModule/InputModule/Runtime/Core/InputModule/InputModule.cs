@@ -57,15 +57,15 @@ namespace CizaInputModule
 
         public int MaxPlayerCount { get; private set; }
 
-        public bool TryGetPlayerInput(int index, out PlayerInput playerInput)
+        public bool TryGetPlayerInput(int playerIndex, out PlayerInput playerInput)
         {
-            playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == index);
+            playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
             return playerInput != null;
         }
 
-        public bool TryGetCurrentControlScheme(int index, out string currentControlScheme)
+        public bool TryGetCurrentControlScheme(int playerIndex, out string currentControlScheme)
         {
-            var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == index);
+            var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
             if (playerInput == null)
             {
                 currentControlScheme = string.Empty;
@@ -76,8 +76,20 @@ namespace CizaInputModule
             return true;
         }
 
-        public bool GetIsInitialized(int index) =>
-            !_timerIdMapByIndex.ContainsKey(index);
+        public bool TryGetActionsJson(int playerIndex, out string json)
+        {
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
+            {
+                json = string.Empty;
+                return false;
+            }
+
+            json = playerInput.actions.SaveBindingOverridesAsJson();
+            return true;
+        }
+
+        public bool GetIsInitialized(int playerIndex) =>
+            !_timerIdMapByIndex.ContainsKey(playerIndex);
 
         public InputModule(IInputModuleConfig inputModuleConfig) =>
             _inputModuleConfig = inputModuleConfig;
@@ -152,6 +164,22 @@ namespace CizaInputModule
                 return;
 
             _eventSystem.SetActive(false);
+        }
+
+        public void RebindActionsByJson(int playerIndex, string json)
+        {
+            if (string.IsNullOrEmpty(json) || !TryGetPlayerInput(playerIndex, out var playerInput))
+                return;
+
+            playerInput.actions.LoadBindingOverridesFromJson(json);
+        }
+
+        public void ResetDefaultActions(int playerIndex)
+        {
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
+                return;
+
+            playerInput.actions.RemoveAllBindingOverrides();
         }
 
         public void SetMaxPlayerCount(int maxPlayerCount) =>
@@ -256,17 +284,17 @@ namespace CizaInputModule
                 HandleActionEvent(playerInput.playerIndex, handleEvent);
         }
 
-        public void HandleActionEvent(int index, Action<int, InputActionAsset> handleEvent)
+        public void HandleActionEvent(int playerIndex, Action<int, InputActionAsset> handleEvent)
         {
-            if (!TryGetPlayerInput(index, out var playerInput))
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
             handleEvent?.Invoke(playerInput.playerIndex, playerInput.actions);
         }
 
-        public void ResetHaptics(int index)
+        public void ResetHaptics(int playerIndex)
         {
-            if (!TryGetPlayerInput(index, out var playerInput))
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
             if (!playerInput.TryGetDevices<Gamepad>(out var gamepads))
@@ -276,9 +304,9 @@ namespace CizaInputModule
                 gamepad.ResetHaptics();
         }
 
-        public void SetMotorSpeeds(int index, float lowFrequency, float highFrequency)
+        public void SetMotorSpeeds(int playerIndex, float lowFrequency, float highFrequency)
         {
-            if (!TryGetPlayerInput(index, out var playerInput))
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
             if (!playerInput.TryGetDevices<Gamepad>(out var gamepads))
@@ -319,7 +347,8 @@ namespace CizaInputModule
             if (_playerInput != null)
                 DestroyPlayerInput();
 
-            _playerInput = Object.Instantiate(_inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab, _root).GetComponent<PlayerInput>();
+            _playerInput = Object.Instantiate(GetPlayerInputPrefab().gameObject, _root).GetComponent<PlayerInput>();
+            _playerInput.actions = CloneInputActionAsset();
 
             if (IsEnableInput)
                 _playerInput.actions.Enable();
@@ -352,9 +381,9 @@ namespace CizaInputModule
             Object.Destroy(playerInput.gameObject);
         }
 
-        private void SwitchActionMap(int index)
+        private void SwitchActionMap(int playerIndex)
         {
-            if (!TryGetPlayerInput(index, out var playerInput))
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
             playerInput.SwitchCurrentActionMap(CurrentActionMapDataId);
@@ -422,5 +451,19 @@ namespace CizaInputModule
             previousControlScheme = _previousControlScheme;
             return true;
         }
+
+        private InputActionAsset CloneInputActionAsset()
+        {
+            var inputActionAsset = ScriptableObject.CreateInstance<InputActionAsset>();
+
+            var inputActionAssetPrefab = GetPlayerInputPrefab().actions;
+            var json = JsonUtility.ToJson(inputActionAssetPrefab);
+            JsonUtility.FromJsonOverwrite(json, inputActionAsset);
+
+            return inputActionAsset;
+        }
+
+        private PlayerInput GetPlayerInputPrefab() =>
+            _inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();
     }
 }

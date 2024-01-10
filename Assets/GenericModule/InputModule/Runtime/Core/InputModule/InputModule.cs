@@ -400,6 +400,8 @@ namespace CizaInputModule
             if (_playerInputManager.playerCount >= MaxPlayerCount)
                 _playerInputManager.DisableJoining();
 
+            playerInput.actions = CloneInputActionAsset();
+            
             playerInput.actions.Disable();
             var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>
             {

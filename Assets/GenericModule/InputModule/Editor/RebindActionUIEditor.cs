@@ -100,10 +100,7 @@ namespace CizaInputModule.Editor
                     var asset = action.actionMap?.asset;
                     if (asset != null)
                     {
-                        var controlSchemes = string.Join(", ",
-                            binding.groups.Split(InputBinding.Separator)
-                                .Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
-
+                        var controlSchemes = string.Join(", ", binding.groups.Split(InputBinding.Separator).Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
                         displayString = $"{displayString} ({controlSchemes})";
                     }
                 }

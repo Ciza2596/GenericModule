@@ -22,9 +22,9 @@ namespace CizaInputModule
 
         // ActionMapDataId ex.Menu, ActionDataId ex.Movement, Path ex.<KeyBoard>/w
         public event Action<string, string, string> OnRebindActionStarted;
+        public event Action<string, string, string> OnRebindActionEnd;
 
         public event Action<string, string, string> OnRebindActionCompleted;
-
         public event Action<string, string, string> OnRebindActionCancel;
 
         public string ActionMapDataId
@@ -105,6 +105,10 @@ namespace CizaInputModule
                 PerformInteractiveRebind(action, bindingIndex);
         }
 
+        public void CancelRebind() =>
+            _rebindOperation?.Cancel();
+
+
         /// <summary>
         /// Return the action and binding index for the binding that is targeted by the component
         /// according to
@@ -142,12 +146,13 @@ namespace CizaInputModule
 
         private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
         {
-            _rebindOperation?.Cancel(); // Will null out m_RebindOperation.
+            CancelRebind(); // Will null out m_RebindOperation.
 
             void m_Clear()
             {
                 _rebindOperation?.Dispose();
                 _rebindOperation = null;
+                OnRebindActionEnd?.Invoke(ActionMapDataId, ActionDataId, Path);
             }
 
             // Configure the rebind.
@@ -176,7 +181,6 @@ namespace CizaInputModule
 
             foreach (var excludingPath in ExcludingPaths)
             {
-             
                 // _rebindOperation.WithControlsHavingToMatchPath()
                 _rebindOperation.WithControlsExcluding(excludingPath);
             }

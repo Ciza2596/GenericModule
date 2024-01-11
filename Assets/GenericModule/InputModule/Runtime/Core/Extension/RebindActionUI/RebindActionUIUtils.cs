@@ -6,6 +6,7 @@ namespace CizaInputModule
 {
     public class RebindActionUIUtils
     {
+        
         #region All
 
         public static string[] AllPaths()

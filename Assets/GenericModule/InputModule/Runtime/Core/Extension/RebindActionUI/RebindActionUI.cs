@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,8 @@ namespace CizaInputModule
 
 
         private string[] _excludingPaths;
+
+        private string _previousPath;
         private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
 
 
@@ -156,6 +159,9 @@ namespace CizaInputModule
             }
 
             // Configure the rebind.
+            var actionBinding = action.bindings[bindingIndex];
+            _previousPath = actionBinding.hasOverrides ? actionBinding.overridePath : actionBinding.path;
+
             _rebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .OnCancel(
                     operation =>
@@ -166,6 +172,9 @@ namespace CizaInputModule
                 .OnComplete(
                     operation =>
                     {
+                        if (action.actionMap.TryGetActionAndBindingIndex(Path, out var otherAction, out var otherBindingIndex))
+                            otherAction.ChangeBindingWithPath(_previousPath);
+
                         OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, Path);
                         m_Clear();
 

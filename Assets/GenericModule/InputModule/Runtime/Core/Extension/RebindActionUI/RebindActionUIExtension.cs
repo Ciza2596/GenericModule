@@ -1,9 +1,28 @@
 using System;
+using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
     public static class RebindActionUIExtension
     {
+        public static bool TryGetActionAndBindingIndex(this InputActionMap inputActionMap, string path, out InputAction inputAction, out int bindingIndex)
+        {
+            foreach (var action in inputActionMap.actions)
+                foreach (var binding in action.bindings)
+                {
+                    if (binding.path == path)
+                    {
+                        inputAction = action;
+                        bindingIndex = action.bindings.IndexOf(x => x.id == binding.id);
+                        return true;
+                    }
+                }
+
+            inputAction = null;
+            bindingIndex = -1;
+            return false;
+        }
+
         public static void RebindActionsByJson(this RebindActionUI[] rebindActionUIs, string json)
         {
             foreach (var rebindActionUI in rebindActionUIs)

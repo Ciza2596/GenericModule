@@ -2,7 +2,8 @@
     "name": "InputModule.Editor",
     "rootNamespace": "CizaInputModule.Editor",
     "references": [
-        "InputModule"
+        "InputModule",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"

@@ -2,6 +2,7 @@
     "name": "InputModule",
     "rootNamespace": "CizaInputModule",
     "references": [
+        "Unity.TextMeshPro",
         "TimerModule",
         "Unity.InputSystem"
     ],

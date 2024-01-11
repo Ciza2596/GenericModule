@@ -6,9 +6,27 @@
             "id": "3329d8c6-b9a9-4292-9995-c48d77f085cb",
             "actions": [
                 {
-                    "name": "Confirm",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "dfa1dd17-ddc6-459f-8e83-81e4bc8168be",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Special",
+                    "type": "Button",
+                    "id": "7a6e6365-943e-49f5-b3e1-9633aa7a35fe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Defeat",
+                    "type": "Button",
+                    "id": "c66ee635-9c76-40e1-abdd-fffb9ce08893",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -18,34 +36,34 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "bbb86822-bf8c-4098-b42d-5398ef671447",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "82ee606a-9c87-46ff-881b-9a8d7d6109a8",
-                    "path": "<XInputController>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Xbox",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5622897b-752c-4066-8e12-a6721e197648",
-                    "path": "<DualSenseGamepadHID>/buttonSouth",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": "PS5",
-                    "action": "Confirm",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4625aa22-8c8f-428e-973e-b13364796a41",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Special",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd9a46b3-cfaa-4b7d-a3e4-edc491509841",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Defeat",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

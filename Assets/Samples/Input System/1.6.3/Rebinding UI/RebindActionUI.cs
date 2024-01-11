@@ -264,6 +264,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+                .WithControlsExcluding("<Keyboard>/w")
                 .OnCancel(
                     operation =>
                     {

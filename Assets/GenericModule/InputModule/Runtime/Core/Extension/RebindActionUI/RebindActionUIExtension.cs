@@ -5,21 +5,24 @@ namespace CizaInputModule
 {
     public static class RebindActionUIExtension
     {
-        public static bool TryGetActionAndBindingIndex(this InputActionMap inputActionMap, string path, out InputAction inputAction, out int bindingIndex)
+        public static bool TryGetActionAndBindingIndex(this InputActionMap inputActionMap, string path, string bindingId, out InputAction otherInputAction, out int otherBindingIndex) =>
+            inputActionMap.TryGetActionAndBindingIndex(path, new Guid(bindingId), out otherInputAction, out otherBindingIndex);
+
+        public static bool TryGetActionAndBindingIndex(this InputActionMap inputActionMap, string path, Guid bindingId, out InputAction otherInputAction, out int otherBindingIndex)
         {
             foreach (var action in inputActionMap.actions)
                 foreach (var binding in action.bindings)
                 {
-                    if (binding.path == path)
+                    if (binding.effectivePath == path && binding.id != bindingId && !binding.isPartOfComposite)
                     {
-                        inputAction = action;
-                        bindingIndex = action.bindings.IndexOf(x => x.id == binding.id);
+                        otherBindingIndex = action.bindings.IndexOf(x => x.id == binding.id);
+                        otherInputAction = action;
                         return true;
                     }
                 }
 
-            inputAction = null;
-            bindingIndex = -1;
+            otherInputAction = null;
+            otherBindingIndex = -1;
             return false;
         }
 

@@ -59,7 +59,7 @@ namespace CizaInputModule
                 if (!TryGetInputActionAndBindingIndex(out var actionMap, out var action, out var bindingIndex))
                     return string.Empty;
 
-                return action.bindings[bindingIndex].path;
+                return action.bindings[bindingIndex].effectivePath;
             }
         }
 
@@ -159,8 +159,7 @@ namespace CizaInputModule
             }
 
             // Configure the rebind.
-            var actionBinding = action.bindings[bindingIndex];
-            _previousPath = actionBinding.hasOverrides ? actionBinding.overridePath : actionBinding.path;
+            _previousPath = Path;
 
             _rebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .OnCancel(
@@ -172,8 +171,8 @@ namespace CizaInputModule
                 .OnComplete(
                     operation =>
                     {
-                        if (action.actionMap.TryGetActionAndBindingIndex(Path, out var otherAction, out var otherBindingIndex))
-                            otherAction.ChangeBindingWithPath(_previousPath);
+                        if (action.actionMap.TryGetActionAndBindingIndex(Path, _bindingId, out var otherAction, out var otherBindingIndex))
+                            otherAction.ApplyBindingOverride(otherBindingIndex, _previousPath);
 
                         OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, Path);
                         m_Clear();

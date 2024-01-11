@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CizaInputModule;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -14,6 +15,19 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     /// </summary>
     public class RebindActionUI : MonoBehaviour
     {
+        private string _previousEffectivePath;
+
+        public string EffectivePath
+        {
+            get
+            {
+                if (!ResolveActionAndBinding(out var action, out var bindingIndex))
+                    return string.Empty;
+
+                return action.bindings[bindingIndex].effectivePath;
+            }
+        }
+
         /// <summary>
         /// Reference to the action that is to be rebound.
         /// </summary>
@@ -227,6 +241,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             {
                 action.RemoveBindingOverride(bindingIndex);
             }
+
             UpdateBindingDisplay();
         }
 
@@ -263,8 +278,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
 
             // Configure the rebind.
+            _previousEffectivePath = EffectivePath;
+
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-                .WithControlsExcluding("<Keyboard>/w")
                 .OnCancel(
                     operation =>
                     {
@@ -276,6 +292,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 .OnComplete(
                     operation =>
                     {
+                        if (action.actionMap.TryGetActionAndBindingIndex(EffectivePath, m_BindingId, out var otherAction, out var otherBindingIndex))
+                            otherAction.ApplyBindingOverride(otherBindingIndex, _previousEffectivePath);
+
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
                         UpdateBindingDisplay();
@@ -377,7 +396,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private InputBinding.DisplayStringOptions m_DisplayStringOptions;
 
         [Tooltip("Text label that will receive the name of the action. Optional. Set to None to have the "
-            + "rebind UI not show a label for the action.")]
+                 + "rebind UI not show a label for the action.")]
         [SerializeField]
         private Text m_ActionLabel;
 
@@ -394,13 +413,13 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private Text m_RebindText;
 
         [Tooltip("Event that is triggered when the way the binding is display should be updated. This allows displaying "
-            + "bindings in custom ways, e.g. using images instead of text.")]
+                 + "bindings in custom ways, e.g. using images instead of text.")]
         [SerializeField]
         private UpdateBindingUIEvent m_UpdateBindingUIEvent;
 
         [Tooltip("Event that is triggered when an interactive rebind is being initiated. This can be used, for example, "
-            + "to implement custom UI behavior while a rebind is in progress. It can also be used to further "
-            + "customize the rebind.")]
+                 + "to implement custom UI behavior while a rebind is in progress. It can also be used to further "
+                 + "customize the rebind.")]
         [SerializeField]
         private InteractiveRebindEvent m_RebindStartEvent;
 
@@ -414,14 +433,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             UpdateActionLabel();
             UpdateBindingDisplay();
         }
 
-        #endif
+#endif
 
         private void UpdateActionLabel()
         {
@@ -433,13 +452,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         }
 
         [Serializable]
-        public class UpdateBindingUIEvent : UnityEvent<RebindActionUI, string, string, string>
-        {
-        }
+        public class UpdateBindingUIEvent : UnityEvent<RebindActionUI, string, string, string> { }
 
         [Serializable]
-        public class InteractiveRebindEvent : UnityEvent<RebindActionUI, InputActionRebindingExtensions.RebindingOperation>
-        {
-        }
+        public class InteractiveRebindEvent : UnityEvent<RebindActionUI, InputActionRebindingExtensions.RebindingOperation> { }
     }
 }

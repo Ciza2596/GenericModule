@@ -17,6 +17,16 @@ namespace CizaInputModule
 
         public bool IsInitialized { get; private set; }
 
+        public string[] ExcludingPaths
+        {
+            get
+            {
+                if (!IsInitialized || _rebindActionUIMapByKey.Count <= 0)
+                    return Array.Empty<string>();
+
+                return _rebindActionUIMapByKey.First().Value.ExcludingPaths;
+            }
+        }
 
         public void AddRebindActionUI(string key, RebindActionUI rebindActionUI)
         {

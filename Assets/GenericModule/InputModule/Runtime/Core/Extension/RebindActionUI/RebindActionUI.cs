@@ -180,10 +180,7 @@ namespace CizaInputModule
                     });
 
             foreach (var excludingPath in ExcludingPaths)
-            {
-                // _rebindOperation.WithControlsHavingToMatchPath()
                 _rebindOperation.WithControlsExcluding(excludingPath);
-            }
 
             OnRebindActionStarted?.Invoke(ActionMapDataId, ActionDataId, Path);
             _rebindOperation.Start();

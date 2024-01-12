@@ -57,6 +57,7 @@ namespace CizaInputModule
 
         public int MaxPlayerCount { get; private set; }
 
+
         public bool TryGetPlayerInput(int playerIndex, out PlayerInput playerInput)
         {
             playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
@@ -75,6 +76,9 @@ namespace CizaInputModule
             currentControlScheme = playerInput.currentControlScheme;
             return true;
         }
+
+        public string GetDefaultActionsJson() =>
+            GetAndCloneDefaultInputActionAsset().ToJson();
 
         public bool TryGetActionsJson(int playerIndex, out string json)
         {
@@ -348,7 +352,7 @@ namespace CizaInputModule
                 DestroyPlayerInput();
 
             _playerInput = Object.Instantiate(GetPlayerInputPrefab().gameObject, _root).GetComponent<PlayerInput>();
-            _playerInput.actions = GetAndCloneInputActionAsset();
+            _playerInput.actions = GetAndCloneDefaultInputActionAsset();
 
             if (IsEnableInput)
                 _playerInput.actions.Enable();
@@ -400,8 +404,8 @@ namespace CizaInputModule
             if (_playerInputManager.playerCount >= MaxPlayerCount)
                 _playerInputManager.DisableJoining();
 
-            playerInput.actions = GetAndCloneInputActionAsset();
-            
+            playerInput.actions = GetAndCloneDefaultInputActionAsset();
+
             playerInput.actions.Disable();
             var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>
             {
@@ -454,9 +458,9 @@ namespace CizaInputModule
             return true;
         }
 
-        private InputActionAsset GetAndCloneInputActionAsset() =>
+        private InputActionAsset GetAndCloneDefaultInputActionAsset() =>
             InputActionAsset.FromJson(GetPlayerInputPrefab().actions.ToJson());
-        
+
         private PlayerInput GetPlayerInputPrefab() =>
             _inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();
     }

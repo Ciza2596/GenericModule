@@ -64,6 +64,20 @@ namespace CizaInputModule
             return playerInput != null;
         }
 
+        public string[] AllControlSchemes
+        {
+            get
+            {
+                var controlSchemes = GetPlayerInputPrefab().actions.controlSchemes;
+                var allControlSchemes = new HashSet<string>();
+                foreach (var controlScheme in controlSchemes)
+                    allControlSchemes.Add(controlScheme.name);
+
+                return allControlSchemes.ToArray();
+            }
+        }
+
+
         public bool TryGetCurrentControlScheme(int playerIndex, out string currentControlScheme)
         {
             var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);

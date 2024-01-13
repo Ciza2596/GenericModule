@@ -10,6 +10,7 @@ namespace CizaInputModule.Editor
     public class RebindActionUIEditor : UnityEditor.Editor
     {
         private SerializedProperty _inputActionReferenceProperty;
+        private SerializedProperty _controlSchemeProperty;
         private SerializedProperty _bindingIdProperty;
 
         private readonly GUIContent _bindingLabel = new GUIContent("Binding");
@@ -21,6 +22,7 @@ namespace CizaInputModule.Editor
         protected void OnEnable()
         {
             _inputActionReferenceProperty = serializedObject.FindProperty("_inputActionReference");
+            _controlSchemeProperty = serializedObject.FindProperty("_controlScheme");
             _bindingIdProperty = serializedObject.FindProperty("_bindingId");
 
             RefreshBindingOptions();
@@ -39,7 +41,18 @@ namespace CizaInputModule.Editor
                 var bindingId = _bindingIds[bindingOptionIndex];
                 _bindingIdProperty.stringValue = bindingId;
                 _bindingOptionIndex = bindingOptionIndex;
+
+                if (TryGetAction(out var action))
+                {
+                    var asset = action.actionMap?.asset;
+                    if (asset != null)
+                        _controlSchemeProperty.stringValue = GetControlScheme(action.bindings[bindingOptionIndex], asset);
+                }
             }
+            
+            GUI.enabled = false;
+            EditorGUILayout.PropertyField(_controlSchemeProperty);
+            GUI.enabled = true;
 
 
             if (EditorGUI.EndChangeCheck())
@@ -51,10 +64,7 @@ namespace CizaInputModule.Editor
 
         private void RefreshBindingOptions()
         {
-            var actionReference = (InputActionReference)_inputActionReferenceProperty.objectReferenceValue;
-            var action = actionReference?.action;
-
-            if (action == null)
+            if (!TryGetAction(out var action))
             {
                 _bindingOptionLabels = Array.Empty<GUIContent>();
                 _bindingIds = Array.Empty<string>();
@@ -100,7 +110,7 @@ namespace CizaInputModule.Editor
                     var asset = action.actionMap?.asset;
                     if (asset != null)
                     {
-                        var controlSchemes = string.Join(", ", binding.groups.Split(InputBinding.Separator).Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
+                        var controlSchemes = GetControlScheme(binding, asset);
                         displayString = $"{displayString} ({controlSchemes})";
                     }
                 }
@@ -112,5 +122,15 @@ namespace CizaInputModule.Editor
                     _bindingOptionIndex = i;
             }
         }
+
+        private bool TryGetAction(out InputAction action)
+        {
+            var actionReference = (InputActionReference)_inputActionReferenceProperty.objectReferenceValue;
+            action = actionReference?.action;
+            return action != null;
+        }
+
+        private string GetControlScheme(InputBinding binding, InputActionAsset asset) =>
+            string.Join(", ", binding.groups.Split(InputBinding.Separator).Select(x => asset.controlSchemes.FirstOrDefault(c => c.bindingGroup == x).name));
     }
 }

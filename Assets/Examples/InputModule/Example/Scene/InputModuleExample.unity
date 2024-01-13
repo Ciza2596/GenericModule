@@ -490,6 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputActionReference: {fileID: -6621969659678075512, guid: 7dead05c54ca85b4681351aafd8bd03a, type: 3}
+  _controlScheme: Keyboard
   _bindingId: 08e9c32e-0a25-4c50-8f14-3120bec12791
 --- !u!1 &1139010887
 GameObject:

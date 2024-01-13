@@ -8,7 +8,7 @@ namespace CizaInputModule
     {
         private readonly Dictionary<string, RebindActionUI> _rebindActionUIMapByKey = new Dictionary<string, RebindActionUI>();
 
-        // ActionMapDataId ex.Menu, ActionDataId ex.Movement, Path ex.<KeyBoard>/w
+        // ActionMapDataId, ActionDataId, PathWithControlScheme ex.Keyboard/w
         public event Action<string, string, string> OnRebindActionStarted;
         public event Action<string, string, string> OnRebindActionEnd;
 
@@ -127,17 +127,16 @@ namespace CizaInputModule
             _rebindActionUIMapByKey.TryGetValue(key, out rebindActionUI) && IsInitialized;
 
 
-        // ActionMapDataId ex.Menu, ActionDataId ex.Movement, Path ex.<KeyBoard>/w
-        private void OnRebindActionStartedImp(string actionMapDataId, string actionDataId, string path) =>
-            OnRebindActionStarted?.Invoke(actionMapDataId, actionDataId, path);
+        private void OnRebindActionStartedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
+            OnRebindActionStarted?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
-        private void OnRebindActionEndImp(string actionMapDataId, string actionDataId, string path) =>
-            OnRebindActionEnd?.Invoke(actionMapDataId, actionDataId, path);
+        private void OnRebindActionEndImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
+            OnRebindActionEnd?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
-        private void OnRebindActionCompletedImp(string actionMapDataId, string actionDataId, string path) =>
-            OnRebindActionCompleted?.Invoke(actionMapDataId, actionDataId, path);
+        private void OnRebindActionCompletedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
+            OnRebindActionCompleted?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
-        private void OnRebindActionCancelImp(string actionMapDataId, string actionDataId, string path) =>
-            OnRebindActionCancel?.Invoke(actionMapDataId, actionDataId, path);
+        private void OnRebindActionCancelImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
+            OnRebindActionCancel?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
     }
 }

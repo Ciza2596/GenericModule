@@ -13,6 +13,9 @@ namespace CizaInputModule
         private InputActionReference _inputActionReference;
 
         [SerializeField]
+        private string _controlScheme;
+
+        [SerializeField]
         private string _bindingId;
 
 
@@ -21,8 +24,10 @@ namespace CizaInputModule
         private string _previousPath;
         private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
 
+        public const char SlashTag = '/';
 
-        // ActionMapDataId ex.Menu, ActionDataId ex.Movement, Path ex.<KeyBoard>/w
+
+        // ActionMapDataId, ActionDataId, PathWithControlScheme ex.Keyboard/w
         public event Action<string, string, string> OnRebindActionStarted;
         public event Action<string, string, string> OnRebindActionEnd;
 
@@ -61,6 +66,10 @@ namespace CizaInputModule
                 return action.bindings[bindingIndex].effectivePath;
             }
         }
+
+        public string PathWithControlScheme =>
+            _controlScheme + SlashTag + Path;
+
 
         public string[] ExcludingPaths => _excludingPaths != null ? _excludingPaths : Array.Empty<string>();
 
@@ -154,7 +163,7 @@ namespace CizaInputModule
             {
                 _rebindOperation?.Dispose();
                 _rebindOperation = null;
-                OnRebindActionEnd?.Invoke(ActionMapDataId, ActionDataId, Path);
+                OnRebindActionEnd?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
             }
 
             // Configure the rebind.
@@ -164,7 +173,7 @@ namespace CizaInputModule
                 .OnCancel(
                     operation =>
                     {
-                        OnRebindActionCancel?.Invoke(ActionMapDataId, ActionDataId, Path);
+                        OnRebindActionCancel?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
                         m_Clear();
                     })
                 .OnComplete(
@@ -173,7 +182,7 @@ namespace CizaInputModule
                         if (action.actionMap.TryGetActionAndBindingIndex(Path, _bindingId, out var otherAction, out var otherBindingIndex))
                             otherAction.ApplyBindingOverride(otherBindingIndex, _previousPath);
 
-                        OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, Path);
+                        OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
                         m_Clear();
 
                         // If there's more composite parts we should bind, initiate a rebind
@@ -189,7 +198,7 @@ namespace CizaInputModule
             foreach (var excludingPath in ExcludingPaths)
                 _rebindOperation.WithControlsExcluding(excludingPath);
 
-            OnRebindActionStarted?.Invoke(ActionMapDataId, ActionDataId, Path);
+            OnRebindActionStarted?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
             _rebindOperation.Start();
         }
     }

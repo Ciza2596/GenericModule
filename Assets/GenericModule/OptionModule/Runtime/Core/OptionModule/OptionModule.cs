@@ -34,6 +34,9 @@ namespace CizaOptionModule
 
         public event Action<float> OnTick;
 
+        // PreviousPageIndex, CurrentPageIndex
+        public event Action<int, int> OnChangePage;
+
         public bool IsInitialized => _pageModule.IsInitialized;
 
         public int PlayerCount => _playerMapByIndex.Count;
@@ -309,27 +312,29 @@ namespace CizaOptionModule
 
             IsChangingPage = true;
 
-            var previousCurrentPageIndex = CurrentPageIndex;
+            var previousPageIndex = CurrentPageIndex;
             CurrentPageIndex = pageIndex;
 
-            if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsVisible(previousCurrentPageIndex.ToString()))
+            if (previousPageIndex != NotInitialPageIndex && _pageModule.CheckIsVisible(previousPageIndex.ToString()))
             {
                 if (isHideImmediately)
-                    _pageModule.HideImmediately(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
+                    _pageModule.HideImmediately(previousPageIndex.ToString(), isIncludeHidingComplete: false);
                 else
-                    await _pageModule.HideAsync(previousCurrentPageIndex.ToString(), isIncludeHidingComplete: false);
+                    await _pageModule.HideAsync(previousPageIndex.ToString(), isIncludeHidingComplete: false);
             }
 
-            if (previousCurrentPageIndex != CurrentPageIndex)
+            if (previousPageIndex != CurrentPageIndex)
                 await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, coordinate, isAutoTurnOffIsNew);
 
-            if (previousCurrentPageIndex != NotInitialPageIndex && _pageModule.CheckIsHiding(previousCurrentPageIndex.ToString()))
-                _pageModule.OnlyCallHidingComplete(previousCurrentPageIndex.ToString());
+            if (previousPageIndex != NotInitialPageIndex && _pageModule.CheckIsHiding(previousPageIndex.ToString()))
+                _pageModule.OnlyCallHidingComplete(previousPageIndex.ToString());
 
             if (isShowImmediately)
                 await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
             else
                 await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
+
+            OnChangePage?.Invoke(previousPageIndex, CurrentPageIndex);
 
             IsChangingPage = false;
 

@@ -15,6 +15,9 @@ namespace CizaInputModule
         public event Action<string, string, string> OnRebindActionCompleted;
         public event Action<string, string, string> OnRebindActionCancel;
 
+        // PathWithControlScheme ex.Keyboard/w
+        public event Func<string, string> OnTranslate;
+
         public bool IsInitialized { get; private set; }
 
         public string[] ExcludingPaths
@@ -50,6 +53,8 @@ namespace CizaInputModule
 
                 rebindActionUI.OnRebindActionCompleted += OnRebindActionCompletedImp;
                 rebindActionUI.OnRebindActionCancel += OnRebindActionCancelImp;
+
+                rebindActionUI.OnTranslate += OnTranslateImp;
             }
         }
 
@@ -67,6 +72,8 @@ namespace CizaInputModule
 
                 pair.Value.OnRebindActionCompleted -= OnRebindActionCompletedImp;
                 pair.Value.OnRebindActionCancel -= OnRebindActionCancelImp;
+
+                pair.Value.OnTranslate -= OnTranslateImp;
                 _rebindActionUIMapByKey.Remove(pair.Key);
             }
         }
@@ -122,12 +129,18 @@ namespace CizaInputModule
             rebindActionUI.CancelRebind();
         }
 
-        public void SetText(string key, string text)
+        public void RefreshAllText()
+        {
+            foreach (var key in _rebindActionUIMapByKey.Keys.ToArray())
+                RefreshText(key);
+        }
+
+        public void RefreshText(string key)
         {
             if (!TryGetRebindActionUIWithIsInitialized(key, out var rebindActionUI))
                 return;
 
-            rebindActionUI.SetText(text);
+            rebindActionUI.RefreshText();
         }
 
 
@@ -141,10 +154,16 @@ namespace CizaInputModule
         private void OnRebindActionEndImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
             OnRebindActionEnd?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
-        private void OnRebindActionCompletedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
+        private void OnRebindActionCompletedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme)
+        {
             OnRebindActionCompleted?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+            RefreshAllText();
+        }
 
         private void OnRebindActionCancelImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
             OnRebindActionCancel?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+
+        private string OnTranslateImp(string pathWithControlScheme) =>
+            OnTranslate != null ? OnTranslate.Invoke(pathWithControlScheme) : string.Empty;
     }
 }

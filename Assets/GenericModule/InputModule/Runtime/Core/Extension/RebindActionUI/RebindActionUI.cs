@@ -38,6 +38,9 @@ namespace CizaInputModule
         public event Action<string, string, string> OnRebindActionCompleted;
         public event Action<string, string, string> OnRebindActionCancel;
 
+        // PathWithControlScheme ex.Keyboard/w
+        public event Func<string, string> OnTranslate;
+
         public string ActionMapDataId
         {
             get
@@ -123,12 +126,12 @@ namespace CizaInputModule
         public void CancelRebind() =>
             _rebindOperation?.Cancel();
 
-        public void SetText(string text)
+        public void RefreshText()
         {
             if (_text.text == null)
                 return;
 
-            _text.text = text;
+            _text.text = OnTranslate != null ? OnTranslate.Invoke(PathWithControlScheme) : PathWithControlScheme;
         }
 
         /// <summary>
@@ -194,6 +197,7 @@ namespace CizaInputModule
                             otherAction.ApplyBindingOverride(otherBindingIndex, _previousPath);
 
                         OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
+                        RefreshText();
                         m_Clear();
 
                         // If there's more composite parts we should bind, initiate a rebind

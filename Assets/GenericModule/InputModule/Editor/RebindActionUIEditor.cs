@@ -12,6 +12,7 @@ namespace CizaInputModule.Editor
         private SerializedProperty _inputActionReferenceProperty;
         private SerializedProperty _controlSchemeProperty;
         private SerializedProperty _bindingIdProperty;
+        private SerializedProperty _textProperty;
 
         private readonly GUIContent _bindingLabel = new GUIContent("Binding");
         private GUIContent[] _bindingOptionLabels;
@@ -24,6 +25,7 @@ namespace CizaInputModule.Editor
             _inputActionReferenceProperty = serializedObject.FindProperty("_inputActionReference");
             _controlSchemeProperty = serializedObject.FindProperty("_controlScheme");
             _bindingIdProperty = serializedObject.FindProperty("_bindingId");
+            _textProperty = serializedObject.FindProperty("_text");
 
             RefreshBindingOptions();
         }
@@ -49,11 +51,13 @@ namespace CizaInputModule.Editor
                         _controlSchemeProperty.stringValue = GetControlScheme(action.bindings[bindingOptionIndex], asset);
                 }
             }
-            
+
             GUI.enabled = false;
             EditorGUILayout.PropertyField(_controlSchemeProperty);
             GUI.enabled = true;
 
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(_textProperty);
 
             if (EditorGUI.EndChangeCheck())
             {

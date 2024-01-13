@@ -122,6 +122,14 @@ namespace CizaInputModule
             rebindActionUI.CancelRebind();
         }
 
+        public void SetText(string key, string text)
+        {
+            if (!TryGetRebindActionUIWithIsInitialized(key, out var rebindActionUI))
+                return;
+
+            rebindActionUI.SetText(text);
+        }
+
 
         private bool TryGetRebindActionUIWithIsInitialized(string key, out RebindActionUI rebindActionUI) =>
             _rebindActionUIMapByKey.TryGetValue(key, out rebindActionUI) && IsInitialized;

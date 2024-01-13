@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,9 @@ namespace CizaInputModule
 
         [SerializeField]
         private string _bindingId;
+
+        [SerializeField]
+        private TMP_Text _text;
 
 
         private string[] _excludingPaths;
@@ -119,6 +123,13 @@ namespace CizaInputModule
         public void CancelRebind() =>
             _rebindOperation?.Cancel();
 
+        public void SetText(string text)
+        {
+            if (_text.text == null)
+                return;
+
+            _text.text = text;
+        }
 
         /// <summary>
         /// Return the action and binding index for the binding that is targeted by the component

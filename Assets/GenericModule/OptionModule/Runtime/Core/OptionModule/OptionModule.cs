@@ -142,6 +142,46 @@ namespace CizaOptionModule
             return supOption != null;
         }
 
+        // PageIndex
+        public TOption[][] GetAllOptionsList<TOption>() where TOption : class
+        {
+            var optionsList = new List<TOption[]>();
+
+            var optionModulePages = _pageModule.GetAllPage<IOptionModulePage>();
+            Array.Sort(optionModulePages, (optionModulePage1, optionModulePage2) => optionModulePage1.PageIndex.CompareTo(optionModulePage2.PageIndex));
+
+            foreach (var optionModulePage in optionModulePages)
+            {
+                var options = new List<TOption>();
+                foreach (var option in optionModulePage.GetAllOptions())
+                    if (option is TOption tOption)
+                        options.Add(tOption);
+                optionsList.Add(options.ToArray());
+            }
+
+            return optionsList.ToArray();
+        }
+        
+        // PageIndex
+        public TSupOption[][] GetAllSupOptionsList<TSupOption>() where TSupOption : class
+        {
+            var supOptionsList = new List<TSupOption[]>();
+
+            var optionModulePages = _pageModule.GetAllPage<IOptionModulePage>();
+            Array.Sort(optionModulePages, (optionModulePage1, optionModulePage2) => optionModulePage1.PageIndex.CompareTo(optionModulePage2.PageIndex));
+
+            foreach (var optionModulePage in optionModulePages)
+            {
+                var supOptions = new List<TSupOption>();
+                foreach (var option in optionModulePage.GetAllOptions())
+                    if (option.TryGetComponent<TSupOption>(out var supOption))
+                        supOptions.Add(supOption);
+                
+                supOptionsList.Add(supOptions.ToArray());
+            }
+
+            return supOptionsList.ToArray();
+        }
 
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {

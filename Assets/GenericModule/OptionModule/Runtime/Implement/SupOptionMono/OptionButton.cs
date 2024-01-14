@@ -26,6 +26,10 @@ namespace CizaOptionModule.Implement
             _button.onClick.RemoveListener(OnClickImp);
         }
 
+
+        public void Click() =>
+            _button.onClick?.Invoke();
+
         private void OnClickImp() =>
             OnClick?.Invoke();
     }

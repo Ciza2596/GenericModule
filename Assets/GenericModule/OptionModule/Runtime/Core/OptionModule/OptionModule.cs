@@ -48,6 +48,8 @@ namespace CizaOptionModule
 
         public bool IsChangingPage { get; private set; }
 
+
+        public int PageCount => _pageModule.GetAllPage<IOptionModulePage>().Length;
         public int CurrentPageIndex { get; private set; } = NotInitialPageIndex;
 
         public bool CanConfirm { get; private set; } = true;
@@ -142,66 +144,78 @@ namespace CizaOptionModule
             return supOption != null;
         }
 
+
         // PageIndex
         public TOption[][] GetAllOptionsList<TOption>() where TOption : class
         {
             var optionsList = new List<TOption[]>();
-
-            var optionModulePages = _pageModule.GetAllPage<IOptionModulePage>();
-            Array.Sort(optionModulePages, (optionModulePage1, optionModulePage2) => optionModulePage1.PageIndex.CompareTo(optionModulePage2.PageIndex));
-
-            foreach (var optionModulePage in optionModulePages)
-            {
-                var options = new List<TOption>();
-                foreach (var option in optionModulePage.GetAllOptions())
-                    if (option is TOption tOption)
-                        options.Add(tOption);
-                optionsList.Add(options.ToArray());
-            }
-
+            for (var i = 0; i < PageCount; i++)
+                if (TryGetOptionsFromPage<TOption>(i, out var options))
+                    optionsList.Add(options);
             return optionsList.ToArray();
         }
-        
+
         // PageIndex
         public TSupOption[][] GetAllSupOptionsList<TSupOption>() where TSupOption : class
         {
             var supOptionsList = new List<TSupOption[]>();
-
-            var optionModulePages = _pageModule.GetAllPage<IOptionModulePage>();
-            Array.Sort(optionModulePages, (optionModulePage1, optionModulePage2) => optionModulePage1.PageIndex.CompareTo(optionModulePage2.PageIndex));
-
-            foreach (var optionModulePage in optionModulePages)
-            {
-                var supOptions = new List<TSupOption>();
-                foreach (var option in optionModulePage.GetAllOptions())
-                    if (option.TryGetComponent<TSupOption>(out var supOption))
-                        supOptions.Add(supOption);
-                
-                supOptionsList.Add(supOptions.ToArray());
-            }
-
+            for (var i = 0; i < PageCount; i++)
+                if (TryGetSupOptionsFromPage<TSupOption>(i, out var supOptions))
+                    supOptionsList.Add(supOptions);
             return supOptionsList.ToArray();
         }
 
         public TOption[] GetAllOptions<TOption>() where TOption : class
         {
-            var options = new HashSet<TOption>();
-            foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
-                foreach (var option in optionModulePage.GetAllOptions())
-                    if (option is TOption tOption)
-                        options.Add(tOption);
-
-            return options.ToArray();
+            var optionList = new HashSet<TOption>();
+            for (var i = 0; i < PageCount; i++)
+                if (TryGetOptionsFromPage<TOption>(i, out var options))
+                    foreach (var option in options)
+                        optionList.Add(option);
+            return optionList.ToArray();
         }
 
         public TSupOption[] GetAllSupOptions<TSupOption>() where TSupOption : class
         {
-            var supOptions = new HashSet<TSupOption>();
-            foreach (var option in GetAllOptions<Option>())
-                if (option.TryGetComponent<TSupOption>(out var supOption))
-                    supOptions.Add(supOption);
+            var supOptionList = new HashSet<TSupOption>();
+            for (var i = 0; i < PageCount; i++)
+                if (TryGetSupOptionsFromPage<TSupOption>(i, out var supOptions))
+                    foreach (var supOption in supOptions)
+                        supOptionList.Add(supOption);
+            return supOptionList.ToArray();
+        }
 
-            return supOptions.ToArray();
+        public bool TryGetOptionsFromPage<TOption>(int pageIndex, out TOption[] options) where TOption : class
+        {
+            if (_pageModule.TryGetPage<IOptionModulePage>(pageIndex.ToString(), out var optionModulePage))
+            {
+                var optionList = new HashSet<TOption>();
+                foreach (var option in optionModulePage.GetAllOptions().Cast<TOption>().ToArray())
+                    optionList.Add(option);
+
+                options = optionList.ToArray();
+                return true;
+            }
+
+            options = Array.Empty<TOption>();
+            return false;
+        }
+
+        public bool TryGetSupOptionsFromPage<TSupOption>(int pageIndex, out TSupOption[] supOptions) where TSupOption : class
+        {
+            if (_pageModule.TryGetPage<IOptionModulePage>(pageIndex.ToString(), out var optionModulePage))
+            {
+                var supOptionList = new HashSet<TSupOption>();
+                foreach (var option in optionModulePage.GetAllOptions())
+                    if (option.TryGetComponent<TSupOption>(out var supOption))
+                        supOptionList.Add(supOption);
+
+                supOptions = supOptionList.ToArray();
+                return true;
+            }
+
+            supOptions = Array.Empty<TSupOption>();
+            return false;
         }
 
         public OptionModule(IOptionModuleConfig optionModuleConfig)

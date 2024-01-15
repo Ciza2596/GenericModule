@@ -2,7 +2,7 @@
   "name": "com.ciza.inputmodule",
   "displayName": "InputModule",
   "description": "InputModule.",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

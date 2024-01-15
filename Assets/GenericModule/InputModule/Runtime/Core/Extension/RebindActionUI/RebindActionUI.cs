@@ -84,7 +84,7 @@ namespace CizaInputModule
                     return string.Empty;
 
                 var simplePath = path.Replace(strs[0], string.Empty);
-                return _controlScheme + SlashTag + simplePath;
+                return _controlScheme + simplePath;
             }
         }
 

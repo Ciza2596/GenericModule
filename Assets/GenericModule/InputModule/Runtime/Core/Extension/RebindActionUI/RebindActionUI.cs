@@ -92,6 +92,18 @@ namespace CizaInputModule
         public string[] ExcludingPaths => _excludingPaths != null ? _excludingPaths : Array.Empty<string>();
 
 
+        public bool TryGetActionsJson(out string json)
+        {
+            if (_inputActionReference == null)
+            {
+                json = string.Empty;
+                return false;
+            }
+
+            json = _inputActionReference.asset.ToJson();
+            return true;
+        }
+
         public void SetExcludingPaths(string[] paths) =>
             _excludingPaths = paths;
 

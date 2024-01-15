@@ -31,6 +31,17 @@ namespace CizaInputModule
             }
         }
 
+        public bool TryGetActionsJson(out string json)
+        {
+            if (!IsInitialized || _rebindActionUIMapByKey.Count <= 0)
+            {
+                json = string.Empty;
+                return false;
+            }
+
+            return _rebindActionUIMapByKey.First().Value.TryGetActionsJson(out json);
+        }
+
         public void AddRebindActionUI(string key, RebindActionUI rebindActionUI)
         {
             if (IsInitialized)

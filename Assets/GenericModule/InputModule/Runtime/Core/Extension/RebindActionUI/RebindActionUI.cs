@@ -102,7 +102,7 @@ namespace CizaInputModule
                 return false;
             }
 
-            json = _inputActionReference.asset.ToJson();
+            json = _inputActionReference.asset.SaveBindingOverridesAsJson();
             return true;
         }
 

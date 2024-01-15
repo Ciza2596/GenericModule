@@ -10,11 +10,11 @@ namespace CizaInputModule
         private readonly Dictionary<string, RebindActionUI> _rebindActionUIMapByKey = new Dictionary<string, RebindActionUI>();
 
         // ActionMapDataId, ActionDataId, PathWithControlScheme ex.Keyboard/w
-        public event Action<string, string, string> OnRebindActionStarted;
-        public event Action<string, string, string> OnRebindActionEnd;
+        public event Action<string, string, string> OnStart;
+        public event Action<string, string, string> OnEnd;
 
-        public event Action<string, string, string> OnRebindActionCompleted;
-        public event Action<string, string, string> OnRebindActionCancel;
+        public event Action<string, string, string> OnComplete;
+        public event Action<string, string, string> OnCancel;
 
         // PathWithControlScheme ex.Keyboard/w
         public event Func<string, string> OnTranslate;
@@ -178,19 +178,19 @@ namespace CizaInputModule
 
 
         private void OnRebindActionStartedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
-            OnRebindActionStarted?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+            OnStart?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
         private void OnRebindActionEndImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
-            OnRebindActionEnd?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+            OnEnd?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
         private void OnRebindActionCompletedImp(string actionMapDataId, string actionDataId, string pathWithControlScheme)
         {
-            OnRebindActionCompleted?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+            OnComplete?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
             RefreshAllText();
         }
 
         private void OnRebindActionCancelImp(string actionMapDataId, string actionDataId, string pathWithControlScheme) =>
-            OnRebindActionCancel?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
+            OnCancel?.Invoke(actionMapDataId, actionDataId, pathWithControlScheme);
 
         private string OnTranslateImp(string pathWithControlScheme) =>
             OnTranslate != null ? OnTranslate.Invoke(pathWithControlScheme) : string.Empty;

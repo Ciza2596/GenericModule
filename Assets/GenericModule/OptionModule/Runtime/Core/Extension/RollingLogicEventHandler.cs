@@ -28,6 +28,7 @@ namespace CizaOptionModule
             _optionModule.OnTick += _rollingLogic.Tick;
             _optionModule.OnAddPlayer += _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer += _rollingLogic.RemovePlayer;
+            _optionModule.OnConfirm += OnOptionModuleConfirm;
 
             _rollingLogic.OnMovementAsync += OnOptionModuleMovementAsync;
 
@@ -39,6 +40,7 @@ namespace CizaOptionModule
             _optionModule.OnTick -= _rollingLogic.Tick;
             _optionModule.OnAddPlayer -= _rollingLogic.AddPlayer;
             _optionModule.OnRemovePlayer -= _rollingLogic.RemovePlayer;
+            _optionModule.OnConfirm -= OnOptionModuleConfirm;
 
             _rollingLogic.OnMovementAsync -= OnOptionModuleMovementAsync;
         }
@@ -77,5 +79,8 @@ namespace CizaOptionModule
 
             return UniTask.CompletedTask;
         }
+
+        private void OnOptionModuleConfirm(int playerIndex, string optionKey, bool isUnlock) =>
+            MovementCancel(playerIndex);
     }
 }

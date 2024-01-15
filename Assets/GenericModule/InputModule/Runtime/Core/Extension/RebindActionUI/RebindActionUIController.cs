@@ -20,6 +20,21 @@ namespace CizaInputModule
 
         public bool IsInitialized { get; private set; }
 
+        public bool IsAnyRebinding
+        {
+            get
+            {
+                if (!IsInitialized || _rebindActionUIMapByKey.Count <= 0)
+                    return false;
+
+                foreach (var rebindActionUI in _rebindActionUIMapByKey.Values.ToArray())
+                    if (rebindActionUI.IsRebinding)
+                        return true;
+
+                return false;
+            }
+        }
+
         public string[] ExcludingPaths
         {
             get

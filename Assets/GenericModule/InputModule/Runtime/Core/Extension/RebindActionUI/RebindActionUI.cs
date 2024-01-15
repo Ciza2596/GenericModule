@@ -91,6 +91,8 @@ namespace CizaInputModule
 
         public string[] ExcludingPaths => _excludingPaths != null ? _excludingPaths : Array.Empty<string>();
 
+        public bool IsRebinding { get; private set; }
+
 
         public bool TryGetActionsJson(out string json)
         {
@@ -206,6 +208,7 @@ namespace CizaInputModule
                 _rebindOperation?.Dispose();
                 _rebindOperation = null;
                 OnRebindActionEnd?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
+                DisableIsRebinding();
             }
 
             // Configure the rebind.
@@ -225,8 +228,9 @@ namespace CizaInputModule
                             otherAction.ApplyBindingOverride(otherBindingIndex, _previousPath);
 
                         OnRebindActionCompleted?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
-                        RefreshText();
                         m_Clear();
+
+                        RefreshText();
 
                         // If there's more composite parts we should bind, initiate a rebind
                         // for the next part.
@@ -241,8 +245,16 @@ namespace CizaInputModule
             foreach (var excludingPath in ExcludingPaths)
                 _rebindOperation.WithControlsExcluding(excludingPath);
 
+            EnableIsRebinding();
             OnRebindActionStarted?.Invoke(ActionMapDataId, ActionDataId, PathWithControlScheme);
             _rebindOperation.Start();
         }
+
+
+        private void EnableIsRebinding() =>
+            IsRebinding = true;
+
+        private void DisableIsRebinding() =>
+            IsRebinding = false;
     }
 }

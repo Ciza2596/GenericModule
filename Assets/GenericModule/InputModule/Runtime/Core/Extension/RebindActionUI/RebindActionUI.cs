@@ -74,8 +74,19 @@ namespace CizaInputModule
             }
         }
 
-        public string PathWithControlScheme =>
-            _controlScheme + SlashTag + Path;
+        public string PathWithControlScheme
+        {
+            get
+            {
+                var path = Path;
+                var strs = path.Split(SlashTag);
+                if (strs.Length <= 0)
+                    return string.Empty;
+
+                var simplePath = path.Replace(strs[0], string.Empty);
+                return _controlScheme + SlashTag + simplePath;
+            }
+        }
 
 
         public string[] ExcludingPaths => _excludingPaths != null ? _excludingPaths : Array.Empty<string>();

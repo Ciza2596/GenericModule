@@ -23,10 +23,15 @@ namespace CizaInputModule
         private TMP_Text _text;
 
 
+        private InputActionAsset _asset;
+
         private string[] _excludingPaths;
 
         private string _previousPath;
         private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
+
+        //private InputActionReference  InputActionReference =>
+        private InputActionAsset Asset => _asset != null ? _asset : _inputActionReference.asset;
 
         public const char SlashTag = '/';
 
@@ -88,7 +93,6 @@ namespace CizaInputModule
             }
         }
 
-
         public string[] ExcludingPaths => _excludingPaths != null ? _excludingPaths : Array.Empty<string>();
 
         public bool IsRebinding { get; private set; }
@@ -102,9 +106,12 @@ namespace CizaInputModule
                 return false;
             }
 
-            json = _inputActionReference.asset.SaveBindingOverridesAsJson();
+            json = Asset.SaveBindingOverridesAsJson();
             return true;
         }
+
+        public void SetAsset(InputActionAsset asset) =>
+            _asset = asset;
 
         public void SetExcludingPaths(string[] paths) =>
             _excludingPaths = paths;
@@ -112,7 +119,7 @@ namespace CizaInputModule
 
         public void RebindActionsByJson(string json)
         {
-            _inputActionReference.asset.LoadBindingOverridesFromJson(json);
+            Asset.LoadBindingOverridesFromJson(json);
             RefreshText();
         }
 
@@ -176,10 +183,14 @@ namespace CizaInputModule
         {
             bindingIndex = -1;
             actionMap = null;
-            action = _inputActionReference?.action;
-            if (action == null)
+            action = null;
+
+            var localAction = _inputActionReference?.action;
+
+            if (localAction == null)
                 return false;
 
+            action = Asset.FindAction(localAction.id);
             actionMap = action.actionMap;
             if (actionMap == null)
                 return false;

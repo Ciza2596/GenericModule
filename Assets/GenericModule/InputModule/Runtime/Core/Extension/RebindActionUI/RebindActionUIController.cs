@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
@@ -65,7 +66,7 @@ namespace CizaInputModule
             _rebindActionUIMapByKey.Add(key, rebindActionUI);
         }
 
-        public void Initialize()
+        public void Initialize(InputActionAsset asset = null)
         {
             if (IsInitialized)
                 return;
@@ -74,6 +75,8 @@ namespace CizaInputModule
 
             foreach (var rebindActionUI in _rebindActionUIMapByKey.Values.ToArray())
             {
+                rebindActionUI.SetAsset(asset);
+
                 rebindActionUI.OnRebindActionStarted += OnRebindActionStartedImp;
                 rebindActionUI.OnRebindActionEnd += OnRebindActionEndImp;
 

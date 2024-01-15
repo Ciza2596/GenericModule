@@ -85,8 +85,11 @@ namespace CizaInputModule
             _excludingPaths = paths;
 
 
-        public void RebindActionsByJson(string json) =>
+        public void RebindActionsByJson(string json)
+        {
             _inputActionReference.asset.LoadBindingOverridesFromJson(json);
+            RefreshText();
+        }
 
         /// <summary>
         /// Remove currently applied binding overrides.
@@ -102,6 +105,8 @@ namespace CizaInputModule
 
             else
                 action.RemoveBindingOverride(bindingIndex);
+
+            RefreshText();
         }
 
         /// <summary>

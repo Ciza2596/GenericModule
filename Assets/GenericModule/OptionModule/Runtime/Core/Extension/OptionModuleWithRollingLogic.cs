@@ -1,6 +1,7 @@
 using CizaCore;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaOptionModule
 {
@@ -11,6 +12,7 @@ namespace CizaOptionModule
         public bool IsRollingHorizontal { get; private set; }
         public bool IsRollingVertical { get; private set; }
 
+        [Preserve]
         public OptionModuleWithRollingLogic(IOptionModuleConfig optionModuleConfig) : base(optionModuleConfig)
         {
             OnTick += _rollingLogic.Tick;

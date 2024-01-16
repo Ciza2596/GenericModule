@@ -5,6 +5,7 @@ using CizaCore;
 using CizaPageModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaOptionModule
 {
@@ -218,6 +219,7 @@ namespace CizaOptionModule
             return false;
         }
 
+        [Preserve]
         public OptionModule(IOptionModuleConfig optionModuleConfig)
         {
             _pageModule = new PageModule(optionModuleConfig);

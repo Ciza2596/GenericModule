@@ -8,9 +8,9 @@ namespace CizaOptionModule
     public class OptionModuleWithRollingLogic: OptionModule
     {
         private readonly RollingLogic _rollingLogic = new RollingLogic();
-        
-        public bool IsRollingHorizontal { get; private set; }
-        public bool IsRollingVertical { get; private set; }
+
+        public bool IsRollingHorizontal { get; private set; } = true;
+        public bool IsRollingVertical { get; private set; } = true;
 
         [Preserve]
         public OptionModuleWithRollingLogic(IOptionModuleConfig optionModuleConfig) : base(optionModuleConfig)

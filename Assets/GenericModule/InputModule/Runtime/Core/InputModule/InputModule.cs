@@ -354,11 +354,10 @@ namespace CizaInputModule
             if (_playerInputManager is null)
                 return;
 
-            var playerInputManager = _playerInputManager;
-
             foreach (var playerInput in _playerInputs.ToArray())
                 OnPlayerLeftImp(playerInput);
 
+            var playerInputManager = _playerInputManager;
             _playerInputManager = null;
             Object.Destroy(playerInputManager.gameObject);
         }
@@ -420,8 +419,9 @@ namespace CizaInputModule
         {
             if (_playerInputManager.playerCount >= MaxPlayerCount)
                 _playerInputManager.DisableJoining();
-
-            playerInput.actions = GetAndCloneDefaultAsset();
+            
+            // cant change playerInput.actions. PlayerInputManager will destroy playerInput.
+            // playerInput.actions = GetAndCloneDefaultAsset();
 
             playerInput.actions.Disable();
             var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>

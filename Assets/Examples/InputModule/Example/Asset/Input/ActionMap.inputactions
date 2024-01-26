@@ -2,6 +2,12 @@
     "name": "ActionMap",
     "maps": [
         {
+            "name": "None",
+            "id": "21252d15-645c-4272-8874-256fb453b9ef",
+            "actions": [],
+            "bindings": []
+        },
+        {
             "name": "Menu",
             "id": "3329d8c6-b9a9-4292-9995-c48d77f085cb",
             "actions": [
@@ -40,6 +46,17 @@
                     "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23fe196a-ff86-43b5-b12e-e5943b27abcb",
+                    "path": "<DualSenseGamepadHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "PS5",
                     "action": "Attack",
                     "isComposite": false,
@@ -51,7 +68,18 @@
                     "path": "<Keyboard>/k",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard",
+                    "action": "Special",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74188ac3-78ae-423a-b92b-f5ba2a9899fc",
+                    "path": "<DualSenseGamepadHID>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PS5",
                     "action": "Special",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -62,7 +90,7 @@
                     "path": "<Keyboard>/l",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard",
                     "action": "Defeat",
                     "isComposite": false,
                     "isPartOfComposite": false

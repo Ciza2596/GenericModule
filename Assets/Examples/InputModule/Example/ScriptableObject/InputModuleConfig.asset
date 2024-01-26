@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38ac1eef9614bb2bae553de85b1a0dd, type: 3}
+  m_Name: InputModuleConfig
+  m_EditorClassIdentifier: 
+  _rootName: '[InputModule]'
+  _isDontDestroyOnLoad: 1
+  _eventSystemPrefab: {fileID: 1943058779514842041, guid: 888476c80f3c94168b43444907cd38a2, type: 3}
+  _canEnableEventSystem: 1
+  _isDefaultEnableEventSystem: 0
+  _playerInputManagerPrefab: {fileID: 4174101175390880107, guid: 83f34f674fccc4a7aad5da2587a369ed, type: 3}
+  _joinedWaitingTime: 0.25
+  _defaultActionMapDataId: None

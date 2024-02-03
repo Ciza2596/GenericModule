@@ -71,8 +71,9 @@ namespace CizaOptionModule
             OptionView.UnSelectAll();
             LocalIsAutoTurnOffIsNew = true;
 
-            for (var i = 0; i < _selectOptionLogic.PlayerCount; i++)
-                _selectOptionLogic.TrySetCurrentCoordinate(i, OnShowingStartCoordinate);
+            foreach (var playerIndex in _selectOptionLogic.PlayerIndexList)
+                _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, OnShowingStartCoordinate);
+
             IsImmediately = false;
         }
 
@@ -125,10 +126,8 @@ namespace CizaOptionModule
         }
 
 
-        public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate)
-        {
-            return _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
-        }
+        public bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate) =>
+            _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, coordinate);
 
         public bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter)
         {

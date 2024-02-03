@@ -5,7 +5,7 @@ using UnityEngine.Scripting;
 
 namespace CizaOptionModule
 {
-    public class OptionModuleWithRollingLogic: OptionModule
+    public class OptionModuleWithRollingLogic : OptionModule
     {
         private readonly RollingLogic _rollingLogic = new RollingLogic();
 
@@ -24,19 +24,18 @@ namespace CizaOptionModule
 
             _rollingLogic.OnMovementAsync += OnOptionModuleMovementAsync;
         }
-        
+
         public void SetIsRollingHorizontal(bool isRollingHorizontal) =>
             IsRollingHorizontal = isRollingHorizontal;
 
         public void SetIsRollingVertical(bool isRollingVertical) =>
             IsRollingVertical = isRollingVertical;
 
-        public void SetIsImmediately(bool isImmediately) =>
-            IsImmediately = isImmediately;
-
-
-        public void MovementStart(int playerIndex, Vector2 direction, float rollingIntervalTime = RollingLogic.RollingIntervalTime) =>
+        public void MovementStart(int playerIndex, Vector2 direction, bool isImmediately = true, float rollingIntervalTime = RollingLogic.RollingIntervalTime)
+        {
+            SetIsImmediately(isImmediately);
             _rollingLogic.TurnOn(playerIndex, direction, rollingIntervalTime);
+        }
 
         public void MovementCancel(int playerIndex) =>
             _rollingLogic.TurnOff(playerIndex);
@@ -65,5 +64,8 @@ namespace CizaOptionModule
 
         private void OnOptionModuleConfirm(int playerIndex, string optionKey, bool isUnlock) =>
             MovementCancel(playerIndex);
+
+        private void SetIsImmediately(bool isImmediately) =>
+            IsImmediately = isImmediately;
     }
 }

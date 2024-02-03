@@ -32,44 +32,42 @@ namespace CizaOptionModule
             var isUnlockedOptions = new HashSet<Option>();
 
             foreach (var option in optionModule.GetAllOptions<Option>())
-            {
                 if (option.IsUnlock)
                     isUnlockedOptions.Add(option);
-            }
 
             options = isUnlockedOptions.ToArray();
             return options.Length > 0;
         }
 
-        public static UniTask MovePageToLeftAsync(this OptionModule optionModule, int playerIndex)
+        public static UniTask MovePageToLeftAsync(this OptionModule optionModule, int playerIndex, bool isImmediately = true)
         {
             if (optionModule.IsChangingPage)
                 return UniTask.CompletedTask;
 
-            return optionModule.TryMovePageToLeftAsync(playerIndex);
+            return optionModule.TryMovePageToLeftAsync(playerIndex, isImmediately);
         }
 
-        public static UniTask MovePageToRightAsync(this OptionModule optionModule, int playerIndex)
+        public static UniTask MovePageToRightAsync(this OptionModule optionModule, int playerIndex, bool isImmediately = true)
         {
             if (optionModule.IsChangingPage)
                 return UniTask.CompletedTask;
 
-            return optionModule.TryMovePageToRightAsync(playerIndex);
+            return optionModule.TryMovePageToRightAsync(playerIndex, isImmediately);
         }
 
-        public static async UniTask HorizontalMovementAsync(this OptionModule optionModule, int playerIndex, Vector2 direction)
+        public static async UniTask HorizontalMovementAsync(this OptionModule optionModule, int playerIndex, Vector2 direction, bool isImmediately = true)
         {
             if (optionModule.IsChangingPage)
                 return;
 
             if (direction.x > 0)
             {
-                if (await optionModule.TryMoveOptionToRightAsync(playerIndex))
+                if (await optionModule.TryMoveOptionToRightAsync(playerIndex, isImmediately))
                     return;
             }
             else if (direction.x < 0)
             {
-                if (await optionModule.TryMoveOptionToLeftAsync(playerIndex))
+                if (await optionModule.TryMoveOptionToLeftAsync(playerIndex, isImmediately))
                     return;
             }
         }
@@ -91,19 +89,19 @@ namespace CizaOptionModule
             }
         }
 
-        public static async UniTask MovementAsync(this OptionModule optionModule, int playerIndex, Vector2 direction)
+        public static async UniTask MovementAsync(this OptionModule optionModule, int playerIndex, Vector2 direction, bool isImmediately = true)
         {
             if (optionModule.IsChangingPage)
                 return;
 
             if (direction.x > 0)
             {
-                if (await optionModule.TryMoveOptionToRightAsync(playerIndex))
+                if (await optionModule.TryMoveOptionToRightAsync(playerIndex, isImmediately))
                     return;
             }
             else if (direction.x < 0)
             {
-                if (await optionModule.TryMoveOptionToLeftAsync(playerIndex))
+                if (await optionModule.TryMoveOptionToLeftAsync(playerIndex, isImmediately))
                     return;
             }
 

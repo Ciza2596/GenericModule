@@ -532,24 +532,24 @@ namespace CizaOptionModule
             player.DisableCanConfirm();
         }
 
-        public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex)
+        public async UniTask<bool> TryMoveOptionToLeftAsync(int playerIndex, bool isImmediately = true)
         {
             if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
                 return false;
 
             if (!optionModulePage.TryMoveToLeft(playerIndex))
-                return IsAutoChangePage && await TryMovePageToLeftAsync(playerIndex);
+                return IsAutoChangePage && await TryMovePageToLeftAsync(playerIndex, isImmediately);
 
             return true;
         }
 
-        public async UniTask<bool> TryMoveOptionToRightAsync(int playerIndex)
+        public async UniTask<bool> TryMoveOptionToRightAsync(int playerIndex, bool isImmediately = true)
         {
             if (!IsInitialized || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanSelect || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage))
                 return false;
 
             if (!optionModulePage.TryMoveToRight(playerIndex))
-                return IsAutoChangePage && await TryMovePageToRightAsync(playerIndex);
+                return IsAutoChangePage && await TryMovePageToRightAsync(playerIndex, isImmediately);
 
             return true;
         }

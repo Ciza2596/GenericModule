@@ -312,12 +312,12 @@ namespace CizaOptionModule
             OnRemovePlayer?.Invoke(playerIndex);
         }
 
-        public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+        public async UniTask ShowCurrentPageAsync(int playerIndex = 0, bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {
             if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || _pageModule.CheckIsShowing(CurrentPageIndex.ToString()) || _pageModule.CheckIsHiding(CurrentPageIndex.ToString()))
                 return;
 
-            if (!TryGetCurrentCoordinate(0, out var currentCoordinate))
+            if (!TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
                 return;
 
             if (_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))

@@ -12,6 +12,8 @@ namespace CizaOptionModule
         public bool IsRollingHorizontal { get; private set; } = true;
         public bool IsRollingVertical { get; private set; } = true;
 
+        public bool IsImmediately { get; private set; } = true;
+
         [Preserve]
         public OptionModuleWithRollingLogic(IOptionModuleConfig optionModuleConfig) : base(optionModuleConfig)
         {
@@ -29,6 +31,9 @@ namespace CizaOptionModule
         public void SetIsRollingVertical(bool isRollingVertical) =>
             IsRollingVertical = isRollingVertical;
 
+        public void SetIsImmediately(bool isImmediately) =>
+            IsImmediately = isImmediately;
+
 
         public void MovementStart(int playerIndex, Vector2 direction, float rollingIntervalTime = RollingLogic.RollingIntervalTime) =>
             _rollingLogic.TurnOn(playerIndex, direction, rollingIntervalTime);
@@ -40,13 +45,13 @@ namespace CizaOptionModule
         private UniTask OnOptionModuleMovementAsync(int playerIndex, bool isFirst, Vector2 direction)
         {
             if (isFirst)
-                return this.MovementAsync(playerIndex, direction);
+                return this.MovementAsync(playerIndex, direction, IsImmediately);
 
             if (IsRollingHorizontal && IsRollingVertical)
-                return this.MovementAsync(playerIndex, direction);
+                return this.MovementAsync(playerIndex, direction, IsImmediately);
 
             if (IsRollingHorizontal)
-                return this.HorizontalMovementAsync(playerIndex, direction);
+                return this.HorizontalMovementAsync(playerIndex, direction, IsImmediately);
 
 
             if (IsRollingVertical)

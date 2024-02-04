@@ -13,7 +13,7 @@ namespace CizaInputModule
 
         GameObject PlayerInputManagerPrefab { get; }
         float JoinedWaitingTime { get; }
-
+        
         string DefaultActionMapDataId { get; }
     }
 }

@@ -276,7 +276,7 @@ namespace CizaInputModule
                 if (_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
                     continue;
 
-                playerInput.actions.Enable();
+                playerInput.ActivateInput();
             }
         }
 
@@ -289,7 +289,7 @@ namespace CizaInputModule
                 if (_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
                     continue;
 
-                playerInput.actions.Disable();
+                playerInput.DeactivateInput();
             }
         }
 
@@ -298,7 +298,7 @@ namespace CizaInputModule
             if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
-            playerInput.actions.Enable();
+            playerInput.ActivateInput();
         }
 
         public void DisableInput(int playerIndex)
@@ -306,7 +306,7 @@ namespace CizaInputModule
             if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
-            playerInput.actions.Disable();
+            playerInput.DeactivateInput();
         }
 
         public void SetCurrentActionMapDataId(string actionMapDataId)
@@ -427,8 +427,8 @@ namespace CizaInputModule
 
         private void SwitchAllActionMap()
         {
-            for (var i = 0; i < _playerInputs.Count; i++)
-                SwitchActionMap(i);
+            foreach (var playerInput in _playerInputs)
+                SwitchActionMap(playerInput.playerIndex);
         }
 
         private void OnPlayerJoinedImp(PlayerInput playerInput)

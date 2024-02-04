@@ -27,8 +27,8 @@ namespace CizaOptionModule
         // PlayerIndex
         public event Action<int> OnRemovePlayer;
 
-        // PlayerIndex, PreviousOptionKey, CurrentOptionKey
-        public event Action<int, string, string> OnSelect;
+        // PlayerIndex, IsChangingPage PreviousOptionKey, CurrentOptionKey
+        public event Action<int, bool, string, string> OnSelect;
 
         // PlayerIndex, OptionKey, IsUnlock
         public event Action<int, string, bool> OnConfirm;
@@ -438,7 +438,6 @@ namespace CizaOptionModule
 
             if (!TryGetOptionModulePage(nextPageIndex, out var nextOptionModulePage))
                 return false;
-
             var coordinate = IsAutoChangePage ? new Vector2Int(nextOptionModulePage.MaxColumnIndex, currentCoordinate.y.ToClamp(0, nextOptionModulePage.MaxRowIndex)) : currentCoordinate;
             return await TrySetPageIndexAsync(nextPageIndex, coordinate, isHideImmediately: isImmediately, isShowImmediately: isImmediately);
         }
@@ -604,7 +603,7 @@ namespace CizaOptionModule
         }
 
         private void Select(int playerIndex, string previousOptionKey, string currentOptionKey) =>
-            OnSelect?.Invoke(playerIndex, previousOptionKey, currentOptionKey);
+            OnSelect?.Invoke(playerIndex, IsChangingPage, previousOptionKey, currentOptionKey);
 
         private void Confirm(int playerIndex, string optionKey, bool isUnlock) =>
             OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);

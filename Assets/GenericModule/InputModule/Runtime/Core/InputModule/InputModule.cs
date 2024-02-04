@@ -230,7 +230,7 @@ namespace CizaInputModule
                 CreatePlayerInput();
             }
 
-            DisableInput();
+            DisableAllInput();
         }
 
         public void EnableJoining()
@@ -261,13 +261,13 @@ namespace CizaInputModule
                 return;
 
             DisableJoining();
-            DisableInput();
+            DisableAllInput();
 
             DestroyPlayerInput();
             DestroyPlayerInputManager();
         }
 
-        public void EnableInput()
+        public void EnableAllInput()
         {
             IsEnableInput = true;
 
@@ -280,7 +280,7 @@ namespace CizaInputModule
             }
         }
 
-        public void DisableInput()
+        public void DisableAllInput()
         {
             IsEnableInput = false;
 
@@ -291,6 +291,22 @@ namespace CizaInputModule
 
                 playerInput.actions.Disable();
             }
+        }
+
+        public void EnableInput(int playerIndex)
+        {
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
+                return;
+
+            playerInput.actions.Enable();
+        }
+
+        public void DisableInput(int playerIndex)
+        {
+            if (!TryGetPlayerInput(playerIndex, out var playerInput))
+                return;
+
+            playerInput.actions.Disable();
         }
 
         public void SetCurrentActionMapDataId(string actionMapDataId)
@@ -419,7 +435,7 @@ namespace CizaInputModule
         {
             if (_playerInputManager.playerCount >= MaxPlayerCount)
                 _playerInputManager.DisableJoining();
-            
+
             // cant change playerInput.actions. PlayerInputManager will destroy playerInput.
             // playerInput.actions = GetAndCloneDefaultAsset();
 

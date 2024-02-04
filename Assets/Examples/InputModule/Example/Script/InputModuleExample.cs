@@ -17,7 +17,7 @@ public class InputModuleExample : MonoBehaviour
         _inputModule.Initialize();
 
         _inputModule.StartJoining(2);
-        _inputModule.EnableInput();
+        _inputModule.EnableAllInput();
     }
 
     private void Update()

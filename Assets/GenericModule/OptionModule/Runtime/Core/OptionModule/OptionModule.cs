@@ -312,7 +312,15 @@ namespace CizaOptionModule
             OnRemovePlayer?.Invoke(playerIndex);
         }
 
-        public async UniTask ShowCurrentPageAsync(int playerIndex = 0, bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+        public UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+        {
+            var player = _playerMapByIndex.Values.FirstOrDefault();
+            if (player == null)
+                return UniTask.CompletedTask;
+            return ShowCurrentPageAsync(player.Index, isImmediately, onCompleteBefore);
+        }
+
+        public async UniTask ShowCurrentPageAsync(int playerIndex, bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {
             if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || _pageModule.CheckIsShowing(CurrentPageIndex.ToString()) || _pageModule.CheckIsHiding(CurrentPageIndex.ToString()))
                 return;

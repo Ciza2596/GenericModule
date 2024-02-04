@@ -10,8 +10,11 @@ namespace CizaOptionModule.Implement
         [SerializeField]
         private Dropdown _dropdown;
 
-        // index
-        public event Action<int> OnIndexChanged;
+        // PreviousIndex, Index
+        public event Action<int, int> OnSelect;
+
+        // Index
+        public event Action<int> OnConfirm;
         public event Action OnCancel;
 
         public event Action OnShow;
@@ -64,7 +67,9 @@ namespace CizaOptionModule.Implement
             base.Initialize(option);
 
             Assert.IsNotNull(_dropdown, $"[OptionDropdown::Initialize] Option: {name} is not set dropdown.");
-            _dropdown.OnIndexChanged += OnIndexChangedImp;
+            _dropdown.OnSelect += OnSelectImp;
+
+            _dropdown.OnConfirm += OnConfirmImp;
             _dropdown.OnCancel += OnCancelImp;
 
             _dropdown.OnShow += OnShowImp;
@@ -74,15 +79,21 @@ namespace CizaOptionModule.Implement
         public override void Release(Option option)
         {
             base.Release(option);
-            _dropdown.OnIndexChanged -= OnIndexChangedImp;
+
+            _dropdown.OnSelect -= OnSelectImp;
+
+            _dropdown.OnConfirm -= OnConfirmImp;
             _dropdown.OnCancel -= OnCancelImp;
 
             _dropdown.OnShow -= OnShowImp;
             _dropdown.OnHide -= OnHideImp;
         }
 
-        private void OnIndexChangedImp(int index) =>
-            OnIndexChanged?.Invoke(index);
+        private void OnSelectImp(int previousIndex, int index) =>
+            OnSelect?.Invoke(previousIndex, index);
+
+        private void OnConfirmImp(int index) =>
+            OnConfirm?.Invoke(index);
 
         private void OnCancelImp() =>
             OnCancel?.Invoke();

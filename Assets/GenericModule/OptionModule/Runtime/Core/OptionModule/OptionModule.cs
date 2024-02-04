@@ -27,7 +27,7 @@ namespace CizaOptionModule
         // PlayerIndex
         public event Action<int> OnRemovePlayer;
 
-        // PlayerIndex, IsChangingPage PreviousOptionKey, CurrentOptionKey
+        // PlayerIndex, IsChangingPage, PreviousOptionKey, CurrentOptionKey
         public event Action<int, bool, string, string> OnSelect;
 
         // PlayerIndex, OptionKey, IsUnlock

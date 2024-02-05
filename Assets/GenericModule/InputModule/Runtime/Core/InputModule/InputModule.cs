@@ -272,12 +272,10 @@ namespace CizaInputModule
             IsEnableInput = true;
 
             foreach (var playerInput in _playerInputs.ToArray())
-            {
-                if (_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
-                    continue;
+                if (!_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
+                    EnableInput(playerInput.playerIndex);
 
-                EnableInput(playerInput.playerIndex);
-            }
+            EnableEventSystem();
         }
 
         public void DisableAllInput()
@@ -285,12 +283,10 @@ namespace CizaInputModule
             IsEnableInput = false;
 
             foreach (var playerInput in _playerInputs.ToArray())
-            {
-                if (_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
-                    continue;
+                if (!_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
+                    DisableInput(playerInput.playerIndex);
 
-                DisableInput(playerInput.playerIndex);
-            }
+            DisableEventSystem();
         }
 
         public void EnableInput(int playerIndex) =>
@@ -307,7 +303,7 @@ namespace CizaInputModule
 
         public void SetCurrentActionMapDataId(string actionMapDataId) =>
             _currentActionMapDataId = actionMapDataId;
-        
+
 
         public void HandleActionEvent(Action<int, InputActionAsset> handleEvent)
         {

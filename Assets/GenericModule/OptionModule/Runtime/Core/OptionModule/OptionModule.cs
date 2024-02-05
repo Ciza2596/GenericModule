@@ -312,29 +312,27 @@ namespace CizaOptionModule
             OnRemovePlayer?.Invoke(playerIndex);
         }
 
-        public UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
-        {
-            var player = _playerMapByIndex.Values.FirstOrDefault();
-            if (player == null)
-                return UniTask.CompletedTask;
-            return ShowCurrentPageAsync(player.Index, isImmediately, onCompleteBefore);
-        }
-
-        public async UniTask ShowCurrentPageAsync(int playerIndex, bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
+        public async UniTask ShowCurrentPageAsync(bool isImmediately = true, Func<UniTask> onCompleteBefore = null)
         {
             if (!IsInitialized || CurrentPageIndex == NotInitialPageIndex || _pageModule.CheckIsShowing(CurrentPageIndex.ToString()) || _pageModule.CheckIsHiding(CurrentPageIndex.ToString()))
                 return;
 
-            if (!TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
-                return;
+            var onShowingStartCoordinateMapByPlayerIndex = new Dictionary<int, Vector2Int>();
+            foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+            {
+                if (!TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
+                    return;
+
+                onShowingStartCoordinateMapByPlayerIndex.Add(playerIndex, currentCoordinate);
+            }
 
             if (_pageModule.CheckIsVisible(CurrentPageIndex.ToString()))
                 _pageModule.HideImmediately(CurrentPageIndex.ToString());
 
             if (isImmediately)
-                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, false, currentCoordinate, false);
+                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, false, onShowingStartCoordinateMapByPlayerIndex, false);
             else
-                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, false, currentCoordinate, false);
+                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, false, onShowingStartCoordinateMapByPlayerIndex, false);
 
             if (onCompleteBefore != null)
                 await onCompleteBefore.Invoke();
@@ -387,16 +385,20 @@ namespace CizaOptionModule
                     await _pageModule.HideAsync(previousPageIndex.ToString(), isIncludeHidingComplete: false);
             }
 
+            var onShowingStartCoordinateMapByPlayerIndex = new Dictionary<int, Vector2Int>();
+            foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
+                onShowingStartCoordinateMapByPlayerIndex.Add(playerIndex, coordinate);
+            
             if (previousPageIndex != CurrentPageIndex)
-                await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, coordinate, isAutoTurnOffIsNew);
+                await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, onShowingStartCoordinateMapByPlayerIndex, isAutoTurnOffIsNew);
 
             if (previousPageIndex != NotInitialPageIndex && _pageModule.CheckIsHiding(previousPageIndex.ToString()))
                 _pageModule.OnlyCallHidingComplete(previousPageIndex.ToString());
 
             if (isShowImmediately)
-                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
+                await _pageModule.ShowImmediatelyAsync(CurrentPageIndex.ToString(), null, true, onShowingStartCoordinateMapByPlayerIndex, isAutoTurnOffIsNew);
             else
-                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, coordinate, isAutoTurnOffIsNew);
+                await _pageModule.ShowAsync(CurrentPageIndex.ToString(), null, true, onShowingStartCoordinateMapByPlayerIndex, isAutoTurnOffIsNew);
 
             OnChangePage?.Invoke(previousPageIndex, CurrentPageIndex);
 

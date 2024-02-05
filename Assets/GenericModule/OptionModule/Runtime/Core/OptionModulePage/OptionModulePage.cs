@@ -18,7 +18,7 @@ namespace CizaOptionModule
         protected readonly SelectOptionLogic _selectOptionLogic = new SelectOptionLogic();
 
         protected IOptionView OptionView { get; private set; }
-        protected Vector2Int OnShowingStartCoordinate { get; private set; }
+        protected Dictionary<int, Vector2Int> OnShowingStartCoordinateMapByPlayerIndex { get; private set; }
 
 
         protected bool IsImmediately { get; private set; }
@@ -50,6 +50,7 @@ namespace CizaOptionModule
             OptionView.OptionsIncludeNull.InitializeOptions(optionModule, optionDefaultPlayerIndex, optionModulePageInfo.OptionKeys, optionInfos, OnConfirmImp, null, GetType().Name);
 
             _selectOptionLogic.Initialize(OptionView.OptionColumns, OptionView.Options, OptionView.ColumnInfo, OptionView.RowInfo);
+            _selectOptionLogic.OnRemovePlayer += OnRemovePlayer;
             _selectOptionLogic.OnSetCurrentCoordinate += OnSetCurrentCoordinate;
 
             OptionView.Initialize();
@@ -58,7 +59,7 @@ namespace CizaOptionModule
 
         public virtual UniTask ShowingPrepareAsync(params object[] parameters)
         {
-            OnShowingStartCoordinate = (Vector2Int)parameters[0];
+            OnShowingStartCoordinateMapByPlayerIndex = parameters[0] as Dictionary<int, Vector2Int>;
             IsAutoTurnOffIsNew = (bool)parameters[1];
             return UniTask.CompletedTask;
         }
@@ -72,7 +73,7 @@ namespace CizaOptionModule
             LocalIsAutoTurnOffIsNew = true;
 
             foreach (var playerIndex in _selectOptionLogic.PlayerIndexList)
-                _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, OnShowingStartCoordinate);
+                _selectOptionLogic.TrySetCurrentCoordinate(playerIndex, OnShowingStartCoordinateMapByPlayerIndex[playerIndex]);
 
             IsImmediately = false;
         }
@@ -95,6 +96,7 @@ namespace CizaOptionModule
         public virtual void Release()
         {
             OptionView.Release();
+            _selectOptionLogic.OnRemovePlayer -= OnRemovePlayer;
             _selectOptionLogic.OnSetCurrentCoordinate -= OnSetCurrentCoordinate;
         }
 
@@ -161,26 +163,27 @@ namespace CizaOptionModule
         protected virtual void OnConfirmImp(int playerIndex, string optionKey, bool isUnlock) =>
             OnConfirm?.Invoke(playerIndex, optionKey, isUnlock);
 
+        protected virtual void OnRemovePlayer(int playerIndex, Vector2Int coordinate) =>
+            Unselect(coordinate);
+
         protected virtual void OnSetCurrentCoordinate(int playerIndex, Vector2Int previousCoordinate, Option previousOption, Vector2Int currentCoordinate, Option currentOption)
         {
             OptionView.SetCurrentCoordinate(playerIndex, previousCoordinate, previousOption, currentCoordinate, currentOption, IsImmediately, _isFromPointerEnterMapByPlayerIndex[playerIndex]);
 
-            if (!CheckIsAnyPlayerOnCoordinate(previousCoordinate))
-                previousOption?.Unselect();
+            Unselect(previousCoordinate);
 
-            currentOption?.Select(IsAutoTurnOffIsNew && LocalIsAutoTurnOffIsNew);
+            currentOption.Select(IsAutoTurnOffIsNew && LocalIsAutoTurnOffIsNew);
             OnSelect?.Invoke(playerIndex, previousOption != null ? previousOption.Key : string.Empty, currentOption != null ? currentOption.Key : string.Empty);
 
             _isFromPointerEnterMapByPlayerIndex[playerIndex] = false;
         }
 
-        protected bool CheckIsAnyPlayerOnCoordinate(Vector2Int coordinate)
+        private void Unselect(Vector2Int coordinate)
         {
-            for (var i = 0; i < _selectOptionLogic.PlayerCount; i++)
-                if (TryGetCurrentCoordinate(i, out var currentCoordinate) && currentCoordinate == coordinate)
-                    return true;
+            if (_selectOptionLogic.CheckIsAnyPlayerOnCoordinate(coordinate) || !_selectOptionLogic.TryGetOption(coordinate, out var option))
+                return;
 
-            return false;
+            option.Unselect();
         }
     }
 }

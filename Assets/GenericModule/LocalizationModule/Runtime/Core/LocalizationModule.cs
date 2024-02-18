@@ -72,16 +72,9 @@ namespace CizaLocalizationModule
             IsInitialized = false;
         }
 
-        public void ChangeToDefaultLocale()
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning($"[{_className}::ChangeToDefaultLocale] LocalizationModule is not initialized.");
-                return;
-            }
+        public UniTask ChangeToDefaultLocaleAsync() =>
+            ChangeLocaleAsync(DefaultLocale);
 
-            CurrentLocale = DefaultLocale;
-        }
 
         public async UniTask ChangeLocaleAsync(string locale)
         {

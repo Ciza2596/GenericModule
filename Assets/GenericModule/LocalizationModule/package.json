@@ -2,7 +2,7 @@
   "name": "com.ciza.localizationmodule",
   "displayName": "LocalizationModule",
   "description": "LocalizationModule.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

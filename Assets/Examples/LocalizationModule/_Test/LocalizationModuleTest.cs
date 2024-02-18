@@ -64,7 +64,7 @@ public class LocalizationModuleTest
         Assert.AreEqual(En, _localizationModule.CurrentLocale, $"LocalizationModule should be locale: {En}.");
 
         // act
-        _localizationModule.ChangeToDefaultLocale();
+        await _localizationModule.ChangeToDefaultLocaleAsync();
 
         // assert
         Assert.AreEqual(DefaultLocale, _localizationModule.CurrentLocale, $"LocalizationModule should be locale: {DefaultLocale}.");

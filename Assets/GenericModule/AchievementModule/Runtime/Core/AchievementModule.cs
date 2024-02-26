@@ -109,6 +109,14 @@ namespace CizaAchievementModule
             }
         }
 
+        public void Refresh()
+        {
+            if (!IsInitialized)
+                return;
+
+            CheckAnyIsAchievementUnlocked(false);
+        }
+
         public void SetStat(string statDataId, float value)
         {
             if (!IsInitialized || !_statMapByStatDataId.TryGetValue(statDataId, out var stat))
@@ -116,7 +124,7 @@ namespace CizaAchievementModule
 
             stat.SetCurrent(value);
 
-            CheckAnyIsAchievementUnlocked();
+            CheckAnyIsAchievementUnlocked(true);
         }
 
         public void AddStat(string statDataId, float value)
@@ -133,24 +141,27 @@ namespace CizaAchievementModule
         public void SetStatBeFalse(string statDataId) =>
             SetStat(statDataId, False);
 
-        private void CheckAnyIsAchievementUnlocked()
+        private void CheckAnyIsAchievementUnlocked(bool isFirstUnlocked)
         {
             foreach (var achievementDataId in _isUnlockedMapByAchievementDataId.Keys.ToArray())
-                CheckIsAchievementUnlocked(achievementDataId);
+                CheckIsAchievementUnlocked(isFirstUnlocked, achievementDataId);
         }
 
-        private void CheckIsAchievementUnlocked(string achievementDataId)
+        private void CheckIsAchievementUnlocked(bool isFirstUnlocked, string achievementDataId)
         {
-            if (CheckIsFirstUnlocked(achievementDataId))
+            if (CheckIsUnlocked(isFirstUnlocked, achievementDataId))
             {
                 _isUnlockedMapByAchievementDataId[achievementDataId] = true;
                 OnUnlocked?.Invoke(achievementDataId);
             }
         }
 
-        private bool CheckIsFirstUnlocked(string achievementDataId)
+        private bool CheckIsUnlocked(bool isFirstUnlocked, string achievementDataId)
         {
-            if (!_isUnlockedMapByAchievementDataId.TryGetValue(achievementDataId, out var isUnlocked) || isUnlocked)
+            if (!_isUnlockedMapByAchievementDataId.TryGetValue(achievementDataId, out var isUnlocked))
+                return false;
+
+            if (isFirstUnlocked && isUnlocked)
                 return false;
 
             foreach (var achievementInfo in _config.AchievementInfos)

@@ -192,6 +192,22 @@ public class AchievementModuleTest
         Check_IsAchievementUnlocked_From_AchievementModule(MasterPlayerAchievementDataId, true);
         Check_IsAchievementUnlockedEvent(MasterPlayerAchievementDataId, true);
     }
+    
+    [Test]
+    public void _11_Refresh()
+    {
+        // arrange
+        _09_Achievement_Is_Unlocked_With_And();
+        _unlockedAchievementDataIds.Remove(MasterPlayerAchievementDataId);
+        Check_IsAchievementUnlockedEvent(MasterPlayerAchievementDataId, false);
+        
+        // act
+        _achievementModule.Refresh();
+
+        // assert
+        Check_IsAchievementUnlocked_From_AchievementModule(MasterPlayerAchievementDataId, true);
+        Check_IsAchievementUnlockedEvent(MasterPlayerAchievementDataId, true);
+    }
 
     private void Check_IsInitialized(bool expectedValue) =>
         Assert.AreEqual(expectedValue, _achievementModule.IsInitialized, $"IsInitialized should be {expectedValue}, not {_achievementModule.IsInitialized}.");

@@ -16,7 +16,7 @@ namespace CizaOptionModule
 
         public static bool TryGetRandomOptionKey(this Option[] options, string[] withoutOptionKeys, out string optionKey)
         {
-            var allOptionKeys = options.ToKeys().ToArrayWithoutSomeItems(withoutOptionKeys);
+            var allOptionKeys = options.ToKeys().ToArrayWithoutSameItems(withoutOptionKeys);
             if (allOptionKeys.Length <= 0)
             {
                 optionKey = string.Empty;

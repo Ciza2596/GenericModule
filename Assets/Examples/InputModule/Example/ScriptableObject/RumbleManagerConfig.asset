@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rumbleInfos:
   - _dataId: 
+    _order: 0
     _duration: 0
     _controlSchemeInfos: []

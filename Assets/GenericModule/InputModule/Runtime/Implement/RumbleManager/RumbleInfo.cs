@@ -13,6 +13,9 @@ namespace CizaInputModule
 
         [Space]
         [SerializeField]
+        private int _order;
+        
+        [SerializeField]
         private float _duration;
 
         [Space]
@@ -21,6 +24,8 @@ namespace CizaInputModule
 
 
         public string DataId => _dataId;
+        
+        public int Order => _order;
         public float Duration => _duration;
 
         public bool TryGetControlSchemeInfo(string dataId, out IControlSchemeInfo controlSchemeInfo)

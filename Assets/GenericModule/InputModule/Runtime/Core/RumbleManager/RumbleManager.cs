@@ -10,10 +10,26 @@ namespace CizaInputModule
         private readonly IRumbleManagerConfig _rumbleManagerConfig;
         private readonly IRumbleInputs _rumbleInputs;
 
-        private readonly Dictionary<int, string> _timerIdMapByIndex = new Dictionary<int, string>();
+        private readonly Dictionary<int, RumbleData> _rumbleDataMapByPlayerIndex = new Dictionary<int, RumbleData>();
         private readonly TimerModule _timerModule = new TimerModule();
 
         public string[] AllDataIds => _rumbleManagerConfig.AllDataIds;
+
+        public bool CheckIsRumble(int playerIndex) =>
+            _rumbleDataMapByPlayerIndex.ContainsKey(playerIndex);
+
+        public bool TryGetOrder(int playerIndex, out int order)
+        {
+            if (!_rumbleDataMapByPlayerIndex.TryGetValue(playerIndex, out var rumbleData))
+            {
+                order = 0;
+                return false;
+            }
+
+            order = rumbleData.Order;
+            return true;
+        }
+
 
         public RumbleManager(IRumbleManagerConfig rumbleManagerConfig, IRumbleInputs rumbleInputs)
         {
@@ -28,13 +44,16 @@ namespace CizaInputModule
         public void Tick(float deltaTime) =>
             _timerModule.Tick(deltaTime);
 
-        public void Rumble(int index, string dataId)
+        public void Rumble(int playerIndex, string dataId)
         {
-            if (!CheckHasPlayer(index) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo) || !_rumbleInputs.TryGetCurrentControlScheme(index, out var currentControlScheme) || !rumbleInfo.TryGetControlSchemeInfo(currentControlScheme, out var controlSchemeInfo))
+            if (!CheckHasPlayer(playerIndex) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo) || !_rumbleInputs.TryGetCurrentControlScheme(playerIndex, out var currentControlScheme) || !rumbleInfo.TryGetControlSchemeInfo(currentControlScheme, out var controlSchemeInfo))
                 return;
 
-            _rumbleInputs.SetMotorSpeeds(index, controlSchemeInfo.LowFrequency, controlSchemeInfo.HighFrequency);
-            AddTimer(index, rumbleInfo.Duration);
+            if (TryGetOrder(playerIndex, out var order) && order > rumbleInfo.Order)
+                return;
+
+            _rumbleInputs.SetMotorSpeeds(playerIndex, controlSchemeInfo.LowFrequency, controlSchemeInfo.HighFrequency);
+            AddRumbleData(playerIndex, rumbleInfo.Order, rumbleInfo.Duration);
         }
 
         public void RumbleAll(string dataId)
@@ -43,47 +62,60 @@ namespace CizaInputModule
                 Rumble(i, dataId);
         }
 
-        public void Stop(int index)
+        public void Stop(int playerIndex)
         {
-            if (!_timerIdMapByIndex.ContainsKey(index))
+            if (!CheckIsRumble(playerIndex))
                 return;
 
-            RemoveTimerIdAndResetHaptics(index);
+            RemoveTimerIdAndResetHaptics(playerIndex);
         }
 
         public void StopAll()
         {
-            foreach (var index in _timerIdMapByIndex.Keys.ToArray())
+            foreach (var index in _rumbleDataMapByPlayerIndex.Keys.ToArray())
                 Stop(index);
         }
 
-        private bool CheckHasPlayer(int index) =>
-            index >= 0 && index < _rumbleInputs.PlayerCount;
+        private bool CheckHasPlayer(int playerIndex) =>
+            playerIndex >= 0 && playerIndex < _rumbleInputs.PlayerCount;
 
-        private void AddTimer(int index, float duration)
+        private void AddRumbleData(int playerIndex, int order, float duration)
         {
-            RemoveTimer(index);
+            RemoveTimer(playerIndex);
 
-            var timerId = _timerModule.AddOnceTimer(duration, timerReadModel => { RemoveTimerIdAndResetHaptics(index); });
-            _timerIdMapByIndex.Add(index, timerId);
+            var timerId = _timerModule.AddOnceTimer(duration, timerReadModel => { RemoveTimerIdAndResetHaptics(playerIndex); });
+            _rumbleDataMapByPlayerIndex.Add(playerIndex, new RumbleData(order, timerId));
         }
 
-        private void RemoveTimer(int index)
+        private void RemoveTimer(int playerIndex)
         {
-            if (!_timerIdMapByIndex.TryGetValue(index, out var timerId))
+            if (!_rumbleDataMapByPlayerIndex.TryGetValue(playerIndex, out var rumbleData))
                 return;
 
-            _timerModule.RemoveTimer(timerId);
-            _timerIdMapByIndex.Remove(index);
+            _timerModule.RemoveTimer(rumbleData.TimerId);
+            _rumbleDataMapByPlayerIndex.Remove(playerIndex);
         }
 
-        private void RemoveTimerIdAndResetHaptics(int index)
+        private void RemoveTimerIdAndResetHaptics(int playerIndex)
         {
-            _rumbleInputs.ResetHaptics(index);
-            _timerIdMapByIndex.Remove(index);
+            _rumbleInputs.ResetHaptics(playerIndex);
+            _rumbleDataMapByPlayerIndex.Remove(playerIndex);
         }
 
         private void OnPlayerLeftImp(PlayerInput playerInput) =>
             Stop(playerInput.playerIndex);
+
+
+        private class RumbleData
+        {
+            public int Order { get; }
+            public string TimerId { get; }
+
+            public RumbleData(int order, string timerId)
+            {
+                Order = order;
+                TimerId = timerId;
+            }
+        }
     }
 }

@@ -15,12 +15,6 @@ namespace CizaTextModule
         public const string DOUBLE_QUOTATION_TAG = "\"\"";
         public const char QUOTATION_TAG = '\"';
 
-        // public const string LESS_THAN_WITH_QUOTATION_TAG = "\"<";
-        // public const string LESS_THAN = "<";
-
-        // public const string GREATER_THAN_WITH_QUOTATION_TAG = ">\"";
-        // public const string GREATER_THAN = ">";
-
         public static Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
         {
             var filterText = FilterText(csvText);
@@ -87,14 +81,5 @@ namespace CizaTextModule
             newText = newText.Replace(R_TAG_WITH_SLASH.ToString(), EMPTY);
             return newText;
         }
-
-        // public static string FilterText(string text)
-        // {
-        //     var newText = text.Replace(DOUBLE_QUOTATION_TAG, QUOTATION_TAG);
-        //     newText = newText.Replace(LESS_THAN_WITH_QUOTATION_TAG, LESS_THAN);
-        //     newText = newText.Replace(GREATER_THAN_WITH_QUOTATION_TAG, GREATER_THAN);
-        //     newText = newText.Replace(R_TAG_WITH_SLASH, EMPTY);
-        //     return newText;
-        // }
     }
 }

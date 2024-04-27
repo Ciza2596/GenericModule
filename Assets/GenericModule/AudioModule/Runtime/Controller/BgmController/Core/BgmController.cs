@@ -14,7 +14,7 @@ namespace CizaAudioModule
             event Action<string, string, string> OnBgmPlay;
             event Action<string, string, string> OnBgmStop;
 
-            UniTask LoadBgmAssetAsync(string sfxDataId, CancellationToken cancellationToken);
+            UniTask LoadBgmAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken);
             void UnloadBgmAsset(string sfxDataId);
 
             UniTask<string> PlayBgmAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null);
@@ -117,7 +117,7 @@ namespace CizaAudioModule
 
         private async UniTask LoadBgmAssetAsync(string bgmDataId, CancellationToken cancellationToken)
         {
-            await _audioPlayer.LoadBgmAssetAsync(bgmDataId, cancellationToken);
+            await _audioPlayer.LoadBgmAssetAsync(bgmDataId, $"Please check bgm: {bgmDataId} in BgmControllerConfig.", cancellationToken);
             _loadedBgmDataIds.Add(bgmDataId);
         }
 

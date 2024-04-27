@@ -194,8 +194,8 @@ namespace CizaAudioModule
         public void SetBgmVolume(float volume) =>
             _bgmModule.SetVolume(volume);
 
-        public UniTask LoadBgmAssetAsync(string bgmDataId, CancellationToken cancellationToken = default) =>
-            _bgmModule.LoadAudioAssetAsync(bgmDataId, cancellationToken);
+        public UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken = default) =>
+            _bgmModule.LoadAudioAssetAsync(bgmDataId, errorMessage, cancellationToken);
 
         public void UnloadBgmAsset(string bgmDataId) =>
             _bgmModule.UnloadAudioAsset(bgmDataId);
@@ -228,8 +228,8 @@ namespace CizaAudioModule
         public void SetSfxVolume(float volume) =>
             _sfxModule.SetVolume(volume);
 
-        public UniTask LoadSfxAssetAsync(string sfxDataId, CancellationToken cancellationToken = default) =>
-            _sfxModule.LoadAudioAssetAsync(sfxDataId, cancellationToken);
+        public UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken = default) =>
+            _sfxModule.LoadAudioAssetAsync(sfxDataId, errorMessage, cancellationToken);
 
         public void UnloadSfxAsset(string sfxDataId) =>
             _sfxModule.UnloadAudioAsset(sfxDataId);
@@ -262,8 +262,8 @@ namespace CizaAudioModule
         public void SetVoiceVolume(float volume) =>
             _voiceModule.SetVolume(volume);
 
-        public UniTask LoadVoiceAssetAsync(string voiceDataId, CancellationToken cancellationToken = default) =>
-            _voiceModule.LoadAudioAssetAsync(voiceDataId, cancellationToken);
+        public UniTask LoadVoiceAssetAsync(string voiceDataId, string errorMessage, CancellationToken cancellationToken = default) =>
+            _voiceModule.LoadAudioAssetAsync(voiceDataId, errorMessage, cancellationToken);
 
         public void UnloadVoiceAsset(string voiceDataId) =>
             _voiceModule.UnloadAudioAsset(voiceDataId);

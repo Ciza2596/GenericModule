@@ -38,6 +38,9 @@ namespace CizaOptionModule
         // PreviousPageIndex, CurrentPageIndex
         public event Action<int, int> OnChangePage;
 
+        // PageIndex, OptionKey, CanConfirm
+        public event Action<int, string, bool> OnSetCanConfirm; 
+        
         // PageIndex, OptionKey, IsUnlock
         public event Action<int, string, bool> OnSetIsUnlock;
 
@@ -362,11 +365,22 @@ namespace CizaOptionModule
         public void SetCanConfirm(bool canConfirm) =>
             CanConfirm = canConfirm;
 
+        public void SetCanConfirm(int pageIndex, string optionKey, bool canConfirm)
+        {
+            if (!IsInitialized || !TryGetOptionModulePage(pageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
+                return;
+
+            option.SetCanConfirm(canConfirm);
+            OnSetCanConfirm?.Invoke(pageIndex, optionKey, canConfirm);
+        }
+
         public void SetIsUnlock(int pageIndex, string optionKey, bool isUnlock)
         {
             if (!IsInitialized || !TryGetOptionModulePage(pageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
                 return;
+            
             option.SetIsUnlock(isUnlock);
+            OnSetIsUnlock?.Invoke(pageIndex, optionKey, isUnlock);
         }
 
         public bool TryConfirm(int playerIndex)

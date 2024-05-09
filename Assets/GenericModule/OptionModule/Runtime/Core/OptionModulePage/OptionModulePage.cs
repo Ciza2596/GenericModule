@@ -142,7 +142,7 @@ namespace CizaOptionModule
             if (!_selectOptionLogic.TryGetCurrentCoordinate(playerIndex, out var currentCoordinate))
                 return false;
 
-            if (!_selectOptionLogic.TryGetOption(currentCoordinate, out var option))
+            if (!_selectOptionLogic.TryGetOption(currentCoordinate, out var option) || !option.CanConfirm)
                 return false;
 
             return option.TryConfirm(playerIndex);

@@ -34,17 +34,19 @@ namespace CizaOptionModule
         public int PlayerIndex { get; private set; }
         public string Key { get; private set; }
 
+        public bool CanConfirm { get; private set; }
         public bool IsEnable { get; private set; }
         public bool IsUnlock { get; private set; }
         public bool IsNew { get; private set; }
 
-        public virtual void Initialize(OptionModule optionModule, int playerIndex, string key, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
+        public virtual void Initialize(OptionModule optionModule, int playerIndex, string key, bool canConfirm, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
         {
             SetOptionModule(optionModule);
 
             SetPlayerIndex(playerIndex);
             SetKey(key);
 
+            SetCanConfirm(canConfirm);
             SetIsEnable(isEnable);
             SetIsUnlock(isUnlock);
             SetIsNew(isNew);
@@ -72,6 +74,9 @@ namespace CizaOptionModule
 
         public virtual void SetKey(string key) =>
             Key = key;
+
+        public virtual void SetCanConfirm(bool canConfirm) =>
+            CanConfirm = canConfirm;
 
         public virtual void SetIsEnable(bool isEnable) =>
             IsEnable = isEnable;

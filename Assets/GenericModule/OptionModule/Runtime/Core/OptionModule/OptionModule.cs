@@ -38,6 +38,9 @@ namespace CizaOptionModule
         // PreviousPageIndex, CurrentPageIndex
         public event Action<int, int> OnChangePage;
 
+        // PageIndex, OptionKey, IsUnlock
+        public event Action<int, string, bool> OnSetIsUnlock;
+
         public bool IsInitialized => _pageModule.IsInitialized;
 
         public int PlayerCount => _playerMapByIndex.Count;

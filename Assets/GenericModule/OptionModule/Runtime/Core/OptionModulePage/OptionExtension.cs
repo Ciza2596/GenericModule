@@ -35,7 +35,7 @@ namespace CizaOptionModule
                 if (option is null)
                     continue;
 
-                option.Initialize(optionModule, playerIndex, optionKey, optionInfo.IsEnable, optionInfo.IsUnlock, optionInfo.IsNew, onConfirm, onPointerEnter, optionInfo.Parameters);
+                option.Initialize(optionModule, playerIndex, optionKey, optionInfo.CanConfirm, optionInfo.IsEnable, optionInfo.IsUnlock, optionInfo.IsNew, onConfirm, onPointerEnter, optionInfo.Parameters);
             }
         }
 
@@ -43,7 +43,7 @@ namespace CizaOptionModule
         {
             Assert.IsNotNull(options, $"[{logName}::InitializeOptions] options is null.");
             foreach (var option in options)
-                option.Initialize(null, playerIndex, option.Key, option.IsEnable, option.IsEnable, !isReadOptionKeys.Contains(option.Key), onConfirm, onPointerEnter, Array.Empty<object>());
+                option.Initialize(null, playerIndex, option.Key, option.CanConfirm, option.IsEnable, option.IsEnable, !isReadOptionKeys.Contains(option.Key), onConfirm, onPointerEnter, Array.Empty<object>());
         }
     }
 }

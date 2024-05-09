@@ -27,7 +27,7 @@ namespace CizaOptionModule
 		bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter);
 
 		bool TryConfirm(int playerIndex);
-
+		
 		bool TryMoveToLeft(int playerIndex);
 
 		bool TryMoveToRight(int playerIndex);

@@ -359,6 +359,13 @@ namespace CizaOptionModule
         public void SetCanConfirm(bool canConfirm) =>
             CanConfirm = canConfirm;
 
+        public void SetIsUnlock(int pageIndex, string optionKey, bool isUnlock)
+        {
+            if (!IsInitialized || !TryGetOptionModulePage(pageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
+                return;
+            option.SetIsUnlock(isUnlock);
+        }
+
         public bool TryConfirm(int playerIndex)
         {
             if (!IsInitialized || !TryGetOptionModulePage(CurrentPageIndex, out var optionModulePage) || !_playerMapByIndex.TryGetValue(playerIndex, out var player) || !player.CanConfirm || !CanConfirm)
@@ -388,7 +395,7 @@ namespace CizaOptionModule
             var onShowingStartCoordinateMapByPlayerIndex = new Dictionary<int, Vector2Int>();
             foreach (var playerIndex in _playerMapByIndex.Keys.ToArray())
                 onShowingStartCoordinateMapByPlayerIndex.Add(playerIndex, coordinate);
-            
+
             if (previousPageIndex != CurrentPageIndex)
                 await _pageModule.OnlyCallShowingPrepareAsync(CurrentPageIndex.ToString(), null, onShowingStartCoordinateMapByPlayerIndex, isAutoTurnOffIsNew);
 

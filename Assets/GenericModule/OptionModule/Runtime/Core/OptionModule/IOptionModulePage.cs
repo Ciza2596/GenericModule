@@ -13,6 +13,8 @@ namespace CizaOptionModule
 		int MaxColumnIndex { get; }
 		int MaxRowIndex    { get; }
 
+		string AllOptionKeys
+		
 		Option[] GetAllOptions();
 		
 		bool TryGetOption(string     optionKey, out Option     option);

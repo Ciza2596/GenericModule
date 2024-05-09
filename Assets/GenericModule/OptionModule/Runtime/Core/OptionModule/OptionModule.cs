@@ -39,8 +39,8 @@ namespace CizaOptionModule
         public event Action<int, int> OnChangePage;
 
         // PageIndex, OptionKey, CanConfirm
-        public event Action<int, string, bool> OnSetCanConfirm; 
-        
+        public event Action<int, string, bool> OnSetCanConfirm;
+
         // PageIndex, OptionKey, IsUnlock
         public event Action<int, string, bool> OnSetIsUnlock;
 
@@ -365,6 +365,13 @@ namespace CizaOptionModule
         public void SetCanConfirm(bool canConfirm) =>
             CanConfirm = canConfirm;
 
+        public void SetAllCanConfirm(bool canConfirm)
+        {
+            foreach (var optionModulePage in _pageModule.GetAllPage<IOptionModulePage>())
+                foreach (var option in optionModulePage.GetAllOptions())
+                    SetCanConfirm(optionModulePage.PageIndex, option.Key, canConfirm);
+        }
+
         public void SetCanConfirm(int pageIndex, string optionKey, bool canConfirm)
         {
             if (!IsInitialized || !TryGetOptionModulePage(pageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
@@ -378,7 +385,7 @@ namespace CizaOptionModule
         {
             if (!IsInitialized || !TryGetOptionModulePage(pageIndex, out var optionModulePage) || !optionModulePage.TryGetOption(optionKey, out var option))
                 return;
-            
+
             option.SetIsUnlock(isUnlock);
             OnSetIsUnlock?.Invoke(pageIndex, optionKey, isUnlock);
         }

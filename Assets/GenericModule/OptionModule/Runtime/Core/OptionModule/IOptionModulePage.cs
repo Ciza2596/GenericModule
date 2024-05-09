@@ -3,39 +3,37 @@ using UnityEngine;
 
 namespace CizaOptionModule
 {
-	public interface IOptionModulePage
-	{
-		event Action<int, string, string> OnSelect;
-		event Action<int, string, bool>   OnConfirm;
+    public interface IOptionModulePage
+    {
+        event Action<int, string, string> OnSelect;
+        event Action<int, string, bool> OnConfirm;
 
-		int PageIndex { get; }
+        int PageIndex { get; }
 
-		int MaxColumnIndex { get; }
-		int MaxRowIndex    { get; }
+        int MaxColumnIndex { get; }
+        int MaxRowIndex { get; }
 
-		string AllOptionKeys
-		
-		Option[] GetAllOptions();
-		
-		bool TryGetOption(string     optionKey, out Option     option);
+        Option[] GetAllOptions();
 
-		bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate);
-		bool TryGetCurrentOptionKey(int  playerIndex, out string     currentOptionKey);
+        bool TryGetOption(string optionKey, out Option option);
 
-		void AddPlayer(int playerIndex);
-		void RemovePlayer(int playerIndex);
+        bool TryGetCurrentCoordinate(int playerIndex, out Vector2Int currentCoordinate);
+        bool TryGetCurrentOptionKey(int playerIndex, out string currentOptionKey);
 
-		bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
-		bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter);
+        void AddPlayer(int playerIndex);
+        void RemovePlayer(int playerIndex);
 
-		bool TryConfirm(int playerIndex);
-		
-		bool TryMoveToLeft(int playerIndex);
+        bool TrySetCurrentCoordinate(int playerIndex, Vector2Int coordinate);
+        bool TrySetCurrentCoordinate(int playerIndex, string optionKey, bool isFromPointerEnter);
 
-		bool TryMoveToRight(int playerIndex);
+        bool TryConfirm(int playerIndex);
 
-		bool TryMoveToUp(int playerIndex);
+        bool TryMoveToLeft(int playerIndex);
 
-		bool TryMoveToDown(int       playerIndex);
-	}
+        bool TryMoveToRight(int playerIndex);
+
+        bool TryMoveToUp(int playerIndex);
+
+        bool TryMoveToDown(int playerIndex);
+    }
 }

@@ -7,5 +7,11 @@ namespace CizaOptionModule
 		void Initialize(Option option);
 
 		void Release(Option option);
+
+		void Show();
+		void Hide();
+
+		void EnableInteractable();
+		void DisableInteractable();
 	}
 }

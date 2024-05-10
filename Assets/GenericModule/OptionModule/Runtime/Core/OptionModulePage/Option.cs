@@ -31,6 +31,9 @@ namespace CizaOptionModule
         // OptionKey, IsNew
         public event Action<string, bool> OnIsNew;
 
+        // OptionKey, IsUnlock
+        public event Action<string, bool> OnSetIsUnlock;
+
         public int PlayerIndex { get; private set; }
         public string Key { get; private set; }
 
@@ -81,8 +84,11 @@ namespace CizaOptionModule
         public virtual void SetIsEnable(bool isEnable) =>
             IsEnable = isEnable;
 
-        public virtual void SetIsUnlock(bool isUnlock) =>
+        public virtual void SetIsUnlock(bool isUnlock)
+        {
             IsUnlock = isUnlock;
+            OnSetIsUnlock?.Invoke(Key, IsUnlock);
+        }
 
         public virtual void SetIsNew(bool isNew) =>
             IsNew = isNew;

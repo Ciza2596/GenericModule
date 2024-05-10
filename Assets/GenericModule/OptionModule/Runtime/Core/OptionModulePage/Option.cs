@@ -44,6 +44,14 @@ namespace CizaOptionModule
 
         public virtual void Initialize(OptionModule optionModule, int playerIndex, string key, bool canConfirm, bool isEnable, bool isUnlock, bool isNew, Action<int, string, bool> onConfirm, Action<int, string> onPointerEnter, object[] parameters)
         {
+            foreach (var optionSup in gameObject.GetComponentsInChildren<IOptionSup>())
+            {
+                if (optionSup.IsInitialized)
+                    optionSup.Release(this);
+
+                optionSup.Initialize(this);
+            }
+            
             SetOptionModule(optionModule);
 
             SetPlayerIndex(playerIndex);
@@ -56,14 +64,6 @@ namespace CizaOptionModule
 
             _onConfirm = onConfirm;
             _onPointerEnter = onPointerEnter;
-
-            foreach (var optionSup in gameObject.GetComponentsInChildren<IOptionSup>())
-            {
-                if (optionSup.IsInitialized)
-                    optionSup.Release(this);
-
-                optionSup.Initialize(this);
-            }
 
             OnInitialize?.Invoke(parameters);
             OnIsNew?.Invoke(Key, IsNew);

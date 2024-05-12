@@ -20,7 +20,7 @@ namespace CizaTransitionModule
         public const string LoadingPageDataId = "Loading";
         public const string TransitionOutPageDataId = "TransitionOut";
 
-        public bool CanChangeScene { get; private set; }
+        public bool CanTransit { get; private set; }
 
         public bool IsInitialized => _pageModule.IsInitialized;
 
@@ -38,7 +38,7 @@ namespace CizaTransitionModule
                 return;
 
             _pageModule.Initialize(parent);
-            CanChangeScene = true;
+            CanTransit = true;
             SetCurrentPresentersToBeNull();
             SetNextPresentersToBeNull();
         }
@@ -62,10 +62,10 @@ namespace CizaTransitionModule
 
         private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters)
         {
-            if (!IsInitialized || !CanChangeScene)
+            if (!IsInitialized || !CanTransit)
                 return;
 
-            CanChangeScene = false;
+            CanTransit = false;
             SetNextPresenters(nextPresenters);
 
             await CreateAllPagesAsync(transitionInPageDataId, loadingPageDataId, transitionOutPageDataId);
@@ -74,7 +74,7 @@ namespace CizaTransitionModule
             await LoadingAsync(transitionInPageDataId, loadingPageDataId);
             await TransitionOutAsync(loadingPageDataId, transitionOutPageDataId);
             _pageModule.DestroyAll();
-            CanChangeScene = true;
+            CanTransit = true;
         }
 
         private void SetCurrentPresentersToBeNull() =>

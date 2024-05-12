@@ -28,10 +28,10 @@ namespace CizaTransitionModule.Example
         private TransitionModule _transitionModule;
 
 
-        private void Awake()
+        private async void Awake()
         {
             _transitionModule = new TransitionModule(_transitionModuleConfig);
-            _transitionModule.Initialize(transform);
+            await _transitionModule.InitializeAsync(transform);
 
             _goToAButton.onClick.AddListener(GoToAButton);
             _goToBButton.onClick.AddListener(GoToBButton);

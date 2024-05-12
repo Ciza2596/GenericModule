@@ -32,7 +32,7 @@ namespace CizaTransitionModule
         public TransitionModule(ITransitionModuleConfig transitionModuleConfig) =>
             _pageModule = new PageModule(transitionModuleConfig);
 
-        public async UniTask Initialize(Transform parent = null)
+        public async UniTask InitializeAsync(Transform parent = null)
         {
             if (IsInitialized)
                 return;

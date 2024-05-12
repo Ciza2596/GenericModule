@@ -4,7 +4,6 @@ using CizaPageModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Scripting;
-using Action = Unity.Plastic.Antlr3.Runtime.Misc.Action;
 
 namespace CizaTransitionModule
 {

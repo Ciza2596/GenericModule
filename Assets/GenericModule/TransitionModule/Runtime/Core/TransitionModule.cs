@@ -70,8 +70,11 @@ namespace CizaTransitionModule
             SetNextPresenters(nextPresenters);
 
             await TransitionInAsync(transitionInPageDataId);
-            await LoadingAsync(transitionInPageDataId, loadingPageDataId, onRelease, onComplete);
+            await LoadingAsync(transitionInPageDataId, loadingPageDataId, onRelease);
             await TransitionOutAsync(loadingPageDataId, transitionOutPageDataId);
+
+            CurrentPresenters.Complete();
+            onComplete?.Invoke();
 
             CanTransit = true;
         }
@@ -100,7 +103,7 @@ namespace CizaTransitionModule
             _pageModule.ShowAsync(transitionInPageDataId);
 
 
-        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId, Action onRelease, Action onComplete)
+        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId, Action onRelease)
         {
             await _pageModule.ShowImmediatelyAsync(loadingPageDataId);
             _pageModule.HideImmediately(transitionInPageDataId);
@@ -115,9 +118,6 @@ namespace CizaTransitionModule
 
             CurrentPresenters.Release();
             onRelease?.Invoke();
-
-            NextPresenters.Complete();
-            onComplete?.Invoke();
 
             SetCurrentPresenters(NextPresenters);
             SetNextPresentersToBeNull();

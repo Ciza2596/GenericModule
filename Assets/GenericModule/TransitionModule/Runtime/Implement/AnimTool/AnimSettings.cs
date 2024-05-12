@@ -13,10 +13,10 @@ namespace CizaTransitionModule.Implement
         [SerializeField]
         private Animator _animator;
 
-        public void PlayAtStart(Action onPlay) =>
-            _animator.PlayAtStart(_animStateName, 0, onPlay);
+        public void PlayAtStart(bool isStop, Action onPlay) =>
+            _animator.PlayAtStart(_animStateName, 0, isStop, onPlay);
 
-        public UniTask PlayAtStartAsync(Action onPlay) =>
-            _animator.PlayAtStartAsync(_animStateName, 0, onPlay);
+        public UniTask PlayAtStartAsync(bool isStop, Action onPlay) =>
+            _animator.PlayAtStartAsync(_animStateName, 0, isStop, onPlay);
     }
 }

@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _refreshImages:
   - {fileID: 4112154728541978107}
-  _defaultLoadingTime: 5
+  _defaultLoadingTime: 0.5
   _animSettings:
     _animStateName: Execute
     _animator: {fileID: 7957347922394700481}

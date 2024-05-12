@@ -17,6 +17,7 @@ module | Test | Samples |
 [PopupModule](#popupmodule) | ✔️ | ❌ |
 [AchievementModule](#achievementModule) | ✔️ | ❌ |
 [OptionModule](#optionmodule) | ❌ | ❌ |
+[TransitionModule](#transitionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
 [AddressablesModule](#addressablesmodule) | ❌ | ❌ |
 [LocaleAddressablesModule](#localeaddressablesmodule) | ❌ | ❌ |
@@ -413,6 +414,21 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModu
 ### Manual:
 OptionModule manual.
 
+## TransitionModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/TransitionModule
+```
+
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/PageModule
+```
+
+### Manual:
+TransitionModule manual.
 
 ## SceneModule
 ```

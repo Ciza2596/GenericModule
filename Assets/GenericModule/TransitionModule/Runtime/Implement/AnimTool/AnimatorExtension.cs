@@ -12,11 +12,18 @@ namespace CizaTransitionModule.Implement
         
         public static async UniTask PlayAtStartAsync(this Animator animator, string stateName, int layer, Action onPlay)
         {
-            animator.Play(stateName, layer, 0);
-            animator.Update(0);
-            onPlay?.Invoke();
-            while (animator.GetCurrentAnimatorStateInfo(layer).normalizedTime < 0.95f)
-                await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+            try
+            {
+                animator.Play(stateName, layer, 0);
+                animator.Update(0);
+                onPlay?.Invoke();
+                while (animator.GetCurrentAnimatorStateInfo(layer).normalizedTime < 0.95f)
+                    await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
         }
     }
 }

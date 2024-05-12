@@ -1,0 +1,17 @@
+{
+    "name": "TransitionModule",
+    "rootNamespace": "CizaTransitionModule",
+    "references": [
+        "UniTask",
+        "PageModule"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

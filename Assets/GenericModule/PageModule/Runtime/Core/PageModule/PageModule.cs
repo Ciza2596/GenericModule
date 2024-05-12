@@ -19,6 +19,24 @@ namespace CizaPageModule
 
         //public variable
         public bool IsInitialized => _pageContainer.IsInitialized;
+        
+        public bool CheckIsVisible(string key) =>
+            _pageContainer.CheckIsVisible(key);
+        
+        public bool CheckIsInvisible(string key) =>
+            _pageContainer.CheckIsInvisible(key);
+
+        public bool CheckIsShowing(string key) =>
+            _pageContainer.CheckIsShowing(key);
+
+        public bool CheckIsHiding(string key) =>
+            _pageContainer.CheckIsHiding(key);
+
+        public TPage[] GetAllPage<TPage>() where TPage : class =>
+            _pageContainer.GetAllPage<TPage>();
+
+        public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
+            _pageContainer.TryGetPage(key, out page);
 
         //constructor
         [Preserve]
@@ -58,24 +76,6 @@ namespace CizaPageModule
 
         public void Release() =>
             _pageContainer.Release();
-
-        public bool CheckIsVisible(string key) =>
-            _pageContainer.CheckIsVisible(key);
-        
-        public bool CheckIsInvisible(string key) =>
-            _pageContainer.CheckIsInvisible(key);
-
-        public bool CheckIsShowing(string key) =>
-            _pageContainer.CheckIsShowing(key);
-
-        public bool CheckIsHiding(string key) =>
-            _pageContainer.CheckIsHiding(key);
-
-        public TPage[] GetAllPage<TPage>() where TPage : class =>
-            _pageContainer.GetAllPage<TPage>();
-
-        public bool TryGetPage<TPage>(string key, out TPage page) where TPage : class =>
-            _pageContainer.TryGetPage(key, out page);
 
         public UniTask CreateAsync<TPage>(string key, params object[] parameters) where TPage : class =>
             _pageContainer.CreateAsync<TPage>(key, parameters);

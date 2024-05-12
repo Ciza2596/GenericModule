@@ -32,7 +32,7 @@ namespace CizaTransitionModule
         public TransitionModule(ITransitionModuleConfig transitionModuleConfig) =>
             _pageModule = new PageModule(transitionModuleConfig);
 
-        public void Initialize(Transform parent)
+        public void Initialize(Transform parent = null)
         {
             if (IsInitialized)
                 return;

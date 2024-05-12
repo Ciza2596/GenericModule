@@ -19,7 +19,7 @@ namespace CizaTransitionModule.Implement
                 animator.Update(0);
                 onPlay?.Invoke();
                 while (animator.GetCurrentAnimatorStateInfo(layer).normalizedTime < 0.95f)
-                    await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+                    await UniTask.Yield(PlayerLoopTiming.PreLateUpdate);
 
                 if (isStop)
                     animator.speed = 0;

@@ -32,12 +32,13 @@ namespace CizaTransitionModule
         public TransitionModule(ITransitionModuleConfig transitionModuleConfig) =>
             _pageModule = new PageModule(transitionModuleConfig);
 
-        public void Initialize(Transform parent = null)
+        public async UniTask Initialize(Transform parent = null)
         {
             if (IsInitialized)
                 return;
 
             _pageModule.Initialize(parent);
+            await CreateAllPagesAsync(TransitionInPageDataId, LoadingPageDataId, TransitionOutPageDataId);
             CanTransit = true;
             SetCurrentPresentersToBeNull();
             SetNextPresentersToBeNull();
@@ -68,12 +69,10 @@ namespace CizaTransitionModule
             CanTransit = false;
             SetNextPresenters(nextPresenters);
 
-            await CreateAllPagesAsync(transitionInPageDataId, loadingPageDataId, transitionOutPageDataId);
-
             await TransitionInAsync(transitionInPageDataId);
             await LoadingAsync(transitionInPageDataId, loadingPageDataId, onRelease, onComplete);
             await TransitionOutAsync(loadingPageDataId, transitionOutPageDataId);
-            _pageModule.DestroyAll();
+
             CanTransit = true;
         }
 
@@ -130,6 +129,7 @@ namespace CizaTransitionModule
             await _pageModule.OnlyCallShowingPrepareAsync(transitionOutPageDataId);
             _pageModule.HideImmediately(loadingPageDataId);
             await _pageModule.ShowAsync(transitionOutPageDataId);
+            _pageModule.HideAllImmediately();
         }
     }
 }

@@ -10,6 +10,6 @@ namespace CizaTransitionModule.Implement
         private AnimSettings _animSettings;
 
         public override UniTask PlayShowingAnimationAsync() =>
-            _animSettings.PlayAtStartAsync(true, RefreshImages);
+            _animSettings.PlayAtStartAsync(true, RefreshUI);
     }
 }

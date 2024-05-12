@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CizaPageModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -15,6 +16,10 @@ namespace CizaTransitionModule
         private IPresenter[] _nextPresenters;
 
         //public variable
+        public const string TransitionInPageDataId = "TransitionIn";
+        public const string LoadingPageDataId = "Loading";
+        public const string TransitionOutPageDataId = "TransitionOut";
+
         public bool CanChangeScene { get; private set; }
 
         public bool IsInitialized => _pageModule.IsInitialized;
@@ -48,6 +53,13 @@ namespace CizaTransitionModule
             SetNextPresentersToBeNull();
         }
 
+        public UniTask TransitAsync(IPresenter nextPresenter) =>
+            TransitAsync(new[] { nextPresenter });
+
+        public UniTask TransitAsync(IPresenter[] nextPresenters) =>
+            TransitAsync(TransitionInPageDataId, LoadingPageDataId, TransitionOutPageDataId, nextPresenters);
+
+
         private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters)
         {
             if (!IsInitialized || !CanChangeScene)
@@ -72,7 +84,7 @@ namespace CizaTransitionModule
             _currentPresenters = currentPresenters;
 
         private void SetNextPresentersToBeNull() =>
-            SetCurrentPresenters(null);
+            SetNextPresenters(null);
 
         private void SetNextPresenters(IPresenter[] nextPresenters) =>
             _nextPresenters = nextPresenters;
@@ -93,9 +105,17 @@ namespace CizaTransitionModule
         {
             await _pageModule.ShowImmediatelyAsync(loadingPageDataId);
             _pageModule.HideImmediately(transitionInPageDataId);
-            await NextPresenters.InitializeAsync();
-            NextPresenters.Complete();
+
+            if (!_pageModule.TryGetPage<ILoadingPage>(loadingPageDataId, out var loadingPage))
+                return;
+
+            var uniTasks = new List<UniTask>();
+            uniTasks.Add(NextPresenters.InitializeAsync());
+            uniTasks.Add(loadingPage.DefaultLoadingAsync());
+            await UniTask.WhenAll(uniTasks);
+
             CurrentPresenters.Release();
+            NextPresenters.Complete();
             SetCurrentPresenters(NextPresenters);
             SetNextPresentersToBeNull();
         }

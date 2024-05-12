@@ -5,10 +5,11 @@ using UnityEngine.Assertions;
 
 namespace CizaTransitionModule.Implement
 {
+    [CreateAssetMenu(fileName = "TransitionModuleConfig", menuName = "Ciza/TransitionModule/TransitionModuleConfig")]
     public class TransitionModuleConfig : ScriptableObject, ITransitionModuleConfig
     {
         [SerializeField]
-        private string _sceneRootName = "[SceneModule]";
+        private string _rootName = "[TransitionModule]";
 
         [SerializeField]
         private bool _isDontDestroyOnLoad = true;
@@ -18,7 +19,7 @@ namespace CizaTransitionModule.Implement
         private Page[] _pagePrefabs;
 
 
-        public string PageRootName => _sceneRootName;
+        public string PageRootName => _rootName;
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
         public MonoBehaviour[] GetPagePrefabs()

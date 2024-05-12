@@ -1,6 +1,8 @@
+using CizaPageModule;
+
 namespace CizaTransitionModule
 {
-    public interface ITransitionOutPage
+    public interface ITransitionOutPage: IShowingAnimated
     {
         
     }

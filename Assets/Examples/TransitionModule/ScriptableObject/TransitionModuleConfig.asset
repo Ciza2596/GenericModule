@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f8d2e8f73cc4988acfb2b2cf8f3c0bd, type: 3}
+  m_Name: TransitionModuleConfig
+  m_EditorClassIdentifier: 
+  _rootName: '[TransitionModule]'
+  _isDontDestroyOnLoad: 1
+  _pagePrefabs:
+  - {fileID: 8024381442864172197, guid: 14f85e3ded74a49d6b3d0986e1444e3e, type: 3}
+  - {fileID: 6935403055820942992, guid: 6a5c38368cfb0414b9d5989b2a49b226, type: 3}
+  - {fileID: 5850238097209936074, guid: 9f71ac112f236443a8001ee4a9e0d4bc, type: 3}

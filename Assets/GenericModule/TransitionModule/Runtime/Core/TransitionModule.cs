@@ -4,6 +4,7 @@ using CizaPageModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Scripting;
+using Action = Unity.Plastic.Antlr3.Runtime.Misc.Action;
 
 namespace CizaTransitionModule
 {
@@ -53,14 +54,14 @@ namespace CizaTransitionModule
             SetNextPresentersToBeNull();
         }
 
-        public UniTask TransitAsync(IPresenter nextPresenter) =>
-            TransitAsync(new[] { nextPresenter });
+        public UniTask TransitAsync(IPresenter nextPresenter, Action onRelease = null, Action onComplete = null) =>
+            TransitAsync(new[] { nextPresenter }, onRelease, onComplete);
 
-        public UniTask TransitAsync(IPresenter[] nextPresenters) =>
-            TransitAsync(TransitionInPageDataId, LoadingPageDataId, TransitionOutPageDataId, nextPresenters);
+        public UniTask TransitAsync(IPresenter[] nextPresenters, Action onRelease = null, Action onComplete = null) =>
+            TransitAsync(TransitionInPageDataId, LoadingPageDataId, TransitionOutPageDataId, nextPresenters, onRelease, onComplete);
 
 
-        private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters)
+        private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters, Action onRelease, Action onComplete)
         {
             if (!IsInitialized || !CanTransit)
                 return;
@@ -71,7 +72,7 @@ namespace CizaTransitionModule
             await CreateAllPagesAsync(transitionInPageDataId, loadingPageDataId, transitionOutPageDataId);
 
             await TransitionInAsync(transitionInPageDataId);
-            await LoadingAsync(transitionInPageDataId, loadingPageDataId);
+            await LoadingAsync(transitionInPageDataId, loadingPageDataId, onRelease, onComplete);
             await TransitionOutAsync(loadingPageDataId, transitionOutPageDataId);
             _pageModule.DestroyAll();
             CanTransit = true;
@@ -101,7 +102,7 @@ namespace CizaTransitionModule
             _pageModule.ShowAsync(transitionInPageDataId);
 
 
-        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId)
+        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId, Action onRelease, Action onComplete)
         {
             await _pageModule.ShowImmediatelyAsync(loadingPageDataId);
             _pageModule.HideImmediately(transitionInPageDataId);
@@ -115,7 +116,11 @@ namespace CizaTransitionModule
             await UniTask.WhenAll(uniTasks);
 
             CurrentPresenters.Release();
+            onRelease?.Invoke();
+
             NextPresenters.Complete();
+            onComplete?.Invoke();
+
             SetCurrentPresenters(NextPresenters);
             SetNextPresentersToBeNull();
         }

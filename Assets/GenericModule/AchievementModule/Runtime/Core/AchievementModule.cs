@@ -107,6 +107,8 @@ namespace CizaAchievementModule
 
                 _isUnlockedMapByAchievementDataId[pair.Key] = pair.Value;
             }
+
+            Refresh();
         }
 
         public void Refresh()

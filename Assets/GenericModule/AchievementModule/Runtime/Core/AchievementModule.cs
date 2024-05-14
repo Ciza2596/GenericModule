@@ -166,33 +166,34 @@ namespace CizaAchievementModule
             if (isFirstUnlocked && isUnlocked)
                 return false;
 
-            foreach (var achievementInfo in _config.AchievementInfos)
-            {
-                foreach (var ruleInfo in achievementInfo.RuleInfos)
-                {
-                    if (!ruleInfo.IsEnable)
-                        continue;
+            var achievementInfo = _config.AchievementInfos.FirstOrDefault(achievementInfo => achievementInfo.DataId == achievementDataId);
+            if (achievementInfo == null)
+                return false;
 
-                    var isConditionCompletedCount = 0;
-                    var isConditionEnableCount = 0;
-
-                    foreach (var conditionInfo in ruleInfo.ConditionInfos)
-                    {
-                        if (!conditionInfo.IsEnable)
-                            continue;
-
-                        isConditionEnableCount++;
-
-                        if (TryGetStatReadModel(conditionInfo.StatDataId, out var statReadModel) && statReadModel.Current >= conditionInfo.Value)
-                            isConditionCompletedCount++;
-                    }
-
-                    if (isConditionCompletedCount == isConditionEnableCount)
-                        return true;
-                }
-            }
+            foreach (var ruleInfo in achievementInfo.RuleInfos)
+                if (ruleInfo.IsEnable && CheckIsSucceed(ruleInfo.ConditionInfos))
+                    return true;
 
             return false;
+        }
+
+        private bool CheckIsSucceed(IConditionInfo[] conditionInfos)
+        {
+            var isConditionCompletedCount = 0;
+            var isConditionEnableCount = 0;
+
+            foreach (var conditionInfo in conditionInfos)
+            {
+                if (!conditionInfo.IsEnable)
+                    continue;
+
+                isConditionEnableCount++;
+
+                if (TryGetStatReadModel(conditionInfo.StatDataId, out var statReadModel) && statReadModel.Current >= conditionInfo.Value)
+                    isConditionCompletedCount++;
+            }
+
+            return isConditionCompletedCount == isConditionEnableCount;
         }
 
 

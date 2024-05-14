@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaAchievementModule
 {
@@ -12,6 +13,10 @@ namespace CizaAchievementModule
         [SerializeField]
         private float _current;
 
+        [Preserve]
+        public ExportedStat() { }
+
+        [Preserve]
         public ExportedStat(string dataId, float current)
         {
             _dataId = dataId;

@@ -89,7 +89,7 @@ namespace CizaAchievementModule
 
         public void Import(IExportedAchievement exportedAchievement)
         {
-            if (!IsInitialized)
+            if (!IsInitialized || exportedAchievement == null)
                 return;
 
             foreach (var exportedStat in exportedAchievement.ExportedStatMapByStatDataId.Values.ToArray())

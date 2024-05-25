@@ -79,7 +79,7 @@ namespace CizaAudioModule
 
         public bool CheckIsOnCooldown(string audioDataId)
         {
-            if (!_consecutiveCountMapByDataId.TryGetValue(audioDataId, out var count))
+            if (!_config.RestrictContinuousPlay.IsEnable || !_consecutiveCountMapByDataId.TryGetValue(audioDataId, out var count))
                 return false;
 
             return count >= _config.RestrictContinuousPlay.MaxConsecutiveCount;

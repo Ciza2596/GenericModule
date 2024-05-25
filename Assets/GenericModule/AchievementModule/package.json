@@ -2,7 +2,7 @@
   "name": "com.ciza.achievementmodule",
   "displayName": "AchievementModule",
   "description": "AchievementModule.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "unity": "2022.2",
   "unityRelease": "1f1",
   "dependencies": {},

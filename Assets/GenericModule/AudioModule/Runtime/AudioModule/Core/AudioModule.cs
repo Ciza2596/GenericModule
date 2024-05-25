@@ -35,6 +35,8 @@ namespace CizaAudioModule
         private readonly Dictionary<string, List<IAudio>> _idleAudioMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
         private readonly Dictionary<string, IAudio> _playingAudioMapByAudioId = new Dictionary<string, IAudio>();
 
+        private readonly Dictionary<string, int> _consecutiveCountMapByDataId = new Dictionary<string, int>();
+
         private Transform _poolRoot;
         private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
@@ -74,6 +76,14 @@ namespace CizaAudioModule
 
         public bool CheckIsAudioInfoLoaded(string audioDataId) =>
             CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out var clipAddress, out var prefabAddress);
+
+        public bool CheckIsOnCooldown(string audioDataId)
+        {
+            if (!_consecutiveCountMapByDataId.TryGetValue(audioDataId, out var count))
+                return false;
+
+            return count >= _config.RestrictContinuousPlay.MaxConsecutiveCount;
+        }
 
         //public method
         public AudioModule(IAudioModuleConfig config, IAssetProvider clipAssetProvider, IAssetProvider prefabAssetProvider, AudioMixer audioMixer, bool isDontDestroyOnLoad = false)
@@ -129,7 +139,7 @@ namespace CizaAudioModule
             SetVolume(_config.DefaultVolume);
         }
 
-        public async void Release()
+        public void Release()
         {
             if (!IsInitialized)
             {
@@ -151,6 +161,7 @@ namespace CizaAudioModule
             _audioInfoMapByDataId = null;
 
             _timerModule.Release();
+            _consecutiveCountMapByDataId.Clear();
         }
 
         public async void Tick(float deltaTime)
@@ -324,6 +335,11 @@ namespace CizaAudioModule
         {
             if (!CheckIsAudioInfoLoaded(audioDataId, "PlayAsync", out var clipAddress, out var prefabAddress))
                 return string.Empty;
+
+            if (CheckIsOnCooldown(audioDataId))
+                return string.Empty;
+
+            AddCooldown(audioDataId);
 
             var audio = m_GetOrCreateAudio(prefabAddress);
 
@@ -608,6 +624,29 @@ namespace CizaAudioModule
 
             _timerModule.RemoveTimer(timerId);
             _timerIdMapByAudioId.Remove(audioId);
+        }
+
+
+        private void AddCooldown(string audioDataId)
+        {
+            if (!_config.RestrictContinuousPlay.IsEnable)
+                return;
+
+            if (!_consecutiveCountMapByDataId.TryAdd(audioDataId, 1))
+                _consecutiveCountMapByDataId[audioDataId]++;
+
+            _timerModule.AddOnceTimer(_config.RestrictContinuousPlay.Duration, timerReadModel => RemoveCooldown(audioDataId));
+        }
+
+        private void RemoveCooldown(string audioDataId)
+        {
+            if (!_consecutiveCountMapByDataId.ContainsKey(audioDataId))
+                return;
+
+            _consecutiveCountMapByDataId[audioDataId]--;
+
+            if (_consecutiveCountMapByDataId[audioDataId] <= 0)
+                _consecutiveCountMapByDataId.Remove(audioDataId);
         }
     }
 }

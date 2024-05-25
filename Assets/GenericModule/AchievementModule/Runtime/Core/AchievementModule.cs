@@ -23,6 +23,8 @@ namespace CizaAchievementModule
 
         public bool IsInitialized => _isInitialized && !_isInitializing;
 
+        public bool IsEnable { get; private set; }
+
         public string[] AllStatDataIds => _statMapByStatDataId.Keys.ToArray();
         public string[] AllAchievementDataIds => _isUnlockedMapByAchievementDataId.Keys.ToArray();
 
@@ -67,6 +69,7 @@ namespace CizaAchievementModule
             }
 
             _isInitializing = false;
+            Enable();
         }
 
         public void Release()
@@ -74,9 +77,17 @@ namespace CizaAchievementModule
             if (!_isInitialized)
                 return;
 
+            Disable();
             _statMapByStatDataId.Clear();
             _isInitialized = false;
         }
+
+
+        public void Enable() =>
+            IsEnable = true;
+
+        public void Disable() =>
+            IsEnable = false;
 
         // StatDataId, Current 
         public ExportedAchievement Export()
@@ -121,7 +132,7 @@ namespace CizaAchievementModule
 
         public void SetStat(string statDataId, float value)
         {
-            if (!IsInitialized || !_statMapByStatDataId.TryGetValue(statDataId, out var stat))
+            if (!IsInitialized || !IsEnable || !_statMapByStatDataId.TryGetValue(statDataId, out var stat))
                 return;
 
             stat.SetCurrent(value);

@@ -4,10 +4,11 @@ namespace CizaFadeCreditModule
 {
     public interface IRow
     {
+        int ViewOrder { get; }
         string Address { get; }
 
 
-        bool IsNeedHiding => Time >= Duration;
+        bool IsNeedHiding => IsVisible && Time >= Duration;
         float Duration { get; }
 
         bool IsVisible { get; }
@@ -20,42 +21,47 @@ namespace CizaFadeCreditModule
         void Initialize(string address);
         void Release();
 
-        void PlayEmpty(Transform parent, Vector2 position, float duration, Vector2 size)
+        void PlayEmpty(int viewOrder, Transform parent, Vector2 position, float duration, Vector2 size)
         {
             SetText(string.Empty);
             SetSprite(null);
-            Play(parent, position, duration, size);
+            Play(viewOrder, parent, position, duration, size);
         }
 
-        void PlayText(Transform parent, Vector2 position, float duration, Vector2 size, string text)
+        void PlayText(int viewOrder, Transform parent, Vector2 position, float duration, Vector2 size, string text)
         {
             SetText(text);
             SetSprite(null);
-            Play(parent, position, duration, size);
+            Play(viewOrder, parent, position, duration, size);
         }
 
-        void PlaySprite(Transform parent, Vector2 position, float duration, Vector2 size, Sprite sprite)
+        void PlaySprite(int viewOrder, Transform parent, Vector2 position, float duration, Vector2 size, Sprite sprite)
         {
             SetText(string.Empty);
             SetSprite(sprite);
-            Play(parent, position, duration, size);
+            Play(viewOrder, parent, position, duration, size);
         }
 
-        void Play(Transform parent, Vector2 position, float duration, Vector2 size)
+        void Play(int viewOrder, Transform parent, Vector2 position, float duration, Vector2 size)
         {
+            SetViewOrder(viewOrder);
             SetParent(parent);
             SetPosition(position);
             SetDuration(duration);
             SetSize(size);
         }
+        
+        void SetTransformIndex(int index);
 
         void Close(Transform parent)
         {
             SetParent(parent);
             SetText(string.Empty);
             SetSprite(null);
+            SetViewOrder(-1);
         }
-
+        
+        void SetViewOrder(int viewOrder);
 
         void SetParent(Transform parent);
 

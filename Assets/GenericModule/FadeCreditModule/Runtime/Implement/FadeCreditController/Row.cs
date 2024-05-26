@@ -11,7 +11,9 @@ namespace CizaFadeCreditModule.Implement
         [SerializeField]
         protected SettingImp Setting;
 
+        public int ViewOrder { get; private set; }
         public string Address { get; private set; }
+
         public float Duration { get; private set; }
 
         public bool IsVisible { get; private set; }
@@ -22,28 +24,35 @@ namespace CizaFadeCreditModule.Implement
         public float Time { get; private set; }
 
 
-        public void Release() =>
+        public virtual void Release() =>
             DestroyImmediate(gameObject);
 
-        public void Initialize(string address) =>
+        public virtual void Initialize(string address) =>
             Address = address;
 
-        public void SetParent(Transform parent) =>
+        public void SetTransformIndex(int index) =>
+            transform.SetSiblingIndex(index);
+
+
+        public virtual void SetViewOrder(int viewOrder) =>
+            ViewOrder = viewOrder;
+
+        public virtual void SetParent(Transform parent) =>
             transform.SetParent(parent);
 
-        public void SetPosition(Vector2 position) =>
+        public virtual void SetPosition(Vector2 position) =>
             Setting.SetPosition(position);
 
         public virtual void SetDuration(float duration) =>
             Duration = duration;
 
-        public void SetSize(Vector2 size) =>
+        public virtual void SetSize(Vector2 size) =>
             Setting.SetSize(size);
 
-        public void SetText(string text) =>
+        public virtual void SetText(string text) =>
             Setting.SetText(text);
 
-        public void SetSprite(Sprite sprite) =>
+        public virtual void SetSprite(Sprite sprite) =>
             Setting.SetSprite(sprite);
 
         public virtual async void Show()

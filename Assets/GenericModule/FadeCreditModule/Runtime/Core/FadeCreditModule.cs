@@ -19,7 +19,7 @@ namespace CizaFadeCreditModule
         private readonly Dictionary<string, SpriteAsset> _spriteAssetMapByAddress = new Dictionary<string, SpriteAsset>();
 
         private readonly Dictionary<string, List<IRow>> _rowMapByAddress = new Dictionary<string, List<IRow>>();
-        private readonly HashSet<IRow> _playingRow = new HashSet<IRow>();
+        private readonly HashSet<IRow> _playingRows = new HashSet<IRow>();
 
         private readonly HashSet<IFadeCreditRowData> _playedRowDatas = new HashSet<IFadeCreditRowData>();
 
@@ -108,7 +108,7 @@ namespace CizaFadeCreditModule
                         Play(rowData);
             }
 
-            foreach (var row in _playingRow.ToArray())
+            foreach (var row in _playingRows.ToArray())
             {
                 if (row.IsNeedHiding && !row.IsHiding)
                 {
@@ -126,7 +126,7 @@ namespace CizaFadeCreditModule
                     row.Tick(deltaTime);
             }
 
-            if (rowDatas.Length == _playedRowDatas.Count && _playingRow.Count == 0)
+            if (rowDatas.Length == _playedRowDatas.Count && _playingRows.Count == 0)
                 Hide();
         }
 
@@ -271,15 +271,22 @@ namespace CizaFadeCreditModule
         {
             var row = SpawnRow(rowData.PrefabAddress);
             if (rowData.RowKind.CheckIsEmpty())
-                row.PlayEmpty(_controller.Content, rowData.Position, rowData.Duration, rowData.Size);
+                row.PlayEmpty(rowData.ViewOrder, _controller.Content, rowData.Position, rowData.Duration, rowData.Size);
 
             if (rowData.RowKind.CheckIsText())
-                row.PlayText(_controller.Content, rowData.Position, rowData.Duration, rowData.Size, rowData.Text);
+                row.PlayText(rowData.ViewOrder, _controller.Content, rowData.Position, rowData.Duration, rowData.Size, rowData.Text);
 
             if (rowData.RowKind.CheckIsSprite())
-                row.PlaySprite(_controller.Content, rowData.Position, rowData.Duration, rowData.Size, _spriteAssetMapByAddress[rowData.SpriteAddress].Sprite);
+                row.PlaySprite(rowData.ViewOrder, _controller.Content, rowData.Position, rowData.Duration, rowData.Size, _spriteAssetMapByAddress[rowData.SpriteAddress].Sprite);
 
-            _playingRow.Add(row);
+            _playingRows.Add(row);
+
+            var playingRows = _playingRows.ToArray();
+            Array.Sort(playingRows, (row1, row2) => row1.ViewOrder.CompareTo(row2.ViewOrder));
+
+            for (int i = 0; i < playingRows.Length; i++)
+                playingRows[i].SetTransformIndex(i);
+            
             row.Show();
         }
 
@@ -313,7 +320,7 @@ namespace CizaFadeCreditModule
             if (!_rowMapByAddress.ContainsKey(row.Address))
                 return;
 
-            _playingRow.Remove(row);
+            _playingRows.Remove(row);
 
             row.Close(_controller.Pool);
             _rowMapByAddress[row.Address].Add(row);
@@ -321,7 +328,7 @@ namespace CizaFadeCreditModule
 
         private void DestroyAll()
         {
-            foreach (var row in _playingRow.ToArray())
+            foreach (var row in _playingRows.ToArray())
                 DeSpawnRow(row);
 
             foreach (var rows in _rowMapByAddress.Values.ToArray())

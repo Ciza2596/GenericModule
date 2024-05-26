@@ -10,6 +10,9 @@ namespace CizaFadeCreditModule.Implement
         [SerializeField]
         private float _time;
 
+        [SerializeField]
+        private int _viewOrder;
+
         [Space]
         [SerializeField]
         private string _prefabAddress;
@@ -40,13 +43,14 @@ namespace CizaFadeCreditModule.Implement
         public FadeCreditRowData() { }
 
         [Preserve]
-        public FadeCreditRowData(float time, string prefabAddress, Vector2 position, float duration, Vector2 size) : this(time, prefabAddress, position, duration, size, RowKinds.Empty, string.Empty, string.Empty) { }
+        public FadeCreditRowData(float time, int viewOrder, string prefabAddress, Vector2 position, float duration, Vector2 size) : this(time, viewOrder, prefabAddress, position, duration, size, RowKinds.Empty, string.Empty, string.Empty) { }
 
 
         [Preserve]
-        public FadeCreditRowData(float time, string prefabAddress, Vector2 position, float duration, Vector2 size, RowKinds rowKind, string text, string spriteAddress)
+        public FadeCreditRowData(float time, int viewOrder, string prefabAddress, Vector2 position, float duration, Vector2 size, RowKinds rowKind, string text, string spriteAddress)
         {
             _time = time;
+            _viewOrder = viewOrder;
 
             _prefabAddress = prefabAddress;
 
@@ -61,6 +65,7 @@ namespace CizaFadeCreditModule.Implement
         }
 
         public float Time => _time;
+        public int ViewOrder => _viewOrder;
 
         public string PrefabAddress => _prefabAddress;
 

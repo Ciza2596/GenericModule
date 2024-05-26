@@ -7,7 +7,9 @@ namespace CizaFadeCreditModule
         float Time { get; }
 
         string PrefabAddress { get; }
-        
+
+        int ViewOrder { get; }
+
         Vector2 Position { get; }
         float Duration { get; }
         Vector2 Size { get; }

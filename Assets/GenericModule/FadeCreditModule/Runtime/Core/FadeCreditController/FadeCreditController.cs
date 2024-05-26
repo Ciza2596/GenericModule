@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+
 namespace CizaFadeCreditModule
 {
     public class FadeCreditController : MonoBehaviour, IFadeCreditController
@@ -15,6 +16,9 @@ namespace CizaFadeCreditModule
 
         public bool IsVisible { get; private set; }
         public bool IsHiding { get; private set; }
+
+        public void Release() =>
+            DestroyImmediate(gameObject);
 
         public virtual async void Show()
         {

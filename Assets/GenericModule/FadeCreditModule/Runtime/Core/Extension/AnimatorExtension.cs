@@ -14,6 +14,9 @@ namespace CizaFadeCreditModule
         {
             try
             {
+                if (!animator.isActiveAndEnabled)
+                    return;
+
                 animator.speed = 1;
                 animator.Play(stateName, layer, 0);
                 animator.Update(0);

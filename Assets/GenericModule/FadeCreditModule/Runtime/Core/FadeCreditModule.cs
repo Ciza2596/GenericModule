@@ -63,15 +63,15 @@ namespace CizaFadeCreditModule
             _assetProvider = assetProvider;
         }
 
-        public void Initialize(Transform parent)
+        public void Initialize(Transform parent = null)
         {
             if (IsInitialized || IsLoading || IsUnloading)
                 return;
 
             var controllerGameObject = Object.Instantiate(_config.ControllerPrefab, parent);
-            var fadeCreditController = controllerGameObject.GetComponent<IFadeCreditController>();
-            Assert.IsNotNull(fadeCreditController, "[FadeCreditModule::Initialize] FadeCreditController is not found.");
-            fadeCreditController.HideImmediately();
+            _controller = controllerGameObject.GetComponent<IFadeCreditController>();
+            Assert.IsNotNull(_controller, "[FadeCreditModule::Initialize] FadeCreditController is not found.");
+            _controller.HideImmediately();
 
             if (_config.IsDontDestroyOnLoad && parent == null)
                 Object.DontDestroyOnLoad(controllerGameObject);
@@ -89,12 +89,14 @@ namespace CizaFadeCreditModule
 
             SetRowDatas(null);
 
+            _controller.Release();
+
             IsInitialized = false;
         }
 
         public void Tick(float deltaTime)
         {
-            if (!IsVisible || IsHiding)
+            if (!IsInitialized || !IsVisible || IsHiding)
                 return;
 
             _time += deltaTime;
@@ -102,20 +104,29 @@ namespace CizaFadeCreditModule
             if (TryGetRowDatas(out var rowDatas))
             {
                 foreach (var rowData in rowDatas)
-                    if (rowData.Time >= Time && _playedRowDatas.Add(rowData))
+                    if (Time >= rowData.Time && _playedRowDatas.Add(rowData))
                         Play(rowData);
             }
 
             foreach (var row in _playingRow.ToArray())
             {
                 if (row.IsNeedHiding && !row.IsHiding)
+                {
                     row.Hide();
+                    continue;
+                }
 
                 if (!row.IsVisible)
+                {
                     DeSpawnRow(row);
+                    continue;
+                }
+
+                if (!row.IsShowing && !row.IsHiding)
+                    row.Tick(deltaTime);
             }
 
-            if (rowDatas.Length == _playingRow.Count && _playingRow.Count == 0)
+            if (rowDatas.Length == _playedRowDatas.Count && _playingRow.Count == 0)
                 Hide();
         }
 
@@ -191,6 +202,7 @@ namespace CizaFadeCreditModule
                 return;
 
             _controller.Hide();
+            DestroyAll();
         }
 
         public void HideImmediately()
@@ -199,6 +211,7 @@ namespace CizaFadeCreditModule
                 return;
 
             _controller.HideImmediately();
+            DestroyAll();
         }
 
 
@@ -220,8 +233,8 @@ namespace CizaFadeCreditModule
 
             async UniTask m_LoadAssetAsync<T, TAsset>(string m_address, Dictionary<string, TAsset> m_assetMapByAddress) where T : Object where TAsset : Asset
             {
-                var obj = await _assetProvider.LoadAssetAsync<T>(rowData.SpriteAddress, cancellationToken);
-                if (!m_assetMapByAddress.TryAdd(m_address, Activator.CreateInstance(typeof(TAsset), obj) as TAsset))
+                var obj = await _assetProvider.LoadAssetAsync<T>(m_address, cancellationToken);
+                if (!m_assetMapByAddress.TryAdd(m_address, Activator.CreateInstance(typeof(TAsset), args: obj) as TAsset))
                     m_assetMapByAddress[m_address].AddCount();
             }
         }
@@ -304,6 +317,21 @@ namespace CizaFadeCreditModule
 
             row.Close(_controller.Pool);
             _rowMapByAddress[row.Address].Add(row);
+        }
+
+        private void DestroyAll()
+        {
+            foreach (var row in _playingRow.ToArray())
+                DeSpawnRow(row);
+
+            foreach (var rows in _rowMapByAddress.Values.ToArray())
+                foreach (var row in rows.ToArray())
+                {
+                    rows.Remove(row);
+                    row.Release();
+                }
+
+            _rowMapByAddress.Clear();
         }
 
 

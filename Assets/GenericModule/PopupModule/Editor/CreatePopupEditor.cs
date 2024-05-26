@@ -1,23 +1,31 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace CizaPopupModule.Editor
+namespace CizaFadeCreditModule.Editor
 {
-    public class CreatePopupEditor
+    public class CreateObjectEditor
     {
-        public const string PopupModulePath = "PopupModule/";
+        public const string FadeCreditModulePath = "FadeCreditModule/";
 
-        public const string Popup = "Popup";
+        public const string FadeCreditController = "FadeCreditController";
 
-        [MenuItem("GameObject/Ciza/PopupModule/Popup", false, -10)]
-        public static void CreatePopup()
+        [MenuItem("GameObject/Ciza/FadeCreditModule/FadeCreditController", false, -10)]
+        public static void CreateFadeCreditController()
         {
-            CreateUIObject(Popup);
+            CreateObject(FadeCreditController);
         }
 
-        private static void CreateUIObject(string dataId)
+        public const string FadeCreditRow = "FadeCreditRow";
+
+        [MenuItem("GameObject/Ciza/FadeCreditModule/FadeCreditRow", false, -10)]
+        public static void CreateFadeCreditRow()
         {
-            var prefab = Resources.Load<GameObject>(PopupModulePath + dataId);
+            CreateObject(FadeCreditRow);
+        }
+
+        private static void CreateObject(string dataId)
+        {
+            var prefab = Resources.Load<GameObject>(FadeCreditModulePath + dataId);
             var uiObject = Object.Instantiate(prefab, Selection.activeTransform);
             uiObject.name = dataId;
         }

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RowAnimationController
+  m_Controller: {fileID: 9100000, guid: 22ed5d5fe4f3844f9a12a890015c37c6, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: debe70b6d86a74e61a921c0222102dce, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: eaf2b15523a844e629be60bda8168821, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 326bf06d21e5944ab9981266a64fc659, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 19e0ae70018484be3970967a3633abc9, type: 2}

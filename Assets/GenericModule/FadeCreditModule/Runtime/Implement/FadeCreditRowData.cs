@@ -22,7 +22,7 @@ namespace CizaFadeCreditModule.Implement
         private float _duration;
 
         [SerializeField]
-        private Vector2 _size;
+        private Vector2 _size = new Vector2(100, 100);
 
         [Space]
         [SerializeField]
@@ -35,6 +35,9 @@ namespace CizaFadeCreditModule.Implement
         [SerializeField]
         private string _spriteAddress;
 
+
+        [Preserve]
+        public FadeCreditRowData() { }
 
         [Preserve]
         public FadeCreditRowData(float time, string prefabAddress, Vector2 position, float duration, Vector2 size) : this(time, prefabAddress, position, duration, size, RowKinds.Empty, string.Empty, string.Empty) { }

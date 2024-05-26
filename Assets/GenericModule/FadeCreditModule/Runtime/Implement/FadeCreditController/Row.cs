@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = System.Object;
 
 namespace CizaFadeCreditModule.Implement
 {
@@ -16,6 +15,8 @@ namespace CizaFadeCreditModule.Implement
         public float Duration { get; private set; }
 
         public bool IsVisible { get; private set; }
+
+        public bool IsShowing { get; private set; }
         public bool IsHiding { get; private set; }
 
         public float Time { get; private set; }
@@ -27,8 +28,8 @@ namespace CizaFadeCreditModule.Implement
         public void Initialize(string address) =>
             Address = address;
 
-        public void SetParent(Transform transform) =>
-            transform.SetParent(transform);
+        public void SetParent(Transform parent) =>
+            transform.SetParent(parent);
 
         public void SetPosition(Vector2 position) =>
             Setting.SetPosition(position);
@@ -48,7 +49,11 @@ namespace CizaFadeCreditModule.Implement
         public virtual async void Show()
         {
             IsVisible = true;
+            IsShowing = true;
+            Time = 0;
+            gameObject.SetActive(true);
             await Setting.ShowAsync();
+            IsShowing = false;
         }
 
         public virtual async void Hide()
@@ -60,9 +65,16 @@ namespace CizaFadeCreditModule.Implement
 
         public virtual void HideImmediately()
         {
-            Setting.HideImmediately();
-            IsVisible = false;
-            IsHiding = false;
+            try
+            {
+                gameObject.SetActive(false);
+                IsVisible = false;
+                IsHiding = false;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
         }
 
         public virtual void Tick(float deltaTime) =>
@@ -74,9 +86,6 @@ namespace CizaFadeCreditModule.Implement
         {
             [SerializeField]
             private RectTransform _rectTransform;
-
-            [SerializeField]
-            private CanvasGroup _canvasGroup;
 
             [Space]
             [SerializeField]
@@ -107,20 +116,11 @@ namespace CizaFadeCreditModule.Implement
             public void SetSize(Vector2 size) =>
                 RectTransform.sizeDelta = size;
 
-            public UniTask ShowAsync()
-            {
-                _canvasGroup.alpha = 1;
-                return Animator.PlayAtStartAsync(_showStateName, 0, true, null);
-            }
+            public UniTask ShowAsync() =>
+                Animator.PlayAtStartAsync(_showStateName, 0, true, null);
 
-            public async UniTask HideAsync()
-            {
-                await Animator.PlayAtStartAsync(_hideStateName, 0, true, null);
-                HideImmediately();
-            }
-
-            public void HideImmediately() =>
-                _canvasGroup.alpha = 0;
+            public UniTask HideAsync() =>
+                Animator.PlayAtStartAsync(_hideStateName, 0, true, null);
 
             public void SetText(string text) =>
                 _text.text = text;

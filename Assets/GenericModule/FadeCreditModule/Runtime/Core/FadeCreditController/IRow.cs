@@ -11,8 +11,10 @@ namespace CizaFadeCreditModule
         float Duration { get; }
 
         bool IsVisible { get; }
+
+        bool IsShowing { get; }
         bool IsHiding { get; }
-        
+
         float Time { get; }
 
         void Initialize(string address);
@@ -50,10 +52,12 @@ namespace CizaFadeCreditModule
         void Close(Transform parent)
         {
             SetParent(parent);
+            SetText(string.Empty);
+            SetSprite(null);
         }
 
 
-        void SetParent(Transform transform);
+        void SetParent(Transform parent);
 
         void SetPosition(Vector2 position);
         void SetDuration(float duration);

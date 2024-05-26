@@ -16,6 +16,7 @@ module | Test | Samples |
 [InputModule](#inputModule) | ✔️ | ❌ |
 [PopupModule](#popupmodule) | ✔️ | ❌ |
 [AchievementModule](#achievementModule) | ✔️ | ❌ |
+[FadeCreditModule](#fadecreditmodule) | ❌ | ❌ |
 [OptionModule](#optionmodule) | ❌ | ❌ |
 [TransitionModule](#transitionmodule) | ❌ | ❌ |
 [SceneModule](#scenemodule) | ❌ | ❌ |
@@ -393,6 +394,19 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/Achievem
 
 ### Manual:
 AchievementModule manual.
+
+## FadeCreditModule
+```
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/FadeCreditModule
+```
+
+### Dependency:
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+
+### Manual:
+FadeCreditModule manual.
 
 
 ## OptionModule

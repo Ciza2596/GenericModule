@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaFadeCreditModule.Implement
 {
-    [CreateAssetMenu(fileName = "FadeCreditModuleConfig", menuName = "Ciza/FadeCreditModule/FadeCreditModuleConfig", order = -1)]
+    [CreateAssetMenu(fileName = "FadeCreditModuleConfig", menuName = "Ciza/FadeCreditModule/FadeCreditModuleConfig")]
     public class FadeCreditModuleConfig : ScriptableObject, IFadeCreditModuleConfig
     {
         [SerializeField]

@@ -86,7 +86,7 @@ namespace CizaFadeCreditModule
             _controller.HideImmediately();
 
             if (_config.IsDontDestroyOnLoad && parent == null)
-                Object.DontDestroyOnLoad(controllerGameObject);
+                Object.DontDestroyOnLoad(_root.gameObject);
 
             IsInitialized = true;
         }

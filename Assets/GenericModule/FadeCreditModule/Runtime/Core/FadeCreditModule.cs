@@ -85,6 +85,10 @@ namespace CizaFadeCreditModule
             Assert.IsNotNull(_controller, "[FadeCreditModule::Initialize] FadeCreditController is not found.");
             _controller.HideImmediately();
 
+            _controller.OnShow += OnShowImp;
+            _controller.OnHide += OnHideImp;
+            _controller.OnComplete += OnCompleteImp;
+
             if (_config.IsDontDestroyOnLoad && parent == null)
                 Object.DontDestroyOnLoad(_root.gameObject);
 

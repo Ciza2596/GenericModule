@@ -24,6 +24,7 @@ namespace CizaFadeCreditModule
         public virtual async void Show()
         {
             IsVisible = true;
+            Setting.EnableCamera();
             await Setting.ShowAsync();
             OnShow?.Invoke();
         }
@@ -42,6 +43,8 @@ namespace CizaFadeCreditModule
             HideEnd();
         }
 
+        public void Tick(float deltaTime) =>
+            Setting.Tick(deltaTime);
 
         private void HideEnd()
         {
@@ -49,11 +52,16 @@ namespace CizaFadeCreditModule
             IsVisible = false;
             IsHiding = false;
             OnComplete?.Invoke();
+            Setting.DisableCamera();
         }
 
         [Serializable]
         public class SettingImp
         {
+            [SerializeField]
+            private Camera _camera;
+
+            [Space]
             [SerializeField]
             private Transform _pool;
 
@@ -75,10 +83,18 @@ namespace CizaFadeCreditModule
             private Animator _animator;
 
 
+            public Camera Camera => _camera;
+
             public Transform Pool => _pool;
             public Transform Content => _content;
             public Animator Animator => _animator;
 
+
+            public void EnableCamera() =>
+                Camera.enabled = true;
+
+            public void DisableCamera() =>
+                Camera.enabled = false;
 
             public UniTask ShowAsync()
             {
@@ -91,6 +107,9 @@ namespace CizaFadeCreditModule
                 await Animator.PlayAtStartAsync(_hideStateName, 0, true, null);
                 HideImmediately();
             }
+
+            public void Tick(float deltaTime) =>
+                _animator.Update(deltaTime);
 
             public void HideImmediately() =>
                 _canvasGroup.alpha = 0;

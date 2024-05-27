@@ -112,11 +112,16 @@ namespace CizaFadeCreditModule
 
         public void Tick(float deltaTime)
         {
-            if (!IsInitialized || !IsVisible || IsHiding)
+            if (!IsInitialized || !IsVisible)
                 return;
 
             var deltaTimeWithScale = deltaTime * SpeedScale;
             _time += deltaTimeWithScale;
+
+            _controller.Tick(deltaTime);
+
+            if (IsHiding)
+                return;
 
             if (TryGetRowDatas(out var rowDatas))
             {

@@ -20,5 +20,7 @@ namespace CizaFadeCreditModule
         void Hide();
 
         void HideImmediately();
+
+        void Tick(float deltaTime);
     }
 }

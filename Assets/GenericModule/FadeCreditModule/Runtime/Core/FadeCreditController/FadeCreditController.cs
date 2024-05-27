@@ -10,6 +10,10 @@ namespace CizaFadeCreditModule
         [SerializeField]
         protected SettingImp Setting;
 
+        public event Action OnShow;
+        public event Action OnHide;
+        public event Action OnComplete;
+
         public Transform Pool => Setting.Pool;
 
         public Transform Content => Setting.Content;
@@ -24,20 +28,30 @@ namespace CizaFadeCreditModule
         {
             IsVisible = true;
             await Setting.ShowAsync();
+            OnShow?.Invoke();
         }
 
         public virtual async void Hide()
         {
             IsHiding = true;
+            OnHide?.Invoke();
             await Setting.HideAsync();
-            HideImmediately();
+            HideEnd();
         }
 
         public void HideImmediately()
         {
+            OnHide?.Invoke();
+            HideEnd();
+        }
+
+
+        private void HideEnd()
+        {
             Setting.HideImmediately();
             IsVisible = false;
             IsHiding = false;
+            OnComplete?.Invoke();
         }
 
         [Serializable]

@@ -27,6 +27,12 @@ namespace CizaFadeCreditModule
         private IFadeCreditRowData[] _rowDatas;
         private float _time;
 
+        public event Action OnShow;
+
+        public event Action OnHide;
+
+        public event Action OnComplete;
+
         private bool CantShow => !IsInitialized || !HasRowDatas || !IsLoaded;
 
         private bool CantHide => !IsInitialized || !HasRowDatas || !IsLoaded || !IsVisible || IsHiding;
@@ -44,6 +50,8 @@ namespace CizaFadeCreditModule
         public bool HasRowDatas => TryGetRowDatas(out var rowDatas);
 
         public float Time => IsVisible ? _time : 0;
+
+        public float SpeedScale { get; private set; } = 1;
 
         public bool TryGetRowDatas(out IFadeCreditRowData[] fadeCreditRowDatas)
         {
@@ -99,7 +107,8 @@ namespace CizaFadeCreditModule
             if (!IsInitialized || !IsVisible || IsHiding)
                 return;
 
-            _time += deltaTime;
+            var deltaTimeWithScale = deltaTime * SpeedScale;
+            _time += deltaTimeWithScale;
 
             if (TryGetRowDatas(out var rowDatas))
             {
@@ -123,13 +132,16 @@ namespace CizaFadeCreditModule
                 }
 
                 if (!row.IsShowing && !row.IsHiding)
-                    row.Tick(deltaTime);
+                    row.Tick(deltaTimeWithScale);
             }
 
             if (rowDatas.Length == _playedRowDatas.Count && _playingRows.Count == 0)
                 Hide();
         }
 
+
+        public void SetSpeedScale(float speedScale) =>
+            SpeedScale = speedScale;
 
         public void SetRowDatas(IFadeCreditRowData[] rowDatas)
         {
@@ -215,6 +227,16 @@ namespace CizaFadeCreditModule
         }
 
 
+        private void OnShowImp() =>
+            OnShow?.Invoke();
+
+        private void OnHideImp() =>
+            OnHide?.Invoke();
+
+        private void OnCompleteImp() =>
+            OnComplete?.Invoke();
+
+
         private async UniTask LoadAssetAsync(IFadeCreditRowData rowData, CancellationToken cancellationToken)
         {
             await m_LoadAssetAsync<GameObject, PrefabAsset>(rowData.PrefabAddress, _prefabAssetMapByAddress);
@@ -286,7 +308,7 @@ namespace CizaFadeCreditModule
 
             for (int i = 0; i < playingRows.Length; i++)
                 playingRows[i].SetTransformIndex(i);
-            
+
             row.Show();
         }
 

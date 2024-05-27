@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 
 namespace CizaFadeCreditModule
 {
     public interface IFadeCreditController
     {
+        event Action OnShow;
+        event Action OnHide;
+
+        event Action OnComplete;
 
         Transform Pool { get; }
         Transform Content { get; }
@@ -12,7 +17,7 @@ namespace CizaFadeCreditModule
         bool IsHiding { get; }
 
         void Release();
-        
+
         void Show();
         void Hide();
 

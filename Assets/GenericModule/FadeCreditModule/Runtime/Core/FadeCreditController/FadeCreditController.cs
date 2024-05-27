@@ -21,9 +21,6 @@ namespace CizaFadeCreditModule
         public bool IsVisible { get; private set; }
         public bool IsHiding { get; private set; }
 
-        public void Release() =>
-            DestroyImmediate(gameObject);
-
         public virtual async void Show()
         {
             IsVisible = true;

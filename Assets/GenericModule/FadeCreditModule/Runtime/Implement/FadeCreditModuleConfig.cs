@@ -6,10 +6,16 @@ namespace CizaFadeCreditModule.Implement
     public class FadeCreditModuleConfig : ScriptableObject, IFadeCreditModuleConfig
     {
         [SerializeField]
+        private string _rootName = "[CreditModule]";
+
+        [Space]
+        [SerializeField]
         private bool _isDontDestroyOnLoad = true;
 
         [SerializeField]
         private GameObject _controllerPrefab;
+
+        public string RootName => _rootName;
 
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 

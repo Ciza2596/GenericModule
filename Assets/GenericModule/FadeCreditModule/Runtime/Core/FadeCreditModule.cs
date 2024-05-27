@@ -23,6 +23,7 @@ namespace CizaFadeCreditModule
 
         private readonly HashSet<IFadeCreditRowData> _playedRowDatas = new HashSet<IFadeCreditRowData>();
 
+        private Transform _root;
         private IFadeCreditController _controller;
         private IFadeCreditRowData[] _rowDatas;
         private float _time;
@@ -76,7 +77,10 @@ namespace CizaFadeCreditModule
             if (IsInitialized || IsLoading || IsUnloading)
                 return;
 
-            var controllerGameObject = Object.Instantiate(_config.ControllerPrefab, parent);
+            _root = new GameObject(_config.RootName).transform;
+            _root.SetParent(parent);
+
+            var controllerGameObject = Object.Instantiate(_config.ControllerPrefab, _root);
             _controller = controllerGameObject.GetComponent<IFadeCreditController>();
             Assert.IsNotNull(_controller, "[FadeCreditModule::Initialize] FadeCreditController is not found.");
             _controller.HideImmediately();
@@ -97,7 +101,7 @@ namespace CizaFadeCreditModule
 
             SetRowDatas(null);
 
-            _controller.Release();
+            Object.DestroyImmediate(_root);
 
             IsInitialized = false;
         }

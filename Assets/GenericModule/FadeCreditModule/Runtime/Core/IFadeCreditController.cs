@@ -16,8 +16,6 @@ namespace CizaFadeCreditModule
         bool IsVisible { get; }
         bool IsHiding { get; }
 
-        void Release();
-
         void Show();
         void Hide();
 

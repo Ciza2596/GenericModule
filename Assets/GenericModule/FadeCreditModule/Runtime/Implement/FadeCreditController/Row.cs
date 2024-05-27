@@ -86,8 +86,11 @@ namespace CizaFadeCreditModule.Implement
             }
         }
 
-        public virtual void Tick(float deltaTime) =>
+        public virtual void Tick(float deltaTime)
+        {
             Time += deltaTime;
+            Setting.Tick(deltaTime);
+        }
 
 
         [Serializable]
@@ -130,6 +133,9 @@ namespace CizaFadeCreditModule.Implement
 
             public UniTask HideAsync() =>
                 Animator.PlayAtStartAsync(_hideStateName, 0, true, null);
+
+            public void Tick(float deltaTime) =>
+                _animator.Update(deltaTime);
 
             public void SetText(string text) =>
                 _text.text = text;

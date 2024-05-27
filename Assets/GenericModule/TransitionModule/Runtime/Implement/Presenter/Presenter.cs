@@ -9,6 +9,7 @@ namespace CizaTransitionModule.Implement
 
         public virtual void Complete() { }
 
-        public virtual void Release() { }
+        public virtual UniTask ReleaseAsync() =>
+            UniTask.CompletedTask;
     }
 }

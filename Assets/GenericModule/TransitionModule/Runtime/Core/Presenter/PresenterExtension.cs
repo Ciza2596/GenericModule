@@ -19,10 +19,12 @@ namespace CizaTransitionModule
                 presenter.Complete();
         }
 
-        public static void Release(this IPresenter[] presenters)
+        public static UniTask ReleaseAsync(this IPresenter[] presenters)
         {
+            var uniTasks = new List<UniTask>();
             foreach (var presenter in presenters)
-                presenter.Release();
+                uniTasks.Add(presenter.ReleaseAsync());
+            return UniTask.WhenAll(uniTasks);
         }
     }
 }

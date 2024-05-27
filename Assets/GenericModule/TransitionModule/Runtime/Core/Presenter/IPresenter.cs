@@ -8,6 +8,6 @@ namespace CizaTransitionModule
 
         void Complete();
 
-        void Release();
+        UniTask ReleaseAsync();
     }
 }

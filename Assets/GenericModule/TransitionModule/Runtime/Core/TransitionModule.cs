@@ -54,14 +54,14 @@ namespace CizaTransitionModule
             SetNextPresentersToBeNull();
         }
 
-        public UniTask TransitAsync(IPresenter nextPresenter, Action onRelease = null, Action onComplete = null) =>
+        public UniTask TransitAsync(IPresenter nextPresenter, Func<UniTask> onRelease = null, Action onComplete = null) =>
             TransitAsync(new[] { nextPresenter }, onRelease, onComplete);
 
-        public UniTask TransitAsync(IPresenter[] nextPresenters, Action onRelease = null, Action onComplete = null) =>
+        public UniTask TransitAsync(IPresenter[] nextPresenters, Func<UniTask> onRelease = null, Action onComplete = null) =>
             TransitAsync(TransitionInPageDataId, LoadingPageDataId, TransitionOutPageDataId, nextPresenters, onRelease, onComplete);
 
 
-        private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters, Action onRelease, Action onComplete)
+        private async UniTask TransitAsync(string transitionInPageDataId, string loadingPageDataId, string transitionOutPageDataId, IPresenter[] nextPresenters, Func<UniTask> onRelease, Action onComplete)
         {
             if (!IsInitialized || !CanTransit)
                 return;
@@ -103,7 +103,7 @@ namespace CizaTransitionModule
             _pageModule.ShowAsync(transitionInPageDataId);
 
 
-        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId, Action onRelease)
+        private async UniTask LoadingAsync(string transitionInPageDataId, string loadingPageDataId, Func<UniTask> onRelease)
         {
             await _pageModule.ShowImmediatelyAsync(loadingPageDataId);
             _pageModule.HideImmediately(transitionInPageDataId);
@@ -116,8 +116,9 @@ namespace CizaTransitionModule
             uniTasks.Add(loadingPage.DefaultLoadingAsync());
             await UniTask.WhenAll(uniTasks);
 
-            CurrentPresenters.Release();
-            onRelease?.Invoke();
+            await CurrentPresenters.ReleaseAsync();
+            if (onRelease != null)
+                await onRelease.Invoke();
 
             SetCurrentPresenters(NextPresenters);
             SetNextPresentersToBeNull();

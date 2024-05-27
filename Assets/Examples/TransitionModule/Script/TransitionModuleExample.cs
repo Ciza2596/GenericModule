@@ -76,13 +76,15 @@ namespace CizaTransitionModule.Example
                 Debug.Log($"Complete viewPrefab: {_viewPrefab.name}.");
             }
 
-            public void Release()
+            public UniTask ReleaseAsync()
             {
-                Debug.Log($"Release viewPrefab: {_viewPrefab.name}.");
+                Debug.Log($"ReleaseAsync viewPrefab: {_viewPrefab.name}.");
 
                 var view = _view;
                 _view = null;
                 Destroy(view);
+
+                return UniTask.CompletedTask;
             }
         }
     }

@@ -169,7 +169,7 @@ namespace CizaPageModule
 
             if (state != PageStates.Invisible)
             {
-                Debug.LogWarning($"[PageContainer::OnlyCallShowingPrepareAsync] Page: {key} should be InVisible. Current state is {state}.");
+                Debug.LogWarning($"[PageContainer::OnlyCallShowingPrepareAsync] Page: {key} should be Invisible. Current state is {state}.");
                 return;
             }
 

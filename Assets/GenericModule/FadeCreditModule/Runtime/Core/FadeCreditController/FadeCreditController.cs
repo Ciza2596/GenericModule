@@ -99,6 +99,8 @@ namespace CizaFadeCreditModule
             public UniTask ShowAsync()
             {
                 _canvasGroup.alpha = 1;
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
                 return Animator.PlayAtStartAsync(_showStateName, 0, true, null);
             }
 
@@ -111,8 +113,12 @@ namespace CizaFadeCreditModule
             public void Tick(float deltaTime) =>
                 _animator.Update(deltaTime);
 
-            public void HideImmediately() =>
+            public void HideImmediately()
+            {
                 _canvasGroup.alpha = 0;
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
+            }
         }
     }
 }

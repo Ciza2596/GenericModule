@@ -212,11 +212,9 @@ namespace CizaOptionModule
         {
             if (_pageModule.TryGetPage<IOptionModulePage>(pageIndex.ToString(), out var optionModulePage))
             {
-                var supOptionList = new HashSet<TSupOption>();
+                var supOptionList = new List<TSupOption>();
                 foreach (var option in optionModulePage.GetAllOptions())
-                    if (option.TryGetComponent<TSupOption>(out var supOption))
-                        supOptionList.Add(supOption);
-
+                    option.GetComponents(supOptionList);
                 supOptions = supOptionList.ToArray();
                 return true;
             }

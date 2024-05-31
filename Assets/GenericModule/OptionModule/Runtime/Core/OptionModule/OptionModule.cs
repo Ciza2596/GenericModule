@@ -214,7 +214,7 @@ namespace CizaOptionModule
             {
                 var supOptionList = new List<TSupOption>();
                 foreach (var option in optionModulePage.GetAllOptions())
-                    option.GetComponents(supOptionList);
+                    supOptionList.AddRange(option.GetComponents<TSupOption>());
                 supOptions = supOptionList.ToArray();
                 return true;
             }

@@ -1,70 +1,72 @@
 @Group: Hello2
-
-@Group: Heaven
+BundleModeIndex: 1
 #
-Address: Naninovel/Encourage;
-InstanceId: 28534;
+Address: Encourage;
+InstanceId: 30098;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Audio/Encourage.wav)
 
 #
-Address: Naninovel/GameObject;
-InstanceId: 28536;
+Address: GameObject;
+InstanceId: 30100;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Prefab/GameObject.prefab)
 
 #
-Address: Naninovel/AddressableModuleExample1;
-InstanceId: 28540;
+Address: AddressableModuleExample1;
+InstanceId: 30104;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Scene/AddressableModuleExample1.unity)
 
 #
-Address: Naninovel/AddressMapListDataOverview;
-InstanceId: 27816;
+Address: AddressMapListDataOverview;
+InstanceId: 29192;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/ScriptableObject/AddressMapListDataOverview.asset)
 
 #
-Address: Naninovel/DUNE_1;
-InstanceId: 28542;
+Address: DUNE_1;
+InstanceId: 30106;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_1.JPG)
 
 #
-Address: Naninovel/DUNE_2;
-InstanceId: 28544;
+Address: DUNE_2;
+InstanceId: 30110;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_2.png)
 
 #
-Address: Naninovel/DUNE_3;
-InstanceId: 28546;
+Address: DUNE_3;
+InstanceId: 30114;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_3.jpeg)
 
 #
-Address: Naninovel/DUNE_4;
-InstanceId: 28548;
+Address: DUNE_4;
+InstanceId: 30118;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_4.jpeg)
 
 #
-Address: Naninovel/DUNE_5;
-InstanceId: 28550;
+Address: DUNE_5;
+InstanceId: 30122;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_5.jpeg)
 
 #
-Address: Naninovel/DUNE_6;
-InstanceId: 28552;
+Address: DUNE_6;
+InstanceId: 30126;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_6.jpg)
 
 #
-Address: Naninovel/DUNE_7;
-InstanceId: 28554;
+Address: DUNE_7;
+InstanceId: 30130;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_7.png)
 
+
+@Group: Heaven
+BundleModeIndex: 1
 

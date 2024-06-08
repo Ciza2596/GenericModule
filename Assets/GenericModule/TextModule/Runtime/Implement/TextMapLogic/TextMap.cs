@@ -30,6 +30,8 @@ namespace CizaTextModule.Implement
             }
         }
 
+        public abstract string Text { get; }
+
         public void SetKey(string key) =>
             _key = key;
 

@@ -8,6 +8,8 @@ namespace CizaTextModule
 
         string Key { get; }
 
+        string Text { get; }
+
         void SetText(string text);
 
         void SetKey(string key);

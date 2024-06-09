@@ -144,7 +144,7 @@ namespace CizaFadeCreditModule
                     continue;
                 }
 
-                if (!row.IsShowing && !row.IsHiding)
+                if (row.IsVisible)
                     row.Tick(deltaTimeWithScale);
             }
 

@@ -14,7 +14,7 @@ namespace CizaFadeCreditModule
         {
             try
             {
-                if (!animator.isActiveAndEnabled)
+                if (!animator.gameObject.activeSelf)
                     return;
 
                 animator.speed = 1;

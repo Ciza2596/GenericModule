@@ -17,6 +17,9 @@ namespace CizaAchievementModule
 
         // AchievementDataId
         public event Action<string> OnUnlocked;
+        
+        // StatDataId, Value
+        public event Action<string, float> OnSetStat;
 
         private bool _isInitializing;
         private bool _isInitialized;
@@ -160,6 +163,7 @@ namespace CizaAchievementModule
                 return;
 
             stat.SetCurrent(value);
+            OnSetStat?.Invoke(statDataId, value);
 
             CheckAnyIsAchievementUnlocked(true);
         }

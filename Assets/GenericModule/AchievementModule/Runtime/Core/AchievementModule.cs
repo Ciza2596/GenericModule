@@ -28,6 +28,30 @@ namespace CizaAchievementModule
         public string[] AllStatDataIds => _statMapByStatDataId.Keys.ToArray();
         public string[] AllAchievementDataIds => _isUnlockedMapByAchievementDataId.Keys.ToArray();
 
+        public string[] UnlockedAchievementDataIds
+        {
+            get
+            {
+                var unlockedAchievementDataIds = new List<string>();
+                foreach (var pair in _isUnlockedMapByAchievementDataId.ToArray())
+                    if (pair.Value)
+                        unlockedAchievementDataIds.Add(pair.Key);
+                return unlockedAchievementDataIds.ToArray();
+            }
+        }
+
+        public string[] LockedAchievementDataIds
+        {
+            get
+            {
+                var lockedAchievementDataIds = new List<string>();
+                foreach (var pair in _isUnlockedMapByAchievementDataId.ToArray())
+                    if (!pair.Value)
+                        lockedAchievementDataIds.Add(pair.Key);
+                return lockedAchievementDataIds.ToArray();
+            }
+        }
+
         public bool TryGetStatReadModel(string statDataId, out IStatReadModel statReadModel)
         {
             if (!_statMapByStatDataId.TryGetValue(statDataId, out var stat))

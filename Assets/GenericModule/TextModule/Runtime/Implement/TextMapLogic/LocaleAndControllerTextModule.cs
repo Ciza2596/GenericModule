@@ -9,12 +9,11 @@ namespace CizaTextModule.Implement
 
         private readonly TextModuleWithTextMap _textModuleWithTextMap;
 
+        // oriText
+        public event Func<string, string> OnTranslate;
+
         public event Action<string> OnChangeLocaleCategory;
-        // Key, Text
-        public event Func<string, string, string> OnRefreshLocaleCategory;
-        
         public event Action<string> OnChangeControllerCategory;
-        public event Func<string, string, string> OnRefreshControllerCategory;
 
 
         public string[] LocaleCategories
@@ -84,6 +83,7 @@ namespace CizaTextModule.Implement
             _textModuleWithTextMap = new TextModuleWithTextMap(maps, "LocaleAndControllerTextModule");
 
             _textModuleWithTextMap.OnChangeCategory += OnChangeCategoryImp;
+            _textModuleWithTextMap.OnTranslate += OnTranslateImp;
         }
 
         public bool TryChangeLocaleCategory(string category) =>
@@ -115,5 +115,8 @@ namespace CizaTextModule.Implement
             else if (dataId == ControllerTextModuleDataId)
                 OnChangeControllerCategory?.Invoke(category);
         }
+
+        private string OnTranslateImp(string oriText) =>
+            OnTranslate?.Invoke(oriText) ?? oriText;
     }
 }

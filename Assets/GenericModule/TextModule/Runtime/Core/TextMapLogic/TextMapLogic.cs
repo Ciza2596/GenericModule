@@ -12,6 +12,7 @@ namespace CizaTextModule
                 new TextModuleImp(dataId, textModule, keyPattern);
 
             event Action<string> OnChangeCategory;
+            event Func<string, string> OnTranslate;
 
             string DataId { get; }
             string KeyPattern { get; }
@@ -38,9 +39,11 @@ namespace CizaTextModule
                     KeyPattern = keyPattern;
 
                     _textModule.OnChangeCategory += OnChangeCategoryImp;
+                    _textModule.OnTranslate += OnTranslateImp;
                 }
 
                 public event Action<string> OnChangeCategory;
+                public event Func<string, string> OnTranslate;
 
                 public string DataId { get; }
                 public string KeyPattern { get; }
@@ -61,6 +64,9 @@ namespace CizaTextModule
 
                 private void OnChangeCategoryImp(string currentCategory) =>
                     OnChangeCategory?.Invoke(currentCategory);
+
+                private string OnTranslateImp(string oriText) =>
+                    OnTranslate?.Invoke(oriText) ?? oriText;
             }
         }
 
@@ -71,6 +77,9 @@ namespace CizaTextModule
 
         // dataId, category
         public event Action<string, string> OnChangeCategory;
+
+        // oriText
+        public event Func<string, string> OnTranslate;
 
         public bool TryGetCategories(string dataId, out string[] categories)
         {
@@ -129,7 +138,10 @@ namespace CizaTextModule
             _className = className;
 
             foreach (var textModule in textModules)
+            {
                 textModule.OnChangeCategory += OnChangeCategoryImp;
+                textModule.OnTranslate += OnTranslateImp;
+            }
         }
 
 
@@ -180,6 +192,9 @@ namespace CizaTextModule
             foreach (var textMap in _textMaps)
                 SetTextMap(textMap);
         }
+
+        private string OnTranslateImp(string oriText) =>
+            OnTranslate?.Invoke(oriText) ?? oriText;
 
         private void SetTextMap(ITextMap textMap)
         {

@@ -13,6 +13,7 @@ namespace CizaTextModule
         private Dictionary<string, Dictionary<string, string>> _textMapByCategoryByKey;
 
         public event Action<string> OnChangeCategory;
+        public event Func<string, string> OnTranslate;
 
         public string[] Categories { get; private set; }
 
@@ -73,13 +74,15 @@ namespace CizaTextModule
                 return false;
             }
 
-            if (!textMapByCategory.TryGetValue(CurrentCategory, out text))
+            if (!textMapByCategory.TryGetValue(CurrentCategory, out var oriText))
             {
+                text = string.Empty;
                 if (_textModuleConfig.IsShowWarningLog)
                     Debug.LogWarning($"[TextModule::TryGetText] Not find textRecord by key: {key}.");
                 return false;
             }
 
+            text = OnTranslate?.Invoke(oriText) ?? oriText;
             return true;
         }
 

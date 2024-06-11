@@ -10,7 +10,12 @@ namespace CizaTextModule.Implement
         private readonly TextModuleWithTextMap _textModuleWithTextMap;
 
         public event Action<string> OnChangeLocaleCategory;
+        // Key, Text
+        public event Func<string, string, string> OnRefreshLocaleCategory;
+        
         public event Action<string> OnChangeControllerCategory;
+        public event Func<string, string, string> OnRefreshControllerCategory;
+
 
         public string[] LocaleCategories
         {

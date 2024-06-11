@@ -10,6 +10,9 @@ namespace CizaTextModule.Implement
         // dataId, category
         public event Action<string, string> OnChangeCategory;
 
+        // oriText
+        public event Func<string, string> OnTranslate;
+
         public bool TryGetCategories(string dataId, out string[] categories) =>
             _textMapLogic.TryGetCategories(dataId, out categories);
 
@@ -31,6 +34,7 @@ namespace CizaTextModule.Implement
             _textMapLogic = new TextMapLogic(textModules.ToArray(), className);
 
             _textMapLogic.OnChangeCategory += OnChangeCategoryImp;
+            _textMapLogic.OnTranslate += OnTranslateImp;
         }
 
         public bool TryChangeCategory(string dataId, string category) =>
@@ -53,6 +57,9 @@ namespace CizaTextModule.Implement
 
         private void OnChangeCategoryImp(string dataId, string category) =>
             OnChangeCategory?.Invoke(dataId, category);
+
+        private string OnTranslateImp(string oriText) =>
+            OnTranslate?.Invoke(oriText) ?? oriText;
 
 
         public class Map

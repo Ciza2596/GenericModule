@@ -118,7 +118,7 @@ namespace CizaFadeCreditModule
             var deltaTimeWithScale = deltaTime * SpeedScale;
             _time += deltaTimeWithScale;
 
-            _controller.Tick(deltaTime);
+            _controller.Tick(deltaTimeWithScale);
 
             if (IsHiding)
                 return;

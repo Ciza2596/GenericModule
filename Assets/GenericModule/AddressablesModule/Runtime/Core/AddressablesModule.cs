@@ -8,6 +8,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
+using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
 namespace CizaAddressablesModule
@@ -20,8 +21,10 @@ namespace CizaAddressablesModule
 		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType = new Dictionary<Type, Dictionary<string, Object>>();
 		private readonly Dictionary<string, SceneInstance>            _addressSceneMap             = new Dictionary<string, SceneInstance>();
 
+		[Preserve]
 		public AddressablesModule() : this("AddressablesModule") { }
 
+		[Preserve]
 		public AddressablesModule(string className) =>
 			_className = className;
 

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using CizaAddressablesModule;
 using CizaLocalizationModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaLocaleAddressablesModule
 {
@@ -15,6 +17,9 @@ namespace CizaLocaleAddressablesModule
         public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
         public event Func<string, UniTask> OnChangedLocaleAsync;
 
+        public event Func<string, UniTask> OnLoadAssetAsync;
+        public event Action<string> OnUnloadAsset;
+
         public bool IsInitialized => _localizationModule.IsInitialized;
 
         public bool IsChangingLocale => _localizationModule.IsChangingLocale;
@@ -24,9 +29,16 @@ namespace CizaLocaleAddressablesModule
         public string CurrentLocale => _localizationModule.CurrentLocale;
         public string SourceLocale => _localizationModule.SourceLocale;
 
+        public IReadOnlyDictionary<string, int> RefCountMapByAddress => _addressablesByRefCountModule.RefCountMapByAddress;
+
+        [Preserve]
         public LocaleAddressablesByRefCountModule(string className, ILocaleAddressablesByRefCountModuleConfig localeAddressablesByRefCountModuleConfig)
         {
             _addressablesByRefCountModule = new AddressablesByRefCountModule(className);
+
+            _addressablesByRefCountModule.OnLoadAssetAsync += OnLoadAssetAsyncImp;
+            _addressablesByRefCountModule.OnUnloadAsset += OnUnloadAssetImp;
+
             _localizationModule = new LocalizationModule(className, localeAddressablesByRefCountModuleConfig);
 
             _localizationModule.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
@@ -138,5 +150,16 @@ namespace CizaLocaleAddressablesModule
         }
 
         #endregion
+
+        private UniTask OnLoadAssetAsyncImp(string address)
+        {
+            if (OnLoadAssetAsync != null)
+                return OnLoadAssetAsync.Invoke(address);
+
+            return UniTask.CompletedTask;
+        }
+
+        private void OnUnloadAssetImp(string address) =>
+            OnUnloadAsset?.Invoke(address);
     }
 }

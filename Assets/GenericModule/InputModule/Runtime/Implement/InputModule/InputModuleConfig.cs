@@ -23,6 +23,13 @@ namespace CizaInputModule.Implement
 
         [Space]
         [SerializeField]
+        private bool _isAutoHideEventSystem = true;
+
+        [SerializeField]
+        private float _autoHideEventSystemTime = 3;
+
+        [Space]
+        [SerializeField]
         private GameObject _playerInputManagerPrefab;
 
         [SerializeField]
@@ -39,6 +46,10 @@ namespace CizaInputModule.Implement
         public GameObject EventSystemPrefab => _eventSystemPrefab;
         public bool CanEnableEventSystem => _canEnableEventSystem;
         public bool IsDefaultEnableEventSystem => _isDefaultEnableEventSystem;
+
+
+        public bool IsAutoHideEventSystem => _isAutoHideEventSystem;
+        public float AutoHideEventSystemTime => _autoHideEventSystemTime;
 
         public GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
         public float JoinedWaitingTime => _joinedWaitingTime;

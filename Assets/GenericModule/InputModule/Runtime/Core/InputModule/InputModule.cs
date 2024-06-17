@@ -27,6 +27,9 @@ namespace CizaInputModule
         private string _currentActionMapDataId;
         private string _previousControlScheme;
 
+        private Vector3 _autoHideEventSystemLastMousePosition;
+        private float _autoHideEventSystemTimer;
+
         public event Action<PlayerInput> OnControlsChanged;
 
         public event Action<PlayerInput> OnPlayerJoined;
@@ -35,7 +38,9 @@ namespace CizaInputModule
         public bool IsInitialized { get; private set; }
 
         public bool CanEnableEventSystem { get; private set; }
-        public bool IsEnableEventSystem => _eventSystem != null ? _eventSystem.activeSelf : false;
+        public bool IsEnableEventSystem { get; private set; }
+        public bool IsCursorVisible { get; private set; }
+
         public bool IsEnableJoining { get; private set; }
 
         public bool IsEnableInput { get; private set; }
@@ -132,6 +137,7 @@ namespace CizaInputModule
                 Object.DontDestroyOnLoad(_root.gameObject);
 
             _eventSystem = Object.Instantiate(_inputModuleConfig.EventSystemPrefab, _root);
+            DisableEventSystem();
             SetCanEnableEventSystem(_inputModuleConfig.CanEnableEventSystem);
 
             if (_inputModuleConfig.IsDefaultEnableEventSystem)
@@ -161,8 +167,11 @@ namespace CizaInputModule
             IsInitialized = false;
         }
 
-        public void Tick(float deltaTime) =>
+        public void Tick(float deltaTime)
+        {
+            CheckAutoHideEventSystemTime(deltaTime);
             _timerModule.Tick(deltaTime);
+        }
 
         public void SetCanEnableEventSystem(bool canEnableEventSystem)
         {
@@ -173,18 +182,20 @@ namespace CizaInputModule
 
         public void EnableEventSystem()
         {
-            if (!IsInitialized || !CanEnableEventSystem || IsEnableEventSystem)
+            if (!IsInitialized || !CanEnableEventSystem)
                 return;
 
-            _eventSystem.SetActive(true);
+            ShowCursor();
+            IsEnableEventSystem = true;
         }
 
         public void DisableEventSystem()
         {
-            if (!IsInitialized || !IsEnableEventSystem)
+            if (!IsInitialized)
                 return;
 
-            _eventSystem.SetActive(false);
+            HideCursor();
+            IsEnableEventSystem = false;
         }
 
         public void RebindActionsByJson(int playerIndex, string json)
@@ -477,5 +488,47 @@ namespace CizaInputModule
 
         private PlayerInput GetPlayerInputPrefab() =>
             _inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();
+
+
+        private void CheckAutoHideEventSystemTime(float deltaTime)
+        {
+            if (!CanEnableEventSystem || !IsEnableEventSystem || !_inputModuleConfig.IsAutoHideEventSystem)
+                return;
+
+            if (Input.mousePosition != _autoHideEventSystemLastMousePosition)
+            {
+                // Reset timer if mouse moved
+                _autoHideEventSystemTimer = _inputModuleConfig.AutoHideEventSystemTime;
+                ShowCursor();
+                _autoHideEventSystemLastMousePosition = Input.mousePosition;
+            }
+            else if (IsCursorVisible)
+            {
+                // Count down the timer if mouse didn't move
+                _autoHideEventSystemTimer -= deltaTime;
+                if (_autoHideEventSystemTimer <= 0)
+                    HideCursor();
+            }
+        }
+
+        private void ShowCursor()
+        {
+            if (Cursor.visible && _eventSystem.activeSelf)
+                return;
+
+            Cursor.visible = true;
+            _eventSystem.SetActive(true);
+            IsCursorVisible = true;
+        }
+
+        private void HideCursor()
+        {
+            if (!Cursor.visible && !_eventSystem.activeSelf)
+                return;
+
+            IsCursorVisible = false;
+            Cursor.visible = false;
+            _eventSystem.SetActive(false);
+        }
     }
 }

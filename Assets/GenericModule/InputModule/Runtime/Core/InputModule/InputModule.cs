@@ -40,7 +40,7 @@ namespace CizaInputModule
         public bool CanEnableEventSystem { get; private set; }
         public bool IsEnableEventSystem { get; private set; }
         public bool IsCursorVisible { get; private set; }
-        public bool IsCursorAutoHide => _autoHideEventSystemTimer <= 0;
+        public bool IsCursorAutoHide => _inputModuleConfig.IsAutoHideEventSystem && _autoHideEventSystemTimer <= 0;
 
         public bool IsEnableJoining { get; private set; }
 
@@ -186,7 +186,7 @@ namespace CizaInputModule
             if (!IsInitialized || !CanEnableEventSystem)
                 return;
             
-            if(IsCursorAutoHide) 
+            if(!IsCursorAutoHide) 
                 ShowCursor();
             IsEnableEventSystem = true;
         }

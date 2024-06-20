@@ -45,8 +45,8 @@ namespace CizaFadeCreditModule
 
         public bool IsLoaded { get; private set; }
 
-        public bool IsVisible => _controller.IsVisible;
-        public bool IsHiding => _controller.IsHiding;
+        public bool IsVisible => IsInitialized && _controller.IsVisible;
+        public bool IsHiding => IsInitialized && _controller.IsHiding;
 
         public bool HasRowDatas => TryGetRowDatas(out var rowDatas);
 
@@ -105,6 +105,7 @@ namespace CizaFadeCreditModule
 
             SetRowDatas(null);
 
+            _controller = null;
             Object.DestroyImmediate(_root);
 
             IsInitialized = false;
@@ -225,7 +226,7 @@ namespace CizaFadeCreditModule
         {
             if (CantHide)
                 return;
-
+            
             _controller.Hide();
             DestroyAll();
         }
@@ -363,6 +364,8 @@ namespace CizaFadeCreditModule
 
         private void DestroyAll()
         {
+            _playedRowDatas.Clear();
+            
             foreach (var row in _playingRows.ToArray())
                 DeSpawnRow(row);
 

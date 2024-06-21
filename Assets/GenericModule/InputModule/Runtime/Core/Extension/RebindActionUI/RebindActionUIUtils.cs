@@ -67,7 +67,7 @@ namespace CizaInputModule
         public static string[] KeyboardGenericFunctionPaths() =>
             new[]
             {
-                "<Keyboard>/escape", "<Keyboard>/backquote", "<Keyboard>/tab", "<Keyboard>/capsLock", "<Keyboard>/leftShift", "<Keyboard>/leftMeta", "<Keyboard>/rightMeta", "<Keyboard>/rightShift", "<Keyboard>/enter", "<Keyboard>/backslash", "<Keyboard>/backspace",
+                "<Keyboard>/escape", "<Keyboard>/backquote", "<Keyboard>/tab", "<Keyboard>/capsLock", "<Keyboard>/shift", "<Keyboard>/leftShift", "<Keyboard>/leftMeta", "<Keyboard>/rightMeta", "<Keyboard>/rightShift", "<Keyboard>/enter", "<Keyboard>/backslash", "<Keyboard>/backspace",
                 "<Keyboard>/f1", "<Keyboard>/f2", "<Keyboard>/f3", "<Keyboard>/f4", "<Keyboard>/f5", "<Keyboard>/f6", "<Keyboard>/f7", "<Keyboard>/f8", "<Keyboard>/f9", "<Keyboard>/f10", "<Keyboard>/f11", "<Keyboard>/f12",
                 "<Keyboard>/printScreen", "<Keyboard>/scrollLock", "<Keyboard>/pause",
                 "<Keyboard>/home", "<Keyboard>/anyKey", "<Keyboard>/pageUp", "<Keyboard>/pageDown", "<Keyboard>/delete", "<Keyboard>/end", "<Keyboard>/numpadEnter"

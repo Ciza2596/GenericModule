@@ -37,10 +37,10 @@ namespace CizaInputModule
             allPaths.AddRange(XboxGenericFunctionPaths());
 
             // PS5
-            allPaths.AddRange(PS5LeftStickPaths());
-            allPaths.AddRange(PS5DPadPaths());
-            allPaths.AddRange(PS5RightStickPaths());
-            allPaths.AddRange(PS5GenericFunctionPaths());
+            allPaths.AddRange(PSLeftStickPaths());
+            allPaths.AddRange(PSDPadPaths());
+            allPaths.AddRange(PSRightStickPaths());
+            allPaths.AddRange(PSGenericFunctionPaths());
 
             // Switch
             allPaths.AddRange(SwitchLeftStickPaths());
@@ -67,7 +67,7 @@ namespace CizaInputModule
         public static string[] KeyboardGenericFunctionPaths() =>
             new[]
             {
-                "<Keyboard>/escape", "<Keyboard>/backquote", "<Keyboard>/tab", "<Keyboard>/capsLock", "<Keyboard>/shift", "<Keyboard>/leftMeta", "<Keyboard>/rightMeta", "<Keyboard>/rightShift", "<Keyboard>/enter", "<Keyboard>/backslash", "<Keyboard>/backspace",
+                "<Keyboard>/escape", "<Keyboard>/backquote", "<Keyboard>/tab", "<Keyboard>/capsLock", "<Keyboard>/leftShift", "<Keyboard>/leftMeta", "<Keyboard>/rightMeta", "<Keyboard>/rightShift", "<Keyboard>/enter", "<Keyboard>/backslash", "<Keyboard>/backspace",
                 "<Keyboard>/f1", "<Keyboard>/f2", "<Keyboard>/f3", "<Keyboard>/f4", "<Keyboard>/f5", "<Keyboard>/f6", "<Keyboard>/f7", "<Keyboard>/f8", "<Keyboard>/f9", "<Keyboard>/f10", "<Keyboard>/f11", "<Keyboard>/f12",
                 "<Keyboard>/printScreen", "<Keyboard>/scrollLock", "<Keyboard>/pause",
                 "<Keyboard>/home", "<Keyboard>/anyKey", "<Keyboard>/pageUp", "<Keyboard>/pageDown", "<Keyboard>/delete", "<Keyboard>/end", "<Keyboard>/numpadEnter"
@@ -96,21 +96,21 @@ namespace CizaInputModule
 
         #endregion
 
-        #region PS5
+        #region PS
 
-        public static string[] PS5LeftStickPaths() =>
-            new[] { "<DualSenseGamepadHID>/leftStick/up", "<DualSenseGamepadHID>/leftStick/left", "<DualSenseGamepadHID>/leftStick/down", "<DualSenseGamepadHID>/leftStick/down" };
+        public static string[] PSLeftStickPaths() =>
+            new[] { "<DualShockGamepad>/leftStick/up", "<DualShockGamepad>/leftStick/left", "<DualShockGamepad>/leftStick/down", "<DualShockGamepad>/leftStick/down" };
 
-        public static string[] PS5DPadPaths() =>
-            new[] { "<DualSenseGamepadHID>/dpad/up", "<DualSenseGamepadHID>/dpad/left", "<DualSenseGamepadHID>/dpad/down", "<DualSenseGamepadHID>/dpad/right" };
+        public static string[] PSDPadPaths() =>
+            new[] { "<DualShockGamepad>/dpad/up", "<DualShockGamepad>/dpad/left", "<DualShockGamepad>/dpad/down", "<DualShockGamepad>/dpad/right" };
 
-        public static string[] PS5RightStickPaths() =>
-            new[] { "<DualSenseGamepadHID>/rightStick/up", "<DualSenseGamepadHID>/rightStick/left", "<DualSenseGamepadHID>/rightStick/down", "<DualSenseGamepadHID>/rightStick/right" };
+        public static string[] PSRightStickPaths() =>
+            new[] { "<DualShockGamepad>/rightStick/up", "<DualShockGamepad>/rightStick/left", "<DualShockGamepad>/rightStick/down", "<DualShockGamepad>/rightStick/right" };
 
 
         // select, touchpadButton, start
-        public static string[] PS5GenericFunctionPaths() =>
-            new[] { "<DualSenseGamepadHID>/select", "<DualSenseGamepadHID>/touchpadButton", "<DualSenseGamepadHID>/start" };
+        public static string[] PSGenericFunctionPaths() =>
+            new[] { "<DualShockGamepad>/select", "<DualShockGamepad>/touchpadButton", "<DualShockGamepad>/start" };
 
         #endregion
 

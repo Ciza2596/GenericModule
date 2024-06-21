@@ -43,7 +43,7 @@
                 {
                     "name": "",
                     "id": "5622897b-752c-4066-8e12-a6721e197648",
-                    "path": "<Keyboard>/j",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
@@ -54,7 +54,7 @@
                 {
                     "name": "",
                     "id": "23fe196a-ff86-43b5-b12e-e5943b27abcb",
-                    "path": "<DualSenseGamepadHID>/buttonEast",
+                    "path": "<DualShockGamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "PS5",

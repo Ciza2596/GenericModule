@@ -8,45 +8,45 @@ namespace CizaInputModule
     {
         #region All
 
-        public static string[] AllPaths()
+        public static string[] GetAllExcludingPaths()
         {
             var allPaths = new HashSet<string>();
 
             // Keyboard
-            allPaths.AddRange(AllPathsWithoutMouse());
+            allPaths.AddRange(GetAllExcludingPathsWithoutMouse());
 
             // Mouse
-            allPaths.AddRange(MouseAllPaths());
+            allPaths.AddRange(GetMouseAllPaths());
 
             return allPaths.ToArray();
         }
 
-        public static string[] AllPathsWithoutMouse()
+        public static string[] GetAllExcludingPathsWithoutMouse()
         {
             var allPaths = new HashSet<string>();
 
             // Keyboard
-            allPaths.AddRange(KeyboardWASDPaths());
-            allPaths.AddRange(KeyboardArrowPaths());
-            allPaths.AddRange(KeyboardGenericFunctionPaths());
+            allPaths.AddRange(GetKeyboardWASDPaths());
+            allPaths.AddRange(GetKeyboardArrowPaths());
+            allPaths.AddRange(GetKeyboardGenericFunctionPaths());
 
             // Xbox
-            allPaths.AddRange(XboxLeftStickPaths());
-            allPaths.AddRange(XboxDPadPaths());
-            allPaths.AddRange(XboxRightStickPaths());
-            allPaths.AddRange(XboxGenericFunctionPaths());
+            allPaths.AddRange(GetXboxLeftStickPaths());
+            allPaths.AddRange(GetXboxDPadPaths());
+            allPaths.AddRange(GetXboxRightStickPaths());
+            allPaths.AddRange(GetXboxGenericFunctionPaths());
 
             // PS5
-            allPaths.AddRange(PSLeftStickPaths());
-            allPaths.AddRange(PSDPadPaths());
-            allPaths.AddRange(PSRightStickPaths());
-            allPaths.AddRange(PSGenericFunctionPaths());
+            allPaths.AddRange(GetPSLeftStickPaths());
+            allPaths.AddRange(GetPSDPadPaths());
+            allPaths.AddRange(GetPSRightStickPaths());
+            allPaths.AddRange(GetPSGenericFunctionPaths());
 
             // Switch
-            allPaths.AddRange(SwitchLeftStickPaths());
-            allPaths.AddRange(SwitchDPadPaths());
-            allPaths.AddRange(SwitchRightStickPaths());
-            allPaths.AddRange(SwitchGenericFunctionPaths());
+            allPaths.AddRange(GetSwitchLeftStickPaths());
+            allPaths.AddRange(GetSwitchDPadPaths());
+            allPaths.AddRange(GetSwitchRightStickPaths());
+            allPaths.AddRange(GetSwitchGenericFunctionPaths());
 
             return allPaths.ToArray();
         }
@@ -56,15 +56,15 @@ namespace CizaInputModule
         #region Keyboard & Mouse
 
         // wasd
-        public static string[] KeyboardWASDPaths() =>
+        public static string[] GetKeyboardWASDPaths() =>
             new[] { "<Keyboard>/w", "<Keyboard>/a", "<Keyboard>/s", "<Keyboard>/d" };
 
 
-        public static string[] KeyboardArrowPaths() =>
+        public static string[] GetKeyboardArrowPaths() =>
             new[] { "<Keyboard>/upArrow", "<Keyboard>/leftArrow", "<Keyboard>/downArrow", "<Keyboard>/rightArrow" };
 
         // enter, backspace, esc
-        public static string[] KeyboardGenericFunctionPaths() =>
+        public static string[] GetKeyboardGenericFunctionPaths() =>
             new[]
             {
                 "<Keyboard>/escape", "<Keyboard>/backquote", "<Keyboard>/tab", "<Keyboard>/capsLock", "<Keyboard>/shift", "<Keyboard>/leftShift", "<Keyboard>/leftMeta", "<Keyboard>/rightMeta", "<Keyboard>/rightShift", "<Keyboard>/enter", "<Keyboard>/backslash", "<Keyboard>/backspace",
@@ -73,61 +73,61 @@ namespace CizaInputModule
                 "<Keyboard>/home", "<Keyboard>/anyKey", "<Keyboard>/pageUp", "<Keyboard>/pageDown", "<Keyboard>/delete", "<Keyboard>/end", "<Keyboard>/numpadEnter"
             };
 
-        public static string[] MouseAllPaths() =>
+        public static string[] GetMouseAllPaths() =>
             new[] { "<Mouse>/press", "<Mouse>/press", "<Mouse>/press", "<Mouse>/press", "<Mouse>/press", "<Mouse>/rightButton" };
 
         #endregion
 
         #region Xbox
 
-        public static string[] XboxLeftStickPaths() =>
+        public static string[] GetXboxLeftStickPaths() =>
             new[] { "<XInputController>/leftStick/up", "<XInputController>/leftStick/left", "<XInputController>/leftStick/left", "<XInputController>/leftStick/left" };
 
-        public static string[] XboxDPadPaths() =>
+        public static string[] GetXboxDPadPaths() =>
             new[] { "<XInputController>/dpad/up", "<XInputController>/dpad/left", "<XInputController>/dpad/down", "<XInputController>/dpad/right" };
 
-        public static string[] XboxRightStickPaths() =>
+        public static string[] GetXboxRightStickPaths() =>
             new[] { "<XInputController>/rightStick/up", "<XInputController>/rightStick/left", "<XInputController>/rightStick/left", "<XInputController>/rightStick/right" };
 
 
         // right, select
-        public static string[] XboxGenericFunctionPaths() =>
+        public static string[] GetXboxGenericFunctionPaths() =>
             new[] { "<XInputController>/rightStick/right", "<XInputController>/select" };
 
         #endregion
 
         #region PS
 
-        public static string[] PSLeftStickPaths() =>
+        public static string[] GetPSLeftStickPaths() =>
             new[] { "<DualShockGamepad>/leftStick/up", "<DualShockGamepad>/leftStick/left", "<DualShockGamepad>/leftStick/down", "<DualShockGamepad>/leftStick/down" };
 
-        public static string[] PSDPadPaths() =>
+        public static string[] GetPSDPadPaths() =>
             new[] { "<DualShockGamepad>/dpad/up", "<DualShockGamepad>/dpad/left", "<DualShockGamepad>/dpad/down", "<DualShockGamepad>/dpad/right" };
 
-        public static string[] PSRightStickPaths() =>
+        public static string[] GetPSRightStickPaths() =>
             new[] { "<DualShockGamepad>/rightStick/up", "<DualShockGamepad>/rightStick/left", "<DualShockGamepad>/rightStick/down", "<DualShockGamepad>/rightStick/right" };
 
 
         // select, touchpadButton, start
-        public static string[] PSGenericFunctionPaths() =>
+        public static string[] GetPSGenericFunctionPaths() =>
             new[] { "<DualShockGamepad>/select", "<DualShockGamepad>/touchpadButton", "<DualShockGamepad>/start" };
 
         #endregion
 
         #region Switch
 
-        public static string[] SwitchLeftStickPaths() =>
+        public static string[] GetSwitchLeftStickPaths() =>
             new[] { "<SwitchProControllerHID>/leftStick/up", "<SwitchProControllerHID>/leftStick/left", "<SwitchProControllerHID>/leftStick/down", "<SwitchProControllerHID>/leftStick/right" };
 
         // wasd
-        public static string[] SwitchDPadPaths() =>
+        public static string[] GetSwitchDPadPaths() =>
             new[] { "<SwitchProControllerHID>/dpad/up", "<SwitchProControllerHID>/dpad/left", "<SwitchProControllerHID>/dpad/down", "<SwitchProControllerHID>/dpad/right" };
 
-        public static string[] SwitchRightStickPaths() =>
+        public static string[] GetSwitchRightStickPaths() =>
             new[] { "<SwitchProControllerHID>/rightStick/up", "<SwitchProControllerHID>/rightStick/left", "<SwitchProControllerHID>/rightStick/down", "<SwitchProControllerHID>/rightStick/right" };
 
         // enter, esc
-        public static string[] SwitchGenericFunctionPaths() =>
+        public static string[] GetSwitchGenericFunctionPaths() =>
             new[] { "<SwitchProControllerHID>/start", "<SwitchProControllerHID>/select", "<SwitchProControllerHID>/home", "<SwitchProControllerHID>/capture" };
 
         #endregion

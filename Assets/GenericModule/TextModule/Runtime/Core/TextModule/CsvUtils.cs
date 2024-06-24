@@ -27,7 +27,35 @@ namespace CizaTextModule
 
             foreach (var rowText in rowTexts)
             {
-                var columns = rowText.Split(COMMA_TAG).ToList();
+                var columns = new List<string>();
+
+                var columnString = string.Empty;
+                var nextCount = 0;
+
+                for (int i = 0; i < rowText.Length; i++)
+                {
+                    if (nextCount > 0)
+                    {
+                        nextCount--;
+                        continue;
+                    }
+
+                    if (i + 1 < rowText.Length && rowText[i] == COMMA_TAG && rowText[i + 1] == QUOTATION_TAG)
+                    {
+                        columns.Add(columnString);
+                        columnString = string.Empty;
+                        nextCount = 1;
+                        continue;
+                    }
+
+                    columnString += rowText[i];
+
+                    if (i == rowTexts.Count - 1)
+                        columns.Add(columnString);
+                }
+
+
+                // var columns = rowText.Split(COMMA_TAG).ToList();
                 if (columns.Count != (categories.Length + 1))
                     continue;
 

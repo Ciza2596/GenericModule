@@ -15,7 +15,7 @@ namespace CizaTextModule
         public const string DOUBLE_QUOTATION_TAG = "\"\"";
         public const char QUOTATION_TAG = '\"';
 
-        public Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
+        public static Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
         {
             var filterText = FilterText(csvText);
             var categories = GetCategories(filterText, className);

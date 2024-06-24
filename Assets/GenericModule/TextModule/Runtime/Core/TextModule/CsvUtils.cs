@@ -15,7 +15,7 @@ namespace CizaTextModule
         public const string DOUBLE_QUOTATION_TAG = "\"\"";
         public const char QUOTATION_TAG = '\"';
 
-        public static Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
+        public Dictionary<string, Dictionary<string, string>> CreateTextMapByCategoryByKey(string csvText, string className)
         {
             var filterText = FilterText(csvText);
             var categories = GetCategories(filterText, className);
@@ -27,59 +27,128 @@ namespace CizaTextModule
 
             foreach (var rowText in rowTexts)
             {
+                // var columns = new List<string>();
+                //
+                // var columnString = string.Empty;
+                // var ignoreCount = 0;
+                // var commaAndQuotationCount = 0;
+                //
+                // for (int i = 0; i < rowText.Length; i++)
+                // {
+                //     if (ignoreCount > 0)
+                //     {
+                //         ignoreCount--;
+                //         continue;
+                //     }
+                //
+                //     if (commaAndQuotationCount > 0)
+                //     {
+                //         if (i + 1 < rowText.Length && rowText[i] == QUOTATION_TAG && rowText[i + 1] == COMMA_TAG)
+                //         {
+                //             columns.Add(columnString);
+                //             columnString = string.Empty;
+                //             commaAndQuotationCount = 0;
+                //             ignoreCount = 1;
+                //             continue;
+                //         }
+                //     }
+                //     else
+                //     {
+                //         if (i + 1 < rowText.Length && rowText[i] == COMMA_TAG && rowText[i + 1] == QUOTATION_TAG)
+                //         {
+                //             columns.Add(columnString);
+                //             columnString = string.Empty;
+                //             commaAndQuotationCount = 1;
+                //             ignoreCount = 1;
+                //             continue;
+                //         }
+                //
+                //         if (rowText[i] == COMMA_TAG)
+                //         {
+                //             columns.Add(columnString);
+                //             columnString = string.Empty;
+                //             ignoreCount = 1;
+                //             continue;
+                //         }
+                //     }
+                //
+                //     columnString += rowText[i];
+                //
+                //     if (i == rowTexts.Count - 1)
+                //         columns.Add(columnString);
+                // }
+
+
                 var columns = new List<string>();
+                var splitTexts = rowText.Split(COMMA_TAG).ToArray();
+                var hasInComma = false;
 
-                var columnString = string.Empty;
-                var ignoreCount = 0;
-                var commaAndQuotationCount = 0;
+                var targetText = string.Empty;
 
-                for (int i = 0; i < rowText.Length; i++)
+                foreach (var splitText in splitTexts)
                 {
-                    if (ignoreCount > 0)
+                    var quotationCount = 0;
+                    var index = 0;
+                    while ((index = splitText.IndexOf(QUOTATION_TAG, index)) != -1)
                     {
-                        ignoreCount--;
-                        continue;
+                        quotationCount++;
+                        index += 1;
                     }
 
-                    if (commaAndQuotationCount > 0)
+                    if (!hasInComma && CheckIsOdd(quotationCount))
                     {
-                        if (i + 1 < rowText.Length && rowText[i] == QUOTATION_TAG && rowText[i + 1] == COMMA_TAG)
+                        hasInComma = true;
+
+                        var newText = string.Empty;
+                        var firstQuotation = true;
+                        foreach (var chr in splitText)
                         {
-                            columns.Add(columnString);
-                            columnString = string.Empty;
-                            commaAndQuotationCount = 0;
-                            ignoreCount = 1;
-                            continue;
+                            if (chr == QUOTATION_TAG && firstQuotation)
+                            {
+                                firstQuotation = false;
+                                continue;
+                            }
+
+                            newText += chr;
                         }
+
+                        targetText += newText;
+                    }
+                    else if (hasInComma && CheckIsOdd(quotationCount))
+                    {
+                        hasInComma = false;
+                        var newText = string.Empty;
+                        var firstQuotation = true;
+                        foreach (var chr in splitText)
+                        {
+                            if (chr == QUOTATION_TAG && firstQuotation)
+                            {
+                                firstQuotation = false;
+                                continue;
+                            }
+
+                            newText += chr;
+                        }
+
+                        targetText += newText;
+                        columns.Add(targetText);
+                        targetText = string.Empty;
                     }
                     else
                     {
-                        if (i + 1 < rowText.Length && rowText[i] == COMMA_TAG && rowText[i + 1] == QUOTATION_TAG)
+                        if (hasInComma)
                         {
-                            columns.Add(columnString);
-                            columnString = string.Empty;
-                            commaAndQuotationCount = 1;
-                            ignoreCount = 1;
-                            continue;
+                            targetText += splitText;
                         }
-
-                        if (rowText[i] == COMMA_TAG)
-                        {
-                            columns.Add(columnString);
-                            columnString = string.Empty;
-                            ignoreCount = 1;
-                            continue;
-                        }
+                        else
+                            columns.Add(splitText);
                     }
-
-                    columnString += rowText[i];
-
-                    if (i == rowTexts.Count - 1)
-                        columns.Add(columnString);
                 }
 
+                bool CheckIsOdd(int num) =>
+                    num % 2 != 0;
 
-                // var columns = rowText.Split(COMMA_TAG).ToList();
+
                 if (columns.Count != (categories.Length + 1))
                     continue;
 

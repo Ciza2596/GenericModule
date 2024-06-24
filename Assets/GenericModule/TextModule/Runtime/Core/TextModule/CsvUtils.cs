@@ -30,22 +30,46 @@ namespace CizaTextModule
                 var columns = new List<string>();
 
                 var columnString = string.Empty;
-                var nextCount = 0;
+                var ignoreCount = 0;
+                var commaAndQuotationCount = 0;
 
                 for (int i = 0; i < rowText.Length; i++)
                 {
-                    if (nextCount > 0)
+                    if (ignoreCount > 0)
                     {
-                        nextCount--;
+                        ignoreCount--;
                         continue;
                     }
 
-                    if (i + 1 < rowText.Length && rowText[i] == COMMA_TAG && rowText[i + 1] == QUOTATION_TAG)
+                    if (commaAndQuotationCount > 0)
                     {
-                        columns.Add(columnString);
-                        columnString = string.Empty;
-                        nextCount = 1;
-                        continue;
+                        if (i + 1 < rowText.Length && rowText[i] == QUOTATION_TAG && rowText[i + 1] == COMMA_TAG)
+                        {
+                            columns.Add(columnString);
+                            columnString = string.Empty;
+                            commaAndQuotationCount = 0;
+                            ignoreCount = 1;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (i + 1 < rowText.Length && rowText[i] == COMMA_TAG && rowText[i + 1] == QUOTATION_TAG)
+                        {
+                            columns.Add(columnString);
+                            columnString = string.Empty;
+                            commaAndQuotationCount = 1;
+                            ignoreCount = 1;
+                            continue;
+                        }
+
+                        if (rowText[i] == COMMA_TAG)
+                        {
+                            columns.Add(columnString);
+                            columnString = string.Empty;
+                            ignoreCount = 1;
+                            continue;
+                        }
                     }
 
                     columnString += rowText[i];

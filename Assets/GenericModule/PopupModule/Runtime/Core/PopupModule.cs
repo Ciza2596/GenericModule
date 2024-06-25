@@ -153,7 +153,7 @@ namespace CizaPopupModule
             if (!IsInitialized)
                 return;
 
-            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup) || popup.Index == index)
                 return;
 
             Select(popup, index);

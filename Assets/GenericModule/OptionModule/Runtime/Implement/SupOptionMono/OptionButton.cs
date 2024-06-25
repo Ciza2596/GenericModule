@@ -17,6 +17,7 @@ namespace CizaOptionModule.Implement
             base.Initialize(option);
 
             Assert.IsNotNull(_button, $"[OptionButton::Initialize] Option: {name} is not set button.");
+            Option.OnSetIsUnlock += OnSetIsUnlockImp;
             _button.onClick.AddListener(OnClickImp);
         }
 
@@ -24,6 +25,7 @@ namespace CizaOptionModule.Implement
         {
             base.Release(option);
             _button.onClick.RemoveListener(OnClickImp);
+            Option.OnSetIsUnlock -= OnSetIsUnlockImp;
         }
 
 
@@ -32,5 +34,13 @@ namespace CizaOptionModule.Implement
 
         private void OnClickImp() =>
             OnClick?.Invoke();
+        
+        private void OnSetIsUnlockImp(string optionKey, bool isUnlock)
+        {
+            if (optionKey != Option.Key)
+                return;
+
+            _button.enabled = isUnlock;
+        }
     }
 }

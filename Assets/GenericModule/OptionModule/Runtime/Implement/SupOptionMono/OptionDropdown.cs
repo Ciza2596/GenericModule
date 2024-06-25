@@ -33,10 +33,10 @@ namespace CizaOptionModule.Implement
         public void SetOptions(string[] options) =>
             _dropdown.SetOptions(options);
 
-        public void Show() =>
+        public new void Show() =>
             _dropdown.Show();
 
-        public void Hide() =>
+        public new void Hide() =>
             _dropdown.Hide();
 
         public void MoveToUp()
@@ -67,6 +67,8 @@ namespace CizaOptionModule.Implement
             base.Initialize(option);
 
             Assert.IsNotNull(_dropdown, $"[OptionDropdown::Initialize] Option: {name} is not set dropdown.");
+            Option.OnSetIsUnlock += OnSetIsUnlockImp;
+
             _dropdown.OnSelect += OnSelectImp;
 
             _dropdown.OnConfirm += OnConfirmImp;
@@ -87,6 +89,8 @@ namespace CizaOptionModule.Implement
 
             _dropdown.OnShow -= OnShowImp;
             _dropdown.OnHide -= OnHideImp;
+            
+            Option.OnSetIsUnlock -= OnSetIsUnlockImp;
         }
 
         private void OnSelectImp(int previousIndex, int index) =>
@@ -103,5 +107,13 @@ namespace CizaOptionModule.Implement
 
         private void OnHideImp() =>
             OnHide?.Invoke();
+
+        private void OnSetIsUnlockImp(string optionKey, bool isUnlock)
+        {
+            if (optionKey != Option.Key)
+                return;
+
+            _dropdown.enabled = isUnlock;
+        }
     }
 }

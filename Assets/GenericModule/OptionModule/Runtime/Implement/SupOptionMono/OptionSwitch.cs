@@ -28,6 +28,7 @@ namespace CizaOptionModule.Implement
             base.Initialize(option);
 
             Assert.IsNotNull(_switch, $"[OptionSwitch::Initialize] Option: {name} is not set switch.");
+            Option.OnSetIsUnlock += OnSetIsUnlockImp;
             _switch.OnIsOnChanged += OnIsOnChangedImp;
         }
 
@@ -35,9 +36,18 @@ namespace CizaOptionModule.Implement
         {
             base.Release(option);
             _switch.OnIsOnChanged -= OnIsOnChangedImp;
+            Option.OnSetIsUnlock -= OnSetIsUnlockImp;
         }
 
         private void OnIsOnChangedImp(bool isOn) =>
             OnIsOnChanged?.Invoke(isOn);
+
+        private void OnSetIsUnlockImp(string optionKey, bool isUnlock)
+        {
+            if (optionKey != Option.Key)
+                return;
+
+            _switch.enabled = isUnlock;
+        }
     }
 }

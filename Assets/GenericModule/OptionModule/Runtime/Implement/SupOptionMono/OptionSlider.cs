@@ -27,6 +27,7 @@ namespace CizaOptionModule.Implement
             base.Initialize(option);
 
             Assert.IsNotNull(_slider, $"[OptionSlider::Initialize] Option: {name} is not set slider.");
+            Option.OnSetIsUnlock += OnSetIsUnlockImp;
             _slider.onValueChanged.AddListener(OnValueChangedImp);
         }
 
@@ -34,9 +35,18 @@ namespace CizaOptionModule.Implement
         {
             base.Release(option);
             _slider.onValueChanged.RemoveListener(OnValueChangedImp);
+            Option.OnSetIsUnlock -= OnSetIsUnlockImp;
         }
 
         private void OnValueChangedImp(float value) =>
             OnValueChanged?.Invoke(value);
+
+        private void OnSetIsUnlockImp(string optionKey, bool isUnlock)
+        {
+            if (optionKey != Option.Key)
+                return;
+
+            _slider.enabled = isUnlock;
+        }
     }
 }

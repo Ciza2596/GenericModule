@@ -326,7 +326,7 @@ namespace CizaPopupModule
             else
                 selectedIndex = index;
 
-            if (!isForce && index == selectedIndex)
+            if (!isForce && popup.Index == selectedIndex)
                 return;
 
             popup.Select(selectedIndex);

@@ -153,10 +153,10 @@ namespace CizaPopupModule
             if (!IsInitialized)
                 return;
 
-            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup) || popup.Index == index)
+            if (!TryGetIsVisibleAndIsNotConfirmPopup(key, out var popup))
                 return;
 
-            Select(popup, index);
+            Select(popup, index, false);
         }
 
         public void MoveToPrevious(string key)
@@ -279,7 +279,7 @@ namespace CizaPopupModule
 
             popup.GameObject.SetActive(true);
             popup.SetHasConfirm(false);
-            Select(popup, popup.DefaultButtonIndex);
+            Select(popup, popup.DefaultButtonIndex, true);
 
             popup.SetState(PopupStates.Showing);
 
@@ -312,7 +312,7 @@ namespace CizaPopupModule
             popup.GameObject.SetActive(false);
         }
 
-        private void Select(IPopup popup, int index)
+        private void Select(IPopup popup, int index, bool isForce)
         {
             var maxIndex = popup.HasCancel ? CancelIndex : ConfrimIndex;
             int selectedIndex;
@@ -325,6 +325,9 @@ namespace CizaPopupModule
 
             else
                 selectedIndex = index;
+
+            if (!isForce && index == selectedIndex)
+                return;
 
             popup.Select(selectedIndex);
             OnSelect?.Invoke(popup.Key, popup.State == PopupStates.Visible);

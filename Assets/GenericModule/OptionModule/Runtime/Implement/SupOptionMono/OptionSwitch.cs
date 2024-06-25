@@ -47,7 +47,10 @@ namespace CizaOptionModule.Implement
             if (optionKey != Option.Key)
                 return;
 
-            _switch.enabled = isUnlock;
+            if (isUnlock)
+                _switch.EnableInteractable();
+            else
+                _switch.DisableInteractable();
         }
     }
 }

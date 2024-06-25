@@ -46,7 +46,7 @@ namespace CizaOptionModule.Implement
             if (optionKey != Option.Key)
                 return;
 
-            _slider.enabled = isUnlock;
+            _slider.interactable = isUnlock;
         }
     }
 }

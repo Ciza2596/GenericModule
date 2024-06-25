@@ -89,7 +89,7 @@ namespace CizaOptionModule.Implement
 
             _dropdown.OnShow -= OnShowImp;
             _dropdown.OnHide -= OnHideImp;
-            
+
             Option.OnSetIsUnlock -= OnSetIsUnlockImp;
         }
 
@@ -113,7 +113,10 @@ namespace CizaOptionModule.Implement
             if (optionKey != Option.Key)
                 return;
 
-            _dropdown.enabled = isUnlock;
+            if (isUnlock)
+                _dropdown.EnableInteractable();
+            else
+                _dropdown.DisableInteractable();
         }
     }
 }

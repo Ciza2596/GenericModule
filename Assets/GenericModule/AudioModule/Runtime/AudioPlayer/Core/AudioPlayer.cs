@@ -40,6 +40,10 @@ namespace CizaAudioModule
 
         public bool IsInitialized => _root != null && _bgmModule.IsInitialized && _sfxModule.IsInitialized && _voiceModule.IsInitialized;
 
+        public string[] AllBgmDataIds => _bgmModule.AudioDataIds;
+        public string[] AllSfxDataIds => _sfxModule.AudioDataIds;
+        public string[] AllVoiceDataIds => _voiceModule.AudioDataIds;
+
         public bool TryGetMasterMixerGroup(out AudioMixerGroup masterMixerGroup)
         {
             if (_audioPlayerConfig.AudioMixer is null)

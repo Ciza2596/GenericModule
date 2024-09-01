@@ -93,8 +93,8 @@ namespace CizaAudioModule
         public bool CheckIsSfxPlaying(string sfxId) =>
             _sfxModule.CheckIsPlaying(sfxId);
 
-        public bool TryGetSfxReadModel(string bgmId, out IAudioReadModel sfxReadModel) =>
-            _sfxModule.TryGetAudioReadModel(bgmId, out sfxReadModel);
+        public bool TryGetSfxReadModel(string sfxId, out IAudioReadModel sfxReadModel) =>
+            _sfxModule.TryGetAudioReadModel(sfxId, out sfxReadModel);
 
         public bool TryGetVoiceVolume(out float volume) =>
             _voiceModule.TryGetVolume(out volume);
@@ -102,8 +102,8 @@ namespace CizaAudioModule
         public bool CheckIsVoicePlaying(string voiceId) =>
             _voiceModule.CheckIsPlaying(voiceId);
 
-        public bool TryGetVoiceReadModel(string bgmId, out IAudioReadModel voiceReadModel) =>
-            _voiceModule.TryGetAudioReadModel(bgmId, out voiceReadModel);
+        public bool TryGetVoiceReadModel(string voiceId, out IAudioReadModel voiceReadModel) =>
+            _voiceModule.TryGetAudioReadModel(voiceId, out voiceReadModel);
 
         public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
         {

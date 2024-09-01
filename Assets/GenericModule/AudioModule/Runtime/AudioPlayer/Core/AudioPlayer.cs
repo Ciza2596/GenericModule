@@ -84,17 +84,26 @@ namespace CizaAudioModule
         public bool CheckIsBgmPlaying(string bgmId) =>
             _bgmModule.CheckIsPlaying(bgmId);
 
+        public bool TryGetBgmReadModel(string bgmId, out IAudioReadModel bgmReadModel) =>
+            _bgmModule.TryGetAudioReadModel(bgmId, out bgmReadModel);
+
         public bool TryGetSfxVolume(out float volume) =>
             _sfxModule.TryGetVolume(out volume);
 
         public bool CheckIsSfxPlaying(string sfxId) =>
             _sfxModule.CheckIsPlaying(sfxId);
 
+        public bool TryGetSfxReadModel(string bgmId, out IAudioReadModel sfxReadModel) =>
+            _sfxModule.TryGetAudioReadModel(bgmId, out sfxReadModel);
+
         public bool TryGetVoiceVolume(out float volume) =>
             _voiceModule.TryGetVolume(out volume);
 
         public bool CheckIsVoicePlaying(string voiceId) =>
             _voiceModule.CheckIsPlaying(voiceId);
+
+        public bool TryGetVoiceReadModel(string bgmId, out IAudioReadModel voiceReadModel) =>
+            _voiceModule.TryGetAudioReadModel(bgmId, out voiceReadModel);
 
         public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
         {

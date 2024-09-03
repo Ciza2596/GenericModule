@@ -35,6 +35,8 @@ namespace CizaInputModule
         public event Action<PlayerInput> OnPlayerJoined;
         public event Action<PlayerInput> OnPlayerLeft;
 
+        public event Action<PlayerInput, float> OnTick;
+
         public bool IsInitialized { get; private set; }
 
         public bool CanEnableEventSystem { get; private set; }
@@ -170,8 +172,15 @@ namespace CizaInputModule
 
         public void Tick(float deltaTime)
         {
+            if (!IsInitialized)
+                return;
+
             CheckAutoHideEventSystemTime(deltaTime);
             _timerModule.Tick(deltaTime);
+
+            foreach (var playerInput in _playerInputs.ToArray())
+                if (playerInput.currentActionMap.name != _inputModuleConfig.DisableActionMapDataId)
+                    OnTick?.Invoke(playerInput, deltaTime);
         }
 
         public void SetCanEnableEventSystem(bool canEnableEventSystem)
@@ -185,8 +194,8 @@ namespace CizaInputModule
         {
             if (!IsInitialized || !CanEnableEventSystem)
                 return;
-            
-            if(!IsCursorAutoHide) 
+
+            if (!IsCursorAutoHide)
                 ShowCursor();
             IsEnableEventSystem = true;
         }
@@ -303,20 +312,14 @@ namespace CizaInputModule
         }
 
         public void EnableInput(int playerIndex) =>
-            SwitchActionMap(playerIndex);
+            SwitchCurrentActionMap(playerIndex);
 
 
-        public void DisableInput(int playerIndex)
-        {
-            if (!TryGetPlayerInput(playerIndex, out var playerInput))
-                return;
-
-            playerInput.DeactivateInput();
-        }
+        public void DisableInput(int playerIndex) =>
+            SwitchActionMap(playerIndex, _inputModuleConfig.DisableActionMapDataId);
 
         public void SetCurrentActionMapDataId(string actionMapDataId) =>
             _currentActionMapDataId = actionMapDataId;
-
 
         public void HandleActionEvent(Action<int, InputActionAsset> handleEvent)
         {
@@ -403,7 +406,7 @@ namespace CizaInputModule
             OnControlsChangedImp(_playerInput);
             _playerInput.onControlsChanged += OnControlsChangedImp;
 
-            SwitchActionMap(_playerInput.playerIndex);
+            SwitchCurrentActionMap(_playerInput.playerIndex);
         }
 
         private void DestroyPlayerInput()
@@ -420,12 +423,15 @@ namespace CizaInputModule
             Object.Destroy(playerInput.gameObject);
         }
 
-        private void SwitchActionMap(int playerIndex)
+        private void SwitchCurrentActionMap(int playerIndex) =>
+            SwitchActionMap(playerIndex, CurrentActionMapDataId);
+
+        private void SwitchActionMap(int playerIndex, string actionMapDataId)
         {
             if (!TryGetPlayerInput(playerIndex, out var playerInput))
                 return;
 
-            playerInput.SwitchCurrentActionMap(CurrentActionMapDataId);
+            playerInput.SwitchCurrentActionMap(actionMapDataId);
         }
 
         private void OnPlayerJoinedImp(PlayerInput playerInput)
@@ -451,7 +457,7 @@ namespace CizaInputModule
             _playerInputs.Add(playerInput);
             OnPlayerJoined?.Invoke(playerInput);
 
-            SwitchActionMap(playerInput.playerIndex);
+            SwitchCurrentActionMap(playerInput.playerIndex);
         }
 
         private void OnPlayerLeftImp(PlayerInput playerInput)

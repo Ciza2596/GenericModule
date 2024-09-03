@@ -9,7 +9,7 @@ namespace CizaInputModule.Editor
 
         public const string PlayerInputManager = "PlayerInputManager";
 
-        [MenuItem("GameObject/Ciza/InputModule/PlayerInputManager", false, -10)]
+        [MenuItem("GameObject/Ciza/InputModule/PlayerInputManager", false, -101)]
         public static void CreatePlayerInputManager()
         {
             CreateObject(PlayerInputManager);
@@ -17,10 +17,18 @@ namespace CizaInputModule.Editor
 
         public const string PlayerInput = "PlayerInput";
 
-        [MenuItem("GameObject/Ciza/InputModule/PlayerInput", false, -10)]
+        [MenuItem("GameObject/Ciza/InputModule/PlayerInput", false, -100)]
         public static void CreatePlayerInput()
         {
             CreateObject(PlayerInput);
+        }
+
+        public const string EventSystem = "EventSystem";
+
+        [MenuItem("GameObject/Ciza/InputModule/EventSystem", false, -10)]
+        public static void CreateEventSystem()
+        {
+            CreateObject(EventSystem);
         }
 
         private static void CreateObject(string dataId)

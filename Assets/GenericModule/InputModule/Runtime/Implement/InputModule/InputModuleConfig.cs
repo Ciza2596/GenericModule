@@ -39,6 +39,9 @@ namespace CizaInputModule.Implement
         [SerializeField]
         private string _defaultActionMapDataId = "None";
 
+        [SerializeField]
+        private string _disableActionMapDataId = "Disable";
+
 
         public string RootName => _rootName;
         public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
@@ -55,5 +58,6 @@ namespace CizaInputModule.Implement
         public float JoinedWaitingTime => _joinedWaitingTime;
 
         public string DefaultActionMapDataId => _defaultActionMapDataId;
+        public string DisableActionMapDataId => _disableActionMapDataId;
     }
 }

@@ -11,7 +11,7 @@ module | Test | Samples |
 [SaveLoadModule](#saveloadmodule) | ✔️ | ❌ |
 [ObjectPool](#objectpool) | ✔️ | ❌ |
 [GameObjectPoolModule](#gameobjectpoolmodule) | ✔️ | ❌ |
-[LocalizationModule](#localizationmodule) | ✔️ | ❌ |
+[LocaleModule](#localemodule) | ✔️ | ❌ |
 [TextModule](#textmodule) | ✔️ | ❌ |
 [InputModule](#inputModule) | ✔️ | ❌ |
 [PopupModule](#popupmodule) | ✔️ | ❌ |
@@ -332,9 +332,9 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/GameObje
 GameObjectPoolModule manual.
 
 
-## LocalizationModule
+## LocaleModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocalizationModule
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocaleModule
 ```
 
 ### Dependency:
@@ -343,7 +343,7 @@ https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 
 ### Manual:
-LocalizationModule manual.
+LocaleModule manual.
 
 ## TextModule
 ```
@@ -502,6 +502,6 @@ https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/AddressablesModule
 ```
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocalizationModule
+https://github.com/Ciza2596/GenericModule.git?path=Assets/GenericModule/LocaleModule
 ```
        

@@ -1,6 +1,6 @@
-using CizaLocalizationModule;
+using CizaLocaleModule;
 
 namespace CizaLocaleAddressablesModule
 {
-	public interface ILocaleAddressablesByRefCountModuleConfig : ILocalizationModuleConfig { }
+	public interface ILocaleAddressablesByRefCountModuleConfig : ILocaleModuleConfig { }
 }

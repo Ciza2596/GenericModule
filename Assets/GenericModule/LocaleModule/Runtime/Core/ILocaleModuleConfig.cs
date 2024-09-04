@@ -1,6 +1,6 @@
-namespace CizaLocalizationModule
+namespace CizaLocaleModule
 {
-    public interface ILocalizationModuleConfig
+    public interface ILocaleModuleConfig
     {
         string[] SupportLocales { get; }
 

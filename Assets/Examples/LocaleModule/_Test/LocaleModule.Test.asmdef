@@ -1,9 +1,9 @@
 {
-    "name": "LocalizationModule.Test",
+    "name": "LocaleModule.Test",
     "rootNamespace": "",
     "references": [
         "UniTask",
-        "LocalizationModule"
+        "LocaleModule"
     ],
     "includePlatforms": [
         "Editor"

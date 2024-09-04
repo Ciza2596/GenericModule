@@ -4,7 +4,7 @@
     "references": [
         "UniTask",
         "AddressablesModule",
-        "LocalizationModule"
+        "LocaleModule"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

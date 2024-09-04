@@ -1,6 +1,6 @@
 {
-    "name": "LocalizationModule",
-    "rootNamespace": "CizaLocalizationModule",
+    "name": "LocaleModule",
+    "rootNamespace": "CizaLocaleModule",
     "references": [
         "UniTask"
     ],

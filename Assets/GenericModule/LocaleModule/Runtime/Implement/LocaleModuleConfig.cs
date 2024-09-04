@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace CizaLocalizationModule
+namespace CizaLocaleModule
 {
-    [CreateAssetMenu(fileName = "LocalizationModuleConfig", menuName = "Ciza/LocalizationModule/LocalizationModuleConfig")]
-    public class LocalizationModuleConfig : ScriptableObject, ILocalizationModuleConfig
+    [CreateAssetMenu(fileName = "LocaleModuleConfig", menuName = "Ciza/LocaleModule/LocaleModuleConfig")]
+    public class LocaleModuleConfig : ScriptableObject, ILocaleModuleConfig
     {
         [SerializeField]
         private string[] _supportLocales = new[] { "en" };

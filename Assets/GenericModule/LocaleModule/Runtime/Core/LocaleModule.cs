@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UniTask = Cysharp.Threading.Tasks.UniTask;
 
-namespace CizaLocalizationModule
+namespace CizaLocaleModule
 {
-    public class LocalizationModule
+    public class LocaleModule
     {
         private readonly string _className;
-        private readonly ILocalizationModuleConfig _config;
+        private readonly ILocaleModuleConfig _config;
         private string[] _supportLocales;
 
         public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
@@ -25,26 +25,26 @@ namespace CizaLocalizationModule
         public string SourceLocale { get; private set; }
 
         [Preserve]
-        public LocalizationModule(ILocalizationModuleConfig config) : this("LocalizationModule", config) { }
+        public LocaleModule(ILocaleModuleConfig config) : this("LocaleModule", config) { }
 
         [Preserve]
-        public LocalizationModule(string className, ILocalizationModuleConfig config)
+        public LocaleModule(string className, ILocaleModuleConfig config)
         {
             _className = className;
             _config = config;
 
             if (!_config.SupportLocales.Contains(_config.SourceLocale))
-                Debug.LogError($"[{_className}::LocalizationModule] SourceLocale: {_config.SourceLocale} is not in supportLocales.");
+                Debug.LogError($"[{_className}::LocaleModule] SourceLocale: {_config.SourceLocale} is not in supportLocales.");
 
             if (!_config.SupportLocales.Contains(_config.DefaultLocale))
-                Debug.LogError($"[{_className}::LocalizationModule] DefaultLocale: {_config.DefaultLocale} is not in supportLocales.");
+                Debug.LogError($"[{_className}::LocaleModule] DefaultLocale: {_config.DefaultLocale} is not in supportLocales.");
         }
 
         public void Initialize()
         {
             if (IsInitialized)
             {
-                Debug.LogWarning($"[{_className}::Initialize] LocalizationModule is initialized.");
+                Debug.LogWarning($"[{_className}::Initialize] LocaleModule is initialized.");
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace CizaLocalizationModule
         {
             if (!IsInitialized)
             {
-                Debug.LogWarning($"[{_className}::Release] LocalizationModule is not initialized.");
+                Debug.LogWarning($"[{_className}::Release] LocaleModule is not initialized.");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace CizaLocalizationModule
         {
             if (!IsInitialized)
             {
-                Debug.LogWarning($"[{_className}::ChangeLocale] LocalizationModule is not initialized.");
+                Debug.LogWarning($"[{_className}::ChangeLocale] LocaleModule is not initialized.");
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace CizaLocalizationModule
         {
             if (!IsInitialized)
             {
-                Debug.LogWarning($"[{_className}::GetTextWithLocalePrefix] LocalizationModule is not initialized.");
+                Debug.LogWarning($"[{_className}::GetTextWithLocalePrefix] LocaleModule is not initialized.");
                 return string.Empty;
             }
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using CizaAddressablesModule;
-using CizaLocalizationModule;
+using CizaLocaleModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -12,7 +12,7 @@ namespace CizaLocaleAddressablesModule
     public class LocaleAddressablesByRefCountModule
     {
         private readonly AddressablesByRefCountModule _addressablesByRefCountModule;
-        private readonly LocalizationModule _localizationModule;
+        private readonly LocaleModule _localeModule;
 
         public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
         public event Func<string, UniTask> OnChangedLocaleAsync;
@@ -20,14 +20,14 @@ namespace CizaLocaleAddressablesModule
         public event Func<string, UniTask> OnLoadAssetAsync;
         public event Action<string> OnUnloadAsset;
 
-        public bool IsInitialized => _localizationModule.IsInitialized;
+        public bool IsInitialized => _localeModule.IsInitialized;
 
-        public bool IsChangingLocale => _localizationModule.IsChangingLocale;
+        public bool IsChangingLocale => _localeModule.IsChangingLocale;
 
-        public string DefaultLocale => _localizationModule.DefaultLocale;
-        public string[] SupportLocales => _localizationModule.SupportLocales;
-        public string CurrentLocale => _localizationModule.CurrentLocale;
-        public string SourceLocale => _localizationModule.SourceLocale;
+        public string DefaultLocale => _localeModule.DefaultLocale;
+        public string[] SupportLocales => _localeModule.SupportLocales;
+        public string CurrentLocale => _localeModule.CurrentLocale;
+        public string SourceLocale => _localeModule.SourceLocale;
 
         public IReadOnlyDictionary<string, int> RefCountMapByAddress => _addressablesByRefCountModule.RefCountMapByAddress;
 
@@ -39,10 +39,10 @@ namespace CizaLocaleAddressablesModule
             _addressablesByRefCountModule.OnLoadAssetAsync += OnLoadAssetAsyncImp;
             _addressablesByRefCountModule.OnUnloadAsset += OnUnloadAssetImp;
 
-            _localizationModule = new LocalizationModule(className, localeAddressablesByRefCountModuleConfig);
+            _localeModule = new LocaleModule(className, localeAddressablesByRefCountModuleConfig);
 
-            _localizationModule.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
-            _localizationModule.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
+            _localeModule.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
+            _localeModule.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
 
 
             UniTask m_OnChangedLocaleBeforeAsync(string locale) =>
@@ -60,7 +60,7 @@ namespace CizaLocaleAddressablesModule
                 return;
             }
 
-            _localizationModule.Initialize();
+            _localeModule.Initialize();
         }
 
         public void Release()
@@ -71,7 +71,7 @@ namespace CizaLocaleAddressablesModule
                 return;
             }
 
-            _localizationModule.Release();
+            _localeModule.Release();
         }
 
         #region Locale
@@ -84,7 +84,7 @@ namespace CizaLocaleAddressablesModule
                 return UniTask.CompletedTask;
             }
 
-            return _localizationModule.ChangeToDefaultLocaleAsync();
+            return _localeModule.ChangeToDefaultLocaleAsync();
         }
 
         public UniTask ChangeLocaleAsync(string locale)
@@ -95,7 +95,7 @@ namespace CizaLocaleAddressablesModule
                 return UniTask.CompletedTask;
             }
 
-            return _localizationModule.ChangeLocaleAsync(locale);
+            return _localeModule.ChangeLocaleAsync(locale);
         }
 
         #endregion
@@ -110,7 +110,7 @@ namespace CizaLocaleAddressablesModule
                 return UniTask.FromResult<T>(null);
             }
 
-            var addressWithLocalePrefix = _localizationModule.GetTextWithLocalePrefix(address);
+            var addressWithLocalePrefix = _localeModule.GetTextWithLocalePrefix(address);
             return _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, cancellationToken);
         }
 
@@ -122,7 +122,7 @@ namespace CizaLocaleAddressablesModule
                 return null;
             }
 
-            var addressWithLocalePrefix = _localizationModule.GetTextWithLocalePrefix(address);
+            var addressWithLocalePrefix = _localeModule.GetTextWithLocalePrefix(address);
             return _addressablesByRefCountModule.GetAsset<T>(addressWithLocalePrefix);
         }
 
@@ -134,7 +134,7 @@ namespace CizaLocaleAddressablesModule
                 return;
             }
 
-            var addressWithLocalePrefix = _localizationModule.GetTextWithLocalePrefix(address);
+            var addressWithLocalePrefix = _localeModule.GetTextWithLocalePrefix(address);
             _addressablesByRefCountModule.UnloadAsset<T>(addressWithLocalePrefix);
         }
 

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
 namespace CizaAudioModule
@@ -26,15 +28,15 @@ namespace CizaAudioModule
         public event Func<string, UniTask> OnChangedVoiceLocaleAsync;
 
         // CallerId, Id, DataId
-        public event Action<string, string, string> OnBgmPlay;
+        public event Action<string, string, string> OnBgmSpawn;
         public event Action<string, string, string> OnBgmStop;
         public event Action<string, string, string> OnBgmComplete;
 
-        public event Action<string, string, string> OnSfxPlay;
+        public event Action<string, string, string> OnSfxSpawn;
         public event Action<string, string, string> OnSfxStop;
         public event Action<string, string, string> OnSfxComplete;
 
-        public event Action<string, string, string> OnVoicePlay;
+        public event Action<string, string, string> OnVoiceSpawn;
         public event Action<string, string, string> OnVoiceStop;
         public event Action<string, string, string> OnVoiceComplete;
 
@@ -93,6 +95,12 @@ namespace CizaAudioModule
         public bool CheckIsSfxPlaying(string sfxId) =>
             _sfxModule.CheckIsPlaying(sfxId);
 
+        public bool CheckIsSfxPause(string sfxId) =>
+            _sfxModule.CheckIsPause(sfxId);
+
+        public float GetSfxDuration(string sfxDataId) =>
+            _sfxModule.GetDuration(sfxDataId);
+
         public bool TryGetSfxReadModel(string sfxId, out IAudioReadModel sfxReadModel) =>
             _sfxModule.TryGetAudioReadModel(sfxId, out sfxReadModel);
 
@@ -102,9 +110,16 @@ namespace CizaAudioModule
         public bool CheckIsVoicePlaying(string voiceId) =>
             _voiceModule.CheckIsPlaying(voiceId);
 
+        public bool CheckIsVoicePause(string voiceId) =>
+            _voiceModule.CheckIsPause(voiceId);
+
+        public float GetVoiceDuration(string voiceDataId) =>
+            _voiceModule.GetDuration(voiceDataId);
+
         public bool TryGetVoiceReadModel(string voiceId, out IAudioReadModel voiceReadModel) =>
             _voiceModule.TryGetAudioReadModel(voiceId, out voiceReadModel);
 
+        [Preserve]
         public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
         {
             _audioPlayerConfig = audioPlayerConfig;
@@ -113,15 +128,15 @@ namespace CizaAudioModule
             _sfxModule = new AudioModule(audioPlayerConfig.SfxModuleConfig, assetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
             _voiceModule = new AudioModule(audioPlayerConfig.VoiceModuleConfig, voiceAssetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 
-            _bgmModule.OnPlay += (callerId, bgmId, bgmDataId) => OnBgmPlay?.Invoke(callerId, bgmId, bgmDataId);
+            _bgmModule.OnSpawn += (callerId, bgmId, bgmDataId) => OnBgmSpawn?.Invoke(callerId, bgmId, bgmDataId);
             _bgmModule.OnStop += (callerId, bgmId, bgmDataId) => OnBgmStop?.Invoke(callerId, bgmId, bgmDataId);
             _bgmModule.OnComplete += (callerId, bgmId, bgmDataId) => OnBgmComplete?.Invoke(callerId, bgmId, bgmDataId);
 
-            _sfxModule.OnPlay += (callerId, sfxId, sfxDataId) => OnSfxPlay?.Invoke(callerId, sfxId, sfxDataId);
+            _sfxModule.OnSpawn += (callerId, sfxId, sfxDataId) => OnSfxSpawn?.Invoke(callerId, sfxId, sfxDataId);
             _sfxModule.OnStop += (callerId, sfxId, sfxDataId) => OnSfxStop?.Invoke(callerId, sfxId, sfxDataId);
             _sfxModule.OnComplete += (callerId, sfxId, sfxDataId) => OnSfxComplete?.Invoke(callerId, sfxId, sfxDataId);
 
-            _voiceModule.OnPlay += (callerId, voiceId, voiceDataId) => OnVoicePlay?.Invoke(callerId, voiceId, voiceDataId);
+            _voiceModule.OnSpawn += (callerId, voiceId, voiceDataId) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId);
             _voiceModule.OnStop += (callerId, voiceId, voiceDataId) => OnVoiceStop?.Invoke(callerId, voiceId, voiceDataId);
             _voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 
@@ -204,11 +219,13 @@ namespace CizaAudioModule
                 Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
         }
 
-        public async UniTask StopAllAsync(float fadeTime = 0)
+        public UniTask StopAllAsync(float fadeTime = 0)
         {
-            await StopAllBgmAsync(fadeTime);
-            await StopAllSfxAsync(fadeTime);
-            await StopAllVoiceAsync(fadeTime);
+            var uniTasks = new List<UniTask>();
+            uniTasks.Add(StopAllBgmAsync(fadeTime));
+            uniTasks.Add(StopAllSfxAsync(fadeTime));
+            uniTasks.Add(StopAllVoiceAsync(fadeTime));
+            return UniTask.WhenAll(uniTasks);
         }
 
         #region Bgm
@@ -217,19 +234,34 @@ namespace CizaAudioModule
             _bgmModule.SetVolume(volume);
 
         public UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-            _bgmModule.LoadAudioAssetAsync(bgmDataId, errorMessage, cancellationToken);
+            _bgmModule.LoadAssetAsync(bgmDataId, errorMessage, cancellationToken);
 
         public void UnloadBgmAsset(string bgmDataId) =>
-            _bgmModule.UnloadAudioAsset(bgmDataId);
+            _bgmModule.UnloadAsset(bgmDataId);
+
+
+        public string SpawnBgm(string userId, string bgmDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _bgmModule.Spawn(userId, bgmDataId, volume, isLoop, position, callerId);
+
+        public string SpawnBgm(string bgmDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _bgmModule.Spawn(bgmDataId, volume, isLoop, position, callerId);
+
+
+        public UniTask<string> PlayBgmAsync(string userId, string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _bgmModule.PlayAsync(userId, bgmDataId, volume, fadeTime, isLoop, position, callerId);
 
         public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
             _bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, position, callerId);
+
 
         public UniTask ModifyBgmAsync(string bgmId, float volume, bool isLoop, float time = 0) =>
             _bgmModule.ModifyAsync(bgmId, volume, isLoop, time);
 
         public UniTask ModifyBgmAsync(string bgmId, float volume, float time = 0) =>
             _bgmModule.ModifyAsync(bgmId, volume, time);
+
+        public void SetBgmTime(string bgmId, float time) =>
+            _bgmModule.SetTime(bgmId, time);
 
         public void PauseBgm(string bgmId) =>
             _bgmModule.Pause(bgmId);
@@ -251,25 +283,49 @@ namespace CizaAudioModule
             _sfxModule.SetVolume(volume);
 
         public UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-            _sfxModule.LoadAudioAssetAsync(sfxDataId, errorMessage, cancellationToken);
+            _sfxModule.LoadAssetAsync(sfxDataId, errorMessage, cancellationToken);
 
         public void UnloadSfxAsset(string sfxDataId) =>
-            _sfxModule.UnloadAudioAsset(sfxDataId);
+            _sfxModule.UnloadAsset(sfxDataId);
+
+
+        public string SpawnSfx(string userId, string sfxDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _sfxModule.Spawn(userId, sfxDataId, volume, isLoop, position, callerId);
+
+        public string SpawnSfx(string sfxDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _sfxModule.Spawn(sfxDataId, volume, isLoop, position, callerId);
+
+        public void DeSpawnSfx(string sfxId) =>
+            _sfxModule.DeSpawn(sfxId);
+
+
+        public UniTask<string> PlaySfxAsync(string userId, string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _sfxModule.PlayAsync(userId, sfxDataId, volume, fadeTime, isLoop, position, callerId);
 
         public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
             _sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, position, callerId);
 
-        public UniTask ModifySfxAsync(string sfxId, float volume, bool isLoop, float time = 0) =>
-            _sfxModule.ModifyAsync(sfxId, volume, isLoop, time);
 
-        public UniTask ModifySfxAsync(string sfxId, float volume, float time = 0) =>
-            _sfxModule.ModifyAsync(sfxId, volume, time);
+        public UniTask ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0) =>
+            _sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime);
 
-        public void PauseSfx(string sfxId) =>
-            _sfxModule.Pause(sfxId);
+        public UniTask ModifySfxAsync(string sfxId, float volume, float fadeTime = 0) =>
+            _sfxModule.ModifyAsync(sfxId, volume, fadeTime);
+
+        public void SetSfxTime(string sfxId, float time) =>
+            _sfxModule.SetTime(sfxId, time);
+
+        public void ResumeSfx(string sfxId, float time)
+        {
+            _sfxModule.SetTime(sfxId, time);
+            _sfxModule.Resume(sfxId);
+        }
 
         public void ResumeSfx(string sfxId) =>
             _sfxModule.Resume(sfxId);
+
+        public void PauseSfx(string sfxId) =>
+            _sfxModule.Pause(sfxId);
 
         public UniTask StopSfxAsync(string sfxId, float fadeTime = 0) =>
             _sfxModule.StopAsync(sfxId, fadeTime);
@@ -284,26 +340,51 @@ namespace CizaAudioModule
         public void SetVoiceVolume(float volume) =>
             _voiceModule.SetVolume(volume);
 
+
         public UniTask LoadVoiceAssetAsync(string voiceDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-            _voiceModule.LoadAudioAssetAsync(voiceDataId, errorMessage, cancellationToken);
+            _voiceModule.LoadAssetAsync(voiceDataId, errorMessage, cancellationToken);
 
         public void UnloadVoiceAsset(string voiceDataId) =>
-            _voiceModule.UnloadAudioAsset(voiceDataId);
+            _voiceModule.UnloadAsset(voiceDataId);
+
+
+        public string SpawnVoice(string userId, string voiceDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _voiceModule.Spawn(userId, voiceDataId, volume, isLoop, position, callerId);
+
+        public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _voiceModule.Spawn(voiceDataId, volume, isLoop, position, callerId);
+
+        public void DeSpawnVoice(string voiceId) =>
+            _voiceModule.DeSpawn(voiceId);
+
+
+        public UniTask<string> PlayVoiceAsync(string userId, string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            _voiceModule.PlayAsync(userId, voiceDataId, volume, fadeTime, isLoop, position, callerId);
 
         public UniTask<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
             _voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, position, callerId);
 
-        public UniTask ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float time = 0) =>
-            _voiceModule.ModifyAsync(voiceId, volume, isLoop, time);
 
-        public UniTask ModifyVoiceAsync(string voiceId, float volume, float time = 0) =>
-            _voiceModule.ModifyAsync(voiceId, volume, time);
+        public UniTask ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0) =>
+            _voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime);
 
-        public void PauseVoice(string voiceId) =>
-            _voiceModule.Pause(voiceId);
+        public UniTask ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0) =>
+            _voiceModule.ModifyAsync(voiceId, volume, fadeTime);
+
+        public void SetVoiceTime(string voiceId, float time) =>
+            _voiceModule.SetTime(voiceId, time);
+
+        public void ResumeVoice(string voiceId, float time)
+        {
+            _voiceModule.SetTime(voiceId, time);
+            _voiceModule.Resume(voiceId);
+        }
 
         public void ResumeVoice(string voiceId) =>
             _voiceModule.Resume(voiceId);
+
+        public void PauseVoice(string voiceId) =>
+            _voiceModule.Pause(voiceId);
 
         public UniTask StopVoiceAsync(string voiceId, float fadeTime = 0) =>
             _voiceModule.StopAsync(voiceId, fadeTime);

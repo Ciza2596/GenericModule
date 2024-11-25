@@ -1,19 +1,25 @@
 namespace CizaAudioModule
 {
-	public interface IAudioReadModel
-	{
-		string Id     { get; }
-		string DataId { get; }
+    public interface IAudioReadModel
+    {
+        string Id { get; }
+        string DataId { get; }
 
-		string CallerId { get; }
+        string CallerId { get; }
 
-		string ClipAddress   { get; }
-		string PrefabAddress { get; }
+        bool HasUserId => !string.IsNullOrEmpty(UserId) && !string.IsNullOrWhiteSpace(UserId);
+        string UserId { get; }
 
-		bool IsComplete { get; }
+        string ClipAddress { get; }
+        string PrefabAddress { get; }
 
-		bool  IsLoop   { get; }
-		float Volume   { get; }
-		float Duration { get; }
-	}
+        bool IsComplete { get; }
+
+        bool IsLoop { get; }
+        float Volume { get; }
+
+        float Duration { get; }
+        float Time { get; }
+        bool IsPlaying { get; }
+    }
 }

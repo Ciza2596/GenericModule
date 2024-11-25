@@ -11,7 +11,7 @@ namespace CizaAudioModule
     {
         public interface IAudioPlayer
         {
-            event Action<string, string, string> OnBgmPlay;
+            event Action<string, string, string> OnBgmSpawn;
             event Action<string, string, string> OnBgmStop;
 
             UniTask LoadBgmAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken);
@@ -47,7 +47,7 @@ namespace CizaAudioModule
 
         public UniTask InitializeAsync(CancellationToken cancellationToken)
         {
-            _audioPlayer.OnBgmPlay += OnBgmPlay;
+            _audioPlayer.OnBgmSpawn += OnBgmPlay;
             _audioPlayer.OnBgmStop += OnBgmStop;
 
             var uniTasks = new List<UniTask>();
@@ -64,7 +64,7 @@ namespace CizaAudioModule
             foreach (var sfxDataId in _loadedBgmDataIds)
                 _audioPlayer.UnloadBgmAsset(sfxDataId);
 
-            _audioPlayer.OnBgmPlay -= OnBgmPlay;
+            _audioPlayer.OnBgmSpawn -= OnBgmPlay;
             _audioPlayer.OnBgmStop -= OnBgmStop;
         }
 

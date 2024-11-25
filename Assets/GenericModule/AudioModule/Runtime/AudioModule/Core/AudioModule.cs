@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Audio;
+using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
 namespace CizaAudioModule
@@ -41,7 +42,7 @@ namespace CizaAudioModule
         private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
         // CallerId, Id, DataId
-        public event Action<string, string, string> OnPlay;
+        public event Action<string, string, string> OnSpawn;
 
         public event Action<string, string, string> OnStop;
 
@@ -85,13 +86,48 @@ namespace CizaAudioModule
             return count >= _config.RestrictContinuousPlay.MaxConsecutiveCount;
         }
 
-        //public method
+        public bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
+        {
+            if (!_playingAudioMapByAudioId.ContainsKey(audioId))
+            {
+                audioReadModel = null;
+                return false;
+            }
+
+            audioReadModel = _playingAudioMapByAudioId[audioId];
+            return true;
+        }
+
+        public bool CheckIsPlaying(string audioId)
+        {
+            if (!TryGetAudioReadModel(audioId, out var audioReadModel))
+                return false;
+
+            return audioReadModel.IsPlaying;
+        }
+
+        public bool CheckIsPause(string audioId)
+        {
+            if (!TryGetAudioReadModel(audioId, out var audioReadModel))
+                return false;
+
+            return !audioReadModel.IsPlaying;
+        }
+
+        public float GetDuration(string audioDataId)
+        {
+            if (_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo) && _clipMapByAddress.TryGetValue(audioInfo.ClipAddress, out var clip))
+                return clip.length;
+            return 0;
+        }
+
+        [Preserve]
         public AudioModule(IAudioModuleConfig config, IAssetProvider clipAssetProvider, IAssetProvider prefabAssetProvider, AudioMixer audioMixer, bool isDontDestroyOnLoad = false)
         {
             _config = config;
             _clipAssetProvider = clipAssetProvider;
             _prefabAssetProvider = prefabAssetProvider;
-            Assert.IsNotNull(_config, $"[AudioModule::AudioModule] {nameof(IAudioModuleConfig)} is null.");
+            Assert.IsNotNull(_config, $"[AudioModule::AudioModule] AudioModuleConfig is null.");
             Assert.IsNotNull(_clipAssetProvider, $"[AudioModule::AudioModule] ClipAssetProvider is null.");
             Assert.IsNotNull(_prefabAssetProvider, $"[AudioModule::AudioModule] PrefabAssetProvider is null.");
 
@@ -100,7 +136,7 @@ namespace CizaAudioModule
 
             _timerModule.OnRemove += m_OnRemove;
 
-            OnStop += m_OnStop;
+            OnStop += m_OnDeSpawn;
 
             void m_OnRemove(string timerId)
             {
@@ -108,17 +144,14 @@ namespace CizaAudioModule
                     _timerIdMapByAudioId.Remove(m_pair.Key);
             }
 
-            void m_OnStop(string callerId, string audioId, string audioDataId) =>
+            void m_OnDeSpawn(string callerId, string audioId, string audioDataId) =>
                 RemoveTimer(audioId);
         }
 
         public void Initialize(Transform rootParent = null)
         {
             if (IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::Initialize] AudioModule is initialized.");
                 return;
-            }
 
             _timerModule.Initialize();
 
@@ -142,16 +175,13 @@ namespace CizaAudioModule
         public void Release()
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::Release] AudioModule is not initialized.");
                 return;
-            }
 
             foreach (var pair in _loadedCountMapByDataId.ToArray())
             {
                 var audioDataId = pair.Key;
                 for (var i = 0; i < pair.Value; i++)
-                    UnloadAudioAsset(audioDataId);
+                    UnloadAsset(audioDataId);
             }
 
             var poolRootGameObject = _poolRoot.gameObject;
@@ -181,7 +211,8 @@ namespace CizaAudioModule
                         continue;
                     }
 
-                    await StopAsync(audio.Id, 0, OnComplete);
+                    if (!audio.HasUserId)
+                        DeSpawn(audio.Id, OnComplete);
                     continue;
                 }
 
@@ -189,41 +220,11 @@ namespace CizaAudioModule
             }
         }
 
-        public bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
-        {
-            if (!IsInitialized)
-            {
-                audioReadModel = null;
-                Debug.LogWarning("[AudioModule::TryGetAudioReadModel] AudioModule is not initialized.");
-                return false;
-            }
-
-            if (!_playingAudioMapByAudioId.ContainsKey(audioId))
-            {
-                audioReadModel = null;
-                return false;
-            }
-
-            audioReadModel = _playingAudioMapByAudioId[audioId];
-            return true;
-        }
-
-        public bool CheckIsPlaying(string audioId)
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::CheckIsPlaying] AudioModule is not initialized.");
-                return false;
-            }
-
-            return _playingAudioMapByAudioId.ContainsKey(audioId);
-        }
-
         public void SetVolume(float volume)
         {
             if (_audioMixer is null)
             {
-                Debug.LogWarning("[AudioModule::SetAudioMixerVolume] AudioMixer is null.");
+                Debug.LogWarning("[AudioModule::SetVolume] AudioMixer is null.");
                 return;
             }
 
@@ -233,11 +234,11 @@ namespace CizaAudioModule
                 Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
         }
 
-        public async UniTask LoadAudioAssetAsync(string audioDataId, string errorMessage, CancellationToken cancellationToken = default)
+        public async UniTask LoadAssetAsync(string audioDataId, string errorMessage, CancellationToken cancellationToken = default)
         {
             if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
             {
-                Debug.LogError($"[AudioModule::LoadAudioAssetAsync] Not find audioInfo by dataId: {audioDataId}. Please check AudioModule config. {errorMessage}");
+                Debug.LogError($"[AudioModule::LoadAssetAsync] AudioInfo is not find by dataId: {audioDataId}. Please check AudioModule config. {errorMessage}");
                 return;
             }
 
@@ -250,13 +251,13 @@ namespace CizaAudioModule
             _loadedCountMapByDataId.Add(audioDataId, 1);
 
             var clipAddress = audioInfo.ClipAddress;
-            Assert.IsTrue(HasValue(clipAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s clipAddress is null.");
+            Assert.IsTrue(HasValue(clipAddress), $"[AudioModule::LoadAssetAsync] ClipAddress is null by dataId: {audioDataId}.");
 
             var prefabAddress = HasValue(audioInfo.PrefabAddress) ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
-            Assert.IsTrue(HasValue(prefabAddress), $"[AudioModule::LoadAudioAssetAsync] AudioDataId - {audioDataId}'s prefabAddress is null.");
+            Assert.IsTrue(HasValue(prefabAddress), $"[AudioModule::LoadAssetAsync] PrefabAddress is null by dataId: {audioDataId}.");
 
             var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
-            Assert.IsNotNull(clip, $"[AudioModule::LoadAudioAssetAsync] clip not found by address: {clipAddress}.");
+            Assert.IsNotNull(clip, $"[AudioModule::LoadAssetAsync] Clip is not found by address: {clipAddress}.");
 
             _clipMapByAddress.TryAdd(clipAddress, clip);
             _loadedClipAddresses.Add(clipAddress);
@@ -266,11 +267,11 @@ namespace CizaAudioModule
             _loadedPrefabAddresses.Add(clipAddress);
         }
 
-        public async void UnloadAudioAsset(string audioDataId)
+        public async void UnloadAsset(string audioDataId)
         {
             if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
             {
-                Debug.LogError($"[AudioModule::UnloadAudioAsset] Not find audioInfo by dataId: {audioDataId}. Please check AudioModule config.");
+                Debug.LogError($"[AudioModule::UnloadAsset] AudioInfo is not find by dataId: {audioDataId}. Please check AudioModule config.");
                 return;
             }
 
@@ -331,9 +332,12 @@ namespace CizaAudioModule
             }
         }
 
-        public async UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null)
+        public string Spawn(string audioDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            Spawn(string.Empty, audioDataId, volume, isLoop, position, callerId);
+
+        public string Spawn(string userId, string audioDataId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null)
         {
-            if (!CheckIsAudioInfoLoaded(audioDataId, "PlayAsync", out var clipAddress, out var prefabAddress))
+            if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
                 return string.Empty;
 
             if (CheckIsOnCooldown(audioDataId))
@@ -349,16 +353,9 @@ namespace CizaAudioModule
             AddAudioToPlayingAudiosMap(audioId, audio, position);
 
             audio.GameObject.name = clipAddress;
-            OnPlay?.Invoke(callerId, audioId, audioDataId);
+            OnSpawn?.Invoke(callerId, audioId, audioDataId);
 
-            if (fadeTime > 0)
-            {
-                audio.Play(audioId, audioDataId, callerId, clipAddress, audioClip, 0, isLoop);
-                await AddTimer(audioId, 0, volume, fadeTime);
-            }
-            else
-                audio.Play(audioId, audioDataId, callerId, clipAddress, audioClip, volume, isLoop);
-
+            audio.Play(userId, audioId, audioDataId, callerId, clipAddress, audioClip, volume, isLoop);
             return audio.Id;
 
             IAudio m_GetOrCreateAudio(string m_prefabAddress)
@@ -373,7 +370,7 @@ namespace CizaAudioModule
                     var m_audio = Object.Instantiate(m_prefab).GetComponent<IAudio>();
 
                     if (!TryGetAudioMixerGroup(out var audioMixerGroup))
-                        Debug.LogWarning($"[AudioModule::PlayAsync] audioMixerGroup is not found by {_config.AudioMixerGroupPath}.");
+                        Debug.LogWarning($"[AudioModule::PlayAsync] AudioMixerGroup is not found by {_config.AudioMixerGroupPath}.");
 
                     m_audio.Initialize(prefabAddress, audioMixerGroup);
 
@@ -401,13 +398,26 @@ namespace CizaAudioModule
             }
         }
 
-        public async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float time)
+
+        public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
+            PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, position, callerId);
+
+        public async UniTask<string> PlayAsync(string userId, string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null)
+        {
+            var audioId = Spawn(userId, audioDataId, volume, isLoop, position, callerId);
+            if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+            {
+                playingAudio.Resume();
+                await AddTimer(audioId, 0, volume, fadeTime);
+            }
+
+            return audioId;
+        }
+
+        public async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::ModifyAsync] AudioModule is not initialized.");
                 return;
-            }
 
             if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
             {
@@ -416,16 +426,13 @@ namespace CizaAudioModule
             }
 
             playingAudio.SetIsLoop(isLoop);
-            await ModifyAsync(audioId, volume, time);
+            await ModifyAsync(audioId, volume, fadeTime);
         }
 
-        public async UniTask ModifyAsync(string audioId, float volume, float time)
+        public async UniTask ModifyAsync(string audioId, float volume, float fadeTime)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::ModifyAsync] AudioModule is not initialized.");
                 return;
-            }
 
             if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
             {
@@ -433,36 +440,30 @@ namespace CizaAudioModule
                 return;
             }
 
-            if (time > 0)
-                await AddTimer(audioId, playingAudio.Volume, volume, time);
+            if (fadeTime > 0)
+                await AddTimer(audioId, playingAudio.Volume, volume, fadeTime);
             else
                 playingAudio.SetVolume(volume);
         }
 
-        public void Pause(string audioId)
+        public void SetTime(string audioId, float time)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::Pause] AudioModule is not initialized.");
                 return;
-            }
 
             if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
             {
-                Debug.LogWarning($"[AudioModule::Pause] Audio is not found by audioId: {audioId}.");
+                Debug.LogWarning($"[AudioModule::SetTime] Audio is not found by audioId: {audioId}.");
                 return;
             }
 
-            playingAudio.Pause();
+            playingAudio.SetTime(time);
         }
 
         public void Resume(string audioId)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::Resume] AudioModule is not initialized.");
                 return;
-            }
 
             if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
             {
@@ -473,16 +474,30 @@ namespace CizaAudioModule
             playingAudio.Resume();
         }
 
+        public void Pause(string audioId)
+        {
+            if (!IsInitialized)
+                return;
+
+            if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+            {
+                Debug.LogWarning($"[AudioModule::Pause] Audio is not found by audioId: {audioId}.");
+                return;
+            }
+
+            playingAudio.Pause();
+        }
+
+        public void DeSpawn(string audioId) =>
+            DeSpawn(audioId, null);
+
         public UniTask StopAsync(string audioId, float fadeTime = 0) =>
             StopAsync(audioId, fadeTime, null);
 
         public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[StopByDataIdAsync] AudioModule is not initialized.");
                 return UniTask.CompletedTask;
-            }
 
             var uniTasks = new List<UniTask>();
 
@@ -500,20 +515,20 @@ namespace CizaAudioModule
             await UniTask.WhenAll(uniTasks);
         }
 
+        private async void DeSpawn(string audioId, Action<string, string, string> onComplete) =>
+            await StopAsync(audioId, 0, onComplete);
+
         private async UniTask StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)
         {
             if (!IsInitialized)
-            {
-                Debug.LogWarning("[AudioModule::StopAsync] AudioModule is not initialized.");
                 return;
-            }
 
             if (string.IsNullOrEmpty(audioId) || string.IsNullOrWhiteSpace(audioId))
                 return;
 
             if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
             {
-                Debug.LogWarning($"[AudioModule::Pause] Audio is not found by audioId: {audioId}.");
+                Debug.LogWarning($"[AudioModule::StopAsync] Audio is not found by audioId: {audioId}.");
                 return;
             }
 
@@ -534,7 +549,6 @@ namespace CizaAudioModule
         {
             if (!IsInitialized)
             {
-                Debug.LogWarning($"[AudioModule::{methodName}] AudioModule is not initialized.");
                 clipAddress = string.Empty;
                 prefabAddress = string.Empty;
                 return false;
@@ -547,7 +561,7 @@ namespace CizaAudioModule
                 return false;
             }
 
-            Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::{methodName}] Not find audioInfo by audioDataId - {audioDataId}.");
+            Assert.IsTrue(_audioInfoMapByDataId.ContainsKey(audioDataId), $"[AudioModule::{methodName}] AudioInfo is not find by dataId: {audioDataId}.");
             var audioInfo = _audioInfoMapByDataId[audioDataId];
 
             clipAddress = audioInfo.ClipAddress;
@@ -610,7 +624,7 @@ namespace CizaAudioModule
 
             var audio = _playingAudioMapByAudioId[audioId];
 
-            var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (ITimerReadModel, value) => { audio.SetVolume(value); });
+            var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (timerReadModel, value) => { audio.SetVolume(value); });
             _timerIdMapByAudioId.Add(audioId, timerId);
 
             while (_timerIdMapByAudioId.ContainsValue(timerId))

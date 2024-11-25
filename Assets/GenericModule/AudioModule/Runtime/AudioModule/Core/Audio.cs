@@ -17,6 +17,8 @@ namespace CizaAudioModule
 
         public string CallerId => !string.IsNullOrEmpty(_callerId) ? _callerId : string.Empty;
 
+        public string UserId { get; private set; }
+
         public string ClipAddress { get; private set; }
         public string PrefabAddress { get; private set; }
 
@@ -24,7 +26,10 @@ namespace CizaAudioModule
 
         public bool IsLoop { get; private set; }
         public float Volume => _audioSource.volume;
+
         public float Duration { get; private set; }
+        public float Time => _time;
+        public bool IsPlaying => _audioSource?.isPlaying ?? false;
 
         public GameObject GameObject => gameObject;
 
@@ -42,19 +47,18 @@ namespace CizaAudioModule
         {
             if (!_audioSource.isPlaying)
                 return;
-            _time += deltaTime;
+            SetTime(Time + deltaTime);
         }
 
-        public void Play(string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+        public void Play(string userId, string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
         {
-            SetParameter(id, dataId, callerId, clipAddress, audioClip, volume, isLoop);
-            _time = 0;
-            _audioSource.Play();
+            SetParameter(userId, id, dataId, callerId, clipAddress, audioClip, volume, isLoop);
+            SetTime(0);
         }
 
         public void Continue()
         {
-            _time = 0;
+            SetTime(0);
             _audioSource.Stop();
             _audioSource.Play();
         }
@@ -77,9 +81,17 @@ namespace CizaAudioModule
         public void SetIsLoop(bool isLoop) =>
             IsLoop = isLoop;
 
-        // private method
-        private void SetParameter(string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+        public void SetTime(float time)
         {
+            _time = time;
+            _audioSource.time = _time;
+        }
+
+        // private method
+        private void SetParameter(string userId, string id, string dataId, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+        {
+            UserId = userId;
+
             Id = id;
             DataId = dataId;
 

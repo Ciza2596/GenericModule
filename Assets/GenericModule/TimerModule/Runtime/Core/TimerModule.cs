@@ -8,7 +8,7 @@ namespace CizaTimerModule
 	public class TimerModule
 	{
 		private Dictionary<string, Timer> _usingTimerMap;
-		private List<Timer>               _unusingTimers;
+		private List<Timer> _unusingTimers;
 
 		public event Action<string> OnRemove;
 
@@ -83,7 +83,7 @@ namespace CizaTimerModule
 			return true;
 		}
 
-		public string AddOnceTimer(float startValue, float endValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null)
+		public string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null)
 		{
 			if (!IsInitialized)
 			{
@@ -91,13 +91,14 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			var diffValueSpeed = (endValue - startValue) / duration;
-			var value          = startValue;
-
+			var diffValueSpeed = (targetValue - startValue) / duration;
+			var value = startValue;
 			var id = AddOnceTimer(duration, onComplete, (timerReadModel, deltaTime) =>
 			{
 				var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
 				value += diffValueSpeedDeltaTime;
+				if (Mathf.Approximately(value, targetValue))
+					value = targetValue;
 				onTickValue(timerReadModel, value);
 			});
 

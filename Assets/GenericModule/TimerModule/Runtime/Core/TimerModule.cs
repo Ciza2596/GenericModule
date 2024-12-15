@@ -54,7 +54,7 @@ namespace CizaTimerModule
 				timer.AddTime(deltaTime);
 				timer.OnTick(deltaTime);
 
-				if (timer.Time >= timer.Duration)
+				if (timer.IsPlayed)
 				{
 					timer.OnComplete();
 
@@ -97,7 +97,7 @@ namespace CizaTimerModule
 			{
 				var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
 				value += diffValueSpeedDeltaTime;
-				if (Mathf.Approximately(value, targetValue))
+				if (timerReadModel.IsPlayed)
 					value = targetValue;
 				onTickValue(timerReadModel, value);
 			});

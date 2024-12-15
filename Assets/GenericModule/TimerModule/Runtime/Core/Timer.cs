@@ -20,6 +20,8 @@ namespace CizaTimerModule
 
 
 		public bool IsOnce { get; private set; }
+
+		public bool IsPlayed => Time >= Duration;
 		public float Duration { get; private set; }
 		public float Time { get; private set; }
 

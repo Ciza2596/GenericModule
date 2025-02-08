@@ -59,6 +59,10 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# remove _other
+Assets/_Other
+Assets/_Other.meta
+
 #_Build
 _Build
 

@@ -1,0 +1,18 @@
+{
+    "name": "LocaleAddressablesModule",
+    "rootNamespace": "CizaLocaleAddressablesModule",
+    "references": [
+        "UniTask",
+        "AddressablesModule",
+        "LocaleModule"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

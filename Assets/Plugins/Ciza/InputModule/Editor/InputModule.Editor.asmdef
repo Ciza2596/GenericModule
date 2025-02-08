@@ -1,0 +1,19 @@
+{
+    "name": "InputModule.Editor",
+    "rootNamespace": "CizaInputModule.Editor",
+    "references": [
+        "InputModule",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

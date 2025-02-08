@@ -22,7 +22,7 @@ module | Test | Samples |
 
 ## LogModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LogModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LogModule/LogModule
 ```
 
 ### Manual:
@@ -59,7 +59,7 @@ public class LogModuleExample : MonoBehaviour
 
 ## PageModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/PageModule
 ```
 ### Dependency:
 ```
@@ -74,7 +74,7 @@ PageModule manual.
 
 ## TimerModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/TimerModule
 ```
 
 ### Manual:
@@ -108,11 +108,11 @@ public class TimerModuleExample : MonoBehaviour
 
 ## AudioModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AudioModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AudioModule/AudioModule
 ```
 ### Dependency:
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/TimerModule
 ```
 ```
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
@@ -171,7 +171,7 @@ public class AudioModuleExample : MonoBehaviour
 
 ## EventModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/EventModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/EventModule/EventModule
 ```
 ### Dependency:
 ```
@@ -240,7 +240,7 @@ public class EventModuleExample : MonoBehaviour
 
 ## SaveLoadModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/SaveLoadModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/SaveLoadModule/SaveLoadModule
 ```
 
 ### Manual:
@@ -265,7 +265,7 @@ Support type:
 
 ## LocaleModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleModule/LocaleModule
 ```
 
 ### Dependency:
@@ -278,7 +278,7 @@ LocaleModule manual.
 
 ## TextModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TextModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TextModule/TextModule
 ```
 
 ### Manual:
@@ -286,12 +286,12 @@ TextModule manual.
 
 ## InputModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/InputModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/InputModule/InputModule
 ```
 
 ### Dependency:
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/TimerModule
 ```
 ```
 Unity.InputSystem
@@ -303,7 +303,7 @@ InputModule manual.
 
 ## PopupModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PopupModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PopupModule/PopupModule
 ```
 
 ### Dependency:
@@ -320,7 +320,7 @@ PopupModule manual.
 
 ## AchievementModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AchievementModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AchievementModule/AchievementModule
 ```
 
 ### Manual:
@@ -328,7 +328,7 @@ AchievementModule manual.
 
 ## FadeCreditModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/FadeCreditModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/FadeCreditModule/FadeCreditModule
 ```
 
 ### Dependency:
@@ -342,7 +342,7 @@ FadeCreditModule manual.
 
 ## OptionModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/OptionModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/OptionModule/OptionModule
 ```
 
 ### Dependency:
@@ -353,7 +353,7 @@ https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
 ```
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/PageModule
 ```
 
 ### Manual:
@@ -361,7 +361,7 @@ OptionModule manual.
 
 ## TransitionModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TransitionModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TransitionModule/TransitionModule
 ```
 
 ### Dependency:
@@ -369,7 +369,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/Transitio
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/PageModule
 ```
 
 ### Manual:
@@ -377,7 +377,7 @@ TransitionModule manual.
 
 ## AddressablesModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/AddressablesModule
 ```
 ### Dependency:
 ```
@@ -415,15 +415,15 @@ public class AddressablesModuleExample : MonoBehaviour
 
 ## LocaleAddressablesModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleAddressablesModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleAddressablesModule/LocaleAddressablesModule
 ```
 ### Dependency:
 ```
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/AddressablesModule
 ```
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleModule/LocaleModule
 ```

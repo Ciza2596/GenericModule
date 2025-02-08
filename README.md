@@ -389,7 +389,7 @@ PopupModule manual.
 
 ## AchievementModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AchievementModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AchievementModule/AchievementModule
 ```
 
 ### Manual:

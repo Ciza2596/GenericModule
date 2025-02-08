@@ -377,7 +377,7 @@ TransitionModule manual.
 
 ## AddressablesModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AchievementModule/Core
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/Core
 ```
 ### Dependency:
 ```

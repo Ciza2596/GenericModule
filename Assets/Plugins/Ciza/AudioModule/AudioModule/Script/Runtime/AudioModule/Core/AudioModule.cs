@@ -332,10 +332,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, position, parent, localPosition, callerId);
+		public string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, callerId);
 
-		public string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null)
+		public string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -350,7 +350,7 @@ namespace CizaAudioModule
 			var audioId = isCustomId ? customId : Guid.NewGuid().ToString();
 			var audioClip = _clipMapByAddress[clipAddress];
 
-			AddAudioToPlayingAudiosMap(audioId, audio, position, parent, localPosition);
+			AddAudioToPlayingAudiosMap(audioId, audio, parent, position);
 
 			audio.GameObject.name = clipAddress;
 			OnSpawn?.Invoke(callerId, audioId, audioDataId);
@@ -399,12 +399,12 @@ namespace CizaAudioModule
 		}
 
 
-		public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, position, parent, localPosition, callerId);
+		public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, callerId);
 
-		public async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null)
+		public async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, position, parent, localPosition, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();
@@ -589,10 +589,10 @@ namespace CizaAudioModule
 			idleAudios.Add(audio);
 		}
 
-		private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 position, Transform parent, Vector3 localPosition)
+		private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Transform parent, Vector3 position)
 		{
 			var hasParent = parent != null;
-			SetAudioTransform(audio, true, hasParent ? parent : _poolRoot, hasParent, hasParent ? localPosition : position);
+			SetAudioTransform(audio, true, hasParent ? parent : _poolRoot, hasParent, position);
 			_playingAudioMapByAudioId.Add(audioId, audio);
 		}
 

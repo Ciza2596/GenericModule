@@ -100,7 +100,7 @@ namespace CizaAudioModule
             ClipAddress = clipAddress;
             _audioSource.clip = audioClip;
 
-            Duration = audioClip is null ? 0 : audioClip.length;
+            Duration = audioClip?.length ?? 0;
 
             SetVolume(volume);
 

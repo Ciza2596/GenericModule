@@ -76,7 +76,7 @@ namespace CizaAudioModule
 		}
 
 		public bool CheckIsAudioInfoLoaded(string audioDataId) =>
-			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out var clipAddress, out var prefabAddress);
+			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out _, out _);
 
 		public bool CheckIsOnCooldown(string audioDataId)
 		{
@@ -194,7 +194,7 @@ namespace CizaAudioModule
 			_consecutiveCountMapByDataId.Clear();
 		}
 
-		public async void Tick(float deltaTime)
+		public void Tick(float deltaTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -284,7 +284,7 @@ namespace CizaAudioModule
 
 			_loadedCountMapByDataId.Remove(audioDataId);
 
-			await StopByDataIdAsync(audioDataId, 0);
+			await StopByDataIdAsync(audioDataId);
 
 			m_UnloadClip(audioInfo.ClipAddress);
 			m_UnloadPrefab(audioInfo.PrefabAddress);
@@ -332,10 +332,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, position, callerId);
+		public string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, position, parent, localPosition, callerId);
 
-		public string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, string callerId = null)
+		public string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -350,7 +350,7 @@ namespace CizaAudioModule
 			var audioId = isCustomId ? customId : Guid.NewGuid().ToString();
 			var audioClip = _clipMapByAddress[clipAddress];
 
-			AddAudioToPlayingAudiosMap(audioId, audio, position);
+			AddAudioToPlayingAudiosMap(audioId, audio, position, parent, localPosition);
 
 			audio.GameObject.name = clipAddress;
 			OnSpawn?.Invoke(callerId, audioId, audioDataId);
@@ -399,12 +399,12 @@ namespace CizaAudioModule
 		}
 
 
-		public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, position, callerId);
+		public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, position, parent, localPosition, callerId);
 
-		public async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null)
+		public async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, Transform parent = null, Vector3 localPosition = default, string callerId = null)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, position, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, position, parent, localPosition, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();
@@ -583,19 +583,20 @@ namespace CizaAudioModule
 		{
 			audio.GameObject.name = audio.PrefabAddress;
 			var pool = _poolMapByPrefabAddress[audio.PrefabAddress];
-			SetAudioTransform(audio, false, Vector3.zero, pool);
+			SetAudioTransform(audio, false, pool, true, Vector3.zero);
 
 			var idleAudios = _idleAudioMapByPrefabAddress[audio.PrefabAddress];
 			idleAudios.Add(audio);
 		}
 
-		private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 position)
+		private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Vector3 position, Transform parent, Vector3 localPosition)
 		{
-			SetAudioTransform(audio, true, position, _poolRoot);
+			var hasParent = parent != null;
+			SetAudioTransform(audio, true, hasParent ? parent : _poolRoot, hasParent, hasParent ? localPosition : position);
 			_playingAudioMapByAudioId.Add(audioId, audio);
 		}
 
-		private void SetAudioTransform(IAudio audio, bool isActive, Vector3 position, Transform parent)
+		private void SetAudioTransform(IAudio audio, bool isActive, Transform parent, bool isLocalPosition, Vector3 position)
 		{
 			var audioGameObject = audio.GameObject;
 			audioGameObject.SetActive(isActive);
@@ -603,7 +604,10 @@ namespace CizaAudioModule
 			var audioTransform = audioGameObject.transform;
 
 			audioTransform.SetParent(parent);
-			audioTransform.position = position;
+			if (isLocalPosition)
+				audioTransform.localPosition = position;
+			else
+				audioTransform.position = position;
 		}
 
 		private void DestroyOrImmediate(Object obj)
@@ -624,7 +628,7 @@ namespace CizaAudioModule
 
 			var audio = _playingAudioMapByAudioId[audioId];
 
-			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (timerReadModel, value) => { audio.SetVolume(value); });
+			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (_, value) => { audio.SetVolume(value); });
 			_timerIdMapByAudioId.Add(audioId, timerId);
 
 			while (_timerIdMapByAudioId.ContainsValue(timerId))
@@ -649,7 +653,7 @@ namespace CizaAudioModule
 			if (!_consecutiveCountMapByDataId.TryAdd(audioDataId, 1))
 				_consecutiveCountMapByDataId[audioDataId]++;
 
-			_timerModule.AddOnceTimer(_config.RestrictContinuousPlay.Duration, timerReadModel => RemoveCooldown(audioDataId));
+			_timerModule.AddOnceTimer(_config.RestrictContinuousPlay.Duration, _ => RemoveCooldown(audioDataId));
 		}
 
 		private void RemoveCooldown(string audioDataId)

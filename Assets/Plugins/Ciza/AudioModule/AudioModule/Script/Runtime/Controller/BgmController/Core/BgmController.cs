@@ -14,10 +14,10 @@ namespace CizaAudioModule
             event Action<string, string, string> OnBgmSpawn;
             event Action<string, string, string> OnBgmStop;
 
-            UniTask LoadBgmAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken);
-            void UnloadBgmAsset(string sfxDataId);
+            UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken);
+            void UnloadBgmAsset(string bgmDataId);
 
-            UniTask<string> PlayBgmAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null);
+            UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, string callerId = null);
             UniTask ModifyBgmAsync(string bgmId, float volume, float time = 0);
             UniTask StopBgmAsync(string bgmId, float fadeTime = 0);
         }

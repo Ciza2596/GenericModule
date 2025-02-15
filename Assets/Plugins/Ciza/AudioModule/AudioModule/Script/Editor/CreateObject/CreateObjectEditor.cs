@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace CizaAudioModule.Editor
 {
-    public class CreateObjectEditor
+    public static class CreateObjectEditor
     {
-        public const string AudioModulePath = "AudioModule/";
+        public const string AUDIO_MODULE_PATH = "AudioModule/Prefab/Obj/";
 
-        public const string Audio = "Audio";
+        public const string AUDIO = "Audio";
 
         [MenuItem("GameObject/Ciza/AudioModule/Audio", false, -602)]
         public static void CreateLoadUi() =>
-            CreateObject(Audio);
+            CreateObject(AUDIO);
 
         private static void CreateObject(string dataId)
         {
-            var prefab = Resources.Load<GameObject>(AudioModulePath + dataId);
+            var prefab = Resources.Load<GameObject>(AUDIO_MODULE_PATH + dataId);
             var uiObject = Object.Instantiate(prefab, Selection.activeTransform);
             uiObject.name = dataId;
         }

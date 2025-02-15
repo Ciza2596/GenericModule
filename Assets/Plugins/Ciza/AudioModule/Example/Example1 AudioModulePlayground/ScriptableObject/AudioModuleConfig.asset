@@ -19,13 +19,10 @@ MonoBehaviour:
   _audioMixerParameter: Master
   _defaultVolume: 0.7
   _hasRestrictContinuousPlay:
-    _isEnable: 0
+    _isEnable: 1
     _value:
-      _duration: 0.1
+      _duration: -0.38
       _maxConsecutiveCount: 1
   _defaultPrefabAddress: 
   _infoMapList:
     _maps: []
-  references:
-    version: 2
-    RefIds: []

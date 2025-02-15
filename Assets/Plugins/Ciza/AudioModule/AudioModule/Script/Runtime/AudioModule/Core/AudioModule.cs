@@ -14,32 +14,32 @@ namespace CizaAudioModule
 {
 	public class AudioModule
 	{
-		private readonly IAudioModuleConfig _config;
-		private readonly IAssetProvider _clipAssetProvider;
-		private readonly IAssetProvider _prefabAssetProvider;
-		private readonly AudioMixer _audioMixer;
-		private readonly bool _isDontDestroyOnLoad;
+		protected readonly IAudioModuleConfig _config;
+		protected readonly IAssetProvider _clipAssetProvider;
+		protected readonly IAssetProvider _prefabAssetProvider;
+		protected readonly AudioMixer _audioMixer;
+		protected readonly bool _isDontDestroyOnLoad;
 
-		private readonly TimerModule _timerModule = new TimerModule();
-		private readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
+		protected readonly TimerModule _timerModule = new TimerModule();
+		protected readonly Dictionary<string, string> _timerIdMapByAudioId = new Dictionary<string, string>();
 
-		private readonly Dictionary<string, Transform> _poolMapByPrefabAddress = new Dictionary<string, Transform>();
+		protected readonly Dictionary<string, Transform> _poolMapByPrefabAddress = new Dictionary<string, Transform>();
 
-		private readonly Dictionary<string, int> _loadedCountMapByDataId = new Dictionary<string, int>();
+		protected readonly Dictionary<string, int> _loadedCountMapByDataId = new Dictionary<string, int>();
 
-		private readonly List<string> _loadedClipAddresses = new List<string>();
-		private readonly List<string> _loadedPrefabAddresses = new List<string>();
+		protected readonly List<string> _loadedClipAddresses = new List<string>();
+		protected readonly List<string> _loadedPrefabAddresses = new List<string>();
 
-		private readonly Dictionary<string, AudioClip> _clipMapByAddress = new Dictionary<string, AudioClip>();
-		private readonly Dictionary<string, GameObject> _prefabMapByAddress = new Dictionary<string, GameObject>();
+		protected readonly Dictionary<string, AudioClip> _clipMapByAddress = new Dictionary<string, AudioClip>();
+		protected readonly Dictionary<string, GameObject> _prefabMapByAddress = new Dictionary<string, GameObject>();
 
-		private readonly Dictionary<string, List<IAudio>> _idleAudioMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
-		private readonly Dictionary<string, IAudio> _playingAudioMapByAudioId = new Dictionary<string, IAudio>();
+		protected readonly Dictionary<string, List<IAudio>> _idleAudioMapByPrefabAddress = new Dictionary<string, List<IAudio>>();
+		protected readonly Dictionary<string, IAudio> _playingAudioMapByAudioId = new Dictionary<string, IAudio>();
 
-		private readonly Dictionary<string, int> _consecutiveCountMapByDataId = new Dictionary<string, int>();
+		protected readonly Dictionary<string, int> _consecutiveCountMapByDataId = new Dictionary<string, int>();
 
-		private Transform _poolRoot;
-		private IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
+		protected Transform _poolRoot;
+		protected IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
 		// CallerId, Id, DataId
 		public event Action<string, string, string> OnSpawn;
@@ -48,11 +48,11 @@ namespace CizaAudioModule
 
 		public event Action<string, string, string> OnComplete;
 
-		public bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
+		public virtual bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
 
-		public string[] AudioDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
+		public virtual string[] AudioDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
 
-		public bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
+		public virtual bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
 		{
 			if (_audioMixer is null)
 			{
@@ -64,7 +64,7 @@ namespace CizaAudioModule
 			return audioMixerGroup != null;
 		}
 
-		public bool TryGetVolume(out float volume)
+		public virtual bool TryGetVolume(out float volume)
 		{
 			if (_audioMixer is null)
 			{
@@ -75,18 +75,18 @@ namespace CizaAudioModule
 			return _audioMixer.GetFloat(_config.AudioMixerParameter, out volume);
 		}
 
-		public bool CheckIsAudioInfoLoaded(string audioDataId) =>
+		public virtual bool CheckIsAudioInfoLoaded(string audioDataId) =>
 			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out _, out _);
 
-		public bool CheckIsOnCooldown(string audioDataId)
+		public virtual bool CheckIsOnCooldown(string audioDataId)
 		{
-			if (!_config.RestrictContinuousPlay.IsEnable || !_consecutiveCountMapByDataId.TryGetValue(audioDataId, out var count))
+			if (!_config.TryGetRestrictContinuousPlay(out var restrictContinuousPlay) || !_consecutiveCountMapByDataId.TryGetValue(audioDataId, out var count))
 				return false;
 
-			return count >= _config.RestrictContinuousPlay.MaxConsecutiveCount;
+			return count >= restrictContinuousPlay.MaxConsecutiveCount;
 		}
 
-		public bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
+		public virtual bool TryGetAudioReadModel(string audioId, out IAudioReadModel audioReadModel)
 		{
 			if (!_playingAudioMapByAudioId.ContainsKey(audioId))
 			{
@@ -98,7 +98,7 @@ namespace CizaAudioModule
 			return true;
 		}
 
-		public bool CheckIsPlaying(string audioId)
+		public virtual bool CheckIsPlaying(string audioId)
 		{
 			if (!TryGetAudioReadModel(audioId, out var audioReadModel))
 				return false;
@@ -106,7 +106,7 @@ namespace CizaAudioModule
 			return audioReadModel.IsPlaying;
 		}
 
-		public bool CheckIsPause(string audioId)
+		public virtual bool CheckIsPause(string audioId)
 		{
 			if (!TryGetAudioReadModel(audioId, out var audioReadModel))
 				return false;
@@ -148,7 +148,7 @@ namespace CizaAudioModule
 				RemoveTimer(audioId);
 		}
 
-		public void Initialize(Transform rootParent = null)
+		public virtual void Initialize(Transform rootParent = null)
 		{
 			if (IsInitialized)
 				return;
@@ -172,7 +172,7 @@ namespace CizaAudioModule
 			SetVolume(_config.DefaultVolume);
 		}
 
-		public void Release()
+		public virtual void Release()
 		{
 			if (!IsInitialized)
 				return;
@@ -194,7 +194,7 @@ namespace CizaAudioModule
 			_consecutiveCountMapByDataId.Clear();
 		}
 
-		public void Tick(float deltaTime)
+		public virtual void Tick(float deltaTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -220,7 +220,7 @@ namespace CizaAudioModule
 			}
 		}
 
-		public void SetVolume(float volume)
+		public virtual void SetVolume(float volume)
 		{
 			if (_audioMixer is null)
 			{
@@ -234,7 +234,7 @@ namespace CizaAudioModule
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
 
-		public async UniTask LoadAssetAsync(string audioDataId, string errorMessage, CancellationToken cancellationToken = default)
+		public virtual async UniTask LoadAssetAsync(string audioDataId, string errorMessage, CancellationToken cancellationToken = default)
 		{
 			if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
 			{
@@ -267,7 +267,7 @@ namespace CizaAudioModule
 			_loadedPrefabAddresses.Add(clipAddress);
 		}
 
-		public async void UnloadAsset(string audioDataId)
+		public virtual async void UnloadAsset(string audioDataId)
 		{
 			if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
 			{
@@ -332,10 +332,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
 			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, callerId);
 
-		public string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -399,10 +399,10 @@ namespace CizaAudioModule
 		}
 
 
-		public UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
+		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null) =>
 			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, callerId);
 
-		public async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
+		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, string callerId = null)
 		{
 			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
@@ -414,7 +414,7 @@ namespace CizaAudioModule
 			return audioId;
 		}
 
-		public async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime)
+		public virtual async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -429,7 +429,7 @@ namespace CizaAudioModule
 			await ModifyAsync(audioId, volume, fadeTime);
 		}
 
-		public async UniTask ModifyAsync(string audioId, float volume, float fadeTime)
+		public virtual async UniTask ModifyAsync(string audioId, float volume, float fadeTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -446,7 +446,7 @@ namespace CizaAudioModule
 				playingAudio.SetVolume(volume);
 		}
 
-		public void SetTime(string audioId, float time)
+		public virtual void SetTime(string audioId, float time)
 		{
 			if (!IsInitialized)
 				return;
@@ -460,7 +460,7 @@ namespace CizaAudioModule
 			playingAudio.SetTime(time);
 		}
 
-		public void Resume(string audioId)
+		public virtual void Resume(string audioId)
 		{
 			if (!IsInitialized)
 				return;
@@ -474,7 +474,7 @@ namespace CizaAudioModule
 			playingAudio.Resume();
 		}
 
-		public void Pause(string audioId)
+		public virtual void Pause(string audioId)
 		{
 			if (!IsInitialized)
 				return;
@@ -488,13 +488,13 @@ namespace CizaAudioModule
 			playingAudio.Pause();
 		}
 
-		public void DeSpawn(string audioId) =>
+		public virtual void DeSpawn(string audioId) =>
 			DeSpawn(audioId, null);
 
-		public UniTask StopAsync(string audioId, float fadeTime = 0) =>
+		public virtual UniTask StopAsync(string audioId, float fadeTime = 0) =>
 			StopAsync(audioId, fadeTime, null);
 
-		public UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)
+		public virtual UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)
 		{
 			if (!IsInitialized)
 				return UniTask.CompletedTask;
@@ -507,7 +507,7 @@ namespace CizaAudioModule
 			return UniTask.WhenAll(uniTasks);
 		}
 
-		public async UniTask StopAllAsync(float fadeTime = 0)
+		public virtual async UniTask StopAllAsync(float fadeTime = 0)
 		{
 			var uniTasks = new List<UniTask>();
 			foreach (var audioId in _playingAudioMapByAudioId.Keys.ToArray())
@@ -515,10 +515,10 @@ namespace CizaAudioModule
 			await UniTask.WhenAll(uniTasks);
 		}
 
-		private async void DeSpawn(string audioId, Action<string, string, string> onComplete) =>
+		protected virtual async void DeSpawn(string audioId, Action<string, string, string> onComplete) =>
 			await StopAsync(audioId, 0, onComplete);
 
-		private async UniTask StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)
+		protected virtual async UniTask StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)
 		{
 			if (!IsInitialized)
 				return;
@@ -545,7 +545,7 @@ namespace CizaAudioModule
 			onComplete?.Invoke(callerId, audioId, audioDataId);
 		}
 
-		private bool CheckIsAudioInfoLoaded(string audioDataId, string methodName, out string clipAddress, out string prefabAddress)
+		protected virtual bool CheckIsAudioInfoLoaded(string audioDataId, string methodName, out string clipAddress, out string prefabAddress)
 		{
 			if (!IsInitialized)
 			{
@@ -579,7 +579,7 @@ namespace CizaAudioModule
 			return true;
 		}
 
-		private void AddAudioToIdleAudiosMap(IAudio audio)
+		protected virtual void AddAudioToIdleAudiosMap(IAudio audio)
 		{
 			audio.GameObject.name = audio.PrefabAddress;
 			var pool = _poolMapByPrefabAddress[audio.PrefabAddress];
@@ -589,14 +589,14 @@ namespace CizaAudioModule
 			idleAudios.Add(audio);
 		}
 
-		private void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Transform parent, Vector3 position)
+		protected virtual void AddAudioToPlayingAudiosMap(string audioId, IAudio audio, Transform parent, Vector3 position)
 		{
 			var hasParent = parent != null;
 			SetAudioTransform(audio, true, hasParent ? parent : _poolRoot, hasParent, position);
 			_playingAudioMapByAudioId.Add(audioId, audio);
 		}
 
-		private void SetAudioTransform(IAudio audio, bool isActive, Transform parent, bool isLocalPosition, Vector3 position)
+		protected virtual void SetAudioTransform(IAudio audio, bool isActive, Transform parent, bool isLocalPosition, Vector3 position)
 		{
 			var audioGameObject = audio.GameObject;
 			audioGameObject.SetActive(isActive);
@@ -610,7 +610,7 @@ namespace CizaAudioModule
 				audioTransform.position = position;
 		}
 
-		private void DestroyOrImmediate(Object obj)
+		protected virtual void DestroyOrImmediate(Object obj)
 		{
 			if (Application.isPlaying)
 				Object.Destroy(obj);
@@ -618,10 +618,10 @@ namespace CizaAudioModule
 				Object.DestroyImmediate(obj);
 		}
 
-		private bool HasValue(string value) =>
+		protected virtual bool HasValue(string value) =>
 			!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value);
 
-		private async UniTask AddTimer(string audioId, float startVolume, float endVolume, float duration)
+		protected virtual async UniTask AddTimer(string audioId, float startVolume, float endVolume, float duration)
 		{
 			if (_timerIdMapByAudioId.ContainsKey(audioId))
 				RemoveTimer(audioId);
@@ -635,7 +635,7 @@ namespace CizaAudioModule
 				await UniTask.Yield();
 		}
 
-		private void RemoveTimer(string audioId)
+		protected virtual void RemoveTimer(string audioId)
 		{
 			if (!_timerIdMapByAudioId.TryGetValue(audioId, out var timerId))
 				return;
@@ -645,18 +645,18 @@ namespace CizaAudioModule
 		}
 
 
-		private void AddCooldown(string audioDataId)
+		protected virtual void AddCooldown(string audioDataId)
 		{
-			if (!_config.RestrictContinuousPlay.IsEnable)
+			if (!_config.TryGetRestrictContinuousPlay(out var restrictContinuousPlay))
 				return;
 
 			if (!_consecutiveCountMapByDataId.TryAdd(audioDataId, 1))
 				_consecutiveCountMapByDataId[audioDataId]++;
 
-			_timerModule.AddOnceTimer(_config.RestrictContinuousPlay.Duration, _ => RemoveCooldown(audioDataId));
+			_timerModule.AddOnceTimer(restrictContinuousPlay.Duration, _ => RemoveCooldown(audioDataId));
 		}
 
-		private void RemoveCooldown(string audioDataId)
+		protected virtual void RemoveCooldown(string audioDataId)
 		{
 			if (!_consecutiveCountMapByDataId.ContainsKey(audioDataId))
 				return;

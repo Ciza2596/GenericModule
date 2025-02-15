@@ -13,7 +13,7 @@ namespace CizaAudioModule
         string AudioMixerParameter { get; }
         float DefaultVolume { get; }
 
-        IRestrictContinuousPlay RestrictContinuousPlay { get; }
+        bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay);
 
         string DefaultPrefabAddress { get; }
         IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId();

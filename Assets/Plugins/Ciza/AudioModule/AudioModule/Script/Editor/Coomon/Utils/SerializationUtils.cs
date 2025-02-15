@@ -8,7 +8,6 @@ using UnityEditor.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace CizaAudioModule.Editor
 {
@@ -33,41 +32,6 @@ namespace CizaAudioModule.Editor
 		}
 
 		// UI TOOLKIT: ----------------------------------------------------------------------------
-
-		public static bool CreateChildProperties(VisualElement root, Object obj, ChildrenMode mode, float spaceHeight = 5, params string[] excludeFields)
-		{
-			var serializedObject = new SerializedObject(obj);
-			var iterator = serializedObject.GetIterator();
-
-			if (!iterator.NextVisible(true))
-				return false;
-
-			if (spaceHeight > 0)
-				root.Add(new VisualElement { style = { height = spaceHeight } });
-
-			int propertyCount = 0;
-
-			do
-			{
-				if (iterator.name == "m_Script" || excludeFields.Contains(iterator.name))
-					continue;
-
-				PropertyField propertyField = mode switch
-				{
-					ChildrenMode.ShowLabelsInChildren => new PropertyField(iterator),
-					ChildrenMode.HideLabelsInChildren => new PropertyField(iterator, " "),
-					ChildrenMode.FullWidthChildren => new PropertyField(iterator, string.Empty),
-					_ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
-				};
-
-				root.Add(propertyField);
-				propertyCount++;
-			} while (iterator.NextVisible(false));
-
-			root.Bind(serializedObject);
-
-			return propertyCount > 0;
-		}
 
 		public static bool CreateChildProperties(VisualElement root, SerializedProperty prop, ChildrenMode mode, float spaceHeight = 5, params string[] excludeFields)
 		{
@@ -108,79 +72,6 @@ namespace CizaAudioModule.Editor
 			} while (iteratorProperty.NextVisible(false));
 
 			return numProperties != 0;
-		}
-
-		public static object GetParentInstance(this SerializedProperty property)
-		{
-			if (property == null)
-				return null;
-			var serializedObject = property.serializedObject;
-			var index = property.propertyPath.LastIndexOf('.');
-
-			if (index < 0)
-				return serializedObject.targetObject;
-
-			if (property.propertyPath[(index + 1)..].Contains("["))
-			{
-				index = property.propertyPath[..index].LastIndexOf('.');
-				index = property.propertyPath[..index].LastIndexOf('.');
-			}
-
-			var parentPath = property.propertyPath[..index];
-			var parentProperty = serializedObject.FindProperty(parentPath);
-
-			return parentProperty?.boxedValue;
-		}
-
-		public static bool HasAttribute<TAttribute>(this SerializedProperty property, bool inherit = false) where TAttribute : Attribute
-		{
-			if (property == null)
-				return false;
-
-			if (TypeUtils.GetType(property, false) is { } type && type.IsDefined(typeof(TAttribute), inherit))
-				return true;
-
-			var serializedObject = property.serializedObject;
-
-			var index = property.propertyPath.LastIndexOf('.');
-			Type parentType;
-			string selfPath;
-
-			if (index < 0)
-			{
-				if (serializedObject.targetObject?.GetType() is not { } targetType)
-					return false;
-
-				parentType = targetType;
-				selfPath = property.propertyPath;
-			}
-			else
-			{
-				if (property.propertyPath[(index + 1)..].Contains("["))
-				{
-					index = property.propertyPath[..index].LastIndexOf('.');
-					index = property.propertyPath[..index].LastIndexOf('.');
-				}
-
-				var parentPath = property.propertyPath[..index];
-				var parentProperty = serializedObject.FindProperty(parentPath);
-
-				if (parentProperty == null || TypeUtils.GetType(parentProperty, false) is not { } propertyType)
-					return false;
-
-				parentType = propertyType;
-				selfPath = property.propertyPath[(index + 1)..];
-			}
-
-			var fieldInfo = parentType.GetField(selfPath, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-			if (fieldInfo == null && inherit && parentType.BaseType is { } parentBaseType)
-				fieldInfo = parentBaseType.GetField(selfPath, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-			if (fieldInfo == null)
-				return false;
-
-			return (bool)fieldInfo?.IsDefined(typeof(TAttribute), inherit);
 		}
 
 		// UPDATE SERIALIZATION: ------------------------------------------------------------------

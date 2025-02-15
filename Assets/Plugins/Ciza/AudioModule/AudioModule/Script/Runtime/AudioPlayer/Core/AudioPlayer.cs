@@ -192,7 +192,7 @@ namespace CizaAudioModule
 
 			var rootGameObject = _root.gameObject;
 			_root = null;
-			DestroyOrImmediate(rootGameObject);
+			ObjectUtils.DestroyOrImmediate(rootGameObject);
 		}
 
 		public void Tick(float deltaTime)
@@ -405,13 +405,5 @@ namespace CizaAudioModule
 			_voiceModule.StopAllAsync(fadeTime);
 
 		#endregion
-
-		private void DestroyOrImmediate(Object obj)
-		{
-			if (Application.isPlaying)
-				Object.Destroy(obj);
-			else
-				Object.DestroyImmediate(obj);
-		}
 	}
 }

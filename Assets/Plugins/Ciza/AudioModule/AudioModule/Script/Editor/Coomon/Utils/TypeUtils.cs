@@ -11,43 +11,8 @@ namespace CizaAudioModule.Editor
 	public static class TypeUtils
 	{
 		private static readonly char[] ASSEMBLY_SEPARATOR = { ' ' };
-		private static readonly char[] SEPARATOR = { '.' };
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
-
-		public static string GetNiceName(Type type) => GetNiceName(type.ToString());
-
-		public static string GetNiceName(string type)
-		{
-			var split = type.Split(SEPARATOR);
-			return split.Length > 0 ? TextUtils.Humanize(split[^1]) : string.Empty;
-		}
-
-
-		public static string GetTitle(SerializedProperty property, bool isFullType, HashSet<string> forbiddenNames = null) => GetTitle(GetType(property, isFullType), forbiddenNames);
-
-		public static string GetTitle(Type type, HashSet<string> forbiddenNames = null)
-		{
-			if (type == null)
-				return "(none)";
-			var title = type.GetCustomAttributes<TitleAttribute>().FirstOrDefault();
-
-			var titleName = title != null && !string.IsNullOrEmpty(title.Title) ? title.Title : GetNiceName(type);
-
-			if (forbiddenNames == null) return titleName;
-			if (string.IsNullOrEmpty(titleName)) return titleName;
-
-			var number = 1;
-			var complete = titleName;
-
-			while (forbiddenNames.Contains(complete))
-			{
-				complete = $"{titleName} ({number})";
-				number += 1;
-			}
-
-			return complete;
-		}
 
 		public static Type[] GetSelfAndBaseTypes(Type type)
 		{
@@ -99,29 +64,6 @@ namespace CizaAudioModule.Editor
 
 			var copy = property.Copy();
 			return copy.Next(true);
-		}
-
-		// PRIVATE METHOD: --------------------------------------------------------------------- 
-
-		private static Type[] GetDerivedTypes(Type type)
-		{
-			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-			var types = new List<Type>();
-
-			if (type == null) return types.ToArray();
-
-			foreach (var assembly in assemblies)
-			{
-				var assemblyTypes = assembly.GetTypes();
-				foreach (var assemblyType in assemblyTypes)
-				{
-					if (assemblyType.IsInterface) continue;
-					if (assemblyType.IsAbstract) continue;
-					if (type.IsAssignableFrom(assemblyType)) types.Add(assemblyType);
-				}
-			}
-
-			return types.ToArray();
 		}
 	}
 }

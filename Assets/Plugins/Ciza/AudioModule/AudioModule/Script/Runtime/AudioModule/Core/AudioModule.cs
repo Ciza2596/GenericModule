@@ -186,7 +186,7 @@ namespace CizaAudioModule
 
 			var poolRootGameObject = _poolRoot.gameObject;
 			_poolRoot = null;
-			DestroyOrImmediate(poolRootGameObject);
+			ObjectUtils.DestroyOrImmediate(poolRootGameObject);
 
 			_audioInfoMapByDataId = null;
 
@@ -251,10 +251,10 @@ namespace CizaAudioModule
 			_loadedCountMapByDataId.Add(audioDataId, 1);
 
 			var clipAddress = audioInfo.ClipAddress;
-			Assert.IsTrue(HasValue(clipAddress), $"[AudioModule::LoadAssetAsync] ClipAddress is null by dataId: {audioDataId}.");
+			Assert.IsTrue(clipAddress.CheckHasValue(), $"[AudioModule::LoadAssetAsync] ClipAddress is null by dataId: {audioDataId}.");
 
-			var prefabAddress = HasValue(audioInfo.PrefabAddress) ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
-			Assert.IsTrue(HasValue(prefabAddress), $"[AudioModule::LoadAssetAsync] PrefabAddress is null by dataId: {audioDataId}.");
+			var prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
+			Assert.IsTrue(prefabAddress.CheckHasValue(), $"[AudioModule::LoadAssetAsync] PrefabAddress is null by dataId: {audioDataId}.");
 
 			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
 			Assert.IsNotNull(clip, $"[AudioModule::LoadAssetAsync] Clip is not found by address: {clipAddress}.");
@@ -322,13 +322,13 @@ namespace CizaAudioModule
 					return;
 
 				foreach (var m_audio in _idleAudioMapByPrefabAddress[m_prefabAddress].ToArray())
-					DestroyOrImmediate(m_audio.GameObject);
+					ObjectUtils.DestroyOrImmediate(m_audio.GameObject);
 				_idleAudioMapByPrefabAddress.Remove(m_prefabAddress);
 
 
 				var m_pool = _poolMapByPrefabAddress[m_prefabAddress];
 				_poolMapByPrefabAddress.Remove(m_prefabAddress);
-				DestroyOrImmediate(m_pool.gameObject);
+				ObjectUtils.DestroyOrImmediate(m_pool.gameObject);
 			}
 		}
 
@@ -571,7 +571,7 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			prefabAddress = HasValue(audioInfo.PrefabAddress) ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
+			prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
 			if (!_prefabMapByAddress.ContainsKey(prefabAddress))
 				return false;
 
@@ -609,17 +609,6 @@ namespace CizaAudioModule
 			else
 				audioTransform.position = position;
 		}
-
-		protected virtual void DestroyOrImmediate(Object obj)
-		{
-			if (Application.isPlaying)
-				Object.Destroy(obj);
-			else
-				Object.DestroyImmediate(obj);
-		}
-
-		protected virtual bool HasValue(string value) =>
-			!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value);
 
 		protected virtual async UniTask AddTimer(string audioId, float startVolume, float endVolume, float duration)
 		{

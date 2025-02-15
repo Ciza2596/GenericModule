@@ -26,7 +26,7 @@ MonoBehaviour:
     _audioMixerParameter: Bgm
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
-      _isEnable: 0
+      _isEnable: 1
       _value:
         _duration: 0.1
         _maxConsecutiveCount: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
     _audioMixerParameter: Sfx
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
-      _isEnable: 0
+      _isEnable: 1
       _value:
         _duration: 0.1
         _maxConsecutiveCount: 1
@@ -56,7 +56,7 @@ MonoBehaviour:
     _audioMixerParameter: Voice
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
-      _isEnable: 0
+      _isEnable: 1
       _value:
         _duration: 0.1
         _maxConsecutiveCount: 1

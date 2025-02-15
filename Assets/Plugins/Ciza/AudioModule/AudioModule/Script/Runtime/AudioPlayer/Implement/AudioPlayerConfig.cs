@@ -11,49 +11,49 @@ namespace CizaAudioModule.Implement
 	public class AudioPlayerConfig : ScriptableObject, IAudioPlayerConfig
 	{
 		[SerializeField]
-		private string _rootName = "[AudioPlayer]";
+		protected string _rootName = "[AudioPlayer]";
 
 		[SerializeField]
-		private bool _isDontDestroyOnLoad = true;
+		protected bool _isDontDestroyOnLoad = true;
 
 		[Space]
 		[SerializeField]
-		private AudioMixer _audioMixer;
+		protected AudioMixer _audioMixer;
 
 		[SerializeField]
-		private string _masterMixerGroupPath = "Master";
+		protected string _masterMixerGroupPath = "Master";
 
 		[SerializeField]
-		private string _masterMixerParameter = "Master";
+		protected string _masterMixerParameter = "Master";
 
 		[Range(0, 1)]
 		[SerializeField]
-		private float _defaultMasterVolume = 0.7f;
+		protected float _defaultMasterVolume = 0.7f;
 
 		[Space]
 		[SerializeField]
-		private AudioModuleConfig _bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "BgmAudio");
+		protected AudioModuleConfig _bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "BgmAudio");
 
 		[SerializeField]
-		private AudioModuleConfig _sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "SfxAudio");
+		protected AudioModuleConfig _sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "SfxAudio");
 
 		[SerializeField]
-		private AudioModuleConfig _voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
+		protected AudioModuleConfig _voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
 
-		public string RootName => _rootName;
-		public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		public virtual string RootName => _rootName;
+		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-		public AudioMixer AudioMixer => _audioMixer;
-		public string MasterMixerGroupPath => _masterMixerGroupPath;
-		public string MasterMixerParameter => _masterMixerParameter;
-		public float DefaultMasterVolume => _defaultMasterVolume;
+		public virtual AudioMixer AudioMixer => _audioMixer;
+		public virtual string MasterMixerGroupPath => _masterMixerGroupPath;
+		public virtual string MasterMixerParameter => _masterMixerParameter;
+		public virtual float DefaultMasterVolume => _defaultMasterVolume;
 
-		public IAudioModuleConfig BgmModuleConfig => _bgmModuleConfig;
-		public IAudioModuleConfig SfxModuleConfig => _sfxModuleConfig;
-		public IAudioModuleConfig VoiceModuleConfig => _voiceModuleConfig;
+		public virtual IAudioModuleConfig BgmModuleConfig => _bgmModuleConfig;
+		public virtual IAudioModuleConfig SfxModuleConfig => _sfxModuleConfig;
+		public virtual IAudioModuleConfig VoiceModuleConfig => _voiceModuleConfig;
 
 		[Serializable]
-		private class AudioModuleConfig : IAudioModuleConfig
+		public class AudioModuleConfig : IAudioModuleConfig
 		{
 			[SerializeField]
 			protected string _poolRootName;
@@ -85,7 +85,7 @@ namespace CizaAudioModule.Implement
 			protected string _defaultPrefabAddress;
 
 			[SerializeField]
-			protected AudioInfo[] _audioInfos;
+			protected AudioInfoMapList _infoMapList;
 
 			[Preserve]
 			public AudioModuleConfig() { }
@@ -116,36 +116,17 @@ namespace CizaAudioModule.Implement
 
 			public virtual IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId()
 			{
-				Assert.IsNotNull(_audioInfos, "[AudioPlayerModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
+				Assert.IsNotNull(_infoMapList, "[AudioPlayerModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
 
 				var audioInfoMap = new Dictionary<string, IAudioInfo>();
 
-				if (_audioInfos is null)
+				if (_infoMapList is null)
 					return audioInfoMap;
 
-				foreach (var audioInfo in _audioInfos)
-					audioInfoMap.Add(audioInfo.DataId, audioInfo);
+				foreach (var pair in _infoMapList.Pairs)
+					audioInfoMap.Add(pair.Value.DataId, pair.Value);
 
 				return audioInfoMap;
-			}
-
-			[Serializable]
-			public class AudioInfo : IAudioInfo
-			{
-				[SerializeField]
-				private string _dataId;
-
-				[Space]
-				[SerializeField]
-				private string _clipAddress;
-
-				[SerializeField]
-				private string _prefabAddress;
-
-				public string DataId => _dataId;
-
-				public string ClipAddress => _clipAddress;
-				public string PrefabAddress => _prefabAddress;
 			}
 		}
 	}

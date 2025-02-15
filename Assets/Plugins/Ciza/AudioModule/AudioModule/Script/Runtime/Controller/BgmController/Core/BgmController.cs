@@ -95,7 +95,7 @@ namespace CizaAudioModule
         {
             var uniTasks = new List<UniTask>();
 
-            if (_currentBgmDataId.HasValue() && _currentBgmDataId != bgmDataId)
+            if (_currentBgmDataId.CheckHasValue() && _currentBgmDataId != bgmDataId)
                 uniTasks.Add(PauseBgmAsync());
 
             _currentBgmDataId = bgmDataId;

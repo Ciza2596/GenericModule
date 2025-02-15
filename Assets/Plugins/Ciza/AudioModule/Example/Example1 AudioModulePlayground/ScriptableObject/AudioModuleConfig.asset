@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffd1fb2ee0fc445fcaa2ddcf3a47f4d3, type: 3}
+  m_Script: {fileID: 11500000, guid: a83158c1c6e134e6c887b8f7a0c99c9b, type: 3}
   m_Name: AudioModuleConfig
   m_EditorClassIdentifier: 
   _poolRootName: '[AudioModule]'
@@ -18,8 +18,14 @@ MonoBehaviour:
   _audioMixerGroupPath: Master
   _audioMixerParameter: Master
   _defaultVolume: 0.7
-  _defaultPrefabAddress: BGMAudio
-  _audioInfos:
-  - _dataId: wind_bell
-    _clipAddress: wind_bell
-    _prefabAddress: 
+  _hasRestrictContinuousPlay:
+    _isEnable: 0
+    _value:
+      _duration: 0.1
+      _maxConsecutiveCount: 1
+  _defaultPrefabAddress: 
+  _infoMapList:
+    _maps: []
+  references:
+    version: 2
+    RefIds: []

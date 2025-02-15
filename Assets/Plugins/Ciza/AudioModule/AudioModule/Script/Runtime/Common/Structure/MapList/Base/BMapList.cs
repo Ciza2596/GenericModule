@@ -9,8 +9,8 @@ namespace CizaAudioModule
     [Serializable]
     public abstract class BMapList<TMap, TValue> where TMap : BMap<TValue>
     {
-        [SerializeReference]
-        protected List<TMap> _maps = new List<TMap>();
+        [SerializeField]
+        protected List<TMap> _maps;
 
         public Pair<TValue>[] Pairs
         {

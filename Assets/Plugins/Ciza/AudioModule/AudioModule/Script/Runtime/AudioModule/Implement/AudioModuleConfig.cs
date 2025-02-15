@@ -38,7 +38,7 @@ namespace CizaAudioModule.Implement
 		protected string _defaultPrefabAddress;
 
 		[SerializeField]
-		protected AudioInfo[] _audioInfos;
+		protected AudioInfoMapList _infoMapList;
 
 		public virtual string PoolRootName => _poolRootName;
 
@@ -56,36 +56,17 @@ namespace CizaAudioModule.Implement
 
 		public virtual IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId()
 		{
-			Assert.IsNotNull(_audioInfos, "[AudioModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
+			Assert.IsNotNull(_infoMapList, "[AudioModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
 
 			var audioInfoMap = new Dictionary<string, IAudioInfo>();
 
-			if (_audioInfos is null)
+			if (_infoMapList is null)
 				return audioInfoMap;
 
-			foreach (var audioInfo in _audioInfos)
-				audioInfoMap.Add(audioInfo.DataId, audioInfo);
+			foreach (var pair in _infoMapList.Pairs)
+				audioInfoMap.Add(pair.Value.DataId, pair.Value);
 
 			return audioInfoMap;
-		}
-
-		[Serializable]
-		public class AudioInfo : IAudioInfo
-		{
-			[SerializeField]
-			private string _dataId;
-
-			[Space]
-			[SerializeField]
-			private string _clipAddress;
-
-			[SerializeField]
-			private string _prefabAddress;
-
-			public string DataId => _dataId;
-
-			public string ClipAddress => _clipAddress;
-			public string PrefabAddress => _prefabAddress;
 		}
 	}
 }

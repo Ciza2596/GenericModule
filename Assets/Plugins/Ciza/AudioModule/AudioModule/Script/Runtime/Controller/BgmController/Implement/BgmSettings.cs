@@ -25,7 +25,7 @@ namespace CizaAudioModule.Implement
 
         private bool TryGetAudioDataId(string inputBgmDataId, out string outputBgmDataId)
         {
-            if (!inputBgmDataId.HasValue() || !_isEnable)
+            if (!inputBgmDataId.CheckHasValue() || !_isEnable)
             {
                 outputBgmDataId = string.Empty;
                 return false;

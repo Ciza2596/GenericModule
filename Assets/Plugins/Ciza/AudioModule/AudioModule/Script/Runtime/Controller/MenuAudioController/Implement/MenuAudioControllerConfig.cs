@@ -125,7 +125,7 @@ namespace CizaAudioModule.Implement
 
             private bool TryGetSfxDataId(string value, out string sfxDataId)
             {
-                if (!value.HasValue())
+                if (!value.CheckHasValue())
                 {
                     sfxDataId = string.Empty;
                     return false;

@@ -30,7 +30,7 @@
     height: var(--common-element-height);
 }
 
-.box-body{
+.box-body {
     display: none;
 }
 
@@ -42,35 +42,4 @@
     border-top-width: 0;
     border-color: var(--color-border-default);
     display: flex;
-}
-
-/* Switch Group Box */
-
-.switchgroupbox-root {
-    margin: var(--common-space-smallest) 0 var(--common-space-smallest) 0;
-}
-
-.switchgroupbox-head {
-    height: var(--list-head-size);
-    flex-direction: row;
-    margin-bottom: var(--common-space-smallest);
-}
-
-.switchgroupbox-head Label {
-    -unity-text-align: middle-left;
-}
-
-.switchgroupbox-body {
-    display: none;
-}
-
-.switchgroupbox-body.switchgroupbox-active {
-    display: flex;
-    background-color: rgba(0, 0, 0, 0.08);
-    margin-left: var(--common-space-smallest);
-    padding: var(--list-body-padding);
-}
-
-.switchgroupbox-body .box-root {
-    margin: 1px -2px 3px 3px;
 }

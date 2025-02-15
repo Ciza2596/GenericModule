@@ -53,7 +53,7 @@ namespace CizaAudioModule.Implement
 		public virtual IAudioModuleConfig VoiceModuleConfig => _voiceModuleConfig;
 
 		[Serializable]
-		public class AudioModuleConfig : IAudioModuleConfig
+		public class AudioModuleConfig : IAudioModuleConfig, IZomeraphyPanel
 		{
 			[SerializeField]
 			protected string _poolRootName;

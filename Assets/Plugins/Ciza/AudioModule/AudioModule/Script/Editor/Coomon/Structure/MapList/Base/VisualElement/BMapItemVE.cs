@@ -74,6 +74,8 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected bool IsAllowCopyPaste { get; private set; } = true;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+		public virtual string ItemKey => Root.RootKey + $"{Index}.";
+
 
 		public virtual string Key
 		{
@@ -97,10 +99,10 @@ namespace CizaAudioModule.Editor.MapListVisual
 			}
 		}
 
-		protected virtual bool IsExpand
+		public virtual bool IsExpand
 		{
 			get => MapProperty?.isExpanded ?? false;
-			private set
+			protected set
 			{
 				if (MapProperty != null)
 					MapProperty.isExpanded = value;
@@ -254,7 +256,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			IsExpand = isExpand;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, isExpand);
-			if (isExpand) RefreshBody();
+			if (IsExpand) RefreshBody();
 		}
 
 		protected abstract void DerivedInitialize();

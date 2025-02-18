@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: BgmControllerConfig
   m_EditorClassIdentifier: 
   _fadeTime: 0.5
-  _bgmDataIds:
-  - 
+  _bgmDataIds: []

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace CizaAudioModule.Editor
 {
-    public class ItemVE : BItemVE
+	public class ItemVE : BItemVE
 	{
 		[NonSerialized]
 		protected readonly VisualElement _head = new VisualElement();
@@ -16,9 +16,6 @@ namespace CizaAudioModule.Editor
 
 		[NonSerialized]
 		protected VisualElement _headTitle;
-
-		[NonSerialized]
-		protected readonly Button _headDisable = new Button();
 
 		[NonSerialized]
 		protected readonly Button _headDuplicate = new Button();
@@ -40,11 +37,7 @@ namespace CizaAudioModule.Editor
 		protected virtual string[] HeadRightClasses => new[] { "list-item-head-right" };
 		protected virtual string[] BodyClasses => new[] { "list-item-body" };
 
-		// protected virtual string KeyPath => "_key";
-		// protected virtual string IsEnablePath => "_isEnable";
-		// protected virtual string ValuePath => "_value";
 		protected virtual Texture2D ReorderingIcon => new DragIcon(ColorTheme.Type.TextLight).Texture;
-		protected virtual Texture2D DisableIcon => new CancelIcon(ColorTheme.Type.Light).Texture;
 		protected virtual Texture2D DuplicateIcon => new DuplicateIcon(ColorTheme.Type.Light).Texture;
 		protected virtual Texture2D DeleteIcon => new MinusIcon(ColorTheme.Type.Light).Texture;
 
@@ -60,7 +53,6 @@ namespace CizaAudioModule.Editor
 		protected int Index { get; private set; }
 
 		protected bool IsAllowReordering { get; set; } = true;
-		protected bool IsAllowDisable { get; set; } = true;
 		protected bool IsAllowDuplicate { get; set; } = true;
 		protected bool IsAllowDelete { get; set; } = true;
 
@@ -68,19 +60,17 @@ namespace CizaAudioModule.Editor
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public virtual string Title => ItemProperty.displayName;
+		public virtual string Title => $"Element {Index}";
 
-		protected virtual bool IsExpand
+		public virtual bool IsExpand
 		{
 			get => ItemProperty?.isExpanded ?? false;
-			private set
+			protected set
 			{
 				if (ItemProperty != null)
 					ItemProperty.isExpanded = value;
 			}
 		}
-
-		public bool IsClass => ItemProperty.IsClass();
 
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
@@ -88,7 +78,7 @@ namespace CizaAudioModule.Editor
 		{
 			Root = root;
 			ItemProperty = itemProperty;
-			_headTitle = IsClass ? new Button() : new PropertyField(ItemProperty);
+			_headTitle = Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
 			Add(_head);
 			Add(_body);
 		}
@@ -110,20 +100,20 @@ namespace CizaAudioModule.Editor
 			SetupHead();
 			SetupDrop();
 			DerivedInitialize();
+			SetIsExpand(IsExpand);
 		}
 
-		public virtual void Refresh(int index, bool isAllowReordering = true, bool isAllowDisable = true, bool isAllowDuplicate = true, bool isAllowDelete = true, bool isAllowCopyPaste = true)
+		public virtual void Refresh(int index, bool isAllowReordering = true, bool isAllowDuplicate = true, bool isAllowDelete = true, bool isAllowCopyPaste = true)
 		{
 			Index = index;
 			IsAllowReordering = isAllowReordering;
-			IsAllowDisable = isAllowDisable;
 			IsAllowDuplicate = isAllowDuplicate;
 			IsAllowDelete = isAllowDelete;
 			IsAllowCopyPaste = isAllowCopyPaste;
 
 			RefreshHeadTitle();
 
-			SetIsExpand(ItemProperty?.isExpanded ?? false);
+			SetIsExpand(IsExpand);
 
 			if (Root.IsAllowReordering)
 			{
@@ -169,9 +159,9 @@ namespace CizaAudioModule.Editor
 				foreach (var c in HeadTitleClasses)
 					_headTitle.AddToClassList(c);
 
-				if (IsClass && _headTitle is Button { } button)
+				if (Root.IsElementIsClass && _headTitle is Button { } button)
 					button.clicked += () => SetIsExpand(!IsExpand);
-				else if (!IsClass && _headTitle is PropertyField { } field)
+				else if (!Root.IsElementIsClass && _headTitle is PropertyField { } field)
 					field.BindProperty(ItemProperty);
 
 				if (Root.IsAllowContextMenu)
@@ -211,28 +201,24 @@ namespace CizaAudioModule.Editor
 
 		public virtual void SetIsExpand(bool isExpand)
 		{
-			IsExpand = isExpand && IsClass;
+			IsExpand = isExpand && Root.IsElementIsClass;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, IsExpand);
 			if (IsExpand) RefreshBody();
 		}
 
-		protected virtual void DerivedInitialize() { }
-
-		protected virtual void RefreshBody()
+		protected virtual void DerivedInitialize()
 		{
-			if (_body.childCount != 0)
-				_body.Clear();
-			
 			SerializationUtils.CreateChildProperties(_body, ItemProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0f);
-			
 		}
+
+		protected virtual void RefreshBody() { }
 
 		protected virtual void RefreshHeadTitle()
 		{
-			if (IsClass && _headTitle is Button { } button)
+			if (Root.IsElementIsClass && _headTitle is Button { } button)
 				button.text = Title;
-			else if (!IsClass && _headTitle is PropertyField { } field)
+			else if (!Root.IsElementIsClass && _headTitle is PropertyField { } field)
 				field.BindProperty(ItemProperty);
 		}
 

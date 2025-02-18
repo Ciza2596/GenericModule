@@ -41,46 +41,52 @@ namespace CizaAudioModule.Editor
 
 		protected virtual Texture2D DropDownIcon => new TriangleDownIcon(ColorTheme.Type.TextLight).Texture;
 		protected virtual Texture2D DropRightIcon => new TriangleRightIcon(ColorTheme.Type.TextLight).Texture;
+
 		protected virtual Texture2D SearchIcon => new SearchIcon(ColorTheme.Type.TextLight).Texture;
 		protected virtual Texture2D ClearSearchIcon => new CrossMarkIcon(ColorTheme.Type.TextLight).Texture;
+
 		protected virtual Texture2D AddItemIcon => new DuplicateIcon(ColorTheme.Type.TextLight).Texture;
+
 
 		[field: NonSerialized]
 		protected SerializedProperty ListProperty { get; }
 
 		protected string SearchingText
 		{
-			get => SessionState.GetString(ListProperty.serializedObject.targetObject.GetInstanceID().ToString(), string.Empty);
-			set => SessionState.SetString(ListProperty.serializedObject.targetObject.GetInstanceID().ToString(), value);
+			get => SessionState.GetString(SearchingTextKey, string.Empty);
+			set => SessionState.SetString(SearchingTextKey, value);
 		}
 
 		protected bool IsSearch => SearchingText.CheckHasValue();
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual string Id => GetType().Name;
+		public virtual string IdKey => Id + ".";
+
+		public virtual string RootKey => IdKey + ListProperty.serializedObject.targetObject.GetInstanceID() + ".";
+		public virtual string SearchingTextKey => RootKey + nameof(SearchingText);
+
 		public VisualElement Body => this;
+
 		public virtual bool IsAllowReordering => true;
-		public virtual bool IsAllowDisable => false;
 		public virtual bool IsAllowDuplicate => true;
 		public virtual bool IsAllowDelete => true;
 		public virtual bool IsAllowContextMenu => true;
 		public virtual bool IsAllowCopyPaste => true;
-		public virtual bool IsAllowGroupCollapse => IsClass();
-		public virtual bool IsAllowGroupExpand => IsClass();
+
+		public virtual bool IsAllowGroupCollapse => IsElementIsClass;
+		public virtual bool IsAllowGroupExpand => IsElementIsClass;
 
 		[field: NonSerialized]
-		public ItemSortManipulator ItemSortManipulator { get; private set; }
+		public virtual ItemSortManipulator ItemSortManipulator { get; private set; }
 
-		public Type ItemType => TypeUtils.GetGenericTypes(ListProperty)[0];
+		[field: NonSerialized]
+		public virtual Type ItemType { get; }
 
-		public bool IsClass()
-		{
-			if (ListProperty.arraySize > 0)
-				return ListProperty.GetArrayElementAtIndex(0).IsClass();
-			ListProperty.InsertArrayElementAtIndex(0);
-			var isClass = ListProperty.GetArrayElementAtIndex(0).IsClass();
-			ListProperty.DeleteArrayElementAtIndex(0);
-			return isClass;
-		}
+		[field: NonSerialized]
+		public virtual bool IsElementIsClass { get; }
+
 
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
 
@@ -88,6 +94,8 @@ namespace CizaAudioModule.Editor
 		public ListVE(SerializedProperty listProperty)
 		{
 			ListProperty = listProperty;
+			ItemType = TypeUtils.GetGenericTypes(ListProperty)[0];
+			IsElementIsClass = ItemType.CheckIsClassWithoutString();
 
 			Add(_head);
 			Add(_body);
@@ -135,6 +143,7 @@ namespace CizaAudioModule.Editor
 			ListProperty.GetArrayElementAtIndex(index).SetValue(value);
 
 			Refresh();
+			RefreshIsExpandWhenInsert(index);
 			_items[index].SetIsExpand(true);
 		}
 
@@ -147,13 +156,27 @@ namespace CizaAudioModule.Editor
 			var source = ListProperty.GetArrayElementAtIndex(index).GetValue();
 			if (source == null) return;
 
-			ListProperty.InsertArrayElementAtIndex(index);
-			var newObj = ListProperty.GetArrayElementAtIndex(index + 1);
+			var insertIndex = index + 1;
+			ListProperty.InsertArrayElementAtIndex(insertIndex);
+			var newObj = ListProperty.GetArrayElementAtIndex(insertIndex);
 
 			CopyPasteUtils.Duplicate(newObj, source);
 			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();
+			RefreshIsExpandWhenInsert(insertIndex);
+			_items[insertIndex].SetIsExpand(true);
+		}
+
+		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
+		{
+			for (int i = ListProperty.arraySize - 1; i > insertIndex; i--)
+			{
+				var previousIndex = i - 1;
+				if (i - 1 < 0)
+					continue;
+				_items[i].SetIsExpand(_items[previousIndex].IsExpand);
+			}
 		}
 
 		public virtual void DeleteItem(int index)
@@ -175,7 +198,9 @@ namespace CizaAudioModule.Editor
 		}
 
 		public virtual void CollapseAll() => SetIsExpandAll(false);
+
 		public virtual void ExpandAll() => SetIsExpandAll(true);
+
 
 		// PROTECTED VIRTUAL METHODS: -------------------------------------------------------------
 

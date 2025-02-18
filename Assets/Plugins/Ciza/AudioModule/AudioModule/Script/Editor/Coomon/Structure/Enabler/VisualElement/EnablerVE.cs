@@ -29,6 +29,9 @@ namespace CizaAudioModule.Editor
 		[field: NonSerialized]
 		protected SerializedProperty EnablerProperty { get; }
 
+		[field: NonSerialized]
+		protected Type ValueType { get; }
+
 		protected SerializedProperty IsEnableProperty => EnablerProperty.FindPropertyRelative(IsEnablePath);
 		protected SerializedProperty ValueProperty => EnablerProperty.FindPropertyRelative(ValuePath);
 
@@ -41,7 +44,11 @@ namespace CizaAudioModule.Editor
 		// CONSTRUCTOR: ------------------------------------------------------------------------
 
 		[Preserve]
-		public EnablerVE(SerializedProperty property) => EnablerProperty = property;
+		public EnablerVE(SerializedProperty property)
+		{
+			EnablerProperty = property;
+			ValueType = TypeUtils.GetGenericTypes(EnablerProperty)[0];
+		}
 
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
@@ -80,7 +87,7 @@ namespace CizaAudioModule.Editor
 			_isEnableToggle.RegisterValueChangedCallback(changeEvent => { _valueContainer.style.display = changeEvent.newValue ? DisplayStyle.Flex : DisplayStyle.None; });
 			Add(_valueContainer);
 
-			if (ValueProperty.IsClass())
+			if (ValueType.CheckIsClassWithoutString())
 			{
 				style.flexDirection = FlexDirection.Column;
 				SerializationUtils.CreateChildProperties(_valueContainer, ValueProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);

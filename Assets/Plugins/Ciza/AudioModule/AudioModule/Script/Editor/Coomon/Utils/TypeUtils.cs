@@ -17,12 +17,14 @@ namespace CizaAudioModule.Editor
 			if (type == typeof(string))
 				return string.Empty;
 
+			if (type.IsArray)
+				return Array.CreateInstance(type.GetElementType(), 0);
+
 			if (!type.IsValueType && (type.IsAbstract || type.IsInterface || type.GetConstructor(Type.EmptyTypes) == null))
 				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
-
 			return Activator.CreateInstance(type);
 		}
-		
+
 		public static Type[] GetSelfAndBaseTypes(Type type)
 		{
 			var types = new List<Type> { type };
@@ -57,6 +59,9 @@ namespace CizaAudioModule.Editor
 
 			return allGenericTypes.ToArray();
 		}
+		
+		public static bool CheckIsClassWithoutString(this Type type) =>
+			type.IsClass && type != typeof(string);
 
 		public static Type GetType(SerializedProperty property, bool isFullType)
 		{
@@ -71,14 +76,6 @@ namespace CizaAudioModule.Editor
 
 			var split = isFullType ? property.managedReferenceFullTypename.Split(ASSEMBLY_SEPARATOR) : property.managedReferenceFieldTypename.Split(ASSEMBLY_SEPARATOR);
 			return split.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(split[0], split[1]));
-		}
-
-		public static bool IsClass(this SerializedProperty property)
-		{
-			if (property.propertyType != SerializedPropertyType.Generic) return false;
-
-			var copy = property.Copy();
-			return copy.Next(true);
 		}
 	}
 }

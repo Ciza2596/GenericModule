@@ -57,13 +57,20 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		protected string SearchingText
 		{
-			get => SessionState.GetString(MapListProperty.serializedObject.targetObject.GetInstanceID().ToString(), string.Empty);
-			set => SessionState.SetString(MapListProperty.serializedObject.targetObject.GetInstanceID().ToString(), value);
+			get => SessionState.GetString(SearchingTextKey, string.Empty);
+			set => SessionState.SetString(SearchingTextKey, value);
 		}
 
 		protected bool IsSearch => SearchingText.CheckHasValue();
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual string Id => GetType().Name;
+		public virtual string IdKey => Id + ".";
+
+		public virtual string RootKey => IdKey + MapListProperty.serializedObject.targetObject.GetInstanceID() + ".";
+		public virtual string SearchingTextKey => RootKey + nameof(SearchingText);
+
 
 		public VisualElement Body => this;
 
@@ -152,13 +159,15 @@ namespace CizaAudioModule.Editor.MapListVisual
 			var source = MapsProperty.GetArrayElementAtIndex(index).GetValue();
 			if (source == null) return;
 
-			MapsProperty.InsertArrayElementAtIndex(index);
-			var newObj = MapsProperty.GetArrayElementAtIndex(index + 1);
+			var insertIndex = index + 1;
+			MapsProperty.InsertArrayElementAtIndex(insertIndex);
+			var newObj = MapsProperty.GetArrayElementAtIndex(insertIndex);
 
 			CopyPasteUtils.Duplicate(newObj, source);
 			SerializationUtils.ApplyUnregisteredSerialization(MapListProperty.serializedObject);
 
 			Refresh();
+			_items[insertIndex].SetIsExpand(true);
 		}
 
 		public virtual void DeleteItem(int index)

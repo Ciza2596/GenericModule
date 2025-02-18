@@ -29,7 +29,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		[NonSerialized]
 		protected readonly VisualElement _foot = new VisualElement();
 
-		protected virtual string[] USSPaths => new[] { "List" };
+		protected virtual string[] USSPaths => new[] { "General/List" };
 
 		protected virtual string MapsPath => "_maps";
 
@@ -37,9 +37,9 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		protected virtual string Name => "MapList";
 
-		protected virtual string[] HeadClasses => new[] { "maplist-head" };
-		protected virtual string[] BodyClasses => new[] { "maplist-body" };
-		protected virtual string[] FootClasses => new[] { "maplist-foot" };
+		protected virtual string[] HeadClasses => new[] { "list-head" };
+		protected virtual string[] BodyClasses => new[] { "list-body" };
+		protected virtual string[] FootClasses => new[] { "list-foot" };
 
 		#endregion
 
@@ -78,7 +78,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		public virtual bool IsAllowGroupExpand => true;
 
 		[field: NonSerialized]
-		public SortManipulator SortManipulator { get; private set; }
+		public MapItemSortManipulator MapItemSortManipulator { get; private set; }
 
 		[field: NonSerialized]
 		public SerializedProperty MapsProperty { get; private set; }
@@ -128,7 +128,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			RefreshSearchButton(IsSearch);
 		}
 
-		public virtual void InsertNewItem(int index) => InsertItem(index, Activator.CreateInstance(MapType));
+		public virtual void InsertNewItem(int index) => InsertItem(index, TypeUtils.CreateInstance(MapType));
 
 		public virtual void InsertItem(int index, object value)
 		{
@@ -194,7 +194,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 				styleSheets.Add(sheet);
 
 			MapsProperty = MapListProperty.FindPropertyRelative(MapsPath);
-			SortManipulator = CreateSortManipulator();
+			MapItemSortManipulator = CreateSortManipulator();
 
 			foreach (var c in HeadClasses)
 				_head.AddToClassList(c);
@@ -210,7 +210,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		#region Create VE
 
-		protected virtual SortManipulator CreateSortManipulator() => new SortManipulator(this);
+		protected virtual MapItemSortManipulator CreateSortManipulator() => new MapItemSortManipulator(this);
 
 		protected abstract BMapItemVE CreateMapItem(SerializedProperty mapProperty);
 

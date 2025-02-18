@@ -34,15 +34,15 @@ namespace CizaAudioModule.Editor.MapListVisual
 		[NonSerialized]
 		protected readonly VisualElement _body = new VisualElement();
 
-		protected override string[] DropAboveClasses => new[] { "maplist-item-drop-above" };
-		protected override string[] DropBelowClasses => new[] { "maplist-item-drop-below" };
+		protected override string[] DropAboveClasses => new[] { "list-item-drop-above" };
+		protected override string[] DropBelowClasses => new[] { "list-item-drop-below" };
 
-		protected virtual string[] HeadClasses => new[] { "maplist-item-head" };
-		protected virtual string[] HeadLeftClasses => new[] { "maplist-item-head-left" };
-		protected virtual string[] HeadTitleClasses => new[] { "maplist-item-head-title" };
-		protected virtual string HeadTitleExpandedClass => "maplist-item-head-title--expanded";
-		protected virtual string[] HeadRightClasses => new[] { "maplist-item-head-right" };
-		protected virtual string[] BodyClasses => new[] { "maplist-item-body" };
+		protected virtual string[] HeadClasses => new[] { "list-item-head" };
+		protected virtual string[] HeadLeftClasses => new[] { "list-item-head-left" };
+		protected virtual string[] HeadTitleClasses => new[] { "list-item-head-title" };
+		protected virtual string HeadTitleExpandedClass => "list-item-head-title--expanded";
+		protected virtual string[] HeadRightClasses => new[] { "list-item-head-right" };
+		protected virtual string[] BodyClasses => new[] { "list-item-body" };
 
 		protected virtual string KeyPath => "_key";
 		protected virtual string IsEnablePath => "_isEnable";
@@ -153,9 +153,9 @@ namespace CizaAudioModule.Editor.MapListVisual
 			{
 				GetActiveOpacity(_headReordering, IsAllowReordering, "Reordering");
 				if (IsAllowReordering)
-					_headReordering.AddManipulator(Root.SortManipulator);
+					_headReordering.AddManipulator(Root.MapItemSortManipulator);
 				else
-					_headReordering.RemoveManipulator(Root.SortManipulator);
+					_headReordering.RemoveManipulator(Root.MapItemSortManipulator);
 			}
 
 			if (Root.IsAllowDisable)

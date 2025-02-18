@@ -168,17 +168,6 @@ namespace CizaAudioModule.Editor
 			_items[insertIndex].SetIsExpand(true);
 		}
 
-		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
-		{
-			for (int i = ListProperty.arraySize - 1; i > insertIndex; i--)
-			{
-				var previousIndex = i - 1;
-				if (i - 1 < 0)
-					continue;
-				_items[i].SetIsExpand(_items[previousIndex].IsExpand);
-			}
-		}
-
 		public virtual void DeleteItem(int index)
 		{
 			if (index < 0) return;
@@ -290,5 +279,19 @@ namespace CizaAudioModule.Editor
 		}
 
 		protected virtual void RefreshSearchButton(bool isSearch) => _clearSearchButton.SetIsVisible(isSearch);
+
+		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
+		{
+			if (insertIndex == ListProperty.arraySize - 1)
+				return;
+
+			for (int i = ListProperty.arraySize - 1; i > insertIndex; i--)
+			{
+				var previousIndex = i - 1;
+				if (i - 1 < 0)
+					continue;
+				_items[i].SetIsExpand(_items[previousIndex].IsExpand);
+			}
+		}
 	}
 }

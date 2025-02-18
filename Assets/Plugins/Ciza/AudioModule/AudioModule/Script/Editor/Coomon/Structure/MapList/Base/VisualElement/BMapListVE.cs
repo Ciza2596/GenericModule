@@ -147,6 +147,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			MapsProperty.GetArrayElementAtIndex(index).SetValue(value);
 
 			Refresh();
+			RefreshIsExpandWhenInsert(index);
 			_items[index].SetIsExpand(true);
 		}
 
@@ -167,6 +168,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			SerializationUtils.ApplyUnregisteredSerialization(MapListProperty.serializedObject);
 
 			Refresh();
+			RefreshIsExpandWhenInsert(index);
 			_items[insertIndex].SetIsExpand(true);
 		}
 
@@ -280,6 +282,20 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected virtual void RefreshSearchButton(bool isSearch)
 		{
 			_clearSearchButton.style.display = isSearch ? DisplayStyle.Flex : DisplayStyle.None;
+		}
+
+		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
+		{
+			if (insertIndex == MapListProperty.arraySize - 1)
+				return;
+
+			for (int i = MapListProperty.arraySize - 1; i > insertIndex; i--)
+			{
+				var previousIndex = i - 1;
+				if (i - 1 < 0)
+					continue;
+				_items[i].SetIsExpand(_items[previousIndex].IsExpand);
+			}
 		}
 	}
 }

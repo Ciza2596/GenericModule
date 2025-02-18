@@ -139,8 +139,18 @@ namespace CizaAudioModule.Editor
 		{
 			if (property.propertyType == SerializedPropertyType.ManagedReference)
 				property.managedReferenceValue = value;
+			else if (value is IList list)
+			{
+				property.arraySize = 0;
+				for (var i = 0; i < list.Count; i++)
+				{
+					property.InsertArrayElementAtIndex(i);
+					property.GetArrayElementAtIndex(i).SetValue(list[i]);
+				}
+			}
 			else
 				property.boxedValue = value;
+
 			ApplyUnregisteredSerialization(property.serializedObject);
 		}
 

@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 
 namespace CizaAudioModule.Editor
@@ -15,7 +17,7 @@ namespace CizaAudioModule.Editor
 		{
 			var type = source.GetType();
 			SOURCE_MAP_LIST_BY_TYPE.Remove(type);
-			SOURCE_MAP_LIST_BY_TYPE.Add(type, source);
+			SOURCE_MAP_LIST_BY_TYPE.Add(type, Duplicate(source.GetType(), source));
 			OnCopy?.Invoke();
 		}
 
@@ -30,11 +32,44 @@ namespace CizaAudioModule.Editor
 				return false;
 			}
 
-			var jsonSource = EditorJsonUtility.ToJson(source);
-			copy = Activator.CreateInstance(type);
-			EditorJsonUtility.FromJsonOverwrite(jsonSource, copy);
+			copy = Duplicate(source.GetType(), source);
 			OnPaste?.Invoke();
-			return true;
+			return copy != null;
+		}
+
+		public static object Duplicate(Type sourceType, object source)
+		{
+			var newObj = TypeUtils.CreateInstance(sourceType);
+
+			if (!sourceType.CheckIsClassWithoutString())
+				newObj = source;
+
+			else if (sourceType.IsArray && source is object[] sourceArray)
+			{
+				var list = new List<object>();
+				foreach (var sourceElement in sourceArray)
+					list.Add(Duplicate(sourceElement.GetType(), sourceElement));
+
+				return list.Count > 0 ? list.ToArray() : null;
+			}
+			else if (source is IList sourceList)
+			{
+				var list = new List<object>();
+				foreach (var sourceElement in sourceList)
+					list.Add(Duplicate(sourceElement.GetType(), sourceElement));
+
+				return list.Count > 0 ? list.ToList() : null;
+			}
+			else
+				OverrideObj(source, newObj);
+
+			return newObj;
+		}
+
+		public static void OverrideObj(object source, object newObj)
+		{
+			var json = EditorJsonUtility.ToJson(source);
+			EditorJsonUtility.FromJsonOverwrite(json, newObj);
 		}
 
 		public static void Duplicate(SerializedProperty property, object source)
@@ -42,12 +77,16 @@ namespace CizaAudioModule.Editor
 			if (source == null)
 				return;
 
-			var jsonSource = EditorJsonUtility.ToJson(source);
+			if (source.GetType().CheckIsClassWithoutString())
+			{
+				var jsonSource = EditorJsonUtility.ToJson(source);
 
-			var newInstance = Activator.CreateInstance(source.GetType());
-			EditorJsonUtility.FromJsonOverwrite(jsonSource, newInstance);
-
-			property.SetValue(newInstance);
+				var newInstance = TypeUtils.CreateInstance(source.GetType());
+				EditorJsonUtility.FromJsonOverwrite(jsonSource, newInstance);
+				property.SetValue(newInstance);
+			}
+			else
+				property.SetValue(source);
 		}
 
 

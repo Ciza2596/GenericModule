@@ -40,13 +40,19 @@ namespace CizaAudioModule.Editor
 
 		public static Type[] GetGenericTypes(SerializedProperty property)
 		{
-			var types = GetSelfAndBaseTypes(property.GetValue().GetType());
+			var value = property.GetValue();
+			var types = GetSelfAndBaseTypes(value.GetType());
 			var allGenericTypes = new List<Type>();
 			foreach (var type in types)
 			{
-				var genericTypes = type.GetGenericArguments();
-				if (genericTypes.Length > 0)
-					allGenericTypes.AddRange(genericTypes);
+				if (type.IsArray)
+					allGenericTypes.Add(type.GetElementType());
+				else
+				{
+					var genericTypes = type.GetGenericArguments();
+					if (genericTypes.Length > 0)
+						allGenericTypes.AddRange(genericTypes);
+				}
 			}
 
 			return allGenericTypes.ToArray();

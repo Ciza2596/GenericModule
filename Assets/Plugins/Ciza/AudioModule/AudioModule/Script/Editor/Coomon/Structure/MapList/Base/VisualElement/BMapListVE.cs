@@ -286,10 +286,10 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
 		{
-			if (insertIndex == MapListProperty.arraySize - 1)
+			if (insertIndex == MapsProperty.arraySize - 1)
 				return;
 
-			for (int i = MapListProperty.arraySize - 1; i > insertIndex; i--)
+			for (int i = MapsProperty.arraySize - 1; i > insertIndex; i--)
 			{
 				var previousIndex = i - 1;
 				if (i - 1 < 0)

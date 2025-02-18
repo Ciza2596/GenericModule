@@ -164,9 +164,6 @@ namespace CizaLocaleModule.Editor
 			if (value != null)
 				return value;
 
-			if (field.FieldType == typeof(ScriptableObject))
-				return default;
-
 			return TypeUtils.CreateInstance(field.FieldType);
 		}
 

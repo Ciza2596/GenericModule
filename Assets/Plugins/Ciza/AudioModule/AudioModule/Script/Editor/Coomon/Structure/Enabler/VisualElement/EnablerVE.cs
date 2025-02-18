@@ -87,7 +87,7 @@ namespace CizaAudioModule.Editor
 			_isEnableToggle.RegisterValueChangedCallback(changeEvent => { _valueContainer.style.display = changeEvent.newValue ? DisplayStyle.Flex : DisplayStyle.None; });
 			Add(_valueContainer);
 
-			if (ValueType.CheckIsClassWithoutString())
+			if (!ValueType.CheckIsUnityObj() && ValueType.CheckIsClassWithoutString())
 			{
 				style.flexDirection = FlexDirection.Column;
 				SerializationUtils.CreateChildProperties(_valueContainer, ValueProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);

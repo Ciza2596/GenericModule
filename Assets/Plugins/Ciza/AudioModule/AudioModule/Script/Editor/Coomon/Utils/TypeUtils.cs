@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CizaAudioModule.Editor
 {
@@ -14,6 +15,9 @@ namespace CizaAudioModule.Editor
 
 		public static object CreateInstance(Type type)
 		{
+			if (type.CheckIsUnityObj())
+				return null;
+			
 			if (type == typeof(string))
 				return string.Empty;
 
@@ -59,6 +63,9 @@ namespace CizaAudioModule.Editor
 
 			return allGenericTypes.ToArray();
 		}
+		
+		public static bool CheckIsUnityObj(this Type type) =>
+			type.IsSubclassOf(typeof(Object));
 		
 		public static bool CheckIsClassWithoutString(this Type type) =>
 			type.IsClass && type != typeof(string);

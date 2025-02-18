@@ -29,7 +29,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		[NonSerialized]
 		protected readonly VisualElement _foot = new VisualElement();
 
-		protected virtual string[] USSPaths => new[] { "General/List" };
+		protected virtual string[] USSPaths => new[] { "List" };
 
 		protected virtual string MapsPath => "_maps";
 

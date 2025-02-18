@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
-namespace CizaAudioModule.Editor.MapListVisual
+namespace CizaAudioModule.Editor
 {
-	public abstract class BMapListVE : BListVE<BMapItemVE>, BBoxVE.IContent
+	public class ListVE : BListVE<ItemVE>, BBoxVE.IContent
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 
@@ -31,67 +31,63 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		protected virtual string[] USSPaths => new[] { "List" };
 
-		protected virtual string MapsPath => "_maps";
-
 		#region Name
 
-		protected virtual string Name => "MapList";
-
-		protected virtual string[] HeadClasses => new[] { "maplist-head" };
-		protected virtual string[] BodyClasses => new[] { "maplist-body" };
-		protected virtual string[] FootClasses => new[] { "maplist-foot" };
+		protected virtual string[] HeadClasses => new[] { "list-head" };
+		protected virtual string[] BodyClasses => new[] { "list-body" };
+		protected virtual string[] FootClasses => new[] { "list-foot" };
 
 		#endregion
 
 		protected virtual Texture2D DropDownIcon => new TriangleDownIcon(ColorTheme.Type.TextLight).Texture;
 		protected virtual Texture2D DropRightIcon => new TriangleRightIcon(ColorTheme.Type.TextLight).Texture;
-
 		protected virtual Texture2D SearchIcon => new SearchIcon(ColorTheme.Type.TextLight).Texture;
 		protected virtual Texture2D ClearSearchIcon => new CrossMarkIcon(ColorTheme.Type.TextLight).Texture;
-
 		protected virtual Texture2D AddItemIcon => new DuplicateIcon(ColorTheme.Type.TextLight).Texture;
 
-
 		[field: NonSerialized]
-		protected SerializedProperty MapListProperty { get; }
+		protected SerializedProperty ListProperty { get; }
 
 		protected string SearchingText
 		{
-			get => SessionState.GetString(MapListProperty.serializedObject.targetObject.GetInstanceID().ToString(), string.Empty);
-			set => SessionState.SetString(MapListProperty.serializedObject.targetObject.GetInstanceID().ToString(), value);
+			get => SessionState.GetString(ListProperty.serializedObject.targetObject.GetInstanceID().ToString(), string.Empty);
+			set => SessionState.SetString(ListProperty.serializedObject.targetObject.GetInstanceID().ToString(), value);
 		}
 
 		protected bool IsSearch => SearchingText.CheckHasValue();
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
-
 		public VisualElement Body => this;
-
 		public virtual bool IsAllowReordering => true;
-		public virtual bool IsAllowDisable => true;
+		public virtual bool IsAllowDisable => false;
 		public virtual bool IsAllowDuplicate => true;
 		public virtual bool IsAllowDelete => true;
 		public virtual bool IsAllowContextMenu => true;
 		public virtual bool IsAllowCopyPaste => true;
-
-		public virtual bool IsAllowGroupCollapse => true;
-		public virtual bool IsAllowGroupExpand => true;
-
-		[field: NonSerialized]
-		public SortManipulator SortManipulator { get; private set; }
+		public virtual bool IsAllowGroupCollapse => IsClass();
+		public virtual bool IsAllowGroupExpand => IsClass();
 
 		[field: NonSerialized]
-		public SerializedProperty MapsProperty { get; private set; }
+		public ItemSortManipulator ItemSortManipulator { get; private set; }
 
-		public Type MapType => TypeUtils.GetGenericTypes(MapListProperty)[0];
+		public Type ItemType => TypeUtils.GetGenericTypes(ListProperty)[0];
 
+		public bool IsClass()
+		{
+			if (ListProperty.arraySize > 0)
+				return ListProperty.GetArrayElementAtIndex(0).IsClass();
+			ListProperty.InsertArrayElementAtIndex(0);
+			var isClass = ListProperty.GetArrayElementAtIndex(0).IsClass();
+			ListProperty.DeleteArrayElementAtIndex(0);
+			return isClass;
+		}
 
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
 
 		[Preserve]
-		protected BMapListVE(SerializedProperty mapListProperty)
+		public ListVE(SerializedProperty listProperty)
 		{
-			MapListProperty = mapListProperty;
+			ListProperty = listProperty;
 
 			Add(_head);
 			Add(_body);
@@ -102,12 +98,11 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		public override void Refresh()
 		{
-			var mapsProperty = MapsProperty;
-			for (int i = 0; i < mapsProperty.arraySize; i++)
+			for (int i = 0; i < ListProperty.arraySize; i++)
 			{
 				if (i >= _items.Count)
 				{
-					_items.Add(CreateMapItem(mapsProperty.GetArrayElementAtIndex(i)));
+					_items.Add(CreateItem(ListProperty.GetArrayElementAtIndex(i)));
 					_body.Insert(i, _items[i]);
 				}
 
@@ -115,11 +110,11 @@ namespace CizaAudioModule.Editor.MapListVisual
 				_items.Remove(item);
 				_items.Insert(i, item);
 				_items[i].Refresh(i);
-				var isVisible = !IsSearch || (IsSearch && _items[i].Key.ToLower().Contains(SearchingText.ToLower()));
+				var isVisible = !IsSearch || (IsSearch && _items[i].Title.ToLower().Contains(SearchingText.ToLower()));
 				_items[i].SetIsVisible(isVisible);
 			}
 
-			for (var i = mapsProperty.arraySize; i < _items.Count; i++)
+			for (var i = ListProperty.arraySize; i < _items.Count; i++)
 			{
 				_items.RemoveAt(i);
 				_body.RemoveAt(i);
@@ -128,16 +123,16 @@ namespace CizaAudioModule.Editor.MapListVisual
 			RefreshSearchButton(IsSearch);
 		}
 
-		public virtual void InsertNewItem(int index) => InsertItem(index, Activator.CreateInstance(MapType));
+		public virtual void InsertNewItem(int index) => InsertItem(index, TypeUtils.CreateInstance(ItemType));
 
 		public virtual void InsertItem(int index, object value)
 		{
 			if (index < 0) return;
 
-			MapListProperty.serializedObject.Update();
+			ListProperty.serializedObject.Update();
 
-			MapsProperty.InsertArrayElementAtIndex(index);
-			MapsProperty.GetArrayElementAtIndex(index).SetValue(value);
+			ListProperty.InsertArrayElementAtIndex(index);
+			ListProperty.GetArrayElementAtIndex(index).SetValue(value);
 
 			Refresh();
 			_items[index].SetIsExpand(true);
@@ -147,16 +142,16 @@ namespace CizaAudioModule.Editor.MapListVisual
 		{
 			if (index < 0) return;
 
-			MapListProperty.serializedObject.Update();
+			ListProperty.serializedObject.Update();
 
-			var source = MapsProperty.GetArrayElementAtIndex(index).GetValue();
+			var source = ListProperty.GetArrayElementAtIndex(index).GetValue();
 			if (source == null) return;
 
-			MapsProperty.InsertArrayElementAtIndex(index);
-			var newObj = MapsProperty.GetArrayElementAtIndex(index + 1);
+			ListProperty.InsertArrayElementAtIndex(index);
+			var newObj = ListProperty.GetArrayElementAtIndex(index + 1);
 
 			CopyPasteUtils.Duplicate(newObj, source);
-			SerializationUtils.ApplyUnregisteredSerialization(MapListProperty.serializedObject);
+			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();
 		}
@@ -165,36 +160,31 @@ namespace CizaAudioModule.Editor.MapListVisual
 		{
 			if (index < 0) return;
 
-			MapListProperty.serializedObject.Update();
+			ListProperty.serializedObject.Update();
 
-			MapsProperty.DeleteArrayElementAtIndex(index);
-			SerializationUtils.ApplyUnregisteredSerialization(MapListProperty.serializedObject);
+			ListProperty.DeleteArrayElementAtIndex(index);
+			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();
 		}
 
 		public override void MoveItems(int sourceIndex, int destinationIndex)
 		{
-			MoveItems(MapListProperty.serializedObject, MapsProperty, sourceIndex, destinationIndex);
+			MoveItems(ListProperty.serializedObject, ListProperty, sourceIndex, destinationIndex);
 			Refresh();
 		}
 
 		public virtual void CollapseAll() => SetIsExpandAll(false);
-
 		public virtual void ExpandAll() => SetIsExpandAll(true);
-
 
 		// PROTECTED VIRTUAL METHODS: -------------------------------------------------------------
 
 		protected override void DerivedInitialize()
 		{
-			name = Name;
-
 			foreach (var sheet in StyleSheetUtils.GetStyleSheets(USSPaths))
 				styleSheets.Add(sheet);
 
-			MapsProperty = MapListProperty.FindPropertyRelative(MapsPath);
-			SortManipulator = CreateSortManipulator();
+			ItemSortManipulator = CreateSortManipulator();
 
 			foreach (var c in HeadClasses)
 				_head.AddToClassList(c);
@@ -206,13 +196,19 @@ namespace CizaAudioModule.Editor.MapListVisual
 			foreach (var c in FootClasses)
 				_foot.AddToClassList(c);
 			SetupFoot();
+			Refresh();
 		}
 
 		#region Create VE
 
-		protected virtual SortManipulator CreateSortManipulator() => new SortManipulator(this);
+		protected virtual ItemSortManipulator CreateSortManipulator() => new ItemSortManipulator(this);
 
-		protected abstract BMapItemVE CreateMapItem(SerializedProperty mapProperty);
+		protected virtual ItemVE CreateItem(SerializedProperty property)
+		{
+			var itemVE = new ItemVE(this, property);
+			itemVE.Initialize();
+			return itemVE;
+		}
 
 		#endregion
 
@@ -255,7 +251,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			var addButton = new Button();
 			addButton.Add(new Image { image = AddItemIcon });
 			addButton.Add(new Label { text = "Add new item..." });
-			addButton.clicked += () => { InsertNewItem(MapsProperty.arraySize); };
+			addButton.clicked += () => { InsertNewItem(ListProperty.arraySize); };
 
 			_foot.Add(addButton);
 		}
@@ -268,9 +264,6 @@ namespace CizaAudioModule.Editor.MapListVisual
 				_items[i].SetIsExpand(isExpand);
 		}
 
-		protected virtual void RefreshSearchButton(bool isSearch)
-		{
-			_clearSearchButton.style.display = isSearch ? DisplayStyle.Flex : DisplayStyle.None;
-		}
+		protected virtual void RefreshSearchButton(bool isSearch) => _clearSearchButton.SetIsVisible(isSearch);
 	}
 }

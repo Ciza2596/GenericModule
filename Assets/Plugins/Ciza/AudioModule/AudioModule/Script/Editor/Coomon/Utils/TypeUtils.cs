@@ -12,6 +12,17 @@ namespace CizaAudioModule.Editor
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
+		public static object CreateInstance(Type type)
+		{
+			if (type == typeof(string))
+				return string.Empty;
+
+			if (!type.IsValueType && (type.IsAbstract || type.IsInterface || type.GetConstructor(Type.EmptyTypes) == null))
+				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
+
+			return Activator.CreateInstance(type);
+		}
+		
 		public static Type[] GetSelfAndBaseTypes(Type type)
 		{
 			var types = new List<Type> { type };

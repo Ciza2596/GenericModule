@@ -11,13 +11,13 @@ namespace CizaAudioModule.Editor
 	{
 		public const string ROOT_PATH = "AudioModule/StyleSheet/";
 
-		private static readonly string[] COMMON_STYLE_PATHS = { "CommonElement", "CommonValue", "CommonColor", };
+		private static readonly string[] COMMON_STYLE_PATHS = { "CommonValue", "CommonColor", };
 
 		public static StyleSheet[] GetStyleSheets(params string[] paths)
 		{
-			if(BuildPipeline.isBuildingPlayer)
+			if (BuildPipeline.isBuildingPlayer)
 				return Array.Empty<StyleSheet>();
-			
+
 			var styleSheets = new List<StyleSheet>();
 			styleSheets.AddRange(GetCommonStyleSheets());
 			foreach (var path in paths)

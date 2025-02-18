@@ -1,35 +1,37 @@
-.maplist {
-    
+.list {
+
 }
 
-.maplist-head {
+.list-head {
     flex-direction: row;
     height: var(--list-head-size);
-    margin: 5px 2px 10px 0;
+    margin: 3px 0 8px 0;
 }
 
-.maplist-head > Button {
+.list-head > Button {
     padding: 0;
-    margin: 1px 2px 0 0;
+    margin: 1px 3px 0 0;
     height: var(--list-head-size);
     width: var(--list-head-size);
     align-items: center;
     justify-content: center;
 }
 
-.maplist-head > TextField {
+.list-head > TextField {
     height: var(--list-head-size);
     width: 0;
     flex-grow: 1;
+    margin: 1px;
 }
 
-.maplist-head > TextField > #unity-text-input {
+.list-head > TextField > #unity-text-input {
     -unity-text-align: middle-left;
     padding: 0 25px 0 22px;
     overflow: hidden;
 }
 
-.maplist-head > TextField > Image, .maplist-head > TextField > Button {
+.list-head > TextField > Image,
+.list-head > TextField > Button {
     height: var(--list-head-image-size);
     width: var(--list-head-image-size);
     position: absolute;
@@ -37,26 +39,27 @@
     padding: 1px;
     top: 3px;
 }
-.maplist-head > TextField > Image{
+
+.list-head > TextField > Image {
     left: 4px;
 }
 
-.maplist-head > TextField > Button {
+.list-head > TextField > Button {
     right: 5px;
     background-color: transparent;
     border-width: 0;
 }
 
-.maplist-body {
+.list-body {
 }
 
-.maplist-foot {
+.list-foot {
     height: var(--list-head-size);
     margin-top: 8px;
     margin-bottom: 5px;
 }
 
-.maplist-foot Button {
+.list-foot Button {
     flex-direction: row;
     align-items: center;
     margin: 0;
@@ -65,20 +68,20 @@
     border-color: var(--color-border-default);
 }
 
-.maplist-foot Image {
+.list-foot Image {
     height: var(--list-head-size);
     width: var(--list-head-size);
     margin-right: 5px;
 }
 
-.maplist-foot Label {
+.list-foot Label {
     flex-grow: 1;
     -unity-text-align: middle-left;
 }
 
 /* ITEM */
-.maplist-item-drop-above,
-.maplist-item-drop-below {
+.list-item-drop-above,
+.list-item-drop-below {
     position: absolute;
     width: 100%;
     height: 3px;
@@ -86,15 +89,15 @@
     display: none;
 }
 
-.maplist-item-drop-above {
+.list-item-drop-above {
     top: -3px;
 }
 
-.maplist-item-drop-below {
+.list-item-drop-below {
     bottom: -3px;
 }
 
-.maplist-item-head {
+.list-item-head {
     flex-direction: row;
     flex-wrap: nowrap;
     overflow: hidden;
@@ -102,12 +105,12 @@
     height: var(--list-head-size);
     background-color: var(--color-bg-light);
     border-color: var(--color-border-default);
-    
+
     border-width: var(--common-border-width);
     margin-top: -1px;
 }
 
-.maplist-item-head > * {
+.list-item-head > * {
     background-color: var(--color-list-head-default);
     border-color: var(--color-border-element);
     margin: 0;
@@ -116,39 +119,49 @@
     border-radius: 0;
 }
 
-.maplist-item-head > Button:hover {
+.list-item-head > Button:hover {
     background-color: var(--color-list-head-hover);
 }
 
-.maplist-item-head > Button:active {
+.list-item-head > Button:active {
     background-color: var(--color-list-head-press);
 }
 
-.maplist-item-head Image {
+.list-item-head > PropertyField > * {
+    margin: 1px 0 1px 0;
+}
+
+.list-item-head > PropertyField > * > Label {
+    padding-left: 0;
+    color: var(--color-text-button);
+}
+
+.list-item-head Image {
     width: var(--list-head-image-size);
     height: var(--list-head-image-size);
     margin: var(--list-head-image-margin);
 }
 
-.maplist-item-head > .maplist-item-head-left {
+.list-item-head > .list-item-head-left {
     border-right-width: var(--common-border-width);
 }
 
-.maplist-item-head > .maplist-item-head-title {
+.list-item-head > .list-item-head-title {
     flex-grow: 1;
     -unity-text-align: middle-left;
     padding-left: 8px;
+    padding-right: 5px;
 }
 
-.maplist-item-head > .maplist-item-head-title--expanded {
+.list-item-head > .list-item-head-title--expanded {
     background-color: var(--color-list-head-expanded);
 }
 
-.maplist-item-head > .maplist-item-head-right {
+.list-item-head > .list-item-head-right {
     border-left-width: var(--common-border-width);
 }
 
-.maplist-item-body {
+.list-item-body {
     margin-top: -1px;
     margin-left: var(--list-body-margins);
     margin-right: var(--list-body-margins);

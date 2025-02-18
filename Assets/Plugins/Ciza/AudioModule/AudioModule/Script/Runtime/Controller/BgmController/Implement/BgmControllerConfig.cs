@@ -4,18 +4,19 @@ using UnityEngine;
 
 namespace CizaAudioModule.Implement
 {
-    [CreateAssetMenu(fileName = "BgmControllerConfig", menuName = "Ciza/AudioModule/BgmControllerConfig", order = 200)]
-    public class BgmControllerConfig : ScriptableObject, IBgmControllerConfig
-    {
-        [SerializeField]
-        private float _fadeTime = 0.5f;
+	[CreateAssetMenu(fileName = "BgmControllerConfig", menuName = "Ciza/AudioModule/BgmControllerConfig", order = 200)]
+	public class BgmControllerConfig : ScriptableObject, IBgmControllerConfig
+	{
+		[SerializeField]
+		protected float _fadeTime = 0.5f;
 
-        [Space]
-        [SerializeField]
-        private string[] _bgmDataIds;
+		[Space]
+		[SerializeField]
+		[OverrideDrawer]
+		protected string[] _bgmDataIds;
 
-        public float FadeTime => _fadeTime;
+		public virtual float FadeTime => _fadeTime;
 
-        public string[] BgmDataIds => _bgmDataIds != null ? _bgmDataIds.ToHashSet().ToArray() : Array.Empty<string>();
-    }
+		public virtual string[] BgmDataIds => _bgmDataIds != null ? _bgmDataIds.ToHashSet().ToArray() : Array.Empty<string>();
+	}
 }

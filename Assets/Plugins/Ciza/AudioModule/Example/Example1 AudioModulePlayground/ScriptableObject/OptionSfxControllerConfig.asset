@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c845fac17d244d9f9be49bc4d964ac2, type: 3}
+  m_Name: OptionSfxControllerConfig
+  m_EditorClassIdentifier: 
+  _selectSfxDataId: UI_Select
+  _confirmSfxDataId: UI_Confirm
+  _cantConfirmSfxDataId: UI_CantConfirm
+  _cancelSfxDataId: UI_Cancel
+  _settingsShowSfxDataId: UI_SettingsShow
+  _settingsHideSfxDataId: UI_SettingsHide
+  _dialogContinueSfxDataId: UI_DialogContinue
+  _dialogFunctionSfxDataId: UI_DialogFunction

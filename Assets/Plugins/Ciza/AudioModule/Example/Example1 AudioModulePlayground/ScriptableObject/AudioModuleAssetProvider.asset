@@ -12,8 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72da03662acbf46a0aa7acbe60d83639, type: 3}
   m_Name: AudioModuleAssetProvider
   m_EditorClassIdentifier: 
-  _clipMapInfos:
-  - _audioClip: {fileID: 0}
-  _prefabMapInfos:
-  - _audioPrefab: {fileID: 0}
-  - _audioPrefab: {fileID: 0}
+  _clipMapInfos: []
+  _prefabMapInfos: []

@@ -80,6 +80,7 @@ namespace CizaAudioModule.Editor
 		{
 			serializedObject.ApplyModifiedProperties();
 			serializedObject.Update();
+			serializedObject.SetIsDifferentCacheDirty();
 
 			var component = serializedObject.targetObject as Component;
 			if (component == null || !component.gameObject.scene.isLoaded)
@@ -123,7 +124,8 @@ namespace CizaAudioModule.Editor
 			{
 				if (field.Contains("["))
 				{
-					var index = Convert.ToInt32(new string(field.Where(char.IsDigit).ToArray()));
+					var groups = RX_ARRAY.Match(field).Groups;
+					var index = int.Parse(groups[0].Value.Replace("[", "").Replace("]", ""));
 					obj = GetFieldValueWithIndex(RX_ARRAY.Replace(field, string.Empty), obj, index);
 				}
 				else
@@ -145,7 +147,17 @@ namespace CizaAudioModule.Editor
 		private static object GetFieldValue(string fieldName, object obj)
 		{
 			var field = obj?.GetType().GetField(fieldName, BINDINGS);
-			return field != null ? field.GetValue(obj) : default;
+			if (field == null)
+				return default;
+
+			var value = field.GetValue(obj);
+			if (value != null)
+				return value;
+
+			if (field.FieldType == typeof(ScriptableObject))
+				return default;
+
+			return TypeUtils.CreateInstance(field.FieldType);
 		}
 
 		private static object GetFieldValueWithIndex(string fieldName, object obj, int index)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -55,13 +56,19 @@ namespace CizaAudioModule.Editor.MapListVisual
 		[field: NonSerialized]
 		protected SerializedProperty MapListProperty { get; }
 
-		protected string SearchingText
+		protected virtual string SearchingText
 		{
 			get => SessionState.GetString(SearchingTextKey, string.Empty);
 			set => SessionState.SetString(SearchingTextKey, value);
 		}
 
-		protected bool IsSearch => SearchingText.CheckHasValue();
+		protected virtual bool IsSearch => SearchingText.CheckHasValue();
+
+		protected virtual bool TryGetItemVE(SerializedProperty mapProperty, out BMapItemVE mapItemVE)
+		{
+			mapItemVE = _items.FirstOrDefault(item => (item.MapProperty.serializedObject.targetObject == mapProperty.serializedObject.targetObject) && (item.MapProperty.propertyPath == mapProperty.propertyPath));
+			return mapItemVE != null;
+		}
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
@@ -90,7 +97,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		[field: NonSerialized]
 		public SerializedProperty MapsProperty { get; private set; }
 
-		public Type MapType => TypeUtils.GetGenericTypes(MapListProperty)[0];
+		public virtual Type MapType { get; }
 
 
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
@@ -99,6 +106,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected BMapListVE(SerializedProperty mapListProperty)
 		{
 			MapListProperty = mapListProperty;
+			MapType = TypeUtils.GetGenericTypes(MapListProperty)[0];
 
 			Add(_head);
 			Add(_body);
@@ -111,27 +119,8 @@ namespace CizaAudioModule.Editor.MapListVisual
 		{
 			var mapsProperty = MapsProperty;
 			for (int i = 0; i < mapsProperty.arraySize; i++)
-			{
-				if (i >= _items.Count)
-				{
-					_items.Add(CreateMapItem(mapsProperty.GetArrayElementAtIndex(i)));
-					_body.Insert(i, _items[i]);
-				}
-
-				var item = _items[i];
-				_items.Remove(item);
-				_items.Insert(i, item);
-				_items[i].Refresh(i);
-				var isVisible = !IsSearch || (IsSearch && _items[i].Key.ToLower().Contains(SearchingText.ToLower()));
-				_items[i].SetIsVisible(isVisible);
-			}
-
-			for (var i = mapsProperty.arraySize; i < _items.Count; i++)
-			{
-				_items.RemoveAt(i);
-				_body.RemoveAt(i);
-			}
-
+				SpawnMapItem(i, mapsProperty.GetArrayElementAtIndex(i));
+			RemoveMapItems(mapsProperty.arraySize);
 			RefreshSearchButton(IsSearch);
 		}
 
@@ -282,6 +271,36 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected virtual void RefreshSearchButton(bool isSearch)
 		{
 			_clearSearchButton.style.display = isSearch ? DisplayStyle.Flex : DisplayStyle.None;
+		}
+
+		protected virtual void SpawnMapItem(int index, SerializedProperty mapProperty, bool isAllowReordering = true, bool isAllowDisable = true, bool isAllowDuplicate = true, bool isAllowDelete = true, bool isAllowCopyPaste = true)
+		{
+			if (!TryGetItemVE(mapProperty, out var itemVE))
+			{
+				itemVE = CreateMapItem(mapProperty);
+				_items.Add(itemVE);
+				_body.Add(itemVE);
+			}
+
+			_items.Remove(itemVE);
+			_items.Insert(index, itemVE);
+
+			_body.Remove(itemVE);
+			_body.Insert(index, itemVE);
+
+			_items[index].Refresh(index, isAllowReordering, isAllowDisable, isAllowDuplicate, isAllowDelete, isAllowCopyPaste);
+			var isVisible = !IsSearch || (IsSearch && _items[index].Key.ToLower().Contains(SearchingText.ToLower()));
+			_items[index].SetIsVisible(isVisible);
+		}
+
+		protected virtual void RemoveMapItems(int finalIndex)
+		{
+			var itemsCount = _items.Count;
+			for (var i = finalIndex; i < itemsCount; i++)
+			{
+				_items.RemoveAt(_items.Count - 1);
+				_body.RemoveAt(_body.childCount - 1);
+			}
 		}
 
 		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)

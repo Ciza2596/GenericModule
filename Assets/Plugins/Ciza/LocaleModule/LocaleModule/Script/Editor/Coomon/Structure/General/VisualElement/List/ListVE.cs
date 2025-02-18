@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -59,6 +60,13 @@ namespace CizaLocaleModule.Editor
 
 		protected bool IsSearch => SearchingText.CheckHasValue();
 
+		protected virtual bool TryGetItemVE(SerializedProperty mapProperty, out ItemVE itemVE)
+		{
+			itemVE = _items.FirstOrDefault(item => (item.ItemProperty.serializedObject.targetObject == mapProperty.serializedObject.targetObject) && (item.ItemProperty.propertyPath == mapProperty.propertyPath));
+			return itemVE != null;
+		}
+
+
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		public virtual string Id => GetType().Name;
@@ -106,28 +114,10 @@ namespace CizaLocaleModule.Editor
 
 		public override void Refresh()
 		{
-			for (int i = 0; i < ListProperty.arraySize; i++)
-			{
-				if (i >= _items.Count)
-				{
-					_items.Add(CreateItem(ListProperty.GetArrayElementAtIndex(i)));
-					_body.Insert(i, _items[i]);
-				}
-
-				var item = _items[i];
-				_items.Remove(item);
-				_items.Insert(i, item);
-				_items[i].Refresh(i);
-				var isVisible = !IsSearch || (IsSearch && _items[i].Title.ToLower().Contains(SearchingText.ToLower()));
-				_items[i].SetIsVisible(isVisible);
-			}
-
-			for (var i = ListProperty.arraySize; i < _items.Count; i++)
-			{
-				_items.RemoveAt(i);
-				_body.RemoveAt(i);
-			}
-
+			var mapsProperty = ListProperty;
+			for (int i = 0; i < mapsProperty.arraySize; i++)
+				SpawnMapItem(i, mapsProperty.GetArrayElementAtIndex(i));
+			RemoveMapItems(mapsProperty.arraySize);
 			RefreshSearchButton(IsSearch);
 		}
 
@@ -279,6 +269,36 @@ namespace CizaLocaleModule.Editor
 		}
 
 		protected virtual void RefreshSearchButton(bool isSearch) => _clearSearchButton.SetIsVisible(isSearch);
+
+		protected virtual void SpawnMapItem(int index, SerializedProperty mapProperty, bool isAllowReordering = true, bool isAllowDuplicate = true, bool isAllowDelete = true, bool isAllowCopyPaste = true)
+		{
+			if (!TryGetItemVE(mapProperty, out var itemVE))
+			{
+				itemVE = CreateItem(mapProperty);
+				_items.Add(itemVE);
+				_body.Add(itemVE);
+			}
+
+			_items.Remove(itemVE);
+			_items.Insert(index, itemVE);
+
+			_body.Remove(itemVE);
+			_body.Insert(index, itemVE);
+
+			_items[index].Refresh(index, isAllowReordering, isAllowDuplicate, isAllowDelete, isAllowCopyPaste);
+			var isVisible = !IsSearch || (IsSearch && _items[index].Title.ToLower().Contains(SearchingText.ToLower()));
+			_items[index].SetIsVisible(isVisible);
+		}
+
+		protected virtual void RemoveMapItems(int finalIndex)
+		{
+			var itemsCount = _items.Count;
+			for (var i = finalIndex; i < itemsCount; i++)
+			{
+				_items.RemoveAt(_items.Count - 1);
+				_body.RemoveAt(_body.childCount - 1);
+			}
+		}
 
 		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)
 		{

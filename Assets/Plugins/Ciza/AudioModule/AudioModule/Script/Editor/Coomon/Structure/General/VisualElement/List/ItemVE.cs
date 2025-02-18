@@ -45,9 +45,6 @@ namespace CizaAudioModule.Editor
 		[field: NonSerialized]
 		protected ListVE Root { get; }
 
-		[field: NonSerialized]
-		protected SerializedProperty ItemProperty { get; }
-
 
 		[field: NonSerialized]
 		protected int Index { get; private set; }
@@ -59,6 +56,9 @@ namespace CizaAudioModule.Editor
 		protected bool IsAllowCopyPaste { get; private set; } = true;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		[field: NonSerialized]
+		public SerializedProperty ItemProperty { get; }
 
 		public virtual string Title => $"Element {Index}";
 

@@ -57,7 +57,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected BMapListVE Root { get; }
 
 		[field: NonSerialized]
-		protected SerializedProperty MapProperty { get; }
+		public SerializedProperty MapProperty { get; }
 
 		protected SerializedProperty KeyProperty => MapProperty.FindPropertyRelative(KeyPath);
 		protected SerializedProperty IsEnableProperty => MapProperty.FindPropertyRelative(IsEnablePath);
@@ -256,12 +256,9 @@ namespace CizaAudioModule.Editor.MapListVisual
 			IsExpand = isExpand;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, isExpand);
-			if (IsExpand) RefreshBody();
 		}
 
 		protected abstract void DerivedInitialize();
-
-		protected virtual void RefreshBody() { }
 
 		protected virtual void RefreshHeadTitle()
 		{

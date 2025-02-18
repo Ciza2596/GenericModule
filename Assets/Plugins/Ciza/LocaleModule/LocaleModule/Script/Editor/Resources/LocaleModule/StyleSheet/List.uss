@@ -1,0 +1,172 @@
+.list {
+
+}
+
+.list-head {
+    flex-direction: row;
+    height: var(--list-head-size);
+    margin: 3px 0 8px 0;
+}
+
+.list-head > Button {
+    padding: 0;
+    margin: 1px 3px 0 0;
+    height: var(--list-head-size);
+    width: var(--list-head-size);
+    align-items: center;
+    justify-content: center;
+}
+
+.list-head > TextField {
+    height: var(--list-head-size);
+    width: 0;
+    flex-grow: 1;
+    margin: 1px;
+}
+
+.list-head > TextField > #unity-text-input {
+    -unity-text-align: middle-left;
+    padding: 0 25px 0 22px;
+    overflow: hidden;
+}
+
+.list-head > TextField > Image,
+.list-head > TextField > Button {
+    height: var(--list-head-image-size);
+    width: var(--list-head-image-size);
+    position: absolute;
+    margin: 0;
+    padding: 1px;
+    top: 3px;
+}
+
+.list-head > TextField > Image {
+    left: 4px;
+}
+
+.list-head > TextField > Button {
+    right: 5px;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.list-body {
+}
+
+.list-foot {
+    height: var(--list-head-size);
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+.list-foot Button {
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border-color: var(--color-border-default);
+}
+
+.list-foot Image {
+    height: var(--list-head-size);
+    width: var(--list-head-size);
+    margin-right: 5px;
+}
+
+.list-foot Label {
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+}
+
+/* ITEM */
+.list-item-drop-above,
+.list-item-drop-below {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-border-active);
+    display: none;
+}
+
+.list-item-drop-above {
+    top: -3px;
+}
+
+.list-item-drop-below {
+    bottom: -3px;
+}
+
+.list-item-head {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: hidden;
+
+    height: var(--list-head-size);
+    background-color: var(--color-bg-light);
+    border-color: var(--color-border-default);
+
+    border-width: var(--common-border-width);
+    margin-top: -1px;
+}
+
+.list-item-head > * {
+    background-color: var(--color-list-head-default);
+    border-color: var(--color-border-element);
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.list-item-head > Button:hover {
+    background-color: var(--color-list-head-hover);
+}
+
+.list-item-head > Button:active {
+    background-color: var(--color-list-head-press);
+}
+
+.list-item-head > PropertyField > * {
+    margin: 1px 0 1px 0;
+}
+
+.list-item-head > PropertyField > * > Label {
+    padding-left: 0;
+    color: var(--color-text-button);
+}
+
+.list-item-head Image {
+    width: var(--list-head-image-size);
+    height: var(--list-head-image-size);
+    margin: var(--list-head-image-margin);
+}
+
+.list-item-head > .list-item-head-left {
+    border-right-width: var(--common-border-width);
+}
+
+.list-item-head > .list-item-head-title {
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    padding-left: 8px;
+    padding-right: 5px;
+}
+
+.list-item-head > .list-item-head-title--expanded {
+    background-color: var(--color-list-head-expanded);
+}
+
+.list-item-head > .list-item-head-right {
+    border-left-width: var(--common-border-width);
+}
+
+.list-item-body {
+    margin-top: -1px;
+    margin-left: var(--list-body-margins);
+    margin-right: var(--list-body-margins);
+    padding: var(--list-body-padding);
+    border-color: var(--color-border-default);
+    border-width: var(--common-border-width);
+    background-color: var(--color-list-body);
+}

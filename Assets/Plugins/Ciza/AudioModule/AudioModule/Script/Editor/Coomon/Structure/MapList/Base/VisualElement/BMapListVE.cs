@@ -281,16 +281,16 @@ namespace CizaAudioModule.Editor.MapListVisual
 				_items.Add(itemVE);
 				_body.Add(itemVE);
 			}
+			
+			_items[index].Refresh(index, isAllowReordering, isAllowDisable, isAllowDuplicate, isAllowDelete, isAllowCopyPaste);
+			var isVisible = !IsSearch || (IsSearch && _items[index].Key.ToLower().Contains(SearchingText.ToLower()));
+			_items[index].SetIsVisible(isVisible);
 
 			_items.Remove(itemVE);
 			_items.Insert(index, itemVE);
 
 			_body.Remove(itemVE);
 			_body.Insert(index, itemVE);
-
-			_items[index].Refresh(index, isAllowReordering, isAllowDisable, isAllowDuplicate, isAllowDelete, isAllowCopyPaste);
-			var isVisible = !IsSearch || (IsSearch && _items[index].Key.ToLower().Contains(SearchingText.ToLower()));
-			_items[index].SetIsVisible(isVisible);
 		}
 
 		protected virtual void RemoveMapItems(int finalIndex)

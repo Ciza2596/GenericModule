@@ -38,3 +38,9 @@ MonoBehaviour:
         _dataId: 
         _clipAddress: 
         _prefabAddress: 
+    - _key: Default
+      _isEnable: 1
+      _value:
+        _dataId: 
+        _clipAddress: 
+        _prefabAddress: 

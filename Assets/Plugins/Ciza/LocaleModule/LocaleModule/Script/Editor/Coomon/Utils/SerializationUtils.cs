@@ -171,13 +171,7 @@ namespace CizaLocaleModule.Editor
 		{
 			var field = obj.GetType().GetField(fieldName, BINDINGS);
 			if (field == null) return default;
-
-			var list = field.GetValue(obj);
-
-			if (list.GetType().IsArray)
-				return ((object[])list)[index];
-
-			return list is IEnumerable ? ((IList)list)[index] : default;
+			return field.GetValue(obj) is IList list ? list[index] : default;
 		}
 	}
 }

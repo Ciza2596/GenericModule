@@ -212,9 +212,8 @@ namespace CizaAudioModule
 				Debug.LogWarning("[AudioPlayer::SetMasterVolume] AudioMixer is null.");
 				return;
 			}
-
+			
 			_audioPlayerConfig.AudioMixer.SetFloat(_audioPlayerConfig.MasterMixerParameter, m_GetLinearToLogarithmicScale(volume));
-
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}

@@ -43,6 +43,7 @@ namespace CizaAudioModule.Implement
 		public virtual string RootName => _rootName;
 		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
+		// Start 之後才會初始好，使用時請注意。
 		public virtual AudioMixer AudioMixer => _audioMixer;
 		public virtual string MasterMixerGroupPath => _masterMixerGroupPath;
 		public virtual string MasterMixerParameter => _masterMixerParameter;

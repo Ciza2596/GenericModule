@@ -6,6 +6,8 @@ namespace CizaAudioModule
 {
 	public class Audio : MonoBehaviour, IAudio
 	{
+		public const float DURATION_ERROR = 0.00001f;
+
 		private AudioSource _audioSource;
 
 		private string _callerId;
@@ -30,7 +32,7 @@ namespace CizaAudioModule
 
 		public float Duration { get; private set; }
 		public float Time => _time;
-		public bool IsPlaying => _audioSource?.isPlaying ?? false;
+		public bool IsPlaying { get; private set; }
 
 		public GameObject GameObject => gameObject;
 
@@ -46,7 +48,7 @@ namespace CizaAudioModule
 
 		public void Tick(float deltaTime)
 		{
-			if (_audioSource.isPlaying)
+			if (IsPlaying)
 				SetTime(Time + deltaTime);
 		}
 
@@ -63,17 +65,31 @@ namespace CizaAudioModule
 			_audioSource.Play();
 		}
 
-		public void Stop() =>
+		public void Stop()
+		{
+			IsPlaying = false;
 			_audioSource.Stop();
+			SetParameter(string.Empty, string.Empty, string.Empty, true, string.Empty, string.Empty, null, 1, false);
+		}
 
 		public void Resume()
 		{
-			if (!_audioSource.isPlaying)
+			if (!IsPlaying)
+			{
+				IsPlaying = true;
 				_audioSource.Play();
+			}
 		}
 
-		public void Pause() =>
-			_audioSource.Pause();
+		public void Pause()
+		{
+			if (IsPlaying)
+			{
+				IsPlaying = false;
+				_audioSource.Pause();
+			}
+		}
+
 
 		public void SetVolume(float volume) =>
 			_audioSource.volume = volume;
@@ -84,7 +100,7 @@ namespace CizaAudioModule
 		public void SetTime(float time)
 		{
 			_time = time;
-			_audioSource.time = time;
+			_audioSource.time = Mathf.Min(time, Duration);
 		}
 
 
@@ -102,7 +118,7 @@ namespace CizaAudioModule
 			ClipAddress = clipAddress;
 			_audioSource.clip = audioClip;
 
-			Duration = audioClip?.length ?? 0;
+			Duration = audioClip != null && audioClip.length > DURATION_ERROR ? audioClip.length - DURATION_ERROR : 0;
 
 			SetVolume(volume);
 

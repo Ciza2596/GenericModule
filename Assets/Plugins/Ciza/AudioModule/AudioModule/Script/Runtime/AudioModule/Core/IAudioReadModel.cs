@@ -7,7 +7,7 @@ namespace CizaAudioModule
 
         string CallerId { get; }
 
-        bool HasUserId => !string.IsNullOrEmpty(UserId) && !string.IsNullOrWhiteSpace(UserId);
+        bool IsAutoDeSpawn { get; }
         string UserId { get; }
 
         string ClipAddress { get; }

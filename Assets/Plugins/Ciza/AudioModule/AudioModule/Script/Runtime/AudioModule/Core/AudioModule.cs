@@ -229,7 +229,7 @@ namespace CizaAudioModule
 			}
 
 			_audioMixer.SetFloat(_config.AudioMixerParameter, m_GetLinearToLogarithmicScale(volume));
-			
+
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
@@ -332,15 +332,15 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
 
-			if (CheckIsOnCooldown(audioDataId))
+			if (isRestrictContinuousPlay && CheckIsOnCooldown(audioDataId))
 				return string.Empty;
 
 			AddCooldown(audioDataId);
@@ -399,12 +399,12 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null)
+		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();

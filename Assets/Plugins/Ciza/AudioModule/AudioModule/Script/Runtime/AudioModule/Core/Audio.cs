@@ -25,7 +25,7 @@ namespace CizaAudioModule
 		public string ClipAddress { get; private set; }
 		public string PrefabAddress { get; private set; }
 
-		public bool IsComplete => _time >= Duration;
+		public bool IsComplete => IsPlaying && _time >= Duration;
 
 		public bool IsLoop { get; private set; }
 		public float Volume => _audioSource.volume;
@@ -70,6 +70,7 @@ namespace CizaAudioModule
 			IsPlaying = false;
 			_audioSource.Stop();
 			SetParameter(string.Empty, string.Empty, string.Empty, true, string.Empty, string.Empty, null, 1, false);
+			SetTime(0);
 		}
 
 		public void Resume()
@@ -100,7 +101,9 @@ namespace CizaAudioModule
 		public void SetTime(float time)
 		{
 			_time = time;
-			_audioSource.time = Mathf.Min(time, Duration);
+			var minTime = Mathf.Min(time, Duration);
+			if (_audioSource.clip != null && (time <= 0 || Mathf.Abs(_audioSource.time - minTime) > 0.02f))
+				_audioSource.time = minTime;
 		}
 
 

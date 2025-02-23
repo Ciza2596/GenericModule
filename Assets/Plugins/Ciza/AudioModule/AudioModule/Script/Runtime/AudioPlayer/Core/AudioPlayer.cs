@@ -212,8 +212,9 @@ namespace CizaAudioModule
 				Debug.LogWarning("[AudioPlayer::SetMasterVolume] AudioMixer is null.");
 				return;
 			}
-			
+
 			_audioPlayerConfig.AudioMixer.SetFloat(_audioPlayerConfig.MasterMixerParameter, m_GetLinearToLogarithmicScale(volume));
+
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
@@ -239,23 +240,23 @@ namespace CizaAudioModule
 			_bgmModule.UnloadAsset(bgmDataId);
 
 
-		public string SpawnBgm(string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.Spawn(bgmDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnBgm(string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.Spawn(bgmDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnBgm(string bgmDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.Spawn(bgmDataId, string.Empty, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnBgm(string bgmDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.Spawn(bgmDataId, string.Empty, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.Spawn(isCustomBgmId, bgmId, bgmDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.Spawn(isCustomBgmId, bgmId, bgmDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
 
 		public UniTask ModifyBgmAsync(string bgmId, float volume, bool isLoop, float time = 0) =>
@@ -292,27 +293,27 @@ namespace CizaAudioModule
 		public void UnloadSfxAsset(string sfxDataId) =>
 			_sfxModule.UnloadAsset(sfxDataId);
 
-		public string SpawnSfx(string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.Spawn(sfxDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnSfx(string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.Spawn(sfxDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnSfx(string sfxDataId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.Spawn(sfxDataId, string.Empty, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnSfx(string sfxDataId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.Spawn(sfxDataId, string.Empty, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnSfx(bool isCustomSfxId, string sfxId, string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.Spawn(isCustomSfxId, sfxId, sfxDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public string SpawnSfx(bool isCustomSfxId, string sfxId, string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.Spawn(isCustomSfxId, sfxId, sfxDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
 		public void DeSpawnSfx(string sfxId) =>
 			_sfxModule.DeSpawn(sfxId);
 
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, callerId);
+		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
 
 		public UniTask ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0) =>
 			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime);
@@ -355,25 +356,25 @@ namespace CizaAudioModule
 		public void UnloadVoiceAsset(string voiceDataId) =>
 			_voiceModule.UnloadAsset(voiceDataId);
 
-		public string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, string callerId = null) =>
-			_voiceModule.Spawn(voiceDataId, userId, volume, isLoop, parent, position, isAutoDeSpawn, callerId);
+		public string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_voiceModule.Spawn(voiceDataId, userId, volume, isLoop, parent, position, isAutoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, string callerId = null) =>
-			_voiceModule.Spawn(voiceDataId, string.Empty, volume, isLoop, parent, position, isAutoDeSpawn, callerId);
+		public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_voiceModule.Spawn(voiceDataId, string.Empty, volume, isLoop, parent, position, isAutoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, string callerId = null) =>
-			_voiceModule.Spawn(isCustomVoiceId, voiceId, voiceDataId, userId, volume, isLoop, parent, position, isAutoDeSpawn, callerId);
+		public string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_voiceModule.Spawn(isCustomVoiceId, voiceId, voiceDataId, userId, volume, isLoop, parent, position, isAutoDeSpawn, isRestrictContinuousPlay, callerId);
 
 
 		public void DeSpawnVoice(string voiceId) =>
 			_voiceModule.DeSpawn(voiceId);
 
 
-		public UniTask<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, string callerId = null) =>
-			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isAutoDeSpawn, callerId);
+		public UniTask<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isAutoDeSpawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, string callerId = null) =>
-			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isAutoDeSpawn, callerId);
+		public UniTask<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isAutoDeSpawn, isRestrictContinuousPlay, callerId);
 
 
 		public UniTask ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0) =>

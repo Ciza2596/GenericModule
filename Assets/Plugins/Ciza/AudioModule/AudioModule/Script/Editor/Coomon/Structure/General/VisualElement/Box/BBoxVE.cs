@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
@@ -101,6 +102,21 @@ namespace CizaAudioModule.Editor
 		{
 			public VisualElement Body => this;
 			public virtual void Refresh() { }
+		}
+		
+		public class PropertyContentVE : ContentVE
+		{
+			public SerializedProperty Property { get; }
+
+			[Preserve]
+			public PropertyContentVE(SerializedProperty property) =>
+				Property = property;
+
+			public override void Refresh()
+			{
+				Clear();
+				SerializationUtils.CreateChildProperties(this, Property, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);
+			}
 		}
 	}
 }

@@ -8,9 +8,9 @@ namespace CizaAudioModule.Editor
 	{
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
-			var container = new BBoxVE.ContentVE() { style = { paddingRight = 5 } };
-			SerializationUtils.CreateChildProperties(container, property, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);
-
+			var container = new BBoxVE.PropertyContentVE(property) { style = { paddingRight = 5 } };
+			container.Refresh();
+			
 			var box = new BoxVE(property);
 			container.style.paddingRight = 0;
 			box.Initialize(property.displayName, container);

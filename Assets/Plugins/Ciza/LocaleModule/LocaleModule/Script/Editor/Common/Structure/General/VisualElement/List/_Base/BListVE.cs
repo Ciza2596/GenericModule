@@ -7,17 +7,18 @@ using UnityEngine.UIElements;
 
 namespace CizaLocaleModule.Editor
 {
-	public abstract class BListVE<TItem> : VisualElement, IListVE where TItem : BItemVE
+	public abstract class BListVE<TItemVE> : VisualElement, IListVE where TItemVE : BItemVE
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 		[NonSerialized]
-		protected readonly List<TItem> _items = new List<TItem>();
+		protected readonly List<TItemVE> _itemVEs = new List<TItemVE>();
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		[field: NonSerialized]
 		public bool IsInitialized { get; private set; }
 
+		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
 		protected BListVE() { }
@@ -26,8 +27,8 @@ namespace CizaLocaleModule.Editor
 
 		public virtual int GetItemIndexOf(VisualElement item)
 		{
-			for (int i = 0; i < _items.Count; i++)
-				if (_items[i] == item)
+			for (int i = 0; i < _itemVEs.Count; i++)
+				if (_itemVEs[i] == item)
 					return i;
 
 			return -1;
@@ -38,12 +39,12 @@ namespace CizaLocaleModule.Editor
 			var minDistance = Mathf.Infinity;
 			var minIndex = -1;
 
-			for (int i = 0; i < _items.Count; ++i)
+			for (int i = 0; i < _itemVEs.Count; ++i)
 			{
-				if (_items[i] == null)
+				if (_itemVEs[i] == null)
 					continue;
 
-				var center = _items[i].worldBound.y + _items[i].worldBound.height * 0.5f;
+				var center = _itemVEs[i].worldBound.y + _itemVEs[i].worldBound.height * 0.5f;
 				var distance = center - cursorY;
 				var distanceAbsolute = Math.Abs(distance);
 
@@ -61,7 +62,7 @@ namespace CizaLocaleModule.Editor
 
 		public virtual void RefreshItemDragUI(int sourceIndex, int targetIndex)
 		{
-			var items = _items;
+			var items = _itemVEs;
 			if (items.Count <= 0)
 				return;
 
@@ -96,19 +97,18 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual void DerivedInitialize() { }
 
-
-		protected virtual void MoveItems(SerializedObject rootSerializedObject, SerializedProperty arrayProperty, int sourceIndex, int destinationIndex)
+		protected virtual void MoveItems(SerializedProperty arrayProperty, int sourceIndex, int destinationIndex)
 		{
-			rootSerializedObject.Update();
+			arrayProperty.MoveArrayElement(sourceIndex, GetDestinationIndex(arrayProperty, destinationIndex));
+			SerializationUtils.ApplyUnregisteredSerialization(arrayProperty.serializedObject);
+		}
 
+		protected virtual int GetDestinationIndex(SerializedProperty arrayProperty, int destinationIndex)
+		{
+			arrayProperty.serializedObject.Update();
 			destinationIndex = Math.Max(destinationIndex, 0);
-			destinationIndex = Math.Min(destinationIndex, arrayProperty.arraySize);
-
-			if (sourceIndex < destinationIndex)
-				destinationIndex -= 1;
-
-			arrayProperty.MoveArrayElement(sourceIndex, destinationIndex);
-			SerializationUtils.ApplyUnregisteredSerialization(rootSerializedObject);
+			destinationIndex = Math.Min(destinationIndex, arrayProperty.arraySize - 1);
+			return destinationIndex;
 		}
 	}
 }

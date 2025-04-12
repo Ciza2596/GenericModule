@@ -9,7 +9,7 @@ namespace CizaLocaleModule.Editor
 {
 	public static class StyleSheetUtils
 	{
-		public const string ROOT_PATH = "AudioModule/StyleSheet/";
+		public const string ROOT_PATH = "LocaleModule/StyleSheet/";
 
 		private static readonly string[] COMMON_STYLE_PATHS = { "CommonValue", "CommonColor", };
 

@@ -3,11 +3,14 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace CizaLocaleModule.Editor
 {
 	public class ItemVE : BItemVE
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[NonSerialized]
 		protected readonly VisualElement _head = new VisualElement();
 
@@ -15,7 +18,10 @@ namespace CizaLocaleModule.Editor
 		protected readonly Label _headReordering = new Label();
 
 		[NonSerialized]
-		protected VisualElement _headTitle;
+		protected readonly VisualElement _headTitle;
+
+		[NonSerialized]
+		protected readonly Button _headDisable = new Button();
 
 		[NonSerialized]
 		protected readonly Button _headDuplicate = new Button();
@@ -23,6 +29,14 @@ namespace CizaLocaleModule.Editor
 		[NonSerialized]
 		protected readonly Button _headDelete = new Button();
 
+		[NonSerialized]
+		protected Object _target;
+
+		[NonSerialized]
+		protected string _itemPath;
+
+		[NonSerialized]
+		protected Type _itemType;
 
 		[NonSerialized]
 		protected readonly VisualElement _body = new VisualElement();
@@ -38,29 +52,33 @@ namespace CizaLocaleModule.Editor
 		protected virtual string[] BodyClasses => new[] { "list-item-body" };
 
 		protected virtual Texture2D ReorderingIcon => new DragIcon(ColorTheme.Type.TextLight).Texture;
+		protected virtual Texture2D DisableIcon => new CancelIcon(ColorTheme.Type.Light).Texture;
 		protected virtual Texture2D DuplicateIcon => new DuplicateIcon(ColorTheme.Type.Light).Texture;
 		protected virtual Texture2D DeleteIcon => new MinusIcon(ColorTheme.Type.Light).Texture;
 
 
 		[field: NonSerialized]
-		protected ListVE Root { get; }
+		protected virtual ListVE Root { get; }
 
 
-		[field: NonSerialized]
-		protected int Index { get; private set; }
+		protected virtual bool IsAllowReordering { get; set; } = true;
+		protected virtual bool IsAllowDisable { get; set; } = true;
+		protected virtual bool IsAllowDuplicate { get; set; } = true;
+		protected virtual bool IsAllowDelete { get; set; } = true;
 
-		protected bool IsAllowReordering { get; set; } = true;
-		protected bool IsAllowDuplicate { get; set; } = true;
-		protected bool IsAllowDelete { get; set; } = true;
-
-		protected bool IsAllowCopyPaste { get; private set; } = true;
+		protected virtual bool IsAllowCopyPaste { get; set; } = true;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		[field: NonSerialized]
-		public SerializedProperty ItemProperty { get; }
+		public virtual int Index { get; protected set; }
+
+		[field: NonSerialized]
+		public virtual SerializedProperty ItemProperty { get; protected set; }
 
 		public virtual string Title => $"Element {Index}";
+
+		public virtual bool IsEnable { get; protected set; }
 
 		public virtual bool IsExpand
 		{
@@ -77,7 +95,7 @@ namespace CizaLocaleModule.Editor
 		public ItemVE(ListVE root, SerializedProperty itemProperty) : base()
 		{
 			Root = root;
-			ItemProperty = itemProperty;
+			SetItemProperty(itemProperty, false);
 			_headTitle = Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
 			Add(_head);
 			Add(_body);
@@ -103,10 +121,15 @@ namespace CizaLocaleModule.Editor
 			SetIsExpand(IsExpand);
 		}
 
-		public virtual void Refresh(int index, bool isAllowReordering = true, bool isAllowDuplicate = true, bool isAllowDelete = true, bool isAllowCopyPaste = true)
+		public override void Refresh() =>
+			Refresh(Index, ItemProperty, IsAllowReordering, IsAllowDisable, IsAllowDuplicate, IsAllowDelete, IsAllowCopyPaste);
+
+		public virtual void Refresh(int index, SerializedProperty itemProperty, bool isAllowReordering, bool isAllowDisable, bool isAllowDuplicate, bool isAllowDelete, bool isAllowCopyPaste)
 		{
 			Index = index;
+			SetItemProperty(itemProperty, true);
 			IsAllowReordering = isAllowReordering;
+			IsAllowDisable = isAllowDisable;
 			IsAllowDuplicate = isAllowDuplicate;
 			IsAllowDelete = isAllowDelete;
 			IsAllowCopyPaste = isAllowCopyPaste;
@@ -119,9 +142,17 @@ namespace CizaLocaleModule.Editor
 			{
 				GetActiveOpacity(_headReordering, IsAllowReordering, "Reordering");
 				if (IsAllowReordering)
-					_headReordering.AddManipulator(Root.ItemSortManipulator);
+					_headReordering.AddManipulator(Root.SortManipulator);
 				else
-					_headReordering.RemoveManipulator(Root.ItemSortManipulator);
+					_headReordering.RemoveManipulator(Root.SortManipulator);
+			}
+
+			if (Root.IsAllowDisable)
+			{
+				_headTitle.style.opacity = IsEnable ? 1f : 0.25f;
+				_headDisable.SetIsVisible(IsAllowDisable && !IsEnable);
+
+				GetActiveOpacity(_headDisable, IsAllowDisable, "Disable");
 			}
 
 			if (Root.IsAllowDuplicate)
@@ -169,6 +200,19 @@ namespace CizaLocaleModule.Editor
 				_head.Add(_headTitle);
 			}
 
+			if (Root.IsAllowDisable)
+			{
+				foreach (var c in HeadRightClasses)
+					_headDisable.AddToClassList(c);
+				_headDisable.clicked += () =>
+				{
+					IsEnable = true;
+					Root.Refresh();
+				};
+				_headDisable.Add(new Image { image = DisableIcon, focusable = false });
+				_head.Add(_headDisable);
+			}
+
 
 			if (Root.IsAllowDuplicate)
 			{
@@ -199,33 +243,71 @@ namespace CizaLocaleModule.Editor
 
 		#endregion
 
+		protected virtual void SetItemProperty(SerializedProperty itemProperty, bool isRefreshBodyContent)
+		{
+			var target = itemProperty.serializedObject.targetObject;
+			var itemPath = itemProperty.propertyPath;
+			var itemType = itemProperty.GetValue().GetType();
+			if (target != _target || itemPath != _itemPath || itemType != _itemType)
+			{
+				ItemProperty = itemProperty;
+				_target = target;
+				_itemPath = itemPath;
+				_itemType = itemType;
+				if (isRefreshBodyContent)
+				{
+					_body.Clear();
+					CreateBodyContent();
+				}
+			}
+		}
+
 		public virtual void SetIsExpand(bool isExpand)
 		{
-			IsExpand = isExpand && Root.IsElementIsClass;
+			IsExpand = isExpand && Root.IsElementIsClass && _body.childCount > 0;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, IsExpand);
-			if (IsExpand) RefreshBody();
 		}
 
 		protected virtual void DerivedInitialize()
 		{
-			SerializationUtils.CreateChildProperties(_body, ItemProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0f);
+			CreateBodyContent();
 		}
 
-		protected virtual void RefreshBody() { }
+		protected virtual void CreateBodyContent()
+		{
+			SerializationUtils.CreateChildProperties(_body, ItemProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0f, onChangeValue: OnRefreshBody);
+		}
+
+		protected virtual void OnRefreshBody(SerializedPropertyChangeEvent @event)
+		{
+			RefreshHeadTitle();
+		}
 
 		protected virtual void RefreshHeadTitle()
 		{
-			if (Root.IsElementIsClass && _headTitle is Button { } button)
+			if (Root.IsElementIsClass && _headTitle is Button button)
 				button.text = Title;
-			else if (!Root.IsElementIsClass && _headTitle is PropertyField { } field)
-				field.BindProperty(ItemProperty);
+			else if (!Root.IsElementIsClass && _headTitle is PropertyField field)
+			{
+				field.Unbind();
+				field.Bind(ItemProperty.serializedObject);
+			}
 		}
 
 		// EVENT CALLBACK: ---------------------------------------------------------------------
 
 		protected virtual void OnOpenMenu(ContextualMenuPopulateEvent populateEvent)
 		{
+			if (Root.IsAllowDisable && IsAllowDisable)
+			{
+				populateEvent.menu.AppendAction(IsEnable ? "Disable" : "Enable", _ =>
+				{
+					IsEnable = !IsEnable;
+					Root.Refresh();
+				});
+			}
+
 			populateEvent.menu.AppendSeparator();
 
 			if (Root.IsAllowCopyPaste && IsAllowCopyPaste)

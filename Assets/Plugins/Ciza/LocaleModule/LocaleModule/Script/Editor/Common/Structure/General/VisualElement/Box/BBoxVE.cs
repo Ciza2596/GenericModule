@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
@@ -6,13 +7,16 @@ namespace CizaLocaleModule.Editor
 {
 	public abstract class BBoxVE : VisualElement
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[NonSerialized]
-		private readonly VisualElement _head = new VisualElement();
-		
+		protected readonly VisualElement _head = new VisualElement();
+
 		[NonSerialized]
-		private readonly VisualElement _headLeftAlignment = new FlexibleSpaceVE() { style = { flexDirection = FlexDirection.Row } };
+		protected readonly VisualElement _headLeftAlignment = new FlexibleSpaceVE() { style = { flexDirection = FlexDirection.Row } };
+
 		[NonSerialized]
-		private readonly VisualElement _headRightAlignment = new VisualElement() { style = { flexDirection = FlexDirection.RowReverse } };
+		protected readonly VisualElement _headRightAlignment = new VisualElement() { style = { flexDirection = FlexDirection.RowReverse } };
 
 		[NonSerialized]
 		protected readonly VisualElement _body = new VisualElement();
@@ -33,9 +37,13 @@ namespace CizaLocaleModule.Editor
 		protected virtual string[] BodyClasses => Array.Empty<string>();
 		protected virtual string[] FootClasses => Array.Empty<string>();
 
-		[field: NonSerialized]
-		public bool IsInitialized { get; private set; }
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
+		[field: NonSerialized]
+		public virtual bool IsInitialized { get; protected set; }
+
+
+		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
 		protected BBoxVE()
@@ -45,6 +53,8 @@ namespace CizaLocaleModule.Editor
 			Add(_foot);
 		}
 
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
 		public void Initialize(string title, IContent content)
 		{
 			if (IsInitialized) return;
@@ -53,14 +63,17 @@ namespace CizaLocaleModule.Editor
 			Refresh();
 		}
 
+		public abstract void Refresh();
+
+		// PROTECT METHOD: --------------------------------------------------------------------
+
 		protected virtual void DerivedInitialize(string title, IContent content)
 		{
 			Title = title;
 
-			
 			_head.Add(_headLeftAlignment);
 			_head.Add(_headRightAlignment);
-			
+
 			Content = content;
 			_body.Add(Content?.Body);
 
@@ -82,14 +95,12 @@ namespace CizaLocaleModule.Editor
 			_head.AddManipulator(new Clickable(OnHeadClick));
 		}
 
-		public abstract void Refresh();
-
-		protected void AddHeadMainpulator(IManipulator manipulator) => _head.AddManipulator(manipulator);
+		protected void AddHeadManipulator(IManipulator manipulator) => _head.AddManipulator(manipulator);
 		protected void AddHeadLeftContent(VisualElement content) => _headLeftAlignment.Add(content);
 		protected void AddHeadRightContent(VisualElement content) => _headRightAlignment.Add(content);
-		
+
 		protected abstract void OnHeadClick();
-		
+
 		public interface IContent
 		{
 			VisualElement Body { get; }
@@ -101,6 +112,21 @@ namespace CizaLocaleModule.Editor
 		{
 			public VisualElement Body => this;
 			public virtual void Refresh() { }
+		}
+
+		public class PropertyContentVE : ContentVE
+		{
+			public SerializedProperty Property { get; }
+
+			[Preserve]
+			public PropertyContentVE(SerializedProperty property) =>
+				Property = property;
+
+			public override void Refresh()
+			{
+				Clear();
+				SerializationUtils.CreateChildProperties(this, Property, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);
+			}
 		}
 	}
 }

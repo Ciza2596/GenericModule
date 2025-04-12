@@ -2,7 +2,7 @@ using System;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
-namespace CizaAudioModule.Editor
+namespace CizaLocaleModule.Editor
 {
 	public abstract class BItemVE : VisualElement
 	{

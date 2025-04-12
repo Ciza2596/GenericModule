@@ -8,6 +8,8 @@ namespace CizaLocaleModule.Editor
 {
 	public class BoxVE : BBoxVE
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[NonSerialized]
 		protected readonly string _boxId;
 
@@ -35,13 +37,17 @@ namespace CizaLocaleModule.Editor
 		[field: NonSerialized]
 		protected SerializedProperty Property { get; }
 
-		protected Type Type => TypeUtils.GetType(Property, false);
+		protected virtual Type Type => TypeUtils.GetType(Property, false);
+
+		// EVENT: ---------------------------------------------------------------------------------
 
 		public event Action<bool> OnExpand;
 
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
 		public virtual bool IsExpand
 		{
-			get => Property?.isExpanded ?? EditorPrefs.GetBool(IsExpandKey, false);
+			get => Property?.isExpanded ?? EditorPrefs.GetBool(IsExpandKey, true);
 			protected set
 			{
 				if (Property != null)
@@ -50,6 +56,8 @@ namespace CizaLocaleModule.Editor
 				OnExpand?.Invoke(value);
 			}
 		}
+
+		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
 		public BoxVE(SerializedProperty property, VisualElement headAdditional = null)
@@ -63,7 +71,23 @@ namespace CizaLocaleModule.Editor
 		{
 			_boxId = boxId;
 			_headAdditional = headAdditional;
+			IsAllowCopyPaste = false;
 		}
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		public override void Refresh()
+		{
+			_headImage.image = IsExpand ? TriangleDownIcon : TriangleRightIcon;
+
+			_body.EnableInClassList(ActiveBodyClass, IsExpand);
+
+			if (!IsExpand) return;
+
+			Content?.Refresh();
+		}
+
+		// PROTECT METHOD: --------------------------------------------------------------------
 
 		protected override void DerivedInitialize(string title, IContent content)
 		{
@@ -76,21 +100,10 @@ namespace CizaLocaleModule.Editor
 				AddHeadRightContent(_headAdditional);
 
 			if (IsAllowContextMenu)
-				AddHeadMainpulator(new ContextualMenuManipulator(OnOpenMenu));
+				AddHeadManipulator(new ContextualMenuManipulator(OnOpenMenu));
 
 			_body.AddToClassList(ActiveBodyClass);
 			IsExpand = IsExpand;
-		}
-
-		public override void Refresh()
-		{
-			_headImage.image = IsExpand ? TriangleDownIcon : TriangleRightIcon;
-
-			_body.EnableInClassList(ActiveBodyClass, IsExpand);
-
-			if (!IsExpand) return;
-
-			Content?.Refresh();
 		}
 
 		protected override void OnHeadClick()

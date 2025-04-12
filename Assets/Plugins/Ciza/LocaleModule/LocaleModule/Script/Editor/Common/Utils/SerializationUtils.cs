@@ -21,6 +21,8 @@ namespace CizaLocaleModule.Editor
 
 		private const string SPACE = " ";
 
+		public const string SCRIPT_FIELD = "m_Script";
+
 
 		// ENUMS: ---------------------------------------------------------------------------------
 
@@ -33,30 +35,33 @@ namespace CizaLocaleModule.Editor
 
 		// UI TOOLKIT: ----------------------------------------------------------------------------
 
-		public static bool CreateChildProperties(VisualElement root, SerializedProperty prop, ChildrenMode mode, float spaceHeight = 5, params string[] excludeFields)
-		{
-			var iteratorProperty = prop.Copy();
-			var endProperty = iteratorProperty.GetEndProperty();
+		public static bool CreateChildProperties(VisualElement root, SerializedProperty property, ChildrenMode mode, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields) =>
+			CreateChildProperties(root, property, true, mode, spaceHeight, onChangeValue, excludeFields);
 
-			var numProperties = 0;
-			var next = iteratorProperty.NextVisible(true);
-			if (!next)
+		private static bool CreateChildProperties(VisualElement root, SerializedProperty property, bool isUsedEnd, ChildrenMode mode, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields)
+		{
+			var iteratorProperty = property.Copy();
+
+			var endProperty = isUsedEnd ? iteratorProperty.GetEndProperty() : null;
+			var isNext = iteratorProperty.NextVisible(true);
+			if (!isNext)
 				return false;
 
 			if (spaceHeight > 0)
 				root.Add(new VisualElement() { style = { height = spaceHeight } });
 
-			root.Bind(prop.serializedObject);
+			root.Bind(property.serializedObject);
+			var propertyNumber = 0;
 
 			do
 			{
-				if (SerializedProperty.EqualContents(iteratorProperty, endProperty))
+				if (isUsedEnd && SerializedProperty.EqualContents(iteratorProperty, endProperty))
 					break;
 
-				if (excludeFields.Contains(iteratorProperty.name))
+				if (iteratorProperty.name == SCRIPT_FIELD || excludeFields.Contains(iteratorProperty.name))
 					continue;
 
-				var field = mode switch
+				var fieldVE = mode switch
 				{
 					ChildrenMode.ShowLabelsInChildren => new PropertyField(iteratorProperty),
 					ChildrenMode.HideLabelsInChildren => new PropertyField(iteratorProperty, SPACE),
@@ -64,14 +69,16 @@ namespace CizaLocaleModule.Editor
 					_ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
 				};
 
-				field.BindProperty(iteratorProperty);
-				field.name = iteratorProperty.propertyPath;
+				fieldVE.BindProperty(iteratorProperty);
+				if (onChangeValue != null)
+					fieldVE.RegisterValueChangeCallback(onChangeValue.Invoke);
+				fieldVE.name = iteratorProperty.propertyPath;
 
-				root.Add(field);
-				numProperties += 1;
+				root.Add(fieldVE);
+				propertyNumber += 1;
 			} while (iteratorProperty.NextVisible(false));
 
-			return numProperties != 0;
+			return propertyNumber != 0;
 		}
 
 		// UPDATE SERIALIZATION: ------------------------------------------------------------------
@@ -158,7 +165,7 @@ namespace CizaLocaleModule.Editor
 		{
 			var field = obj?.GetType().GetField(fieldName, BINDINGS);
 			if (field == null)
-				return default;
+				return null;
 
 			var value = field.GetValue(obj);
 			if (value != null)
@@ -170,8 +177,8 @@ namespace CizaLocaleModule.Editor
 		private static object GetFieldValueWithIndex(string fieldName, object obj, int index)
 		{
 			var field = obj.GetType().GetField(fieldName, BINDINGS);
-			if (field == null) return default;
-			return field.GetValue(obj) is IList list ? list[index] : default;
+			if (field == null) return null;
+			return field.GetValue(obj) is IList list ? list[index] : null;
 		}
 	}
 }

@@ -10,35 +10,41 @@ namespace CizaLocaleModule.Editor
 	{
 		// CONST & STATIC: -----------------------------------------------------------------------
 
-		[NonSerialized]
-		private static readonly Dictionary<Type, object> SOURCE_MAP_LIST_BY_TYPE = new Dictionary<Type, object>();
+		#region By Type
 
-		public static void Copy(object source)
+		[NonSerialized]
+		private static readonly Dictionary<Type, object> SOURCE_MAP_BY_TYPE = new Dictionary<Type, object>();
+
+		public static void Copy(object source) =>
+			Copy(source.GetType(), source);
+
+
+		public static void Copy(Type type, object source)
 		{
-			var type = source.GetType();
-			SOURCE_MAP_LIST_BY_TYPE.Remove(type);
-			SOURCE_MAP_LIST_BY_TYPE.Add(type, Duplicate(source.GetType(), source));
-			OnCopy?.Invoke();
+			SOURCE_MAP_BY_TYPE.Remove(type);
+			SOURCE_MAP_BY_TYPE.Add(type, Duplicate(source));
 		}
 
 		public static bool CheckCanPaste(Type type) =>
-			SOURCE_MAP_LIST_BY_TYPE.ContainsKey(type);
+			SOURCE_MAP_BY_TYPE.ContainsKey(type);
 
 		public static bool TryPaste(Type type, out object copy)
 		{
-			if (!SOURCE_MAP_LIST_BY_TYPE.TryGetValue(type, out var source))
+			if (!SOURCE_MAP_BY_TYPE.TryGetValue(type, out var source))
 			{
 				copy = null;
 				return false;
 			}
 
-			copy = Duplicate(source.GetType(), source);
-			OnPaste?.Invoke();
+			copy = Duplicate(source);
 			return copy != null;
 		}
 
-		public static object Duplicate(Type sourceType, object source)
+		#endregion
+
+		public static object Duplicate(object source)
 		{
+			var sourceType = source.GetType();
 			var newObj = TypeUtils.CreateInstance(sourceType);
 
 			if (!sourceType.CheckIsClassWithoutString())
@@ -48,7 +54,7 @@ namespace CizaLocaleModule.Editor
 			{
 				var list = new List<object>();
 				foreach (var sourceElement in sourceArray)
-					list.Add(Duplicate(sourceElement.GetType(), sourceElement));
+					list.Add(Duplicate(sourceElement));
 
 				return list.Count > 0 ? list.ToArray() : null;
 			}
@@ -56,7 +62,7 @@ namespace CizaLocaleModule.Editor
 			{
 				var list = new List<object>();
 				foreach (var sourceElement in sourceList)
-					list.Add(Duplicate(sourceElement.GetType(), sourceElement));
+					list.Add(Duplicate(sourceElement));
 
 				return list.Count > 0 ? list.ToList() : null;
 			}
@@ -88,11 +94,5 @@ namespace CizaLocaleModule.Editor
 			else
 				property.SetValue(source);
 		}
-
-
-		// EVENT: ---------------------------------------------------------------------------------
-
-		public static event Action OnCopy;
-		public static event Action OnPaste;
 	}
 }

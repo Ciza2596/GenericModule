@@ -34,7 +34,7 @@ namespace CizaAudioModule.Editor
 		protected virtual BBoxVE.IContent CreateBody()
 		{
 			var content = new BBoxVE.ContentVE();
-			SerializationUtils.CreateChildProperties(content, Property, SerializationUtils.ChildrenMode.ShowLabelsInChildren);
+			SerializationUtils.CreateChildProperties(content, Property, SerializationUtils.ChildrenKinds.ShowLabelsInChildren);
 			return content;
 		}
 	}

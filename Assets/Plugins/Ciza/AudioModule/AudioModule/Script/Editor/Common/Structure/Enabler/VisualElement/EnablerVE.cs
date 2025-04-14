@@ -90,7 +90,7 @@ namespace CizaAudioModule.Editor
 			if (!ValueType.CheckIsUnityObj() && ValueType.CheckIsClassWithoutString())
 			{
 				style.flexDirection = FlexDirection.Column;
-				SerializationUtils.CreateChildProperties(_valueContainer, ValueProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);
+				SerializationUtils.CreateChildProperties(_valueContainer, ValueProperty, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0);
 			}
 			else
 			{

@@ -125,7 +125,7 @@ namespace CizaLocaleModule.Editor
 			public override void Refresh()
 			{
 				Clear();
-				SerializationUtils.CreateChildProperties(this, Property, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0);
+				SerializationUtils.CreateChildProperties(this, Property, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0);
 			}
 		}
 	}

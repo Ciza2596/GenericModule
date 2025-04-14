@@ -20,7 +20,7 @@ namespace CizaAudioModule.Editor
 
 		protected override void CreateBodyContent()
 		{
-			SerializationUtils.CreateChildProperties(_body, ValueProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0, OnRefreshBody);
+			SerializationUtils.CreateChildProperties(_body, ValueProperty, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0, OnRefreshBody);
 		}
 	}
 }

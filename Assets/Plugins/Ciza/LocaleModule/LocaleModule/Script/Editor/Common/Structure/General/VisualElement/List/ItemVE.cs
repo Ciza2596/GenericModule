@@ -276,7 +276,7 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual void CreateBodyContent()
 		{
-			SerializationUtils.CreateChildProperties(_body, ItemProperty, SerializationUtils.ChildrenMode.ShowLabelsInChildren, 0f, onChangeValue: OnRefreshBody);
+			SerializationUtils.CreateChildProperties(_body, ItemProperty, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0f, onChangeValue: OnRefreshBody);
 		}
 
 		protected virtual void OnRefreshBody(SerializedPropertyChangeEvent @event)

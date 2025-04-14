@@ -26,7 +26,7 @@ namespace CizaLocaleModule.Editor
 
 		// ENUMS: ---------------------------------------------------------------------------------
 
-		public enum ChildrenMode
+		public enum ChildrenKinds
 		{
 			ShowLabelsInChildren,
 			HideLabelsInChildren,
@@ -35,10 +35,10 @@ namespace CizaLocaleModule.Editor
 
 		// UI TOOLKIT: ----------------------------------------------------------------------------
 
-		public static bool CreateChildProperties(VisualElement root, SerializedProperty property, ChildrenMode mode, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields) =>
-			CreateChildProperties(root, property, true, mode, spaceHeight, onChangeValue, excludeFields);
+		public static bool CreateChildProperties(VisualElement root, SerializedProperty property, ChildrenKinds kind, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields) =>
+			CreateChildProperties(root, property, true, kind, spaceHeight, onChangeValue, excludeFields);
 
-		private static bool CreateChildProperties(VisualElement root, SerializedProperty property, bool isUsedEnd, ChildrenMode mode, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields)
+		private static bool CreateChildProperties(VisualElement root, SerializedProperty property, bool isUsedEnd, ChildrenKinds kind, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields)
 		{
 			var iteratorProperty = property.Copy();
 
@@ -61,12 +61,12 @@ namespace CizaLocaleModule.Editor
 				if (iteratorProperty.name == SCRIPT_FIELD || excludeFields.Contains(iteratorProperty.name))
 					continue;
 
-				var fieldVE = mode switch
+				var fieldVE = kind switch
 				{
-					ChildrenMode.ShowLabelsInChildren => new PropertyField(iteratorProperty),
-					ChildrenMode.HideLabelsInChildren => new PropertyField(iteratorProperty, SPACE),
-					ChildrenMode.FullWidthChildren => new PropertyField(iteratorProperty, string.Empty),
-					_ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+					ChildrenKinds.ShowLabelsInChildren => new PropertyField(iteratorProperty),
+					ChildrenKinds.HideLabelsInChildren => new PropertyField(iteratorProperty, SPACE),
+					ChildrenKinds.FullWidthChildren => new PropertyField(iteratorProperty, string.Empty),
+					_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, null)
 				};
 
 				fieldVE.BindProperty(iteratorProperty);

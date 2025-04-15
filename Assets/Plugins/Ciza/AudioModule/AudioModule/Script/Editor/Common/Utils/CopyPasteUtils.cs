@@ -47,7 +47,7 @@ namespace CizaAudioModule.Editor
 			var sourceType = source.GetType();
 			var newObj = TypeUtils.CreateInstance(sourceType);
 
-			if (!sourceType.CheckIsClassWithoutString())
+			if (!TypeUtils.CheckIsClassWithoutString(sourceType))
 				newObj = source;
 
 			else if (sourceType.IsArray && source is object[] sourceArray)
@@ -83,7 +83,7 @@ namespace CizaAudioModule.Editor
 			if (source == null)
 				return;
 
-			if (source.GetType().CheckIsClassWithoutString())
+			if (TypeUtils.CheckIsClassWithoutString(source.GetType()))
 			{
 				var jsonSource = EditorJsonUtility.ToJson(source);
 

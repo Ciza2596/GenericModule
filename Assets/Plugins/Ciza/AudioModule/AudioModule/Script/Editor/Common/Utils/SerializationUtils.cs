@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -15,14 +16,15 @@ namespace CizaAudioModule.Editor
 	{
 		// CONSTANTS: -----------------------------------------------------------------------------
 
-		private const BindingFlags BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+		public const BindingFlags BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-		private static readonly Regex RX_ARRAY = new Regex(@"\[\d+\]");
+		public static readonly Regex RX_ARRAY = new Regex(@"\[\d+\]");
 
-		private const string SPACE = " ";
+		public const string SPACE = " ";
 
 		public const string SCRIPT_FIELD = "m_Script";
 
+		public static readonly char[] ASSEMBLY_SEPARATOR = { ' ' };
 
 		// ENUMS: ---------------------------------------------------------------------------------
 
@@ -35,13 +37,47 @@ namespace CizaAudioModule.Editor
 
 		// UI TOOLKIT: ----------------------------------------------------------------------------
 
+		#region GetType
+
+		public static Type GetType(SerializedProperty property, bool isFullType)
+		{
+			if (property.propertyType != SerializedPropertyType.ManagedReference)
+				return property.GetValue()?.GetType();
+
+			var split = isFullType ? property.managedReferenceFullTypename.Split(ASSEMBLY_SEPARATOR) : property.managedReferenceFieldTypename.Split(ASSEMBLY_SEPARATOR);
+			return split.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(split[0], split[1]));
+		}
+
+		public static Type[] GetElementTypes(SerializedProperty property)
+		{
+			var value = property.GetValue();
+			var types = TypeUtils.GetSelfAndBaseTypes(value.GetType());
+			var allGenericTypes = new List<Type>();
+			foreach (var type in types)
+			{
+				if (type.IsArray)
+					allGenericTypes.Add(type.GetElementType());
+				else
+				{
+					var genericTypes = type.GetGenericArguments();
+					if (genericTypes.Length > 0)
+						allGenericTypes.AddRange(genericTypes);
+				}
+			}
+
+			return allGenericTypes.ToArray();
+		}
+
+		#endregion
+
+		#region CreateChildProperties
+
 		public static bool CreateChildProperties(VisualElement root, SerializedProperty property, ChildrenKinds kind, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields) =>
 			CreateChildProperties(root, property, true, kind, spaceHeight, onChangeValue, excludeFields);
 
 		private static bool CreateChildProperties(VisualElement root, SerializedProperty property, bool isUsedEnd, ChildrenKinds kind, float spaceHeight = 5, Action<SerializedPropertyChangeEvent> onChangeValue = null, params string[] excludeFields)
 		{
 			var iteratorProperty = property.Copy();
-
 			var endProperty = isUsedEnd ? iteratorProperty.GetEndProperty() : null;
 			var isNext = iteratorProperty.NextVisible(true);
 			if (!isNext)
@@ -80,6 +116,8 @@ namespace CizaAudioModule.Editor
 
 			return propertyNumber != 0;
 		}
+
+		#endregion
 
 		// UPDATE SERIALIZATION: ------------------------------------------------------------------
 

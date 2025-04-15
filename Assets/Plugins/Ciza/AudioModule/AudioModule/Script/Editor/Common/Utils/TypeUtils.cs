@@ -1,24 +1,32 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using UnityEditor;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace CizaAudioModule.Editor
 {
 	public static class TypeUtils
 	{
-		private static readonly char[] ASSEMBLY_SEPARATOR = { ' ' };
-
 		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		#region Check
+
+		public static bool CheckIsUnityObj(Type type) =>
+			type.IsSubclassOf(typeof(Object));
+
+		public static bool CheckIsString(Type type) =>
+			type == typeof(string);
+		
+		public static bool CheckIsClassWithoutString(Type type) =>
+			type.IsClass && !CheckIsString(type);
+
+		#endregion
 
 		public static object CreateInstance(Type type)
 		{
-			if (type.CheckIsUnityObj())
+			if (CheckIsUnityObj(type))
 				return null;
-			
-			if (type == typeof(string))
+
+			if (CheckIsString(type))
 				return string.Empty;
 
 			if (type.IsArray)
@@ -29,9 +37,18 @@ namespace CizaAudioModule.Editor
 			return Activator.CreateInstance(type);
 		}
 
+		#region BaseTypes
+
 		public static Type[] GetSelfAndBaseTypes(Type type)
 		{
-			var types = new List<Type> { type };
+			var types = new List<Type>() { type };
+			types.AddRange(GetBaseTypes(type));
+			return types.ToArray();
+		}
+
+		public static Type[] GetBaseTypes(Type type)
+		{
+			var types = new List<Type>();
 			var baseType = type.BaseType;
 			while (baseType != null)
 			{
@@ -43,46 +60,6 @@ namespace CizaAudioModule.Editor
 			return types.ToArray();
 		}
 
-
-		public static Type[] GetGenericTypes(SerializedProperty property)
-		{
-			var value = property.GetValue();
-			var types = GetSelfAndBaseTypes(value.GetType());
-			var allGenericTypes = new List<Type>();
-			foreach (var type in types)
-			{
-				if (type.IsArray)
-					allGenericTypes.Add(type.GetElementType());
-				else
-				{
-					var genericTypes = type.GetGenericArguments();
-					if (genericTypes.Length > 0)
-						allGenericTypes.AddRange(genericTypes);
-				}
-			}
-
-			return allGenericTypes.ToArray();
-		}
-		
-		public static bool CheckIsUnityObj(this Type type) =>
-			type.IsSubclassOf(typeof(Object));
-		
-		public static bool CheckIsClassWithoutString(this Type type) =>
-			type.IsClass && type != typeof(string);
-
-		public static Type GetType(SerializedProperty property, bool isFullType)
-		{
-			if (property == null)
-			{
-				Debug.LogError("Null property was found at 'GetTypeFromProperty'");
-				return null;
-			}
-
-			if (property.propertyType != SerializedPropertyType.ManagedReference)
-				return property.GetValue()?.GetType();
-
-			var split = isFullType ? property.managedReferenceFullTypename.Split(ASSEMBLY_SEPARATOR) : property.managedReferenceFieldTypename.Split(ASSEMBLY_SEPARATOR);
-			return split.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(split[0], split[1]));
-		}
+		#endregion
 	}
 }

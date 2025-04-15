@@ -47,7 +47,7 @@ namespace CizaAudioModule.Editor
 		public EnablerVE(SerializedProperty property)
 		{
 			EnablerProperty = property;
-			ValueType = TypeUtils.GetGenericTypes(EnablerProperty)[0];
+			ValueType = SerializationUtils.GetElementTypes(EnablerProperty)[0];
 		}
 
 
@@ -87,7 +87,7 @@ namespace CizaAudioModule.Editor
 			_isEnableToggle.RegisterValueChangedCallback(changeEvent => { _valueContainer.style.display = changeEvent.newValue ? DisplayStyle.Flex : DisplayStyle.None; });
 			Add(_valueContainer);
 
-			if (!ValueType.CheckIsUnityObj() && ValueType.CheckIsClassWithoutString())
+			if (!TypeUtils.CheckIsUnityObj(ValueType) && TypeUtils.CheckIsClassWithoutString(ValueType))
 			{
 				style.flexDirection = FlexDirection.Column;
 				SerializationUtils.CreateChildProperties(_valueContainer, ValueProperty, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0);

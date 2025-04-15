@@ -251,8 +251,8 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual void DerivedInitializeItemType()
 		{
-			ItemType = TypeUtils.GetGenericTypes(ItemsProperty)[0];
-			IsElementIsClass = ItemType.CheckIsClassWithoutString();
+			ItemType = SerializationUtils.GetElementTypes(ItemsProperty)[0];
+			IsElementIsClass = TypeUtils.CheckIsClassWithoutString(ItemType);
 		}
 
 		#region Create VE

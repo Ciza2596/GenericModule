@@ -37,7 +37,7 @@ namespace CizaLocaleModule.Editor
 		[field: NonSerialized]
 		protected SerializedProperty Property { get; }
 
-		protected virtual Type Type => TypeUtils.GetType(Property, false);
+		protected virtual Type Type => SerializationUtils.GetType(Property, false);
 
 		// EVENT: ---------------------------------------------------------------------------------
 

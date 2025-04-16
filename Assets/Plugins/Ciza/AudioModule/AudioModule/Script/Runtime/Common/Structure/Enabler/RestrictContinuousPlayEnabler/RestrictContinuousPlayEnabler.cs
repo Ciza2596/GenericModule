@@ -24,6 +24,9 @@ namespace CizaAudioModule
 		public RestrictContinuousPlayEnabler() { }
 
 		[Preserve]
+		public RestrictContinuousPlayEnabler(bool isEnable) : base(isEnable) { }
+
+		[Preserve]
 		public RestrictContinuousPlayEnabler(RestrictContinuousPlay value) : base(value) { }
 
 		[Preserve]

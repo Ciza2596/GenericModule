@@ -13,10 +13,14 @@ namespace CizaAudioModule
 		protected BEnabler() { }
 
 		[Preserve]
+		protected BEnabler(bool isEnable) : base(isEnable) { }
+
+		[Preserve]
 		protected BEnabler(TValueImp value) : base(value) { }
 
 		[Preserve]
 		protected BEnabler(bool isEnable, TValueImp value) : base(isEnable, value) { }
+
 	}
 
 	[Serializable]
@@ -44,6 +48,10 @@ namespace CizaAudioModule
 
 		[Preserve]
 		protected BEnabler() { }
+
+		[Preserve]
+		protected BEnabler(bool isEnable) =>
+			_isEnable = isEnable;
 
 		[Preserve]
 		protected BEnabler(TValueImp value) : this(true, value) { }

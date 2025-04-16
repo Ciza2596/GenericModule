@@ -19,7 +19,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 
 		public override string Title => Key;
 
-		public string Key
+		public virtual string Key
 		{
 			get => KeyProperty.GetValue<string>();
 			protected set => IsEnableProperty.SetValue(value);

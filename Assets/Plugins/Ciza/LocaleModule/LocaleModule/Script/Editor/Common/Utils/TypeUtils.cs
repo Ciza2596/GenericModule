@@ -21,7 +21,7 @@ namespace CizaLocaleModule.Editor
 
 		#endregion
 
-		public static object CreateInstance(Type type)
+		public static object CreateInstance(Type type, params object[] args)
 		{
 			if (CheckIsUnityObj(type))
 				return null;
@@ -34,7 +34,7 @@ namespace CizaLocaleModule.Editor
 
 			if (!type.IsValueType && (type.IsAbstract || type.IsInterface || type.GetConstructor(Type.EmptyTypes) == null))
 				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
-			return Activator.CreateInstance(type);
+			return Activator.CreateInstance(type, args);
 		}
 
 		#region BaseTypes

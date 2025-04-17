@@ -22,6 +22,8 @@ namespace CizaAudioModule.Editor
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
+		[field: NonSerialized]
+		public virtual bool HasFilter { get; }
 
 		[field: NonSerialized]
 		public virtual bool IsStopPropagation { get; }
@@ -33,11 +35,11 @@ namespace CizaAudioModule.Editor
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		protected BSortManipulator(IListVE list, bool isStopPropagation)
+		protected BSortManipulator(IListVE list, bool hasFilter, bool isStopPropagation)
 		{
 			_list = list;
+			HasFilter = hasFilter;
 			IsStopPropagation = isStopPropagation;
-			activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
 		}
 
 		// PROTECT METHOD: --------------------------------------------------------------------
@@ -66,7 +68,8 @@ namespace CizaAudioModule.Editor
 				return;
 			}
 
-			if (!CanStartManipulation(mouseDownEvent)) return;
+			if (HasFilter && !CanStartManipulation(mouseDownEvent))
+				return;
 
 			IsDragging = true;
 
@@ -90,7 +93,7 @@ namespace CizaAudioModule.Editor
 
 		protected virtual void OnMouseUp(MouseUpEvent mouseUpEvent)
 		{
-			if (!IsDragging || !CanStopManipulation(mouseUpEvent))
+			if (!IsDragging || (HasFilter && !CanStopManipulation(mouseUpEvent)))
 				return;
 
 			IsDragging = false;
@@ -119,7 +122,7 @@ namespace CizaAudioModule.Editor
 			_list.RefreshItemDragUI(-1, -1);
 
 			if (_startIndex != _currentIndex)
-				_list.MoveItems(_startIndex, _currentIndex);
+				_list.MoveItems(_startIndex, (_currentIndex > _startIndex) ? _currentIndex - 1 : _currentIndex);
 
 			else
 				_list.Refresh();

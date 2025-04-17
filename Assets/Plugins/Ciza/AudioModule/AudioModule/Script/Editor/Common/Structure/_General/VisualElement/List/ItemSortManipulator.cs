@@ -1,7 +1,10 @@
+using UnityEngine.Scripting;
+
 namespace CizaAudioModule.Editor
 {
     public class ItemSortManipulator : BSortManipulator<ItemVE>
     {
-        public ItemSortManipulator(IListVE list) : base(list, true) { }
+        [Preserve]
+        public ItemSortManipulator(IListVE list) : base(list, false, true) { }
     }
 }

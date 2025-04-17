@@ -7,7 +7,7 @@ namespace CizaAudioModule
 
         string CallerId { get; }
 
-        bool IsAutoDeSpawn { get; }
+        bool IsAutoDespawn { get; }
         string UserId { get; }
 
         string ClipAddress { get; }

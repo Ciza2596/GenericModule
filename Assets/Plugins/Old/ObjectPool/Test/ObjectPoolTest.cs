@@ -23,14 +23,14 @@ public class ObjectPoolTest
 	}
 
 	[Test]
-	public void Call_DeSpawn_Recycle_Obj()
+	public void Call_Despawn_Recycle_Obj()
 	{
 		// arrange
 		var fakeObject = Spawn_Obj_And_Check();
 		Assert.IsFalse(fakeObject.IsDispose);
 
 		// act
-		_fakeObjectPool.DeSpawn(fakeObject);
+		_fakeObjectPool.Despawn(fakeObject);
 
 		// assert
 		Assert.AreEqual(_fakeObjectPool.UsingCount, 0);

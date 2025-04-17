@@ -10,7 +10,7 @@ namespace CizaAudioModule
 
         void Tick(float deltaTime);
 
-        void Play(string userId, string id, string dataId, bool isAutoDeSpawn, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop);
+        void Play(string userId, string id, string dataId, bool isAutoDespawn, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop);
 
         
         void Continue();

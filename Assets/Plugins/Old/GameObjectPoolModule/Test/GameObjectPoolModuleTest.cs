@@ -75,7 +75,7 @@ public class GameObjectPoolModuleTest
 	}
 
 	[Test]
-	public void _05_DeSpawn_By_GameObjects()
+	public void _05_Despawn_By_GameObjects()
 	{
 		//arrange
 		var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
@@ -88,7 +88,7 @@ public class GameObjectPoolModuleTest
 
 
 		//act
-		_gameObjectPoolModule.DeSpawn(gameObjects);
+		_gameObjectPoolModule.Despawn(gameObjects);
 
 
 		//assert
@@ -96,7 +96,7 @@ public class GameObjectPoolModuleTest
 	}
 
 	[Test]
-	public void _06_DeSpawn_By_GameObject()
+	public void _06_Despawn_By_GameObject()
 	{
 		//arrange
 		var prefabMap = CreatePrefabMap(1, _keyPrefix, _prefabNamePrefix);
@@ -110,7 +110,7 @@ public class GameObjectPoolModuleTest
 
 		//act
 		var gameObject = gameObjects[0];
-		_gameObjectPoolModule.DeSpawn(gameObject);
+		_gameObjectPoolModule.Despawn(gameObject);
 
 
 		//assert
@@ -118,7 +118,7 @@ public class GameObjectPoolModuleTest
 	}
 
 	[Test]
-	public void _07_DeSpawn_By_Key()
+	public void _07_Despawn_By_Key()
 	{
 		//arrange
 		var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
@@ -133,7 +133,7 @@ public class GameObjectPoolModuleTest
 
 		//act
 		var key = GetKey(0, prefabMap);
-		_gameObjectPoolModule.DeSpawn(key);
+		_gameObjectPoolModule.Despawn(key);
 
 
 		//assert
@@ -141,7 +141,7 @@ public class GameObjectPoolModuleTest
 	}
 
 	[Test]
-	public void _08_DeSpawnAll()
+	public void _08_DespawnAll()
 	{
 		//arrange
 		var prefabMap = CreatePrefabMap(2, _keyPrefix, _prefabNamePrefix);
@@ -155,7 +155,7 @@ public class GameObjectPoolModuleTest
 
 
 		//act
-		_gameObjectPoolModule.DeSpawnAll();
+		_gameObjectPoolModule.DespawnAll();
 
 
 		//assert

@@ -20,8 +20,8 @@ namespace CizaGameObjectPoolModule.Example1
         [Space] [SerializeField] private TMP_InputField _inputField;
 
         [Space] [SerializeField] private Button _spawnButton;
-        [SerializeField] private Button _deSpawnButton;
-        [SerializeField] private Button _deSpawnAllButton;
+        [SerializeField] private Button _despawnButton;
+        [SerializeField] private Button _despawnAllButton;
         [SerializeField] private Button _releasePoolButton;
 
         public Dictionary<string, GameObject> GetPrefabMap()
@@ -39,8 +39,8 @@ namespace CizaGameObjectPoolModule.Example1
         
         public string Key => _inputField.text;
         public Button SpawnButton => _spawnButton;
-        public Button DeSpawnButton => _deSpawnButton;
-        public Button DeSpawnAllButton => _deSpawnAllButton;
+        public Button DespawnButton => _despawnButton;
+        public Button DespawnAllButton => _despawnAllButton;
 
         public Button ReleasePoolButton => _releasePoolButton;
     }

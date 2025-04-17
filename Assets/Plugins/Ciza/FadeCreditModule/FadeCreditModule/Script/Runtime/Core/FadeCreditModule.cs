@@ -141,7 +141,7 @@ namespace CizaFadeCreditModule
 
                 if (!row.IsVisible)
                 {
-                    DeSpawnRow(row);
+                    DespawnRow(row);
                     continue;
                 }
 
@@ -351,7 +351,7 @@ namespace CizaFadeCreditModule
             return row;
         }
 
-        private void DeSpawnRow(IRow row)
+        private void DespawnRow(IRow row)
         {
             if (!_rowMapByAddress.ContainsKey(row.Address))
                 return;
@@ -367,7 +367,7 @@ namespace CizaFadeCreditModule
             _playedRowDatas.Clear();
             
             foreach (var row in _playingRows.ToArray())
-                DeSpawnRow(row);
+                DespawnRow(row);
 
             foreach (var rows in _rowMapByAddress.Values.ToArray())
                 foreach (var row in rows.ToArray())

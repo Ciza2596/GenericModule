@@ -12,7 +12,7 @@ public class ObjectPoolExample : MonoBehaviour
         var character = _characterPool.Spawn();
         character.Initialize("Ciza", 100);
         
-        _characterPool.DeSpawn(character); // call Dispose method
+        _characterPool.Despawn(character); // call Dispose method
     }
 
     private void OnApplicationQuit()

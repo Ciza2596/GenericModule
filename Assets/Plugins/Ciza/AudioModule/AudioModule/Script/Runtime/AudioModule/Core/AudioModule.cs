@@ -136,7 +136,7 @@ namespace CizaAudioModule
 
 			_timerModule.OnRemove += m_OnRemove;
 
-			OnStop += m_OnDeSpawn;
+			OnStop += m_OnDespawn;
 
 			void m_OnRemove(string timerId)
 			{
@@ -144,7 +144,7 @@ namespace CizaAudioModule
 					_timerIdMapByAudioId.Remove(m_pair.Key);
 			}
 
-			void m_OnDeSpawn(string callerId, string audioId, string audioDataId) =>
+			void m_OnDespawn(string callerId, string audioId, string audioDataId) =>
 				RemoveTimer(audioId);
 		}
 
@@ -211,8 +211,8 @@ namespace CizaAudioModule
 						continue;
 					}
 
-					if (audio.IsAutoDeSpawn)
-						DeSpawn(audio.Id, OnComplete);
+					if (audio.IsAutoDespawn)
+						Despawn(audio.Id, OnComplete);
 					continue;
 				}
 
@@ -332,10 +332,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -355,7 +355,7 @@ namespace CizaAudioModule
 			audio.GameObject.name = clipAddress;
 			OnSpawn?.Invoke(callerId, audioId, audioDataId);
 
-			audio.Play(userId, audioId, audioDataId, isAuoDeSpawn, callerId, clipAddress, audioClip, volume, isLoop);
+			audio.Play(userId, audioId, audioDataId, isAuoDespawn, callerId, clipAddress, audioClip, volume, isLoop);
 			return audio.Id;
 
 			IAudio m_GetOrCreateAudio(string m_prefabAddress)
@@ -399,12 +399,12 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
+		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
+		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDeSpawn, isRestrictContinuousPlay, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();
@@ -488,8 +488,8 @@ namespace CizaAudioModule
 			playingAudio.Pause();
 		}
 
-		public virtual void DeSpawn(string audioId) =>
-			DeSpawn(audioId, null);
+		public virtual void Despawn(string audioId) =>
+			Despawn(audioId, null);
 
 		public virtual UniTask StopAsync(string audioId, float fadeTime = 0) =>
 			StopAsync(audioId, fadeTime, null);
@@ -515,7 +515,7 @@ namespace CizaAudioModule
 			await UniTask.WhenAll(uniTasks);
 		}
 
-		protected virtual async void DeSpawn(string audioId, Action<string, string, string> onComplete) =>
+		protected virtual async void Despawn(string audioId, Action<string, string, string> onComplete) =>
 			await StopAsync(audioId, 0, onComplete);
 
 		protected virtual async UniTask StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)

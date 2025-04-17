@@ -10,13 +10,13 @@ namespace CizaGameObjectPoolModule
 		//private variable
 
 		private readonly IGameObjectPoolModuleConfig _gameObjectPoolModuleConfig;
-		private          Transform                   _poolRootTransform;
+		private Transform _poolRootTransform;
 
 		private readonly Dictionary<string, Transform> _poolTransforms = new Dictionary<string, Transform>();
 
-		private readonly Dictionary<string, List<GameObject>> _pools             = new Dictionary<string, List<GameObject>>();
-		private readonly Dictionary<GameObject, string>       _gameObjectKeyMaps = new Dictionary<GameObject, string>();
-		private readonly List<GameObject>                     _usingGameObjects  = new List<GameObject>();
+		private readonly Dictionary<string, List<GameObject>> _pools = new Dictionary<string, List<GameObject>>();
+		private readonly Dictionary<GameObject, string> _gameObjectKeyMaps = new Dictionary<GameObject, string>();
+		private readonly List<GameObject> _usingGameObjects = new List<GameObject>();
 
 		private Dictionary<string, GameObject> _prefabMap;
 
@@ -103,21 +103,20 @@ namespace CizaGameObjectPoolModule
 			return gameObject;
 		}
 
-		public void DeSpawn(GameObject[] gameObjects)
+		public void Despawn(GameObject[] gameObjects)
 		{
 			foreach (var gameObject in gameObjects)
-				DeSpawn(gameObject);
+				Despawn(gameObject);
 		}
 
-		public void DeSpawn(GameObject gameObject)
+		public void Despawn(GameObject gameObject)
 		{
-			Assert.IsTrue(_usingGameObjects.Contains(gameObject),
-			              "[PoolModule::DeSpawn] Not find gameObject from usingGameObjects.");
+			Assert.IsTrue(_usingGameObjects.Contains(gameObject), "[PoolModule::Despawn] Not find gameObject from usingGameObjects.");
 
 			gameObject.SetActive(false);
 			_usingGameObjects.Remove(gameObject);
 
-			var key           = _gameObjectKeyMaps[gameObject];
+			var key = _gameObjectKeyMaps[gameObject];
 			var poolTransform = _poolTransforms[key];
 
 			var transform = gameObject.transform;
@@ -127,16 +126,16 @@ namespace CizaGameObjectPoolModule
 			gameObjects.Add(gameObject);
 		}
 
-		public void DeSpawn(string key)
+		public void Despawn(string key)
 		{
 			var usingGameObjects = GetUsingGameObjects(key);
-			DeSpawn(usingGameObjects);
+			Despawn(usingGameObjects);
 		}
 
-		public void DeSpawnAll()
+		public void DespawnAll()
 		{
 			var usingGameObjects = _usingGameObjects.ToArray();
-			DeSpawn(usingGameObjects);
+			Despawn(usingGameObjects);
 		}
 
 		public void ReleasePool(string key)
@@ -144,15 +143,14 @@ namespace CizaGameObjectPoolModule
 			Assert.IsTrue(_pools.ContainsKey(key), $"[PoolModule::Release] Not find pool. Please check key:{key}");
 
 			var keyValuePairs = _gameObjectKeyMaps.Where(pair => pair.Value == key).ToArray();
-			Assert.IsNotNull(keyValuePairs,
-			                 $"[PoolModule::Release] Not find gameObject from _gameObjectKeyMaps. Please check key: {key}");
+			Assert.IsNotNull(keyValuePairs, $"[PoolModule::Release] Not find gameObject from _gameObjectKeyMaps. Please check key: {key}");
 
 			foreach (var keyValuePair in keyValuePairs)
 			{
 				var gameObject = keyValuePair.Key;
 
 				if (_usingGameObjects.Contains(gameObject))
-					DeSpawn(gameObject);
+					Despawn(gameObject);
 				_gameObjectKeyMaps.Remove(gameObject);
 			}
 
@@ -186,8 +184,8 @@ namespace CizaGameObjectPoolModule
 			var gameObjects = new List<GameObject>();
 			_pools.Add(key, gameObjects);
 
-			var poolName      = GetPoolName(key);
-			var gameObject    = new GameObject(poolName);
+			var poolName = GetPoolName(key);
+			var gameObject = new GameObject(poolName);
 			var poolTransform = gameObject.transform;
 			poolTransform.SetParent(_poolRootTransform);
 			_poolTransforms.Add(key, poolTransform);
@@ -195,7 +193,7 @@ namespace CizaGameObjectPoolModule
 
 		private GameObject CreateGameObject(string key)
 		{
-			var prefab     = _prefabMap[key];
+			var prefab = _prefabMap[key];
 			var gameObject = Object.Instantiate(prefab);
 			_gameObjectKeyMaps.Add(gameObject, key);
 
@@ -204,7 +202,7 @@ namespace CizaGameObjectPoolModule
 
 		private GameObject[] GetUsingGameObjects(string key)
 		{
-			var usingGameObjects      = _usingGameObjects.ToArray();
+			var usingGameObjects = _usingGameObjects.ToArray();
 			var usingGameObjectsByKey = new List<GameObject>();
 
 			foreach (var usingGameObject in usingGameObjects)

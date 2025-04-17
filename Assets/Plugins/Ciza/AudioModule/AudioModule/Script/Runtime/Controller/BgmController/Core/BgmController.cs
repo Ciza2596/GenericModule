@@ -17,7 +17,7 @@ namespace CizaAudioModule
 			UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken);
 			void UnloadBgmAsset(string bgmDataId);
 
-			UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
+			UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
 			UniTask ModifyBgmAsync(string bgmId, float volume, float time = 0);
 			UniTask StopBgmAsync(string bgmId, float fadeTime = 0);
 		}

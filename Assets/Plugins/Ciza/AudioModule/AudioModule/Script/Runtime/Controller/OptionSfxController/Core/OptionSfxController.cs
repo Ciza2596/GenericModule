@@ -13,7 +13,7 @@ namespace CizaAudioModule
 			UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken);
 			void UnloadSfxAsset(string sfxDataId);
 
-			UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDeSpawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
+			UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
 		}
 
 		private readonly IOptionSfxControllerConfig _config;

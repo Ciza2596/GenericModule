@@ -22,7 +22,7 @@ namespace CizaObjectPool
 			var usingObjs = _usingObjs.ToArray();
 
 			foreach (var usingObj in usingObjs)
-				DeSpawn(usingObj);
+				Despawn(usingObj);
 
 			_unusingObjs.Clear();
 		}
@@ -39,7 +39,7 @@ namespace CizaObjectPool
 			return obj;
 		}
 
-		public void DeSpawn(T obj)
+		public void Despawn(T obj)
 		{
 			if (obj is IDisposable disposable)
 				disposable.Dispose();

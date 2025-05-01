@@ -16,7 +16,7 @@ namespace CizaLocaleModule.Editor
 	{
 		// CONSTANTS: -----------------------------------------------------------------------------
 
-		public const BindingFlags BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+		public const BindingFlags FIELD_BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
 		public static readonly Regex RX_ARRAY = new Regex(@"\[\d+\]");
 
@@ -201,7 +201,7 @@ namespace CizaLocaleModule.Editor
 
 		private static object GetFieldValue(string fieldName, object obj)
 		{
-			var field = obj?.GetType().GetField(fieldName, BINDINGS);
+			var field = obj?.GetType().GetField(fieldName, FIELD_BINDINGS);
 			if (field == null)
 				return null;
 
@@ -214,7 +214,7 @@ namespace CizaLocaleModule.Editor
 
 		private static object GetFieldValueWithIndex(string fieldName, object obj, int index)
 		{
-			var field = obj.GetType().GetField(fieldName, BINDINGS);
+			var field = obj.GetType().GetField(fieldName, FIELD_BINDINGS);
 			if (field == null) return null;
 			return field.GetValue(obj) is IList list ? list[index] : null;
 		}

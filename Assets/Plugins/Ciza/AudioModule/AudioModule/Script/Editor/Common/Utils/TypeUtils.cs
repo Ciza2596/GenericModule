@@ -15,7 +15,7 @@ namespace CizaAudioModule.Editor
 
 		public static bool CheckIsString(Type type) =>
 			type == typeof(string);
-		
+
 		public static bool CheckIsClassWithoutString(Type type) =>
 			type.IsClass && !CheckIsString(type);
 
@@ -39,10 +39,16 @@ namespace CizaAudioModule.Editor
 
 		#region BaseTypes
 
-		public static Type[] GetSelfAndBaseTypes(Type type)
+		public static Type[] GetSelfAndBaseTypes(Type type) =>
+			GetBaseAndSelfTypes(type, true);
+
+		private static Type[] GetBaseAndSelfTypes(Type type, bool isReverse)
 		{
-			var types = new List<Type>() { type };
+			var types = new List<Type>();
 			types.AddRange(GetBaseTypes(type));
+			types.Add(type);
+			if (isReverse)
+				types.Reverse();
 			return types.ToArray();
 		}
 

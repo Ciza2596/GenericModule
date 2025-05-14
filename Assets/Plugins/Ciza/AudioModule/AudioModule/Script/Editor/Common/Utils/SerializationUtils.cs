@@ -21,7 +21,6 @@ namespace CizaAudioModule.Editor
 		public static readonly Regex RX_ARRAY = new Regex(@"\[\d+\]");
 
 		public const string SPACE = " ";
-
 		public const string SCRIPT_FIELD = "m_Script";
 
 		public static readonly char[] ASSEMBLY_SEPARATOR = { ' ' };

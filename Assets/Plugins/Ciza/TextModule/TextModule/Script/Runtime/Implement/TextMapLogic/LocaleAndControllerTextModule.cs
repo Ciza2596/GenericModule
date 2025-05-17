@@ -9,12 +9,11 @@ namespace CizaTextModule.Implement
 
         private readonly TextModuleWithTextMap _textModuleWithTextMap;
 
-        // oriText
-        public event Func<string, string> OnTranslate;
-
         public event Action<string> OnChangeLocaleCategory;
         public event Action<string> OnChangeControllerCategory;
-
+        
+        // OriText, return New Text
+        public event Func<string, string> OnTranslate;
 
         public string[] LocaleCategories
         {

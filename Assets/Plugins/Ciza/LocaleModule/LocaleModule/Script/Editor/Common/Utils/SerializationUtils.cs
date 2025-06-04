@@ -43,8 +43,15 @@ namespace CizaLocaleModule.Editor
 			if (property.propertyType != SerializedPropertyType.ManagedReference)
 				return property.GetValue()?.GetType();
 
-			var split = isFullType ? property.managedReferenceFullTypename.Split(ASSEMBLY_SEPARATOR) : property.managedReferenceFieldTypename.Split(ASSEMBLY_SEPARATOR);
-			return split.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(split[0], split[1]));
+			if (isFullType)
+			{
+				var fullSplit = property.managedReferenceFullTypename.Split(ASSEMBLY_SEPARATOR);
+				if (fullSplit.Length == 2)
+					return Type.GetType(Assembly.CreateQualifiedName(fullSplit[0], fullSplit[1]));
+			}
+
+			var fieldSplit = property.managedReferenceFieldTypename.Split(ASSEMBLY_SEPARATOR);
+			return fieldSplit.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(fieldSplit[0], fieldSplit[1]));
 		}
 
 		public static Type[] GetElementTypes(SerializedProperty property)

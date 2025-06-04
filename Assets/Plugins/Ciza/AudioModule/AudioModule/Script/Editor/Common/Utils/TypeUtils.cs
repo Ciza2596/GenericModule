@@ -45,14 +45,14 @@ namespace CizaAudioModule.Editor
 		private static Type[] GetBaseAndSelfTypes(Type type, bool isReverse)
 		{
 			var types = new List<Type>();
-			types.AddRange(GetBaseTypes(type));
+			types.AddRange(GetBaseTypes(type, true));
 			types.Add(type);
 			if (isReverse)
 				types.Reverse();
 			return types.ToArray();
 		}
 
-		public static Type[] GetBaseTypes(Type type)
+		public static Type[] GetBaseTypes(Type type, bool isReverse = false)
 		{
 			var types = new List<Type>();
 			var baseType = type.BaseType;
@@ -62,7 +62,8 @@ namespace CizaAudioModule.Editor
 				baseType = baseType.BaseType;
 			}
 
-			types.Reverse();
+			if (isReverse)
+				types.Reverse();
 			return types.ToArray();
 		}
 

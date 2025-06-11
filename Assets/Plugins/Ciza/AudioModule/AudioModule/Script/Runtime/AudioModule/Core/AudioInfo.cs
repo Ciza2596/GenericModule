@@ -14,11 +14,11 @@ namespace CizaAudioModule
 		private string _clipAddress;
 
 		[SerializeField]
-		private string _prefabAddress;
+		private StringEnabler _isOverridePrefabAddress;
 
 		public virtual string DataId => _dataId;
 
 		public virtual string ClipAddress => _clipAddress;
-		public virtual string PrefabAddress => _prefabAddress;
+		public virtual string PrefabAddress => _isOverridePrefabAddress.TryGetValue(out var value) ? value : string.Empty;
 	}
 }

@@ -26,9 +26,10 @@ MonoBehaviour:
   _defaultPrefabAddress: 
   _infoMapList:
     _maps:
-    - _key: Default
-      _isEnable: 1
+    - _isEnable: 1
       _value:
         _dataId: 1
         _clipAddress: 
-        _prefabAddress: 
+        _isOverridePrefabAddress:
+          _isEnable: 0
+          _value: 

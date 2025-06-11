@@ -9,62 +9,26 @@ namespace CizaAudioModule
 	[Serializable]
 	public abstract class BMapList<TMap, TValue> where TMap : BMap<TValue>
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[SerializeField]
 		protected List<TMap> _maps = new List<TMap>();
 
-		public Pair<TValue>[] Pairs
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual KeyValuePair<string, TValue>[] KeyValuePairs =>
+			_maps.Where(map => map.IsEnable).Select(map => new KeyValuePair<string, TValue>(map.Key, map.Value)).ToArray();
+
+		public virtual string[] Keys =>
+			_maps.Where(map => map.IsEnable).Select(map => map.Key).Distinct().ToArray();
+
+		public virtual TValue[] Values =>
+			_maps.Where(map => map.IsEnable).Select(map => map.Value).Distinct().ToArray();
+
+		public virtual bool TryGetValue(string key, out TValue value)
 		{
-			get
-			{
-				var pairs = new List<Pair<TValue>>();
-				foreach (var map in _maps)
-					if (map.IsEnable)
-						pairs.Add(new Pair<TValue>(map.Key, map.Value));
-
-				return pairs.ToArray();
-			}
-		}
-
-		public string[] Keys
-		{
-			get
-			{
-				if (_maps is null)
-					return Array.Empty<string>();
-
-				var allDataIds = new HashSet<string>();
-				foreach (var map in _maps)
-					if (map.IsEnable)
-						allDataIds.Add(map.Key);
-				return allDataIds.ToArray();
-			}
-		}
-
-		public TValue[] Values
-		{
-			get
-			{
-				if (_maps is null)
-					return Array.Empty<TValue>();
-
-				var allValues = new HashSet<TValue>();
-				foreach (var map in _maps)
-					if (map.IsEnable)
-						allValues.Add(map.Value);
-				return allValues.ToArray();
-			}
-		}
-
-		public bool TryGetValue(string key, out TValue value)
-		{
-			if (_maps is null)
-			{
-				value = default;
-				return false;
-			}
-
-			var map = _maps.FirstOrDefault(map => map.Key == key);
-			if (map is null || !map.IsEnable)
+			var map = _maps.FirstOrDefault(map => map.IsEnable && map.Key == key);
+			if (map is null)
 			{
 				value = default;
 				return false;
@@ -74,9 +38,29 @@ namespace CizaAudioModule
 			return true;
 		}
 
+		// CONSTRUCTOR: --------------------------------------------------------------------- 
+
 		[Preserve]
 		protected BMapList() { }
 
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		public virtual Dictionary<string, TValue> ToDictionary()
+		{
+			var dictionary = new Dictionary<string, TValue>();
+			foreach (var keyValuePair in KeyValuePairs)
+				dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+			return dictionary;
+		}
+
+		public virtual Dictionary<string, TValueType> ToDictionary<TValueType>() where TValueType : class
+		{
+			var dictionary = new Dictionary<string, TValueType>();
+			foreach (var keyValuePair in KeyValuePairs)
+				dictionary.Add(keyValuePair.Key, keyValuePair.Value as TValueType);
+			return dictionary;
+		}
 
 		public virtual void Add(string key, TValue value)
 		{
@@ -94,6 +78,21 @@ namespace CizaAudioModule
 				if (map.Key == key)
 					_maps.Remove(map);
 		}
+
+		public virtual void Clear()
+		{
+			foreach (var key in Keys)
+				Remove(key);
+		}
+
+		public virtual void Reset(KeyValuePair<string, TValue>[] keyValuePairs)
+		{
+			Clear();
+			foreach (var keyValuePair in keyValuePairs)
+				Add(keyValuePair.Key, keyValuePair.Value);
+		}
+
+		// PROTECT METHOD: --------------------------------------------------------------------
 
 		protected abstract TMap CreateMap(string key, TValue value);
 	}

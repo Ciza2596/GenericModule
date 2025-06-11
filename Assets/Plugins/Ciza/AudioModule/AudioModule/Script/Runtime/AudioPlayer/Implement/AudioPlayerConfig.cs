@@ -115,19 +115,10 @@ namespace CizaAudioModule.Implement
 
 			public virtual string DefaultPrefabAddress => _defaultPrefabAddress;
 
-			public virtual IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapDataId()
+			public virtual IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapByDataId()
 			{
 				Assert.IsNotNull(_infoMapList, "[AudioPlayerModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
-
-				var audioInfoMap = new Dictionary<string, IAudioInfo>();
-
-				if (_infoMapList is null)
-					return audioInfoMap;
-
-				foreach (var pair in _infoMapList.Pairs)
-					audioInfoMap.Add(pair.Value.DataId, pair.Value);
-
-				return audioInfoMap;
+				return _infoMapList.ToDictionary<IAudioInfo>();
 			}
 		}
 	}

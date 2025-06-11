@@ -11,7 +11,8 @@ namespace CizaAudioModule.Editor
 		protected virtual SerializedProperty ValueDataIdProperty =>
 			ValueProperty.FindPropertyRelative(ValueDataIdPath);
 
-		public override string Title => ValueDataIdProperty.GetValue<string>();
+		public override string Key =>
+			ValueDataIdProperty.GetValue<string>();
 
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 

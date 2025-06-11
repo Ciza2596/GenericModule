@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace CizaAudioModule
@@ -10,19 +11,28 @@ namespace CizaAudioModule
 		public AudioInfoMapList() { }
 
 		protected override Map CreateMap(string key, AudioInfo value) =>
-			new Map(key, value);
+			new Map(value);
 
 		[Serializable]
 		public class Map : BMap<AudioInfo>
 		{
-			[Preserve]
-			public Map() : base("Default", null) { }
+			[SerializeField]
+			protected AudioInfo _value;
+
+			public override string Key => Value.DataId;
+
+			public override AudioInfo Value => _value;
 
 			[Preserve]
-			public Map(string dataId, AudioInfo audioInfo) : base(dataId, audioInfo) { }
+			public Map() : this(new AudioInfo()) { }
 
 			[Preserve]
-			public Map(string dataId, bool isEnable, AudioInfo audioInfo) : base(dataId, isEnable, audioInfo) { }
+			public Map(AudioInfo value) : base() =>
+				_value = value;
+
+			[Preserve]
+			public Map(bool isEnable, AudioInfo value) : base(isEnable) =>
+				_value = value;
 		}
 	}
 }

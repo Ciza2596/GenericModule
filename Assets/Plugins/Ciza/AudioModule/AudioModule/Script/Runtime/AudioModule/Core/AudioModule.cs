@@ -155,7 +155,7 @@ namespace CizaAudioModule
 
 			_timerModule.Initialize();
 
-			_audioInfoMapByDataId = _config.CreateAudioInfoMapDataId();
+			_audioInfoMapByDataId = _config.CreateAudioInfoMapByDataId();
 
 			if (_poolRoot is null)
 			{

@@ -253,7 +253,7 @@ namespace CizaAudioModule
 			var clipAddress = audioInfo.ClipAddress;
 			Assert.IsTrue(clipAddress.CheckHasValue(), $"[AudioModule::LoadAssetAsync] ClipAddress is null by dataId: {audioDataId}.");
 
-			var prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
+			var prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.PrefabAddress;
 			Assert.IsTrue(prefabAddress.CheckHasValue(), $"[AudioModule::LoadAssetAsync] PrefabAddress is null by dataId: {audioDataId}.");
 
 			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
@@ -571,7 +571,7 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.DefaultPrefabAddress;
+			prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.PrefabAddress;
 			if (!_prefabMapByAddress.ContainsKey(prefabAddress))
 				return false;
 

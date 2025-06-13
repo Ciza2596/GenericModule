@@ -34,7 +34,7 @@ namespace CizaAudioModule.Implement
 
 		[Space]
 		[SerializeField]
-		protected string _defaultPrefabAddress;
+		protected string _prefabAddress;
 
 		[SerializeField]
 		protected AudioInfoMapList _infoMapList;
@@ -51,7 +51,7 @@ namespace CizaAudioModule.Implement
 		public virtual bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay) =>
 			_hasRestrictContinuousPlay.TryGetValue(out restrictContinuousPlay);
 
-		public virtual string DefaultPrefabAddress => _defaultPrefabAddress;
+		public virtual string PrefabAddress => _prefabAddress;
 
 		public virtual IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapByDataId()
 		{

@@ -15,7 +15,7 @@ namespace CizaAudioModule
 
         bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay);
 
-        string DefaultPrefabAddress { get; }
+        string PrefabAddress { get; }
         IReadOnlyDictionary<string, IAudioInfo> CreateAudioInfoMapByDataId();
     }
 }

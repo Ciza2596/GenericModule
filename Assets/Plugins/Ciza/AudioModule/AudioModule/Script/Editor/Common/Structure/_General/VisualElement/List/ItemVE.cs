@@ -9,6 +9,8 @@ namespace CizaAudioModule.Editor
 {
 	public class ItemVE : BItemVE
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[NonSerialized]
 		protected readonly VisualElement _head = new VisualElement();
 
@@ -94,7 +96,7 @@ namespace CizaAudioModule.Editor
 		{
 			Root = root;
 			SetItemProperty(itemProperty, false);
-			_headTitle = Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
+			_headTitle = CreateHeadTitle();
 			Add(_head);
 			Add(_body);
 		}
@@ -170,6 +172,9 @@ namespace CizaAudioModule.Editor
 
 		#region Setup Head
 
+		protected virtual VisualElement CreateHeadTitle() =>
+			Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
+
 		protected virtual void SetupHead()
 		{
 			if (Root.IsAllowReordering)
@@ -190,7 +195,7 @@ namespace CizaAudioModule.Editor
 
 				if (Root.IsElementIsClass && _headTitle is Button { } button)
 					button.clicked += () => SetIsExpand(!IsExpand);
-				else if (!Root.IsElementIsClass && _headTitle is PropertyField { } field)
+				else if (!Root.IsElementIsClass && _headTitle is BindableElement field)
 					field.BindProperty(ItemProperty);
 
 				if (Root.IsAllowContextMenu)
@@ -286,10 +291,10 @@ namespace CizaAudioModule.Editor
 		{
 			if (Root.IsElementIsClass && _headTitle is Button button)
 				button.text = Title;
-			else if (!Root.IsElementIsClass && _headTitle is PropertyField field)
+			else if (!Root.IsElementIsClass)
 			{
-				field.Unbind();
-				field.Bind(ItemProperty.serializedObject);
+				_headTitle.Unbind();
+				_headTitle.Bind(ItemProperty.serializedObject);
 			}
 		}
 

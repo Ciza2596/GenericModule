@@ -1,72 +1,72 @@
+@Group: Heaven
+BundleModeIndex: 1
+
 @Group: Hello2
 BundleModeIndex: 1
 #
-Address: Encourage;
-InstanceId: 30098;
+Address: DUNE_4;
+InstanceId: 70022;
 Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Audio/Encourage.wav)
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_4.jpeg)
+
+#
+Address: DUNE_2;
+InstanceId: 70024;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_2.png)
+
+#
+Address: DUNE_1;
+InstanceId: 70026;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_1.JPG)
+
+#
+Address: DUNE_6;
+InstanceId: 70028;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_6.jpg)
+
+#
+Address: DUNE_3;
+InstanceId: 70030;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_3.jpeg)
+
+#
+Address: DUNE_7;
+InstanceId: 70032;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_7.png)
+
+#
+Address: DUNE_5;
+InstanceId: 70034;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_5.jpeg)
 
 #
 Address: GameObject;
-InstanceId: 30100;
+InstanceId: 69432;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Prefab/GameObject.prefab)
 
 #
 Address: AddressableModuleExample1;
-InstanceId: 30104;
+InstanceId: 69434;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Scene/AddressableModuleExample1.unity)
 
 #
+Address: Encourage;
+InstanceId: 69428;
+Labels: ;
+(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Audio/Encourage.wav)
+
+#
 Address: AddressMapListDataOverview;
-InstanceId: 29192;
+InstanceId: 55266;
 Labels: ;
 (AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/ScriptableObject/AddressMapListDataOverview.asset)
 
-#
-Address: DUNE_1;
-InstanceId: 30106;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_1.JPG)
-
-#
-Address: DUNE_2;
-InstanceId: 30110;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_2.png)
-
-#
-Address: DUNE_3;
-InstanceId: 30114;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_3.jpeg)
-
-#
-Address: DUNE_4;
-InstanceId: 30118;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_4.jpeg)
-
-#
-Address: DUNE_5;
-InstanceId: 30122;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_5.jpeg)
-
-#
-Address: DUNE_6;
-InstanceId: 30126;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_6.jpg)
-
-#
-Address: DUNE_7;
-InstanceId: 30130;
-Labels: ;
-(AssetPath: Assets/Examples/AddressablesModule/Example1/AAS/Texture/DUNE_7.png)
-
-
-@Group: Heaven
-BundleModeIndex: 1
 

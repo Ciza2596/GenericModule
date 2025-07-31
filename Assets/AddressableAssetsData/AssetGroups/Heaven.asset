@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: Heaven
   m_EditorClassIdentifier: 
   m_GroupName: Heaven
-  m_Data:
-    m_SerializedData: []
-  m_GUID: a0a35c874ed964912b9cc1cbf48e6d66
+  m_GUID: f117adb7aff331a4ab22ce6b18bc131b
   m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f13026c52f0494d528ed53640ba9254c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: f2d5583a69e264e43915640f35c02486, type: 2}
     - {fileID: 11400000, guid: 327905909620b4c8abd37a838e8f1d87, type: 2}
+    - {fileID: 11400000, guid: f2d5583a69e264e43915640f35c02486, type: 2}

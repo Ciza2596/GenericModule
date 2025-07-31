@@ -82,9 +82,9 @@ namespace CizaAddressablesModule.Editor
             }
         }
 
-        private readonly string _assetFolderPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AssetFolderPath)}";
+        private readonly string _assetFolderPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AssetPath)}";
 
-        private string AssetFolderPath
+        private string AssetPath
         {
             get => PlayerPrefs.GetString(_assetFolderPathKey);
 
@@ -236,7 +236,7 @@ namespace CizaAddressablesModule.Editor
             EditorGUILayout.BeginVertical();
 
             EditorGUILayout.Space();
-            AssetFolderPath = GetAssetFolderPathAndOpenWindow("Asset Folder Path", AssetFolderPath);
+            AssetPath = GetAssetFolderPathAndOpenWindow("Asset Folder Path", AssetPath);
             EditorGUILayout.Space();
 
             GroupName = EditorGUILayout.TextField("Group Name", GroupName);
@@ -275,11 +275,11 @@ namespace CizaAddressablesModule.Editor
 
             var content = ImportText.text;
             _addressablesAssetManager.Import(content);
-            Export();
+            AssetDatabase.Refresh();
         }
 
         private void Add() =>
-            _addressablesAssetManager.Add(GroupName, (int)BundleMode, AssetFolderPath, LabelsString, AddressPrefix, AddressSuffix);
+            _addressablesAssetManager.Add(GroupName, (int)BundleMode, AssetPath, LabelsString, AddressPrefix, AddressSuffix);
 
         private void CreateAndWriteFile(string content = null)
         {
@@ -332,9 +332,15 @@ namespace CizaAddressablesModule.Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 var path = EditorGUILayout.TextField(label, originPath);
-                if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
+                if (GUILayout.Button("Folder", EditorStyles.miniButton, GUILayout.Width(60)))
                 {
                     path = EditorUtility.OpenFolderPanel("Folder Path", originPath, "");
+                    path = GetAssetPathWithoutDataPath(path);
+                }
+                
+                if (GUILayout.Button("File", EditorStyles.miniButton, GUILayout.Width(60)))
+                {
+                    path = EditorUtility.OpenFilePanel("File Path", originPath, "");
                     path = GetAssetPathWithoutDataPath(path);
                 }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -32,6 +33,8 @@ namespace CizaAddressablesModule.Editor
 		private const string ASSET_PATH_END_TAG = ")";
 
 		private const string LABELS_AND_TAG = ",";
+		
+		private const string GROUP_NAME_BUILT_IN_DATA = "Built In Data";
 
 		//public method
 		public string Export()
@@ -81,30 +84,44 @@ namespace CizaAddressablesModule.Editor
 			}
 		}
 
-		public void Add(string groupName, int bundleModeIndex, string assetFolderPath, string labelsString, string addressPrefix, string addressSuffix)
+		public void Add(string groupName, int bundleModeIndex, string assetPath, string labelsString, string addressPrefix, string addressSuffix)
 		{
 			var settings = AddressableAssetSettingsDefaultObject.Settings;
 			if (string.IsNullOrWhiteSpace(groupName))
 				groupName = settings.DefaultGroup.name;
-
 			else
 				CreateAddressablesGroup(groupName, bundleModeIndex);
 
 			var labels = string.IsNullOrWhiteSpace(labelsString) ? null : GetLabelsFromLabelsString(labelsString);
 
-			var guids = AssetDatabase.FindAssets("", new string[] { assetFolderPath });
-			foreach (var guid in guids)
+			var dataPath = Application.dataPath.Replace("Assets", "");
+			
+			if (Directory.Exists(dataPath + assetPath))
 			{
-				var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-				var obj       = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
-				if (obj is DefaultAsset)
-					continue;
+				var guids = AssetDatabase.FindAssets("", new string[] { assetPath });
+				foreach (var guid in guids)
+				{
+					var path = AssetDatabase.GUIDToAssetPath(guid);
+					var obj = AssetDatabase.LoadAssetAtPath<Object>(path);
+					if (obj is DefaultAsset)
+						continue;
 
+					var address    = addressPrefix + obj.name + addressSuffix;
+					var instanceId = obj.GetInstanceID();
+					AddEntryToAddressables(groupName, address, instanceId, labels);
+				}
+			}
+			else if(File.Exists(dataPath + assetPath))
+			{
+				var obj = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
+				if (obj is DefaultAsset)
+					return;
 				var address    = addressPrefix + obj.name + addressSuffix;
 				var instanceId = obj.GetInstanceID();
 				AddEntryToAddressables(groupName, address, instanceId, labels);
 			}
 		}
+		
 
 		//private method
 		private bool TryGetAllGroupNames(out string[] groupNames, out int[] bundleModeIndexs)
@@ -131,15 +148,17 @@ namespace CizaAddressablesModule.Editor
 			groupNames       = new string[groupsCount];
 			bundleModeIndexs = new int[groupsCount];
 
-			for (int i = 0; i < groupsCount; i++)
+			var index = 0;
+			foreach (var group in groups)
 			{
-				var group = groups[i + 2];
-
-				var groupName = group.Name;
-				groupNames[i] = groupName;
-
+				if(group.Name == GROUP_NAME_BUILT_IN_DATA || group.Name == settings.DefaultGroup.name)
+					continue;
+				
+				groupNames[index] = group.Name;
+				
 				var bundledAssetGroupSchema = group.GetSchema<BundledAssetGroupSchema>();
-				bundleModeIndexs[i] = (int)bundledAssetGroupSchema.BundleMode;
+				bundleModeIndexs[index] = (int)bundledAssetGroupSchema.BundleMode;
+				index++;
 			}
 
 			return true;
@@ -194,9 +213,12 @@ namespace CizaAddressablesModule.Editor
 			}
 
 			var groups = settings.groups.ToArray();
-			for (int i = 2; i < groups.Length; i++)
+
+			foreach (var group in groups)
 			{
-				var group = groups[i];
+				if(group.Name == GROUP_NAME_BUILT_IN_DATA || group.Name == settings.DefaultGroup.name)
+					continue;
+				
 				settings.RemoveGroup(group);
 			}
 		}

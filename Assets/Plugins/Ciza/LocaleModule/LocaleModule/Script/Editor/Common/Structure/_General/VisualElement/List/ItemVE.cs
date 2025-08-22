@@ -34,7 +34,7 @@ namespace CizaLocaleModule.Editor
 
 		[NonSerialized]
 		protected string _itemPath;
-		
+
 		[NonSerialized]
 		protected object _itemValue;
 
@@ -254,7 +254,8 @@ namespace CizaLocaleModule.Editor
 			var target = itemProperty.serializedObject.targetObject;
 			var itemPath = itemProperty.propertyPath;
 			var itemValue = itemProperty.GetValue();
-			var itemType = itemValue.GetType();
+			var itemType = itemValue?.GetType();
+
 			if (target != _target || itemPath != _itemPath || itemValue != _itemValue || itemType != _itemType)
 			{
 				ItemProperty = itemProperty;

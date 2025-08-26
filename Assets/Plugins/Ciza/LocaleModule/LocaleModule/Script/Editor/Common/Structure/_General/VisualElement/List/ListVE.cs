@@ -175,13 +175,13 @@ namespace CizaLocaleModule.Editor
 			ListProperty.serializedObject.Update();
 
 			var source = ItemsProperty.GetArrayElementAtIndex(index).GetValue();
-			if (source == null && !TypeUtils.CheckIsUnityObj(ItemType)) return;
+			if (source == null && !TypeUtils.CheckIsUnityObjSubclass(ItemType)) return;
 
 			var insertIndex = index + 1;
 			ItemsProperty.InsertArrayElementAtIndex(insertIndex);
 			var newObj = ItemsProperty.GetArrayElementAtIndex(insertIndex);
 
-			if (TypeUtils.CheckIsUnityObj(ItemType))
+			if (TypeUtils.CheckIsUnityObjSubclass(ItemType))
 				newObj.SetValue(source);
 			else
 				CopyPasteUtils.Duplicate(newObj, source);
@@ -255,7 +255,7 @@ namespace CizaLocaleModule.Editor
 		protected virtual void DerivedInitializeItemType()
 		{
 			ItemType = SerializationUtils.GetElementTypes(ItemsProperty)[0];
-			IsElementIsClass = !TypeUtils.CheckIsUnityObj(ItemType) && TypeUtils.CheckIsClassWithoutString(ItemType);
+			IsElementIsClass = !TypeUtils.CheckIsUnityObjSubclass(ItemType) && TypeUtils.CheckIsClassWithoutString(ItemType);
 		}
 
 		#region Create VE

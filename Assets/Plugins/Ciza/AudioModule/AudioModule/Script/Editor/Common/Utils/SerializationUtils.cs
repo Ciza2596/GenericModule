@@ -207,22 +207,22 @@ namespace CizaAudioModule.Editor
 
 		private static object GetFieldValue(string fieldName, object obj)
 		{
-			var field = obj?.GetType().GetField(fieldName, FIELD_BINDINGS);
-			if (field == null)
+			var fieldInfo = obj?.GetType().GetField(fieldName, FIELD_BINDINGS);
+			if (fieldInfo == null)
 				return null;
 
-			var value = field.GetValue(obj);
+			var value = fieldInfo.GetValue(obj);
 			if (value != null)
 				return value;
 
-			return TypeUtils.CreateInstance(field.FieldType);
+			return TypeUtils.CreateInstance(fieldInfo.FieldType);
 		}
 
 		private static object GetFieldValueWithIndex(string fieldName, object obj, int index)
 		{
-			var field = obj.GetType().GetField(fieldName, FIELD_BINDINGS);
-			if (field == null) return null;
-			return field.GetValue(obj) is IList list ? list[index] : null;
+			var fieldInfo = obj.GetType().GetField(fieldName, FIELD_BINDINGS);
+			if (fieldInfo == null) return null;
+			return fieldInfo.GetValue(obj) is IList list ? list[index] : null;
 		}
 	}
 }

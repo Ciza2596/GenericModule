@@ -175,13 +175,16 @@ namespace CizaLocaleModule.Editor
 			ListProperty.serializedObject.Update();
 
 			var source = ItemsProperty.GetArrayElementAtIndex(index).GetValue();
-			if (source == null) return;
+			if (source == null && !TypeUtils.CheckIsUnityObj(ItemType)) return;
 
 			var insertIndex = index + 1;
 			ItemsProperty.InsertArrayElementAtIndex(insertIndex);
 			var newObj = ItemsProperty.GetArrayElementAtIndex(insertIndex);
 
-			CopyPasteUtils.Duplicate(newObj, source);
+			if (TypeUtils.CheckIsUnityObj(ItemType))
+				newObj.SetValue(source);
+			else
+				CopyPasteUtils.Duplicate(newObj, source);
 			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();

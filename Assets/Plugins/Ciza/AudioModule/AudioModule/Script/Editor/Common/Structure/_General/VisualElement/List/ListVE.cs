@@ -174,17 +174,15 @@ namespace CizaAudioModule.Editor
 
 			ListProperty.serializedObject.Update();
 
-			var source = ItemsProperty.GetArrayElementAtIndex(index).GetValue();
-			if (source == null && !TypeUtils.CheckIsUnityObjSubclass(ItemType)) return;
+			ListProperty.serializedObject.Update();
 
+			var source = ItemsProperty.GetArrayElementAtIndex(index).GetValue();
 			var insertIndex = index + 1;
 			ItemsProperty.InsertArrayElementAtIndex(insertIndex);
 			var newObj = ItemsProperty.GetArrayElementAtIndex(insertIndex);
 
-			if (TypeUtils.CheckIsUnityObjSubclass(ItemType))
-				newObj.SetValue(source);
-			else
-				CopyPasteUtils.Duplicate(newObj, source);
+			SerializationUtils.Duplicate(newObj, source);
+
 			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();
@@ -255,7 +253,7 @@ namespace CizaAudioModule.Editor
 		protected virtual void DerivedInitializeItemType()
 		{
 			ItemType = SerializationUtils.GetElementTypes(ItemsProperty)[0];
-			IsElementIsClass = !TypeUtils.CheckIsUnityObjSubclass(ItemType) && TypeUtils.CheckIsClassWithoutString(ItemType);
+			IsElementIsClass = TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(ItemType);
 		}
 
 		#region Create VE

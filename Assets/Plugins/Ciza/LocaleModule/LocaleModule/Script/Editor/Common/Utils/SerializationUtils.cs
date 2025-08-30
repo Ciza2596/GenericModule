@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -54,27 +53,21 @@ namespace CizaLocaleModule.Editor
 			return fieldSplit.Length != 2 ? null : Type.GetType(Assembly.CreateQualifiedName(fieldSplit[0], fieldSplit[1]));
 		}
 
-		public static Type[] GetElementTypes(SerializedProperty property)
-		{
-			var value = property.GetValue();
-			var types = TypeUtils.GetSelfAndBaseTypes(value.GetType());
-			var allGenericTypes = new List<Type>();
-			foreach (var type in types)
-			{
-				if (type.IsArray)
-					allGenericTypes.Add(type.GetElementType());
-				else
-				{
-					var genericTypes = type.GetGenericArguments();
-					if (genericTypes.Length > 0)
-						allGenericTypes.AddRange(genericTypes);
-				}
-			}
-
-			return allGenericTypes.ToArray();
-		}
+		public static Type[] GetElementTypes(SerializedProperty property) =>
+			TypeUtils.GetElementTypes(property.GetValue().GetType());
 
 		#endregion
+
+		public static void Duplicate(SerializedProperty property, object source)
+		{
+			if (source == null)
+			{
+				property.SetValue(null);
+				return;
+			}
+
+			property.SetValue(CopyPasteUtils.Duplicate(source.GetType(), source));
+		}
 
 		#region CreateChildProperties
 

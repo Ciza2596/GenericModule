@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 
 namespace CizaAudioModule.Editor
@@ -10,65 +9,75 @@ namespace CizaAudioModule.Editor
 	{
 		// CONST & STATIC: -----------------------------------------------------------------------
 
-		#region By Type
+		#region Copy
 
 		[NonSerialized]
 		private static readonly Dictionary<Type, object> SOURCE_MAP_BY_TYPE = new Dictionary<Type, object>();
 
-		public static void Copy(object source) =>
-			Copy(source.GetType(), source);
-
-
-		public static void Copy(Type type, object source)
+		public static void Copy(object source)
 		{
-			SOURCE_MAP_BY_TYPE.Remove(type);
-			SOURCE_MAP_BY_TYPE.Add(type, Duplicate(source));
+			if (source == null)
+				return;
+
+			Copy(source.GetType(), source);
 		}
 
-		public static bool CheckCanPaste(Type type) =>
-			SOURCE_MAP_BY_TYPE.ContainsKey(type);
-
-		public static bool TryPaste(Type type, out object copy)
+		public static void Copy(Type sourceType, object source)
 		{
-			if (!SOURCE_MAP_BY_TYPE.TryGetValue(type, out var source))
+			foreach (var childType in TypeUtils.GetBaseAndSelfTypes(sourceType))
+				SimpleCopy(childType, sourceType, source);
+		}
+
+		public static void SimpleCopy(Type itemType, Type sourceType, object source)
+		{
+			SOURCE_MAP_BY_TYPE.Remove(itemType);
+			var copy = Duplicate(sourceType, source);
+			if (copy == null)
+				return;
+			SOURCE_MAP_BY_TYPE.Add(itemType, copy);
+		}
+
+		public static bool CheckCanPaste(Type itemType) =>
+			SOURCE_MAP_BY_TYPE.ContainsKey(itemType);
+
+		public static bool TryPaste(Type itemType, out object copy)
+		{
+			if (!SOURCE_MAP_BY_TYPE.TryGetValue(itemType, out var source))
 			{
 				copy = null;
 				return false;
 			}
 
-			copy = Duplicate(source);
+			copy = Duplicate(itemType, source);
 			return copy != null;
 		}
 
 		#endregion
 
-		public static object Duplicate(object source)
+		public static object Duplicate(Type sourceType, object source)
 		{
-			var sourceType = source.GetType();
+			if (!TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(sourceType))
+				return source;
+
+			if (source is IList sourceList)
+			{
+				var sourceListType = sourceList.GetType();
+				var list = TypeUtils.CreateInstance(sourceListType, sourceList.Count) as IList;
+				for (var i = 0; i < sourceList.Count; i++)
+				{
+					var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
+					var element = Duplicate(elementType, i < sourceList.Count ? sourceList[i] : TypeUtils.CreateInstance(elementType));
+					if (sourceType.IsArray)
+						list[i] = element;
+					else
+						list.Add(element);
+				}
+
+				return list;
+			}
+
 			var newObj = TypeUtils.CreateInstance(sourceType);
-
-			if (!TypeUtils.CheckIsClassWithoutString(sourceType))
-				newObj = source;
-
-			else if (sourceType.IsArray && source is object[] sourceArray)
-			{
-				var list = new List<object>();
-				foreach (var sourceElement in sourceArray)
-					list.Add(Duplicate(sourceElement));
-
-				return list.Count > 0 ? list.ToArray() : null;
-			}
-			else if (source is IList sourceList)
-			{
-				var list = new List<object>();
-				foreach (var sourceElement in sourceList)
-					list.Add(Duplicate(sourceElement));
-
-				return list.Count > 0 ? list.ToList() : null;
-			}
-			else
-				OverrideObj(source, newObj);
-
+			OverrideObj(source, newObj);
 			return newObj;
 		}
 
@@ -76,23 +85,6 @@ namespace CizaAudioModule.Editor
 		{
 			var json = EditorJsonUtility.ToJson(source);
 			EditorJsonUtility.FromJsonOverwrite(json, newObj);
-		}
-
-		public static void Duplicate(SerializedProperty property, object source)
-		{
-			if (source == null)
-				return;
-
-			if (TypeUtils.CheckIsClassWithoutString(source.GetType()))
-			{
-				var jsonSource = EditorJsonUtility.ToJson(source);
-
-				var newInstance = TypeUtils.CreateInstance(source.GetType());
-				EditorJsonUtility.FromJsonOverwrite(jsonSource, newInstance);
-				property.SetValue(newInstance);
-			}
-			else
-				property.SetValue(source);
 		}
 	}
 }

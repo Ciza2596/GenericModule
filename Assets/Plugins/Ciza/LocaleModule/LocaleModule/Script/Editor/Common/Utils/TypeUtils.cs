@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
@@ -10,14 +11,17 @@ namespace CizaLocaleModule.Editor
 
 		#region Check
 
+		public static bool CheckIsListImp(Type type) =>
+			typeof(IList).IsAssignableFrom(type);
+
 		public static bool CheckIsUnityObjSubclass(Type type) =>
 			type.IsSubclassOf(typeof(Object));
 
 		public static bool CheckIsString(Type type) =>
 			type == typeof(string);
 
-		public static bool CheckIsClassWithoutString(Type type) =>
-			type.IsClass && !CheckIsString(type);
+		public static bool CheckIsClassWithoutStringOrUnityObjSubclass(Type type) =>
+			type.IsClass && !CheckIsString(type) && !CheckIsUnityObjSubclass(type);
 
 		#endregion
 
@@ -30,11 +34,36 @@ namespace CizaLocaleModule.Editor
 				return string.Empty;
 
 			if (type.IsArray)
-				return Array.CreateInstance(type.GetElementType(), 0);
+				return Array.CreateInstance(GetElementTypes(type)[0], (args.Length == 1 && args[0] is int length) ? length : 0);
+
+			if (CheckIsListImp(type))
+			{
+				var listType = typeof(List<>).MakeGenericType(GetElementTypes(type)[0]);
+				return (IList)Activator.CreateInstance(listType);
+			}
 
 			if (!type.IsValueType && (type.IsAbstract || type.IsInterface || type.GetConstructor(Type.EmptyTypes) == null))
 				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
 			return Activator.CreateInstance(type, args);
+		}
+		
+		public static Type[] GetElementTypes(Type type)
+		{
+			var types = GetSelfAndBaseTypes(type);
+			var allGenericTypes = new List<Type>();
+			foreach (var childType in types)
+			{
+				if (childType.IsArray)
+					allGenericTypes.Add(childType.GetElementType());
+				else
+				{
+					var genericTypes = childType.GetGenericArguments();
+					if (genericTypes.Length > 0)
+						allGenericTypes.AddRange(genericTypes);
+				}
+			}
+
+			return allGenericTypes.ToArray();
 		}
 
 		#region BaseTypes
@@ -42,6 +71,9 @@ namespace CizaLocaleModule.Editor
 		public static Type[] GetSelfAndBaseTypes(Type type) =>
 			GetBaseAndSelfTypes(type, true);
 
+		public static Type[] GetBaseAndSelfTypes(Type type) =>
+			GetBaseAndSelfTypes(type, false);
+		
 		private static Type[] GetBaseAndSelfTypes(Type type, bool isReverse)
 		{
 			var types = new List<Type>();

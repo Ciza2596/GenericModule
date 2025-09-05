@@ -256,7 +256,7 @@ namespace CizaLocaleModule.Editor
 			var itemValue = itemProperty.GetValue();
 			var itemType = itemValue?.GetType();
 
-			if (target != _target || itemPath != _itemPath || itemValue != _itemValue || itemType != _itemType)
+			if (itemProperty != ItemProperty || target != _target || itemPath != _itemPath || itemValue != _itemValue || itemType != _itemType)
 			{
 				ItemProperty = itemProperty;
 				_target = target;

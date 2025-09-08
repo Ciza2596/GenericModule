@@ -28,15 +28,12 @@ namespace CizaAudioModule.Editor
 
 		[NonSerialized]
 		protected readonly Button _headDelete = new Button();
-
+		
 		[NonSerialized]
 		protected Object _target;
 
 		[NonSerialized]
 		protected string _itemPath;
-		
-		[NonSerialized]
-		protected object _itemValue;
 
 		[NonSerialized]
 		protected Type _itemType;
@@ -253,15 +250,17 @@ namespace CizaAudioModule.Editor
 		{
 			var target = itemProperty.serializedObject.targetObject;
 			var itemPath = itemProperty.propertyPath;
-			var itemValue = itemProperty.GetValue();
-			var itemType = itemValue?.GetType();
+			var itemType = itemProperty.GetValue()?.GetType();
 
-			if (target != _target || itemPath != _itemPath || itemValue != _itemValue || itemType != _itemType)
+			var isDifTarget = target != _target;
+			var isDifItemPath = itemPath != _itemPath;
+			var isDifItemType = itemType != _itemType;
+
+			if (isDifTarget || isDifItemPath || isDifItemType)
 			{
 				ItemProperty = itemProperty;
 				_target = target;
 				_itemPath = itemPath;
-				_itemValue = itemValue;
 				_itemType = itemType;
 				if (isRefreshBodyContent)
 				{

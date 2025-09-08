@@ -25,6 +25,7 @@ namespace CizaLocaleModule.Editor
 
 			var root = new BoxVE(property, CreateHeadAdditional_ListCountLabel());
 			root.Initialize(Property.displayName, CreateBody_ListVE());
+			root.TrackPropertyValue(Property, _ => root.Refresh());
 
 			return root;
 		}

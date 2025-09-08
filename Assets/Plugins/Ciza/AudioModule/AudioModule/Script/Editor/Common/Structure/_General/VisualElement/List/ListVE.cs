@@ -162,6 +162,8 @@ namespace CizaAudioModule.Editor
 
 			ItemsProperty.InsertArrayElementAtIndex(index);
 			ItemsProperty.GetArrayElementAtIndex(index).SetValue(value);
+			
+			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
 			Refresh();
 			RefreshIsExpandWhenInsert(index);

@@ -23,13 +23,6 @@ MonoBehaviour:
     _value:
       _duration: 0.1
       _maxConsecutiveCount: 1
-  _defaultPrefabAddress: 
+  _prefabAddress: 
   _infoMapList:
-    _maps:
-    - _isEnable: 1
-      _value:
-        _dataId: 1
-        _clipAddress: 
-        _isOverridePrefabAddress:
-          _isEnable: 0
-          _value: 
+    _maps: []

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71e686fd22804bbea094714ffd179af, type: 3}
+  m_Name: AudioPlayerConfig
+  m_EditorClassIdentifier: 
+  _rootName: '[AudioPlayer]'
+  _isDontDestroyOnLoad: 1
+  _audioMixer: {fileID: 0}
+  _masterMixerGroupPath: Master
+  _masterMixerParameter: Master
+  _defaultMasterVolume: 0.7
+  _bgmModuleConfig:
+    _poolRootName: Bgm
+    _poolPrefix: 
+    _poolSuffix: s
+    _audioMixerGroupPath: Master/Bgm
+    _audioMixerParameter: Bgm
+    _defaultVolume: 0.7
+    _hasRestrictContinuousPlay:
+      _isEnable: 0
+      _value:
+        _duration: 0.1
+        _maxConsecutiveCount: 1
+    _prefabAddress: BgmAudio
+    _infoMapList:
+      _maps: []
+  _sfxModuleConfig:
+    _poolRootName: Sfx
+    _poolPrefix: 
+    _poolSuffix: s
+    _audioMixerGroupPath: Master/Sfx
+    _audioMixerParameter: Sfx
+    _defaultVolume: 0.7
+    _hasRestrictContinuousPlay:
+      _isEnable: 0
+      _value:
+        _duration: 0.1
+        _maxConsecutiveCount: 1
+    _prefabAddress: SfxAudio
+    _infoMapList:
+      _maps: []
+  _voiceModuleConfig:
+    _poolRootName: Voice
+    _poolPrefix: 
+    _poolSuffix: s
+    _audioMixerGroupPath: Master/Voice
+    _audioMixerParameter: Voice
+    _defaultVolume: 0.7
+    _hasRestrictContinuousPlay:
+      _isEnable: 0
+      _value:
+        _duration: 0.1
+        _maxConsecutiveCount: 1
+    _prefabAddress: VoiceAudio
+    _infoMapList:
+      _maps: []

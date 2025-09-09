@@ -26,12 +26,23 @@ namespace CizaAudioModule.Editor.MapListVisual
 		{
 			var keyField = new PropertyField(KeyProperty, _keyLabel);
 			keyField.Bind(ItemProperty.serializedObject);
-
-			var valueField = new PropertyField(ValueProperty, _valueLabel);
-			valueField.Bind(ItemProperty.serializedObject);
-
 			_body.Add(keyField);
-			_body.Add(valueField);
+
+			var valueType = SerializationUtils.GetType(ValueProperty, false);
+			if (valueType != null)
+			{
+				if (TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(valueType))
+				{
+					_body.Add(new SmallSpaceVE());
+					SerializationUtils.CreateChildProperties(_body, ValueProperty, SerializationUtils.ChildrenKinds.ShowLabelsInChildren, 0f, onChangeValue: OnRefreshBody);
+				}
+				else
+				{
+					var valueField = new PropertyField(ValueProperty, _valueLabel);
+					valueField.Bind(ItemProperty.serializedObject);
+					_body.Add(valueField);
+				}
+			}
 
 			keyField.RegisterCallback<SerializedPropertyChangeEvent>(_ => { RefreshHeadTitle(); });
 		}

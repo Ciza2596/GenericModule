@@ -27,6 +27,8 @@ namespace CizaAudioModule.Editor
 		protected override string[] HeadClasses => new[] { "box-head" };
 		protected override string[] BodyClasses => new[] { "box-body" };
 		protected virtual string ActiveBodyClass => "box-active";
+		
+		protected virtual string[] TitleLabelClasses => new[] { "box-head-titlelabel" };
 
 		public virtual bool IsAllowContextMenu { get; set; } = true;
 		public virtual bool IsAllowCopyPaste { get; set; } = true;
@@ -94,7 +96,11 @@ namespace CizaAudioModule.Editor
 			base.DerivedInitialize(title, content);
 
 			AddHeadLeftContent(_headImage);
-			AddHeadLeftContent(new Label(Title));
+			
+			var titleLabel = new Label(Title);
+			foreach (var titleLabelClass in TitleLabelClasses)
+				titleLabel.AddToClassList(titleLabelClass);
+			AddHeadLeftContent(titleLabel);
 
 			if (_headAdditional != null)
 				AddHeadRightContent(_headAdditional);

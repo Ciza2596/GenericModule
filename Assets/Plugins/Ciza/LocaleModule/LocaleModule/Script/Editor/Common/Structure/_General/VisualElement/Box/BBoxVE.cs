@@ -16,7 +16,7 @@ namespace CizaLocaleModule.Editor
 		protected readonly VisualElement _headLeftAlignment = new FlexibleSpaceVE() { style = { flexDirection = FlexDirection.Row } };
 
 		[NonSerialized]
-		protected readonly VisualElement _headRightAlignment = new VisualElement() { style = { flexDirection = FlexDirection.RowReverse } };
+		protected readonly VisualElement _headRightAlignment = new VisualElement() { style = { flexDirection = FlexDirection.RowReverse, flexShrink = 0 } };
 
 		[NonSerialized]
 		protected readonly VisualElement _body = new VisualElement();

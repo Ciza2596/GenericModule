@@ -22,6 +22,9 @@ namespace CizaLocaleModule.Editor
 
 		public static bool CheckIsClassWithoutStringOrUnityObjSubclass(Type type) =>
 			type.IsClass && !CheckIsString(type) && !CheckIsUnityObjSubclass(type);
+		
+		public static bool CheckIsAbstractOrInterface(Type type) =>
+			type.IsAbstract || type.IsInterface;
 
 		#endregion
 
@@ -42,7 +45,7 @@ namespace CizaLocaleModule.Editor
 				return (IList)Activator.CreateInstance(listType);
 			}
 
-			if (!type.IsValueType && (type.IsAbstract || type.IsInterface || type.GetConstructor(Type.EmptyTypes) == null))
+			if (!type.IsValueType && (CheckIsAbstractOrInterface(type) || type.GetConstructor(Type.EmptyTypes) == null))
 				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
 			return Activator.CreateInstance(type, args);
 		}

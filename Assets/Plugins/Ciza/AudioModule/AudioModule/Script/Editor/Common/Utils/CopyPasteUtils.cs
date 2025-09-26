@@ -65,8 +65,14 @@ namespace CizaAudioModule.Editor
 				var list = TypeUtils.CreateInstance(sourceListType, sourceList.Count) as IList;
 				for (var i = 0; i < sourceList.Count; i++)
 				{
+					object element;
 					var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
-					var element = Duplicate(elementType, i < sourceList.Count ? sourceList[i] : TypeUtils.CreateInstance(elementType));
+					if (TypeUtils.CheckIsAbstractOrInterface(elementType))
+						element = i < sourceList.Count ? Duplicate(sourceList[i].GetType(), sourceList[i]) : null;
+
+					else
+						element = Duplicate(elementType, i < sourceList.Count ? sourceList[i] : TypeUtils.CreateInstance(elementType));
+
 					if (sourceType.IsArray)
 						list[i] = element;
 					else

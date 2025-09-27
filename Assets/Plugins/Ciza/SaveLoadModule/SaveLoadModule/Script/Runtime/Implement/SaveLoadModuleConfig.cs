@@ -8,24 +8,28 @@ namespace CizaSaveLoadModule.Implement
 	[Preserve]
 	public class SaveLoadModuleConfig : ScriptableObject, ISaveLoadModuleConfig
 	{
-		private enum Directories
+		public enum Directories
 		{
 			PersistentDataPath,
 			DataPath
 		}
 
-		[Space]
-		[SerializeField]
-		private Directories _directory;
-
-		[SerializeField]
-		private string _defaultFilePath = "SaveLoadModuleFile.slmf";
+		// VARIABLE: -----------------------------------------------------------------------------
 
 		[Space]
 		[SerializeField]
-		private int _bufferSize = 2048;
+		protected Directories _directory;
 
-		public string ApplicationDataPath
+		[SerializeField]
+		protected string _defaultFilePath;
+
+		[Space]
+		[SerializeField]
+		protected int _bufferSize;
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual string ApplicationDataPath
 		{
 			get
 			{
@@ -36,9 +40,19 @@ namespace CizaSaveLoadModule.Implement
 			}
 		}
 
-		public string DefaultFilePath => _defaultFilePath;
+		public virtual string DefaultFilePath => _defaultFilePath;
 
-		public int      BufferSize => _bufferSize;
-		public Encoding Encoding   => Encoding.UTF8;
+		public virtual int BufferSize => _bufferSize;
+		public virtual Encoding Encoding => Encoding.UTF8;
+
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_directory = Directories.PersistentDataPath;
+			_defaultFilePath = "SaveLoadModuleFile.slmf";
+			_bufferSize = 2048;
+		}
 	}
 }

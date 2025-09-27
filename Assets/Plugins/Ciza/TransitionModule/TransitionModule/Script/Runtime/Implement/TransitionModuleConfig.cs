@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CizaPageModule.Implement;
 using UnityEngine;
@@ -5,34 +6,48 @@ using UnityEngine.Assertions;
 
 namespace CizaTransitionModule.Implement
 {
-    [CreateAssetMenu(fileName = "TransitionModuleConfig", menuName = "Ciza/TransitionModule/TransitionModuleConfig")]
-    public class TransitionModuleConfig : ScriptableObject, ITransitionModuleConfig
-    {
-        [SerializeField]
-        private string _rootName = "[TransitionModule]";
+	[CreateAssetMenu(fileName = "TransitionModuleConfig", menuName = "Ciza/TransitionModule/TransitionModuleConfig")]
+	public class TransitionModuleConfig : ScriptableObject, ITransitionModuleConfig
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [SerializeField]
-        private bool _isDontDestroyOnLoad = true;
+		[SerializeField]
+		protected string _rootName;
 
-        [Space]
-        [SerializeField]
-        private Page[] _pagePrefabs;
+		[SerializeField]
+		protected bool _isDontDestroyOnLoad;
+
+		[Space]
+		[SerializeField]
+		protected Page[] _pagePrefabs;
 
 
-        public string PageRootName => _rootName;
-        public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-        public MonoBehaviour[] GetPagePrefabs()
-        {
-            var pagePrefabs = new List<MonoBehaviour>();
+		public virtual string PageRootName => _rootName;
+		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-            foreach (var pagePrefab in _pagePrefabs)
-            {
-                Assert.IsNotNull(pagePrefab, "[TransitionModuleConfig::GetPagePrefabs] Please check pagePrefabs. Lose a pagePrefab.");
-                pagePrefabs.Add(pagePrefab);
-            }
+		public virtual MonoBehaviour[] GetPagePrefabs()
+		{
+			var pagePrefabs = new List<MonoBehaviour>();
 
-            return pagePrefabs.ToArray();
-        }
-    }
+			foreach (var pagePrefab in _pagePrefabs)
+			{
+				Assert.IsNotNull(pagePrefab, "[TransitionModuleConfig::GetPagePrefabs] Please check pagePrefabs. Lose a pagePrefab.");
+				pagePrefabs.Add(pagePrefab);
+			}
+
+			return pagePrefabs.ToArray();
+		}
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_rootName = "[TransitionModule]";
+			_isDontDestroyOnLoad = true;
+
+			_pagePrefabs = Array.Empty<Page>();
+		}
+	}
 }

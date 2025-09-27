@@ -2,23 +2,37 @@ using UnityEngine;
 
 namespace CizaFadeCreditModule.Implement
 {
-    [CreateAssetMenu(fileName = "FadeCreditModuleConfig", menuName = "Ciza/FadeCreditModule/FadeCreditModuleConfig")]
-    public class FadeCreditModuleConfig : ScriptableObject, IFadeCreditModuleConfig
-    {
-        [SerializeField]
-        private string _rootName = "[CreditModule]";
+	[CreateAssetMenu(fileName = "FadeCreditModuleConfig", menuName = "Ciza/FadeCreditModule/FadeCreditModuleConfig")]
+	public class FadeCreditModuleConfig : ScriptableObject, IFadeCreditModuleConfig
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [Space]
-        [SerializeField]
-        private bool _isDontDestroyOnLoad = true;
+		[SerializeField]
+		private string _rootName;
 
-        [SerializeField]
-        private GameObject _controllerPrefab;
+		[Space]
+		[SerializeField]
+		private bool _isDontDestroyOnLoad;
 
-        public string RootName => _rootName;
+		[SerializeField]
+		private GameObject _controllerPrefab;
 
-        public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-        public GameObject ControllerPrefab => _controllerPrefab;
-    }
+		public virtual string RootName => _rootName;
+
+		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		public virtual GameObject ControllerPrefab => _controllerPrefab;
+
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_rootName = "[CreditModule]";
+
+			_isDontDestroyOnLoad = true;
+			_controllerPrefab = null;
+		}
+	}
 }

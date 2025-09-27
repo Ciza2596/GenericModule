@@ -4,18 +4,30 @@ using UnityEngine;
 
 namespace CizaAchievementModule.Implement
 {
-    [CreateAssetMenu(fileName = "AchievementModuleConfig", menuName = "Ciza/AchievementModule/AchievementModuleConfig")]
-    public class AchievementModuleConfig : ScriptableObject, IAchievementModuleConfig
-    {
-        [SerializeField]
-        private StatInfo[] _statInfos;
+	[CreateAssetMenu(fileName = "AchievementModuleConfig", menuName = "Ciza/AchievementModule/AchievementModuleConfig")]
+	public class AchievementModuleConfig : ScriptableObject, IAchievementModuleConfig
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [SerializeField]
-        private AchievementInfo[] _achievementInfos;
+		[SerializeField]
+		protected StatInfo[] _statInfos;
 
-        public Type StatType => typeof(Stat);
+		[SerializeField]
+		protected AchievementInfo[] _achievementInfos;
 
-        public IStatInfo[] StatInfos => _statInfos != null ? _statInfos.Cast<IStatInfo>().ToArray() : Array.Empty<IStatInfo>();
-        public IAchievementInfo[] AchievementInfos => _achievementInfos != null ? _achievementInfos.Cast<IAchievementInfo>().ToArray() : Array.Empty<IAchievementInfo>();
-    }
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual Type StatType => typeof(Stat);
+
+		public virtual IStatInfo[] StatInfos => _statInfos != null ? _statInfos.Cast<IStatInfo>().ToArray() : Array.Empty<IStatInfo>();
+		public virtual IAchievementInfo[] AchievementInfos => _achievementInfos != null ? _achievementInfos.Cast<IAchievementInfo>().ToArray() : Array.Empty<IAchievementInfo>();
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_statInfos = Array.Empty<StatInfo>();
+			_achievementInfos = Array.Empty<AchievementInfo>();
+		}
+	}
 }

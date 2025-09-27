@@ -1,57 +1,88 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaPopupModule.Implement
 {
-    [CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "Ciza/PopupModule/PopupModuleConfig")]
-    public class PopupModuleConfig : ScriptableObject, IPopupModuleConfig
-    {
-        [SerializeField]
-        private string _rootName = "[PopupModule]";
+	[CreateAssetMenu(fileName = "PopupModuleConfig", menuName = "Ciza/PopupModule/PopupModuleConfig")]
+	public class PopupModuleConfig : ScriptableObject, IPopupModuleConfig
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [SerializeField]
-        private bool _isDontDestroyOnLoad = true;
-        
-        [Space]
-        [SerializeField]
-        private PopupPrefabMap[] _popupPrefabMaps;
+		[SerializeField]
+		protected string _rootName;
 
-        public string RootName => _rootName;
-        public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		[SerializeField]
+		protected bool _isDontDestroyOnLoad;
 
-        public bool TryGetPopupPrefab(string dataId, out GameObject popupPrefab)
-        {
-            if (_popupPrefabMaps == null || _popupPrefabMaps.Length == 0)
-            {
-                popupPrefab = null;
-                return false;
-            }
+		[Space]
+		[SerializeField]
+		protected PopupPrefabMap[] _popupPrefabMaps;
 
-            var popupMap = _popupPrefabMaps.FirstOrDefault(popupMap => popupMap.DataId == dataId);
-            if (popupMap != null && popupMap.Prefab != null)
-            {
-                popupPrefab = popupMap.Prefab;
-                return true;
-            }
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-            popupPrefab = null;
-            return false;
-        }
+		public string RootName => _rootName;
+		public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+
+		public bool TryGetPopupPrefab(string dataId, out GameObject popupPrefab)
+		{
+			if (_popupPrefabMaps == null || _popupPrefabMaps.Length == 0)
+			{
+				popupPrefab = null;
+				return false;
+			}
+
+			var popupMap = _popupPrefabMaps.FirstOrDefault(popupMap => popupMap.DataId == dataId);
+			if (popupMap != null && popupMap.Prefab != null)
+			{
+				popupPrefab = popupMap.Prefab;
+				return true;
+			}
+
+			popupPrefab = null;
+			return false;
+		}
 
 
-        [Serializable]
-        private class PopupPrefabMap
-        {
-            [SerializeField]
-            private string _dataId;
+		// CONSTRUCTOR: ------------------------------------------------------------------------
 
-            [SerializeField]
-            private GameObject _prefab;
+		public virtual void Reset()
+		{
+			_rootName = "[PopupModule]";
+			_isDontDestroyOnLoad = true;
 
-            public string DataId => _dataId;
+			_popupPrefabMaps = Array.Empty<PopupPrefabMap>();
+		}
 
-            public GameObject Prefab => _prefab;
-        }
-    }
+
+		[Serializable]
+		public class PopupPrefabMap
+		{
+			// VARIABLE: -----------------------------------------------------------------------------
+
+			[SerializeField]
+			protected string _dataId;
+
+			[SerializeField]
+			protected GameObject _prefab;
+
+			// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+			public virtual string DataId => _dataId;
+			public virtual GameObject Prefab => _prefab;
+
+			// CONSTRUCTOR: ------------------------------------------------------------------------
+
+			[Preserve]
+			public PopupPrefabMap() : this(string.Empty, null) { }
+
+			[Preserve]
+			public PopupPrefabMap(string dataId, GameObject prefab)
+			{
+				_dataId = dataId;
+				_prefab = prefab;
+			}
+		}
+	}
 }

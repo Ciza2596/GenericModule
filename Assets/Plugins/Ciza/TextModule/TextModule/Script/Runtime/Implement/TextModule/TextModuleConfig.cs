@@ -5,25 +5,38 @@ namespace CizaTextModule.Implement
 	[CreateAssetMenu(fileName = "TextModuleConfig", menuName = "Ciza/TextModule/TextModuleConfig")]
 	public class TextModuleConfig : ScriptableObject, ITextModuleConfig
 	{
-		[SerializeField]
-		private bool _isCustomDefaultCategory = false;
+		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
-		private string _customCustomDefaultCategory;
+		protected bool _isCustomDefaultCategory;
+
+		[SerializeField]
+		protected string _customCustomDefaultCategory;
 
 		[Space]
 		[SerializeField]
-		private TextAsset _csvTextAsset;
+		protected TextAsset _csvTextAsset;
 
 		[Space]
 		[SerializeField]
-		private bool _isShowWarningLog = true;
+		protected bool _isShowWarningLog;
 
-		public bool   IsCustomDefaultCategory => _isCustomDefaultCategory;
-		public string CustomDefaultCategory   => _customCustomDefaultCategory;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public string CsvText => _csvTextAsset.text;
+		public virtual bool IsCustomDefaultCategory => _isCustomDefaultCategory;
+		public virtual string CustomDefaultCategory => _customCustomDefaultCategory;
 
-		public bool IsShowWarningLog => _isShowWarningLog;
+		public virtual string CsvText => _csvTextAsset.text;
+
+		public virtual bool IsShowWarningLog => _isShowWarningLog;
+
+		public virtual void Reset()
+		{
+			_isCustomDefaultCategory = false;
+			_customCustomDefaultCategory = string.Empty;
+
+			_csvTextAsset = null;
+			_isShowWarningLog = true;
+		}
 	}
 }

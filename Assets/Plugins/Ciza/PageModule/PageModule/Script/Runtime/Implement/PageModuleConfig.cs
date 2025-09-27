@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,21 +8,25 @@ namespace CizaPageModule.Implement
 	[CreateAssetMenu(fileName = "PageModuleConfig", menuName = "Ciza/PageModule/PageModuleConfig")]
 	public class PageModuleConfig : ScriptableObject, IPageModuleConfig
 	{
-		[SerializeField]
-		private string _pageRootName = "[Page]";
+		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
-		private bool _isDontDestroyOnLoad = false;
+		protected string _pageRootName;
+
+		[SerializeField]
+		protected bool _isDontDestroyOnLoad;
 
 		[Space]
 		[SerializeField]
-		private Page[] _pagePrefabs;
+		protected Page[] _pagePrefabs;
 
-		public string PageRootName => _pageRootName;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+		public virtual string PageRootName => _pageRootName;
 
-		public MonoBehaviour[] GetPagePrefabs()
+		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
+
+		public virtual MonoBehaviour[] GetPagePrefabs()
 		{
 			var pagePrefabs = new List<MonoBehaviour>();
 
@@ -32,6 +37,16 @@ namespace CizaPageModule.Implement
 			}
 
 			return pagePrefabs.ToArray();
+		}
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_pageRootName = "[Page]";
+			_isDontDestroyOnLoad = false;
+
+			_pagePrefabs = Array.Empty<Page>();
 		}
 	}
 }

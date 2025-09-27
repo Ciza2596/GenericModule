@@ -10,35 +10,39 @@ namespace CizaAudioModule.Implement
 	[CreateAssetMenu(fileName = "AudioPlayerConfig", menuName = "Ciza/AudioModule/AudioPlayerConfig", order = 100)]
 	public class AudioPlayerConfig : ScriptableObject, IAudioPlayerConfig
 	{
-		[SerializeField]
-		protected string _rootName = "[AudioPlayer]";
+		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
-		protected bool _isDontDestroyOnLoad = true;
+		protected string _rootName;
+
+		[SerializeField]
+		protected bool _isDontDestroyOnLoad;
 
 		[Space]
 		[SerializeField]
 		protected AudioMixer _audioMixer;
 
 		[SerializeField]
-		protected string _masterMixerGroupPath = "Master";
+		protected string _masterMixerGroupPath;
 
 		[SerializeField]
-		protected string _masterMixerParameter = "Master";
+		protected string _masterMixerParameter;
 
 		[Range(0, 1)]
 		[SerializeField]
-		protected float _defaultMasterVolume = 0.7f;
+		protected float _defaultMasterVolume;
 
 		[Space]
 		[SerializeField]
-		protected AudioModuleConfig _bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "BgmAudio");
+		protected AudioModuleConfig _bgmModuleConfig;
 
 		[SerializeField]
-		protected AudioModuleConfig _sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "SfxAudio");
+		protected AudioModuleConfig _sfxModuleConfig;
 
 		[SerializeField]
-		protected AudioModuleConfig _voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
+		protected AudioModuleConfig _voiceModuleConfig;
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		public virtual string RootName => _rootName;
 		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
@@ -53,9 +57,30 @@ namespace CizaAudioModule.Implement
 		public virtual IAudioModuleConfig SfxModuleConfig => _sfxModuleConfig;
 		public virtual IAudioModuleConfig VoiceModuleConfig => _voiceModuleConfig;
 
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_rootName = "[AudioPlayer]";
+			_isDontDestroyOnLoad = true;
+
+			_audioMixer = null;
+
+			_masterMixerGroupPath = "Master";
+			_masterMixerParameter = "Master";
+			_defaultMasterVolume = 0.7f;
+
+			_bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "BgmAudio");
+			_sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "SfxAudio");
+			_voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
+		}
+
 		[Serializable]
 		public class AudioModuleConfig : IAudioModuleConfig, IZomeraphyPanel
 		{
+			// VARIABLE: -----------------------------------------------------------------------------
+
 			[SerializeField]
 			protected string _poolRootName;
 
@@ -64,7 +89,7 @@ namespace CizaAudioModule.Implement
 			protected string _poolPrefix;
 
 			[SerializeField]
-			protected string _poolSuffix = "s";
+			protected string _poolSuffix;
 
 			[Space]
 			[SerializeField]
@@ -75,7 +100,7 @@ namespace CizaAudioModule.Implement
 
 			[Range(0, 1)]
 			[SerializeField]
-			protected float _defaultVolume = 0.7f;
+			protected float _defaultVolume;
 
 			[Space]
 			[SerializeField]
@@ -88,17 +113,7 @@ namespace CizaAudioModule.Implement
 			[SerializeField]
 			protected AudioInfoMapList _infoMapList;
 
-			[Preserve]
-			public AudioModuleConfig() { }
-
-			[Preserve]
-			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerParameter, string defaultPrefabAddress)
-			{
-				_poolRootName = poolRootName;
-				_audioMixerGroupPath = audioMixerGroupPath;
-				_audioMixerParameter = audioMixerParameter;
-				_prefabAddress = defaultPrefabAddress;
-			}
+			// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 			public virtual string PoolRootName => _poolRootName;
 
@@ -119,6 +134,32 @@ namespace CizaAudioModule.Implement
 			{
 				Assert.IsNotNull(_infoMapList, "[AudioPlayerModuleConfig::CreateAudioInfoMapDataId] AudioInfos is null.");
 				return _infoMapList.ToDictionary<IAudioInfo>();
+			}
+
+			// CONSTRUCTOR: ------------------------------------------------------------------------
+
+			[Preserve]
+			public AudioModuleConfig() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
+
+			[Preserve]
+			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", string.Empty, string.Empty, 0.7f, new RestrictContinuousPlayEnabler(), string.Empty, new AudioInfoMapList()) { }
+
+			[Preserve]
+			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerParameter, float defaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
+			{
+				_poolRootName = poolRootName;
+
+				_poolPrefix = poolPrefix;
+				_poolSuffix = poolSuffix;
+
+				_audioMixerGroupPath = audioMixerGroupPath;
+				_audioMixerParameter = audioMixerParameter;
+				_defaultVolume = defaultVolume;
+
+				_hasRestrictContinuousPlay = hasRestrictContinuousPlay;
+
+				_prefabAddress = prefabAddress;
+				_infoMapList = infoMapList;
 			}
 		}
 	}

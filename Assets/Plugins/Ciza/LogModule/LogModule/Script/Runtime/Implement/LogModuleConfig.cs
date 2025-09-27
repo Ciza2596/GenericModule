@@ -5,21 +5,36 @@ namespace CizaLogModule.Implement
 	[CreateAssetMenu(fileName = "LogModuleConfig", menuName = "Ciza/LogModule/LogModuleConfig")]
 	public class LogModuleConfig : ScriptableObject, ILogModuleConfig
 	{
-		[SerializeField]
-		private bool _isPrintDebug;
+		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
-		private bool _isPrintInfo;
+		protected bool _isPrintDebug;
 
 		[SerializeField]
-		private bool _isPrintWarn;
+		protected bool _isPrintInfo;
 
 		[SerializeField]
-		private bool _isPrintError;
+		protected bool _isPrintWarn;
 
-		public bool IsPrintDebug => _isPrintDebug;
-		public bool IsPrintInfo  => _isPrintInfo;
-		public bool IsPrintWarn  => _isPrintWarn;
-		public bool IsPrintError => _isPrintError;
+		[SerializeField]
+		protected bool _isPrintError;
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual bool IsPrintDebug => _isPrintDebug;
+		public virtual bool IsPrintInfo => _isPrintInfo;
+		public virtual bool IsPrintWarn => _isPrintWarn;
+		public virtual bool IsPrintError => _isPrintError;
+
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_isPrintDebug = false;
+			_isPrintInfo = false;
+			_isPrintWarn = false;
+			_isPrintError = false;
+		}
 	}
 }

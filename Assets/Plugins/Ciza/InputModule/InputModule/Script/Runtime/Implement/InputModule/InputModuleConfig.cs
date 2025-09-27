@@ -2,62 +2,89 @@ using UnityEngine;
 
 namespace CizaInputModule.Implement
 {
-    [CreateAssetMenu(fileName = "InputModuleConfig", menuName = "Ciza/InputModule/InputModuleConfig", order = -1)]
-    public class InputModuleConfig : ScriptableObject, IInputModuleConfig
-    {
-        [SerializeField]
-        private string _rootName = "[InputModule]";
+	[CreateAssetMenu(fileName = "InputModuleConfig", menuName = "Ciza/InputModule/InputModuleConfig", order = -1)]
+	public class InputModuleConfig : ScriptableObject, IInputModuleConfig
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [SerializeField]
-        private bool _isDontDestroyOnLoad = true;
+		[SerializeField]
+		private string _rootName;
 
-        [Space]
-        [SerializeField]
-        private GameObject _eventSystemPrefab;
+		[SerializeField]
+		private bool _isDontDestroyOnLoad;
 
-        [SerializeField]
-        private bool _canEnableEventSystem = true;
+		[Space]
+		[SerializeField]
+		private GameObject _eventSystemPrefab;
 
-        [SerializeField]
-        private bool _isDefaultEnableEventSystem;
+		[SerializeField]
+		private bool _canEnableEventSystem;
 
-        [Space]
-        [SerializeField]
-        private bool _isAutoHideEventSystem = true;
+		[SerializeField]
+		private bool _isDefaultEnableEventSystem;
 
-        [SerializeField]
-        private float _autoHideEventSystemTime = 3;
+		[Space]
+		[SerializeField]
+		private bool _isAutoHideEventSystem;
 
-        [Space]
-        [SerializeField]
-        private GameObject _playerInputManagerPrefab;
+		[SerializeField]
+		private float _autoHideEventSystemTime;
 
-        [SerializeField]
-        private float _joinedWaitingTime = 0.25f;
+		[Space]
+		[SerializeField]
+		private GameObject _playerInputManagerPrefab;
 
-        [Space]
-        [SerializeField]
-        private string _defaultActionMapDataId = "None";
+		[SerializeField]
+		private float _joinedWaitingTime;
 
-        [SerializeField]
-        private string _disableActionMapDataId = "Disable";
+		[Space]
+		[SerializeField]
+		private string _defaultActionMapDataId;
 
-
-        public string RootName => _rootName;
-        public bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
-
-        public GameObject EventSystemPrefab => _eventSystemPrefab;
-        public bool CanEnableEventSystem => _canEnableEventSystem;
-        public bool IsDefaultEnableEventSystem => _isDefaultEnableEventSystem;
+		[SerializeField]
+		private string _disableActionMapDataId;
 
 
-        public bool IsAutoHideEventSystem => _isAutoHideEventSystem;
-        public float AutoHideEventSystemTime => _autoHideEventSystemTime;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-        public GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
-        public float JoinedWaitingTime => _joinedWaitingTime;
+		public virtual string RootName => _rootName;
+		public virtual bool IsDontDestroyOnLoad => _isDontDestroyOnLoad;
 
-        public string DefaultActionMapDataId => _defaultActionMapDataId;
-        public string DisableActionMapDataId => _disableActionMapDataId;
-    }
+		public virtual GameObject EventSystemPrefab => _eventSystemPrefab;
+		public virtual bool CanEnableEventSystem => _canEnableEventSystem;
+		public virtual bool IsDefaultEnableEventSystem => _isDefaultEnableEventSystem;
+
+
+		public virtual bool IsAutoHideEventSystem => _isAutoHideEventSystem;
+		public virtual float AutoHideEventSystemTime => _autoHideEventSystemTime;
+
+		public virtual GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
+		public virtual float JoinedWaitingTime => _joinedWaitingTime;
+
+		public virtual string DefaultActionMapDataId => _defaultActionMapDataId;
+		public virtual string DisableActionMapDataId => _disableActionMapDataId;
+
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_rootName = "[InputModule]";
+			_isDontDestroyOnLoad = true;
+
+			_eventSystemPrefab = null;
+			_canEnableEventSystem = true;
+			_isDefaultEnableEventSystem = false;
+
+			_isAutoHideEventSystem = true;
+			_autoHideEventSystemTime = 3;
+
+
+			_playerInputManagerPrefab = null;
+			_joinedWaitingTime = 0.25f;
+
+			_defaultActionMapDataId = "None";
+			_disableActionMapDataId = "Disable";
+		}
+	}
 }

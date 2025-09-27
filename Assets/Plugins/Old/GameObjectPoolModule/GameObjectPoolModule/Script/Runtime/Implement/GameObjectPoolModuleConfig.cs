@@ -5,18 +5,32 @@ namespace CizaGameObjectPoolModule.Implement
 	[CreateAssetMenu(fileName = "GameObjectPoolModuleConfig", menuName = "Ciza/GameObjectPoolModule/GameObjectPoolModuleConfig")]
 	public class GameObjectPoolModuleConfig : ScriptableObject, IGameObjectPoolModuleConfig
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[SerializeField]
-		private string _poolRootName = "[GameObjectModule]";
+		protected string _poolRootName;
 
 		[Space]
 		[SerializeField]
-		private string _poolPrefix = "[";
+		protected string _poolPrefix;
 
 		[SerializeField]
-		private string _poolSuffix = "s]";
+		protected string _poolSuffix;
 
-		public string PoolRootName => _poolRootName;
-		public string PoolPrefix   => _poolPrefix;
-		public string PoolSuffix   => _poolSuffix;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual string PoolRootName => _poolRootName;
+		public virtual string PoolPrefix => _poolPrefix;
+		public virtual string PoolSuffix => _poolSuffix;
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_poolRootName = "[GameObjectModule]";
+
+			_poolPrefix = "[";
+			_poolSuffix = "s]";
+		}
 	}
 }

@@ -7,26 +7,28 @@ namespace CizaAudioModule.Implement
 	[CreateAssetMenu(fileName = "AudioModuleConfig", menuName = "Ciza/AudioModule/AudioModuleConfig")]
 	public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		[SerializeField]
-		protected string _poolRootName = "[AudioModule]";
+		protected string _poolRootName;
 
 		[Space]
 		[SerializeField]
-		protected string _poolPrefix = "";
+		protected string _poolPrefix;
 
 		[SerializeField]
-		protected string _poolSuffix = "s";
+		protected string _poolSuffix;
 
 		[Space]
 		[SerializeField]
-		protected string _audioMixerGroupPath = "Master";
+		protected string _audioMixerGroupPath;
 
 		[SerializeField]
-		protected string _audioMixerParameter = "Master";
+		protected string _audioMixerParameter;
 
 		[Range(0, 1)]
 		[SerializeField]
-		protected float _defaultVolume = 0.7f;
+		protected float _defaultVolume;
 
 		[Space]
 		[SerializeField]
@@ -38,6 +40,8 @@ namespace CizaAudioModule.Implement
 
 		[SerializeField]
 		protected AudioInfoMapList _infoMapList;
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		public virtual string PoolRootName => _poolRootName;
 
@@ -66,6 +70,26 @@ namespace CizaAudioModule.Implement
 				audioInfoMap.Add(pair.Value.DataId, pair.Value);
 
 			return audioInfoMap;
+		}
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			_poolRootName = "[AudioModule]";
+
+			_poolPrefix = "";
+			_poolSuffix = "s";
+
+			_audioMixerGroupPath = "Master";
+			_audioMixerParameter = "Master";
+			_defaultVolume = 0.7f;
+
+			_hasRestrictContinuousPlay = new RestrictContinuousPlayEnabler();
+
+			_prefabAddress = string.Empty;
+
+			_infoMapList = new AudioInfoMapList();
 		}
 	}
 }

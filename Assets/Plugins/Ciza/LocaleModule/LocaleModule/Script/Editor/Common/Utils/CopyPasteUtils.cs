@@ -65,13 +65,16 @@ namespace CizaLocaleModule.Editor
 				var list = TypeUtils.CreateInstance(sourceListType, sourceList.Count) as IList;
 				for (var i = 0; i < sourceList.Count; i++)
 				{
+					var sourceElement = i < sourceList.Count ? sourceList[i] : null;
 					object element;
-					var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
-					if (TypeUtils.CheckIsAbstractOrInterface(elementType))
-						element = i < sourceList.Count ? Duplicate(sourceList[i].GetType(), sourceList[i]) : null;
+					if (sourceElement != null)
+						element = Duplicate(sourceElement.GetType(), sourceElement);
 
 					else
-						element = Duplicate(elementType, i < sourceList.Count ? sourceList[i] : TypeUtils.CreateInstance(elementType));
+					{
+						var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
+						element = !TypeUtils.CheckIsAbstractOrInterface(elementType) ? TypeUtils.CreateInstance(elementType) : null;
+					}
 
 					if (sourceType.IsArray)
 						list[i] = element;

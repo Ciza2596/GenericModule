@@ -48,7 +48,7 @@ namespace CizaAudioModule.Editor
 				return false;
 			}
 
-			copy = Duplicate(itemType, source);
+			copy = Duplicate(source.GetType(), source);
 			return copy != null;
 		}
 

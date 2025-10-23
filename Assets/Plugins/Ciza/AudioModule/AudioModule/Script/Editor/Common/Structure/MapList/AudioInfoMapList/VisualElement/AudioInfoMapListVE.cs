@@ -19,7 +19,7 @@ namespace CizaAudioModule.Editor
 			Refresh();
 		}
 
-		protected override ItemVE CreateItem(SerializedProperty itemProperty)
+		protected override ItemVE CreateItemVE(SerializedProperty itemProperty)
 		{
 			var itemVE = new AudioInfoMapItemVE(this, itemProperty);
 			itemVE.Initialize();

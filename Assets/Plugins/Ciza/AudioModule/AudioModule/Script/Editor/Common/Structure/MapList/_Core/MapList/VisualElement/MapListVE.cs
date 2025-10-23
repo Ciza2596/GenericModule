@@ -27,7 +27,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 			Refresh();
 		}
 
-		protected override ItemVE CreateItem(SerializedProperty itemProperty)
+		protected override ItemVE CreateItemVE(SerializedProperty itemProperty)
 		{
 			var itemVE = new MapItemVE(_keyLabel, _valueLabel, this, itemProperty);
 			itemVE.Initialize();

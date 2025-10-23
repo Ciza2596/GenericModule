@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -9,6 +11,13 @@ namespace CizaLocaleModule.Editor
 {
 	public class ItemVE : BItemVE
 	{
+		// CONST & STATIC: -----------------------------------------------------------------------
+
+		public static readonly IIcon DEFAULT_REORDERING_ICON = new DragIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_DISABLE_ICON = new CancelIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_DUPLICATE_ICON = new DuplicateIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_DELETE_ICON = new MinusIcon(ColorTheme.Type.TextLight);
+
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		[NonSerialized]
@@ -50,11 +59,13 @@ namespace CizaLocaleModule.Editor
 		protected virtual string HeadTitleExpandedClass => "list-item-head-title--expanded";
 		protected virtual string[] HeadRightClasses => new[] { "list-item-head-right" };
 		protected virtual string[] BodyClasses => new[] { "list-item-body" };
+		protected virtual string SelectedItemClass => "selected";
 
-		protected virtual Texture2D ReorderingIcon => new DragIcon(ColorTheme.Type.TextLight).Texture;
-		protected virtual Texture2D DisableIcon => new CancelIcon(ColorTheme.Type.Light).Texture;
-		protected virtual Texture2D DuplicateIcon => new DuplicateIcon(ColorTheme.Type.Light).Texture;
-		protected virtual Texture2D DeleteIcon => new MinusIcon(ColorTheme.Type.Light).Texture;
+
+		protected virtual Texture2D ReorderingIcon => DEFAULT_REORDERING_ICON.Texture;
+		protected virtual Texture2D DisableIcon => DEFAULT_DISABLE_ICON.Texture;
+		protected virtual Texture2D DuplicateIcon => DEFAULT_DUPLICATE_ICON.Texture;
+		protected virtual Texture2D DeleteIcon => DEFAULT_DELETE_ICON.Texture;
 
 
 		[field: NonSerialized]
@@ -92,6 +103,7 @@ namespace CizaLocaleModule.Editor
 
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
+		[Preserve]
 		public ItemVE(ListVE root, SerializedProperty itemProperty) : base()
 		{
 			Root = root;
@@ -110,6 +122,7 @@ namespace CizaLocaleModule.Editor
 
 			foreach (var c in HeadClasses)
 				_head.AddToClassList(c);
+			_head.AddToClassList(SelectedItemClass);
 			_headTitle.AddToClassList(HeadTitleExpandedClass);
 
 			foreach (var c in BodyClasses)
@@ -164,7 +177,12 @@ namespace CizaLocaleModule.Editor
 			{
 				GetActiveOpacity(_headDelete, IsAllowDelete, "Delete");
 			}
+
+			RefreshSelectedStyle();
 		}
+
+		public virtual void RefreshSelectedStyle() =>
+			_head.EnableInClassList(SelectedItemClass, Root.SelectedItemIndexList.Contains(Index));
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
@@ -200,6 +218,19 @@ namespace CizaLocaleModule.Editor
 
 				if (Root.IsAllowContextMenu)
 					_headTitle.AddManipulator(new ContextualMenuManipulator(OnOpenMenu));
+
+				_headTitle.RegisterCallback<PointerDownEvent>(@event =>
+				{
+					switch (@event.button)
+					{
+						case 1 when !Root.SelectedItemIndexList.Contains(Index):
+							Root.OnItemSelected(Index, EventModifiers.None);
+							break;
+						case 0:
+							Root.OnItemSelected(Index, @event.modifiers);
+							break;
+					}
+				});
 				_head.Add(_headTitle);
 			}
 
@@ -307,6 +338,8 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual void OnOpenMenu(ContextualMenuPopulateEvent populateEvent)
 		{
+			populateEvent.menu.ClearItems();
+
 			if (Root.IsAllowDisable && IsAllowDisable)
 			{
 				populateEvent.menu.AppendAction(IsEnable ? "Disable" : "Enable", _ =>
@@ -320,14 +353,26 @@ namespace CizaLocaleModule.Editor
 
 			if (Root.IsAllowCopyPaste && IsAllowCopyPaste)
 			{
-				populateEvent.menu.AppendAction("Copy", _ => { CopyPasteUtils.Copy(ItemProperty.GetValue()); });
+				populateEvent.menu.AppendAction("Select All", _ => { Root.SelectAllItem(); }, _ => Root.IsAllowSelection && !Root.IsSelectAll ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+				populateEvent.menu.AppendAction("Unselect All", _ => { Root.UnselectAllItem(); }, _ => Root.IsAllowSelection && !Root.IsUnselectAll ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
 
+				populateEvent.menu.AppendSeparator();
+
+				populateEvent.menu.AppendAction("Copy", _ => { CopyPasteUtils.Copy(Root.GetSelectedItemsCopy()); }, _ => Root.SelectedItemIndexList.Length > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+
+				var arrayType = Array.CreateInstance(Root.ItemType, 0).GetType();
 				populateEvent.menu.AppendAction("Paste", _ =>
 				{
+					if (!CopyPasteUtils.TryPaste(arrayType, out var copy) || copy is not Array array)
+						return;
 					var pasteIndex = Index + 1;
-					if (CopyPasteUtils.TryPaste(Root.ItemType, out var copy))
-						Root.InsertItem(pasteIndex, copy);
-				}, _ => CopyPasteUtils.CheckCanPaste(Root.ItemType) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+					foreach (var item in array)
+					{
+						Root.InsertItem(pasteIndex, item);
+						pasteIndex++;
+					}
+				}, _ => CopyPasteUtils.CheckCanPaste(arrayType) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+
 				populateEvent.menu.AppendSeparator();
 			}
 

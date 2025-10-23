@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -8,6 +10,14 @@ namespace CizaAudioModule.Editor
 {
 	public class ListVE : BListVE<ItemVE>, BBoxVE.IContent
 	{
+		// CONST & STATIC: -----------------------------------------------------------------------
+
+		public static readonly IIcon DEFAULT_DROP_DOWN_ICON = new TriangleDownIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_DROP_RIGHT_ICON = new TriangleRightIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_SEARCH_ICON = new SearchIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_CLEAR_SEARCH_ICON = new CrossMarkIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_ADD_ITEM_ICON = new DuplicateIcon(ColorTheme.Type.TextLight);
+
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		#region Head
@@ -29,6 +39,12 @@ namespace CizaAudioModule.Editor
 		[NonSerialized]
 		protected readonly VisualElement _foot = new VisualElement();
 
+		[NonSerialized]
+		protected readonly List<int> _selectedItemIndexList = new List<int>();
+
+		[NonSerialized]
+		protected int _selectedItemIndexBaseline = -1;
+
 		protected virtual string[] USSPaths => new[] { "List" };
 
 		#region Class
@@ -49,13 +65,13 @@ namespace CizaAudioModule.Editor
 
 		#endregion
 
-		protected virtual Texture2D DropDownIcon => new TriangleDownIcon(ColorTheme.Type.TextLight).Texture;
-		protected virtual Texture2D DropRightIcon => new TriangleRightIcon(ColorTheme.Type.TextLight).Texture;
+		protected virtual Texture2D DropDownIcon => DEFAULT_DROP_DOWN_ICON.Texture;
+		protected virtual Texture2D DropRightIcon => DEFAULT_DROP_RIGHT_ICON.Texture;
 
-		protected virtual Texture2D SearchIcon => new SearchIcon(ColorTheme.Type.TextLight).Texture;
-		protected virtual Texture2D ClearSearchIcon => new CrossMarkIcon(ColorTheme.Type.TextLight).Texture;
+		protected virtual Texture2D SearchIcon => DEFAULT_SEARCH_ICON.Texture;
+		protected virtual Texture2D ClearSearchIcon => DEFAULT_CLEAR_SEARCH_ICON.Texture;
 
-		protected virtual Texture2D AddItemIcon => new DuplicateIcon(ColorTheme.Type.TextLight).Texture;
+		protected virtual Texture2D AddItemIcon => DEFAULT_ADD_ITEM_ICON.Texture;
 
 
 		[field: NonSerialized]
@@ -79,6 +95,7 @@ namespace CizaAudioModule.Editor
 
 		public virtual VisualElement Body => this;
 
+		public virtual bool IsAllowSelection => true;
 		public virtual bool IsAllowReordering => true;
 		public virtual bool IsAllowDisable => false;
 		public virtual bool IsAllowDuplicate => true;
@@ -102,6 +119,11 @@ namespace CizaAudioModule.Editor
 
 		[field: NonSerialized]
 		public virtual bool IsElementIsClass { get; protected set; }
+
+
+		public virtual int[] SelectedItemIndexList => _selectedItemIndexList.ToArray();
+		public virtual bool IsSelectAll => Count == _selectedItemIndexList.Count;
+		public virtual bool IsUnselectAll => _selectedItemIndexList.Count == 0;
 
 
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
@@ -143,16 +165,100 @@ namespace CizaAudioModule.Editor
 		{
 			var itemsProperty = ItemsProperty;
 			for (int i = 0; i < itemsProperty.arraySize; i++)
-				SpawnItem(i, itemsProperty.GetArrayElementAtIndex(i));
+			{
+				var itemProperty = itemsProperty.GetArrayElementAtIndex(i);
+				if (itemProperty.GetValue() == null)
+					if (TypeUtils.TryCreateInstance(SerializationUtils.GetType(itemProperty, false), out var instance))
+						itemProperty.SetValue(instance);
+					else
+					{
+						itemProperty.DeleteArrayElementAtIndex(i);
+						continue;
+					}
+
+				SpawnItem(i, itemProperty);
+			}
+
 			RemoveItems(itemsProperty.arraySize);
 			RefreshSearchButton(IsSearch);
+		}
+
+		public virtual void OnItemSelected(int index, EventModifiers modifier)
+		{
+			if (!IsAllowSelection)
+				return;
+
+			if (modifier.CheckIsShift())
+			{
+				if (_selectedItemIndexList.Count == 0)
+				{
+					_selectedItemIndexBaseline = index;
+					_selectedItemIndexList.Add(index);
+				}
+				else
+				{
+					var startIndex = Math.Min(index, _selectedItemIndexBaseline);
+					var endIndex = Math.Max(index, _selectedItemIndexBaseline);
+					_selectedItemIndexList.Clear();
+					for (var i = startIndex; i <= endIndex; i++)
+						_selectedItemIndexList.Add(i);
+				}
+			}
+			else if (modifier.CheckIsCtrl())
+			{
+				_selectedItemIndexBaseline = index;
+				if (!_selectedItemIndexList.Contains(index))
+					_selectedItemIndexList.Add(index);
+				else
+					_selectedItemIndexList.Remove(index);
+			}
+			else
+			{
+				var isAllClear = _selectedItemIndexList.Count == 1 && _selectedItemIndexList[0] == index;
+				_selectedItemIndexList.Clear();
+				_selectedItemIndexBaseline = isAllClear ? -1 : index;
+				if (!isAllClear)
+					_selectedItemIndexList.Add(index);
+			}
+
+			RefreshSelectedColor();
+		}
+
+		public virtual void SelectAllItem()
+		{
+			_selectedItemIndexBaseline = 0;
+			_selectedItemIndexList.Clear();
+			_selectedItemIndexList.AddRange(Enumerable.Range(0, Count));
+
+			RefreshSelectedColor();
+		}
+
+		public virtual void UnselectAllItem()
+		{
+			_selectedItemIndexBaseline = 0;
+			_selectedItemIndexList.Clear();
+			RefreshSelectedColor();
+		}
+
+		public virtual Array GetSelectedItemsCopy()
+		{
+			var indices = SelectedItemIndexList.OrderBy(i => i).ToArray();
+			var result = Array.CreateInstance(ItemType, indices.Length);
+
+			for (var i = 0; i < indices.Length; i++)
+				result.SetValue(_itemVEs.FirstOrDefault(itemVE => itemVE.Index == indices[i])?.ItemProperty?.GetValue(), i);
+
+			return result;
 		}
 
 		public virtual void InsertNewItemAtLast(Type type) =>
 			InsertNewItem(Count, type);
 
-		public virtual void InsertNewItem(int index, Type type) =>
-			InsertItem(index, TypeUtils.CreateInstance(type));
+		public virtual void InsertNewItem(int index, Type type)
+		{
+			if (TypeUtils.TryCreateInstance(type, out var value))
+				InsertItem(index, value);
+		}
 
 		public virtual void InsertItem(int index, object value)
 		{
@@ -162,8 +268,15 @@ namespace CizaAudioModule.Editor
 
 			ItemsProperty.InsertArrayElementAtIndex(index);
 			ItemsProperty.GetArrayElementAtIndex(index).SetValue(value);
-			
+
 			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
+
+			var selectedIndices = SelectedItemIndexList;
+			for (int i = 0; i < selectedIndices.Length; i++)
+			{
+				if (selectedIndices[i] >= index)
+					_selectedItemIndexList[i]++;
+			}
 
 			Refresh();
 			RefreshIsExpandWhenInsert(index);
@@ -173,8 +286,6 @@ namespace CizaAudioModule.Editor
 		public virtual void DuplicateItem(int index)
 		{
 			if (index < 0) return;
-
-			ListProperty.serializedObject.Update();
 
 			ListProperty.serializedObject.Update();
 
@@ -215,8 +326,40 @@ namespace CizaAudioModule.Editor
 				for (int i = sourceIndex; i > destinationIndex; i--)
 					_itemVEs[i].SetIsExpand(_itemVEs[i - 1].IsExpand);
 
+			var hasSourceSelected = _selectedItemIndexList.Contains(sourceIndex);
+			_selectedItemIndexList.Remove(sourceIndex);
+
+			var selectedItemIndexList = new List<int>();
+			destinationIndex = Math.Clamp(destinationIndex, 0, Count - 1);
+			if (destinationIndex > sourceIndex)
+			{
+				for (int i = sourceIndex; i <= destinationIndex; i++)
+					if (_selectedItemIndexList.Contains(i))
+					{
+						selectedItemIndexList.Add(i - 1);
+						_selectedItemIndexList.Remove(i);
+					}
+			}
+			else if (destinationIndex < sourceIndex)
+			{
+				for (int i = sourceIndex; i >= destinationIndex; i--)
+					if (_selectedItemIndexList.Contains(i))
+					{
+						selectedItemIndexList.Add(i + 1);
+						_selectedItemIndexList.Remove(i);
+					}
+			}
+
 			MoveItems(ItemsProperty, sourceIndex, destinationIndex);
 			Refresh();
+
+			selectedItemIndexList.AddRange(_selectedItemIndexList);
+			_selectedItemIndexList.Clear();
+			if (hasSourceSelected)
+				_selectedItemIndexList.Add(destinationIndex);
+			_selectedItemIndexList.AddRange(selectedItemIndexList);
+			RefreshSelectedColor();
+
 			_itemVEs[destinationIndex].SetIsExpand(sourceIsExpand);
 		}
 
@@ -266,7 +409,7 @@ namespace CizaAudioModule.Editor
 		protected virtual ItemSortManipulator CreateSortManipulator() =>
 			new ItemSortManipulator(this);
 
-		protected virtual ItemVE CreateItem(SerializedProperty itemProperty)
+		protected virtual ItemVE CreateItemVE(SerializedProperty itemProperty)
 		{
 			var itemVE = new ItemVE(this, itemProperty);
 			itemVE.Initialize();
@@ -334,7 +477,7 @@ namespace CizaAudioModule.Editor
 		{
 			if (index >= _itemVEs.Count)
 			{
-				var itemVE = CreateItem(itemProperty);
+				var itemVE = CreateItemVE(itemProperty);
 				_itemVEs.Add(itemVE);
 				_body.Add(itemVE);
 			}
@@ -352,6 +495,12 @@ namespace CizaAudioModule.Editor
 				_itemVEs.RemoveAt(_itemVEs.Count - 1);
 				_body.RemoveAt(_body.childCount - 1);
 			}
+		}
+
+		protected virtual void RefreshSelectedColor()
+		{
+			foreach (var itemVE in _itemVEs)
+				itemVE.RefreshSelectedStyle();
 		}
 
 		protected virtual void RefreshIsExpandWhenInsert(int insertIndex)

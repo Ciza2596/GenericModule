@@ -8,6 +8,11 @@ namespace CizaLocaleModule.Editor
 {
 	public class BoxVE : BBoxVE
 	{
+		// CONST & STATIC: -----------------------------------------------------------------------
+
+		public static readonly IIcon DEFAULT_TRIANGLE_DOWN_ICON = new TriangleDownIcon(ColorTheme.Type.TextLight);
+		public static readonly IIcon DEFAULT_TRIANGLE_RIGHT_ICON = new TriangleRightIcon(ColorTheme.Type.TextLight);
+
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		[NonSerialized]
@@ -33,8 +38,8 @@ namespace CizaLocaleModule.Editor
 		public virtual bool IsAllowContextMenu { get; set; } = true;
 		public virtual bool IsAllowCopyPaste { get; set; } = true;
 
-		protected virtual Texture2D TriangleDownIcon => new TriangleDownIcon(ColorTheme.Type.TextLight).Texture;
-		protected virtual Texture2D TriangleRightIcon => new TriangleRightIcon(ColorTheme.Type.TextLight).Texture;
+		protected virtual Texture2D TriangleDownIcon => DEFAULT_TRIANGLE_DOWN_ICON.Texture;
+		protected virtual Texture2D TriangleRightIcon => DEFAULT_TRIANGLE_RIGHT_ICON.Texture;
 
 		[field: NonSerialized]
 		protected SerializedProperty Property { get; }

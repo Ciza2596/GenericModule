@@ -19,6 +19,6 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected override SerializedProperty CreateItemsProperty() =>
 			ListProperty.FindPropertyRelative("_maps");
 
-		protected abstract override ItemVE CreateItem(SerializedProperty itemProperty);
+		protected abstract override ItemVE CreateItemVE(SerializedProperty itemProperty);
 	}
 }

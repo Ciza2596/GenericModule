@@ -28,26 +28,41 @@ namespace CizaAudioModule.Editor
 
 		#endregion
 
-		public static object CreateInstance(Type type, params object[] args)
+		public static bool TryCreateInstance(Type type, out object instance, params object[] args)
 		{
 			if (CheckIsUnityObjSubclass(type))
-				return null;
+			{
+				instance = null;
+				return true;
+			}
 
 			if (CheckIsString(type))
-				return string.Empty;
+			{
+				instance = string.Empty;
+				return true;
+			}
 
 			if (type.IsArray)
-				return Array.CreateInstance(GetElementTypes(type)[0], (args.Length == 1 && args[0] is int length) ? length : 0);
+			{
+				instance = Array.CreateInstance(GetElementTypes(type)[0], (args.Length == 1 && args[0] is int length) ? length : 0);
+				return true;
+			}
 
 			if (CheckIsListImp(type))
 			{
 				var listType = typeof(List<>).MakeGenericType(GetElementTypes(type)[0]);
-				return (IList)Activator.CreateInstance(listType);
+				instance = (IList)Activator.CreateInstance(listType);
+				return true;
 			}
 
 			if (!type.IsValueType && (CheckIsAbstractOrInterface(type) || type.GetConstructor(Type.EmptyTypes) == null))
-				throw new InvalidOperationException($"Type {type.Name} cant created by activator,");
-			return Activator.CreateInstance(type, args);
+			{
+				instance = null;
+				return false;
+			}
+
+			instance = Activator.CreateInstance(type, args);
+			return true;
 		}
 
 		public static Type[] GetElementTypes(Type type)

@@ -62,7 +62,7 @@ namespace CizaAudioModule.Editor
 			if (source is IList sourceList)
 			{
 				var sourceListType = sourceList.GetType();
-				var list = TypeUtils.CreateInstance(sourceListType, sourceList.Count) as IList;
+				var list = TypeUtils.TryCreateInstance(sourceListType, out var listInstance, sourceList.Count) ? listInstance as IList : null;
 				for (var i = 0; i < sourceList.Count; i++)
 				{
 					var sourceElement = i < sourceList.Count ? sourceList[i] : null;
@@ -73,7 +73,7 @@ namespace CizaAudioModule.Editor
 					else
 					{
 						var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
-						element = !TypeUtils.CheckIsAbstractOrInterface(elementType) ? TypeUtils.CreateInstance(elementType) : null;
+						element = TypeUtils.TryCreateInstance(elementType, out var localInstance) ? localInstance : null;
 					}
 
 					if (sourceType.IsArray)
@@ -85,7 +85,7 @@ namespace CizaAudioModule.Editor
 				return list;
 			}
 
-			var newObj = TypeUtils.CreateInstance(sourceType);
+			var newObj = TypeUtils.TryCreateInstance(sourceType, out var instance) ? instance : null;
 			OverrideObj(source, newObj);
 			return newObj;
 		}

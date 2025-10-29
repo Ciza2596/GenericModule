@@ -164,19 +164,21 @@ namespace CizaLocaleModule.Editor
 		public override void Refresh()
 		{
 			var itemsProperty = ItemsProperty;
+			int index = 0;
 			for (int i = 0; i < itemsProperty.arraySize; i++)
 			{
-				var itemProperty = itemsProperty.GetArrayElementAtIndex(i);
+				var itemProperty = itemsProperty.GetArrayElementAtIndex(index);
 				if (itemProperty.GetValue() == null)
 					if (TypeUtils.TryCreateInstance(SerializationUtils.GetType(itemProperty, false), out var instance))
 						itemProperty.SetValue(instance);
 					else
 					{
-						itemProperty.DeleteArrayElementAtIndex(i);
+						itemProperty.DeleteArrayElementAtIndex(index);
 						continue;
 					}
 
-				SpawnItem(i, itemProperty);
+				SpawnItem(index, itemsProperty.GetArrayElementAtIndex(index));
+				index++;
 			}
 
 			RemoveItems(itemsProperty.arraySize);

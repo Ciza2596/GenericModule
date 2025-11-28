@@ -85,7 +85,6 @@ namespace CizaLocaleModule.Editor
 			if (spaceHeight > 0)
 				root.Add(new VisualElement() { style = { height = spaceHeight } });
 
-			root.Bind(property.serializedObject);
 			var propertyNumber = 0;
 
 			do

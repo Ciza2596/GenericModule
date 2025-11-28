@@ -55,11 +55,14 @@ namespace CizaLocaleModule.Editor
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-		public void Initialize(string title, IContent content)
+		public void Initialize(string title, IContent content) =>
+			Initialize(title, content, null);
+
+		public void Initialize(string title, IContent content, VisualElement headAdditional)
 		{
 			if (IsInitialized) return;
 			IsInitialized = true;
-			DerivedInitialize(title, content);
+			DerivedInitialize(title, content, headAdditional);
 			Refresh();
 		}
 
@@ -67,7 +70,7 @@ namespace CizaLocaleModule.Editor
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected virtual void DerivedInitialize(string title, IContent content)
+		protected virtual void DerivedInitialize(string title, IContent content, VisualElement headAdditional)
 		{
 			Title = title;
 

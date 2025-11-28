@@ -3,7 +3,7 @@ using UnityEngine.Scripting;
 
 namespace CizaAudioModule.Editor.MapListVisual
 {
-	public class MapListVE: BMapListVE
+	public class MapListVE : BMapListVE
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		public MapListVE(string keyLabel, string valueLabel, SerializedProperty listProperty) : base(listProperty)
+		public MapListVE(SerializedProperty listProperty, bool isAutoRefresh, string keyLabel, string valueLabel) : base(listProperty, isAutoRefresh)
 		{
 			_keyLabel = keyLabel;
 			_valueLabel = valueLabel;

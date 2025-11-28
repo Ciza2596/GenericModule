@@ -23,10 +23,9 @@ namespace CizaLocaleModule.Editor
 			if (!Property.isArray)
 				return base.CreatePropertyGUI(property);
 
-			var root = new BoxVE(property, CreateHeadAdditional_ListCountLabel());
-			root.Initialize(Property.displayName, CreateBody_ListVE());
+			var root = new BoxVE(property);
+			root.Initialize(Property.displayName, CreateBody_ListVE(), CreateHeadAdditional_ListCountLabel());
 			root.TrackPropertyValue(Property, _ => root.Refresh());
-
 			return root;
 		}
 
@@ -40,7 +39,7 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual BBoxVE.IContent CreateBody_ListVE()
 		{
-			var listVE = new ListVE(Property);
+			var listVE = new ListVE(Property, false);
 			listVE.Initialize();
 			return listVE;
 		}

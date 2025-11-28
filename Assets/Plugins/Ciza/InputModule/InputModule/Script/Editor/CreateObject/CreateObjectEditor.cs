@@ -3,37 +3,37 @@ using UnityEngine;
 
 namespace CizaInputModule.Editor
 {
-    public class CreateObjectEditor
+    public static class CreateObjectEditor
     {
-        public const string InputModulePath = "InputModule/";
+        public const string INPUT_MODULE_PATH = "InputModule/Prefab/";
 
-        public const string PlayerInputManager = "PlayerInputManager";
+        public const string PLAYER_INPUT_MANAGER = "PlayerInputManager";
 
         [MenuItem("GameObject/Ciza/InputModule/PlayerInputManager", false, -101)]
         public static void CreatePlayerInputManager()
         {
-            CreateObject(PlayerInputManager);
+            CreateObject(PLAYER_INPUT_MANAGER);
         }
 
-        public const string PlayerInput = "PlayerInput";
+        public const string PLAYER_INPUT = "PlayerInput";
 
         [MenuItem("GameObject/Ciza/InputModule/PlayerInput", false, -100)]
         public static void CreatePlayerInput()
         {
-            CreateObject(PlayerInput);
+            CreateObject(PLAYER_INPUT);
         }
 
-        public const string EventSystem = "EventSystem";
+        public const string EVENT_SYSTEM = "EventSystem";
 
         [MenuItem("GameObject/Ciza/InputModule/EventSystem", false, -10)]
         public static void CreateEventSystem()
         {
-            CreateObject(EventSystem);
+            CreateObject(EVENT_SYSTEM);
         }
 
         private static void CreateObject(string dataId)
         {
-            var prefab = Resources.Load<GameObject>(InputModulePath + dataId);
+            var prefab = Resources.Load<GameObject>(INPUT_MODULE_PATH + dataId);
             var uiObject = Object.Instantiate(prefab, Selection.activeTransform);
             uiObject.name = dataId;
         }

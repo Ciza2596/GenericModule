@@ -8,9 +8,9 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected virtual string KeyLabel => "Key";
 		protected virtual string ValueLabel => "Value";
 
-		protected override BMapListVE CreateListVE()
+		protected override BMapListVE CreateMapListVE(SerializedProperty property, BoxVE root)
 		{
-			var listVE = new MapListVE(KeyLabel, ValueLabel, Property);
+			var listVE = new MapListVE(property, false, KeyLabel, ValueLabel);
 			listVE.Initialize();
 			return listVE;
 		}

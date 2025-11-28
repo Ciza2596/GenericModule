@@ -8,33 +8,24 @@ namespace CizaAudioModule.Editor
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 
-		[field: NonSerialized]
-		protected SerializedProperty Property { get; set; }
-
-		[field: NonSerialized]
-		protected BBoxVE Root { get; set; }
-
-		protected virtual string GetName() => Property.displayName;
+		protected virtual string GetName(SerializedProperty property, VisualElement root) => property.displayName;
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
-			Property = property;
-
-			Root = new BoxVE(property, CreateHeadAdditional());
-			Root.Initialize(GetName(), CreateBody());
-
-			return Root;
+			var root = new BoxVE(property);
+			root.Initialize(GetName(property, root), CreateBody(property, root), CreateHeadAdditional(property, root));
+			return root;
 		}
 
 		// PROTECT METHOD: --------------------------------------------------------------------
-		protected virtual VisualElement CreateHeadAdditional() => null;
+		protected virtual VisualElement CreateHeadAdditional(SerializedProperty property, BoxVE root) => null;
 
-		protected virtual BBoxVE.IContent CreateBody()
+		protected virtual BBoxVE.IContent CreateBody(SerializedProperty property, BoxVE root)
 		{
 			var content = new BBoxVE.ContentVE();
-			SerializationUtils.CreateChildProperties(content, Property, SerializationUtils.ChildrenKinds.ShowLabelsInChildren);
+			SerializationUtils.CreateChildProperties(content, property, SerializationUtils.ChildrenKinds.ShowLabelsInChildren);
 			return content;
 		}
 	}

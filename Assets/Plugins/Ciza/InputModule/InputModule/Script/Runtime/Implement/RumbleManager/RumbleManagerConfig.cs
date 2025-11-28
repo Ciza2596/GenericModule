@@ -1,41 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace CizaInputModule.Implement
 {
-    [CreateAssetMenu(fileName = "RumbleManagerConfig", menuName = "Ciza/InputModule/RumbleManagerConfig")]
-    public class RumbleManagerConfig : ScriptableObject, IRumbleManagerConfig
-    {
-        [SerializeField]
-        private RumbleInfo[] _rumbleInfos;
+	[CreateAssetMenu(fileName = "RumbleManagerConfig", menuName = "Ciza/InputModule/RumbleManagerConfig")]
+	public class RumbleManagerConfig : ScriptableObject, IRumbleManagerConfig
+	{
+		[SerializeField]
+		protected RumbleInfoMapList _rumbleInfoMapList;
 
-        public string[] AllDataIds
-        {
-            get
-            {
-                var allDataIds = new HashSet<string>();
-                var rumbleInfos = _rumbleInfos != null ? _rumbleInfos : Array.Empty<RumbleInfo>();
-                foreach (var rumbleInfo in rumbleInfos)
-                    if (!string.IsNullOrEmpty(rumbleInfo.DataId))
-                        allDataIds.Add(rumbleInfo.DataId);
-
-                return allDataIds.ToArray();
-            }
-        }
+		public virtual string[] AllDataIds => _rumbleInfoMapList.Keys;
 
 
-        public bool TryGetRumbleInfo(string dataId, out IRumbleInfo rumbleInfo)
-        {
-            if (_rumbleInfos == null)
-            {
-                rumbleInfo = null;
-                return false;
-            }
+		public virtual bool TryGetRumbleInfo(string dataId, out IRumbleInfo rumbleInfo)
+		{
+			if (!_rumbleInfoMapList.TryGetValue(dataId, out var rumbleInfoImp))
+			{
+				rumbleInfo = null;
+				return false;
+			}
 
-            rumbleInfo = _rumbleInfos.FirstOrDefault(rumbleInfo => rumbleInfo.DataId == dataId);
-            return rumbleInfo != null;
-        }
-    }
+			rumbleInfo = rumbleInfoImp;
+			return true;
+		}
+
+
+		public virtual void Reset()
+		{
+			_rumbleInfoMapList = new RumbleInfoMapList();
+		}
+	}
 }

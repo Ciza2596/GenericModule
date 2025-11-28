@@ -12,7 +12,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
 
 		[Preserve]
-		protected BMapListVE(SerializedProperty listProperty) : base(listProperty) { }
+		protected BMapListVE(SerializedProperty listProperty, bool isAutoRefresh) : base(listProperty, isAutoRefresh) { }
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 

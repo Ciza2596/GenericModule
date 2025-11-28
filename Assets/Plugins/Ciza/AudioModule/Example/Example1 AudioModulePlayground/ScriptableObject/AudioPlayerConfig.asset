@@ -47,7 +47,21 @@ MonoBehaviour:
         _maxConsecutiveCount: 1
     _prefabAddress: SfxAudio
     _infoMapList:
-      _maps: []
+      _maps:
+      - _isEnable: 1
+        _value:
+          _dataId: 
+          _clipAddress: 
+          _isOverridePrefabAddress:
+            _isEnable: 0
+            _value: 
+      - _isEnable: 1
+        _value:
+          _dataId: 12321
+          _clipAddress: 
+          _isOverridePrefabAddress:
+            _isEnable: 0
+            _value: 
   _voiceModuleConfig:
     _poolRootName: Voice
     _poolPrefix: 

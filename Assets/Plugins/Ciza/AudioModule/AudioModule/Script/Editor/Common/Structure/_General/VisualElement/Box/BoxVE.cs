@@ -12,7 +12,7 @@ namespace CizaAudioModule.Editor
 
 		public static readonly IIcon DEFAULT_TRIANGLE_DOWN_ICON = new TriangleDownIcon(ColorTheme.Type.TextLight);
 		public static readonly IIcon DEFAULT_TRIANGLE_RIGHT_ICON = new TriangleRightIcon(ColorTheme.Type.TextLight);
-		
+
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		[NonSerialized]
@@ -20,9 +20,6 @@ namespace CizaAudioModule.Editor
 
 		[NonSerialized]
 		protected readonly Image _headImage = new Image();
-
-		[NonSerialized]
-		protected readonly VisualElement _headAdditional;
 
 		protected virtual string IsExpandKey => _boxId + "." + nameof(IsExpand);
 
@@ -32,7 +29,7 @@ namespace CizaAudioModule.Editor
 		protected override string[] HeadClasses => new[] { "box-head" };
 		protected override string[] BodyClasses => new[] { "box-body" };
 		protected virtual string ActiveBodyClass => "box-active";
-		
+
 		protected virtual string[] TitleLabelClasses => new[] { "box-head-titlelabel" };
 
 		public virtual bool IsAllowContextMenu { get; set; } = true;
@@ -67,17 +64,15 @@ namespace CizaAudioModule.Editor
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		public BoxVE(SerializedProperty property, VisualElement headAdditional = null)
+		public BoxVE(SerializedProperty property)
 		{
 			Property = property;
-			_headAdditional = headAdditional;
 		}
 
 		[Preserve]
-		public BoxVE(string boxId, VisualElement headAdditional = null)
+		public BoxVE(string boxId)
 		{
 			_boxId = boxId;
-			_headAdditional = headAdditional;
 			IsAllowCopyPaste = false;
 		}
 
@@ -86,29 +81,26 @@ namespace CizaAudioModule.Editor
 		public override void Refresh()
 		{
 			_headImage.image = IsExpand ? TriangleDownIcon : TriangleRightIcon;
-
 			_body.EnableInClassList(ActiveBodyClass, IsExpand);
-
 			if (!IsExpand) return;
-
 			Content?.Refresh();
 		}
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected override void DerivedInitialize(string title, IContent content)
+		protected override void DerivedInitialize(string title, IContent content, VisualElement headAdditional)
 		{
-			base.DerivedInitialize(title, content);
+			base.DerivedInitialize(title, content, headAdditional);
 
 			AddHeadLeftContent(_headImage);
-			
+
 			var titleLabel = new Label(Title);
 			foreach (var titleLabelClass in TitleLabelClasses)
 				titleLabel.AddToClassList(titleLabelClass);
 			AddHeadLeftContent(titleLabel);
 
-			if (_headAdditional != null)
-				AddHeadRightContent(_headAdditional);
+			if (headAdditional != null)
+				AddHeadRightContent(headAdditional);
 
 			if (IsAllowContextMenu)
 				AddHeadManipulator(new ContextualMenuManipulator(OnOpenMenu));

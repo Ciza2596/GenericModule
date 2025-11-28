@@ -5,52 +5,50 @@ using UnityEngine.Scripting;
 
 namespace CizaInputModule
 {
-    [Serializable]
-    public class RumbleInfo : IRumbleInfo
-    {
-        [SerializeField]
-        private string _dataId;
+	[Serializable]
+	public class RumbleInfo : IRumbleInfo
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        [Space]
-        [SerializeField]
-        private int _order;
-        
-        [SerializeField]
-        private float _duration;
+		[SerializeField]
+		protected int _order;
 
-        [Space]
-        [SerializeField]
-        private ControlSchemeInfo[] _controlSchemeInfos;
+		[SerializeField]
+		protected float _duration;
 
+		[Space]
+		[SerializeField]
+		protected ControlSchemeInfoMapList _controlSchemeInfoMapList;
 
-        public string DataId => _dataId;
-        
-        public int Order => _order;
-        public float Duration => _duration;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-        public bool TryGetControlSchemeInfo(string dataId, out IControlSchemeInfo controlSchemeInfo)
-        {
-            if (_controlSchemeInfos == null || _controlSchemeInfos.Length <= 0)
-            {
-                controlSchemeInfo = null;
-                return false;
-            }
+		public virtual int Order => _order;
+		public virtual float Duration => _duration;
 
-            var chosenControlSchemeInfo = _controlSchemeInfos.FirstOrDefault(m_controlSchemeInfo => m_controlSchemeInfo.DataId == dataId);
-            controlSchemeInfo = chosenControlSchemeInfo != null ? chosenControlSchemeInfo : _controlSchemeInfos[0];
-            return true;
-        }
+		public virtual bool TryGetControlSchemeInfo(string dataId, out IControlSchemeInfo controlSchemeInfo)
+		{
+			if (!_controlSchemeInfoMapList.TryGetValue(dataId, out var controlSchemeInfoImp))
+			{
+				controlSchemeInfo = null;
+				return false;
+			}
+
+			controlSchemeInfo = controlSchemeInfoImp;
+			return true;
+		}
 
 
-        [Preserve]
-        public RumbleInfo() { }
+		// CONSTRUCTOR: ------------------------------------------------------------------------
 
-        [Preserve]
-        public RumbleInfo(string dataId, float duration, ControlSchemeInfo[] controlSchemeInfos)
-        {
-            _dataId = dataId;
-            _duration = duration;
-            _controlSchemeInfos = controlSchemeInfos;
-        }
-    }
+		[Preserve]
+		public RumbleInfo() : this(0, 0, new ControlSchemeInfoMapList()) { }
+
+		[Preserve]
+		public RumbleInfo(int order, float duration, ControlSchemeInfoMapList controlSchemeInfoMapList)
+		{
+			_order = order;
+			_duration = duration;
+			_controlSchemeInfoMapList = controlSchemeInfoMapList;
+		}
+	}
 }

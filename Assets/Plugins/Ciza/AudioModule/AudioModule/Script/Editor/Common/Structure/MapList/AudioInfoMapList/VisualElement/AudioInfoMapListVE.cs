@@ -9,7 +9,7 @@ namespace CizaAudioModule.Editor
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		public AudioInfoMapListVE(SerializedProperty listProperty) : base(listProperty) { }
+		public AudioInfoMapListVE(SerializedProperty listProperty, bool isAutoRefresh) : base(listProperty, isAutoRefresh) { }
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 

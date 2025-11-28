@@ -21,9 +21,6 @@ namespace CizaLocaleModule.Editor
 		[NonSerialized]
 		protected readonly Image _headImage = new Image();
 
-		[NonSerialized]
-		protected readonly VisualElement _headAdditional;
-
 		protected virtual string IsExpandKey => _boxId + "." + nameof(IsExpand);
 
 		protected override string[] USSPaths => new[] { "Box" };
@@ -67,17 +64,15 @@ namespace CizaLocaleModule.Editor
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		public BoxVE(SerializedProperty property, VisualElement headAdditional = null)
+		public BoxVE(SerializedProperty property)
 		{
 			Property = property;
-			_headAdditional = headAdditional;
 		}
 
 		[Preserve]
-		public BoxVE(string boxId, VisualElement headAdditional = null)
+		public BoxVE(string boxId)
 		{
 			_boxId = boxId;
-			_headAdditional = headAdditional;
 			IsAllowCopyPaste = false;
 		}
 
@@ -86,19 +81,16 @@ namespace CizaLocaleModule.Editor
 		public override void Refresh()
 		{
 			_headImage.image = IsExpand ? TriangleDownIcon : TriangleRightIcon;
-
 			_body.EnableInClassList(ActiveBodyClass, IsExpand);
-
 			if (!IsExpand) return;
-
 			Content?.Refresh();
 		}
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected override void DerivedInitialize(string title, IContent content)
+		protected override void DerivedInitialize(string title, IContent content, VisualElement headAdditional)
 		{
-			base.DerivedInitialize(title, content);
+			base.DerivedInitialize(title, content, headAdditional);
 
 			AddHeadLeftContent(_headImage);
 
@@ -107,8 +99,8 @@ namespace CizaLocaleModule.Editor
 				titleLabel.AddToClassList(titleLabelClass);
 			AddHeadLeftContent(titleLabel);
 
-			if (_headAdditional != null)
-				AddHeadRightContent(_headAdditional);
+			if (headAdditional != null)
+				AddHeadRightContent(headAdditional);
 
 			if (IsAllowContextMenu)
 				AddHeadManipulator(new ContextualMenuManipulator(OnOpenMenu));

@@ -1,0 +1,40 @@
+﻿* {
+    --color-bg-default: #383838;
+    --color-bg-text: #2a2a2a;
+
+    --color-bg-dark: #333333;
+    --color-bg-darker: #2a2a2a;
+    --color-bg-darkest: #191919;
+
+    --color-bg-light: #3f3f3f;
+    --color-bg-lighter: #494949;
+    --color-bg-lightest: #565656;
+
+    --color-border-default: #1a1a1a;
+    --color-border-element: #303030;
+    --color-border-hover: #656565;
+
+    --color-text-default: #c4c4c4;
+    --color-text-button: #eeeeee;
+
+    --color-border-active: #3d7ad9;
+    --color-bg-active: #46607C;
+
+    --color-border-accept: #519932;
+    --color-bg-accept: #42752d;
+
+    --color-border-warning: #b0963a;
+    --color-bg-warning: #64591f;
+
+    --color-border-error: #b03a3a;
+    --color-bg-error: #641f1f;
+
+    --color-list-head-default: #404040;
+    --color-list-head-hover: #545454;
+    --color-list-head-press: #333333;
+    --color-list-head-expanded: #2a2a2a;
+    --color-list-head-running: #191919;
+    --color-list-body: #333333;
+
+    --color-track-section:#454950;
+}

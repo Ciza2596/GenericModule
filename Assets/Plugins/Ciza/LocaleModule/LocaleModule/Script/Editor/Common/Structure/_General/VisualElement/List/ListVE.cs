@@ -87,6 +87,8 @@ namespace CizaLocaleModule.Editor
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
+		public virtual bool IsAutoRefresh { get; }
+
 		public virtual string DataId => GetType().Name;
 		public virtual string DataIdKey => DataId + ".";
 
@@ -129,9 +131,10 @@ namespace CizaLocaleModule.Editor
 		// CONSTRUCTOR: ---------------------------------------------------------------------------
 
 		[Preserve]
-		public ListVE(SerializedProperty listProperty)
+		public ListVE(SerializedProperty listProperty, bool isAutoRefresh)
 		{
 			ListProperty = listProperty;
+			IsAutoRefresh = isAutoRefresh;
 
 			Add(_head);
 			Add(_body);
@@ -314,7 +317,8 @@ namespace CizaLocaleModule.Editor
 			ItemsProperty.DeleteArrayElementAtIndex(index);
 			SerializationUtils.ApplyUnregisteredSerialization(ListProperty.serializedObject);
 
-			Refresh();
+			if (IsAutoRefresh)
+				Refresh();
 		}
 
 		public override void MoveItems(int sourceIndex, int destinationIndex)
@@ -353,7 +357,9 @@ namespace CizaLocaleModule.Editor
 			}
 
 			MoveItems(ItemsProperty, sourceIndex, destinationIndex);
-			Refresh();
+
+			if (IsAutoRefresh)
+				Refresh();
 
 			selectedItemIndexList.AddRange(_selectedItemIndexList);
 			_selectedItemIndexList.Clear();

@@ -192,7 +192,7 @@ namespace CizaInputModule.Editor
 		#region Setup Head
 
 		protected virtual VisualElement CreateHeadTitle() =>
-			Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
+			Root.IsElementClass ? new Button() : new PropertyField(ItemProperty);
 
 		protected virtual void SetupHead()
 		{
@@ -212,9 +212,9 @@ namespace CizaInputModule.Editor
 				foreach (var c in HeadTitleClasses)
 					_headTitle.AddToClassList(c);
 
-				if (Root.IsElementIsClass && _headTitle is Button { } button)
+				if (Root.IsElementClass && _headTitle is Button { } button)
 					button.clicked += () => SetIsExpand(!IsExpand);
-				else if (!Root.IsElementIsClass && _headTitle is BindableElement field)
+				else if (!Root.IsElementClass && _headTitle is BindableElement field)
 					field.BindProperty(ItemProperty);
 
 				if (Root.IsAllowContextMenu)
@@ -304,7 +304,7 @@ namespace CizaInputModule.Editor
 
 		public virtual void SetIsExpand(bool isExpand)
 		{
-			IsExpand = isExpand && Root.IsElementIsClass && _body.childCount > 0;
+			IsExpand = isExpand && Root.IsElementClass && _body.childCount > 0;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, IsExpand);
 		}
@@ -326,9 +326,9 @@ namespace CizaInputModule.Editor
 
 		protected virtual void RefreshHeadTitle()
 		{
-			if (Root.IsElementIsClass && _headTitle is Button button)
+			if (Root.IsElementClass && _headTitle is Button button)
 				button.text = Title;
-			else if (!Root.IsElementIsClass)
+			else if (!Root.IsElementClass)
 			{
 				_headTitle.Unbind();
 				_headTitle.Bind(ItemProperty.serializedObject);

@@ -105,8 +105,8 @@ namespace CizaLocaleModule.Editor
 		public virtual bool IsAllowContextMenu => true;
 		public virtual bool IsAllowCopyPaste => true;
 
-		public virtual bool IsAllowGroupCollapse => IsElementIsClass;
-		public virtual bool IsAllowGroupExpand => IsElementIsClass;
+		public virtual bool IsAllowGroupCollapse => IsElementClass;
+		public virtual bool IsAllowGroupExpand => IsElementClass;
 
 		[field: NonSerialized]
 		public virtual ItemSortManipulator SortManipulator { get; protected set; }
@@ -120,7 +120,7 @@ namespace CizaLocaleModule.Editor
 		public virtual Type ItemType { get; protected set; }
 
 		[field: NonSerialized]
-		public virtual bool IsElementIsClass { get; protected set; }
+		public virtual bool IsElementClass { get; protected set; }
 
 
 		public virtual int[] SelectedItemIndexList => _selectedItemIndexList.ToArray();
@@ -146,8 +146,7 @@ namespace CizaLocaleModule.Editor
 		public virtual void SetListProperty(SerializedProperty listProperty)
 		{
 			ListProperty = listProperty;
-			ItemsProperty = CreateItemsProperty();
-			DerivedInitializeItemType();
+			RefreshItemsProperty();
 		}
 
 		public virtual void SetIsShowHead(bool isShow)
@@ -357,7 +356,6 @@ namespace CizaLocaleModule.Editor
 			}
 
 			MoveItems(ItemsProperty, sourceIndex, destinationIndex);
-
 			if (IsAutoRefresh)
 				Refresh();
 
@@ -403,10 +401,11 @@ namespace CizaLocaleModule.Editor
 			SetupFoot();
 		}
 
-		protected virtual void DerivedInitializeItemType()
+		protected virtual void RefreshItemsProperty()
 		{
+			ItemsProperty = CreateItemsProperty();
 			ItemType = SerializationUtils.GetElementTypes(ItemsProperty)[0];
-			IsElementIsClass = TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(ItemType);
+			IsElementClass = TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(ItemType);
 		}
 
 		#region Create VE

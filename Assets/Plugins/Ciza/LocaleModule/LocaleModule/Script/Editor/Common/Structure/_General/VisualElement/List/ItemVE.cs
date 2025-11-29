@@ -191,7 +191,7 @@ namespace CizaLocaleModule.Editor
 		#region Setup Head
 
 		protected virtual VisualElement CreateHeadTitle() =>
-			Root.IsElementIsClass ? new Button() : new PropertyField(ItemProperty);
+			Root.IsElementClass ? new Button() : new PropertyField(ItemProperty);
 
 		protected virtual void SetupHead()
 		{
@@ -211,9 +211,9 @@ namespace CizaLocaleModule.Editor
 				foreach (var c in HeadTitleClasses)
 					_headTitle.AddToClassList(c);
 
-				if (Root.IsElementIsClass && _headTitle is Button { } button)
+				if (Root.IsElementClass && _headTitle is Button { } button)
 					button.clicked += () => SetIsExpand(!IsExpand);
-				else if (!Root.IsElementIsClass && _headTitle is BindableElement field)
+				else if (!Root.IsElementClass && _headTitle is BindableElement field)
 					field.BindProperty(ItemProperty);
 
 				if (Root.IsAllowContextMenu)
@@ -282,11 +282,11 @@ namespace CizaLocaleModule.Editor
 			var target = itemProperty.serializedObject.targetObject;
 			var itemPath = itemProperty.propertyPath;
 			var itemType = itemProperty.GetValue()?.GetType();
-
+			
 			var isDifTarget = target != _target;
 			var isDifItemPath = itemPath != _itemPath;
 			var isDifItemType = itemType != _itemType;
-
+			
 			if (isDifTarget || isDifItemPath || isDifItemType)
 			{
 				ItemProperty = itemProperty;
@@ -303,7 +303,7 @@ namespace CizaLocaleModule.Editor
 
 		public virtual void SetIsExpand(bool isExpand)
 		{
-			IsExpand = isExpand && Root.IsElementIsClass && _body.childCount > 0;
+			IsExpand = isExpand && Root.IsElementClass && _body.childCount > 0;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, IsExpand);
 		}
@@ -325,9 +325,9 @@ namespace CizaLocaleModule.Editor
 
 		protected virtual void RefreshHeadTitle()
 		{
-			if (Root.IsElementIsClass && _headTitle is Button button)
+			if (Root.IsElementClass && _headTitle is Button button)
 				button.text = Title;
-			else if (!Root.IsElementIsClass)
+			else if (!Root.IsElementClass)
 			{
 				_headTitle.Unbind();
 				_headTitle.Bind(ItemProperty.serializedObject);

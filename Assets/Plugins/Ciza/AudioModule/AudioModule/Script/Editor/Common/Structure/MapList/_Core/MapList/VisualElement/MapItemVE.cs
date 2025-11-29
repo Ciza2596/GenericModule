@@ -14,7 +14,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
-		public MapItemVE(string keyLabel, string valueLabel, BMapListVE root, SerializedProperty itemProperty) : base(root, itemProperty)
+		public MapItemVE(BMapListVE root, SerializedProperty itemProperty, string keyLabel, string valueLabel) : base(root, itemProperty)
 		{
 			_keyLabel = keyLabel;
 			_valueLabel = valueLabel;
@@ -25,7 +25,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		protected override void CreateBodyContent()
 		{
 			var keyField = new PropertyField(KeyProperty, _keyLabel);
-			keyField.Bind(ItemProperty.serializedObject);
+			keyField.BindProperty(KeyProperty);
 			_body.Add(keyField);
 
 			var valueType = SerializationUtils.GetType(ValueProperty, false);
@@ -39,7 +39,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 				else
 				{
 					var valueField = new PropertyField(ValueProperty, _valueLabel);
-					valueField.Bind(ItemProperty.serializedObject);
+					valueField.BindProperty(ValueProperty);
 					_body.Add(valueField);
 				}
 			}

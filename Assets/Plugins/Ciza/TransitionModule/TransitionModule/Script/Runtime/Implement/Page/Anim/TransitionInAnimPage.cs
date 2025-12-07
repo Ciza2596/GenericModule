@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 using UnityEngine;
 
 namespace CizaTransitionModule.Implement

@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using CizaUniTask;
 using UnityEngine;
 using UnityEngine.Scripting;
-using UniTask = Cysharp.Threading.Tasks.UniTask;
 
 namespace CizaLocaleModule
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CizaPageModule;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 using UnityEngine;
 using UnityEngine.Scripting;
 

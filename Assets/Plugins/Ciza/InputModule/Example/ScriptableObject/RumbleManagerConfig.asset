@@ -13,4 +13,23 @@ MonoBehaviour:
   m_Name: RumbleManagerConfig
   m_EditorClassIdentifier: 
   _rumbleInfoMapList:
-    _maps: []
+    _maps:
+    - _isEnable: 1
+      _key: Default123312
+      _value:
+        _order: 0
+        _duration: 0
+        _controlSchemeInfoMapList:
+          _maps:
+          - _isEnable: 1
+            _key: Default
+            _value:
+              _lowFrequency: 500
+              _highFrequency: 0
+    - _isEnable: 1
+      _key: Default
+      _value:
+        _order: 0
+        _duration: 0
+        _controlSchemeInfoMapList:
+          _maps: []

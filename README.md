@@ -63,7 +63,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModul
 ```
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -115,7 +115,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AudioModu
 https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/TimerModule
 ```
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -175,7 +175,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/EventModu
 ```
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -270,7 +270,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleMod
 
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -308,7 +308,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PopupModu
 
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 ```
 https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
@@ -333,7 +333,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/FadeCredi
 
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -347,7 +347,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/OptionMod
 
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 ```
 https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore
@@ -366,7 +366,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/Transitio
 
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/PageModule/PageModule
@@ -381,7 +381,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/Addressab
 ```
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
@@ -419,7 +419,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleAdd
 ```
 ### Dependency:
 ```
-https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/AddressablesModule

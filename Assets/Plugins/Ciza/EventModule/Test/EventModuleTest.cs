@@ -1,6 +1,6 @@
 ﻿using System.Threading;
-using Cysharp.Threading.Tasks;
 using CizaEventModule;
+using CizaUniTask;
 using NUnit.Framework;
 using Assert = UnityEngine.Assertions.Assert;
 

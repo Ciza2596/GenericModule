@@ -1,6 +1,6 @@
 using System;
 using CizaCore;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;

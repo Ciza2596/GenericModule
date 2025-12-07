@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 
 namespace CizaTransitionModule
 {

@@ -1,29 +1,29 @@
-using Cysharp.Threading.Tasks;
 using CizaPageModule;
+using CizaUniTask;
 using UnityEngine;
 
 public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable, IReleasable, IShowingPrepare, IShowingStart, IShowingAnimated, IShowingAnimatedImmediately, IShowingComplete, IHidingStart, IHidingAnimated, IHidingAnimatedImmediately, IHidingComplete
 {
 	//public variable
-	public       bool   IsPassInitialize { get; private set; }
-	public       bool   IsPassTick       { get; private set; }
-	public       bool   IsPassFixedTick  { get; private set; }
+	public bool IsPassInitialize { get; private set; }
+	public bool IsPassTick { get; private set; }
+	public bool IsPassFixedTick { get; private set; }
 	public const string IS_PASS_RELEASE_CREATE_GAME_OBJECT_NAME = "FakeIsReleased";
 
 	public bool IsPassOnShowingPrepare { get; private set; }
-	public bool IsPassOnShowingStart   { get; private set; }
+	public bool IsPassOnShowingStart { get; private set; }
 
-	public bool IsPassPlayShowingAnimation            { get; private set; }
+	public bool IsPassPlayShowingAnimation { get; private set; }
 	public bool IsPassPlayShowingAnimationImmediately { get; private set; }
 
 	public bool IsPassOnShowingComplete { get; private set; }
 
-	public bool IsPassOnHidingStart                  { get; private set; }
-	
-	public bool IsPassPlayHidingAnimation            { get; private set; }
+	public bool IsPassOnHidingStart { get; private set; }
+
+	public bool IsPassPlayHidingAnimation { get; private set; }
 	public bool IsPassPlayHidingAnimationImmediately { get; private set; }
-	
-	public bool IsPassOnHidingComplete               { get; private set; }
+
+	public bool IsPassOnHidingComplete { get; private set; }
 
 	//public method
 	public UniTask InitializeAsync(params object[] parameters)
@@ -46,7 +46,7 @@ public class FakePage : MonoBehaviour, IInitializable, ITickable, IFixedTickable
 		IsPassOnShowingPrepare = true;
 		return UniTask.CompletedTask;
 	}
-	
+
 	public void ShowingStart() =>
 		IsPassOnShowingStart = true;
 

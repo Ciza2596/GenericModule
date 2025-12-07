@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.ciza.cizacore": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.ciza.unitask": "https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask",
     "com.unity.addressables": "2.7.2",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.collab-proxy": "2.9.3",

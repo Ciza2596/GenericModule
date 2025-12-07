@@ -1,5 +1,5 @@
 using System;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 
 namespace CizaAudioModule
 {

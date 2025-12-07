@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CizaPageModule;
 using CizaPageModule.Implement;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 using UnityEngine;
 using UnityEngine.Assertions;
 

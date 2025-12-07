@@ -5,14 +5,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c669104156df1954ac6d24b3429d95953b2bb8c9"
+      "hash": "809aeb5daee6f36ab282a79479d37fc25ae83870"
     },
-    "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.ciza.unitask": {
+      "version": "https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "8042b29ff87dd5506d7aad72bd6d8d7405985f27"
+      "hash": "d2be15e8a6f4b206439eca415ec28c26b7eed795"
     },
     "com.unity.addressables": {
       "version": "2.7.2",

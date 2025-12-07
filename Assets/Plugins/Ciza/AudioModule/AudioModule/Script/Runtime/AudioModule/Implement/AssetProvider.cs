@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
-using Cysharp.Threading.Tasks;
+using CizaUniTask;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

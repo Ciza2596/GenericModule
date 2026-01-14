@@ -2,7 +2,7 @@ using System;
 
 namespace CizaTimerModule
 {
-	internal class Timer : ITimerReadModel
+	public class Timer : ITimerReadModel
 	{
 		private event Action<ITimerReadModel> _onComplete;
 		private event Action<ITimerReadModel, float> _onTick;

@@ -7,14 +7,14 @@ namespace CizaTimerModule
 {
 	public class TimerModule
 	{
-		private Dictionary<string, Timer> _usingTimerMap;
-		private List<Timer> _unusingTimers;
+		protected Dictionary<string, Timer> _usingTimerMap;
+		protected List<Timer> _unusingTimers;
 
 		public event Action<string> OnRemove;
 
-		public bool IsInitialized => _usingTimerMap is not null && _unusingTimers is not null;
+		public virtual bool IsInitialized => _usingTimerMap is not null && _unusingTimers is not null;
 
-		public void Initialize()
+		public virtual void Initialize()
 		{
 			if (IsInitialized)
 			{
@@ -26,7 +26,7 @@ namespace CizaTimerModule
 			_unusingTimers = new();
 		}
 
-		public void Release()
+		public virtual void Release()
 		{
 			if (!IsInitialized)
 			{
@@ -41,7 +41,7 @@ namespace CizaTimerModule
 			_unusingTimers = null;
 		}
 
-		public void Tick(float deltaTime)
+		public virtual void Tick(float deltaTime)
 		{
 			if (!IsInitialized)
 			{
@@ -65,13 +65,16 @@ namespace CizaTimerModule
 			}
 		}
 
-		public bool TryGetTimerReadModel(string timerId, out ITimerReadModel timerReadModel)
+		public bool CheckHasTimer(string timerId) =>
+			TryGetTimerReadModel(timerId, out _);
+
+		public virtual bool TryGetTimerReadModel(string timerId, out ITimerReadModel timerReadModel)
 		{
 			timerReadModel = null;
 
 			if (!IsInitialized)
 			{
-				Debug.LogWarning("[TimerModule::Tick] TimerModule is not initialized.");
+				Debug.LogWarning("[TimerModule::TryGetTimerReadModel] TimerModule is not initialized.");
 				return false;
 			}
 
@@ -83,51 +86,26 @@ namespace CizaTimerModule
 			return true;
 		}
 
-		public string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning("[TimerModule::AddOnceTimer] TimerModule is not initialized.");
-				return string.Empty;
-			}
+		public virtual string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null) =>
+			AddOnceTimer(false, string.Empty, startValue, targetValue, duration, onTickValue, onComplete);
 
-			var diffValueSpeed = (targetValue - startValue) / duration;
-			var value = startValue;
-			var id = AddOnceTimer(duration, onComplete, (timerReadModel, deltaTime) =>
-			{
-				var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
-				value += diffValueSpeedDeltaTime;
-				if (timerReadModel.IsPlayed)
-					value = targetValue;
-				onTickValue(timerReadModel, value);
-			});
+		public virtual string AddOnceTimer(string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null) =>
+			AddOnceTimer(true, timerId, startValue, targetValue, duration, onTickValue, onComplete);
 
-			return id;
-		}
+		public virtual string AddOnceTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
+			AddOnceTimer(false, string.Empty, duration, onComplete, onTick);
 
-		public string AddOnceTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning("[TimerModule::AddOnceTimer] TimerModule is not initialized.");
-				return string.Empty;
-			}
+		public virtual string AddOnceTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
+			AddOnceTimer(true, timerId, duration, onComplete, onTick);
 
-			return AddTimerToUsingTimerMap(true, duration, onComplete, onTick);
-		}
+		public virtual string AddLoopTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
+			AddLoopTimer(false, string.Empty, duration, onComplete, onTick);
 
-		public string AddLoopTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
-		{
-			if (!IsInitialized)
-			{
-				Debug.LogWarning("[TimerModule::AddLoopTimer] TimerModule is not initialized.");
-				return string.Empty;
-			}
+		public virtual string AddLoopTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
+			AddLoopTimer(true, timerId, duration, onComplete, onTick);
 
-			return AddTimerToUsingTimerMap(false, duration, onComplete, onTick);
-		}
 
-		public void RemoveTimer(string timerId)
+		public virtual void RemoveTimer(string timerId)
 		{
 			if (!IsInitialized)
 			{
@@ -146,9 +124,55 @@ namespace CizaTimerModule
 		}
 
 		// private method
-		private string AddTimerToUsingTimerMap(bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
+		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete)
 		{
-			var timerId = Guid.NewGuid().ToString();
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[TimerModule::AddOnceTimer] TimerModule is not initialized.");
+				return string.Empty;
+			}
+
+			var diffValueSpeed = (targetValue - startValue) / duration;
+			var value = startValue;
+			var id = AddOnceTimer(isCustomId, timerId, duration, onComplete, (timerReadModel, deltaTime) =>
+			{
+				var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
+				value += diffValueSpeedDeltaTime;
+				if (timerReadModel.IsPlayed)
+					value = targetValue;
+				onTickValue(timerReadModel, value);
+			});
+
+			return id;
+		}
+
+
+		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[TimerModule::AddOnceTimer] TimerModule is not initialized.");
+				return string.Empty;
+			}
+
+			return AddTimerToUsingTimerMap(isCustomId, timerId, true, duration, onComplete, onTick);
+		}
+
+		protected virtual string AddLoopTimer(bool isCustomId, string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[TimerModule::AddLoopTimer] TimerModule is not initialized.");
+				return string.Empty;
+			}
+
+			return AddTimerToUsingTimerMap(isCustomId, timerId, false, duration, onComplete, onTick);
+		}
+
+
+		protected virtual string AddTimerToUsingTimerMap(bool isCustomId, string customId, bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
+		{
+			var timerId = isCustomId ? customId : Guid.NewGuid().ToString();
 
 			var timer = GetTimerFromUnusingTimer();
 			timer.Initialize(timerId, isOnce, duration, onComplete, onTick);
@@ -158,15 +182,16 @@ namespace CizaTimerModule
 			return timerId;
 		}
 
-		private void RemoveTimerFromUsingTimerMap(string timerId)
+		protected virtual void RemoveTimerFromUsingTimerMap(string timerId)
 		{
 			var timer = _usingTimerMap[timerId];
 			_usingTimerMap.Remove(timerId);
+			timer.ResetTime();
 
 			_unusingTimers.Add(timer);
 		}
 
-		private Timer GetTimerFromUnusingTimer()
+		protected virtual Timer GetTimerFromUnusingTimer()
 		{
 			if (_unusingTimers.Count <= 0)
 				_unusingTimers.Add(new Timer());

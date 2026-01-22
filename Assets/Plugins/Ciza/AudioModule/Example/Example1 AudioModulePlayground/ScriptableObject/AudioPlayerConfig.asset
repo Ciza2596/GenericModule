@@ -54,7 +54,7 @@ MonoBehaviour:
           _clipAddress: 
           _isOverridePrefabAddress:
             _isEnable: 0
-            _value: 
+            _value: SfxAudio2
       - _isEnable: 1
         _value:
           _dataId: 12321

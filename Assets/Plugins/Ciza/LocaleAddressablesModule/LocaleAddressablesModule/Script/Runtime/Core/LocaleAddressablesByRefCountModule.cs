@@ -6,30 +6,39 @@ using CizaLocaleModule;
 using CizaUniTask;
 using UnityEngine;
 using UnityEngine.Scripting;
+using Object = UnityEngine.Object;
 
 namespace CizaLocaleAddressablesModule
 {
 	public class LocaleAddressablesByRefCountModule
 	{
-		private readonly AddressablesByRefCountModule _addressablesByRefCountModule;
-		private readonly LocaleModule _localeModule;
+		// VARIABLE: -----------------------------------------------------------------------------
 
-		public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
-		public event Func<string, UniTask> OnChangedLocaleAsync;
+		protected readonly AddressablesByRefCountModule _addressablesByRefCountModule;
+		protected readonly LocaleModule _localeModule;
 
-		public event Func<string, UniTask> OnLoadAssetAsync;
+		// EVENT: ---------------------------------------------------------------------------------
+
+		public event Func<string, CancellationToken, UniTask> OnChangedLocaleBeforeAsync;
+		public event Func<string, CancellationToken, UniTask> OnChangedLocaleAsync;
+
+		public event Func<string, CancellationToken, UniTask> OnLoadAssetAsync;
 		public event Action<string> OnUnloadAsset;
 
-		public bool IsInitialized => _localeModule.IsInitialized;
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public bool IsChangingLocale => _localeModule.IsChangingLocale;
+		public virtual bool IsInitialized => _localeModule.IsInitialized;
 
-		public string DefaultLocale => _localeModule.DefaultLocale;
-		public string[] SupportLocales => _localeModule.SupportLocales;
-		public string CurrentLocale => _localeModule.CurrentLocale;
-		public string SourceLocale => _localeModule.SourceLocale;
+		public virtual bool IsChangingLocale => _localeModule.IsChangingLocale;
 
-		public IReadOnlyDictionary<string, int> RefCountMapByAddress => _addressablesByRefCountModule.RefCountMapByAddress;
+		public virtual string DefaultLocale => _localeModule.DefaultLocale;
+		public virtual string[] SupportLocales => _localeModule.SupportLocales;
+		public virtual string CurrentLocale => _localeModule.CurrentLocale;
+		public virtual string SourceLocale => _localeModule.SourceLocale;
+
+		public virtual IReadOnlyDictionary<string, int> RefCountMapByAddress => _addressablesByRefCountModule.RefCountMapByAddress;
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
 
 		[Preserve]
 		public LocaleAddressablesByRefCountModule(string className, ILocaleAddressablesByRefCountModuleConfig localeAddressablesByRefCountModuleConfig)
@@ -45,14 +54,16 @@ namespace CizaLocaleAddressablesModule
 			_localeModule.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
 
 
-			UniTask m_OnChangedLocaleBeforeAsync(string locale) =>
-				OnChangedLocaleBeforeAsync?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleBeforeAsync(string locale, CancellationToken cancellationToken) =>
+				OnChangedLocaleBeforeAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
 
-			UniTask m_OnChangedLocaleAsync(string locale) =>
-				OnChangedLocaleAsync?.Invoke(locale) ?? UniTask.CompletedTask;
+			UniTask m_OnChangedLocaleAsync(string locale, CancellationToken cancellationToken) =>
+				OnChangedLocaleAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
 		}
 
-		public void Initialize()
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
+
+		public virtual void Initialize()
 		{
 			if (IsInitialized)
 			{
@@ -63,7 +74,7 @@ namespace CizaLocaleAddressablesModule
 			_localeModule.Initialize();
 		}
 
-		public void Release()
+		public virtual void Release()
 		{
 			if (!IsInitialized)
 			{
@@ -74,9 +85,11 @@ namespace CizaLocaleAddressablesModule
 			_localeModule.Release();
 		}
 
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
 		#region Locale
 
-		public UniTask ChangeToDefaultLocaleAsync()
+		public virtual UniTask ChangeToDefaultLocaleAsync(CancellationToken cancellationToken)
 		{
 			if (!IsInitialized)
 			{
@@ -84,10 +97,10 @@ namespace CizaLocaleAddressablesModule
 				return UniTask.CompletedTask;
 			}
 
-			return _localeModule.ChangeToDefaultLocaleAsync();
+			return _localeModule.ChangeToDefaultLocaleAsync(cancellationToken);
 		}
 
-		public UniTask ChangeLocaleAsync(string locale)
+		public virtual UniTask ChangeLocaleAsync(string locale, CancellationToken cancellationToken)
 		{
 			if (!IsInitialized)
 			{
@@ -95,14 +108,14 @@ namespace CizaLocaleAddressablesModule
 				return UniTask.CompletedTask;
 			}
 
-			return _localeModule.ChangeLocaleAsync(locale);
+			return _localeModule.ChangeLocaleAsync(locale, cancellationToken);
 		}
 
 		#endregion
 
 		#region Asset
 
-		public UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : UnityEngine.Object
+		public virtual UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken) where T : Object
 		{
 			if (!IsInitialized)
 			{
@@ -114,7 +127,7 @@ namespace CizaLocaleAddressablesModule
 			return _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, cancellationToken);
 		}
 
-		public T GetAsset<T>(string address) where T : UnityEngine.Object
+		public virtual T GetAsset<T>(string address) where T : Object
 		{
 			if (!IsInitialized)
 			{
@@ -126,7 +139,7 @@ namespace CizaLocaleAddressablesModule
 			return _addressablesByRefCountModule.GetAsset<T>(addressWithLocalePrefix);
 		}
 
-		public void UnloadAsset<T>(string address) where T : UnityEngine.Object
+		public virtual void UnloadAsset<T>(string address) where T : Object
 		{
 			if (!IsInitialized)
 			{
@@ -138,7 +151,7 @@ namespace CizaLocaleAddressablesModule
 			_addressablesByRefCountModule.UnloadAsset<T>(addressWithLocalePrefix);
 		}
 
-		public void UnloadAllAssets()
+		public virtual void UnloadAllAssets()
 		{
 			if (!IsInitialized)
 			{
@@ -151,15 +164,13 @@ namespace CizaLocaleAddressablesModule
 
 		#endregion
 
-		private UniTask OnLoadAssetAsyncImp(string address)
+		protected virtual async UniTask OnLoadAssetAsyncImp(string address, CancellationToken cancellationToken)
 		{
 			if (OnLoadAssetAsync != null)
-				return OnLoadAssetAsync.Invoke(address);
-
-			return UniTask.CompletedTask;
+				await OnLoadAssetAsync.Invoke(address, cancellationToken);
 		}
 
-		private void OnUnloadAssetImp(string address) =>
+		protected virtual void OnUnloadAssetImp(string address) =>
 			OnUnloadAsset?.Invoke(address);
 	}
 }

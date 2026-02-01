@@ -1,128 +1,135 @@
 using System;
 using System.Linq;
+using System.Threading;
 using CizaUniTask;
 using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace CizaLocaleModule
 {
-    public class LocaleModule
-    {
-        private readonly string _className;
-        private readonly ILocaleModuleConfig _config;
-        private string[] _supportLocales;
+	public class LocaleModule
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-        public event Func<string, UniTask> OnChangedLocaleBeforeAsync;
-        public event Func<string, UniTask> OnChangedLocaleAsync;
+		protected readonly string _className;
+		protected readonly ILocaleModuleConfig _config;
+		protected string[] _supportLocales;
 
-        public bool IsInitialized { get; private set; }
+		// EVENT: ---------------------------------------------------------------------------------
 
-        public bool IsChangingLocale { get; private set; }
+		public event Func<string, CancellationToken, UniTask> OnChangedLocaleBeforeAsync;
+		public event Func<string, CancellationToken, UniTask> OnChangedLocaleAsync;
 
-        public string DefaultLocale { get; private set; }
-        public string[] SupportLocales => _supportLocales != null ? _supportLocales.ToArray() : Array.Empty<string>();
-        public string CurrentLocale { get; private set; }
-        public string SourceLocale { get; private set; }
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-        [Preserve]
-        public LocaleModule(ILocaleModuleConfig config) : this("LocaleModule", config) { }
+		public virtual bool IsInitialized { get; private set; }
 
-        [Preserve]
-        public LocaleModule(string className, ILocaleModuleConfig config)
-        {
-            _className = className;
-            _config = config;
+		public virtual bool IsChangingLocale { get; private set; }
 
-            if (!_config.SupportLocales.Contains(_config.SourceLocale))
-                Debug.LogError($"[{_className}::LocaleModule] SourceLocale: {_config.SourceLocale} is not in supportLocales.");
+		public virtual string DefaultLocale { get; private set; }
+		public virtual string[] SupportLocales => _supportLocales != null ? _supportLocales.ToArray() : Array.Empty<string>();
+		public virtual string CurrentLocale { get; private set; }
+		public virtual string SourceLocale { get; private set; }
 
-            if (!_config.SupportLocales.Contains(_config.DefaultLocale))
-                Debug.LogError($"[{_className}::LocaleModule] DefaultLocale: {_config.DefaultLocale} is not in supportLocales.");
-        }
+		// CONSTRUCTOR: ------------------------------------------------------------------------
 
-        public void Initialize()
-        {
-            if (IsInitialized)
-            {
-                Debug.LogWarning($"[{_className}::Initialize] LocaleModule is initialized.");
-                return;
-            }
+		[Preserve]
+		public LocaleModule(ILocaleModuleConfig config) : this("LocaleModule", config) { }
 
-            IsInitialized = true;
+		[Preserve]
+		public LocaleModule(string className, ILocaleModuleConfig config)
+		{
+			_className = className;
+			_config = config;
 
-            _supportLocales = _config.SupportLocales;
-            SourceLocale = _config.SourceLocale;
-            DefaultLocale = _config.DefaultLocale;
-            CurrentLocale = DefaultLocale;
-        }
+			if (!_config.SupportLocales.Contains(_config.SourceLocale))
+				Debug.LogError($"[{_className}::LocaleModule] SourceLocale: {_config.SourceLocale} is not in supportLocales.");
 
-        public void Release()
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning($"[{_className}::Release] LocaleModule is not initialized.");
-                return;
-            }
+			if (!_config.SupportLocales.Contains(_config.DefaultLocale))
+				Debug.LogError($"[{_className}::LocaleModule] DefaultLocale: {_config.DefaultLocale} is not in supportLocales.");
+		}
 
-            _supportLocales = null;
-            SourceLocale = string.Empty;
-            CurrentLocale = string.Empty;
-            DefaultLocale = string.Empty;
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
 
-            IsInitialized = false;
-        }
+		public virtual void Initialize()
+		{
+			if (IsInitialized)
+			{
+				Debug.LogWarning($"[{_className}::Initialize] LocaleModule is initialized.");
+				return;
+			}
 
-        public UniTask ChangeToDefaultLocaleAsync() =>
-            ChangeLocaleAsync(DefaultLocale);
+			IsInitialized = true;
 
+			_supportLocales = _config.SupportLocales;
+			SourceLocale = _config.SourceLocale;
+			DefaultLocale = _config.DefaultLocale;
+			CurrentLocale = DefaultLocale;
+		}
 
-        public async UniTask ChangeLocaleAsync(string locale)
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning($"[{_className}::ChangeLocale] LocaleModule is not initialized.");
-                return;
-            }
+		public virtual void Release()
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning($"[{_className}::Release] LocaleModule is not initialized.");
+				return;
+			}
 
-            if (!SupportLocales.Contains(locale))
-            {
-                Debug.LogError($"[{_className}::ChangeLocale] Locale: {locale} is not support.");
-                return;
-            }
+			_supportLocales = null;
+			SourceLocale = string.Empty;
+			CurrentLocale = string.Empty;
+			DefaultLocale = string.Empty;
 
-            if (IsChangingLocale)
-                return;
+			IsInitialized = false;
+		}
 
-            IsChangingLocale = true;
+		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-            await m_OnChangedLocaleBeforeAsync();
+		public virtual UniTask ChangeToDefaultLocaleAsync(CancellationToken cancellationToken) =>
+			ChangeLocaleAsync(DefaultLocale, cancellationToken);
 
-            CurrentLocale = locale;
+		public virtual async UniTask ChangeLocaleAsync(string locale, CancellationToken cancellationToken)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning($"[{_className}::ChangeLocale] LocaleModule is not initialized.");
+				return;
+			}
 
-            await m_OnChangedLocaleAsync();
+			if (!SupportLocales.Contains(locale))
+			{
+				Debug.LogError($"[{_className}::ChangeLocale] Locale: {locale} is not support.");
+				return;
+			}
 
-            IsChangingLocale = false;
+			if (IsChangingLocale)
+				return;
 
+			IsChangingLocale = true;
 
-            UniTask m_OnChangedLocaleBeforeAsync() =>
-                OnChangedLocaleBeforeAsync?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
+			if (OnChangedLocaleBeforeAsync != null)
+				await OnChangedLocaleBeforeAsync.Invoke(CurrentLocale, cancellationToken);
 
-            UniTask m_OnChangedLocaleAsync() =>
-                OnChangedLocaleAsync?.Invoke(CurrentLocale) ?? UniTask.CompletedTask;
-        }
+			CurrentLocale = locale;
 
-        public string GetTextWithLocalePrefix(string text)
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning($"[{_className}::GetTextWithLocalePrefix] LocaleModule is not initialized.");
-                return string.Empty;
-            }
+			if (OnChangedLocaleAsync != null)
+				await OnChangedLocaleAsync.Invoke(CurrentLocale, cancellationToken);
 
-            var localePrefix = _config.IsIgnoreSourceLocale && CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
-            var textByAddLocalePrefix = localePrefix + text;
+			IsChangingLocale = false;
+		}
 
-            return textByAddLocalePrefix;
-        }
-    }
+		public virtual string GetTextWithLocalePrefix(string text)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning($"[{_className}::GetTextWithLocalePrefix] LocaleModule is not initialized.");
+				return string.Empty;
+			}
+
+			var localePrefix = _config.IsIgnoreSourceLocale && CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
+			var textByAddLocalePrefix = localePrefix + text;
+
+			return textByAddLocalePrefix;
+		}
+	}
 }

@@ -108,14 +108,14 @@ public class TimerModuleExample : MonoBehaviour
 
 ## AudioModule
 ```
-https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
+https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AudioModule/AudioModule
 ```
 ### Dependency:
 ```
+https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
+```
+```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/TimerModule/TimerModule
-```
-```
-https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:

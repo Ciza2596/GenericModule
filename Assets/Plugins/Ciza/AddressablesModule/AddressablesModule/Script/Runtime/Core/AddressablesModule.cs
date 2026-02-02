@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
@@ -19,7 +18,7 @@ namespace CizaAddressablesModule
 		private readonly string _className;
 
 		private readonly Dictionary<Type, Dictionary<string, Object>> _objectMapByAddressMapByType = new Dictionary<Type, Dictionary<string, Object>>();
-		private readonly Dictionary<string, SceneInstance>            _addressSceneMap             = new Dictionary<string, SceneInstance>();
+		private readonly Dictionary<string, SceneInstance> _addressSceneMap = new Dictionary<string, SceneInstance>();
 
 		[Preserve]
 		public AddressablesModule() : this("AddressablesModule") { }
@@ -35,7 +34,7 @@ namespace CizaAddressablesModule
 		{
 			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[{_className}::GetAsset] Address is null.");
 
-			var type                = typeof(T);
+			var type = typeof(T);
 			var hasAddressObjectMap = _objectMapByAddressMapByType.TryGetValue(type, out var addressObjectMap);
 			Assert.IsTrue(hasAddressObjectMap, $"[{_className}::GetAsset] Type: {type} doesnt exist in typeAssetHandleInfos.");
 
@@ -45,12 +44,10 @@ namespace CizaAddressablesModule
 			return obj as T;
 		}
 
-		public async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken = default) where T : Object
+		public async Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken = default) where T : Object
 		{
 			Assert.IsTrue(!string.IsNullOrWhiteSpace(address), $"[{_className}::LoadAssetAsync] Address is null.");
-
-			var obj = await GetAssetHandleInfo<T>(address, cancellationToken);
-			return obj;
+			return await GetAssetHandleInfo<T>(address, asyncToken);
 		}
 
 		public void UnloadAsset<T>(string address) where T : Object
@@ -84,7 +81,7 @@ namespace CizaAddressablesModule
 		public void UnloadAssets(string[] addressList, Type type)
 		{
 			Assert.IsTrue(addressList != null, $"[{_className}::UnloadAssets] AddressList is null.");
-			Assert.IsTrue(type        != null, $"[{_className}::UnloadAssets] Type is null.");
+			Assert.IsTrue(type != null, $"[{_className}::UnloadAssets] Type is null.");
 
 			foreach (var address in addressList)
 				UnloadAsset(address, type);
@@ -113,7 +110,7 @@ namespace CizaAddressablesModule
 			}
 
 			var assetHandleInfo = _objectMapByAddressMapByType[type];
-			var addressList     = assetHandleInfo.Keys.ToArray();
+			var addressList = assetHandleInfo.Keys.ToArray();
 			foreach (var address in addressList)
 				UnloadAsset(address, type);
 
@@ -150,9 +147,9 @@ namespace CizaAddressablesModule
 			scene.ActivateAsync();
 		}
 
-		public async UniTask<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool isActivateOnLoad = true)
+		public async Awaitable<SceneInstance> LoadSceneAsync(string address, LoadSceneMode loadMode = LoadSceneMode.Single, bool isActivateOnLoad = true)
 		{
-			var scene = await Addressables.LoadSceneAsync(address, loadMode, false);
+			var scene = await Addressables.LoadSceneAsync(address, loadMode, false).Task;
 			_addressSceneMap.Add(address, scene);
 
 			if (isActivateOnLoad)
@@ -161,18 +158,18 @@ namespace CizaAddressablesModule
 			return scene;
 		}
 
-		public async UniTask UnloadSceneAsync(string address)
+		public async Awaitable UnloadSceneAsync(string address)
 		{
 			Assert.IsTrue(_addressSceneMap.ContainsKey(address), $"[{_className}::UnloadSceneAsync] Cant unload scene. Not find sceneHandle");
 
 			var scene = _addressSceneMap[address];
 			_addressSceneMap.Remove(address);
 
-			await Addressables.UnloadSceneAsync(scene);
+			await Addressables.UnloadSceneAsync(scene).Task;
 		}
 
 		//private method
-		private async UniTask<T> GetAssetHandleInfo<T>(string address, CancellationToken cancellationToken) where T : Object
+		private async Awaitable<T> GetAssetHandleInfo<T>(string address, AsyncToken asyncToken) where T : Object
 		{
 			var type = typeof(T);
 			if (type.IsSubclassOf(typeof(Component)))
@@ -191,7 +188,14 @@ namespace CizaAddressablesModule
 			{
 				try
 				{
-					obj = await Addressables.LoadAssetAsync<T>(address).WithCancellation(cancellationToken);
+					var handle = Addressables.LoadAssetAsync<T>(address);
+					obj = await handle.Task;
+					if (asyncToken.Canceled)
+					{
+						Addressables.Release(handle);
+						return null;
+					}
+
 					addressObjectMap.Add(address, obj);
 				}
 				catch

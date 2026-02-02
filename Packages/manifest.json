@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.ciza.async": "https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async",
     "com.ciza.cizacore": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",
     "com.ciza.unitask": "https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask",
     "com.unity.addressables": "2.7.2",

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 
 namespace CizaAddressablesModule.Preload
@@ -13,51 +12,53 @@ namespace CizaAddressablesModule.Preload
 		private IPreloadAssetInfo[] _preloadAssetInfos;
 
 		// BgmDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadBgmAssetAsync;
-		public event Action<string>                           OnUnloadBgmAsset;
+		public event Func<string, AsyncToken, Awaitable> OnLoadBgmAssetAsync;
+		public event Action<string> OnUnloadBgmAsset;
 
 		// SfxDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadSfxAssetAsync;
-		public event Action<string>                           OnUnloadSfxAsset;
+		public event Func<string, AsyncToken, Awaitable> OnLoadSfxAssetAsync;
+		public event Action<string> OnUnloadSfxAsset;
 
 		// VoiceDataId (Address)
-		public event Func<string, CancellationToken, UniTask> OnLoadVoiceAssetAsync;
-		public event Action<string>                           OnUnloadVoiceAsset;
+		public event Func<string, AsyncToken, Awaitable> OnLoadVoiceAssetAsync;
+		public event Action<string> OnUnloadVoiceAsset;
 
 		public bool IsLoading { get; private set; }
-		public bool IsLoaded  { get; private set; }
+		public bool IsLoaded { get; private set; }
 
 		public PreloadAssetController(IAssetProvider assetProvider) =>
 			_assetProvider = assetProvider;
 
-		public async UniTask LoadAssetAsync(IPreloadAssetInfo[] preloadAssetInfos, CancellationToken cancellationToken)
+		public async Awaitable LoadAssetAsync(IPreloadAssetInfo[] preloadAssetInfos, AsyncToken asyncToken)
 		{
 			if (IsLoading || IsLoaded)
 				return;
 
-			IsLoading          = true;
+			IsLoading = true;
 			_preloadAssetInfos = preloadAssetInfos;
 
-			var unitaks = new List<UniTask>();
+			var unitaks = new List<Awaitable>();
 			foreach (var preloadAssetInfo in _preloadAssetInfos)
 			{
 				if (!preloadAssetInfo.IsPreLoad)
 					continue;
 
 				if (preloadAssetInfo.AssetKind == AssetKinds.Bgm && OnLoadBgmAssetAsync != null)
-					unitaks.Add(OnLoadBgmAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
+					unitaks.Add(OnLoadBgmAssetAsync.Invoke(preloadAssetInfo.Address, asyncToken));
 
 				else if (preloadAssetInfo.AssetKind == AssetKinds.Sfx && OnLoadSfxAssetAsync != null)
-					unitaks.Add(OnLoadSfxAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
+					unitaks.Add(OnLoadSfxAssetAsync.Invoke(preloadAssetInfo.Address, asyncToken));
 
 				else if (preloadAssetInfo.AssetKind == AssetKinds.Voice && OnLoadVoiceAssetAsync != null)
-					unitaks.Add(OnLoadVoiceAssetAsync.Invoke(preloadAssetInfo.Address, cancellationToken));
+					unitaks.Add(OnLoadVoiceAssetAsync.Invoke(preloadAssetInfo.Address, asyncToken));
 
 				else
-					unitaks.Add(LoadAssetAsync(preloadAssetInfo.Address, preloadAssetInfo.AssetKind, cancellationToken));
+					unitaks.Add(LoadAssetAsync(preloadAssetInfo.Address, preloadAssetInfo.AssetKind, asyncToken));
 			}
 
-			await UniTask.WhenAll(unitaks);
+			foreach (var awaitable in unitaks)
+				await awaitable;
+
 			IsLoading = false;
 
 			IsLoaded = true;
@@ -89,21 +90,22 @@ namespace CizaAddressablesModule.Preload
 			IsLoaded = false;
 		}
 
-		private UniTask LoadAssetAsync(string address, AssetKinds assetKind, CancellationToken cancellationToken)
+		private async Awaitable LoadAssetAsync(string address, AssetKinds assetKind, AsyncToken asyncToken)
 		{
 			switch (assetKind)
 			{
 				case AssetKinds.GameObject:
-					return _assetProvider.LoadAssetAsync<GameObject>(address, cancellationToken);
+					await _assetProvider.LoadAssetAsync<GameObject>(address, asyncToken);
+					break;
 
 				case AssetKinds.Sprite:
-					return _assetProvider.LoadAssetAsync<Sprite>(address, cancellationToken);
+					await _assetProvider.LoadAssetAsync<Sprite>(address, asyncToken);
+					break;
 
 				case AssetKinds.ScriptableObject:
-					return _assetProvider.LoadAssetAsync<ScriptableObject>(address, cancellationToken);
+					await _assetProvider.LoadAssetAsync<ScriptableObject>(address, asyncToken);
+					break;
 			}
-
-			return UniTask.CompletedTask;
 		}
 
 		private void UnloadAsset(string address, AssetKinds assetKind)

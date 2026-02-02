@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.ciza.async": {
+      "version": "https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f69cdd25f373f3d83bf54d48ce66860d4b96d8d6"
+    },
     "com.ciza.cizacore": {
       "version": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",
       "depth": 0,

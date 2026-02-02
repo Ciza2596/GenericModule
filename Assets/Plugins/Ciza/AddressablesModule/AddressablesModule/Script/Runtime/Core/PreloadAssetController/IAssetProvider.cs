@@ -1,12 +1,11 @@
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 
 namespace CizaAddressablesModule.Preload
 {
 	public interface IAssetProvider
 	{
-		UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken) where T : Object;
+		Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken) where T : Object;
 
 		void UnloadAsset<T>(string address) where T : Object;
 	}

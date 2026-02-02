@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
+using UnityEngine;
 using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
 
@@ -16,7 +16,7 @@ namespace CizaAddressablesModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
-		public event Func<string, CancellationToken, UniTask> OnLoadAssetAsync;
+		public event Func<string, AsyncToken, Awaitable> OnLoadAssetAsync;
 		public event Action<string> OnUnloadAsset;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
@@ -31,12 +31,12 @@ namespace CizaAddressablesModule
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-		public virtual async UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken) where T : Object
+		public virtual async Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken) where T : Object
 		{
-			await _addressablesModule.LoadAssetAsync<T>(address, cancellationToken);
+			await _addressablesModule.LoadAssetAsync<T>(address, asyncToken);
 			AddRefCount(address);
 			if (OnLoadAssetAsync != null)
-				await OnLoadAssetAsync.Invoke(address, cancellationToken);
+				await OnLoadAssetAsync.Invoke(address, asyncToken);
 			return GetAsset<T>(address);
 		}
 

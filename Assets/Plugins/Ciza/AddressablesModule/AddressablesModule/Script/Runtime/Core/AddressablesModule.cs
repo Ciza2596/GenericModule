@@ -190,7 +190,7 @@ namespace CizaAddressablesModule
 				{
 					var handle = Addressables.LoadAssetAsync<T>(address);
 					obj = await handle.Task;
-					if (asyncToken.Canceled)
+					if (asyncToken.IsCanceled)
 					{
 						Addressables.Release(handle);
 						return null;

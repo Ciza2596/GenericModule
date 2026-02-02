@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "86cb4be3be210c1c289b039f6e0abbfea4647144"
+      "hash": "043ce4b0e34a7bf1ab557a92a9bfe2b0b3435ee4"
     },
     "com.ciza.cizacore": {
       "version": "https://github.com/Ciza2596/CizaCore.git?path=Assets/_Project/CizaCore",

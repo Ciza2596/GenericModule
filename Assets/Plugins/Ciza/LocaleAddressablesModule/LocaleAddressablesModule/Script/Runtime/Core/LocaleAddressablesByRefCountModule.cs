@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using CizaAddressablesModule;
 using CizaLocaleModule;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using UnityEngine.Scripting;
 using Object = UnityEngine.Object;
@@ -19,10 +18,10 @@ namespace CizaLocaleAddressablesModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
-		public event Func<string, CancellationToken, UniTask> OnChangedLocaleBeforeAsync;
-		public event Func<string, CancellationToken, UniTask> OnChangedLocaleAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 
-		public event Func<string, CancellationToken, UniTask> OnLoadAssetAsync;
+		public event Func<string, AsyncToken, Awaitable> OnLoadAssetAsync;
 		public event Action<string> OnUnloadAsset;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
@@ -54,11 +53,11 @@ namespace CizaLocaleAddressablesModule
 			_localeModule.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
 
 
-			UniTask m_OnChangedLocaleBeforeAsync(string locale, CancellationToken cancellationToken) =>
-				OnChangedLocaleBeforeAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
+			Awaitable m_OnChangedLocaleBeforeAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedLocaleBeforeAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 
-			UniTask m_OnChangedLocaleAsync(string locale, CancellationToken cancellationToken) =>
-				OnChangedLocaleAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
+			Awaitable m_OnChangedLocaleAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedLocaleAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 		}
 
 		// LIFECYCLE METHOD: ------------------------------------------------------------------
@@ -89,42 +88,42 @@ namespace CizaLocaleAddressablesModule
 
 		#region Locale
 
-		public virtual UniTask ChangeToDefaultLocaleAsync(CancellationToken cancellationToken)
+		public virtual Awaitable ChangeToDefaultLocaleAsync(AsyncToken asyncToken)
 		{
 			if (!IsInitialized)
 			{
 				Debug.LogWarning($"[LocaleAddressablesByRefCountModule::ChangeToDefaultLocale] LocaleAddressablesByRefCountModule is not initialized.");
-				return UniTask.CompletedTask;
+				return Async.Completed;
 			}
 
-			return _localeModule.ChangeToDefaultLocaleAsync(cancellationToken);
+			return _localeModule.ChangeToDefaultLocaleAsync(asyncToken);
 		}
 
-		public virtual UniTask ChangeLocaleAsync(string locale, CancellationToken cancellationToken)
+		public virtual Awaitable ChangeLocaleAsync(string locale, AsyncToken asyncToken)
 		{
 			if (!IsInitialized)
 			{
 				Debug.LogWarning($"[LocaleAddressablesByRefCountModule::ChangeLocale] LocaleAddressablesByRefCountModule is not initialized.");
-				return UniTask.CompletedTask;
+				return Async.Completed;
 			}
 
-			return _localeModule.ChangeLocaleAsync(locale, cancellationToken);
+			return _localeModule.ChangeLocaleAsync(locale, asyncToken);
 		}
 
 		#endregion
 
 		#region Asset
 
-		public virtual UniTask<T> LoadAssetAsync<T>(string address, CancellationToken cancellationToken) where T : Object
+		public virtual Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken) where T : Object
 		{
 			if (!IsInitialized)
 			{
 				Debug.LogWarning($"[LocaleAddressablesByRefCountModule::LoadAssetAsync] LocaleAddressablesByRefCountModule is not initialized.");
-				return UniTask.FromResult<T>(null);
+				return GetNullAwaitable<T>();
 			}
 
 			var addressWithLocalePrefix = _localeModule.GetTextWithLocalePrefix(address);
-			return _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, cancellationToken);
+			return _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, asyncToken);
 		}
 
 		public virtual T GetAsset<T>(string address) where T : Object
@@ -164,13 +163,19 @@ namespace CizaLocaleAddressablesModule
 
 		#endregion
 
-		protected virtual async UniTask OnLoadAssetAsyncImp(string address, CancellationToken cancellationToken)
+		protected virtual async Awaitable OnLoadAssetAsyncImp(string address, AsyncToken asyncToken)
 		{
 			if (OnLoadAssetAsync != null)
-				await OnLoadAssetAsync.Invoke(address, cancellationToken);
+				await OnLoadAssetAsync.Invoke(address, asyncToken);
 		}
 
 		protected virtual void OnUnloadAssetImp(string address) =>
 			OnUnloadAsset?.Invoke(address);
+
+		private async Awaitable<T> GetNullAwaitable<T>() where T : Object
+		{
+			await Awaitable.MainThreadAsync();
+			return null;
+		}
 	}
 }

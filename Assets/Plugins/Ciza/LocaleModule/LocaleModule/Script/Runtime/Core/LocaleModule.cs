@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -17,8 +16,8 @@ namespace CizaLocaleModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
-		public event Func<string, CancellationToken, UniTask> OnChangedLocaleBeforeAsync;
-		public event Func<string, CancellationToken, UniTask> OnChangedLocaleAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
@@ -85,10 +84,10 @@ namespace CizaLocaleModule
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-		public virtual UniTask ChangeToDefaultLocaleAsync(CancellationToken cancellationToken) =>
-			ChangeLocaleAsync(DefaultLocale, cancellationToken);
+		public virtual Awaitable ChangeToDefaultLocaleAsync(AsyncToken asyncToken) =>
+			ChangeLocaleAsync(DefaultLocale, asyncToken);
 
-		public virtual async UniTask ChangeLocaleAsync(string locale, CancellationToken cancellationToken)
+		public virtual async Awaitable ChangeLocaleAsync(string locale, AsyncToken asyncToken)
 		{
 			if (!IsInitialized)
 			{
@@ -108,12 +107,12 @@ namespace CizaLocaleModule
 			IsChangingLocale = true;
 
 			if (OnChangedLocaleBeforeAsync != null)
-				await OnChangedLocaleBeforeAsync.Invoke(CurrentLocale, cancellationToken);
+				await OnChangedLocaleBeforeAsync.Invoke(CurrentLocale, asyncToken);
 
 			CurrentLocale = locale;
 
 			if (OnChangedLocaleAsync != null)
-				await OnChangedLocaleAsync.Invoke(CurrentLocale, cancellationToken);
+				await OnChangedLocaleAsync.Invoke(CurrentLocale, asyncToken);
 
 			IsChangingLocale = false;
 		}

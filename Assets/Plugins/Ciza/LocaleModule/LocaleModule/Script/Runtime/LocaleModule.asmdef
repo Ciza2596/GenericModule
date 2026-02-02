@@ -2,7 +2,7 @@
     "name": "LocaleModule",
     "rootNamespace": "CizaLocaleModule",
     "references": [
-        "UniTask"
+        "Async"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

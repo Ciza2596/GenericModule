@@ -2,7 +2,7 @@
     "name": "AudioModule",
     "rootNamespace": "CizaAudioModule",
     "references": [
-        "UniTask",
+        "Async",
         "TimerModule"
     ],
     "includePlatforms": [],

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Scripting;
@@ -24,8 +23,8 @@ namespace CizaAudioModule
 		public event Action OnRelease;
 
 
-		public event Func<string, CancellationToken, UniTask> OnChangedVoiceLocaleBeforeAsync;
-		public event Func<string, CancellationToken, UniTask> OnChangedVoiceLocaleAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedVoiceLocaleBeforeAsync;
+		public event Func<string, AsyncToken, Awaitable> OnChangedVoiceLocaleAsync;
 
 		// CallerId, Id, DataId
 		public event Action<string, string, string> OnBgmSpawn;
@@ -143,11 +142,11 @@ namespace CizaAudioModule
 			voiceAssetProvider.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
 			voiceAssetProvider.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
 
-			UniTask m_OnChangedLocaleBeforeAsync(string locale, CancellationToken cancellationToken) =>
-				OnChangedVoiceLocaleBeforeAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
+			Awaitable m_OnChangedLocaleBeforeAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedVoiceLocaleBeforeAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 
-			UniTask m_OnChangedLocaleAsync(string locale, CancellationToken cancellationToken) =>
-				OnChangedVoiceLocaleAsync?.Invoke(locale, cancellationToken) ?? UniTask.CompletedTask;
+			Awaitable m_OnChangedLocaleAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedVoiceLocaleAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 		}
 
 		public void Initialize(Transform rootParent = null)
@@ -219,13 +218,14 @@ namespace CizaAudioModule
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
 
-		public UniTask StopAllAsync(float fadeTime = 0)
+		public async Awaitable StopAllAsync(float fadeTime = 0)
 		{
-			var uniTasks = new List<UniTask>();
-			uniTasks.Add(StopAllBgmAsync(fadeTime));
-			uniTasks.Add(StopAllSfxAsync(fadeTime));
-			uniTasks.Add(StopAllVoiceAsync(fadeTime));
-			return UniTask.WhenAll(uniTasks);
+			var awaitables = new List<Awaitable>();
+			awaitables.Add(StopAllBgmAsync(fadeTime));
+			awaitables.Add(StopAllSfxAsync(fadeTime));
+			awaitables.Add(StopAllVoiceAsync(fadeTime));
+
+			await Async.All(awaitables);
 		}
 
 		#region Bgm
@@ -233,8 +233,8 @@ namespace CizaAudioModule
 		public void SetBgmVolume(float volume) =>
 			_bgmModule.SetVolume(volume);
 
-		public UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-			_bgmModule.LoadAssetAsync(bgmDataId, errorMessage, cancellationToken);
+		public Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken) =>
+			_bgmModule.LoadAssetAsync(bgmDataId, errorMessage, asyncToken);
 
 		public void UnloadBgmAsset(string bgmDataId) =>
 			_bgmModule.UnloadAsset(bgmDataId);
@@ -249,20 +249,20 @@ namespace CizaAudioModule
 		public string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_bgmModule.Spawn(isCustomBgmId, bgmId, bgmDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
 
-		public UniTask ModifyBgmAsync(string bgmId, float volume, bool isLoop, float time = 0) =>
+		public Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float time = 0) =>
 			_bgmModule.ModifyAsync(bgmId, volume, isLoop, time);
 
-		public UniTask ModifyBgmAsync(string bgmId, float volume, float time = 0) =>
+		public Awaitable ModifyBgmAsync(string bgmId, float volume, float time = 0) =>
 			_bgmModule.ModifyAsync(bgmId, volume, time);
 
 		public void SetBgmTime(string bgmId, float time) =>
@@ -274,10 +274,10 @@ namespace CizaAudioModule
 		public void ResumeBgm(string bgmId) =>
 			_bgmModule.Resume(bgmId);
 
-		public UniTask StopBgmAsync(string bgmId, float fadeTime = 0) =>
+		public Awaitable StopBgmAsync(string bgmId, float fadeTime = 0) =>
 			_bgmModule.StopAsync(bgmId, fadeTime);
 
-		public UniTask StopAllBgmAsync(float fadeTime = 0) =>
+		public Awaitable StopAllBgmAsync(float fadeTime = 0) =>
 			_bgmModule.StopAllAsync(fadeTime);
 
 		#endregion
@@ -287,8 +287,8 @@ namespace CizaAudioModule
 		public void SetSfxVolume(float volume) =>
 			_sfxModule.SetVolume(volume);
 
-		public UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-			_sfxModule.LoadAssetAsync(sfxDataId, errorMessage, cancellationToken);
+		public Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken) =>
+			_sfxModule.LoadAssetAsync(sfxDataId, errorMessage, asyncToken);
 
 		public void UnloadSfxAsset(string sfxDataId) =>
 			_sfxModule.UnloadAsset(sfxDataId);
@@ -306,19 +306,19 @@ namespace CizaAudioModule
 			_sfxModule.Despawn(sfxId);
 
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = default, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0) =>
+		public Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0) =>
 			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime);
 
-		public UniTask ModifySfxAsync(string sfxId, float volume, float fadeTime = 0) =>
+		public Awaitable ModifySfxAsync(string sfxId, float volume, float fadeTime = 0) =>
 			_sfxModule.ModifyAsync(sfxId, volume, fadeTime);
 
 		public void SetSfxTime(string sfxId, float time) =>
@@ -336,10 +336,10 @@ namespace CizaAudioModule
 		public void PauseSfx(string sfxId) =>
 			_sfxModule.Pause(sfxId);
 
-		public UniTask StopSfxAsync(string sfxId, float fadeTime = 0) =>
+		public Awaitable StopSfxAsync(string sfxId, float fadeTime = 0) =>
 			_sfxModule.StopAsync(sfxId, fadeTime);
 
-		public UniTask StopAllSfxAsync(float fadeTime = 0) =>
+		public Awaitable StopAllSfxAsync(float fadeTime = 0) =>
 			_sfxModule.StopAllAsync(fadeTime);
 
 		#endregion
@@ -350,8 +350,8 @@ namespace CizaAudioModule
 			_voiceModule.SetVolume(volume);
 
 
-		public UniTask LoadVoiceAssetAsync(string voiceDataId, string errorMessage, CancellationToken cancellationToken = default) =>
-			_voiceModule.LoadAssetAsync(voiceDataId, errorMessage, cancellationToken);
+		public Awaitable LoadVoiceAssetAsync(string voiceDataId, string errorMessage, AsyncToken asyncToken = default) =>
+			_voiceModule.LoadAssetAsync(voiceDataId, errorMessage, asyncToken);
 
 		public void UnloadVoiceAsset(string voiceDataId) =>
 			_voiceModule.UnloadAsset(voiceDataId);
@@ -370,17 +370,17 @@ namespace CizaAudioModule
 			_voiceModule.Despawn(voiceId);
 
 
-		public UniTask<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, callerId);
 
-		public UniTask<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, callerId);
 
 
-		public UniTask ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0) =>
+		public Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0) =>
 			_voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime);
 
-		public UniTask ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0) =>
+		public Awaitable ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0) =>
 			_voiceModule.ModifyAsync(voiceId, volume, fadeTime);
 
 		public void SetVoiceTime(string voiceId, float time) =>
@@ -398,10 +398,10 @@ namespace CizaAudioModule
 		public void PauseVoice(string voiceId) =>
 			_voiceModule.Pause(voiceId);
 
-		public UniTask StopVoiceAsync(string voiceId, float fadeTime = 0) =>
+		public Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0) =>
 			_voiceModule.StopAsync(voiceId, fadeTime);
 
-		public UniTask StopAllVoiceAsync(float fadeTime = 0) =>
+		public Awaitable StopAllVoiceAsync(float fadeTime = 0) =>
 			_voiceModule.StopAllAsync(fadeTime);
 
 		#endregion

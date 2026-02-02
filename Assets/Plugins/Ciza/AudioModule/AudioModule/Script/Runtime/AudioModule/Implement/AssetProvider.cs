@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -18,23 +17,23 @@ namespace CizaAudioModule.Implement
 		[OverrideDrawer]
 		protected PrefabMapInfo[] _prefabMapInfos;
 
-		public virtual UniTask<T> LoadAssetAsync<T>(string dataId, CancellationToken cancellationToken) where T : Object
+		public virtual Awaitable<T> LoadAssetAsync<T>(string dataId, AsyncToken asyncToken) where T : Object
 		{
 			var type = typeof(T);
 			if (type == typeof(AudioClip))
 			{
 				var clip = _clipMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioClip as T;
-				return UniTask.FromResult(clip);
+				return Async.Result(clip);
 			}
 
 			if (type == typeof(GameObject))
 			{
 				var prefab = _prefabMapInfos.FirstOrDefault(clipMapData => clipMapData.DataId == dataId)?.AudioPrefab as T;
-				return UniTask.FromResult(prefab);
+				return Async.Result(prefab);
 			}
 
 			Debug.LogError($"[AudioModuleExampleAssetProvider::GetAsset] Asset is not found by dataId: {dataId}");
-			return UniTask.FromResult<T>(null);
+			return null;
 		}
 
 		public virtual void UnloadAsset<T>(string dataId) where T : Object { }

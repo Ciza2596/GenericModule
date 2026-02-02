@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 
 namespace CizaAudioModule
@@ -14,12 +13,12 @@ namespace CizaAudioModule
 			event Action<string, string, string> OnBgmSpawn;
 			event Action<string, string, string> OnBgmStop;
 
-			UniTask LoadBgmAssetAsync(string bgmDataId, string errorMessage, CancellationToken cancellationToken);
+			Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken);
 			void UnloadBgmAsset(string bgmDataId);
 
-			UniTask<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
-			UniTask ModifyBgmAsync(string bgmId, float volume, float time = 0);
-			UniTask StopBgmAsync(string bgmId, float fadeTime = 0);
+			Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
+			Awaitable ModifyBgmAsync(string bgmId, float volume, float time = 0);
+			Awaitable StopBgmAsync(string bgmId, float fadeTime = 0);
 		}
 
 		public const string CallerId = "BgmController";
@@ -45,16 +44,15 @@ namespace CizaAudioModule
 			_audioPlayer = audioPlayer;
 		}
 
-		public UniTask InitializeAsync(CancellationToken cancellationToken)
+		public async Awaitable InitializeAsync(AsyncToken asyncToken)
 		{
 			_audioPlayer.OnBgmSpawn += OnBgmPlay;
 			_audioPlayer.OnBgmStop += OnBgmStop;
 
-			var uniTasks = new List<UniTask>();
+			var awaitables = new List<Awaitable>();
 			foreach (var bgmDataId in _config.BgmDataIds)
-				uniTasks.Add(LoadBgmAssetAsync(bgmDataId, cancellationToken));
-
-			return UniTask.WhenAll(uniTasks);
+				awaitables.Add(LoadBgmAssetAsync(bgmDataId, asyncToken));
+			await Async.All(awaitables);
 		}
 
 		public void Release()
@@ -68,21 +66,19 @@ namespace CizaAudioModule
 			_audioPlayer.OnBgmStop -= OnBgmStop;
 		}
 
-		public UniTask PlayBgmAsync(IBgmSettings bgmSettings)
+		public async Awaitable PlayBgmAsync(IBgmSettings bgmSettings)
 		{
 			if (bgmSettings.TryGetBgmInfo(out var bgmDataId, out var volume))
-				return PlayBgmAsync(bgmDataId, volume);
-
-			return UniTask.CompletedTask;
+				await PlayBgmAsync(bgmDataId, volume);
 		}
 
-		public UniTask PlayBgmAsync(string bgmDataId) =>
+		public Awaitable PlayBgmAsync(string bgmDataId) =>
 			PlayBgmAsync(bgmDataId, 1);
 
-		public UniTask PlayBgmAsync(string bgmDataId, float volume) =>
+		public Awaitable PlayBgmAsync(string bgmDataId, float volume) =>
 			PlayBgmAsync(bgmDataId, volume, _config.FadeTime);
 
-		public UniTask PauseBgmAsync() =>
+		public Awaitable PauseBgmAsync() =>
 			PauseBgmAsync(_currentBgmDataId, _config.FadeTime);
 
 		public async void StopAllBgm()
@@ -91,33 +87,32 @@ namespace CizaAudioModule
 				await _audioPlayer.StopBgmAsync(bgmId);
 		}
 
-		private UniTask PlayBgmAsync(string bgmDataId, float volume, float fadeTime)
+		private async Awaitable PlayBgmAsync(string bgmDataId, float volume, float fadeTime)
 		{
-			var uniTasks = new List<UniTask>();
-
+			var awaitables = new List<Awaitable>();
 			if (_currentBgmDataId.CheckHasValue() && _currentBgmDataId != bgmDataId)
-				uniTasks.Add(PauseBgmAsync());
+				awaitables.Add(PauseBgmAsync());
 
 			_currentBgmDataId = bgmDataId;
 			if (!_bgmIdMapByBgmDataId.TryGetValue(bgmDataId, out var bgmId))
-				uniTasks.Add(_audioPlayer.PlayBgmAsync(bgmDataId, fadeTime: fadeTime, volume: volume, isLoop: true, callerId: CallerId));
+				awaitables.Add(_audioPlayer.PlayBgmAsync(bgmDataId, fadeTime: fadeTime, volume: volume, isLoop: true, callerId: CallerId).ToAwaitable());
 			else
-				uniTasks.Add(_audioPlayer.ModifyBgmAsync(bgmId, volume, fadeTime));
+				awaitables.Add(_audioPlayer.ModifyBgmAsync(bgmId, volume, fadeTime));
 
-			return UniTask.WhenAll(uniTasks);
+			await Async.All(awaitables);
 		}
 
-		private UniTask PauseBgmAsync(string bgmDataId, float fadeTime)
+		private async Awaitable PauseBgmAsync(string bgmDataId, float fadeTime)
 		{
 			if (!_bgmIdMapByBgmDataId.TryGetValue(bgmDataId, out var bgmId))
-				return UniTask.CompletedTask;
+				return;
 
-			return _audioPlayer.ModifyBgmAsync(bgmId, MinVolume, fadeTime);
+			await _audioPlayer.ModifyBgmAsync(bgmId, MinVolume, fadeTime);
 		}
 
-		private async UniTask LoadBgmAssetAsync(string bgmDataId, CancellationToken cancellationToken)
+		private async Awaitable LoadBgmAssetAsync(string bgmDataId, AsyncToken asyncToken)
 		{
-			await _audioPlayer.LoadBgmAssetAsync(bgmDataId, $"Please check bgm: {bgmDataId} in BgmControllerConfig.", cancellationToken);
+			await _audioPlayer.LoadBgmAssetAsync(bgmDataId, $"Please check bgm: {bgmDataId} in BgmControllerConfig.", asyncToken);
 			_loadedBgmDataIds.Add(bgmDataId);
 		}
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 
 namespace CizaAudioModule
@@ -10,10 +9,10 @@ namespace CizaAudioModule
 	{
 		public interface IAudioPlayer
 		{
-			UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken);
+			Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken);
 			void UnloadSfxAsset(string sfxDataId);
 
-			UniTask<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
+			Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null);
 		}
 
 		private readonly IOptionSfxControllerConfig _config;
@@ -37,39 +36,39 @@ namespace CizaAudioModule
 			_audioPlayer = audioPlayer;
 		}
 
-		public UniTask InitializeAsync(CancellationToken cancellationToken)
+		public async Awaitable InitializeAsync(AsyncToken asyncToken)
 		{
-			var uniTasks = new List<UniTask>();
+			var awaitables = new List<Awaitable>();
 
 			if (_config.TryGetSelectSfxDataId(out var selectSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(selectSfxDataId, $"Please check selectSfx: {selectSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(selectSfxDataId, $"Please check selectSfx: {selectSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 
 			if (_config.TryGetConfirmSfxDataId(out var confirmSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(confirmSfxDataId, $"Please check confirmSfx: {confirmSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(confirmSfxDataId, $"Please check confirmSfx: {confirmSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 			if (_config.TryGetCantConfirmSfxDataId(out var cantConfirmSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(cantConfirmSfxDataId, $"Please check cantConfirmSfx: {cantConfirmSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(cantConfirmSfxDataId, $"Please check cantConfirmSfx: {cantConfirmSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 
 			if (_config.TryGetCancelSfxDataId(out var cancelSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(cancelSfxDataId, $"Please check cancelSfx: {cancelSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(cancelSfxDataId, $"Please check cancelSfx: {cancelSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 
 			if (_config.TryGetSettingsShowSfxDataId(out var settingsShowSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(settingsShowSfxDataId, $"Please check settingsShowSfx: {settingsShowSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(settingsShowSfxDataId, $"Please check settingsShowSfx: {settingsShowSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 			if (_config.TryGetSettingsHideSfxDataId(out var settingsHideSfxDataId))
-				uniTasks.Add(LoadSfxAssetAsync(settingsHideSfxDataId, $"Please check settingsHideSfx: {settingsHideSfxDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(settingsHideSfxDataId, $"Please check settingsHideSfx: {settingsHideSfxDataId} in OptionSfxControllerConfig.", asyncToken));
 
 
 			if (_config.TryGetDialogContinueSfxDataId(out var dialogContinueDataId))
-				uniTasks.Add(LoadSfxAssetAsync(dialogContinueDataId, $"Please check dialogContinue: {dialogContinueDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(dialogContinueDataId, $"Please check dialogContinue: {dialogContinueDataId} in OptionSfxControllerConfig.", asyncToken));
 
 			if (_config.TryGetDialogFunctionSfxDataId(out var dialogFunctionDataId))
-				uniTasks.Add(LoadSfxAssetAsync(dialogFunctionDataId, $"Please check dialogFunction: {dialogFunctionDataId} in OptionSfxControllerConfig.", cancellationToken));
+				awaitables.Add(LoadSfxAssetAsync(dialogFunctionDataId, $"Please check dialogFunction: {dialogFunctionDataId} in OptionSfxControllerConfig.", asyncToken));
 
-			return UniTask.WhenAll(uniTasks);
+			await Async.All(awaitables);
 		}
 
 		public void Release()
@@ -261,9 +260,9 @@ namespace CizaAudioModule
 			return false;
 		}
 
-		private async UniTask LoadSfxAssetAsync(string sfxDataId, string errorMessage, CancellationToken cancellationToken)
+		private async Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken)
 		{
-			await _audioPlayer.LoadSfxAssetAsync(sfxDataId, errorMessage, cancellationToken);
+			await _audioPlayer.LoadSfxAssetAsync(sfxDataId, errorMessage, asyncToken);
 			_loadedSfxDataIds.Add(sfxDataId);
 		}
 

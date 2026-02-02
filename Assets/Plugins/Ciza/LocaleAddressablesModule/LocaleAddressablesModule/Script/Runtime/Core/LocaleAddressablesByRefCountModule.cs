@@ -114,16 +114,16 @@ namespace CizaLocaleAddressablesModule
 
 		#region Asset
 
-		public virtual Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken) where T : Object
+		public virtual async Awaitable<T> LoadAssetAsync<T>(string address, AsyncToken asyncToken) where T : Object
 		{
 			if (!IsInitialized)
 			{
 				Debug.LogWarning($"[LocaleAddressablesByRefCountModule::LoadAssetAsync] LocaleAddressablesByRefCountModule is not initialized.");
-				return GetNullAwaitable<T>();
+				return null;
 			}
 
 			var addressWithLocalePrefix = _localeModule.GetTextWithLocalePrefix(address);
-			return _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, asyncToken);
+			return await _addressablesByRefCountModule.LoadAssetAsync<T>(addressWithLocalePrefix, asyncToken);
 		}
 
 		public virtual T GetAsset<T>(string address) where T : Object
@@ -171,11 +171,5 @@ namespace CizaLocaleAddressablesModule
 
 		protected virtual void OnUnloadAssetImp(string address) =>
 			OnUnloadAsset?.Invoke(address);
-
-		private async Awaitable<T> GetNullAwaitable<T>() where T : Object
-		{
-			await Awaitable.MainThreadAsync();
-			return null;
-		}
 	}
 }

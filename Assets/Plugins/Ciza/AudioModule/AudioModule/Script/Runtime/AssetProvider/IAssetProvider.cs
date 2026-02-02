@@ -1,12 +1,11 @@
-using System.Threading;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 
 namespace CizaAudioModule
 {
 	public interface IAssetProvider
 	{
-		UniTask<T> LoadAssetAsync<T>(string dataId, CancellationToken cancellationToken) where T : Object;
+		Awaitable<T> LoadAssetAsync<T>(string dataId, AsyncToken asyncToken) where T : Object;
 
 		void UnloadAsset<T>(string dataId) where T : Object;
 	}

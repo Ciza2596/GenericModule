@@ -108,7 +108,7 @@ public class TimerModuleExample : MonoBehaviour
 
 ## AudioModule
 ```
-https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AudioModule/AudioModule
+https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
 ```
 ### Dependency:
 ```
@@ -119,7 +119,6 @@ https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
 ```
 
 ### Manual:
-Dependency [UniTask](https://github.com/Cysharp/UniTask)
 
 - **Operate AudioModuleConfig**
   1. Create AudioModuleConfig:
@@ -270,7 +269,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleMod
 
 ### Dependency:
 ```
-https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
+https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
 ```
 
 ### Manual:
@@ -381,7 +380,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/Addressab
 ```
 ### Dependency:
 ```
-https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
+https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
 ```
 
 ### Manual:
@@ -419,7 +418,7 @@ https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/LocaleAdd
 ```
 ### Dependency:
 ```
-https://github.com/Ciza2596/UniTask.git?path=Assets/Plugins/Ciza/UniTask/UniTask
+https://github.com/Ciza2596/Async.git?path=Assets/Plugins/Ciza/Async/Async
 ```
 ```
 https://github.com/Ciza2596/GenericModule.git?path=Assets/Plugins/Ciza/AddressablesModule/AddressablesModule

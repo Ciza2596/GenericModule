@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using CizaTimerModule;
-using CizaUniTask;
+using CizaAsync;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Audio;
@@ -234,7 +233,7 @@ namespace CizaAudioModule
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
 
-		public virtual async UniTask LoadAssetAsync(string audioDataId, string errorMessage, CancellationToken cancellationToken = default)
+		public virtual async Awaitable LoadAssetAsync(string audioDataId, string errorMessage, AsyncToken asyncToken = default)
 		{
 			if (!_audioInfoMapByDataId.TryGetValue(audioDataId, out var audioInfo))
 			{
@@ -256,13 +255,13 @@ namespace CizaAudioModule
 			var prefabAddress = audioInfo.PrefabAddress.CheckHasValue() ? audioInfo.PrefabAddress : _config.PrefabAddress;
 			Assert.IsTrue(prefabAddress.CheckHasValue(), $"[AudioModule::LoadAssetAsync] PrefabAddress is null by dataId: {audioDataId}.");
 
-			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, cancellationToken);
+			var clip = await _clipAssetProvider.LoadAssetAsync<AudioClip>(clipAddress, asyncToken);
 			Assert.IsNotNull(clip, $"[AudioModule::LoadAssetAsync] Clip is not found by address: {clipAddress}.");
 
 			_clipMapByAddress.TryAdd(clipAddress, clip);
 			_loadedClipAddresses.Add(clipAddress);
 
-			var prefab = await _prefabAssetProvider.LoadAssetAsync<GameObject>(prefabAddress, cancellationToken);
+			var prefab = await _prefabAssetProvider.LoadAssetAsync<GameObject>(prefabAddress, asyncToken);
 			_prefabMapByAddress.TryAdd(prefabAddress, prefab);
 			_loadedPrefabAddresses.Add(clipAddress);
 		}
@@ -399,10 +398,10 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual UniTask<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
+		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
 			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 
-		public virtual async UniTask<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
+		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
 		{
 			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
@@ -414,7 +413,7 @@ namespace CizaAudioModule
 			return audioId;
 		}
 
-		public virtual async UniTask ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime)
+		public virtual async Awaitable ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -429,7 +428,7 @@ namespace CizaAudioModule
 			await ModifyAsync(audioId, volume, fadeTime);
 		}
 
-		public virtual async UniTask ModifyAsync(string audioId, float volume, float fadeTime)
+		public virtual async Awaitable ModifyAsync(string audioId, float volume, float fadeTime)
 		{
 			if (!IsInitialized)
 				return;
@@ -491,34 +490,35 @@ namespace CizaAudioModule
 		public virtual void Despawn(string audioId) =>
 			Despawn(audioId, null);
 
-		public virtual UniTask StopAsync(string audioId, float fadeTime = 0) =>
+		public virtual Awaitable StopAsync(string audioId, float fadeTime = 0) =>
 			StopAsync(audioId, fadeTime, null);
 
-		public virtual UniTask StopByDataIdAsync(string audioDataId, float fadeTime = 0)
+		public virtual async Awaitable StopByDataIdAsync(string audioDataId, float fadeTime = 0)
 		{
 			if (!IsInitialized)
-				return UniTask.CompletedTask;
+				return;
 
-			var uniTasks = new List<UniTask>();
-
-			foreach (var pair in _playingAudioMapByAudioId.Where(pair => pair.Value.DataId == audioDataId).ToArray())
-				uniTasks.Add(StopAsync(pair.Key, fadeTime));
-
-			return UniTask.WhenAll(uniTasks);
+			var awaitables = new List<Awaitable>();
+			foreach (var playingAudio in _playingAudioMapByAudioId.Values.Where(m_playingAudio => m_playingAudio.DataId == audioDataId).ToArray())
+				awaitables.Add(StopAsync(playingAudio.Id, fadeTime));
+			await Async.All(awaitables);
 		}
 
-		public virtual async UniTask StopAllAsync(float fadeTime = 0)
+		public virtual async Awaitable StopAllAsync(float fadeTime = 0)
 		{
-			var uniTasks = new List<UniTask>();
-			foreach (var audioId in _playingAudioMapByAudioId.Keys.ToArray())
-				uniTasks.Add(StopAsync(audioId, fadeTime));
-			await UniTask.WhenAll(uniTasks);
+			if (!IsInitialized)
+				return;
+
+			var awaitables = new List<Awaitable>();
+			foreach (var playingAudio in _playingAudioMapByAudioId.Values.ToArray())
+				awaitables.Add(StopAsync(playingAudio.Id, fadeTime));
+			await Async.All(awaitables);
 		}
 
 		protected virtual async void Despawn(string audioId, Action<string, string, string> onComplete) =>
 			await StopAsync(audioId, 0, onComplete);
 
-		protected virtual async UniTask StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)
+		protected virtual async Awaitable StopAsync(string audioId, float fadeTime, Action<string, string, string> onComplete)
 		{
 			if (!IsInitialized)
 				return;
@@ -610,7 +610,7 @@ namespace CizaAudioModule
 				audioTransform.position = position;
 		}
 
-		protected virtual async UniTask AddTimer(string audioId, float startVolume, float endVolume, float duration)
+		protected virtual async Awaitable AddTimer(string audioId, float startVolume, float endVolume, float duration)
 		{
 			if (_timerIdMapByAudioId.ContainsKey(audioId))
 				RemoveTimer(audioId);
@@ -621,7 +621,7 @@ namespace CizaAudioModule
 			_timerIdMapByAudioId.Add(audioId, timerId);
 
 			while (_timerIdMapByAudioId.ContainsValue(timerId))
-				await UniTask.Yield();
+				await Awaitable.NextFrameAsync();
 		}
 
 		protected virtual void RemoveTimer(string audioId)

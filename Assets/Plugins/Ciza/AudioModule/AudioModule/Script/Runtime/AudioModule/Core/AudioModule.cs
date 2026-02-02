@@ -501,7 +501,7 @@ namespace CizaAudioModule
 			var awaitables = new List<Awaitable>();
 			foreach (var playingAudio in _playingAudioMapByAudioId.Values.Where(m_playingAudio => m_playingAudio.DataId == audioDataId).ToArray())
 				awaitables.Add(StopAsync(playingAudio.Id, fadeTime));
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		public virtual async Awaitable StopAllAsync(float fadeTime = 0)
@@ -512,7 +512,7 @@ namespace CizaAudioModule
 			var awaitables = new List<Awaitable>();
 			foreach (var playingAudio in _playingAudioMapByAudioId.Values.ToArray())
 				awaitables.Add(StopAsync(playingAudio.Id, fadeTime));
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		protected virtual async void Despawn(string audioId, Action<string, string, string> onComplete) =>
@@ -621,7 +621,7 @@ namespace CizaAudioModule
 			_timerIdMapByAudioId.Add(audioId, timerId);
 
 			while (_timerIdMapByAudioId.ContainsValue(timerId))
-				await Async.NextFrame();
+				await Async.NextFrameAsync();
 		}
 
 		protected virtual void RemoveTimer(string audioId)

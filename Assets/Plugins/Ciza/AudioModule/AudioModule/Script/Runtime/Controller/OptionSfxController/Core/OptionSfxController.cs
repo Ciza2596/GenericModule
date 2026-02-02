@@ -68,7 +68,7 @@ namespace CizaAudioModule
 			if (_config.TryGetDialogFunctionSfxDataId(out var dialogFunctionDataId))
 				awaitables.Add(LoadSfxAssetAsync(dialogFunctionDataId, $"Please check dialogFunction: {dialogFunctionDataId} in OptionSfxControllerConfig.", asyncToken));
 
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		public void Release()

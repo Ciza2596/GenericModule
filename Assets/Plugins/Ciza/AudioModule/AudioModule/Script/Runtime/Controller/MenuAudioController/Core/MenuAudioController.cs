@@ -31,7 +31,7 @@ namespace CizaAudioModule
 			var awaitables = new List<Awaitable>();
 			awaitables.Add(_bgmController.InitializeAsync(asyncToken));
 			awaitables.Add(_optionSfxController.InitializeAsync(asyncToken));
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		public void Release()

@@ -52,7 +52,7 @@ namespace CizaAudioModule
 			var awaitables = new List<Awaitable>();
 			foreach (var bgmDataId in _config.BgmDataIds)
 				awaitables.Add(LoadBgmAssetAsync(bgmDataId, asyncToken));
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		public void Release()
@@ -99,7 +99,7 @@ namespace CizaAudioModule
 			else
 				awaitables.Add(_audioPlayer.ModifyBgmAsync(bgmId, volume, fadeTime));
 
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		private async Awaitable PauseBgmAsync(string bgmDataId, float fadeTime)

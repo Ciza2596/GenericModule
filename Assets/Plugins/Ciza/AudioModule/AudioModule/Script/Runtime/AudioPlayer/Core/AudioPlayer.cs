@@ -225,7 +225,7 @@ namespace CizaAudioModule
 			awaitables.Add(StopAllSfxAsync(fadeTime));
 			awaitables.Add(StopAllVoiceAsync(fadeTime));
 
-			await Async.All(awaitables);
+			await Async.AllAsync(awaitables);
 		}
 
 		#region Bgm

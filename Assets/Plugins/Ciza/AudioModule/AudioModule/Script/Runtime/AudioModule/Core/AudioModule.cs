@@ -621,7 +621,7 @@ namespace CizaAudioModule
 			_timerIdMapByAudioId.Add(audioId, timerId);
 
 			while (_timerIdMapByAudioId.ContainsValue(timerId))
-				await Awaitable.NextFrameAsync();
+				await Async.NextFrame();
 		}
 
 		protected virtual void RemoveTimer(string audioId)

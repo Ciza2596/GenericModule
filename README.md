@@ -1,16 +1,15 @@
 ## Info
 Modules for unity.
 
-module |
---- |
-
-[AddressablesModule](#addressablesmodule) |
-[LocaleModule](#localemodule) |
-[LocaleAddressablesModule](#localeaddressablesmodule) |
-[TextModule](#textmodule) |
-[TimerModule](#timermodule) |
-[AudioModule](#audiomodule) |
-[InputModule](#inputModule) |
+module | Status |
+--- | --- |
+[AddressablesModule](#addressablesmodule) | ✔️ |
+[LocaleModule](#localemodule) | ✔️ |
+[LocaleAddressablesModule](#localeaddressablesmodule) | ✔️ |
+[TextModule](#textmodule) | ✔️ |
+[TimerModule](#timermodule) | ✔️ |
+[AudioModule](#audiomodule) | ✔️ |
+[InputModule](#inputModule) | ✔️ |
 
 
 

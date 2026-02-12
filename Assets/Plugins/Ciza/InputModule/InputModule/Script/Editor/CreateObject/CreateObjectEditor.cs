@@ -30,6 +30,20 @@ namespace CizaInputModule.Editor
         {
             CreateObject(EVENT_SYSTEM);
         }
+        
+        public const string VIRTUAL_MOUSE_CANVAS = "VirtualMouseCanvas";
+        [MenuItem("GameObject/Ciza/InputModule/VirtualMouseCanvas", false, -9)]
+        public static void CreateVirtualMouseCanvas()
+        {
+            CreateObject(VIRTUAL_MOUSE_CANVAS);
+        }
+        
+        public const string VIRTUAL_MOUSE = "VirtualMouse";
+        [MenuItem("GameObject/Ciza/InputModule/VirtualMouse", false, -8)]
+        public static void CreateVirtualMouse()
+        {
+            CreateObject(VIRTUAL_MOUSE);
+        }
 
         private static void CreateObject(string dataId)
         {

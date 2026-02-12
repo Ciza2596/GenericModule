@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class DragIcon : Icon
+    public class DragIcon : BIcon
     {
         public DragIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

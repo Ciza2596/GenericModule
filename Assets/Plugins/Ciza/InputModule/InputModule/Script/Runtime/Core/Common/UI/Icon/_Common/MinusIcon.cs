@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class MinusIcon : Icon
+    public class MinusIcon : BIcon
     {
         public MinusIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

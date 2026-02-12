@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CizaInputModule
 {
-	public interface IIcon
-	{
-		Texture2D Texture { get; }
-	}
+    public interface IIcon
+    {
+        Texture2D Texture { get; }
+    }
 }

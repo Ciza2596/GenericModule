@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class TriangleDownIcon : Icon
+    public class TriangleDownIcon : BIcon
     {
         public TriangleDownIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

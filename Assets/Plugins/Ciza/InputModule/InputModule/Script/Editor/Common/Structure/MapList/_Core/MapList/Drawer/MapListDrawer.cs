@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace CizaInputModule.Editor.MapListVisual
+namespace  CizaInputModule.Editor.MapListVisual
 {
 	[CustomPropertyDrawer(typeof(MapList<>), true)]
 	public class MapListDrawer : BMapListDrawer

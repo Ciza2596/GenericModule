@@ -36,5 +36,5 @@
     --color-list-head-running: #191919;
     --color-list-body: #333333;
 
-    --color-track-section:#454950;
+    --color-track-section: #454950;
 }

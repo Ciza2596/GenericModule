@@ -41,9 +41,6 @@ namespace CizaInputModule.Editor
 
 			for (int i = 0; i < _itemVEs.Count; ++i)
 			{
-				if (_itemVEs[i] == null)
-					continue;
-
 				var center = _itemVEs[i].worldBound.y + _itemVEs[i].worldBound.height * 0.5f;
 				var distance = center - cursorY;
 				var distanceAbsolute = Math.Abs(distance);
@@ -106,9 +103,7 @@ namespace CizaInputModule.Editor
 		protected virtual int GetDestinationIndex(SerializedProperty arrayProperty, int destinationIndex)
 		{
 			arrayProperty.serializedObject.Update();
-			destinationIndex = Math.Max(destinationIndex, 0);
-			destinationIndex = Math.Min(destinationIndex, arrayProperty.arraySize - 1);
-			return destinationIndex;
+			return Math.Clamp(destinationIndex, 0, arrayProperty.arraySize - 1);
 		}
 	}
 }

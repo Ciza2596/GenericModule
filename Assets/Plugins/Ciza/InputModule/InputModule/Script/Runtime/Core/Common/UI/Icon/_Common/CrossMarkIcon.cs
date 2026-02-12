@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class CrossMarkIcon : Icon
+    public class CrossMarkIcon : BIcon
     {
         public CrossMarkIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

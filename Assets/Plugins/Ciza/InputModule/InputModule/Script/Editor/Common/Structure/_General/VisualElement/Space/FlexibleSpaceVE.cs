@@ -3,10 +3,10 @@ using UnityEngine.UIElements;
 
 namespace CizaInputModule.Editor
 {
-	public class FlexibleSpaceVE : VisualElement
-	{
-		[Preserve]
-		public FlexibleSpaceVE() =>
-			style.flexGrow = 1;
-	}
+    public class FlexibleSpaceVE : VisualElement
+    {
+        [Preserve]
+        public FlexibleSpaceVE() =>
+            style.flexGrow = 1;
+    }
 }

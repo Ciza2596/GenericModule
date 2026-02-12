@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
 namespace CizaInputModule.Editor
 {
 	public static class StyleSheetUtils

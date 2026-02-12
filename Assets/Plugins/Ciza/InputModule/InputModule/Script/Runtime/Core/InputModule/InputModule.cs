@@ -10,25 +10,30 @@ namespace CizaInputModule
 {
 	public class InputModule
 	{
-		private readonly IInputModuleConfig _inputModuleConfig;
+		// VARIABLE: -----------------------------------------------------------------------------
 
-		private readonly HashSet<PlayerInput> _playerInputs = new HashSet<PlayerInput>();
-		private readonly Dictionary<int, string> _timerIdMapByIndex = new Dictionary<int, string>();
+		protected readonly IInputModuleConfig _inputModuleConfig;
 
-		private readonly TimerModule _timerModule = new TimerModule();
+		protected readonly HashSet<PlayerInput> _playerInputs = new HashSet<PlayerInput>();
+		protected readonly Dictionary<int, string> _timerIdMapByIndex = new Dictionary<int, string>();
 
-		private Transform _root;
+		protected readonly TimerModule _timerModule = new TimerModule();
+		protected readonly VirtualMouseContainer _virtualMouseContainer;
 
-		private GameObject _eventSystem;
+		protected Transform _root;
+		protected BEventHandler[] _eventHandlers;
 
-		private PlayerInputManager _playerInputManager;
-		private PlayerInput _playerInput;
+		protected GameObject _eventSystem;
 
-		private string _currentActionMapDataId;
-		private string _previousControlScheme;
+		protected PlayerInputManager _playerInputManager;
+		protected PlayerInput _playerInput;
 
-		private Vector3 _autoHideEventSystemLastMousePosition;
-		private float _autoHideEventSystemTimer;
+		protected string _currentActionMapDataId;
+		protected string _previousControlScheme;
+
+		protected float _autoHideHardwareCursorTimer;
+
+		// EVENT: ---------------------------------------------------------------------------------
 
 		public event Action<PlayerInput> OnControlsChanged;
 
@@ -37,22 +42,40 @@ namespace CizaInputModule
 
 		public event Action<PlayerInput, float> OnTick;
 
-		public bool IsInitialized { get; private set; }
 
-		public bool CanEnableEventSystem { get; private set; }
-		public bool IsEnableEventSystem { get; private set; }
-		public bool IsCursorVisible { get; private set; }
-		public bool IsCursorAutoHide => _inputModuleConfig.IsAutoHideEventSystem && _autoHideEventSystemTimer <= 0;
+		#region GetActionPath
 
-		public bool IsEnableJoining { get; private set; }
+		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		public event Func<int, string, string> GetVirtualMouseMoveActionPath;
 
-		public bool IsEnableInput { get; private set; }
+		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		public event Func<int, string, string> GetVirtualMouseLeftButtonActionPath;
 
-		public bool IsSinglePlayer { get; private set; }
+		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		public event Func<int, string, string> GetVirtualMouseRightButtonActionPath;
 
-		public string CurrentActionMapDataId => !string.IsNullOrEmpty(_currentActionMapDataId) ? _currentActionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
+		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		public event Func<int, string, string> GetVirtualMouseScrollActionPath;
 
-		public int PlayerCount
+		#endregion
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public virtual bool IsInitialized { get; private set; }
+
+		public virtual bool CanEnableEventSystem { get; private set; }
+		public virtual bool IsEnableEventSystem { get; private set; }
+		public virtual bool IsHardwareCursorVisible { get; private set; }
+
+		public virtual bool IsEnableJoining { get; private set; }
+
+		public virtual bool IsEnableInput { get; private set; }
+
+		public virtual bool IsSinglePlayer { get; private set; }
+
+		public virtual string CurrentActionMapDataId => !string.IsNullOrEmpty(_currentActionMapDataId) ? _currentActionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
+
+		public virtual int PlayerCount
 		{
 			get
 			{
@@ -63,18 +86,18 @@ namespace CizaInputModule
 			}
 		}
 
-		public int MaxPlayerCount { get; private set; }
+		public virtual int MaxPlayerCount { get; private set; }
 
-		public bool TryGetPlayerInput(out PlayerInput playerInput) =>
+		public virtual bool TryGetPlayerInput(out PlayerInput playerInput) =>
 			TryGetPlayerInput(0, out playerInput);
 
-		public bool TryGetPlayerInput(int playerIndex, out PlayerInput playerInput)
+		public virtual bool TryGetPlayerInput(int playerIndex, out PlayerInput playerInput)
 		{
 			playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
 			return playerInput != null;
 		}
 
-		public string[] AllControlSchemes
+		public virtual string[] AllControlSchemes
 		{
 			get
 			{
@@ -88,7 +111,7 @@ namespace CizaInputModule
 		}
 
 
-		public bool TryGetCurrentControlScheme(int playerIndex, out string currentControlScheme)
+		public virtual bool TryGetCurrentControlScheme(int playerIndex, out string currentControlScheme)
 		{
 			var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
 			if (playerInput == null)
@@ -101,13 +124,13 @@ namespace CizaInputModule
 			return true;
 		}
 
-		public InputActionAsset GetAndCloneDefaultAsset() =>
+		public virtual InputActionAsset GetAndCloneDefaultAsset() =>
 			InputActionAsset.FromJson(GetPlayerInputPrefab().actions.ToJson());
 
-		public string GetDefaultActionsJson() =>
+		public virtual string GetDefaultActionsJson() =>
 			GetAndCloneDefaultAsset().ToJson();
 
-		public bool TryGetActionsJson(int playerIndex, out string json)
+		public virtual bool TryGetActionsJson(int playerIndex, out string json)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 			{
@@ -119,18 +142,43 @@ namespace CizaInputModule
 			return true;
 		}
 
-		public bool GetIsInitialized(int playerIndex) =>
+		public virtual bool GetIsInitialized(int playerIndex) =>
 			!_timerIdMapByIndex.ContainsKey(playerIndex);
 
-		public InputModule(IInputModuleConfig inputModuleConfig) =>
-			_inputModuleConfig = inputModuleConfig;
 
-		public void Initialize(Transform parent = null)
+		#region VirtualMouse
+
+		public virtual bool CanEnableVirtualMouse => _virtualMouseContainer.CanEnableVirtualMouse;
+
+		public virtual bool TryGetVirtualMouseReadModel(int playerIndex, out IVirtualMouseReadModel virtualMouseReadModel) =>
+			_virtualMouseContainer.TryGetVirtualMouseReadModel(playerIndex, out virtualMouseReadModel);
+
+		#endregion
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		public InputModule(IInputModuleConfig inputModuleConfig)
+		{
+			_inputModuleConfig = inputModuleConfig;
+			_virtualMouseContainer = new VirtualMouseContainer(_inputModuleConfig);
+			_virtualMouseContainer.GetMoveActionPath += GetVirtualMouseMoveActionPathImp;
+			_virtualMouseContainer.GetLeftButtonActionPath += GetVirtualMouseLeftButtonActionPathImp;
+			_virtualMouseContainer.GetRightButtonActionPath += GetVirtualMouseRightButtonActionPathImp;
+			_virtualMouseContainer.GetScrollActionPath += GetVirtualMouseScrollActionPathImp;
+		}
+
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
+
+		public virtual void Initialize(Transform parent = null) =>
+			Initialize(Array.Empty<BEventHandler>(), parent);
+
+		public virtual void Initialize(BEventHandler eventHandler, Transform parent = null) =>
+			Initialize(new BEventHandler[] { eventHandler }, parent);
+
+		public virtual void Initialize(BEventHandler[] eventHandlers, Transform parent = null)
 		{
 			if (IsInitialized)
 				return;
-
-			IsInitialized = true;
 
 			var rootGameObject = new GameObject(_inputModuleConfig.RootName);
 			_root = rootGameObject.transform;
@@ -145,21 +193,35 @@ namespace CizaInputModule
 			DisableEventSystem();
 			SetCanEnableEventSystem(_inputModuleConfig.CanEnableEventSystem);
 
+			_virtualMouseContainer.Initialize(_root);
+			_virtualMouseContainer.SetCanEnableVirtualMouse(_inputModuleConfig.CanEnableVirtualMouse);
+
 			if (_inputModuleConfig.IsDefaultEnableEventSystem)
 				EnableEventSystem();
 			else
 				DisableEventSystem();
 
 			_timerModule.Initialize();
+
+			_eventHandlers = eventHandlers;
+			foreach (var eventHandler in _eventHandlers)
+				eventHandler.Register(this);
+
+			IsInitialized = true;
 		}
 
-		public void Release()
+		public virtual void Release()
 		{
 			if (!IsInitialized)
 				return;
 
 			Clear();
+			foreach (var eventHandler in _eventHandlers)
+				eventHandler.Unregister(this);
+			_eventHandlers = Array.Empty<BEventHandler>();
+
 			_timerModule.Release();
+			_virtualMouseContainer.Release();
 
 			var eventSystem = _eventSystem;
 			_eventSystem = null;
@@ -172,12 +234,14 @@ namespace CizaInputModule
 			IsInitialized = false;
 		}
 
-		public void Tick(float deltaTime)
+		public virtual void Tick(float deltaTime)
 		{
 			if (!IsInitialized)
 				return;
 
-			CheckAutoHideEventSystemTime(deltaTime);
+			CheckAutoHideHardwareCursorTime(deltaTime);
+			CheckAutoHideEventSystem();
+
 			_timerModule.Tick(deltaTime);
 
 			foreach (var playerInput in _playerInputs.ToArray())
@@ -185,33 +249,42 @@ namespace CizaInputModule
 					OnTick?.Invoke(playerInput, deltaTime);
 		}
 
-		public void SetCanEnableEventSystem(bool canEnableEventSystem)
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		#region EventSystem
+
+		public virtual void SetCanEnableEventSystem(bool canEnableEventSystem)
 		{
 			CanEnableEventSystem = canEnableEventSystem;
 			if (!CanEnableEventSystem && IsEnableEventSystem)
 				DisableEventSystem();
 		}
 
-		public void EnableEventSystem()
+		public virtual void EnableEventSystem()
 		{
 			if (!IsInitialized || !CanEnableEventSystem)
 				return;
 
-			if (!IsCursorAutoHide)
-				ShowCursor();
+			if (!_eventSystem.activeSelf)
+				_eventSystem.SetActive(true);
+
 			IsEnableEventSystem = true;
 		}
 
-		public void DisableEventSystem()
+		public virtual void DisableEventSystem()
 		{
 			if (!IsInitialized)
 				return;
 
-			HideCursor();
+			if (_eventSystem != null && _eventSystem.activeSelf)
+				_eventSystem.SetActive(false);
+
 			IsEnableEventSystem = false;
 		}
 
-		public void RebindActionsByJson(int playerIndex, string json)
+		#endregion
+
+		public virtual void RebindActionsByJson(int playerIndex, string json)
 		{
 			if (string.IsNullOrEmpty(json) || !TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -219,7 +292,7 @@ namespace CizaInputModule
 			playerInput.actions.LoadBindingOverridesFromJson(json);
 		}
 
-		public void ResetDefaultActions(int playerIndex)
+		public virtual void ResetDefaultActions(int playerIndex)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -227,16 +300,16 @@ namespace CizaInputModule
 			playerInput.actions.RemoveAllBindingOverrides();
 		}
 
-		public void SetMaxPlayerCount(int maxPlayerCount) =>
+		public virtual void SetMaxPlayerCount(int maxPlayerCount) =>
 			MaxPlayerCount = maxPlayerCount;
 
-		public void StartJoining(int maxPlayerCount)
+		public virtual void StartJoining(int maxPlayerCount)
 		{
 			SetMaxPlayerCount(maxPlayerCount);
 			StartJoining();
 		}
 
-		public void StartJoining()
+		public virtual void StartJoining()
 		{
 			if (!IsInitialized)
 				return;
@@ -257,7 +330,7 @@ namespace CizaInputModule
 			DisableAllInput();
 		}
 
-		public void EnableJoining()
+		public virtual void EnableJoining()
 		{
 			if (!IsInitialized)
 				return;
@@ -268,7 +341,7 @@ namespace CizaInputModule
 				_playerInputManager.EnableJoining();
 		}
 
-		public void DisableJoining()
+		public virtual void DisableJoining()
 		{
 			if (!IsInitialized)
 				return;
@@ -279,7 +352,7 @@ namespace CizaInputModule
 				_playerInputManager.DisableJoining();
 		}
 
-		public void Clear()
+		public virtual void Clear()
 		{
 			if (!IsInitialized)
 				return;
@@ -291,7 +364,7 @@ namespace CizaInputModule
 			DestroyPlayerInputManager();
 		}
 
-		public void EnableAllInput()
+		public virtual void EnableAllInput()
 		{
 			IsEnableInput = true;
 
@@ -299,10 +372,11 @@ namespace CizaInputModule
 				if (!_timerIdMapByIndex.ContainsKey(playerInput.playerIndex))
 					EnableInput(playerInput.playerIndex);
 
-			EnableEventSystem();
+			if (!IsEnableEventSystem)
+				EnableEventSystem();
 		}
 
-		public void DisableAllInput()
+		public virtual void DisableAllInput()
 		{
 			IsEnableInput = false;
 
@@ -313,23 +387,28 @@ namespace CizaInputModule
 			DisableEventSystem();
 		}
 
-		public void EnableInput(int playerIndex) =>
+		public virtual void EnableInput(int playerIndex)
+		{
 			SwitchCurrentActionMap(playerIndex);
+			_virtualMouseContainer.Enable(playerIndex);
+		}
 
-
-		public void DisableInput(int playerIndex) =>
+		public virtual void DisableInput(int playerIndex)
+		{
 			SwitchActionMap(playerIndex, _inputModuleConfig.DisableActionMapDataId);
+			_virtualMouseContainer.Disable(playerIndex);
+		}
 
-		public void SetCurrentActionMapDataId(string actionMapDataId) =>
+		public virtual void SetCurrentActionMapDataId(string actionMapDataId) =>
 			_currentActionMapDataId = actionMapDataId;
 
-		public void HandleActionEvent(Action<int, InputActionAsset> handleEvent)
+		public virtual void HandleActionEvent(Action<int, InputActionAsset> handleEvent)
 		{
 			foreach (var playerInput in _playerInputs)
 				HandleActionEvent(playerInput.playerIndex, handleEvent);
 		}
 
-		public void HandleActionEvent(int playerIndex, Action<int, InputActionAsset> handleEvent)
+		public virtual void HandleActionEvent(int playerIndex, Action<int, InputActionAsset> handleEvent)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -337,7 +416,7 @@ namespace CizaInputModule
 			handleEvent?.Invoke(playerInput.playerIndex, playerInput.actions);
 		}
 
-		public void ResetHaptics(int playerIndex)
+		public virtual void ResetHaptics(int playerIndex)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -349,7 +428,7 @@ namespace CizaInputModule
 				gamepad.ResetHaptics();
 		}
 
-		public void SetMotorSpeeds(int playerIndex, float lowFrequency, float highFrequency)
+		public virtual void SetMotorSpeeds(int playerIndex, float lowFrequency, float highFrequency)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -361,7 +440,59 @@ namespace CizaInputModule
 				gamepad.SetMotorSpeeds(lowFrequency, highFrequency);
 		}
 
-		private void CreatePlayerInputManager()
+
+		#region VirtualMouse
+
+		public virtual void SetCanEnableVirtualMouse(bool canEnableVirtualMouse) =>
+			_virtualMouseContainer.SetCanEnableVirtualMouse(canEnableVirtualMouse);
+
+
+		public virtual void EnableVirtualMouse(int playerIndex) =>
+			_virtualMouseContainer.Enable(playerIndex);
+
+		public virtual void EnableAllVirtualMouse() =>
+			_virtualMouseContainer.EnableAll();
+
+
+		public virtual void DisableVirtualMouse(int playerIndex) =>
+			_virtualMouseContainer.Disable(playerIndex);
+
+		public virtual void DisableAllVirtualMouse() =>
+			_virtualMouseContainer.DisableAll();
+
+
+		public virtual void SetVirtualMouseMoveSensitivity(int playerIndex, float moveSensitivity) =>
+			_virtualMouseContainer.SetMoveSensitivity(playerIndex, moveSensitivity);
+
+		public virtual void SetVirtualMouseMoveSensitivity(float moveSensitivity) =>
+			_virtualMouseContainer.SetMoveSensitivity(moveSensitivity);
+
+
+		public virtual void SetVirtualMouseScrollSensitivity(int playerIndex, float scrollSensitivity) =>
+			_virtualMouseContainer.SetScrollSensitivity(playerIndex, scrollSensitivity);
+
+		public virtual void SetVirtualMouseScrollSensitivity(float scrollSensitivity) =>
+			_virtualMouseContainer.SetScrollSensitivity(scrollSensitivity);
+
+
+		public virtual void SetVirtualMouseScreenPadding(int playerIndex, bool isByRatio, RectOffset padding) =>
+			_virtualMouseContainer.SetScreenPadding(playerIndex, isByRatio, padding);
+
+		public virtual void SetVirtualMouseScreenPadding(bool isByRatio, RectOffset padding) =>
+			_virtualMouseContainer.SetScreenPadding(isByRatio, padding);
+
+
+		public virtual void SetVirtualMouseScreenPadding(int playerIndex, RectOffset padding) =>
+			_virtualMouseContainer.SetScreenPadding(playerIndex, padding);
+
+		public virtual void SetVirtualMouseScreenPadding(RectOffset padding) =>
+			_virtualMouseContainer.SetScreenPadding(padding);
+
+		#endregion
+
+		// PROTECT METHOD: --------------------------------------------------------------------
+
+		protected virtual void CreatePlayerInputManager()
 		{
 			if (_playerInputManager != null)
 				DestroyPlayerInputManager();
@@ -373,7 +504,7 @@ namespace CizaInputModule
 			EnableJoining();
 		}
 
-		private void DestroyPlayerInputManager()
+		protected virtual void DestroyPlayerInputManager()
 		{
 			if (_playerInputManager is null)
 				return;
@@ -386,7 +517,7 @@ namespace CizaInputModule
 			Object.Destroy(playerInputManager.gameObject);
 		}
 
-		private void CreatePlayerInput()
+		protected virtual void CreatePlayerInput()
 		{
 			if (_playerInput != null)
 				DestroyPlayerInput();
@@ -405,13 +536,15 @@ namespace CizaInputModule
 			if (TryGetPreviousControlScheme(out var previousControlScheme))
 				_playerInput.SwitchCurrentControlScheme(previousControlScheme);
 
-			OnControlsChangedImp(_playerInput);
-			_playerInput.onControlsChanged += OnControlsChangedImp;
+			_virtualMouseContainer.Create(_playerInput);
+
+			OnControlsChangedImp_SinglePlayer(_playerInput, false);
+			_playerInput.onControlsChanged += OnControlsChangedImp_SinglePlayer;
 
 			SwitchCurrentActionMap(_playerInput.playerIndex);
 		}
 
-		private void DestroyPlayerInput()
+		protected virtual void DestroyPlayerInput()
 		{
 			if (_playerInput is null)
 				return;
@@ -422,13 +555,15 @@ namespace CizaInputModule
 			_playerInputs.Remove(playerInput);
 			OnPlayerLeft?.Invoke(playerInput);
 
+			_virtualMouseContainer.Destroy(playerInput.playerIndex);
+
 			Object.Destroy(playerInput.gameObject);
 		}
 
-		private void SwitchCurrentActionMap(int playerIndex) =>
+		protected virtual void SwitchCurrentActionMap(int playerIndex) =>
 			SwitchActionMap(playerIndex, CurrentActionMapDataId);
 
-		private void SwitchActionMap(int playerIndex, string actionMapDataId)
+		protected virtual void SwitchActionMap(int playerIndex, string actionMapDataId)
 		{
 			if (!TryGetPlayerInput(playerIndex, out var playerInput))
 				return;
@@ -436,7 +571,7 @@ namespace CizaInputModule
 			playerInput.SwitchCurrentActionMap(actionMapDataId);
 		}
 
-		private void OnPlayerJoinedImp(PlayerInput playerInput)
+		protected virtual void OnPlayerJoinedImp(PlayerInput playerInput)
 		{
 			if (_playerInputManager.playerCount >= MaxPlayerCount)
 				_playerInputManager.DisableJoining();
@@ -445,7 +580,7 @@ namespace CizaInputModule
 			// playerInput.actions = GetAndCloneDefaultAsset();
 
 			playerInput.actions.Disable();
-			var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, timerReadModel =>
+			var timerId = _timerModule.AddOnceTimer(_inputModuleConfig.JoinedWaitingTime, _ =>
 			{
 				if (IsEnableInput)
 					playerInput.actions.Enable();
@@ -459,10 +594,16 @@ namespace CizaInputModule
 			_playerInputs.Add(playerInput);
 			OnPlayerJoined?.Invoke(playerInput);
 
-			SwitchCurrentActionMap(playerInput.playerIndex);
+			var playerIndex = playerInput.playerIndex;
+			_virtualMouseContainer.Create(playerInput);
+
+			OnControlsChangedImp(playerInput, false);
+			playerInput.onControlsChanged += OnControlsChangedImp;
+
+			SwitchCurrentActionMap(playerIndex);
 		}
 
-		private void OnPlayerLeftImp(PlayerInput playerInput)
+		protected virtual void OnPlayerLeftImp(PlayerInput playerInput)
 		{
 			if (IsEnableJoining && _playerInputManager.playerCount < MaxPlayerCount)
 				_playerInputManager.EnableJoining();
@@ -473,18 +614,61 @@ namespace CizaInputModule
 				_timerIdMapByIndex.Remove(playerInput.playerIndex);
 			}
 
+			_virtualMouseContainer.Destroy(playerInput.playerIndex);
+
 			_playerInputs.Remove(playerInput);
 			OnPlayerLeft?.Invoke(playerInput);
 		}
 
-		private void OnControlsChangedImp(PlayerInput playerInput)
+		protected virtual void OnControlsChangedImp_SinglePlayer(PlayerInput playerInput) =>
+			OnControlsChangedImp(playerInput, true);
+
+		protected virtual void OnControlsChangedImp_SinglePlayer(PlayerInput playerInput, bool isSyncPosition)
 		{
-			OnControlsChanged?.Invoke(playerInput);
+			OnControlsChangedImp(playerInput, isSyncPosition);
 			_previousControlScheme = playerInput.currentControlScheme;
 		}
 
+		protected virtual void OnControlsChangedImp(PlayerInput playerInput) =>
+			OnControlsChangedImp(playerInput, true);
 
-		private bool TryGetPreviousControlScheme(out string previousControlScheme)
+
+		protected virtual void OnControlsChangedImp(PlayerInput playerInput, bool isSyncPosition)
+		{
+			OnControlsChanged?.Invoke(playerInput);
+
+			var playerIndex = playerInput.playerIndex;
+
+			// If player is single player or first player, sync with hardware mouse.
+			if (!IsSinglePlayer && playerIndex != 0)
+				return;
+
+			var controllerSchemeName = _inputModuleConfig.ControllerSchemeName;
+			if (playerInput.currentControlScheme == controllerSchemeName)
+			{
+				if (isSyncPosition)
+				{
+					if (_virtualMouseContainer.CanEnableVirtualMouse)
+						_virtualMouseContainer.Enable(playerIndex);
+					_virtualMouseContainer.SyncVirtualMouseToHardwareMousePosition(playerIndex);
+				}
+
+				if (_inputModuleConfig.IsAutoHideHardwareCursor)
+					HideHardwareCursor();
+			}
+			else if (playerInput.currentControlScheme != controllerSchemeName)
+			{
+				if (isSyncPosition)
+				{
+					_virtualMouseContainer.SyncHardwareMouseToVirtualMousePosition(playerIndex);
+					_virtualMouseContainer.Disable(playerIndex);
+				}
+
+				ShowHardwareCursor();
+			}
+		}
+
+		protected virtual bool TryGetPreviousControlScheme(out string previousControlScheme)
 		{
 			if (string.IsNullOrEmpty(_previousControlScheme) || string.IsNullOrWhiteSpace(_previousControlScheme))
 			{
@@ -496,49 +680,69 @@ namespace CizaInputModule
 			return true;
 		}
 
-		private PlayerInput GetPlayerInputPrefab() =>
+		protected virtual PlayerInput GetPlayerInputPrefab() =>
 			_inputModuleConfig.PlayerInputManagerPrefab.GetComponent<PlayerInputManager>().playerPrefab.GetComponent<PlayerInput>();
 
 
-		private void CheckAutoHideEventSystemTime(float deltaTime)
+		protected virtual void CheckAutoHideEventSystem()
 		{
-			if (!CanEnableEventSystem || !IsEnableEventSystem || !_inputModuleConfig.IsAutoHideEventSystem)
+			if (!CanEnableEventSystem || !IsEnableEventSystem)
 				return;
 
-			if (Input.mousePosition != _autoHideEventSystemLastMousePosition)
+			var isAnyCursorExist = IsHardwareCursorVisible || InputSystem.devices.Any(device => device is Mouse { native: false, enabled: true });
+
+			if (isAnyCursorExist && !_eventSystem.activeSelf)
+				_eventSystem.SetActive(true);
+			else if (!isAnyCursorExist && _eventSystem.activeSelf)
+				_eventSystem.SetActive(false);
+		}
+
+		protected virtual void CheckAutoHideHardwareCursorTime(float deltaTime)
+		{
+			if (!CanEnableEventSystem || !IsEnableEventSystem || !_inputModuleConfig.IsAutoHideHardwareCursor || !InputSystemUtils.TryGetHardwareMouse(out var hardwareMouse))
+				return;
+
+			if (hardwareMouse.CheckMouseHasAnyInput())
 			{
-				// Reset timer if mouse moved
-				_autoHideEventSystemTimer = _inputModuleConfig.AutoHideEventSystemTime;
-				ShowCursor();
-				_autoHideEventSystemLastMousePosition = Input.mousePosition;
+				// Show mouse and reset timer if mouse has any input
+				ShowHardwareCursor();
 			}
-			else if (IsCursorVisible)
+			else if (IsHardwareCursorVisible)
 			{
-				// Count down the timer if mouse didn't move
-				_autoHideEventSystemTimer -= deltaTime;
-				if (_autoHideEventSystemTimer <= 0)
-					HideCursor();
+				// Count down the timer if mouse has no input
+				_autoHideHardwareCursorTimer -= deltaTime;
+				if (_autoHideHardwareCursorTimer <= 0)
+					HideHardwareCursor();
 			}
 		}
 
-		private void ShowCursor()
+		protected virtual void ShowHardwareCursor()
 		{
-			if (Cursor.visible && _eventSystem.activeSelf)
-				return;
+			if (!Cursor.visible)
+				Cursor.visible = true;
 
-			Cursor.visible = true;
-			_eventSystem.SetActive(true);
-			IsCursorVisible = true;
+			IsHardwareCursorVisible = true;
+			_autoHideHardwareCursorTimer = _inputModuleConfig.AutoHideHardwareCursorTime;
 		}
 
-		private void HideCursor()
+		protected virtual void HideHardwareCursor()
 		{
-			if (!Cursor.visible && !_eventSystem.activeSelf)
-				return;
+			if (Cursor.visible)
+				Cursor.visible = false;
 
-			IsCursorVisible = false;
-			Cursor.visible = false;
-			_eventSystem.SetActive(false);
+			IsHardwareCursorVisible = false;
 		}
+
+		protected virtual string GetVirtualMouseMoveActionPathImp(int playerIndex, string currentActionMapDataId) =>
+			GetVirtualMouseMoveActionPath?.Invoke(playerIndex, currentActionMapDataId);
+
+		protected virtual string GetVirtualMouseLeftButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
+			GetVirtualMouseLeftButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+
+		protected virtual string GetVirtualMouseRightButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
+			GetVirtualMouseRightButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+
+		protected virtual string GetVirtualMouseScrollActionPathImp(int playerIndex, string currentActionMapDataId) =>
+			GetVirtualMouseScrollActionPath?.Invoke(playerIndex, currentActionMapDataId);
 	}
 }

@@ -7,7 +7,6 @@ using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-
 namespace CizaInputModule.Editor
 {
 	public class ItemVE : BItemVE

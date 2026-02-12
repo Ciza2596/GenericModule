@@ -2,22 +2,26 @@ using UnityEngine;
 
 namespace CizaInputModule
 {
-    public interface IInputModuleConfig
-    {
-        string RootName { get; }
-        bool IsDontDestroyOnLoad { get; }
+	public interface IInputModuleConfig : IVirtualMouseContainerConfig
+	{
+		string RootName { get; }
+		bool IsDontDestroyOnLoad { get; }
 
-        GameObject EventSystemPrefab { get; }
-        bool CanEnableEventSystem { get; }
-        bool IsDefaultEnableEventSystem { get; }
+		GameObject EventSystemPrefab { get; }
+		bool CanEnableEventSystem { get; }
+		bool IsDefaultEnableEventSystem { get; }
 
-        bool IsAutoHideEventSystem { get; }
-        float AutoHideEventSystemTime { get; }
+		bool IsAutoHideHardwareCursor { get; }
+		float AutoHideHardwareCursorTime { get; }
 
-        GameObject PlayerInputManagerPrefab { get; }
-        float JoinedWaitingTime { get; }
+		GameObject PlayerInputManagerPrefab { get; }
+		float JoinedWaitingTime { get; }
 
-        string DefaultActionMapDataId { get; }
-        string DisableActionMapDataId { get; }
-    }
+		string DefaultActionMapDataId { get; }
+		string DisableActionMapDataId { get; }
+
+		string ControllerSchemeName { get; }
+		
+		bool CanEnableVirtualMouse { get; }
+	}
 }

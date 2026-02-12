@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CizaInputModule.Implement
@@ -25,10 +26,10 @@ namespace CizaInputModule.Implement
 
 		[Space]
 		[SerializeField]
-		private bool _isAutoHideEventSystem;
+		private bool _isAutoHideHardwareCursor;
 
 		[SerializeField]
-		private float _autoHideEventSystemTime;
+		private float _autoHideHardwareCursorTime;
 
 		[Space]
 		[SerializeField]
@@ -44,6 +45,16 @@ namespace CizaInputModule.Implement
 		[SerializeField]
 		private string _disableActionMapDataId;
 
+		[Space]
+		[SerializeField]
+		private string _controllerSchemeName;
+
+
+		[Space]
+		[Space]
+		[SerializeField]
+		private VirtualMouseContainerConfigEnabler _canEnableVirtualMouse;
+
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
@@ -54,15 +65,36 @@ namespace CizaInputModule.Implement
 		public virtual bool CanEnableEventSystem => _canEnableEventSystem;
 		public virtual bool IsDefaultEnableEventSystem => _isDefaultEnableEventSystem;
 
-
-		public virtual bool IsAutoHideEventSystem => _isAutoHideEventSystem;
-		public virtual float AutoHideEventSystemTime => _autoHideEventSystemTime;
+		public virtual bool IsAutoHideHardwareCursor => _isAutoHideHardwareCursor;
+		public virtual float AutoHideHardwareCursorTime => _autoHideHardwareCursorTime;
 
 		public virtual GameObject PlayerInputManagerPrefab => _playerInputManagerPrefab;
 		public virtual float JoinedWaitingTime => _joinedWaitingTime;
 
 		public virtual string DefaultActionMapDataId => _defaultActionMapDataId;
 		public virtual string DisableActionMapDataId => _disableActionMapDataId;
+
+		public virtual string ControllerSchemeName => _controllerSchemeName;
+
+
+		#region VirtualMouse
+
+		public virtual bool CanEnableVirtualMouse => _canEnableVirtualMouse.IsEnable;
+
+		public virtual Vector2Int ReferenceResolution => _canEnableVirtualMouse.Value.ReferenceResolution;
+
+		public virtual float MoveSensitivity => _canEnableVirtualMouse.Value.MoveSensitivity;
+		public virtual float ScrollSensitivity => _canEnableVirtualMouse.Value.ScrollSensitivity;
+
+		public virtual bool IsScreenPaddingByRatio => _canEnableVirtualMouse.Value.IsScreenPaddingByRatio;
+		public virtual RectOffset ScreenPadding => _canEnableVirtualMouse.Value.ScreenPadding;
+
+		public virtual GameObject CanvasPrefab => _canEnableVirtualMouse.Value.CanvasPrefab;
+
+		public virtual bool TryGetInfo(int playerIndex, out IVirtualMouseInfo info) =>
+			_canEnableVirtualMouse.Value.TryGetInfo(playerIndex, out info);
+
+		#endregion
 
 
 		// CONSTRUCTOR: ------------------------------------------------------------------------
@@ -76,15 +108,18 @@ namespace CizaInputModule.Implement
 			_canEnableEventSystem = true;
 			_isDefaultEnableEventSystem = false;
 
-			_isAutoHideEventSystem = true;
-			_autoHideEventSystemTime = 3;
-
+			_isAutoHideHardwareCursor = true;
+			_autoHideHardwareCursorTime = 3;
 
 			_playerInputManagerPrefab = null;
 			_joinedWaitingTime = 0.25f;
 
 			_defaultActionMapDataId = "None";
 			_disableActionMapDataId = "Disable";
+
+			_controllerSchemeName = "Controller";
+
+			_canEnableVirtualMouse = new VirtualMouseContainerConfigEnabler();
 		}
 	}
 }

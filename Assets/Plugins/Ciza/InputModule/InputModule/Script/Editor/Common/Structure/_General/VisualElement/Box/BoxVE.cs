@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
-
 namespace CizaInputModule.Editor
 {
-	public class BoxVE: BBoxVE
+	public class BoxVE : BBoxVE
 	{
 		// CONST & STATIC: -----------------------------------------------------------------------
 
@@ -82,8 +81,11 @@ namespace CizaInputModule.Editor
 		public override void Refresh()
 		{
 			_headImage.image = IsExpand ? TriangleDownIcon : TriangleRightIcon;
+
 			_body.EnableInClassList(ActiveBodyClass, IsExpand);
+
 			if (!IsExpand) return;
+
 			Content?.Refresh();
 		}
 

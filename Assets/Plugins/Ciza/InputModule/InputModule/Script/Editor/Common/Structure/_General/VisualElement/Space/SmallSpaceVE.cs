@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace CizaInputModule.Editor
 {
-	public class SmallSpaceVE: VisualElement
+	public class SmallSpaceVE : VisualElement
 	{
 		[Preserve]
 		public SmallSpaceVE() =>

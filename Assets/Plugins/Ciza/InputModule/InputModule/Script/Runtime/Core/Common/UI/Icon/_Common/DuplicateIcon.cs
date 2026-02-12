@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class DuplicateIcon : Icon
+    public class DuplicateIcon : BIcon
     {
         public DuplicateIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

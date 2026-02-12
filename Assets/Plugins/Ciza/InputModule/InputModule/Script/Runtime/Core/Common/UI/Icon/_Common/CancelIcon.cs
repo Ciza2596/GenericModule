@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class CancelIcon : Icon
+    public class CancelIcon : BIcon
     {
         public CancelIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

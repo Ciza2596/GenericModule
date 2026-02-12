@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class TriangleRightIcon : Icon
+    public class TriangleRightIcon : BIcon
     {
         public TriangleRightIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

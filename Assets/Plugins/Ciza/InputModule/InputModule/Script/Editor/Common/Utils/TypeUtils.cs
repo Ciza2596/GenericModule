@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using Object = UnityEngine.Object;
-
 
 namespace CizaInputModule.Editor
 {
@@ -17,6 +17,9 @@ namespace CizaInputModule.Editor
 
 		public static bool CheckIsUnityObjSubclass(Type type) =>
 			type.IsSubclassOf(typeof(Object));
+
+		public static bool CheckIsBehaviourSubclass(Type type) =>
+			type.IsSubclassOf(typeof(Behaviour));
 
 		public static bool CheckIsString(Type type) =>
 			type == typeof(string);

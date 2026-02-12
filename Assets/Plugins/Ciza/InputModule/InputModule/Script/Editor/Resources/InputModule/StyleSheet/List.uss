@@ -114,7 +114,7 @@
     margin-top: -1px;
 }
 
-.list-item-head.selected{
+.list-item-head.selected {
     border-left-color: var(--color-border-active);
     border-left-width: 2px;
     margin-left: -1px;

@@ -27,9 +27,6 @@ namespace CizaInputModule.Editor
 		[field: NonSerialized]
 		protected string Title { get; private set; }
 
-		[field: NonSerialized]
-		protected IContent Content { get; private set; }
-
 
 		protected virtual string[] USSPaths => Array.Empty<string>();
 		protected virtual string[] RootClasses => Array.Empty<string>();
@@ -43,6 +40,10 @@ namespace CizaInputModule.Editor
 		public virtual bool IsInitialized { get; protected set; }
 
 
+		[field: NonSerialized]
+		public virtual IContent Content { get; private set; }
+
+
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
@@ -54,6 +55,7 @@ namespace CizaInputModule.Editor
 		}
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
+
 
 		public void Initialize(string title, IContent content) =>
 			Initialize(title, content, null);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule
 {
-    public class SearchIcon : Icon
+    public class SearchIcon : BIcon
     {
         public SearchIcon(ColorTheme.Type color, IIcon overlay = null) : this(ColorTheme.Get(color), overlay) { }
         

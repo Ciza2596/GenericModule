@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace CizaInputModule.Editor
 {
-	public abstract class BItemVE: VisualElement
+	public abstract class BItemVE : VisualElement
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 

@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine.Scripting;
 
-
 namespace CizaInputModule.Editor.MapListVisual
 {
 	public class MapListVE : BMapListVE

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Linq;
 using UnityEditor;
@@ -15,7 +15,7 @@ namespace CizaInputModule.Editor
 	{
 		// CONSTANTS: -----------------------------------------------------------------------------
 
-		public const BindingFlags FIELD_BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+		public const BindingFlags FIELD_BINDINGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 		public static readonly Regex RX_ARRAY = new Regex(@"\[\d+\]");
 
@@ -23,6 +23,7 @@ namespace CizaInputModule.Editor
 		public const string SCRIPT_FIELD = "m_Script";
 
 		public static readonly char[] ASSEMBLY_SEPARATOR = { ' ' };
+
 
 		// ENUMS: ---------------------------------------------------------------------------------
 

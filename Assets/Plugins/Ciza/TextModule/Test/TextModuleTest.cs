@@ -107,14 +107,18 @@ public class TextModuleTest
             IsCustomDefaultCategory = isCustomDefaultCategory;
             CustomDefaultCategory = customDefaultCategory;
 
-            CsvText = csvText;
+            TryGetCsvText = csvText;
             IsShowWarningLog = isShowWarningLog;
         }
 
         public bool IsCustomDefaultCategory { get; }
         public string CustomDefaultCategory { get; }
 
-        public string CsvText { get; }
+        public string TryGetCsvText { get; }
         public bool IsShowWarningLog { get; }
+        bool ITextModuleConfig.TryGetCsvText(out string csvText)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

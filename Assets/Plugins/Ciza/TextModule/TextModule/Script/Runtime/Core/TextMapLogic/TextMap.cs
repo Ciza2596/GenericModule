@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CizaTextModule.Implement
+namespace CizaTextModule
 {
     public abstract class TextMap : MonoBehaviour, ITextMap
     {

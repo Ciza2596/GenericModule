@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Scripting;
 
@@ -9,61 +8,36 @@ namespace CizaTextModule
 {
 	public class TextModule
 	{
-		private readonly ITextModuleConfig _textModuleConfig;
+		// VARIABLE: -----------------------------------------------------------------------------
 
-		private Dictionary<string, Dictionary<string, string>> _textMapByCategoryByKey;
+		protected readonly ITextModuleConfig _config;
+		protected Dictionary<string, Dictionary<string, string>> _textMapByCategoryByKey;
+
+		// EVENT: ---------------------------------------------------------------------------------
 
 		// Category
 		public event Action<string> OnChangeCategory;
-		
+
 		// OriText, return New Text
 		public event Func<string, string> OnTranslate;
 
-		public string[] Categories { get; private set; }
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public string DefaultCategory { get; private set; }
-		public string CurrentCategory { get; private set; }
+		public virtual string[] Categories { get; protected set; }
 
-		[Preserve]
-		public TextModule(ITextModuleConfig textModuleConfig)
-		{
-			_textModuleConfig = textModuleConfig;
+		public virtual string DefaultCategory { get; protected set; }
+		public virtual string CurrentCategory { get; protected set; }
 
-			ReloadTexts();
-		}
-
-		public void ReloadTexts() =>
-			ReloadTexts(_textModuleConfig.CsvText);
-
-		public void SetDefaultCategory() =>
-			TryChangeCategory(DefaultCategory);
-
-		public bool TryChangeCategory(string category)
-		{
-			if (!Categories.Contains(category))
-				return false;
-
-			CurrentCategory = category;
-			OnChangeCategory?.Invoke(CurrentCategory);
-			return true;
-		}
-
-		public bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey)
+		public virtual bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey)
 		{
 			textMapByKey = new Dictionary<string, string>();
-
 			foreach (var key in keys)
-			{
-				if (!TryGetText(key, out var text))
-					continue;
-
-				textMapByKey.Add(key, text);
-			}
-
+				if (TryGetText(key, out var text))
+					textMapByKey.Add(key, text);
 			return textMapByKey.Count > 0;
 		}
 
-		public bool TryGetText(string key, out string text)
+		public virtual bool TryGetText(string key, out string text)
 		{
 			if (string.IsNullOrEmpty(key) || string.IsNullOrWhiteSpace(key))
 			{
@@ -74,16 +48,12 @@ namespace CizaTextModule
 			if (!_textMapByCategoryByKey.TryGetValue(key, out var textMapByCategory))
 			{
 				text = string.Empty;
-				if (_textModuleConfig.IsShowWarningLog)
-					Debug.LogWarning($"[TextModule::TryGetText] Not find textRecordMapByCategory by key: {key}.");
 				return false;
 			}
 
 			if (!textMapByCategory.TryGetValue(CurrentCategory, out var oriText))
 			{
 				text = string.Empty;
-				if (_textModuleConfig.IsShowWarningLog)
-					Debug.LogWarning($"[TextModule::TryGetText] Not find textRecord by key: {key}.");
 				return false;
 			}
 
@@ -91,12 +61,66 @@ namespace CizaTextModule
 			return true;
 		}
 
-		private void ReloadTexts(string csvText)
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		[Preserve]
+		public TextModule(ITextModuleConfig config) =>
+			_config = config;
+
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
+
+		public virtual void Reset()
+		{
+			Categories = Array.Empty<string>();
+			DefaultCategory = string.Empty;
+			CurrentCategory = string.Empty;
+			_textMapByCategoryByKey = new Dictionary<string, Dictionary<string, string>>();
+		}
+
+		public virtual void ReloadDefaultTexts() =>
+			ReloadDefaultTexts(false, string.Empty);
+
+		public virtual void ReloadDefaultTexts(string defaultCategory) =>
+			ReloadDefaultTexts(true, defaultCategory);
+
+		public virtual void ReloadTexts(string csvText) =>
+			ReloadTexts(csvText, false, string.Empty);
+
+		public virtual void ReloadTexts(string csvText, string defaultCategory) =>
+			ReloadTexts(csvText, true, defaultCategory);
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+
+		public virtual void SetDefaultCategory() =>
+			TryChangeCategory(DefaultCategory);
+
+		public virtual bool TryChangeCategory(string category)
+		{
+			if (!Categories.Contains(category))
+				return false;
+
+			CurrentCategory = category;
+			OnChangeCategory?.Invoke(CurrentCategory);
+			return true;
+		}
+
+		// PROTECT METHOD: --------------------------------------------------------------------
+
+		protected virtual void ReloadDefaultTexts(bool hasCustomDefaultCategory, string customDefaultCategory)
+		{
+			if (_config.TryGetCsvText(out var csvTexts))
+				ReloadTexts(csvTexts, hasCustomDefaultCategory, customDefaultCategory);
+			else
+				Reset();
+		}
+
+		protected virtual void ReloadTexts(string csvText, bool hasCustomDefaultCategory, string customDefaultCategory)
 		{
 			Categories = CsvUtils.GetCategories(csvText, "TextModule");
 			Assert.IsTrue(Categories.Length > 0, "[TextModule::ReloadTexts] Categories length is zero. Please check textModuleConfig.");
 
-			DefaultCategory = _textModuleConfig.IsCustomDefaultCategory ? _textModuleConfig.CustomDefaultCategory : Categories[0];
+			DefaultCategory = hasCustomDefaultCategory ? customDefaultCategory : Categories[0];
 			Assert.IsTrue(Categories.Contains(DefaultCategory), "[TextModule::ReloadTexts] Categories is not include DefaultCategory. Please check textModuleConfig.");
 
 			_textMapByCategoryByKey = CsvUtils.CreateTextMapByCategoryByKey(csvText, "TextModule");

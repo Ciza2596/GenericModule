@@ -1,244 +1,239 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Scripting;
 
 namespace CizaTextModule
 {
-    public class TextMapLogic
-    {
-        public interface ITextModule
-        {
-            public static ITextModule CreateTextModule(string dataId, TextModule textModule, string keyPattern) =>
-                new TextModuleImp(dataId, textModule, keyPattern);
+	public class TextMapLogic
+	{
+		// VARIABLE: -----------------------------------------------------------------------------
 
-            event Action<string> OnChangeCategory;
-            event Func<string, string> OnTranslate;
+		protected readonly Dictionary<string, TextModuleWithDataId> _textModuleMapByDataId;
+		protected readonly string _className;
 
-            string DataId { get; }
-            string KeyPattern { get; }
+		protected readonly HashSet<ITextMap> _textMaps = new HashSet<ITextMap>();
 
-            string[] Categories { get; }
+		// EVENT: ---------------------------------------------------------------------------------
 
-            string DefaultCategory { get; }
-            string CurrentCategory { get; }
+		// dataId, category
+		public event Action<string, string> OnChangeCategory;
 
-            bool TryChangeCategory(string category);
+		// oriText
+		public event Func<string, string> OnTranslate;
 
-            bool TryGetText(string key, out string text);
-            bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey);
+		// PUBLIC METHOD: ----------------------------------------------------------------------
 
+		public virtual bool TryGetCategories(string dataId, out string[] categories)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+			{
+				categories = Array.Empty<string>();
+				return false;
+			}
 
-            private class TextModuleImp : ITextModule
-            {
-                private readonly TextModule _textModule;
+			categories = textModule.Categories;
+			return true;
+		}
 
-                public TextModuleImp(string dataId, TextModule textModule, string keyPattern)
-                {
-                    DataId = dataId;
-                    _textModule = textModule;
-                    KeyPattern = keyPattern;
+		public virtual bool TryGetDefaultCategory(string dataId, out string defaultCategory)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+			{
+				defaultCategory = string.Empty;
+				return false;
+			}
 
-                    _textModule.OnChangeCategory += OnChangeCategoryImp;
-                    _textModule.OnTranslate += OnTranslateImp;
-                }
+			defaultCategory = textModule.DefaultCategory;
+			return true;
+		}
 
-                public event Action<string> OnChangeCategory;
-                public event Func<string, string> OnTranslate;
+		public virtual bool TryGetCurrentCategory(string dataId, out string currentCategory)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+			{
+				currentCategory = string.Empty;
+				return false;
+			}
 
-                public string DataId { get; }
-                public string KeyPattern { get; }
+			currentCategory = textModule.CurrentCategory;
+			return true;
+		}
 
-                public string[] Categories => _textModule.Categories;
+		public virtual bool TryGetText(string dataId, string key, out string text)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+			{
+				text = string.Empty;
+				return false;
+			}
 
-                public string DefaultCategory => _textModule.DefaultCategory;
-                public string CurrentCategory => _textModule.CurrentCategory;
+			return textModule.TryGetText(key, out text);
+		}
 
-                public bool TryChangeCategory(string category) =>
-                    _textModule.TryChangeCategory(category);
+		// CONSTRUCTOR: ------------------------------------------------------------------------
 
-                public bool TryGetText(string key, out string text) =>
-                    _textModule.TryGetText(key, out text);
+		[Preserve]
+		public TextMapLogic(TextModuleWithDataId[] textModules, string className)
+		{
+			_textModuleMapByDataId = new Dictionary<string, TextModuleWithDataId>();
 
-                public bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey) =>
-                    _textModule.TryGetTexts(keys, out textMapByKey);
+			foreach (var textModule in textModules)
+				_textModuleMapByDataId.Add(textModule.DataId, textModule);
 
-                private void OnChangeCategoryImp(string currentCategory) =>
-                    OnChangeCategory?.Invoke(currentCategory);
+			_className = className;
 
-                private string OnTranslateImp(string oriText) =>
-                    OnTranslate?.Invoke(oriText) ?? oriText;
-            }
-        }
+			foreach (var textModule in textModules)
+			{
+				textModule.OnChangeCategory += OnChangeCategoryImp;
+				textModule.OnTranslate += OnTranslateImp;
+			}
+		}
 
-        private readonly Dictionary<string, ITextModule> _textModuleMapByDataId;
-        private readonly string _className;
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
 
-        private readonly HashSet<ITextMap> _textMaps = new HashSet<ITextMap>();
+		public virtual bool TryReset(string dataId)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-        // dataId, category
-        public event Action<string, string> OnChangeCategory;
+			textModule.Reset();
+			return true;
+		}
 
-        // oriText
-        public event Func<string, string> OnTranslate;
+		public virtual bool TryReloadDefaultTexts(string dataId)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-        public bool TryGetCategories(string dataId, out string[] categories)
-        {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-            {
-                categories = Array.Empty<string>();
-                return false;
-            }
+			textModule.ReloadDefaultTexts();
+			return true;
+		}
 
-            categories = textModule.Categories;
-            return true;
-        }
+		public virtual bool TryReloadDefaultTexts(string dataId, string defaultCategory)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-        public bool TryGetDefaultCategory(string dataId, out string defaultCategory)
-        {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-            {
-                defaultCategory = string.Empty;
-                return false;
-            }
+			textModule.ReloadDefaultTexts(defaultCategory);
+			return true;
+		}
 
-            defaultCategory = textModule.DefaultCategory;
-            return true;
-        }
+		public virtual bool TryReloadTexts(string dataId, string csvText)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-        public bool TryGetCurrentCategory(string dataId, out string currentCategory)
-        {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-            {
-                currentCategory = string.Empty;
-                return false;
-            }
+			textModule.ReloadTexts(csvText);
+			return true;
+		}
 
-            currentCategory = textModule.CurrentCategory;
-            return true;
-        }
+		public virtual bool TryReloadTexts(string dataId, string csvText, string defaultCategory)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-        public bool TryGetText(string dataId, string key, out string text)
-        {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-            {
-                text = string.Empty;
-                return false;
-            }
-
-            return textModule.TryGetText(key, out text);
-        }
-
-        public TextMapLogic(ITextModule[] textModules, string className)
-        {
-            _textModuleMapByDataId = new Dictionary<string, ITextModule>();
-
-            foreach (var textModule in textModules)
-                _textModuleMapByDataId.Add(textModule.DataId, textModule);
-
-            _className = className;
-
-            foreach (var textModule in textModules)
-            {
-                textModule.OnChangeCategory += OnChangeCategoryImp;
-                textModule.OnTranslate += OnTranslateImp;
-            }
-        }
+			textModule.ReloadTexts(csvText, defaultCategory);
+			return true;
+		}
 
 
-        public bool TryChangeCategory(string dataId, string category)
-        {
-            if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
-                return false;
+		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-            if (textModule.TryChangeCategory(category))
-            {
-                RefreshAllTextMaps();
-                OnChangeCategory?.Invoke(dataId, category);
-                return true;
-            }
+		public virtual bool TryChangeCategory(string dataId, string category)
+		{
+			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
+				return false;
 
-            return false;
-        }
+			if (textModule.TryChangeCategory(category))
+			{
+				RefreshAllTextMaps();
+				OnChangeCategory?.Invoke(dataId, category);
+				return true;
+			}
 
-        public void RefreshAllTextMaps()
-        {
-            foreach (var textMap in _textMaps.ToArray())
-                SetTextMap(textMap);
-        }
+			return false;
+		}
 
-        public void AddTextMap(ITextMap textMap)
-        {
-            SetTextMap(textMap);
-            _textMaps.Add(textMap);
-        }
+		public virtual void RefreshAllTextMaps()
+		{
+			foreach (var textMap in _textMaps.ToArray())
+				SetTextMap(textMap);
+		}
 
-        public void AddTextMaps(ITextMap[] textMaps)
-        {
-            foreach (var textMap in textMaps)
-                AddTextMap(textMap);
-        }
+		public virtual void AddTextMap(ITextMap textMap)
+		{
+			SetTextMap(textMap);
+			_textMaps.Add(textMap);
+		}
 
-        public void RemoveTextMap(ITextMap textMap) =>
-            _textMaps.Remove(textMap);
+		public virtual void AddTextMaps(ITextMap[] textMaps)
+		{
+			foreach (var textMap in textMaps)
+				AddTextMap(textMap);
+		}
 
-        public void RemoveTextMaps(ITextMap[] textMaps)
-        {
-            foreach (var textMap in textMaps)
-                RemoveTextMap(textMap);
-        }
+		public virtual void RemoveTextMap(ITextMap textMap) =>
+			_textMaps.Remove(textMap);
 
-        private void OnChangeCategoryImp(string currentCategory)
-        {
-            foreach (var textMap in _textMaps)
-                SetTextMap(textMap);
-        }
+		public virtual void RemoveTextMaps(ITextMap[] textMaps)
+		{
+			foreach (var textMap in textMaps)
+				RemoveTextMap(textMap);
+		}
 
-        private string OnTranslateImp(string oriText) =>
-            OnTranslate?.Invoke(oriText) ?? oriText;
+		// PROTECT METHOD: --------------------------------------------------------------------
 
-        private void SetTextMap(ITextMap textMap)
-        {
-            if (!textMap.IsEnable)
-                return;
+		protected virtual void OnChangeCategoryImp(string currentCategory)
+		{
+			foreach (var textMap in _textMaps)
+				SetTextMap(textMap);
+		}
 
-            if (TrySetTextMapByKey(textMap))
-                return;
+		protected virtual void SetTextMap(ITextMap textMap)
+		{
+			if (!textMap.IsEnable)
+				return;
 
-            if (TrySetTextMapByKeyWithPattern(textMap))
-                return;
-        }
+			if (TrySetTextMapByKey(textMap))
+				return;
+
+			if (TrySetTextMapByKeyWithPattern(textMap))
+				return;
+		}
 
 
-        private bool TrySetTextMapByKey(ITextMap textMap)
-        {
-            foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
-                if (textModule.TryGetText(textMap.Key, out var text))
-                {
-                    textMap.SetText(text);
-                    return true;
-                }
+		protected virtual bool TrySetTextMapByKey(ITextMap textMap)
+		{
+			foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
+				if (textModule.TryGetText(textMap.Key, out var text))
+				{
+					textMap.SetText(text);
+					return true;
+				}
 
-            return false;
-        }
+			return false;
+		}
 
-        private bool TrySetTextMapByKeyWithPattern(ITextMap textMap)
-        {
-            var text = textMap.Key;
+		protected virtual bool TrySetTextMapByKeyWithPattern(ITextMap textMap)
+		{
+			var text = textMap.Key;
 
-            foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
-            {
-                var keys = text.GetKeys(textModule.KeyPattern);
-                if (textModule.TryGetTexts(keys, out var textMapByKey))
-                    text = text.Replace(textModule.KeyPattern, textMapByKey, _className, "TrySetTextMapByKeyWithPattern");
-            }
+			foreach (var textModule in _textModuleMapByDataId.Values.ToArray())
+				if (textModule.TryGetTexts(text.GetKeys(textModule.KeyPattern), out var textMapByKey))
+					text = text.Replace(textModule.KeyPattern, textMapByKey, _className, "TrySetTextMapByKeyWithPattern");
 
-            if (!string.IsNullOrEmpty(text) && text != textMap.Key)
-            {
-                textMap.SetText(text);
-                return true;
-            }
+			if (!string.IsNullOrEmpty(text) && text != textMap.Key)
+			{
+				textMap.SetText(text);
+				return true;
+			}
 
-            return false;
-        }
-    }
+			return false;
+		}
+
+
+		protected virtual string OnTranslateImp(string oriText) =>
+			OnTranslate?.Invoke(oriText) ?? oriText;
+	}
 }

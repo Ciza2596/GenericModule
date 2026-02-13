@@ -61,6 +61,9 @@ namespace CizaTextModule
 		// CONSTRUCTOR: ------------------------------------------------------------------------
 
 		[Preserve]
+		public LocaleAndControllerTextModule() : this(new TextModuleConfigInput(), new TextModuleConfigInput()) { }
+
+		[Preserve]
 		public LocaleAndControllerTextModule(ITextModuleConfig localeTextModuleConfig, ITextModuleConfig controllerTextModuleConfig)
 		{
 			_textMapLogic = new TextMapLogic(new TextModuleWithDataId[] { new TextModuleWithDataId(LOCALE_TEXT_MODULE_DATA_ID, StringExtension.LOCALE_TEXT_KEY_PATTERN, localeTextModuleConfig), new TextModuleWithDataId(CONTROLLER_TEXT_MODULE_DATA_ID, StringExtension.CONTROLLER_TEXT_KEY_PATTERN, controllerTextModuleConfig), }, "LocaleAndControllerTextModule");
@@ -85,6 +88,12 @@ namespace CizaTextModule
 
 		public virtual bool TryReloadDefaultTexts() =>
 			TryReloadLocaleDefaultTexts() && TryReloadControllerDefaultTexts();
+
+		public virtual bool TryReloadDefaultTexts(string defaultCategory) =>
+			TryReloadLocaleDefaultTexts(defaultCategory) && TryReloadControllerDefaultTexts(defaultCategory);
+
+		public virtual bool TryReloadTexts(string localeCsvText, string controllerCsvText, string defaultCategory) =>
+			TryReloadLocaleTexts(localeCsvText, defaultCategory) && TryReloadControllerTexts(controllerCsvText, defaultCategory);
 
 
 		#region Locale

@@ -116,7 +116,7 @@ public class TextModuleTest
 
         public string TryGetCsvText { get; }
         public bool IsShowWarningLog { get; }
-        bool ITextModuleConfig.TryGetCsvText(out string csvText)
+        bool ITextModuleConfig.TryGetCsv(out string csv)
         {
             throw new System.NotImplementedException();
         }

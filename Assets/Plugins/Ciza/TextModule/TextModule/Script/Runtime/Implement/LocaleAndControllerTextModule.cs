@@ -107,11 +107,11 @@ namespace CizaTextModule
 		public virtual bool TryReloadLocaleDefaultTexts(string defaultCategory) =>
 			_textMapLogic.TryReloadDefaultTexts(LOCALE_TEXT_MODULE_DATA_ID, defaultCategory);
 
-		public virtual bool TryReloadLocaleTexts(string csvText) =>
-			_textMapLogic.TryReloadTexts(LOCALE_TEXT_MODULE_DATA_ID, csvText);
+		public virtual bool TryReloadLocaleTexts(string csv) =>
+			_textMapLogic.TryReloadTexts(LOCALE_TEXT_MODULE_DATA_ID, csv);
 
-		public virtual bool TryReloadLocaleTexts(string csvText, string defaultCategory) =>
-			_textMapLogic.TryReloadTexts(LOCALE_TEXT_MODULE_DATA_ID, csvText, defaultCategory);
+		public virtual bool TryReloadLocaleTexts(string csv, string defaultCategory) =>
+			_textMapLogic.TryReloadTexts(LOCALE_TEXT_MODULE_DATA_ID, csv, defaultCategory);
 
 		public virtual bool TryChangeLocaleCategory(string category) =>
 			_textMapLogic.TryChangeCategory(LOCALE_TEXT_MODULE_DATA_ID, category);
@@ -129,11 +129,11 @@ namespace CizaTextModule
 		public virtual bool TryReloadControllerDefaultTexts(string defaultCategory) =>
 			_textMapLogic.TryReloadDefaultTexts(CONTROLLER_TEXT_MODULE_DATA_ID, defaultCategory);
 
-		public virtual bool TryReloadControllerTexts(string csvText) =>
-			_textMapLogic.TryReloadTexts(CONTROLLER_TEXT_MODULE_DATA_ID, csvText);
+		public virtual bool TryReloadControllerTexts(string csv) =>
+			_textMapLogic.TryReloadTexts(CONTROLLER_TEXT_MODULE_DATA_ID, csv);
 
-		public virtual bool TryReloadControllerTexts(string csvText, string defaultCategory) =>
-			_textMapLogic.TryReloadTexts(CONTROLLER_TEXT_MODULE_DATA_ID, csvText, defaultCategory);
+		public virtual bool TryReloadControllerTexts(string csv, string defaultCategory) =>
+			_textMapLogic.TryReloadTexts(CONTROLLER_TEXT_MODULE_DATA_ID, csv, defaultCategory);
 
 		public virtual bool TryChangeControllerCategory(string category) =>
 			_textMapLogic.TryChangeCategory(CONTROLLER_TEXT_MODULE_DATA_ID, category);

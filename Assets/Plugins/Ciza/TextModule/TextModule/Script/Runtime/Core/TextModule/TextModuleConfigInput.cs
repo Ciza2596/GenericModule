@@ -10,19 +10,19 @@ namespace CizaTextModule
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
-		protected string _csvText;
+		protected string _csv;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public virtual bool TryGetCsvText(out string csvText)
+		public virtual bool TryGetCsv(out string csv)
 		{
-			if (!_csvText.CheckHasValue())
+			if (!_csv.CheckHasValue())
 			{
-				csvText = string.Empty;
+				csv = string.Empty;
 				return false;
 			}
 
-			csvText = _csvText;
+			csv = _csv;
 			return true;
 		}
 
@@ -32,7 +32,7 @@ namespace CizaTextModule
 		public TextModuleConfigInput() : this(string.Empty) { }
 
 		[Preserve]
-		public TextModuleConfigInput(string csvText) =>
-			_csvText = csvText;
+		public TextModuleConfigInput(string csv) =>
+			_csv = csv;
 	}
 }

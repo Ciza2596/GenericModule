@@ -12,15 +12,15 @@ namespace CizaTextModule
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public virtual bool TryGetCsvText(out string cvsText)
+		public virtual bool TryGetCsv(out string csv)
 		{
 			if (!_hasCsvTextAsset.TryGetValue(out var csvTextAsset) || !csvTextAsset.text.CheckHasValue())
 			{
-				cvsText = string.Empty;
+				csv = string.Empty;
 				return false;
 			}
 
-			cvsText = csvTextAsset.text;
+			csv = csvTextAsset.text;
 			return true;
 		}
 

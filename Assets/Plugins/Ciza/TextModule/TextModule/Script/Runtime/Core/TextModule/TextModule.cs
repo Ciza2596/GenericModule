@@ -64,8 +64,11 @@ namespace CizaTextModule
 		// CONSTRUCTOR: ------------------------------------------------------------------------
 
 		[Preserve]
-		public TextModule(ITextModuleConfig config) =>
+		public TextModule(ITextModuleConfig config)
+		{
 			_config = config;
+			Reset();
+		}
 
 		// LIFECYCLE METHOD: ------------------------------------------------------------------
 
@@ -83,11 +86,11 @@ namespace CizaTextModule
 		public virtual void ReloadDefaultTexts(string defaultCategory) =>
 			ReloadDefaultTexts(true, defaultCategory);
 
-		public virtual void ReloadTexts(string csvText) =>
-			ReloadTexts(csvText, false, string.Empty);
+		public virtual void ReloadTexts(string csv) =>
+			ReloadTexts(csv, false, string.Empty);
 
-		public virtual void ReloadTexts(string csvText, string defaultCategory) =>
-			ReloadTexts(csvText, true, defaultCategory);
+		public virtual void ReloadTexts(string csv, string defaultCategory) =>
+			ReloadTexts(csv, true, defaultCategory);
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
@@ -109,21 +112,21 @@ namespace CizaTextModule
 
 		protected virtual void ReloadDefaultTexts(bool hasCustomDefaultCategory, string customDefaultCategory)
 		{
-			if (_config.TryGetCsvText(out var csvTexts))
-				ReloadTexts(csvTexts, hasCustomDefaultCategory, customDefaultCategory);
+			if (_config.TryGetCsv(out var csv))
+				ReloadTexts(csv, hasCustomDefaultCategory, customDefaultCategory);
 			else
 				Reset();
 		}
 
-		protected virtual void ReloadTexts(string csvText, bool hasCustomDefaultCategory, string customDefaultCategory)
+		protected virtual void ReloadTexts(string csv, bool hasCustomDefaultCategory, string customDefaultCategory)
 		{
-			Categories = CsvUtils.GetCategories(csvText, "TextModule");
+			Categories = CsvUtils.GetCategories(csv, "TextModule");
 			Assert.IsTrue(Categories.Length > 0, "[TextModule::ReloadTexts] Categories length is zero. Please check textModuleConfig.");
 
 			DefaultCategory = hasCustomDefaultCategory ? customDefaultCategory : Categories[0];
 			Assert.IsTrue(Categories.Contains(DefaultCategory), "[TextModule::ReloadTexts] Categories is not include DefaultCategory. Please check textModuleConfig.");
 
-			_textMapByCategoryByKey = CsvUtils.CreateTextMapByCategoryByKey(csvText, "TextModule");
+			_textMapByCategoryByKey = CsvUtils.CreateTextMapByCategoryByKey(csv, "TextModule");
 			Assert.IsNotNull(_textMapByCategoryByKey, "[TextModule::ReloadTexts] Reload texts fail. Please check textModuleConfig.");
 
 			SetDefaultCategory();

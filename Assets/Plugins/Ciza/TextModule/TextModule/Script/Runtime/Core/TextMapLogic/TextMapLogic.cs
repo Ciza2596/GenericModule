@@ -119,21 +119,21 @@ namespace CizaTextModule
 			return true;
 		}
 
-		public virtual bool TryReloadTexts(string dataId, string csvText)
+		public virtual bool TryReloadTexts(string dataId, string csv)
 		{
 			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
 				return false;
 
-			textModule.ReloadTexts(csvText);
+			textModule.ReloadTexts(csv);
 			return true;
 		}
 
-		public virtual bool TryReloadTexts(string dataId, string csvText, string defaultCategory)
+		public virtual bool TryReloadTexts(string dataId, string csv, string defaultCategory)
 		{
 			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
 				return false;
 
-			textModule.ReloadTexts(csvText, defaultCategory);
+			textModule.ReloadTexts(csv, defaultCategory);
 			return true;
 		}
 

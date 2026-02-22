@@ -2,17 +2,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace CizaTimerModule
 {
 	public class TimerModule
 	{
+		// VARIABLE: -----------------------------------------------------------------------------
+
 		protected Dictionary<string, Timer> _usingTimerMap;
 		protected List<Timer> _unusingTimers;
 
+		// EVENT: ---------------------------------------------------------------------------------
+
 		public event Action<string> OnRemove;
 
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
 		public virtual bool IsInitialized => _usingTimerMap is not null && _unusingTimers is not null;
+
+		public virtual bool CheckHasTimer(string timerId) =>
+			TryGetTimerReadModel(timerId, out _);
+
+		public virtual bool TryGetTimerReadModel(string timerId, out ITimerReadModel timerReadModel)
+		{
+			if (!IsInitialized)
+			{
+				timerReadModel = null;
+				Debug.LogWarning("[TimerModule::TryGetTimerReadModel] TimerModule is not initialized.");
+				return false;
+			}
+
+			if (!_usingTimerMap.TryGetValue(timerId, out var timer))
+			{
+				timerReadModel = null;
+				return false;
+			}
+
+			timerReadModel = timer;
+			return true;
+		}
+
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
+		[Preserve]
+		public TimerModule() { }
+
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
 
 		public virtual void Initialize()
 		{
@@ -22,8 +58,8 @@ namespace CizaTimerModule
 				return;
 			}
 
-			_usingTimerMap = new();
-			_unusingTimers = new();
+			_usingTimerMap = new Dictionary<string, Timer>();
+			_unusingTimers = new List<Timer>();
 		}
 
 		public virtual void Release()
@@ -65,26 +101,7 @@ namespace CizaTimerModule
 			}
 		}
 
-		public bool CheckHasTimer(string timerId) =>
-			TryGetTimerReadModel(timerId, out _);
-
-		public virtual bool TryGetTimerReadModel(string timerId, out ITimerReadModel timerReadModel)
-		{
-			timerReadModel = null;
-
-			if (!IsInitialized)
-			{
-				Debug.LogWarning("[TimerModule::TryGetTimerReadModel] TimerModule is not initialized.");
-				return false;
-			}
-
-			if (!_usingTimerMap.ContainsKey(timerId))
-				return false;
-
-			timerReadModel = _usingTimerMap[timerId];
-
-			return true;
-		}
+		// PUBLIC METHOD: ----------------------------------------------------------------------
 
 		public virtual string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null) =>
 			AddOnceTimer(false, string.Empty, startValue, targetValue, duration, onTickValue, onComplete);
@@ -104,7 +121,6 @@ namespace CizaTimerModule
 		public virtual string AddLoopTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
 			AddLoopTimer(true, timerId, duration, onComplete, onTick);
 
-
 		public virtual void RemoveTimer(string timerId)
 		{
 			if (!IsInitialized)
@@ -114,16 +130,15 @@ namespace CizaTimerModule
 			}
 
 			if (!_usingTimerMap.ContainsKey(timerId))
-			{
-				Debug.LogWarning($"[TimerModule::RemoveTimer] Timer is not found by timerId: {timerId}.");
 				return;
-			}
 
 			RemoveTimerFromUsingTimerMap(timerId);
 			OnRemove?.Invoke(timerId);
 		}
 
-		// private method
+
+		// PROTECT METHOD: --------------------------------------------------------------------
+
 		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete)
 		{
 			if (!IsInitialized)

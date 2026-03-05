@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace CizaTimerModule
 {
 	public interface ITimerReadModel
@@ -7,6 +9,6 @@ namespace CizaTimerModule
 		bool IsPlayed { get; }
 		float Duration { get; }
 		float Time { get; }
-		float Normalized => Time / Duration;
+		float Normalized => Mathf.Clamp01(Time / Duration);
 	}
 }

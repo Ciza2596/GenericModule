@@ -6,15 +6,15 @@ namespace CizaTimerModule
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
 
-		protected event Action<ITimerReadModel> _onComplete;
-		protected event Action<ITimerReadModel, float> _onTick;
+		private event Action<ITimerReadModel> _onComplete;
+		private event Action<ITimerReadModel, float> _onTick;
 
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
-		public string Id { get; private set; }
+		public string Id { get; protected set; }
 
-		public virtual bool IsOnce { get; private set; }
+		public virtual bool IsOnce { get; protected set; }
 
 		public virtual bool IsPlayed => Time >= Duration;
 		public virtual float Duration { get; protected set; }

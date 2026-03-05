@@ -4,6 +4,8 @@ namespace CizaTimerModule
 {
 	public interface ITimerReadModel
 	{
+		string Id { get; }
+
 		bool IsOnce { get; }
 
 		bool IsPlayed { get; }

@@ -103,23 +103,46 @@ namespace CizaTimerModule
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-		public virtual string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null) =>
-			AddOnceTimer(false, string.Empty, startValue, targetValue, duration, onTickValue, onComplete);
+		public virtual string AddOnceTimer(float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null, params object[] args) =>
+			AddOnceTimer(startValue, targetValue, duration, 0, onTickValue, onComplete, args);
 
-		public virtual string AddOnceTimer(string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null) =>
-			AddOnceTimer(true, timerId, startValue, targetValue, duration, onTickValue, onComplete);
+		public virtual string AddOnceTimer(float startValue, float targetValue, float duration, float time, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null, params object[] args) =>
+			AddOnceTimer(false, string.Empty, startValue, targetValue, duration, time, onTickValue, onComplete, args);
 
-		public virtual string AddOnceTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
-			AddOnceTimer(false, string.Empty, duration, onComplete, onTick);
 
-		public virtual string AddOnceTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
-			AddOnceTimer(true, timerId, duration, onComplete, onTick);
+		public virtual string AddOnceTimer(string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null, params object[] args) =>
+			AddOnceTimer(timerId, startValue, targetValue, duration, 0, onTickValue, onComplete, args);
 
-		public virtual string AddLoopTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
-			AddLoopTimer(false, string.Empty, duration, onComplete, onTick);
+		public virtual string AddOnceTimer(string timerId, float startValue, float targetValue, float duration, float time, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete = null, params object[] args) =>
+			AddOnceTimer(true, timerId, startValue, targetValue, duration, time, onTickValue, onComplete, args);
 
-		public virtual string AddLoopTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null) =>
-			AddLoopTimer(true, timerId, duration, onComplete, onTick);
+
+		public virtual string AddOnceTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddOnceTimer(duration, 0, onComplete, onTick, args);
+
+		public virtual string AddOnceTimer(float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddOnceTimer(false, string.Empty, duration, time, onComplete, onTick, args);
+
+
+		public virtual string AddOnceTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddOnceTimer(timerId, duration, 0, onComplete, onTick, args);
+
+		public virtual string AddOnceTimer(string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddOnceTimer(true, timerId, duration, time, onComplete, onTick, args);
+
+
+		public virtual string AddLoopTimer(float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddLoopTimer(duration, 0, onComplete, onTick, args);
+
+		public virtual string AddLoopTimer(float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddLoopTimer(false, string.Empty, duration, time, onComplete, onTick, args);
+
+
+		public virtual string AddLoopTimer(string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddLoopTimer(timerId, duration, 0, onComplete, onTick, args);
+
+		public virtual string AddLoopTimer(string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
+			AddLoopTimer(true, timerId, duration, time, onComplete, onTick, args);
 
 		public virtual void RemoveTimer(string timerId)
 		{
@@ -139,7 +162,7 @@ namespace CizaTimerModule
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float startValue, float targetValue, float duration, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete)
+		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float startValue, float targetValue, float duration, float time, Action<ITimerReadModel, float> onTickValue, Action<ITimerReadModel> onComplete, params object[] args)
 		{
 			if (!IsInitialized)
 			{
@@ -147,22 +170,32 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			var diffValueSpeed = (targetValue - startValue) / duration;
-			var value = startValue;
-			var id = AddOnceTimer(isCustomId, timerId, duration, onComplete, (timerReadModel, deltaTime) =>
+			var diffValue = targetValue - startValue;
+			var id = AddOnceTimer(isCustomId, timerId, duration, time, onComplete, (timerReadModel, _) =>
 			{
-				var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
-				value += diffValueSpeedDeltaTime;
+				var value = startValue + diffValue * timerReadModel.Normalized;
 				if (timerReadModel.IsPlayed)
 					value = targetValue;
 				onTickValue(timerReadModel, value);
-			});
+			}, args);
+
+
+			// var diffValueSpeed = (targetValue - startValue) / duration;
+			// var value = startValue;
+			// var id = AddOnceTimer(isCustomId, timerId, duration, time, onComplete, (timerReadModel, deltaTime) =>
+			// {
+			// 	var diffValueSpeedDeltaTime = diffValueSpeed * deltaTime;
+			// 	value += diffValueSpeedDeltaTime;
+			// 	if (timerReadModel.IsPlayed)
+			// 		value = targetValue;
+			// 	onTickValue(timerReadModel, value);
+			// }, args);
 
 			return id;
 		}
 
 
-		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
+		protected virtual string AddOnceTimer(bool isCustomId, string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
 			if (!IsInitialized)
 			{
@@ -170,10 +203,10 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			return AddTimerToUsingTimerMap(isCustomId, timerId, true, duration, onComplete, onTick);
+			return AddTimerToUsingTimerMap(isCustomId, timerId, true, duration, time, onComplete, onTick, args);
 		}
 
-		protected virtual string AddLoopTimer(bool isCustomId, string timerId, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
+		protected virtual string AddLoopTimer(bool isCustomId, string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
 			if (!IsInitialized)
 			{
@@ -181,16 +214,16 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			return AddTimerToUsingTimerMap(isCustomId, timerId, false, duration, onComplete, onTick);
+			return AddTimerToUsingTimerMap(isCustomId, timerId, false, duration, time, onComplete, onTick, args);
 		}
 
 
-		protected virtual string AddTimerToUsingTimerMap(bool isCustomId, string customId, bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null)
+		protected virtual string AddTimerToUsingTimerMap(bool isCustomId, string customId, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
 			var timerId = isCustomId ? customId : Guid.NewGuid().ToString();
 
 			var timer = GetTimerFromUnusingTimer();
-			timer.Initialize(timerId, isOnce, duration, onComplete, onTick);
+			timer.Initialize(timerId, isOnce, duration, time, onComplete, onTick, args);
 
 			_usingTimerMap.Add(timerId, timer);
 
@@ -209,12 +242,14 @@ namespace CizaTimerModule
 		protected virtual Timer GetTimerFromUnusingTimer()
 		{
 			if (_unusingTimers.Count <= 0)
-				_unusingTimers.Add(new Timer());
+				_unusingTimers.Add(CreateTimer());
 
 			var timer = _unusingTimers.First();
 			_unusingTimers.Remove(timer);
 
 			return timer;
 		}
+
+		protected virtual Timer CreateTimer() => new Timer();
 	}
 }

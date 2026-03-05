@@ -1,11 +1,12 @@
 namespace CizaTimerModule
 {
-    public interface ITimerReadModel
-    {
-        bool IsOnce { get; }
+	public interface ITimerReadModel
+	{
+		bool IsOnce { get; }
 
-        bool IsPlayed { get; }
-        float Duration { get; }
-        float Time { get; }
-    }
+		bool IsPlayed { get; }
+		float Duration { get; }
+		float Time { get; }
+		float Normalized => Time / Duration;
+	}
 }

@@ -4,32 +4,42 @@ namespace CizaTimerModule
 {
 	public class Timer : ITimerReadModel
 	{
-		private event Action<ITimerReadModel> _onComplete;
-		private event Action<ITimerReadModel, float> _onTick;
+		// VARIABLE: -----------------------------------------------------------------------------
 
-		public void Initialize(string id, bool isOnce, float duration, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick)
+		protected event Action<ITimerReadModel> _onComplete;
+		protected event Action<ITimerReadModel, float> _onTick;
+
+
+		// PUBLIC VARIABLE: ---------------------------------------------------------------------
+
+		public string Id { get; private set; }
+
+		public virtual bool IsOnce { get; private set; }
+
+		public virtual bool IsPlayed => Time >= Duration;
+		public virtual float Duration { get; protected set; }
+		public virtual float Time { get; protected set; }
+
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
+
+		public virtual void Initialize(string id, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
 			Id = id;
 			IsOnce = isOnce;
 			Duration = duration;
+			Time = time;
 			_onComplete = onComplete;
 			_onTick = onTick;
+			OnTick(0);
 		}
 
-		public string Id { get; private set; }
 
+		// PUBLIC METHOD: ----------------------------------------------------------------------
 
-		public bool IsOnce { get; private set; }
+		public virtual void AddTime(float deltaTime) => Time += deltaTime;
+		public virtual void ResetTime() => Time = 0;
 
-		public bool IsPlayed => Time >= Duration;
-		public float Duration { get; private set; }
-		public float Time { get; private set; }
-
-
-		public void AddTime(float deltaTime) => Time += deltaTime;
-		public void ResetTime() => Time = 0;
-
-		public void OnComplete() => _onComplete?.Invoke(this);
-		public void OnTick(float deltaTime) => _onTick?.Invoke(this, deltaTime);
+		public virtual void OnComplete() => _onComplete?.Invoke(this);
+		public virtual void OnTick(float deltaTime) => _onTick?.Invoke(this, deltaTime);
 	}
 }

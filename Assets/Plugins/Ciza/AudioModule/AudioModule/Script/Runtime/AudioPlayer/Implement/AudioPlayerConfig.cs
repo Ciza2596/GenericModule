@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "AudioPlayerConfig", menuName = "Ciza/AudioModule/AudioPlayerConfig", order = 100)]
+	[CreateAssetMenu(fileName = "Aud.AudioPlayerConfig.asset", menuName = "Ciza/AudioModule/AudioPlayerConfig", order = 100)]
 	public class AudioPlayerConfig : ScriptableObject, IAudioPlayerConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

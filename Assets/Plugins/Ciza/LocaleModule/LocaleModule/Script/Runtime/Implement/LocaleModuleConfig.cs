@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaLocaleModule
 {
-	[CreateAssetMenu(fileName = "LocaleModuleConfig", menuName = "Ciza/LocaleModule/LocaleModuleConfig")]
+	[CreateAssetMenu(fileName = "Loc.Config.asset", menuName = "Ciza/LocaleModule/LocaleModuleConfig")]
 	public class LocaleModuleConfig : ScriptableObject, ILocaleModuleConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

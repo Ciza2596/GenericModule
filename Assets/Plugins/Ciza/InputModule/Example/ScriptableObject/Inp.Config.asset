@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c38ac1eef9614bb2bae553de85b1a0dd, type: 3}
-  m_Name: InputModuleConfig
+  m_Name: Inp.Config
   m_EditorClassIdentifier: 
   _rootName: '[InputModule]'
   _isDontDestroyOnLoad: 1

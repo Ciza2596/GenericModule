@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "OptionSfxControllerConfig", menuName = "Ciza/AudioModule/OptionSfxControllerConfig", order = 201)]
+	[CreateAssetMenu(fileName = "Aud.OptionSfxControllerConfig.asset", menuName = "Ciza/AudioModule/OptionSfxControllerConfig", order = 201)]
 	public class OptionSfxControllerConfig : ScriptableObject, IOptionSfxControllerConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

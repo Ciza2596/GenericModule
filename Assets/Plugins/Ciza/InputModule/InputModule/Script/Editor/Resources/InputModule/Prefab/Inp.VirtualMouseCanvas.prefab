@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3024720361789747970}
   - component: {fileID: 6041402635919976225}
   m_Layer: 0
-  m_Name: VirtualMouseCanvas
+  m_Name: Inp.VirtualMouseCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,4 +100,4 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55

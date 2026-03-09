@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "AudioModuleConfig", menuName = "Ciza/AudioModule/AudioModuleConfig")]
+	[CreateAssetMenu(fileName = "Aud.Config.asset", menuName = "Ciza/AudioModule/AudioModuleConfig")]
 	public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

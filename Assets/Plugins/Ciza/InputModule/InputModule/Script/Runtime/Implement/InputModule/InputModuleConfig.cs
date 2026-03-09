@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaInputModule.Implement
 {
-	[CreateAssetMenu(fileName = "InputModuleConfig", menuName = "Ciza/InputModule/InputModuleConfig", order = -1)]
+	[CreateAssetMenu(fileName = "Inp.Config.asset", menuName = "Ciza/InputModule/InputModuleConfig", order = -1)]
 	public class InputModuleConfig : ScriptableObject, IInputModuleConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

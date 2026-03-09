@@ -5,7 +5,7 @@ using UnityEngine.Scripting;
 
 namespace CizaAudioModule.Implement
 {
-	[CreateAssetMenu(fileName = "MenuAudioControllerConfig", menuName = "Ciza/AudioModule/MenuAudioControllerConfig", order = 101)]
+	[CreateAssetMenu(fileName = "Aud.MenuAudioControllerConfig.asset", menuName = "Ciza/AudioModule/MenuAudioControllerConfig", order = 101)]
 	public class MenuAudioControllerConfig : ScriptableObject, IMenuAudioControllerConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

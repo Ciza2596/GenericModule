@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e49e48cd6a834ec6bd27a4cae7c5c70e, type: 3}
-  m_Name: RumbleManagerConfig
+  m_Name: Inp.RumbleManagerConfig
   m_EditorClassIdentifier: 
   _rumbleInfoMapList:
     _maps:

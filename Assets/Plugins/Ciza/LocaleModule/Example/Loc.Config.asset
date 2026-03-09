@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72da03662acbf46a0aa7acbe60d83639, type: 3}
-  m_Name: AudioModuleAssetProvider
+  m_Script: {fileID: 11500000, guid: e850f24dc58ce4ca5adb39464789af9d, type: 3}
+  m_Name: Loc.Config
   m_EditorClassIdentifier: 
-  _clipMapInfos:
-  - _audioClip: {fileID: 0}
-  _prefabMapInfos:
-  - _audioPrefab: {fileID: 0}
+  _supportLocales:
+  - en
+  _isIgnoreSourceLocale: 1
+  _sourceLocale: en
+  _defaultLocale: en
+  _prefixTag: 47

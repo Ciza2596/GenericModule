@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule.Implement
 {
-	[CreateAssetMenu(fileName = "RumbleManagerConfig", menuName = "Ciza/InputModule/RumbleManagerConfig")]
+	[CreateAssetMenu(fileName = "Inp.RumbleManagerConfig.asset", menuName = "Ciza/InputModule/RumbleManagerConfig")]
 	public class RumbleManagerConfig : ScriptableObject, IRumbleManagerConfig
 	{
 		[SerializeField]

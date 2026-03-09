@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1926341855124437870}
   - component: {fileID: 3414821318519750533}
   m_Layer: 0
-  m_Name: Audio
+  m_Name: Aud.Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

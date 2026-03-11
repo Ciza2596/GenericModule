@@ -146,6 +146,9 @@ namespace CizaInputModule
 			!_timerIdMapByIndex.ContainsKey(playerIndex);
 
 
+		public virtual Vector2 GetMousePosition() =>
+			GetMousePosition(0);
+
 		public virtual Vector2 GetMousePosition(int playerIndex)
 		{
 			if (_virtualMouseContainer.TryGetVirtualMouseReadModel(playerIndex, out var virtualMouseReadModel))

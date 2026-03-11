@@ -151,7 +151,7 @@ namespace CizaInputModule
 
 		public virtual Vector2 GetMousePosition(int playerIndex)
 		{
-			if (_virtualMouseContainer.TryGetVirtualMouseReadModel(playerIndex, out var virtualMouseReadModel))
+			if (_virtualMouseContainer.TryGetVirtualMouseReadModel(playerIndex, out var virtualMouseReadModel) && virtualMouseReadModel.IsEnable)
 				return virtualMouseReadModel.Mouse.position.ReadValue();
 
 			return InputSystemUtils.TryGetHardwareMouse(out var hardwareMouse) ? hardwareMouse.position.ReadValue() : Vector2.zero;

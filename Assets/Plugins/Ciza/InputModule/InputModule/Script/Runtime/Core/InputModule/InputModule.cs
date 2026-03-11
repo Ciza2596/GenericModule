@@ -146,6 +146,15 @@ namespace CizaInputModule
 			!_timerIdMapByIndex.ContainsKey(playerIndex);
 
 
+		public virtual Vector2 GetMousePosition(int playerIndex)
+		{
+			if (_virtualMouseContainer.TryGetVirtualMouseReadModel(playerIndex, out var virtualMouseReadModel))
+				return virtualMouseReadModel.Mouse.position.ReadValue();
+
+			return InputSystemUtils.TryGetHardwareMouse(out var hardwareMouse) ? hardwareMouse.position.ReadValue() : Vector2.zero;
+		}
+
+
 		#region VirtualMouse
 
 		public virtual bool CanEnableVirtualMouse => _virtualMouseContainer.CanEnableVirtualMouse;

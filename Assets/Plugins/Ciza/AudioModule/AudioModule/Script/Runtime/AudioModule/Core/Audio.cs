@@ -18,6 +18,8 @@ namespace CizaAudioModule
 		public string DataId { get; private set; }
 
 		public string CallerId => !string.IsNullOrEmpty(_callerId) ? _callerId : string.Empty;
+		public bool IsRecord { get; private set; }
+
 		public bool IsAutoDespawn { get; private set; }
 
 		public string UserId { get; private set; }
@@ -52,9 +54,9 @@ namespace CizaAudioModule
 				SetTime(Time + deltaTime);
 		}
 
-		public void Play(string userId, string id, string dataId, bool isAutoDespawn, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		public void Play(string userId, string id, string dataId, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
 		{
-			SetParameter(userId, id, dataId, isAutoDespawn, callerId, clipAddress, audioClip, volume, isLoop);
+			SetParameter(userId, id, dataId, isAutoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop);
 			SetTime(0);
 		}
 
@@ -69,7 +71,7 @@ namespace CizaAudioModule
 		{
 			IsPlaying = false;
 			_audioSource.Stop();
-			SetParameter(string.Empty, string.Empty, string.Empty, true, string.Empty, string.Empty, null, 1, false);
+			SetParameter(string.Empty, string.Empty, string.Empty, true, string.Empty, false, string.Empty, null, 1, false);
 			SetTime(0);
 		}
 
@@ -108,7 +110,7 @@ namespace CizaAudioModule
 
 
 		// private method
-		private void SetParameter(string userId, string id, string dataId, bool isAutoDespawn, string callerId, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		private void SetParameter(string userId, string id, string dataId, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
 		{
 			UserId = userId;
 
@@ -117,6 +119,7 @@ namespace CizaAudioModule
 
 			IsAutoDespawn = isAutoDespawn;
 			_callerId = callerId;
+			IsRecord = isRecord;
 
 			ClipAddress = clipAddress;
 			_audioSource.clip = audioClip;

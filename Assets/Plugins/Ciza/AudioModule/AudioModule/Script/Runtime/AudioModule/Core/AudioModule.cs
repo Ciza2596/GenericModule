@@ -354,7 +354,7 @@ namespace CizaAudioModule
 			audio.GameObject.name = clipAddress;
 			OnSpawn?.Invoke(callerId, audioId, audioDataId, isRecord);
 
-			audio.Play(userId, audioId, audioDataId, isAuoDespawn, callerId, clipAddress, audioClip, volume, isLoop);
+			audio.Play(userId, audioId, audioDataId, isAuoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop);
 			return audio.Id;
 
 			IAudio m_GetOrCreateAudio(string m_prefabAddress)
@@ -398,12 +398,12 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
+		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null, bool isRecord = false) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId, isRecord);
 
-		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
+		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null, bool isRecord = false)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId, isRecord);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();

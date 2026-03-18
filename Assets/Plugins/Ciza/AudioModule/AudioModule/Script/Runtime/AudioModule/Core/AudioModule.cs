@@ -40,8 +40,8 @@ namespace CizaAudioModule
 		protected Transform _poolRoot;
 		protected IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
-		// CallerId, Id, DataId
-		public event Action<string, string, string> OnSpawn;
+		// CallerId, Id, DataId, IsRecord
+		public event Action<string, string, string, bool> OnSpawn;
 
 		public event Action<string, string, string> OnStop;
 
@@ -331,10 +331,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId);
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null, bool isRecord = false) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, callerId, isRecord);
 
-		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, string callerId = null, bool isRecord = false)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -352,7 +352,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, parent, position);
 
 			audio.GameObject.name = clipAddress;
-			OnSpawn?.Invoke(callerId, audioId, audioDataId);
+			OnSpawn?.Invoke(callerId, audioId, audioDataId, isRecord);
 
 			audio.Play(userId, audioId, audioDataId, isAuoDespawn, callerId, clipAddress, audioClip, volume, isLoop);
 			return audio.Id;

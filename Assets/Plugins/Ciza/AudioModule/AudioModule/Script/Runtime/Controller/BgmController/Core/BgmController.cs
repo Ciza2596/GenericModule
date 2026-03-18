@@ -10,7 +10,7 @@ namespace CizaAudioModule
 	{
 		public interface IAudioPlayer
 		{
-			event Action<string, string, string> OnBgmSpawn;
+			event Action<string, string, string, bool> OnBgmSpawn;
 			event Action<string, string, string> OnBgmStop;
 
 			Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken);
@@ -116,7 +116,7 @@ namespace CizaAudioModule
 			_loadedBgmDataIds.Add(bgmDataId);
 		}
 
-		void OnBgmPlay(string callerId, string audioId, string audioDataId)
+		void OnBgmPlay(string callerId, string audioId, string audioDataId, bool isRecord)
 		{
 			if (callerId != CallerId)
 				return;

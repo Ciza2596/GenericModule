@@ -71,9 +71,9 @@ namespace CizaAudioModule.Implement
 			_masterMixerParameter = "Master";
 			_defaultMasterVolume = 0.7f;
 
-			_bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "BgmAudio");
-			_sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "SfxAudio");
-			_voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "VoiceAudio");
+			_bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "Aud.BgmAudio");
+			_sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "Aud.SfxAudio");
+			_voiceModuleConfig = new AudioModuleConfig("Voice", "Master/Voice", "Voice", "Aud.VoiceAudio");
 		}
 
 		[Serializable]
@@ -142,7 +142,7 @@ namespace CizaAudioModule.Implement
 			public AudioModuleConfig() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
 
 			[Preserve]
-			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", string.Empty, string.Empty, 0.7f, new RestrictContinuousPlayEnabler(), string.Empty, new AudioInfoMapList()) { }
+			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", audioMixerGroupPath, audioMixerParameter, 0.7f, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
 
 			[Preserve]
 			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerParameter, float defaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)

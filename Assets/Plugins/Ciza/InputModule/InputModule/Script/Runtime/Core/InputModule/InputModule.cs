@@ -205,8 +205,11 @@ namespace CizaInputModule
 			DisableEventSystem();
 			SetCanEnableEventSystem(_inputModuleConfig.CanEnableEventSystem);
 
-			_virtualMouseContainer.Initialize(_root);
-			_virtualMouseContainer.SetCanEnableVirtualMouse(_inputModuleConfig.CanEnableVirtualMouse);
+			if (_inputModuleConfig.CanEnableVirtualMouse)
+			{
+				_virtualMouseContainer.Initialize(_root);
+				_virtualMouseContainer.SetCanEnableVirtualMouse(true);
+			}
 
 			if (_inputModuleConfig.IsDefaultEnableEventSystem)
 				EnableEventSystem();

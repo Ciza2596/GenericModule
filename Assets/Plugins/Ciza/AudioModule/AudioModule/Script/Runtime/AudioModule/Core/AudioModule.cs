@@ -459,22 +459,6 @@ namespace CizaAudioModule
 			playingAudio.SetTime(time);
 		}
 
-		public virtual async Awaitable ResumeAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
-		{
-			if (!IsInitialized)
-				return;
-
-			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
-			{
-				Debug.LogWarning($"[AudioModule::ResumeAsync] Audio is not found by audioId: {audioId}.");
-				return;
-			}
-
-			if (fadeTime > 0)
-				await AddTimerAsync(audioId, 0, playingAudio.Volume, fadeTime, asyncToken);
-			playingAudio.Resume();
-		}
-
 		public virtual async Awaitable PauseAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			if (!IsInitialized)
@@ -491,6 +475,22 @@ namespace CizaAudioModule
 				await AddTimerAsync(audioId, volume, 0, fadeTime, asyncToken);
 			playingAudio.Pause();
 			playingAudio.SetVolume(volume);
+		}
+
+		public virtual async Awaitable ResumeAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
+		{
+			if (!IsInitialized)
+				return;
+
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+			{
+				Debug.LogWarning($"[AudioModule::ResumeAsync] Audio is not found by audioId: {audioId}.");
+				return;
+			}
+
+			if (fadeTime > 0)
+				await AddTimerAsync(audioId, 0, playingAudio.Volume, fadeTime, asyncToken);
+			playingAudio.Resume();
 		}
 
 		public virtual void Despawn(string audioId) =>

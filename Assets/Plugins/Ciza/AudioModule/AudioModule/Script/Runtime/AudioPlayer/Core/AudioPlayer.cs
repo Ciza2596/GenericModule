@@ -268,12 +268,13 @@ namespace CizaAudioModule
 
 		public void SetBgmTime(string bgmId, float time) =>
 			_bgmModule.SetTime(bgmId, time);
-
+		
 		public Awaitable PauseBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.PauseAsync(bgmId, fadeTime, asyncToken);
-
+		
 		public Awaitable ResumeBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ResumeAsync(bgmId, fadeTime, asyncToken);
+
 
 		public Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.StopAsync(bgmId, fadeTime, asyncToken);
@@ -387,17 +388,17 @@ namespace CizaAudioModule
 		public void SetVoiceTime(string voiceId, float time) =>
 			_voiceModule.SetTime(voiceId, time);
 
+		public Awaitable PauseVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
+		
 		public async Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			_voiceModule.SetTime(voiceId, time);
 			await _voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
 		}
 
-		public Awaitable ResumeVoice(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public Awaitable ResumeVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
-
-		public Awaitable PauseVoice(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
-			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
 
 		public Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.StopAsync(voiceId, fadeTime, asyncToken);

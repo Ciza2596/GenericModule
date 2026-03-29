@@ -219,12 +219,12 @@ namespace CizaAudioModule
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
 
-		public async Awaitable StopAllAsync(float fadeTime = 0)
+		public async Awaitable StopAllAsync(float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			var awaitables = new List<Awaitable>();
-			awaitables.Add(StopAllBgmAsync(fadeTime));
-			awaitables.Add(StopAllSfxAsync(fadeTime));
-			awaitables.Add(StopAllVoiceAsync(fadeTime));
+			awaitables.Add(StopAllBgmAsync(fadeTime, asyncToken));
+			awaitables.Add(StopAllSfxAsync(fadeTime, asyncToken));
+			awaitables.Add(StopAllVoiceAsync(fadeTime, asyncToken));
 
 			await Async.AllAsync(awaitables);
 		}
@@ -250,36 +250,36 @@ namespace CizaAudioModule
 		public string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
 			_bgmModule.Spawn(isCustomBgmId, bgmId, bgmDataId, userId, volume, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
 
-		public Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float time = 0) =>
-			_bgmModule.ModifyAsync(bgmId, volume, isLoop, time);
+		public Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.ModifyAsync(bgmId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifyBgmAsync(string bgmId, float volume, float time = 0) =>
-			_bgmModule.ModifyAsync(bgmId, volume, time);
+		public Awaitable ModifyBgmAsync(string bgmId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.ModifyAsync(bgmId, volume, fadeTime, asyncToken);
 
 		public void SetBgmTime(string bgmId, float time) =>
 			_bgmModule.SetTime(bgmId, time);
 
-		public void PauseBgm(string bgmId) =>
-			_bgmModule.Pause(bgmId);
+		public Awaitable PauseBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.PauseAsync(bgmId, fadeTime, asyncToken);
 
-		public void ResumeBgm(string bgmId) =>
-			_bgmModule.Resume(bgmId);
+		public Awaitable ResumeBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.ResumeAsync(bgmId, fadeTime, asyncToken);
 
-		public Awaitable StopBgmAsync(string bgmId, float fadeTime = 0) =>
-			_bgmModule.StopAsync(bgmId, fadeTime);
+		public Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.StopAsync(bgmId, fadeTime, asyncToken);
 
-		public Awaitable StopAllBgmAsync(float fadeTime = 0) =>
-			_bgmModule.StopAllAsync(fadeTime);
+		public Awaitable StopAllBgmAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion
 
@@ -307,41 +307,41 @@ namespace CizaAudioModule
 			_sfxModule.Despawn(sfxId);
 
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0) =>
-			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime);
+		public Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifySfxAsync(string sfxId, float volume, float fadeTime = 0) =>
-			_sfxModule.ModifyAsync(sfxId, volume, fadeTime);
+		public Awaitable ModifySfxAsync(string sfxId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.ModifyAsync(sfxId, volume, fadeTime, asyncToken);
 
 		public void SetSfxTime(string sfxId, float time) =>
 			_sfxModule.SetTime(sfxId, time);
 
-		public void ResumeSfx(string sfxId, float time)
+		public async Awaitable ResumeSfxAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			_sfxModule.SetTime(sfxId, time);
-			_sfxModule.Resume(sfxId);
+			await _sfxModule.ResumeAsync(sfxId, fadeTime, asyncToken);
 		}
 
-		public void ResumeSfx(string sfxId) =>
-			_sfxModule.Resume(sfxId);
+		public Awaitable ResumeSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.ResumeAsync(sfxId, fadeTime, asyncToken);
 
-		public void PauseSfx(string sfxId) =>
-			_sfxModule.Pause(sfxId);
+		public Awaitable PauseSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.PauseAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable StopSfxAsync(string sfxId, float fadeTime = 0) =>
-			_sfxModule.StopAsync(sfxId, fadeTime);
+		public Awaitable StopSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.StopAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable StopAllSfxAsync(float fadeTime = 0) =>
-			_sfxModule.StopAllAsync(fadeTime);
+		public Awaitable StopAllSfxAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion
 
@@ -371,39 +371,39 @@ namespace CizaAudioModule
 			_voiceModule.Despawn(voiceId);
 
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null) =>
-			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, isRecord, callerId);
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isAutoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
 
-		public Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0) =>
-			_voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime);
+		public Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0) =>
-			_voiceModule.ModifyAsync(voiceId, volume, fadeTime);
+		public Awaitable ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.ModifyAsync(voiceId, volume, fadeTime, asyncToken);
 
 		public void SetVoiceTime(string voiceId, float time) =>
 			_voiceModule.SetTime(voiceId, time);
 
-		public void ResumeVoice(string voiceId, float time)
+		public async Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			_voiceModule.SetTime(voiceId, time);
-			_voiceModule.Resume(voiceId);
+			await _voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
 		}
 
-		public void ResumeVoice(string voiceId) =>
-			_voiceModule.Resume(voiceId);
+		public Awaitable ResumeVoice(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
 
-		public void PauseVoice(string voiceId) =>
-			_voiceModule.Pause(voiceId);
+		public Awaitable PauseVoice(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0) =>
-			_voiceModule.StopAsync(voiceId, fadeTime);
+		public Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.StopAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable StopAllVoiceAsync(float fadeTime = 0) =>
-			_voiceModule.StopAllAsync(fadeTime);
+		public Awaitable StopAllVoiceAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion
 	}

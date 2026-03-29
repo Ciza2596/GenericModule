@@ -102,13 +102,13 @@ namespace CizaAudioModule.Example1
         private void Pause()
         {
             var audioId = _componentCollectionData.AudioId;
-            _audioModule.Pause(audioId);
+            _audioModule.PauseAsync(audioId);
         }
 
         private void Resume()
         {
             var audioId = _componentCollectionData.AudioId;
-            _audioModule.Resume(audioId);
+            _audioModule.ResumeAsync(audioId);
         }
 
         private async void Stop()

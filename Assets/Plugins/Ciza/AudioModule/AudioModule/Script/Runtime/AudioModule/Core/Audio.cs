@@ -30,7 +30,9 @@ namespace CizaAudioModule
 		public bool IsComplete => IsPlaying && _time >= Duration;
 
 		public bool IsLoop { get; private set; }
-		public float Volume => _audioSource.volume;
+
+		public float Volume { get; private set; }
+		public float CurrentVolume => _audioSource.volume;
 
 		public float Duration { get; private set; }
 		public float Time => _time;
@@ -93,9 +95,11 @@ namespace CizaAudioModule
 			}
 		}
 
+		public virtual void SetVolume(float volume) =>
+			Volume = volume;
 
-		public void SetVolume(float volume) =>
-			_audioSource.volume = volume;
+		public void SetCurrentVolume(float currentVolume) =>
+			_audioSource.volume = currentVolume;
 
 		public void SetIsLoop(bool isLoop) =>
 			IsLoop = isLoop;
@@ -127,6 +131,7 @@ namespace CizaAudioModule
 			Duration = audioClip != null && audioClip.length > DURATION_ERROR ? audioClip.length - DURATION_ERROR : 0;
 
 			SetVolume(volume);
+			SetCurrentVolume(volume);
 
 			SetIsLoop(isLoop);
 		}

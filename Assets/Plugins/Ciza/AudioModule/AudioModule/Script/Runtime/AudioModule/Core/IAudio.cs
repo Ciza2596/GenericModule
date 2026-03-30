@@ -18,7 +18,9 @@ namespace CizaAudioModule
 
 		void Resume();
 		void Pause();
+		
 		void SetVolume(float volume);
+		void SetCurrentVolume(float currentVolume);
 		void SetIsLoop(bool isLoop);
 
 		void SetTime(float time);

@@ -89,6 +89,9 @@ namespace CizaAudioModule
 		public bool TryGetBgmReadModel(string bgmId, out IAudioReadModel bgmReadModel) =>
 			_bgmModule.TryGetAudioReadModel(bgmId, out bgmReadModel);
 
+		public bool TryGetBgmVolume(string bgmId, out float volume) =>
+			_bgmModule.TryGetAudioVolume(bgmId, out volume);
+
 		public bool TryGetSfxVolume(out float volume) =>
 			_sfxModule.TryGetVolume(out volume);
 
@@ -104,6 +107,9 @@ namespace CizaAudioModule
 		public bool TryGetSfxReadModel(string sfxId, out IAudioReadModel sfxReadModel) =>
 			_sfxModule.TryGetAudioReadModel(sfxId, out sfxReadModel);
 
+		public bool TryGetSfxVolume(string sfxId, out float volume) =>
+			_sfxModule.TryGetAudioVolume(sfxId, out volume);
+
 		public bool TryGetVoiceVolume(out float volume) =>
 			_voiceModule.TryGetVolume(out volume);
 
@@ -118,6 +124,9 @@ namespace CizaAudioModule
 
 		public bool TryGetVoiceReadModel(string voiceId, out IAudioReadModel voiceReadModel) =>
 			_voiceModule.TryGetAudioReadModel(voiceId, out voiceReadModel);
+
+		public bool TryGetVoiceVolume(string voiceId, out float volume) =>
+			_voiceModule.TryGetAudioVolume(voiceId, out volume);
 
 		[Preserve]
 		public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)
@@ -268,10 +277,10 @@ namespace CizaAudioModule
 
 		public void SetBgmTime(string bgmId, float time) =>
 			_bgmModule.SetTime(bgmId, time);
-		
+
 		public Awaitable PauseBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.PauseAsync(bgmId, fadeTime, asyncToken);
-		
+
 		public Awaitable ResumeBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ResumeAsync(bgmId, fadeTime, asyncToken);
 
@@ -390,7 +399,7 @@ namespace CizaAudioModule
 
 		public Awaitable PauseVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
-		
+
 		public async Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			_voiceModule.SetTime(voiceId, time);

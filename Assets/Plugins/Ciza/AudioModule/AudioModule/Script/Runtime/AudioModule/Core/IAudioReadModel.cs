@@ -17,7 +17,10 @@ namespace CizaAudioModule
 		bool IsComplete { get; }
 
 		bool IsLoop { get; }
+		
+		
 		float Volume { get; }
+		float CurrentVolume { get; }
 
 		float Duration { get; }
 		float Time { get; }

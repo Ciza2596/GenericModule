@@ -354,6 +354,9 @@ namespace CizaAudioModule
 			if (isRestrictContinuousPlay && CheckIsOnCooldown(audioDataId))
 				return string.Empty;
 
+			if (isCustomId && _playingAudioMapByAudioId.ContainsKey(customId))
+				return string.Empty;
+
 			AddCooldown(audioDataId);
 
 			var audio = m_GetOrCreateAudio(prefabAddress);

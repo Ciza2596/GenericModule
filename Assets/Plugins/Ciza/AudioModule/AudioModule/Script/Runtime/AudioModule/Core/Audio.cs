@@ -109,9 +109,14 @@ namespace CizaAudioModule
 		public void SetTime(float time)
 		{
 			_time = time;
-			var minTime = Mathf.Min(time, Duration);
-			if (_audioSource.clip != null && (time <= 0 || Mathf.Abs(_audioSource.time - minTime) > 0.02f))
-				_audioSource.time = minTime;
+			var targetTime = Mathf.Min(time, Duration);
+			if (_audioSource.clip != null)
+			{
+				if (time <= 0)
+					_audioSource.time = 0;
+				else if (Mathf.Abs(_audioSource.time - targetTime) > 0.01f)
+					_audioSource.time = targetTime;
+			}
 		}
 
 

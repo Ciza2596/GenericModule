@@ -10,13 +10,14 @@ namespace CizaAudioModule
 	{
 		public interface IAudioPlayer
 		{
-			event Action<string, string, string, bool> OnBgmSpawn;
+			// CallerId, Id, DataId, IsOverridable, IsRecord
+			event Action<string, string, string, bool, bool> OnBgmSpawn;
 			event Action<string, string, string> OnBgmStop;
 
 			Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken);
 			void UnloadBgmAsset(string bgmDataId);
 
-			Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default);
+			Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default);
 			Awaitable ModifyBgmAsync(string bgmId, float volume, float fadeTime = 0, AsyncToken asyncToken = default);
 			Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default);
 		}
@@ -116,7 +117,7 @@ namespace CizaAudioModule
 			_loadedBgmDataIds.Add(bgmDataId);
 		}
 
-		void OnBgmPlay(string callerId, string audioId, string audioDataId, bool isRecord)
+		void OnBgmPlay(string callerId, string audioId, string audioDataId, bool isOverridable, bool isRecord)
 		{
 			if (callerId != CallerId)
 				return;

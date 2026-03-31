@@ -92,6 +92,10 @@ namespace CizaAudioModule
 		public bool TryGetBgmVolume(string bgmId, out float volume) =>
 			_bgmModule.TryGetAudioVolume(bgmId, out volume);
 
+		public bool TryGetBgmIsOverridable(string bgmId, out bool isOverridable) =>
+			_bgmModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
+
+
 		public bool TryGetSfxVolume(out float volume) =>
 			_sfxModule.TryGetVolume(out volume);
 
@@ -110,6 +114,9 @@ namespace CizaAudioModule
 		public bool TryGetSfxVolume(string sfxId, out float volume) =>
 			_sfxModule.TryGetAudioVolume(sfxId, out volume);
 
+		public bool TryGetSfxIsOverridable(string bgmId, out bool isOverridable) =>
+			_sfxModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
+
 		public bool TryGetVoiceVolume(out float volume) =>
 			_voiceModule.TryGetVolume(out volume);
 
@@ -127,6 +134,9 @@ namespace CizaAudioModule
 
 		public bool TryGetVoiceVolume(string voiceId, out float volume) =>
 			_voiceModule.TryGetAudioVolume(voiceId, out volume);
+
+		public bool TryGetVoiceIsOverridable(string bgmId, out bool isOverridable) =>
+			_voiceModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
 
 		[Preserve]
 		public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)

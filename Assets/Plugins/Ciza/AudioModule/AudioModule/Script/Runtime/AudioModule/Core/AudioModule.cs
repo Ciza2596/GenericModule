@@ -109,6 +109,18 @@ namespace CizaAudioModule
 			return true;
 		}
 
+		public virtual bool TryGetAudioIsOverridable(string audioId, out bool isOverridable)
+		{
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var audio))
+			{
+				isOverridable = false;
+				return false;
+			}
+
+			isOverridable = audio.IsOverridable;
+			return true;
+		}
+
 		public virtual bool CheckIsPlaying(string audioId)
 		{
 			if (!TryGetAudioReadModel(audioId, out var audioReadModel))

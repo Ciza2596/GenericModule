@@ -345,11 +345,8 @@ namespace CizaAudioModule
 		public void SetSfxTime(string sfxId, float time) =>
 			_sfxModule.SetTime(sfxId, time);
 
-		public async Awaitable ResumeSfxAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
-		{
-			_sfxModule.SetTime(sfxId, time);
-			await _sfxModule.ResumeAsync(sfxId, fadeTime, asyncToken);
-		}
+		public Awaitable ResumeSfxAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.ResumeAsync(sfxId, time, fadeTime, asyncToken);
 
 		public Awaitable ResumeSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ResumeAsync(sfxId, fadeTime, asyncToken);
@@ -410,11 +407,8 @@ namespace CizaAudioModule
 		public Awaitable PauseVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
 
-		public async Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
-		{
-			_voiceModule.SetTime(voiceId, time);
-			await _voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
-		}
+		public Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.ResumeAsync(voiceId, time, fadeTime, asyncToken);
 
 		public Awaitable ResumeVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);

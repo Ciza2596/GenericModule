@@ -497,6 +497,13 @@ namespace CizaAudioModule
 
 			await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, () => playingAudio.Pause(), asyncToken);
 		}
+		
+		
+		public async Awaitable ResumeAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
+		{
+			SetTime(sfxId, time);
+			await ResumeAsync(sfxId, fadeTime, asyncToken);
+		}
 
 		public virtual async Awaitable ResumeAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
 		{

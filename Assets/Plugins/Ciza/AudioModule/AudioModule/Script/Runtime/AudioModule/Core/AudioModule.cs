@@ -514,9 +514,9 @@ namespace CizaAudioModule
 				return;
 			}
 
+			playingAudio.Resume();
 			if (fadeTime > 0)
 				await AddTimerAsync(audioId, 0, playingAudio.CurrentVolume, fadeTime, asyncToken);
-			playingAudio.Resume();
 		}
 
 		public virtual void Despawn(string audioId) =>

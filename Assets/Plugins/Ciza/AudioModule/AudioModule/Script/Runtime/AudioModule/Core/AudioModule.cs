@@ -467,10 +467,7 @@ namespace CizaAudioModule
 			}
 
 			playingAudio.SetVolume(volume);
-			if (fadeTime > 0)
-				await AddTimerAsync(audioId, playingAudio.CurrentVolume, volume, fadeTime, asyncToken);
-			else
-				playingAudio.SetCurrentVolume(volume);
+			await AddTimerAsync(audioId, playingAudio.CurrentVolume, volume, fadeTime, asyncToken);
 		}
 
 		public virtual void SetTime(string audioId, float time)
@@ -498,9 +495,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (fadeTime > 0)
-				await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, asyncToken);
-			playingAudio.Pause();
+			await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, () => playingAudio.Pause(), asyncToken);
 		}
 
 		public virtual async Awaitable ResumeAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
@@ -515,8 +510,7 @@ namespace CizaAudioModule
 			}
 
 			playingAudio.Resume();
-			if (fadeTime > 0)
-				await AddTimerAsync(audioId, 0, playingAudio.CurrentVolume, fadeTime, asyncToken);
+			await AddTimerAsync(audioId, 0, playingAudio.Volume, fadeTime, asyncToken);
 		}
 
 		public virtual void Despawn(string audioId) =>
@@ -555,7 +549,7 @@ namespace CizaAudioModule
 			if (!IsInitialized)
 				return;
 
-			if (string.IsNullOrEmpty(audioId) || string.IsNullOrWhiteSpace(audioId))
+			if (!audioId.CheckHasValue())
 				return;
 
 			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
@@ -564,17 +558,17 @@ namespace CizaAudioModule
 				return;
 			}
 
-			if (fadeTime > 0)
-				await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, asyncToken);
+			await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, () =>
+			{
+				_playingAudioMapByAudioId.Remove(audioId);
+				var callerId = playingAudio.CallerId;
+				var audioDataId = playingAudio.DataId;
+				playingAudio.Stop();
+				AddAudioToIdleAudiosMap(playingAudio);
 
-			_playingAudioMapByAudioId.Remove(audioId);
-			var callerId = playingAudio.CallerId;
-			var audioDataId = playingAudio.DataId;
-			playingAudio.Stop();
-			AddAudioToIdleAudiosMap(playingAudio);
-
-			OnStop?.Invoke(callerId, audioId, audioDataId);
-			onComplete?.Invoke(callerId, audioId, audioDataId);
+				OnStop?.Invoke(callerId, audioId, audioDataId);
+				onComplete?.Invoke(callerId, audioId, audioDataId);
+			}, asyncToken);
 		}
 
 		protected virtual bool CheckIsAudioInfoLoaded(string audioDataId, string methodName, out string clipAddress, out string prefabAddress)
@@ -642,18 +636,28 @@ namespace CizaAudioModule
 				audioTransform.position = position;
 		}
 
-		protected virtual async Awaitable AddTimerAsync(string audioId, float startVolume, float endVolume, float duration, AsyncToken asyncToken)
+		protected virtual Awaitable AddTimerAsync(string audioId, float startVolume, float endVolume, float duration, AsyncToken asyncToken) =>
+			AddTimerAsync(audioId, startVolume, endVolume, duration, null, asyncToken);
+
+		protected virtual async Awaitable AddTimerAsync(string audioId, float startVolume, float endVolume, float duration, Action onComplete, AsyncToken asyncToken)
 		{
 			if (_timerIdMapByAudioId.ContainsKey(audioId))
 				RemoveTimer(audioId);
 
 			var audio = _playingAudioMapByAudioId[audioId];
 
-			var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (_, value) => { audio.SetCurrentVolume(value); });
-			_timerIdMapByAudioId.Add(audioId, timerId);
-
-			while (_timerIdMapByAudioId.ContainsValue(timerId))
-				await Async.NextFrameAsync(asyncToken);
+			if (duration > 0)
+			{
+				var timerId = _timerModule.AddOnceTimer(startVolume, endVolume, duration, (_, value) => { audio.SetCurrentVolume(value); }, _ => { onComplete?.Invoke(); });
+				_timerIdMapByAudioId.Add(audioId, timerId);
+				while (_timerIdMapByAudioId.ContainsValue(timerId))
+					await Async.NextFrameAsync(asyncToken);
+			}
+			else
+			{
+				audio.SetCurrentVolume(endVolume);
+				onComplete?.Invoke();
+			}
 		}
 
 		protected virtual void RemoveTimer(string audioId)

@@ -278,6 +278,9 @@ namespace CizaAudioModule
 		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
+		public Awaitable RestartBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_bgmModule.RestartAsync(bgmId, fadeTime, asyncToken);
+
 
 		public Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ModifyAsync(bgmId, volume, isLoop, fadeTime, asyncToken);
@@ -335,6 +338,9 @@ namespace CizaAudioModule
 
 		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAuoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
+
+		public virtual Awaitable RestartSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_sfxModule.RestartAsync(sfxId, fadeTime, asyncToken);
 
 		public Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime, asyncToken);
@@ -394,6 +400,8 @@ namespace CizaAudioModule
 		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isRecord, callerId, asyncToken);
 
+		public virtual Awaitable RestartVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+			_voiceModule.RestartAsync(voiceId, fadeTime, asyncToken);
 
 		public Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime, asyncToken);

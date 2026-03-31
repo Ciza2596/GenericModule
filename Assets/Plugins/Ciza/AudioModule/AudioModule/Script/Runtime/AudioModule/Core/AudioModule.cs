@@ -439,6 +439,22 @@ namespace CizaAudioModule
 
 			return audioId;
 		}
+		
+		
+		public virtual async Awaitable RestartAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
+		{
+			if (!IsInitialized)
+				return;
+
+			if (!_playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
+			{
+				Debug.LogWarning($"[AudioModule::ResumeAsync] Audio is not found by audioId: {audioId}.");
+				return;
+			}
+
+			playingAudio.Continue();
+			await AddTimerAsync(audioId, 0, playingAudio.Volume, fadeTime, asyncToken);
+		}
 
 		public virtual async Awaitable ModifyAsync(string audioId, float volume, bool isLoop, float fadeTime, AsyncToken asyncToken = default)
 		{
@@ -497,12 +513,12 @@ namespace CizaAudioModule
 
 			await AddTimerAsync(audioId, playingAudio.CurrentVolume, 0, fadeTime, () => playingAudio.Pause(), asyncToken);
 		}
-		
-		
-		public async Awaitable ResumeAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
+
+
+		public virtual async Awaitable ResumeAsync(string audioId, float time, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
-			SetTime(sfxId, time);
-			await ResumeAsync(sfxId, fadeTime, asyncToken);
+			SetTime(audioId, time);
+			await ResumeAsync(audioId, fadeTime, asyncToken);
 		}
 
 		public virtual async Awaitable ResumeAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)

@@ -27,16 +27,16 @@ namespace CizaAudioModule
 		public event Func<string, AsyncToken, Awaitable> OnChangedVoiceLocaleBeforeAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedVoiceLocaleAsync;
 
-		// CallerId, Id, DataId, IsOverridable, IsRecord
-		public event Action<string, string, string, bool, bool> OnBgmSpawn;
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord
+		public event Action<string, string, string, string, bool, bool> OnBgmSpawn;
 		public event Action<string, string, string> OnBgmStop;
 		public event Action<string, string, string> OnBgmComplete;
 
-		public event Action<string, string, string, bool, bool> OnSfxSpawn;
+		public event Action<string, string, string, string, bool, bool> OnSfxSpawn;
 		public event Action<string, string, string> OnSfxStop;
 		public event Action<string, string, string> OnSfxComplete;
 
-		public event Action<string, string, string, bool, bool> OnVoiceSpawn;
+		public event Action<string, string, string, string, bool, bool> OnVoiceSpawn;
 		public event Action<string, string, string> OnVoiceStop;
 		public event Action<string, string, string> OnVoiceComplete;
 
@@ -147,15 +147,15 @@ namespace CizaAudioModule
 			_sfxModule = new AudioModule(audioPlayerConfig.SfxModuleConfig, assetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 			_voiceModule = new AudioModule(audioPlayerConfig.VoiceModuleConfig, voiceAssetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 
-			_bgmModule.OnSpawn += (callerId, bgmId, bgmDataId, isOverridable, isRecord) => OnBgmSpawn?.Invoke(callerId, bgmId, bgmDataId, isOverridable, isRecord);
+			_bgmModule.OnSpawn += (callerId, bgmId, bgmDataId, userId, isOverridable, isRecord) => OnBgmSpawn?.Invoke(callerId, bgmId, bgmDataId, userId, isOverridable, isRecord);
 			_bgmModule.OnStop += (callerId, bgmId, bgmDataId) => OnBgmStop?.Invoke(callerId, bgmId, bgmDataId);
 			_bgmModule.OnComplete += (callerId, bgmId, bgmDataId) => OnBgmComplete?.Invoke(callerId, bgmId, bgmDataId);
 
-			_sfxModule.OnSpawn += (callerId, sfxId, sfxDataId, isOverridable, isRecord) => OnSfxSpawn?.Invoke(callerId, sfxId, sfxDataId, isOverridable, isRecord);
+			_sfxModule.OnSpawn += (callerId, sfxId, sfxDataId, userId, isOverridable, isRecord) => OnSfxSpawn?.Invoke(callerId, sfxId, sfxDataId, userId, isOverridable, isRecord);
 			_sfxModule.OnStop += (callerId, sfxId, sfxDataId) => OnSfxStop?.Invoke(callerId, sfxId, sfxDataId);
 			_sfxModule.OnComplete += (callerId, sfxId, sfxDataId) => OnSfxComplete?.Invoke(callerId, sfxId, sfxDataId);
 
-			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, isOverridable, isRecord) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, isOverridable, isRecord);
+			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, userId, isOverridable, isRecord) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, userId, isOverridable, isRecord);
 			_voiceModule.OnStop += (callerId, voiceId, voiceDataId) => OnVoiceStop?.Invoke(callerId, voiceId, voiceDataId);
 			_voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 

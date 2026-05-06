@@ -64,7 +64,7 @@ namespace CizaAudioModule.Example1
 				UpdateAudioIds();
 			}
 
-			void m_OnPlay(string callerId, string m_audioId, string m_audioDataId, bool isOverridable, bool m_isRecord)
+			void m_OnPlay(string callerId, string m_audioId, string m_audioDataId, string m_userId, bool isOverridable, bool m_isRecord)
 			{
 				_audioIds.Add(m_audioId);
 				UpdateAudioIds();

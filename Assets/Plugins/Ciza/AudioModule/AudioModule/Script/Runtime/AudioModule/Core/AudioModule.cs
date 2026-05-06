@@ -40,8 +40,8 @@ namespace CizaAudioModule
 		protected Transform _poolRoot;
 		protected IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
-		// CallerId, Id, DataId, IsOverridable, IsRecord
-		public event Action<string, string, string, bool, bool> OnSpawn;
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord
+		public event Action<string, string, string, string, bool, bool> OnSpawn;
 
 		public event Action<string, string, string> OnStop;
 
@@ -379,7 +379,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, parent, position);
 
 			audio.GameObject.name = clipAddress;
-			OnSpawn?.Invoke(callerId, audioId, audioDataId, isOverridable, isRecord);
+			OnSpawn?.Invoke(callerId, audioId, audioDataId, userId, isOverridable, isRecord);
 
 			audio.Play(userId, audioId, audioDataId, isOverridable, isAuoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop);
 			return audio.Id;
@@ -439,8 +439,8 @@ namespace CizaAudioModule
 
 			return audioId;
 		}
-		
-		
+
+
 		public virtual async Awaitable RestartAsync(string audioId, float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			if (!IsInitialized)

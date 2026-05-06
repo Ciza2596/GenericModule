@@ -10,8 +10,8 @@ namespace CizaAudioModule
 	{
 		public interface IAudioPlayer
 		{
-			// CallerId, Id, DataId, IsOverridable, IsRecord
-			event Action<string, string, string, bool, bool> OnBgmSpawn;
+			// CallerId, Id, DataId, UserId, IsOverridable, IsRecord
+			event Action<string, string, string, string, bool, bool> OnBgmSpawn;
 			event Action<string, string, string> OnBgmStop;
 
 			Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken);
@@ -22,8 +22,8 @@ namespace CizaAudioModule
 			Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default);
 		}
 
-		public const string CallerId = "BgmController";
-		public const float MinVolume = 0;
+		public const string CALLER_ID = "BgmController";
+		public const float MIN_VOLUME = 0;
 
 		private readonly IBgmControllerConfig _config;
 		private readonly IAudioPlayer _audioPlayer;
@@ -96,7 +96,7 @@ namespace CizaAudioModule
 
 			_currentBgmDataId = bgmDataId;
 			if (!_bgmIdMapByBgmDataId.TryGetValue(bgmDataId, out var bgmId))
-				awaitables.Add(_audioPlayer.PlayBgmAsync(bgmDataId, fadeTime: fadeTime, volume: volume, isLoop: true, callerId: CallerId).ToAwaitable());
+				awaitables.Add(_audioPlayer.PlayBgmAsync(bgmDataId, fadeTime: fadeTime, volume: volume, isLoop: true, callerId: CALLER_ID).ToAwaitable());
 			else
 				awaitables.Add(_audioPlayer.ModifyBgmAsync(bgmId, volume, fadeTime));
 
@@ -108,7 +108,7 @@ namespace CizaAudioModule
 			if (!_bgmIdMapByBgmDataId.TryGetValue(bgmDataId, out var bgmId))
 				return;
 
-			await _audioPlayer.ModifyBgmAsync(bgmId, MinVolume, fadeTime);
+			await _audioPlayer.ModifyBgmAsync(bgmId, MIN_VOLUME, fadeTime);
 		}
 
 		private async Awaitable LoadBgmAssetAsync(string bgmDataId, AsyncToken asyncToken)
@@ -117,9 +117,9 @@ namespace CizaAudioModule
 			_loadedBgmDataIds.Add(bgmDataId);
 		}
 
-		void OnBgmPlay(string callerId, string audioId, string audioDataId, bool isOverridable, bool isRecord)
+		void OnBgmPlay(string callerId, string audioId, string audioDataId, string userId, bool isOverridable, bool isRecord)
 		{
-			if (callerId != CallerId)
+			if (callerId != CALLER_ID)
 				return;
 
 			_bgmIdMapByBgmDataId.Add(audioDataId, audioId);
@@ -127,7 +127,7 @@ namespace CizaAudioModule
 
 		void OnBgmStop(string callerId, string audioId, string audioDataId)
 		{
-			if (callerId != CallerId)
+			if (callerId != CALLER_ID)
 				return;
 
 			_bgmIdMapByBgmDataId.Remove(audioDataId);

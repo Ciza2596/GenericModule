@@ -144,6 +144,20 @@ namespace CizaTimerModule
 		public virtual string AddLoopTimer(string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick = null, params object[] args) =>
 			AddLoopTimer(true, timerId, duration, time, onComplete, onTick, args);
 
+
+		public virtual string AddStopwatch(params object[] args) =>
+			AddStopwatch(0, args);
+
+		public virtual string AddStopwatch(float time, params object[] args) =>
+			AddStopwatch(false, string.Empty, time, args);
+
+		public virtual string AddStopwatch(string timerId, params object[] args) =>
+			AddStopwatch(timerId, 0, args);
+
+		public virtual string AddStopwatch(string timerId, float time, params object[] args) =>
+			AddStopwatch(true, timerId, time, args);
+
+
 		public virtual void RemoveTimer(string timerId)
 		{
 			if (!IsInitialized)
@@ -203,7 +217,7 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			return AddTimerToUsingTimerMap(isCustomId, timerId, true, duration, time, onComplete, onTick, args);
+			return AddTimerToUsingTimerMap(false, isCustomId, timerId, true, duration, time, onComplete, onTick, args);
 		}
 
 		protected virtual string AddLoopTimer(bool isCustomId, string timerId, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
@@ -214,16 +228,28 @@ namespace CizaTimerModule
 				return string.Empty;
 			}
 
-			return AddTimerToUsingTimerMap(isCustomId, timerId, false, duration, time, onComplete, onTick, args);
+			return AddTimerToUsingTimerMap(false, isCustomId, timerId, false, duration, time, onComplete, onTick, args);
 		}
 
 
-		protected virtual string AddTimerToUsingTimerMap(bool isCustomId, string customId, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
+		protected virtual string AddStopwatch(bool isCustomId, string timerId, float time, params object[] args)
+		{
+			if (!IsInitialized)
+			{
+				Debug.LogWarning("[TimerModule::AddLoopTimer] TimerModule is not initialized.");
+				return string.Empty;
+			}
+
+			return AddTimerToUsingTimerMap(true, isCustomId, timerId, false, 0, time, null, null, args);
+		}
+
+
+		protected virtual string AddTimerToUsingTimerMap(bool isStopwatch, bool isCustomId, string customId, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
 			var timerId = isCustomId ? customId : Guid.NewGuid().ToString();
 
 			var timer = GetTimerFromUnusingTimer();
-			timer.Initialize(timerId, isOnce, duration, time, onComplete, onTick, args);
+			timer.Initialize(isStopwatch, timerId, isOnce, duration, time, onComplete, onTick, args);
 
 			_usingTimerMap.Add(timerId, timer);
 

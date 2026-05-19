@@ -12,18 +12,21 @@ namespace CizaTimerModule
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
+		public bool IsStopwatch { get; protected set; }
+
 		public string Id { get; protected set; }
 
 		public virtual bool IsOnce { get; protected set; }
 
-		public virtual bool IsPlayed => Time >= Duration;
+		public virtual bool IsPlayed => !IsStopwatch && Time >= Duration;
 		public virtual float Duration { get; protected set; }
 		public virtual float Time { get; protected set; }
 
 		// LIFECYCLE METHOD: ------------------------------------------------------------------
 
-		public virtual void Initialize(string id, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
+		public virtual void Initialize(bool isStopwatch, string id, bool isOnce, float duration, float time, Action<ITimerReadModel> onComplete, Action<ITimerReadModel, float> onTick, params object[] args)
 		{
+			IsStopwatch = isStopwatch;
 			Id = id;
 			IsOnce = isOnce;
 			Duration = duration;

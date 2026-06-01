@@ -160,12 +160,12 @@ namespace CizaAudioModule
 			_voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 
 			voiceAssetProvider.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
-			voiceAssetProvider.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
+			voiceAssetProvider.OnChangedLocaleStartAsync += m_OnChangedLocaleStartAsync;
 
 			Awaitable m_OnChangedLocaleBeforeAsync(string locale, AsyncToken asyncToken) =>
 				OnChangedVoiceLocaleBeforeAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 
-			Awaitable m_OnChangedLocaleAsync(string locale, AsyncToken asyncToken) =>
+			Awaitable m_OnChangedLocaleStartAsync(string locale, AsyncToken asyncToken) =>
 				OnChangedVoiceLocaleAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 		}
 

@@ -19,7 +19,10 @@ namespace CizaLocaleAddressablesModule
 		// EVENT: ---------------------------------------------------------------------------------
 
 		// Locale, AsyncToken
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeStartAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
+
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleStartAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 
 		// DataId, AsyncToken
@@ -51,12 +54,21 @@ namespace CizaLocaleAddressablesModule
 
 			_localeModule = new LocaleModule(className, localeAddressablesByRefCountModuleConfig);
 
+			_localeModule.OnChangedLocaleBeforeStartAsync += m_OnChangedLocaleBeforeStartAsync;
 			_localeModule.OnChangedLocaleBeforeAsync += m_OnChangedLocaleBeforeAsync;
+
+			_localeModule.OnChangedLocaleStartAsync += m_OnChangedLocaleStartAsync;
 			_localeModule.OnChangedLocaleAsync += m_OnChangedLocaleAsync;
 
 
+			Awaitable m_OnChangedLocaleBeforeStartAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedLocaleBeforeStartAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
+
 			Awaitable m_OnChangedLocaleBeforeAsync(string locale, AsyncToken asyncToken) =>
 				OnChangedLocaleBeforeAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
+
+			Awaitable m_OnChangedLocaleStartAsync(string locale, AsyncToken asyncToken) =>
+				OnChangedLocaleStartAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 
 			Awaitable m_OnChangedLocaleAsync(string locale, AsyncToken asyncToken) =>
 				OnChangedLocaleAsync?.Invoke(locale, asyncToken) ?? Async.Completed;

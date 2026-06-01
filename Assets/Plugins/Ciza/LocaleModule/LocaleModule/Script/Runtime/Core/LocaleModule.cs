@@ -17,7 +17,10 @@ namespace CizaLocaleModule
 		// EVENT: ---------------------------------------------------------------------------------
 
 		// Locale, AsyncToken
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeStartAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
+
+		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleStartAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
@@ -107,10 +110,16 @@ namespace CizaLocaleModule
 
 			IsChangingLocale = true;
 
+			if (OnChangedLocaleBeforeStartAsync != null)
+				await OnChangedLocaleBeforeStartAsync.Invoke(CurrentLocale, asyncToken);
+
 			if (OnChangedLocaleBeforeAsync != null)
 				await OnChangedLocaleBeforeAsync.Invoke(CurrentLocale, asyncToken);
 
 			CurrentLocale = locale;
+
+			if (OnChangedLocaleStartAsync != null)
+				await OnChangedLocaleStartAsync.Invoke(CurrentLocale, asyncToken);
 
 			if (OnChangedLocaleAsync != null)
 				await OnChangedLocaleAsync.Invoke(CurrentLocale, asyncToken);

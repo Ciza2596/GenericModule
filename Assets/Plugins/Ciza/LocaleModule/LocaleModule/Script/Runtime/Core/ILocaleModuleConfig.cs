@@ -3,9 +3,9 @@ namespace CizaLocaleModule
     public interface ILocaleModuleConfig
     {
         string[] SupportLocales { get; }
-
-        bool IsIgnoreSourceLocale { get; }
+        
         string SourceLocale { get; }
+        bool IsIgnoreSourceLocalePrefix { get; }
 
         string DefaultLocale { get; }
 

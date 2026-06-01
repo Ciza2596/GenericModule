@@ -14,10 +14,10 @@ namespace CizaLocaleAddressablesModule.Implement
 
 		[Space]
 		[SerializeField]
-		protected bool _isIgnoreSourceLocale;
-
-		[SerializeField]
 		protected string _sourceLocale;
+		
+		[SerializeField]
+		protected bool _isIgnoreSourceLocalePrefix;
 
 		[Space]
 		[SerializeField]
@@ -30,9 +30,9 @@ namespace CizaLocaleAddressablesModule.Implement
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		public virtual string[] SupportLocales => _supportLocales;
-
-		public virtual bool IsIgnoreSourceLocale => _isIgnoreSourceLocale;
+		
 		public virtual string SourceLocale => _sourceLocale;
+		public virtual bool IsIgnoreSourceLocalePrefix => _isIgnoreSourceLocalePrefix;
 
 		public virtual string DefaultLocale => _defaultLocale;
 		public virtual char PrefixTag => _prefixTag;
@@ -42,9 +42,9 @@ namespace CizaLocaleAddressablesModule.Implement
 		public virtual void Reset()
 		{
 			_supportLocales = new[] { "en" };
-
-			_isIgnoreSourceLocale = true;
+			
 			_sourceLocale = "en";
+			_isIgnoreSourceLocalePrefix = true;
 
 			_defaultLocale = "en";
 			_prefixTag = '/';

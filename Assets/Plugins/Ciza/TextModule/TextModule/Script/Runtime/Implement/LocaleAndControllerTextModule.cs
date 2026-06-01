@@ -33,7 +33,7 @@ namespace CizaTextModule
 		public virtual string LocaleDefaultCategory =>
 			_textMapLogic.TryGetDefaultCategory(LOCALE_TEXT_MODULE_DATA_ID, out var defaultCategory) ? defaultCategory : string.Empty;
 
-		public string LocaleCurrentCategory =>
+		public virtual string LocaleCurrentCategory =>
 			_textMapLogic.TryGetCurrentCategory(LOCALE_TEXT_MODULE_DATA_ID, out var currentCategory) ? currentCategory : string.Empty;
 
 		public virtual bool TryGetLocaleText(string localeTextKey, out string localeText) =>

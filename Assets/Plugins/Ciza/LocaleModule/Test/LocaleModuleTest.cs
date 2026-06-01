@@ -93,7 +93,7 @@ public class LocaleModuleTest
 		// arrange
 		_01_Initialize();
 		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
-		_localeModuleConfig.IsIgnoreSourceLocale.Returns(true);
+		_localeModuleConfig.IsIgnoreSourceLocalePrefix.Returns(true);
 
 		// act
 		var text = _localeModule.GetTextWithLocalePrefix(Text);
@@ -108,7 +108,7 @@ public class LocaleModuleTest
 		// arrange
 		_01_Initialize();
 		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
-		_localeModuleConfig.IsIgnoreSourceLocale.Returns(false);
+		_localeModuleConfig.IsIgnoreSourceLocalePrefix.Returns(false);
 
 		// act
 		var text = _localeModule.GetTextWithLocalePrefix(Text);

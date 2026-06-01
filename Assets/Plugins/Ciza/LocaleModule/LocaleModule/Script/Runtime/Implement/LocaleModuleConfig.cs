@@ -13,10 +13,10 @@ namespace CizaLocaleModule
 
 		[Space]
 		[SerializeField]
-		protected bool _isIgnoreSourceLocale;
+		protected string _sourceLocale;
 
 		[SerializeField]
-		protected string _sourceLocale;
+		protected bool _isIgnoreSourceLocalePrefix;
 
 		[Space]
 		[SerializeField]
@@ -30,7 +30,7 @@ namespace CizaLocaleModule
 
 		public virtual string[] SupportLocales => _supportLocales;
 
-		public virtual bool IsIgnoreSourceLocale => _isIgnoreSourceLocale;
+		public virtual bool IsIgnoreSourceLocalePrefix => _isIgnoreSourceLocalePrefix;
 		public virtual string SourceLocale => _sourceLocale;
 
 		public virtual string DefaultLocale => _defaultLocale;
@@ -41,9 +41,9 @@ namespace CizaLocaleModule
 		public virtual void Reset()
 		{
 			_supportLocales = new[] { "en" };
-
-			_isIgnoreSourceLocale = true;
+			
 			_sourceLocale = "en";
+			_isIgnoreSourceLocalePrefix = true;
 
 			_defaultLocale = "en";
 			_prefixTag = '/';

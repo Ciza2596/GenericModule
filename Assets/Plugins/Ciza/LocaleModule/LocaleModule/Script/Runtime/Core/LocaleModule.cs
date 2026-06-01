@@ -125,7 +125,7 @@ namespace CizaLocaleModule
 				return string.Empty;
 			}
 
-			var localePrefix = _config.IsIgnoreSourceLocale && CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
+			var localePrefix = _config.IsIgnoreSourceLocalePrefix && CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
 			var textByAddLocalePrefix = localePrefix + text;
 
 			return textByAddLocalePrefix;

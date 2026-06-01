@@ -16,6 +16,7 @@ namespace CizaLocaleModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
+		// Locale, AsyncToken
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 

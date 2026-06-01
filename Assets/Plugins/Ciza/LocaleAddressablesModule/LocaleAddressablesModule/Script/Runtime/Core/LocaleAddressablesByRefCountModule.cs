@@ -18,9 +18,11 @@ namespace CizaLocaleAddressablesModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
+		// Locale, AsyncToken
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleBeforeAsync;
 		public event Func<string, AsyncToken, Awaitable> OnChangedLocaleAsync;
 
+		// DataId, AsyncToken
 		public event Func<string, AsyncToken, Awaitable> OnLoadAssetAsync;
 		public event Action<string> OnUnloadAsset;
 

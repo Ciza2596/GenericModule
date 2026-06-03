@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaFadeCreditModule.Editor
 {
-    public class CreateObjectEditor
+    public static class CreateObjectMenu
     {
         public const string FadeCreditModulePath = "FadeCreditModule/";
 

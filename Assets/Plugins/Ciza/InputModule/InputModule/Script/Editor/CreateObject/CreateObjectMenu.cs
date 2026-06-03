@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaInputModule.Editor
 {
-    public static class CreateObjectEditor
+    public static class CreateObjectMenu
     {
         public const string INPUT_MODULE_PATH = "InputModule/Prefab/";
 

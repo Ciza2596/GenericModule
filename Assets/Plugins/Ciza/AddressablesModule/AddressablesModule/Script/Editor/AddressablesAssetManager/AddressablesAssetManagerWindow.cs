@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 namespace CizaAddressablesModule.Editor
 {
-    public class AddressablesAssetManagerEditor : EditorWindow
+    public class AddressablesAssetManagerWindow : EditorWindow
     {
         //private variable
         private readonly string[] _toolbarTexts = { "Export", "Import", "Add" };
@@ -162,7 +162,7 @@ namespace CizaAddressablesModule.Editor
 
         //private method
         [MenuItem("Tools/Ciza/AddressablesAssetManager")]
-        private static void ShowWindow() => GetWindow<AddressablesAssetManagerEditor>("AddressablesAssetManager");
+        private static void ShowWindow() => GetWindow<AddressablesAssetManagerWindow>("AddressablesAssetManager");
 
         private void OnGUI()
         {

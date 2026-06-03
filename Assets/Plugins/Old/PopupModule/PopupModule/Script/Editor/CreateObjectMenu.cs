@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaPopupModule.Editor
 {
-    public class CreateObjectEditor
+    public static class CreateObjectMenu
     {
         public const string PopupModulePath = "PopupModule/";
 

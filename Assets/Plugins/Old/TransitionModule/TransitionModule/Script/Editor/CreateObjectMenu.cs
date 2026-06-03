@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaTransitionModule.Editor
 {
-    public class CreateObjectEditor
+    public static class CreateObjectMenu
     {
         public const string TransitionModulePath = "TransitionModule/";
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaAudioModule.Editor
 {
-	public static class CreateObjectEditor
+	public static class CreateObjectMenu
 	{
 		public const string AUDIO_MODULE_PATH = "AudioModule/Prefab/";
 

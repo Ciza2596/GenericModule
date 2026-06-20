@@ -29,12 +29,14 @@ namespace CizaAudioModule
 		public string ClipAddress { get; private set; }
 		public string PrefabAddress { get; private set; }
 
-		public bool IsComplete => IsPlaying && _time >= Duration;
+		public bool IsComplete => IsPlaying && _time >= Duration && (IsSyncTime || !_audioSource.isPlaying);
 
 		public bool IsLoop { get; private set; }
 
 		public float Volume { get; private set; }
 		public float CurrentVolume => _audioSource.volume;
+
+		public bool IsSyncTime { get; private set; }
 
 		public float Duration { get; private set; }
 		public float Time => _time;
@@ -58,9 +60,9 @@ namespace CizaAudioModule
 				SetTime(Time + deltaTime);
 		}
 
-		public void Play(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		public void Play(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop, bool isSyncTime)
 		{
-			SetParameter(userId, id, dataId, isOverridable, isAutoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop);
+			SetParameter(userId, id, dataId, isOverridable, isAutoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop, isSyncTime);
 			SetTime(0);
 		}
 
@@ -75,7 +77,7 @@ namespace CizaAudioModule
 		{
 			IsPlaying = false;
 			_audioSource.Stop();
-			SetParameter(string.Empty, string.Empty, string.Empty, false, true, string.Empty, false, string.Empty, null, 1, false);
+			SetParameter(string.Empty, string.Empty, string.Empty, false, true, string.Empty, false, string.Empty, null, 1, false, false);
 			SetTime(0);
 		}
 
@@ -106,17 +108,19 @@ namespace CizaAudioModule
 		public void SetIsLoop(bool isLoop) =>
 			IsLoop = isLoop;
 
-		public void SetTime(float time)
+		public void SetTime(float time, bool isSyncTime)
 		{
 			_time = time;
 			var targetTime = Mathf.Min(time, Duration);
-			if (_audioSource.clip != null && (time <= 0 || Mathf.Abs(_audioSource.time - targetTime) > 0.01f))
+			if (isSyncTime && _audioSource.clip != null && (time <= 0 || Mathf.Abs(_audioSource.time - targetTime) > 0.01f))
 				_audioSource.time = targetTime;
 		}
 
-
 		// private method
-		private void SetParameter(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop)
+		private void SetTime(float time) =>
+			SetTime(time, IsSyncTime);
+
+		private void SetParameter(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop, bool isSyncTime)
 		{
 			UserId = userId;
 
@@ -138,6 +142,8 @@ namespace CizaAudioModule
 			SetCurrentVolume(volume);
 
 			SetIsLoop(isLoop);
+
+			IsSyncTime = isSyncTime;
 		}
 	}
 }

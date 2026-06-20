@@ -10,7 +10,7 @@ namespace CizaAudioModule
 
 		void Tick(float deltaTime);
 
-		void Play(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop);
+		void Play(string userId, string id, string dataId, bool isOverridable, bool isAutoDespawn, string callerId, bool isRecord, string clipAddress, AudioClip audioClip, float volume, bool isLoop, bool isSyncTime);
 
 
 		void Continue();
@@ -18,11 +18,11 @@ namespace CizaAudioModule
 
 		void Resume();
 		void Pause();
-		
+
 		void SetVolume(float volume);
 		void SetCurrentVolume(float currentVolume);
 		void SetIsLoop(bool isLoop);
 
-		void SetTime(float time);
+		void SetTime(float time, bool isSyncTime);
 	}
 }

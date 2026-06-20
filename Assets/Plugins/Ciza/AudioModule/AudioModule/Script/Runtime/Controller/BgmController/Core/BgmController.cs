@@ -17,7 +17,7 @@ namespace CizaAudioModule
 			Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken);
 			void UnloadBgmAsset(string bgmDataId);
 
-			Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAuoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default);
+			Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default);
 			Awaitable ModifyBgmAsync(string bgmId, float volume, float fadeTime = 0, AsyncToken asyncToken = default);
 			Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default);
 		}

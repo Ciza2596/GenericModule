@@ -68,6 +68,9 @@ namespace CizaAudioModule
 
 		public void Continue()
 		{
+			if (!IsPlaying)
+				IsPlaying = true;
+
 			SetTime(0);
 			_audioSource.Stop();
 			_audioSource.Play();

@@ -158,12 +158,29 @@ namespace CizaTimerModule
 			AddStopwatch(true, timerId, time, args);
 
 
-		public virtual void RemoveTimer(string timerId)
+		public virtual void CompleteTimer(string timerId) =>
+			RemoveTimer(timerId, true);
+
+		public virtual void RemoveTimer(string timerId) =>
+			RemoveTimer(timerId, false);
+
+		public virtual void RemoveTimer(string timerId, bool isComplete)
 		{
 			if (!IsInitialized)
 			{
 				Debug.LogWarning("[TimerModule::RemoveTimer] TimerModule is not initialized.");
 				return;
+			}
+
+			if (!_usingTimerMap.TryGetValue(timerId, out var timer))
+				return;
+
+			if (isComplete && !timer.IsStopwatch)
+			{
+				var deltaTime = Mathf.Max(0, timer.Duration - timer.Time);
+				timer.AddTime(deltaTime);
+				timer.OnTick(deltaTime);
+				timer.OnComplete();
 			}
 
 			if (!_usingTimerMap.ContainsKey(timerId))

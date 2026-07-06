@@ -572,7 +572,14 @@ namespace CizaInputModule
 
 			_virtualMouseContainer.Destroy(playerInput.playerIndex);
 
-			Object.Destroy(playerInput.gameObject);
+			try
+			{
+				Object.Destroy(playerInput.gameObject);
+			}
+			catch
+			{
+				// ignored
+			}
 		}
 
 		protected virtual void SwitchCurrentActionMap(int playerIndex) =>

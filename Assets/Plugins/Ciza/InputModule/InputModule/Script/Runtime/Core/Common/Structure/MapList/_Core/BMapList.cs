@@ -62,6 +62,14 @@ namespace CizaInputModule
 			return dictionary;
 		}
 
+
+		public virtual void Set(string key, TValue value)
+		{
+			if (Keys.Contains(key))
+				Remove(key);
+			Add(key, value);
+		}
+
 		public virtual void Add(string key, TValue value)
 		{
 			if (Keys.Contains(key))

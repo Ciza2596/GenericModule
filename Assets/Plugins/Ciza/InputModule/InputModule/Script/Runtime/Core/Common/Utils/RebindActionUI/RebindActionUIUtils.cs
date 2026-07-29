@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
-    public static class RebindActionUIExtension
+    public static class RebindActionUIUtils
     {
         public static bool TryGetActionAndBindingIndex(this InputActionMap inputActionMap, string path, string bindingId, out InputAction otherInputAction, out int otherBindingIndex) =>
             inputActionMap.TryGetActionAndBindingIndex(path, new Guid(bindingId), out otherInputAction, out otherBindingIndex);

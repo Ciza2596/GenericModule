@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaInputModule.Editor
 {
-	public static class KeyExtension
+	public static class EditorKeyUtils
 	{
 		// Windows-ctrl, OSX-command
 		public static bool CheckIsCtrl(this EventModifiers modifier) =>

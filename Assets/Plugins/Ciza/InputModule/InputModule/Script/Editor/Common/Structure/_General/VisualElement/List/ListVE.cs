@@ -277,10 +277,8 @@ namespace CizaInputModule.Editor
 
 			var selectedIndices = SelectedItemIndexList;
 			for (int i = 0; i < selectedIndices.Length; i++)
-			{
 				if (selectedIndices[i] >= index)
 					_selectedItemIndexList[i]++;
-			}
 
 			Refresh();
 			RefreshIsExpandWhenInsert(index);

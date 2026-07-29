@@ -108,7 +108,7 @@ namespace CizaInputModule
         }
 
         public void SetDefaultExcludingPaths() =>
-            SetExcludingPaths(RebindActionUIUtils.GetAllExcludingPaths());
+            SetExcludingPaths(RebindActionUIPathUtils.GetAllExcludingPaths());
 
         public void SetExcludingPaths(string[] paths)
         {

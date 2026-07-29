@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace CizaInputModule
 {
-	public static class PlayerInputExtension
+	public static class PlayerInputUtils
 	{
 		public static bool TryGetDevices<TInputDevice>(this PlayerInput playerInput, out TInputDevice[] devices) where TInputDevice : InputDevice
 		{

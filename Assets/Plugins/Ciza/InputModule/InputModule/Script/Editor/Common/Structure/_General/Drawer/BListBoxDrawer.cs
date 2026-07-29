@@ -22,7 +22,7 @@ namespace CizaInputModule.Editor
 			label.TrackPropertyValue(itemsProperty, itemsProperty_ =>
 			{
 				label.text = CountText + itemsProperty_.arraySize;
-				root.Refresh();
+				root.ForceRefresh();
 			});
 			return label;
 		}

@@ -54,7 +54,13 @@ namespace CizaInputModule.Editor
 
 		#endregion
 
-		public static object Duplicate(Type sourceType, object source)
+		public static TObj Duplicate<TObj>(object source) where TObj : class =>
+			Duplicate(source.GetType(), source) as TObj;
+
+		public static object Duplicate(Type sourceType, object source) =>
+			Duplicate(sourceType, source, true);
+
+		public static object Duplicate(Type sourceType, object source, bool isInitNullValues)
 		{
 			if (!TypeUtils.CheckIsClassWithoutStringOrUnityObjSubclass(sourceType))
 				return source;
@@ -63,6 +69,9 @@ namespace CizaInputModule.Editor
 			{
 				var sourceListType = sourceList.GetType();
 				var list = TypeUtils.TryCreateInstance(sourceListType, out var listInstance, sourceList.Count) ? listInstance as IList : null;
+				if (list == null)
+					return null;
+
 				for (var i = 0; i < sourceList.Count; i++)
 				{
 					var sourceElement = i < sourceList.Count ? sourceList[i] : null;
@@ -73,7 +82,7 @@ namespace CizaInputModule.Editor
 					else
 					{
 						var elementType = TypeUtils.GetElementTypes(sourceListType)[0];
-						element = TypeUtils.TryCreateInstance(elementType, out var localInstance) ? localInstance : null;
+						element = isInitNullValues && TypeUtils.TryCreateInstance(elementType, out var localInstance) ? localInstance : null;
 					}
 
 					if (sourceType.IsArray)
@@ -85,7 +94,10 @@ namespace CizaInputModule.Editor
 				return list;
 			}
 
-			var newObj = TypeUtils.TryCreateInstance(sourceType, out var instance) ? instance : null;
+			var newObj = isInitNullValues && TypeUtils.TryCreateInstance(sourceType, out var instance) ? instance : null;
+			if (newObj == null)
+				return null;
+
 			OverrideObj(source, newObj);
 			return newObj;
 		}

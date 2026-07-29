@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace CizaAddressablesModule
 {
-	public static class AddressablesModuleExtension
+	public static class AddressablesModuleUtils
 	{
 		// public static async UniTask LoadAssetsAsync(this AddressablesModule addressablesModule, AddressMap[] addressObjectTypeMaps)
 		// {

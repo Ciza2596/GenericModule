@@ -99,7 +99,7 @@ namespace CizaAudioModule.Editor
 			}
 		}
 
-		private void OnGeometryChanged(GeometryChangedEvent evt)
+		protected virtual void OnGeometryChanged(GeometryChangedEvent evt)
 		{
 			foreach (var c in EnablerClasses)
 				_isEnableToggle.EnableInClassList(c, false);
@@ -107,7 +107,7 @@ namespace CizaAudioModule.Editor
 				_isEnableToggle.EnableInClassList(c, true);
 		}
 
-		private void SetupField(SerializedProperty property, bool hasLabel = true)
+		protected virtual void SetupField(SerializedProperty property, bool hasLabel = true)
 		{
 			var field = new PropertyField(property);
 			field.BindProperty(property);

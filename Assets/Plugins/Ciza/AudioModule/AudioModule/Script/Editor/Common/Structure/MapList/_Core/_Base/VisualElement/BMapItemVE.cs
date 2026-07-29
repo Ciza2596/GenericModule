@@ -22,7 +22,7 @@ namespace CizaAudioModule.Editor.MapListVisual
 		public virtual string Key
 		{
 			get => KeyProperty.GetValue<string>();
-			protected set => IsEnableProperty.SetValue(value);
+			protected set => KeyProperty.SetValue(value);
 		}
 
 		public override bool IsEnable

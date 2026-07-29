@@ -1,7 +1,4 @@
 namespace CizaAudioModule
 {
-	public interface IZomeraphyPanel
-	{
-		
-	}
+	public interface IZomeraphyPanel { }
 }

@@ -27,9 +27,6 @@ namespace CizaAudioModule.Editor
 		[field: NonSerialized]
 		protected string Title { get; private set; }
 
-		[field: NonSerialized]
-		protected IContent Content { get; private set; }
-
 
 		protected virtual string[] USSPaths => Array.Empty<string>();
 		protected virtual string[] RootClasses => Array.Empty<string>();
@@ -41,6 +38,13 @@ namespace CizaAudioModule.Editor
 
 		[field: NonSerialized]
 		public virtual bool IsInitialized { get; protected set; }
+
+
+		[field: NonSerialized]
+		public virtual IContent Content { get; private set; }
+
+		[field: NonSerialized]
+		public virtual bool IsAlreadyRefreshContent { get; protected set; }
 
 
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
@@ -55,6 +59,7 @@ namespace CizaAudioModule.Editor
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
+
 		public void Initialize(string title, IContent content) =>
 			Initialize(title, content, null);
 
@@ -63,10 +68,21 @@ namespace CizaAudioModule.Editor
 			if (IsInitialized) return;
 			IsInitialized = true;
 			DerivedInitialize(title, content, headAdditional);
-			Refresh();
+			ForceRefresh();
 		}
 
-		public abstract void Refresh();
+		public void ForceRefresh() =>
+			Refresh(true);
+
+		public void Refresh() =>
+			Refresh(false);
+
+		protected void Refresh(bool isForce)
+		{
+			if (isForce)
+				IsAlreadyRefreshContent = false;
+			DerivedRefresh(isForce);
+		}
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
@@ -101,6 +117,16 @@ namespace CizaAudioModule.Editor
 		protected void AddHeadManipulator(IManipulator manipulator) => _head.AddManipulator(manipulator);
 		protected void AddHeadLeftContent(VisualElement content) => _headLeftAlignment.Add(content);
 		protected void AddHeadRightContent(VisualElement content) => _headRightAlignment.Add(content);
+
+		protected virtual void CheckAndRefreshContent()
+		{
+			if (IsAlreadyRefreshContent)
+				return;
+			IsAlreadyRefreshContent = true;
+			Content?.Refresh();
+		}
+
+		protected abstract void DerivedRefresh(bool isForce);
 
 		protected abstract void OnHeadClick();
 

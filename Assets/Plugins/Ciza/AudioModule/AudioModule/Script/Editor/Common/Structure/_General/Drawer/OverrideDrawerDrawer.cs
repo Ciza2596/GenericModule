@@ -8,6 +8,7 @@ namespace CizaAudioModule.Editor
 	public class OverrideDrawerDrawer : PropertyDrawer
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
+		
 		protected virtual string CountText => "Count: ";
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
@@ -29,7 +30,7 @@ namespace CizaAudioModule.Editor
 			label.TrackPropertyValue(property, property_ =>
 			{
 				label.text = CountText + property_.arraySize;
-				root.Refresh();
+				root.ForceRefresh();
 			});
 			return label;
 		}

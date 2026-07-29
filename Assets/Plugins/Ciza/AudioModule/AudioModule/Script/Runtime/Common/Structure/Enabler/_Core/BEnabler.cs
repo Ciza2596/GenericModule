@@ -20,7 +20,6 @@ namespace CizaAudioModule
 
 		[Preserve]
 		protected BEnabler(bool isEnable, TValueImp value) : base(isEnable, value) { }
-
 	}
 
 	[Serializable]

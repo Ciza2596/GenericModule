@@ -6,6 +6,8 @@ namespace CizaAudioModule.Editor
 	[CustomPropertyDrawer(typeof(IZomeraphyPanel), true)]
 	public class ZomeraphyPanelDrawer : PropertyDrawer
 	{
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+		
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
 			var container = new BBoxVE.PropertyContentVE(property) { style = { paddingRight = 5 } };

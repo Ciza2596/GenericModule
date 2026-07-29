@@ -4,6 +4,7 @@ using UnityEngine.Audio;
 
 namespace CizaAudioModule
 {
+	[AddComponentMenu("AudioModule/Audio")]
 	public class Audio : MonoBehaviour, IAudio
 	{
 		public const float DURATION_ERROR = 0.00001f;

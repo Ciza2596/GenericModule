@@ -69,9 +69,6 @@ namespace CizaInputModule.Editor
 			{
 				var sourceListType = sourceList.GetType();
 				var list = TypeUtils.TryCreateInstance(sourceListType, out var listInstance, sourceList.Count) ? listInstance as IList : null;
-				if (list == null)
-					return null;
-
 				for (var i = 0; i < sourceList.Count; i++)
 				{
 					var sourceElement = i < sourceList.Count ? sourceList[i] : null;
@@ -97,7 +94,6 @@ namespace CizaInputModule.Editor
 			var newObj = isInitNullValues && TypeUtils.TryCreateInstance(sourceType, out var instance) ? instance : null;
 			if (newObj == null)
 				return null;
-
 			OverrideObj(source, newObj);
 			return newObj;
 		}

@@ -101,6 +101,9 @@ namespace CizaLocaleModule.Editor
 			}
 		}
 
+		[field: NonSerialized]
+		public virtual bool IsAlreadyRefreshContent { get; protected set; }
+
 		// CONSTRUCTOR: --------------------------------------------------------------------- 
 
 		[Preserve]
@@ -114,7 +117,7 @@ namespace CizaLocaleModule.Editor
 		}
 
 
-		// LIFECIRCLE METHOD: ------------------------------------------------------------------
+		// LIFECYCLE METHOD: -------------------------------------------------------------------
 
 		public override void Initialize()
 		{
@@ -282,11 +285,11 @@ namespace CizaLocaleModule.Editor
 			var target = itemProperty.serializedObject.targetObject;
 			var itemPath = itemProperty.propertyPath;
 			var itemType = itemProperty.GetValue()?.GetType();
-			
+
 			var isDifTarget = target != _target;
 			var isDifItemPath = itemPath != _itemPath;
 			var isDifItemType = itemType != _itemType;
-			
+
 			if (isDifTarget || isDifItemPath || isDifItemType)
 			{
 				ItemProperty = itemProperty;
@@ -294,22 +297,40 @@ namespace CizaLocaleModule.Editor
 				_itemPath = itemPath;
 				_itemType = itemType;
 				if (isRefreshBodyContent)
-				{
-					_body.Clear();
-					CreateBodyContent();
-				}
+					ForceCheckAndRefreshContent();
 			}
 		}
 
 		public virtual void SetIsExpand(bool isExpand)
 		{
-			IsExpand = isExpand && Root.IsElementClass && _body.childCount > 0;
+			var targetIsExpand = isExpand && Root.IsElementClass;
+			CheckAndRefreshContent(targetIsExpand);
+			IsExpand = targetIsExpand && _body.childCount > 0;
 			_body.SetIsVisible(IsExpand);
 			_headTitle.EnableInClassList(HeadTitleExpandedClass, IsExpand);
 		}
 
 		protected virtual void DerivedInitialize()
 		{
+			ForceCheckAndRefreshContent();
+		}
+
+		protected virtual void ForceCheckAndRefreshContent()
+		{
+			IsAlreadyRefreshContent = false;
+			CheckAndRefreshContent();
+		}
+
+
+		protected virtual void CheckAndRefreshContent() =>
+			CheckAndRefreshContent(IsExpand);
+
+		protected virtual void CheckAndRefreshContent(bool isExpand)
+		{
+			if (!isExpand || IsAlreadyRefreshContent)
+				return;
+			IsAlreadyRefreshContent = true;
+			_body.Clear();
 			CreateBodyContent();
 		}
 
@@ -327,11 +348,8 @@ namespace CizaLocaleModule.Editor
 		{
 			if (Root.IsElementClass && _headTitle is Button button)
 				button.text = Title;
-			else if (!Root.IsElementClass)
-			{
-				_headTitle.Unbind();
-				_headTitle.Bind(ItemProperty.serializedObject);
-			}
+			else if (!Root.IsElementClass && _headTitle is IBindable bindable)
+				bindable.BindProperty(ItemProperty);
 		}
 
 		// EVENT CALLBACK: ---------------------------------------------------------------------

@@ -53,7 +53,8 @@ namespace CizaTextModule.Editor
 			if (!isNext)
 				return false;
 
-			if (spaceHeight > 0)
+			var hasHeight = spaceHeight > 0;
+			if (hasHeight)
 				root.Add(new VisualElement() { style = { height = spaceHeight } });
 
 			var propertyNumber = 0;

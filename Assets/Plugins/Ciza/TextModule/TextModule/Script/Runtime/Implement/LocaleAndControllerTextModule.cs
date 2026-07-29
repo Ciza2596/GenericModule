@@ -66,7 +66,7 @@ namespace CizaTextModule
 		[Preserve]
 		public LocaleAndControllerTextModule(ITextModuleConfig localeTextModuleConfig, ITextModuleConfig controllerTextModuleConfig)
 		{
-			_textMapLogic = new TextMapLogic(new TextModuleWithDataId[] { new TextModuleWithDataId(LOCALE_TEXT_MODULE_DATA_ID, StringExtension.LOCALE_TEXT_KEY_PATTERN, localeTextModuleConfig), new TextModuleWithDataId(CONTROLLER_TEXT_MODULE_DATA_ID, StringExtension.CONTROLLER_TEXT_KEY_PATTERN, controllerTextModuleConfig), }, "LocaleAndControllerTextModule");
+			_textMapLogic = new TextMapLogic(new TextModuleWithDataId[] { new TextModuleWithDataId(LOCALE_TEXT_MODULE_DATA_ID, StringUtils.LOCALE_TEXT_KEY_PATTERN, localeTextModuleConfig), new TextModuleWithDataId(CONTROLLER_TEXT_MODULE_DATA_ID, StringUtils.CONTROLLER_TEXT_KEY_PATTERN, controllerTextModuleConfig), }, "LocaleAndControllerTextModule");
 
 			_textMapLogic.OnChangeCategory += OnChangeCategoryImp;
 			_textMapLogic.OnTranslate += OnTranslateImp;

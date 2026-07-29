@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using CizaTextModule;
 using NUnit.Framework;
 
-public class StringExtensionTest
+public class StringUtilsTest
 {
     public const string ConfirmKey = "ConfirmKey";
     public const string CancelKey = "CancelKey";

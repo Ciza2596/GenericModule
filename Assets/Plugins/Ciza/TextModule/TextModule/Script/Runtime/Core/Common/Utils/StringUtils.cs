@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CizaTextModule
 {
-	public static class StringExtension
+	public static class StringUtils
 	{
 		public const string CONTROLLER_TEXT_KEY_PATTERN = @"<ControllerTextKey=""([^""]*)""[^>]*>";
 		public const string LOCALE_TEXT_KEY_PATTERN = @"<LocaleTextKey=""([^""]*)""[^>]*>";

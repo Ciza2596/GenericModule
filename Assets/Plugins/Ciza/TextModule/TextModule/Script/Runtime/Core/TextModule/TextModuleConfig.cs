@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CizaTextModule
 {
-	[CreateAssetMenu(fileName = "Txt.Config.asset", menuName = "Ciza/TextModule/TextModuleConfig")]
+	[CreateAssetMenu(fileName = "Txt.Config.asset", menuName = "Ciza/TextModule/Config")]
 	public class TextModuleConfig : ScriptableObject, ITextModuleConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

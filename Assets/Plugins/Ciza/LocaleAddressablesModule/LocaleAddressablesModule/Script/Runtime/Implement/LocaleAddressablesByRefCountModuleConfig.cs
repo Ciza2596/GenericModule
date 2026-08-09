@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CizaLocaleAddressablesModule.Implement
 {
-	[CreateAssetMenu(fileName = "LocAddr.Config.asset", menuName = "Ciza/LocaleAddressablesByRefCountModule/LocaleAddressablesByRefCountModuleConfig")]
+	[CreateAssetMenu(fileName = "LocAddr.Config.asset", menuName = "Ciza/LocaleAddressablesByRefCountModule/Config")]
 	public class LocaleAddressablesByRefCountModuleConfig : ScriptableObject, ILocaleAddressablesByRefCountModuleConfig
 	{
 		// VARIABLE: -----------------------------------------------------------------------------

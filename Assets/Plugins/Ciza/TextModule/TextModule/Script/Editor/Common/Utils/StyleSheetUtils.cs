@@ -9,7 +9,8 @@ namespace CizaTextModule.Editor
 {
 	public static class StyleSheetUtils
 	{
-		public const string ROOT_PATH = "TextModule/StyleSheet/";
+		public const string PROJECT_ID = "TextModule";
+		public const string ROOT_PATH = "StyleSheet";
 
 		private static readonly string[] COMMON_STYLE_PATHS = { "CommonValue", "CommonColor", };
 
@@ -44,6 +45,6 @@ namespace CizaTextModule.Editor
 		}
 
 		private static StyleSheet LoadStyleSheet(string path) =>
-			Resources.Load<StyleSheet>(Path.Combine(ROOT_PATH, path));
+			Resources.Load<StyleSheet>(Path.Combine(PROJECT_ID, ROOT_PATH, path));
 	}
 }

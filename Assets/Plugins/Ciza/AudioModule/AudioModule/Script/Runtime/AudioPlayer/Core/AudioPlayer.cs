@@ -46,6 +46,8 @@ namespace CizaAudioModule
 		public string[] AllSfxDataIds => _sfxModule.AudioDataIds;
 		public string[] AllVoiceDataIds => _voiceModule.AudioDataIds;
 
+		#region Group
+
 		public bool TryGetMasterMixerGroup(out AudioMixerGroup masterMixerGroup)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
@@ -59,14 +61,39 @@ namespace CizaAudioModule
 			return masterMixerGroup != null;
 		}
 
+		#region Bgm
+
 		public bool TryGetBgmMixerGroup(out AudioMixerGroup bgmMixerGroup) =>
 			_bgmModule.TryGetAudioMixerGroup(out bgmMixerGroup);
+
+		public bool TryGetBgmMixerGroup(string bgmGroupPath, out AudioMixerGroup bgmMixerGroup) =>
+			_bgmModule.TryGetAudioMixerGroup(bgmGroupPath, out bgmMixerGroup);
+
+		#endregion
+
+
+		#region Sfx
 
 		public bool TryGetSfxMixerGroup(out AudioMixerGroup sfxMixerGroup) =>
 			_sfxModule.TryGetAudioMixerGroup(out sfxMixerGroup);
 
+		public bool TryGetSfxMixerGroup(string sfxGroupPath, out AudioMixerGroup sfxMixerGroup) =>
+			_bgmModule.TryGetAudioMixerGroup(sfxGroupPath, out sfxMixerGroup);
+
+		#endregion
+
+
+		#region Voice
+
 		public bool TryGetVoiceMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
 			_voiceModule.TryGetAudioMixerGroup(out voiceMixerGroup);
+
+		public bool TryGetVoiceMixerGroup(string voiceGroupPath, out AudioMixerGroup voiceMixerGroup) =>
+			_voiceModule.TryGetAudioMixerGroup(voiceGroupPath, out voiceMixerGroup);
+
+		#endregion
+
+		#endregion
 
 		public bool TryGetMasterVolume(out float volume)
 		{
@@ -80,8 +107,14 @@ namespace CizaAudioModule
 			return _audioPlayerConfig.AudioMixer.GetFloat(_audioPlayerConfig.MasterMixerParameter, out volume);
 		}
 
-		public bool TryGetBgmVolume(out float volume) =>
-			_bgmModule.TryGetVolume(out volume);
+		#region Bgm
+
+		public bool TryGetBgmMixerVolume(out float volume) =>
+			_bgmModule.TryGetAudioMixerVolume(out volume);
+
+		public bool TryGetBgmMixerVolume(string parameter, out float volume) =>
+			_bgmModule.TryGetAudioMixerVolume(parameter, out volume);
+
 
 		public bool CheckIsBgmPlaying(string bgmId) =>
 			_bgmModule.CheckIsPlaying(bgmId);
@@ -95,9 +128,17 @@ namespace CizaAudioModule
 		public bool TryGetBgmIsOverridable(string bgmId, out bool isOverridable) =>
 			_bgmModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
 
+		#endregion
 
-		public bool TryGetSfxVolume(out float volume) =>
-			_sfxModule.TryGetVolume(out volume);
+
+		#region Sfx
+
+		public bool TryGetSfxMixerVolume(out float volume) =>
+			_sfxModule.TryGetAudioMixerVolume(out volume);
+
+		public bool TryGetSfxMixerVolume(string parameter, out float volume) =>
+			_sfxModule.TryGetAudioMixerVolume(parameter, out volume);
+
 
 		public bool CheckIsSfxPlaying(string sfxId) =>
 			_sfxModule.CheckIsPlaying(sfxId);
@@ -114,11 +155,19 @@ namespace CizaAudioModule
 		public bool TryGetSfxVolume(string sfxId, out float volume) =>
 			_sfxModule.TryGetAudioVolume(sfxId, out volume);
 
-		public bool TryGetSfxIsOverridable(string bgmId, out bool isOverridable) =>
-			_sfxModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
+		public bool TryGetSfxIsOverridable(string sfxId, out bool isOverridable) =>
+			_sfxModule.TryGetAudioIsOverridable(sfxId, out isOverridable);
 
-		public bool TryGetVoiceVolume(out float volume) =>
-			_voiceModule.TryGetVolume(out volume);
+		#endregion
+
+		#region Voice
+
+		public bool TryGetVoiceMixerVolume(out float volume) =>
+			_voiceModule.TryGetAudioMixerVolume(out volume);
+
+		public bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
+			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
+
 
 		public bool CheckIsVoicePlaying(string voiceId) =>
 			_voiceModule.CheckIsPlaying(voiceId);
@@ -135,8 +184,11 @@ namespace CizaAudioModule
 		public bool TryGetVoiceVolume(string voiceId, out float volume) =>
 			_voiceModule.TryGetAudioVolume(voiceId, out volume);
 
-		public bool TryGetVoiceIsOverridable(string bgmId, out bool isOverridable) =>
-			_voiceModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
+		public bool TryGetVoiceIsOverridable(string voiceId, out bool isOverridable) =>
+			_voiceModule.TryGetAudioIsOverridable(voiceId, out isOverridable);
+
+		#endregion
+
 
 		[Preserve]
 		public AudioPlayer(IAudioPlayerConfig audioPlayerConfig, IAssetProvider assetProvider, IVoiceAssetProvider voiceAssetProvider)

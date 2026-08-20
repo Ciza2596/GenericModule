@@ -36,7 +36,8 @@ namespace CizaAudioModule
 		public event Action<string, string, string> OnSfxStop;
 		public event Action<string, string, string> OnSfxComplete;
 
-		public event Action<string, string, string, string, bool, bool> OnVoiceSpawn;
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, GroupPath
+		public event Action<string, string, string, string, bool, bool, string> OnVoiceSpawn;
 		public event Action<string, string, string> OnVoiceStop;
 		public event Action<string, string, string> OnVoiceComplete;
 
@@ -199,15 +200,15 @@ namespace CizaAudioModule
 			_sfxModule = new AudioModule(audioPlayerConfig.SfxModuleConfig, assetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 			_voiceModule = new AudioModule(audioPlayerConfig.VoiceModuleConfig, voiceAssetProvider, assetProvider, audioPlayerConfig.AudioMixer, _audioPlayerConfig.IsDontDestroyOnLoad);
 
-			_bgmModule.OnSpawn += (callerId, bgmId, bgmDataId, userId, isOverridable, isRecord) => OnBgmSpawn?.Invoke(callerId, bgmId, bgmDataId, userId, isOverridable, isRecord);
+			_bgmModule.OnSpawn += (callerId, bgmId, bgmDataId, userId, isOverridable, isRecord, _) => OnBgmSpawn?.Invoke(callerId, bgmId, bgmDataId, userId, isOverridable, isRecord);
 			_bgmModule.OnStop += (callerId, bgmId, bgmDataId) => OnBgmStop?.Invoke(callerId, bgmId, bgmDataId);
 			_bgmModule.OnComplete += (callerId, bgmId, bgmDataId) => OnBgmComplete?.Invoke(callerId, bgmId, bgmDataId);
 
-			_sfxModule.OnSpawn += (callerId, sfxId, sfxDataId, userId, isOverridable, isRecord) => OnSfxSpawn?.Invoke(callerId, sfxId, sfxDataId, userId, isOverridable, isRecord);
+			_sfxModule.OnSpawn += (callerId, sfxId, sfxDataId, userId, isOverridable, isRecord, _) => OnSfxSpawn?.Invoke(callerId, sfxId, sfxDataId, userId, isOverridable, isRecord);
 			_sfxModule.OnStop += (callerId, sfxId, sfxDataId) => OnSfxStop?.Invoke(callerId, sfxId, sfxDataId);
 			_sfxModule.OnComplete += (callerId, sfxId, sfxDataId) => OnSfxComplete?.Invoke(callerId, sfxId, sfxDataId);
 
-			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, userId, isOverridable, isRecord) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, userId, isOverridable, isRecord);
+			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, groupPath) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, groupPath);
 			_voiceModule.OnStop += (callerId, voiceId, voiceDataId) => OnVoiceStop?.Invoke(callerId, voiceId, voiceDataId);
 			_voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 
@@ -310,11 +311,6 @@ namespace CizaAudioModule
 
 		public void UnloadBgmAsset(string bgmDataId) =>
 			_bgmModule.UnloadAsset(bgmDataId);
-
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default)
-		{
-			throw new NotImplementedException();
-		}
 
 
 		public string SpawnBgm(string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
@@ -437,25 +433,25 @@ namespace CizaAudioModule
 		public void UnloadVoiceAsset(string voiceDataId) =>
 			_voiceModule.UnloadAsset(voiceDataId);
 
-		public string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null) =>
-			_voiceModule.Spawn(voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId);
+		public string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null) =>
+			_voiceModule.Spawn(voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
 
-		public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null) =>
-			_voiceModule.Spawn(voiceDataId, string.Empty, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId);
+		public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null) =>
+			_voiceModule.Spawn(voiceDataId, string.Empty, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
 
-		public string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null) =>
-			_voiceModule.Spawn(isCustomVoiceId, voiceId, voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId);
+		public string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null) =>
+			_voiceModule.Spawn(isCustomVoiceId, voiceId, voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
 
 
 		public void DespawnVoice(string voiceId) =>
 			_voiceModule.Despawn(voiceId);
 
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
-			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId, asyncToken);
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
+			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId, asyncToken);
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
-			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId, asyncToken);
+		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
+			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId, asyncToken);
 
 		public virtual Awaitable RestartVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.RestartAsync(voiceId, fadeTime, asyncToken);

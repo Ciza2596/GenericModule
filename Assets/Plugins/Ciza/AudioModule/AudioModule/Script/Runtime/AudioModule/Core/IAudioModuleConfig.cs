@@ -10,7 +10,7 @@ namespace CizaAudioModule
         string PoolSuffix { get; }
 
         string AudioMixerGroupPath { get; }
-        string AudioMixerParameter { get; }
+        string AudioMixerVolumeParameter { get; }
         float DefaultVolume { get; }
 
         bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay);

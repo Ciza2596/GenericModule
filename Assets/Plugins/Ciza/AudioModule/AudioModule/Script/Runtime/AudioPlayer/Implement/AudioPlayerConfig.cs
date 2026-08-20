@@ -96,7 +96,7 @@ namespace CizaAudioModule.Implement
 			protected string _audioMixerGroupPath;
 
 			[SerializeField]
-			protected string _audioMixerParameter;
+			protected string _audioMixerVolumeParameter;
 
 			[Range(0, 1)]
 			[SerializeField]
@@ -121,7 +121,7 @@ namespace CizaAudioModule.Implement
 			public virtual string PoolSuffix => _poolSuffix;
 
 			public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
-			public virtual string AudioMixerParameter => _audioMixerParameter;
+			public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
 			public virtual float DefaultVolume => _defaultVolume;
 
 			public virtual bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay) =>
@@ -142,10 +142,10 @@ namespace CizaAudioModule.Implement
 			public AudioModuleConfig() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
 
 			[Preserve]
-			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", audioMixerGroupPath, audioMixerParameter, 0.7f, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
+			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerVolumeParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", audioMixerGroupPath, audioMixerVolumeParameter, 0.7f, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
 
 			[Preserve]
-			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerParameter, float defaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
+			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerVolumeParameter, float defaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
 			{
 				_poolRootName = poolRootName;
 
@@ -153,7 +153,7 @@ namespace CizaAudioModule.Implement
 				_poolSuffix = poolSuffix;
 
 				_audioMixerGroupPath = audioMixerGroupPath;
-				_audioMixerParameter = audioMixerParameter;
+				_audioMixerVolumeParameter = audioMixerVolumeParameter;
 				_defaultVolume = defaultVolume;
 
 				_hasRestrictContinuousPlay = hasRestrictContinuousPlay;

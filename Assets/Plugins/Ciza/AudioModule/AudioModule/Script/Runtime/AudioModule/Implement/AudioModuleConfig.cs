@@ -24,7 +24,7 @@ namespace CizaAudioModule.Implement
 		protected string _audioMixerGroupPath;
 
 		[SerializeField]
-		protected string _audioMixerParameter;
+		protected string _audioMixerVolumeParameter;
 
 		[Range(0, 1)]
 		[SerializeField]
@@ -49,7 +49,7 @@ namespace CizaAudioModule.Implement
 		public virtual string PoolSuffix => _poolSuffix;
 
 		public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
-		public virtual string AudioMixerParameter => _audioMixerParameter;
+		public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
 		public virtual float DefaultVolume => _defaultVolume;
 
 		public virtual bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay) =>
@@ -82,7 +82,7 @@ namespace CizaAudioModule.Implement
 			_poolSuffix = "s";
 
 			_audioMixerGroupPath = "Master";
-			_audioMixerParameter = "Master";
+			_audioMixerVolumeParameter = "Master";
 			_defaultVolume = 0.7f;
 
 			_hasRestrictContinuousPlay = new RestrictContinuousPlayEnabler();

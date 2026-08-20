@@ -41,12 +41,8 @@ namespace CizaAudioModule
 		protected IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
 
-		protected virtual string GetAudioMixerGroupPath(string subGroupPath) =>
-			subGroupPath.CheckHasValue() ? $"{_config.AudioMixerGroupPath}/{subGroupPath}" : _config.AudioMixerGroupPath;
-
-
-		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord
-		public event Action<string, string, string, string, bool, bool> OnSpawn;
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, GroupPath
+		public event Action<string, string, string, string, bool, bool, string> OnSpawn;
 
 		public event Action<string, string, string> OnStop;
 
@@ -74,7 +70,7 @@ namespace CizaAudioModule
 
 
 		public virtual bool TryGetAudioMixerVolume(out float volume) =>
-			TryGetAudioMixerVolume(_config.AudioMixerParameter, out volume);
+			TryGetAudioMixerVolume(_config.AudioMixerVolumeParameter, out volume);
 
 		public virtual bool TryGetAudioMixerVolume(string parameter, out float volume)
 		{
@@ -265,7 +261,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			_audioMixer.SetFloat(_config.AudioMixerParameter, m_GetLinearToLogarithmicScale(volume));
+			_audioMixer.SetFloat(_config.AudioMixerVolumeParameter, m_GetLinearToLogarithmicScale(volume));
 
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
@@ -369,10 +365,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId);
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
 
-		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -385,6 +381,7 @@ namespace CizaAudioModule
 
 			AddCooldown(audioDataId);
 
+			var audioMixerGroupPath = GetAudioMixerGroupPath(groupPath);
 			var audio = m_GetOrCreateAudio(prefabAddress);
 
 			var audioId = isCustomId ? customId : Guid.NewGuid().ToString();
@@ -393,7 +390,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, parent, position);
 
 			audio.GameObject.name = clipAddress;
-			OnSpawn?.Invoke(callerId, audioId, audioDataId, userId, isOverridable, isRecord);
+			OnSpawn?.Invoke(callerId, audioId, audioDataId, userId, isOverridable, isRecord, audioMixerGroupPath);
 
 			audio.Play(userId, audioId, audioDataId, isOverridable, isAutoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop, isSyncTime);
 			return audio.Id;
@@ -409,7 +406,6 @@ namespace CizaAudioModule
 					var m_prefab = _prefabMapByAddress[m_prefabAddress];
 					var m_audio = Object.Instantiate(m_prefab).GetComponent<IAudio>();
 
-					var audioMixerGroupPath = GetAudioMixerGroupPath(subGroupPath);
 					if (!TryGetAudioMixerGroup(audioMixerGroupPath, out var audioMixerGroup))
 						Debug.LogWarning($"[AudioModule::Spawn] AudioMixerGroup is not found by {audioMixerGroupPath}.");
 
@@ -440,12 +436,12 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId, asyncToken);
+		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId, asyncToken);
 
-		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string subGroupPath = null, string callerId = null, AsyncToken asyncToken = default)
+		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, subGroupPath, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();
@@ -578,6 +574,11 @@ namespace CizaAudioModule
 				awaitables.Add(StopAsync(playingAudio.Id, fadeTime, null, asyncToken));
 			await Async.AllAsync(awaitables);
 		}
+
+
+		protected virtual string GetAudioMixerGroupPath(string groupPath) =>
+			groupPath.CheckHasValue() ? groupPath : _config.AudioMixerGroupPath;
+
 
 		protected virtual async void Despawn(string audioId, Action<string, string, string> onComplete) =>
 			await StopAsync(audioId, 0, onComplete, AsyncToken.NONE);

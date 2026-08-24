@@ -84,6 +84,9 @@ namespace CizaAudioModule
 		}
 
 
+		public virtual bool CheckIsAudioDataIdInConfig(string audioDataId) =>
+			audioDataId.CheckHasValue() && (_audioInfoMapByDataId?.ContainsKey(audioDataId) ?? false);
+
 		public virtual bool CheckIsAudioInfoLoaded(string audioDataId) =>
 			CheckIsAudioInfoLoaded(audioDataId, "CheckIsAudioInfoLoaded", out _, out _);
 

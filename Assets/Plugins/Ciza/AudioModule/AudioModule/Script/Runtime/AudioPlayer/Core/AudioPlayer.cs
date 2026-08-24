@@ -117,6 +117,12 @@ namespace CizaAudioModule
 			_bgmModule.TryGetAudioMixerVolume(parameter, out volume);
 
 
+		public bool CheckHasBgmDataIdInConfig(string voiceDataId) =>
+			_bgmModule.CheckIsAudioDataIdInConfig(voiceDataId);
+
+		public bool CheckHasBgm(string bgmId) =>
+			_bgmModule.TryGetAudioReadModel(bgmId, out _);
+
 		public bool CheckIsBgmPlaying(string bgmId) =>
 			_bgmModule.CheckIsPlaying(bgmId);
 
@@ -140,6 +146,12 @@ namespace CizaAudioModule
 		public bool TryGetSfxMixerVolume(string parameter, out float volume) =>
 			_sfxModule.TryGetAudioMixerVolume(parameter, out volume);
 
+
+		public bool CheckHasSfxDataIdInConfig(string sfxDataId) =>
+			_sfxModule.CheckIsAudioDataIdInConfig(sfxDataId);
+
+		public bool CheckHasSfx(string sfxId) =>
+			_sfxModule.TryGetAudioReadModel(sfxId, out _);
 
 		public bool CheckIsSfxPlaying(string sfxId) =>
 			_sfxModule.CheckIsPlaying(sfxId);
@@ -169,6 +181,12 @@ namespace CizaAudioModule
 		public bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
 
+
+		public bool CheckHasVoiceDataIdInConfig(string voiceDataId) =>
+			_voiceModule.CheckIsAudioDataIdInConfig(voiceDataId);
+
+		public bool CheckHasVoice(string voiceId) =>
+			_voiceModule.TryGetAudioReadModel(voiceId, out _);
 
 		public bool CheckIsVoicePlaying(string voiceId) =>
 			_voiceModule.CheckIsPlaying(voiceId);

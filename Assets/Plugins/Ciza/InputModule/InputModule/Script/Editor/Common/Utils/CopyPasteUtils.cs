@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CizaInputModule.Editor
 {
 	public static class CopyPasteUtils
 	{
-		// CONST & STATIC: -----------------------------------------------------------------------
+		private const BindingFlags SERIALIZED_FIELD_BINDINGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
 
 		#region Copy
 
@@ -54,9 +57,6 @@ namespace CizaInputModule.Editor
 
 		#endregion
 
-		public static TObj Duplicate<TObj>(object source) where TObj : class =>
-			Duplicate(source.GetType(), source) as TObj;
-
 		public static object Duplicate(Type sourceType, object source) =>
 			Duplicate(sourceType, source, true);
 
@@ -98,10 +98,60 @@ namespace CizaInputModule.Editor
 			return newObj;
 		}
 
+		public static void OverrideBehaviour(object source, object newObj) =>
+			EditorUtility.CopySerializedManagedFieldsOnly(source, newObj);
+
 		public static void OverrideObj(object source, object newObj)
 		{
 			var json = EditorJsonUtility.ToJson(source);
 			EditorJsonUtility.FromJsonOverwrite(json, newObj);
+			RestoreUnityObjectReferences(source, newObj);
 		}
+
+		private static object RestoreUnityObjectReferences(object source, object destination)
+		{
+			if (source == null)
+				return null;
+
+			var sourceType = source.GetType();
+			if (typeof(Object).IsAssignableFrom(sourceType))
+				return source;
+
+			if (destination == null)
+				return null;
+
+			if (source is IList sourceList && destination is IList destinationList)
+			{
+				var count = Math.Min(sourceList.Count, destinationList.Count);
+				for (var i = 0; i < count; i++)
+					destinationList[i] = RestoreUnityObjectReferences(sourceList[i], destinationList[i]);
+
+				return destination;
+			}
+
+			if (sourceType.IsPrimitive || sourceType.IsEnum || sourceType == typeof(string))
+				return destination;
+
+			foreach (var type in TypeUtils.GetSelfAndBaseTypes(sourceType))
+				foreach (var field in type.GetFields(SERIALIZED_FIELD_BINDINGS))
+					if (CheckIsSerializedField(field))
+					{
+						var sourceValue = field.GetValue(source);
+						var destinationValue = field.GetValue(destination);
+						var restoredValue = RestoreUnityObjectReferences(sourceValue, destinationValue);
+						field.SetValue(destination, restoredValue);
+					}
+
+			return destination;
+		}
+
+		private static bool CheckIsSerializedField(FieldInfo field) =>
+			!field.IsStatic && !field.IsInitOnly && !field.IsNotSerialized && (field.IsPublic || field.IsDefined(typeof(SerializeField), true) || field.IsDefined(typeof(SerializeReference), true));
+
+		public static void CopyToSystemClipboard(string source) =>
+			GUIUtility.systemCopyBuffer = source;
+
+		public static string PasteFromSystemClipboard() =>
+			GUIUtility.systemCopyBuffer;
 	}
 }

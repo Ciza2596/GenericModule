@@ -240,7 +240,7 @@ namespace CizaAudioModule
 				OnChangedVoiceLocaleAsync?.Invoke(locale, asyncToken) ?? Async.Completed;
 		}
 
-		public void Initialize(Transform rootParent = null)
+		public virtual void Initialize(Transform rootParent = null)
 		{
 			if (IsInitialized)
 			{
@@ -266,7 +266,7 @@ namespace CizaAudioModule
 			OnInitialize?.Invoke();
 		}
 
-		public void Release()
+		public virtual void Release()
 		{
 			if (!IsInitialized)
 			{
@@ -285,7 +285,7 @@ namespace CizaAudioModule
 			ObjectUtils.DestroyOrImmediate(rootGameObject);
 		}
 
-		public void Tick(float deltaTime)
+		public virtual void Tick(float deltaTime)
 		{
 			if (!IsInitialized)
 				return;

@@ -4,16 +4,16 @@ namespace CizaAudioModule
 {
 	public interface IAudioPlayerConfig
 	{
-		string RootName           { get; }
-		bool   IsDontDestroyOnLoad { get; }
+		string RootName { get; }
+		bool IsDontDestroyOnLoad { get; }
 
-		AudioMixer AudioMixer           { get; }
-		string     MasterMixerGroupPath { get; }
-		string     MasterMixerParameter { get; }
-		float      DefaultMasterVolume  { get; }
+		AudioMixer AudioMixer { get; }
+		string MasterMixerGroupPath { get; }
+		string MasterMixerParameter { get; }
+		float DefaultMasterVolume { get; }
 
-		IAudioModuleConfig BgmModuleConfig   { get; }
-		IAudioModuleConfig SfxModuleConfig    { get; }
+		IAudioModuleConfig BgmModuleConfig { get; }
+		IAudioModuleConfig SfxModuleConfig { get; }
 		IAudioModuleConfig VoiceModuleConfig { get; }
 	}
 }

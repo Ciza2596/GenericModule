@@ -23,7 +23,7 @@ MonoBehaviour:
     _poolPrefix: 
     _poolSuffix: s
     _audioMixerGroupPath: Master/Bgm
-    _audioMixerParameter: Bgm
+    _audioMixerVolumeParameter: Bgm
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
       _isEnable: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
     _poolPrefix: 
     _poolSuffix: s
     _audioMixerGroupPath: Master/Sfx
-    _audioMixerParameter: Sfx
+    _audioMixerVolumeParameter: Sfx
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
       _isEnable: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
     _poolPrefix: 
     _poolSuffix: s
     _audioMixerGroupPath: Master/Voice
-    _audioMixerParameter: Voice
+    _audioMixerVolumeParameter: Voice
     _defaultVolume: 0.7
     _hasRestrictContinuousPlay:
       _isEnable: 0

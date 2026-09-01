@@ -20,6 +20,7 @@ namespace CizaAudioModule.Implement
 		protected string _poolSuffix;
 
 		[Space]
+		[Space]
 		[SerializeField]
 		protected string _audioMixerGroupPath;
 
@@ -30,6 +31,11 @@ namespace CizaAudioModule.Implement
 		[SerializeField]
 		protected float _defaultVolume;
 
+		[Space]
+		[SerializeField]
+		protected MultipleAudioChannelInfoEnabler _hasMultipleChannelInfo;
+
+		[Space]
 		[Space]
 		[SerializeField]
 		protected RestrictContinuousPlayEnabler _hasRestrictContinuousPlay;
@@ -51,6 +57,31 @@ namespace CizaAudioModule.Implement
 		public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
 		public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
 		public virtual float DefaultVolume => _defaultVolume;
+
+		public virtual bool HasMultipleChannels => _hasMultipleChannelInfo.IsEnable;
+
+		public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo channelInfo)
+		{
+			if (!_hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo))
+			{
+				channelInfo = null;
+				return false;
+			}
+
+			channelInfo = multipleChannelInfo.ExtraChannelInfo;
+			return true;
+		}
+
+		public virtual bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo)
+		{
+			if (!_hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo))
+			{
+				channelInfo = null;
+				return false;
+			}
+
+			return multipleChannelInfo.TryGetChannelInfo(dataId, out channelInfo);
+		}
 
 		public virtual bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay) =>
 			_hasRestrictContinuousPlay.TryGetValue(out restrictContinuousPlay);
@@ -84,6 +115,8 @@ namespace CizaAudioModule.Implement
 			_audioMixerGroupPath = "Master";
 			_audioMixerVolumeParameter = "Master";
 			_defaultVolume = 0.7f;
+
+			_hasMultipleChannelInfo = new MultipleAudioChannelInfoEnabler();
 
 			_hasRestrictContinuousPlay = new RestrictContinuousPlayEnabler();
 

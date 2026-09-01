@@ -32,17 +32,4 @@ namespace CizaAudioModule
 		[Preserve]
 		public RestrictContinuousPlayEnabler(bool isEnable, RestrictContinuousPlay value) : base(isEnable, value) { }
 	}
-
-	[Serializable]
-	public class RestrictContinuousPlay : IRestrictContinuousPlay
-	{
-		[SerializeField]
-		protected float _duration = 0.1f;
-
-		[SerializeField]
-		protected int _maxConsecutiveCount = 1;
-
-		public virtual float Duration => _duration;
-		public virtual int MaxConsecutiveCount => _maxConsecutiveCount;
-	}
 }

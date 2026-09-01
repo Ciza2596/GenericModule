@@ -50,11 +50,35 @@ namespace CizaAudioModule
 
 		public virtual bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
 
-		public virtual string[] AudioDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
+		public virtual string[] AudioInfoDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
+
+		public virtual string[] ChannelDataIds => _config.ChannelDataIds;
 
 
 		public virtual bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup) =>
 			TryGetAudioMixerGroup(_config.AudioMixerGroupPath, out audioMixerGroup);
+
+		public virtual bool TryGetExtraChannelAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				audioMixerGroup = null;
+				return false;
+			}
+
+			return TryGetAudioMixerGroup(extraChannelInfo.AudioMixerGroupPath, out audioMixerGroup);
+		}
+
+		public virtual bool TryGetChannelAudioMixerGroup(string dataId, out AudioMixerGroup audioMixerGroup)
+		{
+			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			{
+				audioMixerGroup = null;
+				return false;
+			}
+
+			return TryGetAudioMixerGroup(channelInfo.AudioMixerGroupPath, out audioMixerGroup);
+		}
 
 		public virtual bool TryGetAudioMixerGroup(string groupPath, out AudioMixerGroup audioMixerGroup)
 		{
@@ -71,6 +95,28 @@ namespace CizaAudioModule
 
 		public virtual bool TryGetAudioMixerVolume(out float volume) =>
 			TryGetAudioMixerVolume(_config.AudioMixerVolumeParameter, out volume);
+
+		public virtual bool TryGetExtraChannelAudioMixerVolume(out float volume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				volume = 0;
+				return false;
+			}
+
+			return TryGetAudioMixerVolume(extraChannelInfo.AudioMixerVolumeParameter, out volume);
+		}
+
+		public virtual bool TryGetChannelAudioMixerVolume(string dataId, out float volume)
+		{
+			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			{
+				volume = 0;
+				return false;
+			}
+
+			return TryGetAudioMixerVolume(channelInfo.AudioMixerVolumeParameter, out volume);
+		}
 
 		public virtual bool TryGetAudioMixerVolume(string parameter, out float volume)
 		{
@@ -205,7 +251,9 @@ namespace CizaAudioModule
 					_poolRoot.SetParent(rootParent);
 			}
 
-			SetVolume(_config.DefaultVolume);
+			SetDefaultVolume();
+			SetExtraChannelDefaultVolume();
+			SetAllChannelDefaultVolume();
 		}
 
 		public virtual void Release()
@@ -256,7 +304,51 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual void SetVolume(float volume)
+
+		public virtual void SetDefaultVolume() =>
+			SetVolume(_config.DefaultVolume);
+
+		public virtual void SetVolume(float volume) =>
+			SetVolume(_config.AudioMixerVolumeParameter, volume);
+
+
+		public virtual void SetExtraChannelDefaultVolume()
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+				return;
+			SetVolume(extraChannelInfo.AudioMixerVolumeParameter, extraChannelInfo.DefaultVolume);
+		}
+
+		public virtual void SetExtraChannelVolume(float volume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+				return;
+			SetVolume(extraChannelInfo.AudioMixerVolumeParameter, volume);
+		}
+
+
+		public virtual void SetAllChannelDefaultVolume()
+		{
+			foreach (var channelDataId in _config.ChannelDataIds)
+				SetChannelDefaultVolume(channelDataId);
+		}
+
+		public virtual void SetChannelDefaultVolume(string dataId)
+		{
+			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+				return;
+			SetVolume(channelInfo.AudioMixerVolumeParameter, channelInfo.DefaultVolume);
+		}
+
+		public virtual void SetChannelVolume(string dataId, float volume)
+		{
+			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+				return;
+			SetVolume(channelInfo.AudioMixerVolumeParameter, volume);
+		}
+
+
+		public virtual void SetVolume(string volumeParameter, float volume)
 		{
 			if (_audioMixer is null)
 			{
@@ -264,7 +356,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			_audioMixer.SetFloat(_config.AudioMixerVolumeParameter, m_GetLinearToLogarithmicScale(volume));
+			_audioMixer.SetFloat(volumeParameter, m_GetLinearToLogarithmicScale(volume));
 
 			float m_GetLinearToLogarithmicScale(float value) =>
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;

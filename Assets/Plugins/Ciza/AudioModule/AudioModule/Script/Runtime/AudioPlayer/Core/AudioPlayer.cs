@@ -43,9 +43,9 @@ namespace CizaAudioModule
 
 		public bool IsInitialized => _root != null && _bgmModule.IsInitialized && _sfxModule.IsInitialized && _voiceModule.IsInitialized;
 
-		public string[] AllBgmDataIds => _bgmModule.AudioDataIds;
-		public string[] AllSfxDataIds => _sfxModule.AudioDataIds;
-		public string[] AllVoiceDataIds => _voiceModule.AudioDataIds;
+		public string[] AllBgmInfoDataIds => _bgmModule.AudioInfoDataIds;
+		public string[] AllSfxInfoDataIds => _sfxModule.AudioInfoDataIds;
+		public string[] AllVoiceInfoDataIds => _voiceModule.AudioInfoDataIds;
 
 		#region Group
 
@@ -321,6 +321,9 @@ namespace CizaAudioModule
 
 		#region Bgm
 
+		public void SetBgmDefaultVolume() =>
+			_bgmModule.SetDefaultVolume();
+
 		public void SetBgmVolume(float volume) =>
 			_bgmModule.SetVolume(volume);
 
@@ -378,6 +381,9 @@ namespace CizaAudioModule
 		#endregion
 
 		#region Sfx
+
+		public void SetSfxDefaultVolume() =>
+			_sfxModule.SetDefaultVolume();
 
 		public void SetSfxVolume(float volume) =>
 			_sfxModule.SetVolume(volume);
@@ -440,6 +446,9 @@ namespace CizaAudioModule
 		#endregion
 
 		#region Voice
+
+		public void SetVoiceDefaultVolume() =>
+			_voiceModule.SetDefaultVolume();
 
 		public void SetVoiceVolume(float volume) =>
 			_voiceModule.SetVolume(volume);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -58,7 +59,6 @@ namespace CizaAudioModule.Implement
 		public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
 		public virtual float DefaultVolume => _defaultVolume;
 
-		public virtual bool HasMultipleChannels => _hasMultipleChannelInfo.IsEnable;
 
 		public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo channelInfo)
 		{
@@ -71,6 +71,8 @@ namespace CizaAudioModule.Implement
 			channelInfo = multipleChannelInfo.ExtraChannelInfo;
 			return true;
 		}
+
+		public virtual string[] ChannelDataIds => _hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo) ? multipleChannelInfo.ChannelDataIds : Array.Empty<string>();
 
 		public virtual bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo)
 		{

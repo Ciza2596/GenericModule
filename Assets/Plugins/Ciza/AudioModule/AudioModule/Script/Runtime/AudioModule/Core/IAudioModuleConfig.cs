@@ -13,8 +13,10 @@ namespace CizaAudioModule
 		string AudioMixerVolumeParameter { get; }
 		float DefaultVolume { get; }
 
-		bool HasMultipleChannels { get; }
+
 		bool TryGetExtraChannelInfo(out IAudioChannelInfo channelInfo);
+
+		string[] ChannelDataIds { get; }
 		bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo);
 
 

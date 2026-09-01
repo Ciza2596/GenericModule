@@ -21,6 +21,8 @@ namespace CizaAudioModule
 
 		public virtual IAudioChannelInfo ExtraChannelInfo => _extraChannelInfo;
 
+		public virtual string[] ChannelDataIds => _channelInfoMapList.Keys;
+
 		public virtual bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo)
 		{
 			if (!_channelInfoMapList.TryGetValue(dataId, out var channelInfoImp))

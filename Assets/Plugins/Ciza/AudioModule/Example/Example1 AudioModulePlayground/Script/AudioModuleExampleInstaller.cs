@@ -42,7 +42,7 @@ namespace CizaAudioModule.Example1
 			_audioModule.OnSpawn += m_OnPlay;
 			_audioModule.OnStop += m_OnStop;
 
-			var audioDataIds = _audioModule.AudioDataIds;
+			var audioDataIds = _audioModule.AudioInfoDataIds;
 			foreach (var audioDataId in audioDataIds)
 				await _audioModule.LoadAssetAsync(audioDataId, string.Empty);
 

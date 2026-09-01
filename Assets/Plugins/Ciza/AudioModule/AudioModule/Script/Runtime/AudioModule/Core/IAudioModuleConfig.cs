@@ -14,10 +14,10 @@ namespace CizaAudioModule
 		float DefaultVolume { get; }
 
 
-		bool TryGetExtraChannelInfo(out IAudioChannelInfo channelInfo);
+		bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo);
 
 		string[] ChannelDataIds { get; }
-		bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo);
+		bool TryGetChannelInfo(string channelDataId, out IAudioChannelInfo channelInfo);
 
 
 		bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay);

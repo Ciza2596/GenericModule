@@ -5,6 +5,6 @@ namespace CizaAudioModule
 		IAudioChannelInfo ExtraChannelInfo { get; }
 
 		string[] ChannelDataIds { get; }
-		bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo);
+		bool TryGetChannelInfo(string channelDataId, out IAudioChannelInfo channelInfo);
 	}
 }

@@ -60,21 +60,21 @@ namespace CizaAudioModule.Implement
 		public virtual float DefaultVolume => _defaultVolume;
 
 
-		public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo channelInfo)
+		public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo)
 		{
 			if (!_hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo))
 			{
-				channelInfo = null;
+				extraChannelInfo = null;
 				return false;
 			}
 
-			channelInfo = multipleChannelInfo.ExtraChannelInfo;
+			extraChannelInfo = multipleChannelInfo.ExtraChannelInfo;
 			return true;
 		}
 
 		public virtual string[] ChannelDataIds => _hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo) ? multipleChannelInfo.ChannelDataIds : Array.Empty<string>();
 
-		public virtual bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo)
+		public virtual bool TryGetChannelInfo(string channelDataId, out IAudioChannelInfo channelInfo)
 		{
 			if (!_hasMultipleChannelInfo.TryGetValue(out var multipleChannelInfo))
 			{
@@ -82,7 +82,7 @@ namespace CizaAudioModule.Implement
 				return false;
 			}
 
-			return multipleChannelInfo.TryGetChannelInfo(dataId, out channelInfo);
+			return multipleChannelInfo.TryGetChannelInfo(channelDataId, out channelInfo);
 		}
 
 		public virtual bool TryGetRestrictContinuousPlay(out IRestrictContinuousPlay restrictContinuousPlay) =>

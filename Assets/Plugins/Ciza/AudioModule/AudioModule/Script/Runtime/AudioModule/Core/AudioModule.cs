@@ -69,9 +69,9 @@ namespace CizaAudioModule
 			return TryGetAudioMixerGroup(extraChannelInfo.AudioMixerGroupPath, out audioMixerGroup);
 		}
 
-		public virtual bool TryGetChannelAudioMixerGroup(string dataId, out AudioMixerGroup audioMixerGroup)
+		public virtual bool TryGetChannelAudioMixerGroup(string channelDataId, out AudioMixerGroup audioMixerGroup)
 		{
-			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{
 				audioMixerGroup = null;
 				return false;
@@ -107,9 +107,9 @@ namespace CizaAudioModule
 			return TryGetAudioMixerVolume(extraChannelInfo.AudioMixerVolumeParameter, out volume);
 		}
 
-		public virtual bool TryGetChannelAudioMixerVolume(string dataId, out float volume)
+		public virtual bool TryGetChannelAudioMixerVolume(string channelDataId, out float volume)
 		{
-			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{
 				volume = 0;
 				return false;
@@ -333,16 +333,16 @@ namespace CizaAudioModule
 				SetChannelDefaultVolume(channelDataId);
 		}
 
-		public virtual void SetChannelDefaultVolume(string dataId)
+		public virtual void SetChannelDefaultVolume(string channelDataId)
 		{
-			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 				return;
 			SetVolume(channelInfo.AudioMixerVolumeParameter, channelInfo.DefaultVolume);
 		}
 
-		public virtual void SetChannelVolume(string dataId, float volume)
+		public virtual void SetChannelVolume(string channelDataId, float volume)
 		{
-			if (!_config.TryGetChannelInfo(dataId, out var channelInfo))
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 				return;
 			SetVolume(channelInfo.AudioMixerVolumeParameter, volume);
 		}
@@ -671,8 +671,13 @@ namespace CizaAudioModule
 		}
 
 
-		protected virtual string GetAudioMixerGroupPath(string groupPath) =>
-			groupPath.CheckHasValue() ? groupPath : _config.AudioMixerGroupPath;
+		protected virtual string GetAudioMixerGroupPath(string channelDataId)
+		{
+			if (channelDataId.CheckHasValue() && _config.TryGetChannelInfo(channelDataId, out var channelInfo))
+				return channelInfo.AudioMixerGroupPath;
+
+			return _config.TryGetExtraChannelInfo(out var extraChannelInfo) ? extraChannelInfo.AudioMixerGroupPath : _config.AudioMixerGroupPath;
+		}
 
 
 		protected virtual async void Despawn(string audioId, Action<string, string, string> onComplete) =>

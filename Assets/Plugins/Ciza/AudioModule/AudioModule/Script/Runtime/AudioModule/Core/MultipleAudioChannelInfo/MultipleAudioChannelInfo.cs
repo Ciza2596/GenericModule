@@ -23,9 +23,9 @@ namespace CizaAudioModule
 
 		public virtual string[] ChannelDataIds => _channelInfoMapList.Keys;
 
-		public virtual bool TryGetChannelInfo(string dataId, out IAudioChannelInfo channelInfo)
+		public virtual bool TryGetChannelInfo(string channelDataId, out IAudioChannelInfo channelInfo)
 		{
-			if (!_channelInfoMapList.TryGetValue(dataId, out var channelInfoImp))
+			if (!_channelInfoMapList.TryGetValue(channelDataId, out var channelInfoImp))
 			{
 				channelInfo = null;
 				return false;

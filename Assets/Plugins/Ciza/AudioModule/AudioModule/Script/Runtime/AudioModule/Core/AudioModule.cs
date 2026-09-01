@@ -460,10 +460,10 @@ namespace CizaAudioModule
 			}
 		}
 
-		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null) =>
-			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
+		public virtual string Spawn(string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
+			Spawn(false, string.Empty, audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId);
 
-		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null)
+		public virtual string Spawn(bool isCustomId, string customId, string audioDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null)
 		{
 			if (!CheckIsAudioInfoLoaded(audioDataId, "Spawn", out var clipAddress, out var prefabAddress))
 				return string.Empty;
@@ -476,7 +476,7 @@ namespace CizaAudioModule
 
 			AddCooldown(audioDataId);
 
-			var audioMixerGroupPath = GetAudioMixerGroupPath(groupPath);
+			var audioMixerGroupPath = GetAudioMixerGroupPath(channelDataId);
 			var audio = m_GetOrCreateAudio(prefabAddress);
 
 			var audioId = isCustomId ? customId : Guid.NewGuid().ToString();
@@ -531,12 +531,12 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default) =>
-			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId, asyncToken);
+		public virtual Awaitable<string> PlayAsync(string audioDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default) =>
+			PlayAsync(string.Empty, audioDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId, asyncToken);
 
-		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string groupPath = null, string callerId = null, AsyncToken asyncToken = default)
+		public virtual async Awaitable<string> PlayAsync(string audioDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default)
 		{
-			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, groupPath, callerId);
+			var audioId = Spawn(audioDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId);
 			if (fadeTime > 0 && _playingAudioMapByAudioId.TryGetValue(audioId, out var playingAudio))
 			{
 				playingAudio.Resume();

@@ -36,7 +36,7 @@ namespace CizaAudioModule
 		public event Action<string, string, string> OnSfxStop;
 		public event Action<string, string, string> OnSfxComplete;
 
-		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, GroupPath
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, ChannelDataId
 		public event Action<string, string, string, string, bool, bool, string> OnVoiceSpawn;
 		public event Action<string, string, string> OnVoiceStop;
 		public event Action<string, string, string> OnVoiceComplete;
@@ -238,7 +238,7 @@ namespace CizaAudioModule
 			_sfxModule.OnStop += (callerId, sfxId, sfxDataId) => OnSfxStop?.Invoke(callerId, sfxId, sfxDataId);
 			_sfxModule.OnComplete += (callerId, sfxId, sfxDataId) => OnSfxComplete?.Invoke(callerId, sfxId, sfxDataId);
 
-			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, groupPath) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, groupPath);
+			_voiceModule.OnSpawn += (callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, channelDataId) => OnVoiceSpawn?.Invoke(callerId, voiceId, voiceDataId, userId, isOverridable, isRecord, channelDataId);
 			_voiceModule.OnStop += (callerId, voiceId, voiceDataId) => OnVoiceStop?.Invoke(callerId, voiceId, voiceDataId);
 			_voiceModule.OnComplete += (callerId, voiceId, voiceDataId) => OnVoiceComplete?.Invoke(callerId, voiceId, voiceDataId);
 

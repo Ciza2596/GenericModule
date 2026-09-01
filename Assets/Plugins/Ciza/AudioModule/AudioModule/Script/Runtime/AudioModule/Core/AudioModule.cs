@@ -41,7 +41,7 @@ namespace CizaAudioModule
 		protected IReadOnlyDictionary<string, IAudioInfo> _audioInfoMapByDataId;
 
 
-		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, GroupPath
+		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, ChannelDataId
 		public event Action<string, string, string, string, bool, bool, string> OnSpawn;
 
 		public event Action<string, string, string> OnStop;
@@ -485,7 +485,7 @@ namespace CizaAudioModule
 			AddAudioToPlayingAudiosMap(audioId, audio, parent, position);
 
 			audio.GameObject.name = clipAddress;
-			OnSpawn?.Invoke(callerId, audioId, audioDataId, userId, isOverridable, isRecord, audioMixerGroupPath);
+			OnSpawn?.Invoke(callerId, audioId, audioDataId, userId, isOverridable, isRecord, channelDataId);
 
 			audio.Play(userId, audioId, audioDataId, isOverridable, isAutoDespawn, callerId, isRecord, clipAddress, audioClip, volume, isLoop, isSyncTime);
 			return audio.Id;

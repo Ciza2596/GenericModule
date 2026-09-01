@@ -69,6 +69,21 @@ MonoBehaviour:
     _audioMixerGroupPath: Master/Voice
     _audioMixerVolumeParameter: Voice
     _defaultVolume: 0.7
+    _hasMultipleChannelInfo:
+      _isEnable: 1
+      _value:
+        _extraChannelInfo:
+          _audioMixerGroupPath: 
+          _audioMixerVolumeParameter: 
+          _defaultVolume: 1
+        _channelInfoMapList:
+          _maps:
+          - _isEnable: 1
+            _key: Default
+            _value:
+              _audioMixerGroupPath: 
+              _audioMixerVolumeParameter: 
+              _defaultVolume: 1
     _hasRestrictContinuousPlay:
       _isEnable: 0
       _value:

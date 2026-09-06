@@ -105,7 +105,7 @@ namespace CizaAudioModule
 			TryGetAudioMixerVolume(_config.AudioMixerVolumeParameter, out volume);
 
 
-		public virtual bool GetExtraChannelDefaultAudioMixerVolume(out float volume)
+		public virtual bool TryGetExtraChannelDefaultAudioMixerVolume(out float volume)
 		{
 			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
 			{
@@ -129,7 +129,7 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual bool GetChannelDefaultAudioMixerVolume(string channelDataId, out float volume)
+		public virtual bool TryGetChannelDefaultAudioMixerVolume(string channelDataId, out float volume)
 		{
 			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{

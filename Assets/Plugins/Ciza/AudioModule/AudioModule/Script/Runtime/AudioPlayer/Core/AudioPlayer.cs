@@ -199,14 +199,14 @@ namespace CizaAudioModule
 		public virtual bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
 
-		public virtual bool GetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
-			_voiceModule.GetExtraChannelDefaultAudioMixerVolume(out volume);
+		public virtual bool TryGetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
+			_voiceModule.TryGetExtraChannelDefaultAudioMixerVolume(out volume);
 
 		public virtual bool TryGetVoiceExtraChannelMixerVolume(out float volume) =>
 			_voiceModule.TryGetExtraChannelAudioMixerVolume(out volume);
 
-		public virtual bool GetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
-			_voiceModule.GetChannelDefaultAudioMixerVolume(channelDataId, out volume);
+		public virtual bool TryGetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
+			_voiceModule.TryGetChannelDefaultAudioMixerVolume(channelDataId, out volume);
 
 		public virtual bool TryGetVoiceChannelMixerVolume(string channelDataId, out float volume) =>
 			_voiceModule.TryGetChannelAudioMixerVolume(channelDataId, out volume);

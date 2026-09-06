@@ -7,8 +7,15 @@ namespace CizaInputModule
 	[Serializable]
 	public class VirtualMouseInfoMapList : BMapList<VirtualMouseInfoMapList.Map, VirtualMouseInfo>
 	{
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
 		[Preserve]
 		public VirtualMouseInfoMapList() { }
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		public virtual VirtualMouseInfoMapList Copy() =>
+			Copy<VirtualMouseInfoMapList>();
 
 		protected override Map CreateMap(string key, VirtualMouseInfo value) =>
 			new Map(value);

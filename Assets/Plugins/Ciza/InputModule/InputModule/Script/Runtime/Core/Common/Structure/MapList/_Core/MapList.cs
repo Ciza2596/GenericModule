@@ -7,8 +7,15 @@ namespace CizaInputModule
 	[Serializable]
 	public class MapList<TValue> : BMapList<MapList<TValue>.Map, TValue>
 	{
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
 		[Preserve]
 		public MapList() { }
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		public virtual MapList<TValue> Copy() =>
+			Copy<MapList<TValue>>();
 
 		protected override Map CreateMap(string key, TValue value) =>
 			new Map(key, value);

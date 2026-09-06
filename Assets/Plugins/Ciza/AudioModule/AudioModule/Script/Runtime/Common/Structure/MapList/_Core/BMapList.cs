@@ -102,6 +102,18 @@ namespace CizaAudioModule
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
+		protected virtual TValue CopyValue(TValue value) =>
+			value;
+
+		protected virtual TMapList Copy<TMapList>() where TMapList : BMapList<TMap, TValue>
+		{
+			var mapList = Activator.CreateInstance(typeof(TMapList)) as TMapList;
+			foreach (var keyValuePair in KeyValuePairs)
+				mapList.Add(keyValuePair.Key, CopyValue(keyValuePair.Value));
+
+			return mapList;
+		}
+
 		protected abstract TMap CreateMap(string key, TValue value);
 	}
 }

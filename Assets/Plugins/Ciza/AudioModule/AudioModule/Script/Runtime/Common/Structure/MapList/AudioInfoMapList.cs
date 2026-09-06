@@ -7,8 +7,15 @@ namespace CizaAudioModule
 	[Serializable]
 	public class AudioInfoMapList : BMapList<AudioInfoMapList.Map, AudioInfo>
 	{
+		// CONSTRUCTOR: ------------------------------------------------------------------------
+
 		[Preserve]
 		public AudioInfoMapList() { }
+
+		// PUBLIC METHOD: ----------------------------------------------------------------------
+
+		public virtual AudioInfoMapList Copy() =>
+			Copy<AudioInfoMapList>();
 
 		protected override Map CreateMap(string key, AudioInfo value) =>
 			new Map(value);

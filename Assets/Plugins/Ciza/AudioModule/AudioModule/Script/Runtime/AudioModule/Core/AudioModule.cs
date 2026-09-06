@@ -43,17 +43,18 @@ namespace CizaAudioModule
 
 		// CallerId, Id, DataId, UserId, IsOverridable, IsRecord, ChannelDataId
 		public event Action<string, string, string, string, bool, bool, string> OnSpawn;
-
 		public event Action<string, string, string> OnStop;
-
 		public event Action<string, string, string> OnComplete;
+
 
 		public virtual bool IsInitialized => _audioInfoMapByDataId != null && _poolRoot != null;
 
-		public virtual string[] AudioInfoDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
 
+		public virtual string[] AudioInfoDataIds => _audioInfoMapByDataId != null ? _audioInfoMapByDataId.Keys.ToArray() : Array.Empty<string>();
 		public virtual string[] ChannelDataIds => _config.ChannelDataIds;
 
+
+		#region AudioMixerGroup
 
 		public virtual bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup) =>
 			TryGetAudioMixerGroup(_config.AudioMixerGroupPath, out audioMixerGroup);
@@ -92,9 +93,29 @@ namespace CizaAudioModule
 			return audioMixerGroup != null;
 		}
 
+		#endregion
+
+
+		#region volume
+
+		public virtual float DefaultAudioMixerVolume =>
+			_config.DefaultVolume;
 
 		public virtual bool TryGetAudioMixerVolume(out float volume) =>
 			TryGetAudioMixerVolume(_config.AudioMixerVolumeParameter, out volume);
+
+
+		public virtual bool GetExtraChannelDefaultAudioMixerVolume(out float volume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				volume = 0;
+				return false;
+			}
+
+			volume = extraChannelInfo.DefaultVolume;
+			return true;
+		}
 
 		public virtual bool TryGetExtraChannelAudioMixerVolume(out float volume)
 		{
@@ -105,6 +126,19 @@ namespace CizaAudioModule
 			}
 
 			return TryGetAudioMixerVolume(extraChannelInfo.AudioMixerVolumeParameter, out volume);
+		}
+
+
+		public virtual bool GetChannelDefaultAudioMixerVolume(string channelDataId, out float volume)
+		{
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
+			{
+				volume = 0;
+				return false;
+			}
+
+			volume = channelInfo.DefaultVolume;
+			return true;
 		}
 
 		public virtual bool TryGetChannelAudioMixerVolume(string channelDataId, out float volume)
@@ -128,6 +162,8 @@ namespace CizaAudioModule
 
 			return _audioMixer.GetFloat(parameter, out volume);
 		}
+
+		#endregion
 
 
 		public virtual bool CheckIsAudioDataIdInConfig(string audioDataId) =>

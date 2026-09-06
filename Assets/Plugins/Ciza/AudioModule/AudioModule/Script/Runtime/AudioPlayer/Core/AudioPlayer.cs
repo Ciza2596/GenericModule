@@ -118,6 +118,9 @@ namespace CizaAudioModule
 
 		#region Bgm
 
+		public float DefaultBgmAudioMixerVolume =>
+			_bgmModule.DefaultAudioMixerVolume;
+
 		public bool TryGetBgmMixerVolume(out float volume) =>
 			_bgmModule.TryGetAudioMixerVolume(out volume);
 
@@ -146,6 +149,9 @@ namespace CizaAudioModule
 
 
 		#region Sfx
+
+		public float DefaultSfxAudioMixerVolume =>
+			_sfxModule.DefaultAudioMixerVolume;
 
 		public bool TryGetSfxMixerVolume(out float volume) =>
 			_sfxModule.TryGetAudioMixerVolume(out volume);
@@ -181,14 +187,23 @@ namespace CizaAudioModule
 
 		#region Voice
 
+		public float DefaultVoiceAudioMixerVolume =>
+			_voiceModule.DefaultAudioMixerVolume;
+
 		public bool TryGetVoiceMixerVolume(out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(out volume);
 
 		public bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
 
+		public bool GetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
+			_voiceModule.GetExtraChannelDefaultAudioMixerVolume(out volume);
+
 		public bool TryGetVoiceExtraChannelMixerVolume(out float volume) =>
 			_voiceModule.TryGetExtraChannelAudioMixerVolume(out volume);
+
+		public bool GetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
+			_voiceModule.GetChannelDefaultAudioMixerVolume(channelDataId, out volume);
 
 		public bool TryGetVoiceChannelMixerVolume(string channelDataId, out float volume) =>
 			_voiceModule.TryGetChannelAudioMixerVolume(channelDataId, out volume);

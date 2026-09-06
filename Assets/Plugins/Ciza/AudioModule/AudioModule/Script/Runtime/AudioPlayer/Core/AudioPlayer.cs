@@ -41,17 +41,17 @@ namespace CizaAudioModule
 		public event Action<string, string, string> OnVoiceStop;
 		public event Action<string, string, string> OnVoiceComplete;
 
-		public bool IsInitialized => _root != null && _bgmModule.IsInitialized && _sfxModule.IsInitialized && _voiceModule.IsInitialized;
+		public virtual bool IsInitialized => _root != null && _bgmModule.IsInitialized && _sfxModule.IsInitialized && _voiceModule.IsInitialized;
 
-		public string[] AllBgmInfoDataIds => _bgmModule.AudioInfoDataIds;
-		public string[] AllSfxInfoDataIds => _sfxModule.AudioInfoDataIds;
-		
-		public string[] AllVoiceInfoDataIds => _voiceModule.AudioInfoDataIds;
-		public string[] AllVoiceChannelDataIds => _voiceModule.ChannelDataIds;
+		public virtual string[] AllBgmInfoDataIds => _bgmModule.AudioInfoDataIds;
+		public virtual string[] AllSfxInfoDataIds => _sfxModule.AudioInfoDataIds;
+
+		public virtual string[] AllVoiceInfoDataIds => _voiceModule.AudioInfoDataIds;
+		public virtual string[] AllVoiceChannelDataIds => _voiceModule.ChannelDataIds;
 
 		#region Group
 
-		public bool TryGetMasterMixerGroup(out AudioMixerGroup masterMixerGroup)
+		public virtual bool TryGetMasterMixerGroup(out AudioMixerGroup masterMixerGroup)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
@@ -66,10 +66,10 @@ namespace CizaAudioModule
 
 		#region Bgm
 
-		public bool TryGetBgmMixerGroup(out AudioMixerGroup bgmMixerGroup) =>
+		public virtual bool TryGetBgmMixerGroup(out AudioMixerGroup bgmMixerGroup) =>
 			_bgmModule.TryGetAudioMixerGroup(out bgmMixerGroup);
 
-		public bool TryGetBgmMixerGroup(string bgmGroupPath, out AudioMixerGroup bgmMixerGroup) =>
+		public virtual bool TryGetBgmMixerGroup(string bgmGroupPath, out AudioMixerGroup bgmMixerGroup) =>
 			_bgmModule.TryGetAudioMixerGroup(bgmGroupPath, out bgmMixerGroup);
 
 		#endregion
@@ -77,10 +77,10 @@ namespace CizaAudioModule
 
 		#region Sfx
 
-		public bool TryGetSfxMixerGroup(out AudioMixerGroup sfxMixerGroup) =>
+		public virtual bool TryGetSfxMixerGroup(out AudioMixerGroup sfxMixerGroup) =>
 			_sfxModule.TryGetAudioMixerGroup(out sfxMixerGroup);
 
-		public bool TryGetSfxMixerGroup(string sfxGroupPath, out AudioMixerGroup sfxMixerGroup) =>
+		public virtual bool TryGetSfxMixerGroup(string sfxGroupPath, out AudioMixerGroup sfxMixerGroup) =>
 			_bgmModule.TryGetAudioMixerGroup(sfxGroupPath, out sfxMixerGroup);
 
 		#endregion
@@ -88,23 +88,26 @@ namespace CizaAudioModule
 
 		#region Voice
 
-		public bool TryGetVoiceMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
+		public virtual bool TryGetVoiceMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
 			_voiceModule.TryGetAudioMixerGroup(out voiceMixerGroup);
 
-		public bool TryGetVoiceMixerGroup(string voiceGroupPath, out AudioMixerGroup voiceMixerGroup) =>
+		public virtual bool TryGetVoiceMixerGroup(string voiceGroupPath, out AudioMixerGroup voiceMixerGroup) =>
 			_voiceModule.TryGetAudioMixerGroup(voiceGroupPath, out voiceMixerGroup);
 
-		public bool TryGetVoiceExtraChannelMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
+		public virtual bool TryGetVoiceExtraChannelMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
 			_voiceModule.TryGetExtraChannelAudioMixerGroup(out voiceMixerGroup);
 
-		public bool TryGetVoiceChannelMixerGroup(string channelDataId, out AudioMixerGroup voiceMixerGroup) =>
+		public virtual bool TryGetVoiceChannelMixerGroup(string channelDataId, out AudioMixerGroup voiceMixerGroup) =>
 			_voiceModule.TryGetChannelAudioMixerGroup(channelDataId, out voiceMixerGroup);
 
 		#endregion
 
 		#endregion
 
-		public bool TryGetMasterVolume(out float volume)
+		public virtual float DefaultMasterVolume =>
+			_audioPlayerConfig.DefaultMasterVolume;
+
+		public virtual bool TryGetMasterVolume(out float volume)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
@@ -118,31 +121,31 @@ namespace CizaAudioModule
 
 		#region Bgm
 
-		public float DefaultBgmAudioMixerVolume =>
+		public virtual float DefaultBgmAudioMixerVolume =>
 			_bgmModule.DefaultAudioMixerVolume;
 
-		public bool TryGetBgmMixerVolume(out float volume) =>
+		public virtual bool TryGetBgmMixerVolume(out float volume) =>
 			_bgmModule.TryGetAudioMixerVolume(out volume);
 
-		public bool TryGetBgmMixerVolume(string parameter, out float volume) =>
+		public virtual bool TryGetBgmMixerVolume(string parameter, out float volume) =>
 			_bgmModule.TryGetAudioMixerVolume(parameter, out volume);
 
-		public bool CheckHasBgmDataIdInConfig(string voiceDataId) =>
+		public virtual bool CheckHasBgmDataIdInConfig(string voiceDataId) =>
 			_bgmModule.CheckIsAudioDataIdInConfig(voiceDataId);
 
-		public bool CheckHasBgm(string bgmId) =>
+		public virtual bool CheckHasBgm(string bgmId) =>
 			_bgmModule.TryGetAudioReadModel(bgmId, out _);
 
-		public bool CheckIsBgmPlaying(string bgmId) =>
+		public virtual bool CheckIsBgmPlaying(string bgmId) =>
 			_bgmModule.CheckIsPlaying(bgmId);
 
-		public bool TryGetBgmReadModel(string bgmId, out IAudioReadModel bgmReadModel) =>
+		public virtual bool TryGetBgmReadModel(string bgmId, out IAudioReadModel bgmReadModel) =>
 			_bgmModule.TryGetAudioReadModel(bgmId, out bgmReadModel);
 
-		public bool TryGetBgmVolume(string bgmId, out float volume) =>
+		public virtual bool TryGetBgmVolume(string bgmId, out float volume) =>
 			_bgmModule.TryGetAudioVolume(bgmId, out volume);
 
-		public bool TryGetBgmIsOverridable(string bgmId, out bool isOverridable) =>
+		public virtual bool TryGetBgmIsOverridable(string bgmId, out bool isOverridable) =>
 			_bgmModule.TryGetAudioIsOverridable(bgmId, out isOverridable);
 
 		#endregion
@@ -150,87 +153,87 @@ namespace CizaAudioModule
 
 		#region Sfx
 
-		public float DefaultSfxAudioMixerVolume =>
+		public virtual float DefaultSfxAudioMixerVolume =>
 			_sfxModule.DefaultAudioMixerVolume;
 
-		public bool TryGetSfxMixerVolume(out float volume) =>
+		public virtual bool TryGetSfxMixerVolume(out float volume) =>
 			_sfxModule.TryGetAudioMixerVolume(out volume);
 
-		public bool TryGetSfxMixerVolume(string parameter, out float volume) =>
+		public virtual bool TryGetSfxMixerVolume(string parameter, out float volume) =>
 			_sfxModule.TryGetAudioMixerVolume(parameter, out volume);
 
-		public bool CheckHasSfxDataIdInConfig(string sfxDataId) =>
+		public virtual bool CheckHasSfxDataIdInConfig(string sfxDataId) =>
 			_sfxModule.CheckIsAudioDataIdInConfig(sfxDataId);
 
-		public bool CheckHasSfx(string sfxId) =>
+		public virtual bool CheckHasSfx(string sfxId) =>
 			_sfxModule.TryGetAudioReadModel(sfxId, out _);
 
-		public bool CheckIsSfxPlaying(string sfxId) =>
+		public virtual bool CheckIsSfxPlaying(string sfxId) =>
 			_sfxModule.CheckIsPlaying(sfxId);
 
-		public bool CheckIsSfxPause(string sfxId) =>
+		public virtual bool CheckIsSfxPause(string sfxId) =>
 			_sfxModule.CheckIsPause(sfxId);
 
-		public float GetSfxDuration(string sfxDataId) =>
+		public virtual float GetSfxDuration(string sfxDataId) =>
 			_sfxModule.GetDuration(sfxDataId);
 
-		public bool TryGetSfxReadModel(string sfxId, out IAudioReadModel sfxReadModel) =>
+		public virtual bool TryGetSfxReadModel(string sfxId, out IAudioReadModel sfxReadModel) =>
 			_sfxModule.TryGetAudioReadModel(sfxId, out sfxReadModel);
 
-		public bool TryGetSfxVolume(string sfxId, out float volume) =>
+		public virtual bool TryGetSfxVolume(string sfxId, out float volume) =>
 			_sfxModule.TryGetAudioVolume(sfxId, out volume);
 
-		public bool TryGetSfxIsOverridable(string sfxId, out bool isOverridable) =>
+		public virtual bool TryGetSfxIsOverridable(string sfxId, out bool isOverridable) =>
 			_sfxModule.TryGetAudioIsOverridable(sfxId, out isOverridable);
 
 		#endregion
 
 		#region Voice
 
-		public float DefaultVoiceAudioMixerVolume =>
+		public virtual float DefaultVoiceAudioMixerVolume =>
 			_voiceModule.DefaultAudioMixerVolume;
 
-		public bool TryGetVoiceMixerVolume(out float volume) =>
+		public virtual bool TryGetVoiceMixerVolume(out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(out volume);
 
-		public bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
+		public virtual bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
 			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
 
-		public bool GetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
+		public virtual bool GetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
 			_voiceModule.GetExtraChannelDefaultAudioMixerVolume(out volume);
 
-		public bool TryGetVoiceExtraChannelMixerVolume(out float volume) =>
+		public virtual bool TryGetVoiceExtraChannelMixerVolume(out float volume) =>
 			_voiceModule.TryGetExtraChannelAudioMixerVolume(out volume);
 
-		public bool GetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
+		public virtual bool GetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
 			_voiceModule.GetChannelDefaultAudioMixerVolume(channelDataId, out volume);
 
-		public bool TryGetVoiceChannelMixerVolume(string channelDataId, out float volume) =>
+		public virtual bool TryGetVoiceChannelMixerVolume(string channelDataId, out float volume) =>
 			_voiceModule.TryGetChannelAudioMixerVolume(channelDataId, out volume);
 
 
-		public bool CheckHasVoiceDataIdInConfig(string voiceDataId) =>
+		public virtual bool CheckHasVoiceDataIdInConfig(string voiceDataId) =>
 			_voiceModule.CheckIsAudioDataIdInConfig(voiceDataId);
 
-		public bool CheckHasVoice(string voiceId) =>
+		public virtual bool CheckHasVoice(string voiceId) =>
 			_voiceModule.TryGetAudioReadModel(voiceId, out _);
 
-		public bool CheckIsVoicePlaying(string voiceId) =>
+		public virtual bool CheckIsVoicePlaying(string voiceId) =>
 			_voiceModule.CheckIsPlaying(voiceId);
 
-		public bool CheckIsVoicePause(string voiceId) =>
+		public virtual bool CheckIsVoicePause(string voiceId) =>
 			_voiceModule.CheckIsPause(voiceId);
 
-		public float GetVoiceDuration(string voiceDataId) =>
+		public virtual float GetVoiceDuration(string voiceDataId) =>
 			_voiceModule.GetDuration(voiceDataId);
 
-		public bool TryGetVoiceReadModel(string voiceId, out IAudioReadModel voiceReadModel) =>
+		public virtual bool TryGetVoiceReadModel(string voiceId, out IAudioReadModel voiceReadModel) =>
 			_voiceModule.TryGetAudioReadModel(voiceId, out voiceReadModel);
 
-		public bool TryGetVoiceVolume(string voiceId, out float volume) =>
+		public virtual bool TryGetVoiceVolume(string voiceId, out float volume) =>
 			_voiceModule.TryGetAudioVolume(voiceId, out volume);
 
-		public bool TryGetVoiceIsOverridable(string voiceId, out bool isOverridable) =>
+		public virtual bool TryGetVoiceIsOverridable(string voiceId, out bool isOverridable) =>
 			_voiceModule.TryGetAudioIsOverridable(voiceId, out isOverridable);
 
 		#endregion
@@ -322,7 +325,7 @@ namespace CizaAudioModule
 			_voiceModule.Tick(deltaTime);
 		}
 
-		public void SetMasterVolume(float volume)
+		public virtual void SetMasterVolume(float volume)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
@@ -336,7 +339,7 @@ namespace CizaAudioModule
 				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
 		}
 
-		public async Awaitable StopAllAsync(float fadeTime = 0, AsyncToken asyncToken = default)
+		public virtual async Awaitable StopAllAsync(float fadeTime = 0, AsyncToken asyncToken = default)
 		{
 			var awaitables = new List<Awaitable>();
 			awaitables.Add(StopAllBgmAsync(fadeTime, asyncToken));
@@ -348,208 +351,208 @@ namespace CizaAudioModule
 
 		#region Bgm
 
-		public void SetBgmDefaultVolume() =>
+		public virtual void SetBgmDefaultVolume() =>
 			_bgmModule.SetDefaultVolume();
 
-		public void SetBgmVolume(float volume) =>
+		public virtual void SetBgmVolume(float volume) =>
 			_bgmModule.SetVolume(volume);
 
-		public Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken) =>
+		public virtual Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken) =>
 			_bgmModule.LoadAssetAsync(bgmDataId, errorMessage, asyncToken);
 
-		public void UnloadBgmAsset(string bgmDataId) =>
+		public virtual void UnloadBgmAsset(string bgmDataId) =>
 			_bgmModule.UnloadAsset(bgmDataId);
 
 
-		public string SpawnBgm(string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnBgm(string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_bgmModule.Spawn(bgmDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public string SpawnBgm(string bgmDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnBgm(string bgmDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_bgmModule.Spawn(bgmDataId, string.Empty, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnBgm(bool isCustomBgmId, string bgmId, string bgmDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_bgmModule.Spawn(isCustomBgmId, bgmId, bgmDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, null, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlayBgmAsync(string bgmDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_bgmModule.PlayAsync(bgmDataId, userId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
-		public Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlayBgmAsync(string bgmDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_bgmModule.PlayAsync(bgmDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
-		public Awaitable RestartBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable RestartBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.RestartAsync(bgmId, fadeTime, asyncToken);
 
 
-		public Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifyBgmAsync(string bgmId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ModifyAsync(bgmId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifyBgmAsync(string bgmId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifyBgmAsync(string bgmId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ModifyAsync(bgmId, volume, fadeTime, asyncToken);
 
-		public void SetBgmTime(string bgmId, float time, bool isSyncTime) =>
+		public virtual void SetBgmTime(string bgmId, float time, bool isSyncTime) =>
 			_bgmModule.SetTime(bgmId, time, isSyncTime);
 
-		public Awaitable PauseBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable PauseBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.PauseAsync(bgmId, fadeTime, asyncToken);
 
-		public Awaitable ResumeBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ResumeBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.ResumeAsync(bgmId, fadeTime, asyncToken);
 
 
-		public Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopBgmAsync(string bgmId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.StopAsync(bgmId, fadeTime, asyncToken);
 
-		public Awaitable StopAllBgmAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopAllBgmAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_bgmModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion
 
 		#region Sfx
 
-		public void SetSfxDefaultVolume() =>
+		public virtual void SetSfxDefaultVolume() =>
 			_sfxModule.SetDefaultVolume();
 
-		public void SetSfxVolume(float volume) =>
+		public virtual void SetSfxVolume(float volume) =>
 			_sfxModule.SetVolume(volume);
 
-		public Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken) =>
+		public virtual Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken) =>
 			_sfxModule.LoadAssetAsync(sfxDataId, errorMessage, asyncToken);
 
-		public void UnloadSfxAsset(string sfxDataId) =>
+		public virtual void UnloadSfxAsset(string sfxDataId) =>
 			_sfxModule.UnloadAsset(sfxDataId);
 
-		public string SpawnSfx(string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnSfx(string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_sfxModule.Spawn(sfxDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public string SpawnSfx(string sfxDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnSfx(string sfxDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_sfxModule.Spawn(sfxDataId, string.Empty, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public string SpawnSfx(bool isCustomSfxId, string sfxId, string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
+		public virtual string SpawnSfx(bool isCustomSfxId, string sfxId, string sfxDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null) =>
 			_sfxModule.Spawn(isCustomSfxId, sfxId, sfxDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId);
 
-		public void DespawnSfx(string sfxId) =>
+		public virtual void DespawnSfx(string sfxId) =>
 			_sfxModule.Despawn(sfxId);
 
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlaySfxAsync(string sfxDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_sfxModule.PlayAsync(sfxDataId, userId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, null, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
-		public Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlaySfxAsync(string sfxDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string callerId = null, AsyncToken asyncToken = default) =>
 			_sfxModule.PlayAsync(sfxDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, string.Empty, callerId, asyncToken);
 
 		public virtual Awaitable RestartSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.RestartAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifySfxAsync(string sfxId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ModifyAsync(sfxId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifySfxAsync(string sfxId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifySfxAsync(string sfxId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ModifyAsync(sfxId, volume, fadeTime, asyncToken);
 
-		public void SetSfxTime(string sfxId, float time, bool isSyncTime) =>
+		public virtual void SetSfxTime(string sfxId, float time, bool isSyncTime) =>
 			_sfxModule.SetTime(sfxId, time, isSyncTime);
 
-		public Awaitable ResumeSfxAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ResumeSfxAsync(string sfxId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ResumeAsync(sfxId, time, fadeTime, asyncToken);
 
-		public Awaitable ResumeSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ResumeSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.ResumeAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable PauseSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable PauseSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.PauseAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable StopSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopSfxAsync(string sfxId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.StopAsync(sfxId, fadeTime, asyncToken);
 
-		public Awaitable StopAllSfxAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopAllSfxAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_sfxModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion
 
 		#region Voice
 
-		public void SetVoiceDefaultVolume() =>
+		public virtual void SetVoiceDefaultVolume() =>
 			_voiceModule.SetDefaultVolume();
 
-		public void SetVoiceVolume(float volume) =>
+		public virtual void SetVoiceVolume(float volume) =>
 			_voiceModule.SetVolume(volume);
 
-		public void SetVoiceVolume(string volumeParameter, float volume) =>
+		public virtual void SetVoiceVolume(string volumeParameter, float volume) =>
 			_voiceModule.SetVolume(volumeParameter, volume);
 
-		public void SetVoiceExtraChannelDefaultVolume() =>
+		public virtual void SetVoiceExtraChannelDefaultVolume() =>
 			_voiceModule.SetExtraChannelDefaultVolume();
 
-		public void SetVoiceExtraChannelVolume(float volume) =>
+		public virtual void SetVoiceExtraChannelVolume(float volume) =>
 			_voiceModule.SetExtraChannelVolume(volume);
 
-		public void SetAllVoiceChannelDefaultVolume() =>
+		public virtual void SetAllVoiceChannelDefaultVolume() =>
 			_voiceModule.SetAllChannelDefaultVolume();
 
-		public void SetVoiceChannelDefaultVolume(string channelDataId) =>
+		public virtual void SetVoiceChannelDefaultVolume(string channelDataId) =>
 			_voiceModule.SetChannelDefaultVolume(channelDataId);
 
-		public void SetVoiceChannelVolume(string channelDataId, float volume) =>
+		public virtual void SetVoiceChannelVolume(string channelDataId, float volume) =>
 			_voiceModule.SetChannelVolume(channelDataId, volume);
 
 
-		public Awaitable LoadVoiceAssetAsync(string voiceDataId, string errorMessage, AsyncToken asyncToken = default) =>
+		public virtual Awaitable LoadVoiceAssetAsync(string voiceDataId, string errorMessage, AsyncToken asyncToken = default) =>
 			_voiceModule.LoadAssetAsync(voiceDataId, errorMessage, asyncToken);
 
-		public void UnloadVoiceAsset(string voiceDataId) =>
+		public virtual void UnloadVoiceAsset(string voiceDataId) =>
 			_voiceModule.UnloadAsset(voiceDataId);
 
-		public string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
+		public virtual string SpawnVoice(string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
 			_voiceModule.Spawn(voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId);
 
-		public string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
+		public virtual string SpawnVoice(string voiceDataId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
 			_voiceModule.Spawn(voiceDataId, string.Empty, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId);
 
-		public string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
+		public virtual string SpawnVoice(bool isCustomVoiceId, string voiceId, string voiceDataId, string userId, float volume = 1, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null) =>
 			_voiceModule.Spawn(isCustomVoiceId, voiceId, voiceDataId, userId, volume, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId);
 
 
-		public void DespawnVoice(string voiceId) =>
+		public virtual void DespawnVoice(string voiceId) =>
 			_voiceModule.Despawn(voiceId);
 
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlayVoiceAsync(string voiceDataId, string userId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default) =>
 			_voiceModule.PlayAsync(voiceDataId, userId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId, asyncToken);
 
-		public Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default) =>
+		public virtual Awaitable<string> PlayVoiceAsync(string voiceDataId, float volume = 1, float fadeTime = 0, bool isLoop = false, Transform parent = null, Vector3 position = default, bool isOverridable = false, bool isAutoDespawn = true, bool isRestrictContinuousPlay = true, bool isSyncTime = false, bool isRecord = false, string channelDataId = null, string callerId = null, AsyncToken asyncToken = default) =>
 			_voiceModule.PlayAsync(voiceDataId, volume, fadeTime, isLoop, parent, position, isOverridable, isAutoDespawn, isRestrictContinuousPlay, isSyncTime, isRecord, channelDataId, callerId, asyncToken);
 
 		public virtual Awaitable RestartVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.RestartAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifyVoiceAsync(string voiceId, float volume, bool isLoop, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ModifyAsync(voiceId, volume, isLoop, fadeTime, asyncToken);
 
-		public Awaitable ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ModifyVoiceAsync(string voiceId, float volume, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ModifyAsync(voiceId, volume, fadeTime, asyncToken);
 
-		public void SetVoiceTime(string voiceId, float time, bool isSyncTime) =>
+		public virtual void SetVoiceTime(string voiceId, float time, bool isSyncTime) =>
 			_voiceModule.SetTime(voiceId, time, isSyncTime);
 
-		public Awaitable PauseVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable PauseVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.PauseAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ResumeVoiceAsync(string voiceId, float time, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ResumeAsync(voiceId, time, fadeTime, asyncToken);
 
-		public Awaitable ResumeVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable ResumeVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.ResumeAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopVoiceAsync(string voiceId, float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.StopAsync(voiceId, fadeTime, asyncToken);
 
-		public Awaitable StopAllVoiceAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
+		public virtual Awaitable StopAllVoiceAsync(float fadeTime = 0, AsyncToken asyncToken = default) =>
 			_voiceModule.StopAllAsync(fadeTime, asyncToken);
 
 		#endregion

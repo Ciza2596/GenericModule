@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,7 +6,8 @@ namespace CizaInputModule.Editor
 {
     public static class CreateObjectMenu
     {
-        public const string INPUT_MODULE_PATH = "InputModule/Prefab/";
+        public const string PROJECT_ID = "InputModule";
+        public const string ROOT_PATH = "Prefab";
 
         public const string PLAYER_INPUT_MANAGER = "PlayerInputManager";
 
@@ -47,7 +49,7 @@ namespace CizaInputModule.Editor
 
         private static void CreateObject(string dataId)
         {
-            var prefab = Resources.Load<GameObject>(INPUT_MODULE_PATH + dataId);
+            var prefab = Resources.Load<GameObject>(Path.Combine(PROJECT_ID, ROOT_PATH, dataId));
             var uiObject = Object.Instantiate(prefab, Selection.activeTransform);
             uiObject.name = dataId;
         }

@@ -1,0 +1,27 @@
+﻿.enabler{
+    margin: var(--unity-base-field-margin);
+}
+
+.enabler Toggle{
+    margin: 2px 0 3px 0;
+}
+
+
+.enabler PropertyField {
+    margin: 1px 0 1px 0;
+}
+
+.enabler PropertyField > * {
+    margin: 0;
+}
+
+.enabler PropertyField > * > Label {
+    margin: 0;
+    padding: 0;
+}
+
+.enabler .value-container{
+    flex-grow: 1;
+    justify-content: center;
+    padding-left: 8px;
+}

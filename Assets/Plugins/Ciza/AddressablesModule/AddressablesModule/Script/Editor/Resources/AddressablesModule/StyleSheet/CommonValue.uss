@@ -1,0 +1,35 @@
+﻿* {
+    --common-element-width: 120px;
+    --common-element-width-larger: 160px;
+    --common-element-width-largest: 200px;
+    --common-element-height: 20px;
+    --common-element-height-larger: 25px;
+    --common-element-height-largest: 30px;
+
+
+    --common-border-width: 1px;
+    --common-border-inverse-width: -1px;
+    --common-border-radius: 3px;
+    
+    --common-padding-box: 2px;
+
+    --common-indent-left: 10px;
+    --common-indent-left-negative: -10px;
+
+    --common-space-smallest: 2px;
+    --common-space-smaller: 5px;
+    --common-space-small: 10px;
+    --common-space-default: 20px;
+
+    --list-head-size: 22px;
+    --list-head-image-size: 16px;
+    --list-head-image-margin: 2px;
+    --list-head-image-margin-larger: 3px;
+
+    --list-body-padding: 5px 7px 5px 5px;
+    --list-body-margins: 2px;
+
+    --list-drop-size: 6px;
+    
+    --unity-base-field-margin: 1px -2px 1px 3px;
+}

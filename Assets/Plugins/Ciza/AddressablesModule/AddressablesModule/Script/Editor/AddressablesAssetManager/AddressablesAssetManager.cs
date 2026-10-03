@@ -84,7 +84,7 @@ namespace CizaAddressablesModule.Editor
 			}
 		}
 
-		public void Add(string groupName, int bundleModeIndex, string assetPath, string labelsString, string addressPrefix, string addressSuffix)
+		public void Add(string groupName, int bundleModeIndex, string assetPath, string labelsString, string addressTrimPrefix, string addressTrimSuffix, string addressAddPrefix, string addressAddSuffix)
 		{
 			var settings = AddressableAssetSettingsDefaultObject.Settings;
 			if (string.IsNullOrWhiteSpace(groupName))
@@ -105,8 +105,16 @@ namespace CizaAddressablesModule.Editor
 					var obj = AssetDatabase.LoadAssetAtPath<Object>(path);
 					if (obj is DefaultAsset)
 						continue;
-
-					var address    = addressPrefix + obj.name + addressSuffix;
+					
+					var address = obj.name;
+					
+					if (!string.IsNullOrEmpty(addressTrimPrefix) && address.StartsWith(addressTrimPrefix, StringComparison.OrdinalIgnoreCase))
+						address = address[addressTrimPrefix.Length..];
+					if (!string.IsNullOrEmpty(addressTrimSuffix) && address.EndsWith(addressTrimSuffix, StringComparison.OrdinalIgnoreCase))
+						address = address[..^addressTrimSuffix.Length];
+					
+					address = addressAddPrefix + address + addressAddSuffix;
+					
 					var instanceId = obj.GetInstanceID();
 					AddEntryToAddressables(groupName, address, instanceId, labels);
 				}
@@ -116,7 +124,7 @@ namespace CizaAddressablesModule.Editor
 				var obj = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
 				if (obj is DefaultAsset)
 					return;
-				var address    = addressPrefix + obj.name + addressSuffix;
+				var address    = addressAddPrefix + obj.name + addressAddSuffix;
 				var instanceId = obj.GetInstanceID();
 				AddEntryToAddressables(groupName, address, instanceId, labels);
 			}

@@ -1,77 +1,63 @@
+using System;
 using System.IO;
 using System.Text;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace CizaAddressablesModule.Editor
 {
     public class AddressablesAssetManagerWindow : EditorWindow
     {
-        //private variable
-        private readonly string[] _toolbarTexts = { "Export", "Import", "Add" };
-        private int _toolbarIndex = 0;
-
         private AddressablesAssetManager _addressablesAssetManager = new AddressablesAssetManager();
 
         private const string ADDRESSABLES_ASSET_MANAGER_EDITOR = "AddressablesAssetManagerEditor.";
 
+        protected readonly string _tabIndexKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(TabIndex)}";
+
+        protected virtual int TabIndex
+        {
+            get => EditorPrefs.GetInt(_tabIndexKey, 0);
+            set => EditorPrefs.SetInt(_tabIndexKey, value);
+        }
+        
+
         private readonly string _configNameKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ConfigName)}";
 
-        private string ConfigName
+        protected virtual string ConfigName
         {
-            get
-            {
-                var value = PlayerPrefs.GetString(_configNameKey);
-                return string.IsNullOrWhiteSpace(value) ? "AddressablesAssetConfig.txt" : value;
-            }
-
-            set
-            {
-                PlayerPrefs.SetString(_configNameKey, value);
-                PlayerPrefs.Save();
-            }
+            get => EditorPrefs.GetString(_configNameKey, "AddressablesAssetConfig.txt");
+            set => EditorPrefs.SetString(_configNameKey, value);
         }
 
         private readonly string _exportPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ExportPath)}";
 
-        private string ExportPath
+        protected virtual string ExportPath
         {
-            get
-            {
-                var value = PlayerPrefs.GetString(_exportPathKey);
-                return string.IsNullOrWhiteSpace(value) ? Application.dataPath : value;
-            }
+            get => EditorPrefs.GetString(_exportPathKey, Application.dataPath);
 
-            set
-            {
-                PlayerPrefs.SetString(_exportPathKey, value);
-                PlayerPrefs.Save();
-            }
+            set => EditorPrefs.SetString(_exportPathKey, value);
         }
 
         private readonly string _importTextGuidKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(ImportTextGuid)}";
 
-        private string ImportTextGuid
+        protected virtual string ImportTextGuid
         {
-            get => PlayerPrefs.GetString(_importTextGuidKey);
-            set
-            {
-                PlayerPrefs.SetString(_importTextGuidKey, value);
-                PlayerPrefs.Save();
-            }
+            get => EditorPrefs.GetString(_importTextGuidKey, string.Empty);
+            set => EditorPrefs.SetString(_importTextGuidKey, value);
         }
 
         private TextAsset _importText;
 
-        private TextAsset ImportText
+        protected virtual TextAsset ImportText
         {
             get
             {
-                if (_importText is null)
-                    _importText = GetObject<TextAsset>(ImportTextGuid);
-
+                _importText ??= GetObject<TextAsset>(ImportTextGuid);
                 return _importText;
             }
             set
@@ -81,183 +67,111 @@ namespace CizaAddressablesModule.Editor
                 ImportTextGuid = guid;
             }
         }
-
-        private readonly string _assetFolderPathKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AssetPath)}";
-
-        private string AssetPath
-        {
-            get => PlayerPrefs.GetString(_assetFolderPathKey);
-
-            set
-            {
-                PlayerPrefs.SetString(_assetFolderPathKey, value);
-                PlayerPrefs.Save();
-            }
-        }
-
-        private readonly string _groupNameKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(GroupName)}";
-
-        private string GroupName
-        {
-            get => PlayerPrefs.GetString(_groupNameKey);
-
-            set
-            {
-                PlayerPrefs.SetString(_groupNameKey, value);
-                PlayerPrefs.Save();
-            }
-        }
-
-        private string _bundleModeKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(BundleMode)}";
-
-        private BundledAssetGroupSchema.BundlePackingMode BundleMode
-        {
-            get => (BundledAssetGroupSchema.BundlePackingMode)PlayerPrefs.GetInt(_bundleModeKey);
-
-            set
-            {
-                PlayerPrefs.SetInt(_bundleModeKey, (int)value);
-                PlayerPrefs.Save();
-            }
-        }
-
-        private readonly string _labelsStringKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(LabelsString)}";
-
-        private string LabelsString
-        {
-            get => PlayerPrefs.GetString(_labelsStringKey);
-
-            set
-            {
-                PlayerPrefs.SetString(_labelsStringKey, value);
-                PlayerPrefs.Save();
-            }
-        }
-
-        private readonly string _addressPrefixKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressPrefix)}";
-
-        private string AddressPrefix
-        {
-            get => PlayerPrefs.GetString(_addressPrefixKey);
-
-            set
-            {
-                PlayerPrefs.SetString(_addressPrefixKey, value);
-                PlayerPrefs.Save();
-            }
-        }
-
-        private readonly string _addressSuffixKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}{nameof(AddressSuffix)}";
-
-        private string AddressSuffix
-        {
-            get => PlayerPrefs.GetString(_addressSuffixKey);
-
-            set
-            {
-                PlayerPrefs.SetString(_addressSuffixKey, value);
-                PlayerPrefs.Save();
-            }
-        }
+        
+        private readonly string _addAddressableDataListKey = $"{ADDRESSABLES_ASSET_MANAGER_EDITOR}AddAddressableDataList";
+        
+        protected virtual string[] USSPaths => new[] { "AddressablesAssetManager" };
+        
+        protected virtual string[] RootClasses => new[] { "addressablesassetmanager" };
 
         //private method
         [MenuItem("Tools/Ciza/AddressablesAssetManager")]
         private static void ShowWindow() => GetWindow<AddressablesAssetManagerWindow>("AddressablesAssetManager");
 
-        private void OnGUI()
+        protected void CreateGUI()
         {
-            ToolbarArea();
+            var root = rootVisualElement;
+            
+            foreach (var sheet in StyleSheetUtils.GetStyleSheets(USSPaths))
+                root.styleSheets.Add(sheet);
+            foreach (var c in RootClasses)
+                root.AddToClassList(c);
+            
+            var tabView = new TabView { selectedTabIndex = TabIndex };
+            tabView.RegisterCallback<ChangeEvent<int>>(@event => TabIndex = @event.newValue);
 
-            switch (_toolbarIndex)
+            var exportTab = CreateTab("Export");
+            SetupExport(exportTab.contentContainer);
+            tabView.Add(exportTab);
+            
+            var importTab = CreateTab("Import");
+            SetupImport(importTab.contentContainer);
+            tabView.Add(importTab);
+            
+            var addTab = CreateTab("Add");
+            SetupAdd(addTab.contentContainer);
+            tabView.Add(addTab);
+            
+            root.Add(tabView);
+        }
+        
+        protected virtual Tab CreateTab(string tabName)
+        {
+            var tab = new Tab(tabName);
+            tab.contentContainer.AddToClassList(AlignLabel.UNITY_INSPECTOR_CLASS);
+            tab.contentContainer.AddToClassList(AlignLabel.UNITY_INSPECTOR_ELEMENT_CLASS);
+            tab.contentContainer.SetPadding(20, 20, 10, 10);
+            return tab;
+        }
+
+        protected virtual TextField CreateTextField(string label, string value, Action<string> onValueChanged)
+        {
+            var textField = new TextField(label);
+            textField.AddToClassList(AlignLabel.UNITY_ALIGN_FIELD_CLASS);
+            textField.labelElement.style.paddingLeft = 0;
+            textField.SetValueWithoutNotify(value);
+            textField.RegisterValueChangedCallback(@event => onValueChanged?.Invoke(@event.newValue));
+            return textField;
+        }
+
+        protected virtual Button CreateButton(string text, Action onClick)
+        {
+            var button = new Button(onClick) {text = text};
+            button.AddToClassList(AlignLabel.UNITY_ALIGN_FIELD_CLASS);
+            return button;
+        }
+        
+        protected virtual void SetupExport(VisualElement container)
+        {
+            var configNameField = CreateTextField("Config Name", ConfigName, value => ConfigName = value);
+            container.Add(configNameField);
+
+            var exportPathField = CreateTextField("Export Path", ExportPath, value => ExportPath = value);
+            var exportPathButton = CreateButton("Select", () =>
             {
-                case 0:
-                    ExportArea();
-                    break;
-                case 1:
-                    ImportArea();
-                    break;
-                case 2:
-                    AddArea();
-                    break;
-            }
+                ExportPath = EditorUtility.OpenFolderPanel("Folder Path", ExportPath, "");
+                exportPathField.SetValueWithoutNotify(ExportPath);
+            });
+            exportPathField.Add(exportPathButton);
+            container.Add(exportPathField);
+            
+            container.Add(new SmallSpaceVE());
+            var exportButton = CreateButton("Export", Export);
+            container.Add(exportButton);
         }
 
-        private void ToolbarArea()
+        protected virtual void SetupImport(VisualElement container)
         {
-            GUILayout.BeginHorizontal();
-            _toolbarIndex = GUILayout.Toolbar(_toolbarIndex, _toolbarTexts);
-            GUILayout.EndHorizontal();
+            var configField = new ObjectField("Config") { objectType = typeof(TextAsset), allowSceneObjects = false };
+            configField.AddToClassList(AlignLabel.UNITY_ALIGN_FIELD_CLASS);
+            configField.labelElement.style.paddingLeft = 0;
+            configField.SetValueWithoutNotify(ImportText);
+            configField.RegisterValueChangedCallback(@event => ImportText = @event.newValue as TextAsset);
+            container.Add(configField);
+            
+            container.Add(new SmallSpaceVE());
+            var importButton = CreateButton("Import", Import);
+            container.Add(importButton);
         }
 
-        private void ExportArea()
+        protected virtual void SetupAdd(VisualElement container)
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space(0.5f);
-
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.Space();
-            ConfigName = EditorGUILayout.TextField("Config Name", ConfigName);
-            ExportPath = GetFolderPathAndOpenWindow("Export Path", ExportPath);
-            EditorGUILayout.Space();
-
-            if (GUILayout.Button("Export"))
-                Export();
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(0.5f);
-            EditorGUILayout.EndHorizontal();
+            var addAddressableListVE = new AddAddressableListVE(_addAddressableDataListKey, _addressablesAssetManager);
+            addAddressableListVE.Initialize();
+            container.Add(addAddressableListVE);
         }
-
-        private void ImportArea()
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space(0.5f);
-
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.Space();
-            ImportText = EditorGUILayout.ObjectField("Config", ImportText, typeof(TextAsset), false) as TextAsset;
-            EditorGUILayout.Space();
-
-            if (GUILayout.Button("Import"))
-                Import();
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(0.5f);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void AddArea()
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space(0.5f);
-
-            EditorGUILayout.BeginVertical();
-
-            EditorGUILayout.Space();
-            AssetPath = GetAssetFolderPathAndOpenWindow("Asset Folder Path", AssetPath);
-            EditorGUILayout.Space();
-
-            GroupName = EditorGUILayout.TextField("Group Name", GroupName);
-            BundleMode = (BundledAssetGroupSchema.BundlePackingMode)EditorGUILayout.EnumPopup("Bundle Mode", BundleMode);
-            LabelsString = EditorGUILayout.TextField("Labels", LabelsString);
-            EditorGUILayout.Space();
-
-            AddressPrefix = EditorGUILayout.TextField("Address Prefix", AddressPrefix);
-            AddressSuffix = EditorGUILayout.TextField("Address Suffix", AddressSuffix);
-            EditorGUILayout.Space();
-
-            if (GUILayout.Button("Add"))
-                Add();
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(0.5f);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void Export()
+        
+        protected virtual  void Export()
         {
             var content = _addressablesAssetManager.Export();
             CreateAndWriteFile(content);
@@ -265,7 +179,7 @@ namespace CizaAddressablesModule.Editor
             AssetDatabase.Refresh();
         }
 
-        private void Import()
+        protected virtual  void Import()
         {
             if (ImportText is null)
             {
@@ -278,10 +192,7 @@ namespace CizaAddressablesModule.Editor
             AssetDatabase.Refresh();
         }
 
-        private void Add() =>
-            _addressablesAssetManager.Add(GroupName, (int)BundleMode, AssetPath, LabelsString, AddressPrefix, AddressSuffix);
-
-        private void CreateAndWriteFile(string content = null)
+        protected virtual void CreateAndWriteFile(string content = null)
         {
             var fullPath = GetFullPath();
             var fileStream = new FileStream(fullPath, FileMode.Create);
@@ -292,7 +203,7 @@ namespace CizaAddressablesModule.Editor
             fileStream.Close();
         }
 
-        private void WriteFile(FileStream fileStream, string content)
+        protected virtual void WriteFile(FileStream fileStream, string content)
         {
             var charArray = content.ToCharArray();
             var byteArray = new byte[Encoding.UTF8.GetMaxByteCount(charArray.Length)];
@@ -304,7 +215,7 @@ namespace CizaAddressablesModule.Editor
             fileStream.Write(byteArray, 0, bytesUsed);
         }
 
-        private string GetFullPath()
+        protected virtual string GetFullPath()
         {
             Assert.IsTrue(!string.IsNullOrWhiteSpace(ConfigName), "[AddressablesAssetManagerEditor::GetFullPath] FileName is null.");
 
@@ -312,58 +223,11 @@ namespace CizaAddressablesModule.Editor
             return Path.Combine(exportPath, ConfigName);
         }
 
-        private string GetFolderPathAndOpenWindow(string label, string originPath)
-        {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                var path = EditorGUILayout.TextField(label, originPath);
-                if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
-                {
-                    path = EditorUtility.OpenFolderPanel("Folder Path", originPath, "");
-                    path = GetAssetPathWithoutDataPath(path);
-                }
-
-                return string.IsNullOrWhiteSpace(path) ? originPath : path;
-            }
-        }
-
-        private string GetAssetFolderPathAndOpenWindow(string label, string originPath)
-        {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                var path = EditorGUILayout.TextField(label, originPath);
-                if (GUILayout.Button("Folder", EditorStyles.miniButton, GUILayout.Width(60)))
-                {
-                    path = EditorUtility.OpenFolderPanel("Folder Path", originPath, "");
-                    path = GetAssetPathWithoutDataPath(path);
-                }
-                
-                if (GUILayout.Button("File", EditorStyles.miniButton, GUILayout.Width(60)))
-                {
-                    path = EditorUtility.OpenFilePanel("File Path", originPath, "");
-                    path = GetAssetPathWithoutDataPath(path);
-                }
-
-                return string.IsNullOrWhiteSpace(path) ? originPath : path;
-            }
-        }
-
         private T GetObject<T>(string guid) where T : Object
         {
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             var obj = AssetDatabase.LoadAssetAtPath<T>(assetPath);
             return obj;
-        }
-
-        private string GetAssetPathWithoutDataPath(string path)
-        {
-            var dataPath = Application.dataPath;
-            dataPath = dataPath.Replace("Assets", "");
-
-            if (path.Contains(dataPath))
-                path = path.Replace(dataPath, "");
-
-            return path;
         }
 
         private string GetAssetPathWithDataPath(string path)

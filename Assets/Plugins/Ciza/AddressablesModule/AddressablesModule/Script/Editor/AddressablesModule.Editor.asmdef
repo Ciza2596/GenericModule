@@ -2,6 +2,7 @@
     "name": "AddressablesModule.Editor",
     "rootNamespace": "CizaAddressablesModule.Editor",
     "references": [
+        "AddressablesModule",
         "Unity.Addressables",
         "Unity.Addressables.Editor"
     ],

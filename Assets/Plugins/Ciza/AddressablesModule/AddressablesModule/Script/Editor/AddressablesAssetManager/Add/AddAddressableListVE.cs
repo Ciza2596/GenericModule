@@ -33,24 +33,16 @@ namespace CizaAddressablesModule.Editor
         
         protected virtual string[] GetFilteredAssetPaths(FileFilter[] fileFilters, string[] paths)
         {
-            paths = paths.Where(AssetDatabase.IsValidFolder).ToArray();
+            var inputPaths = (paths ?? Array.Empty<string>()).Where(path => !string.IsNullOrWhiteSpace(path)).Select(path => path.Replace('\\', '/').TrimEnd('/')).Distinct().ToArray();
+            var folders = inputPaths.Where(AssetDatabase.IsValidFolder).ToArray();
+            var results = inputPaths.Where(path => !AssetDatabase.IsValidFolder(path) && !string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(path))).ToList();
+            
+            if (folders.Length > 0)
+                results.AddRange(AssetDatabase.FindAssets(string.Empty, folders).Select(AssetDatabase.GUIDToAssetPath).Where(path => !AssetDatabase.IsValidFolder(path)));
 
-            var results = new List<string>();
-            if (fileFilters is not { Length: > 0 })
-                results.AddRange(AssetDatabase.FindAssets(string.Empty, paths).Select(AssetDatabase.GUIDToAssetPath).Where(Path.HasExtension));
-            else
-            {
-                foreach (var filter in fileFilters)
-                {
-                    var filterString = $"{filter.NamePrefix} {filter.NameSuffix} ";
-                    var assetPaths = AssetDatabase.FindAssets(filterString.Trim(), paths).Select(AssetDatabase.GUIDToAssetPath);
-
-                    var filteredPaths = assetPaths.Where(path => CheckIsFilePathMatched(path, filter));
-                    results.AddRange(filteredPaths);
-                }
-            }
-
-            return results.Distinct().ToArray();
+            var filters = (fileFilters ?? Array.Empty<FileFilter>()).Where(filter => filter != null).ToArray();
+            
+            return results.Distinct().Where(path => filters.Length == 0 || filters.Any(filter => CheckIsFilePathMatched(path, filter))).ToArray();
 
             bool CheckIsFilePathMatched(string path, FileFilter filter)
             {
@@ -72,6 +64,8 @@ namespace CizaAddressablesModule.Editor
         public AddAddressableListVE(string addAddressableDatasKey, AddressablesAssetManager addressablesAssetManager) : base(addAddressableDatasKey ?? "CizaAddressablesModule.AddressablesAssetManager.AddAddressableDatas") =>
             _addressablesAssetManager = addressablesAssetManager;
 
+        // PUBLIC METHOD: ----------------------------------------------------------------------
+
         public virtual void AddAddressable(AddAddressableData addAddressableData)
         {
             var assetPaths = GetFilteredAssetPaths(addAddressableData.FileFilters, addAddressableData.Paths);
@@ -86,7 +80,5 @@ namespace CizaAddressablesModule.Editor
             foreach (var assetPath in assetPaths) 
                 _addressablesAssetManager.Add(groupName, bundleModeIndex, assetPath, labels, addressTrimPrefix, addressTrimSuffix, addressAddPrefix, addressAddSuffix);
         }
-        
-        
     }
 }

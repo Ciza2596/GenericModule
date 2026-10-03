@@ -87,8 +87,7 @@ namespace CizaAddressablesModule.Editor
             foreach (var c in RootClasses)
                 root.AddToClassList(c);
             
-            var tabView = new TabView { selectedTabIndex = TabIndex };
-            tabView.RegisterCallback<ChangeEvent<int>>(@event => TabIndex = @event.newValue);
+            var tabView = new TabView();
 
             var exportTab = CreateTab("Export");
             SetupExport(exportTab.contentContainer);
@@ -101,6 +100,9 @@ namespace CizaAddressablesModule.Editor
             var addTab = CreateTab("Add");
             SetupAdd(addTab.contentContainer);
             tabView.Add(addTab);
+
+            tabView.selectedTabIndex = Math.Clamp(TabIndex, 0, 2);
+            tabView.activeTabChanged += (_, _) => TabIndex = tabView.selectedTabIndex;
             
             root.Add(tabView);
         }
@@ -139,7 +141,10 @@ namespace CizaAddressablesModule.Editor
             var exportPathField = CreateTextField("Export Path", ExportPath, value => ExportPath = value);
             var exportPathButton = CreateButton("Select", () =>
             {
-                ExportPath = EditorUtility.OpenFolderPanel("Folder Path", ExportPath, "");
+                var selectedPath = EditorUtility.OpenFolderPanel("Folder Path", ExportPath, "");
+                if (string.IsNullOrWhiteSpace(selectedPath))
+                    return;
+                ExportPath = selectedPath;
                 exportPathField.SetValueWithoutNotify(ExportPath);
             });
             exportPathField.Add(exportPathButton);

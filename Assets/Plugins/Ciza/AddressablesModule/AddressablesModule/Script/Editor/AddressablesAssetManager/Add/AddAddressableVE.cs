@@ -244,6 +244,7 @@ namespace CizaAddressablesModule.Editor
 
 		protected virtual void RefreshBody()
 		{
+			_dataIdField.SetValueWithoutNotify(_addAddressableData?.DataId ?? string.Empty);
 			_groupNameField.SetValueWithoutNotify(_addAddressableData?.GroupName ?? string.Empty);
 			_bundleModeField.SetValueWithoutNotify(_addAddressableData?.BundleMode ?? default);
 			_labelsField.SetValueWithoutNotify(_addAddressableData?.Labels ?? string.Empty);

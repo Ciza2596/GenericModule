@@ -106,14 +106,7 @@ namespace CizaAddressablesModule.Editor
 					if (obj is DefaultAsset)
 						continue;
 					
-					var address = obj.name;
-					
-					if (!string.IsNullOrEmpty(addressTrimPrefix) && address.StartsWith(addressTrimPrefix, StringComparison.OrdinalIgnoreCase))
-						address = address[addressTrimPrefix.Length..];
-					if (!string.IsNullOrEmpty(addressTrimSuffix) && address.EndsWith(addressTrimSuffix, StringComparison.OrdinalIgnoreCase))
-						address = address[..^addressTrimSuffix.Length];
-					
-					address = addressAddPrefix + address + addressAddSuffix;
+					var address = FormatAddress(obj.name, addressTrimPrefix, addressTrimSuffix, addressAddPrefix, addressAddSuffix);
 					
 					var instanceId = obj.GetInstanceID();
 					AddEntryToAddressables(groupName, address, instanceId, labels);
@@ -124,9 +117,19 @@ namespace CizaAddressablesModule.Editor
 				var obj = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
 				if (obj is DefaultAsset)
 					return;
-				var address    = addressAddPrefix + obj.name + addressAddSuffix;
+				var address    = FormatAddress(obj.name, addressTrimPrefix, addressTrimSuffix, addressAddPrefix, addressAddSuffix);
 				var instanceId = obj.GetInstanceID();
 				AddEntryToAddressables(groupName, address, instanceId, labels);
+			}
+			return;
+			
+			string FormatAddress(string source, string trimPrefix, string trimSuffix, string addPrefix, string addSuffix)
+			{
+				if (!string.IsNullOrEmpty(trimPrefix) && source.StartsWith(trimPrefix, StringComparison.OrdinalIgnoreCase))
+					source = source[trimPrefix.Length..];
+				if (!string.IsNullOrEmpty(trimSuffix) && source.EndsWith(trimSuffix, StringComparison.OrdinalIgnoreCase))
+					source = source[..^trimSuffix.Length];
+				return addPrefix + source + addSuffix;
 			}
 		}
 		

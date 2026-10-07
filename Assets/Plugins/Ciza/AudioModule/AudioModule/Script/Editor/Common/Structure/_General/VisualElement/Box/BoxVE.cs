@@ -21,6 +21,12 @@ namespace CizaAudioModule.Editor
 		[NonSerialized]
 		protected readonly Image _headImage = new Image();
 
+		[NonSerialized]
+		protected Func<BImportMenuVE> _createImportMenu;
+
+		[NonSerialized]
+		protected BImportMenuVE _activeImportMenu;
+
 		protected virtual string IsExpandKey => _boxId + "." + nameof(IsExpand);
 
 		protected override string[] USSPaths => new[] { "Box" };
@@ -34,6 +40,7 @@ namespace CizaAudioModule.Editor
 
 		public virtual bool IsAllowContextMenu { get; set; } = true;
 		public virtual bool IsAllowCopyPaste { get; set; } = true;
+		public virtual bool IsAllowImport { get; set; }
 
 		protected virtual Texture2D TriangleDownIcon => DEFAULT_TRIANGLE_DOWN_ICON.Texture;
 		protected virtual Texture2D TriangleRightIcon => DEFAULT_TRIANGLE_RIGHT_ICON.Texture;
@@ -76,6 +83,9 @@ namespace CizaAudioModule.Editor
 			_boxId = boxId;
 			IsAllowCopyPaste = false;
 		}
+
+		public virtual void SetImportMenuFactory(Func<BImportMenuVE> createImportMenu) =>
+			_createImportMenu = createImportMenu;
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
@@ -129,7 +139,21 @@ namespace CizaAudioModule.Editor
 						Content?.Refresh();
 					}
 				}, _ => CopyPasteUtils.CheckCanPaste(Type) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+			}
+
+			if (IsAllowImport && _createImportMenu != null && !ImportMenuWindow.CheckIsOpen(_activeImportMenu))
+			{
+				var hasImportMenuActivatorRect = ImportMenuWindow.TryGetActivatorRect(_head, out var importMenuActivatorRect);
 				populateEvent.menu.AppendSeparator();
+
+				populateEvent.menu.AppendAction("Import", _ =>
+				{
+					if (!hasImportMenuActivatorRect)
+						return;
+
+					_activeImportMenu = _createImportMenu.Invoke();
+					ImportMenuWindow.Open(_head, importMenuActivatorRect, _activeImportMenu);
+				});
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace CizaInputModule.Editor
@@ -8,12 +8,16 @@ namespace CizaInputModule.Editor
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		protected virtual string GetName(SerializedProperty property, VisualElement root) => property.displayName;
+		protected virtual bool IsAllowImport => false;
 
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
-			var root = new BoxVE(property);
+			var root = new BoxVE(property) { IsAllowImport = IsAllowImport };
+			if (root.IsAllowImport)
+				root.SetImportMenuFactory(() => CreateImportMenu(property, root));
+
 			root.Initialize(GetName(property, root), CreateBody(property, root), CreateHeadAdditional(property, root));
 			return root;
 		}
@@ -27,5 +31,7 @@ namespace CizaInputModule.Editor
 			SerializationUtils.CreateChildProperties(content, property, SerializationUtils.ChildrenKinds.ShowLabelsInChildren);
 			return content;
 		}
+
+		protected virtual BImportMenuVE CreateImportMenu(SerializedProperty property, BoxVE root) => null;
 	}
 }

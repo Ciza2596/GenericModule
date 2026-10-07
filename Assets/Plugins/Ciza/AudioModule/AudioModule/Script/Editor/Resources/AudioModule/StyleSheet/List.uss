@@ -30,6 +30,10 @@
     overflow: hidden;
 }
 
+.list-head > TextField > #unity-text-input > TextElement {
+    align-self: center;
+}
+
 .list-head > TextField > Image,
 .list-head > TextField > Button {
     height: var(--list-head-image-size);
@@ -84,21 +88,12 @@
 }
 
 /* ITEM */
-.list-item-drop-above,
-.list-item-drop-below {
+.list-drop-indicator {
     position: absolute;
     width: 100%;
     height: 3px;
     background-color: var(--color-border-active);
     display: none;
-}
-
-.list-item-drop-above {
-    top: -3px;
-}
-
-.list-item-drop-below {
-    bottom: -3px;
 }
 
 .list-item-head {
@@ -135,6 +130,21 @@
 
 .list-item-head > Button:active {
     background-color: var(--color-list-head-press);
+}
+
+.list-item-head > Button > .list-item-page-label {
+    padding: 0 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0.5;
+}
+
+.list-item-head > .list-item-page-label {
+    padding: 0 5px;
+    opacity: 0.5;
+    -unity-text-align: middle-center;
 }
 
 .list-item-head > PropertyField > * {

@@ -56,6 +56,30 @@
     display: flex;
 }
 
+/* Box Import Menu*/
+
+.box-import-menu {
+    flex-shrink: 0;
+    background-color: var(--color-bg-darker);
+    border-color: var(--color-border-default);
+    border-width: var(--common-border-width);
+    padding: var(--common-space-small);
+}
+
+.box-import-menu-additional-fields {
+    flex-direction: column;
+    margin-top: var(--common-space-small);
+}
+
+.box-import-menu-button-container {
+    flex-direction: row;
+    margin-top: var(--common-space-small);
+}
+
+.box-import-menu-button-container Button {
+    flex-grow: 1;
+}
+
 /* Switch Group Box */
 
 .switchgroupbox-root {

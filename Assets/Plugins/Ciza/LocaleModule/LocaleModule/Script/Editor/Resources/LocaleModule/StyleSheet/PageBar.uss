@@ -1,0 +1,33 @@
+.pagebar {
+    margin-bottom: 5px;
+    flex-direction: row;
+    height: var(--list-head-size);
+    flex-shrink: 0;
+}
+
+.pagebar Button {
+    padding: 0;
+    margin: 1px 3px 0 0;
+    height: var(--list-head-size);
+    width: var(--list-head-size);
+    align-items: center;
+    justify-content: center;
+}
+
+.pagebar IntegerField {
+    height: var(--list-head-size);
+    margin: 1px;
+    padding: 0 0 0 5px;
+}
+
+.pagebar IntegerField > #unity-text-input {
+    -unity-text-align: middle-left;
+    overflow: hidden;
+}
+
+.pagebar Label {
+    height: var(--list-head-size);
+    padding: 0;
+    margin: 1px 5px 0 2px;
+    -unity-text-align: middle-left;
+}

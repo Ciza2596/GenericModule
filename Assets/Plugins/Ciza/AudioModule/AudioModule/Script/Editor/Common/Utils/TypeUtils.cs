@@ -1,12 +1,46 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Object = UnityEngine.Object;
 
 namespace CizaAudioModule.Editor
 {
 	public static class TypeUtils
 	{
+		#region Type
+
+		public static Type GetType(Assembly assembly, string name) =>
+			assembly?.GetType(name);
+
+		#endregion
+
+		#region FieldInfo
+
+		public const BindingFlags FIELD_BINDINGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+		public static FieldInfo GetFieldInfo(Type type, string path) =>
+			type?.GetField(path, FIELD_BINDINGS);
+
+		#endregion
+
+		#region PropertyInfo
+
+		public const BindingFlags PROPERTY_BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+		public static PropertyInfo GetPropertyInfo(Type type, string path) =>
+			type?.GetProperty(path, PROPERTY_BINDINGS);
+
+		#endregion
+
+		#region MethodInfo
+
+		public const BindingFlags METHOD_BINDINGS = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+		public static MethodInfo GetMethodInfo(Type type, string name, params Type[] parameterTypes) =>
+			type?.GetMethod(name, METHOD_BINDINGS, null, parameterTypes, null);
+
+		#endregion
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
 		#region Check

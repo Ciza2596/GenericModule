@@ -1,4 +1,4 @@
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace CizaInputModule.Editor
 {
@@ -6,10 +6,10 @@ namespace CizaInputModule.Editor
     {
         int GetItemIndexOf(VisualElement item);
 
-        int ClosestItemIndex(float cursorY);
+        bool TryGetClosestItemIndex(float cursorY, out int itemIndex);
 
         void RefreshItemDragUI(int sourceIndex, int targetIndex);
-        void MoveItems(int sourceIndex, int destinationIndex);
+        void MoveItem(int sourceIndex, int destinationIndex);
         
         void Refresh();
     }

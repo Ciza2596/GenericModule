@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,21 +10,21 @@ namespace CizaAudioModule.Editor
 	public abstract class BListVE<TItemVE> : VisualElement, IListVE where TItemVE : BItemVE
 	{
 		// VARIABLE: -----------------------------------------------------------------------------
+		
 		[NonSerialized]
 		protected readonly List<TItemVE> _itemVEs = new List<TItemVE>();
-
+		
+		[NonSerialized]
+		protected readonly VisualElement _dropIndicator = new VisualElement() { pickingMode = PickingMode.Ignore };
+		
+		protected virtual VisualElement DropIndicatorLayer => this;
+		protected abstract string[] DropIndicatorClasses { get; }
+		
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		[field: NonSerialized]
 		public bool IsInitialized { get; private set; }
-
-		// CONSTRUCTOR: --------------------------------------------------------------------- 
-
-		[Preserve]
-		protected BListVE() { }
-
-		// PUBLIC METHOD: ----------------------------------------------------------------------
-
+		
 		public virtual int GetItemIndexOf(VisualElement item)
 		{
 			for (int i = 0; i < _itemVEs.Count; i++)
@@ -55,46 +55,70 @@ namespace CizaAudioModule.Editor
 			return minIndex;
 		}
 
+		public virtual bool TryGetClosestItemIndex(float cursorY, out int itemIndex)
+		{
+			itemIndex = ClosestItemIndex(cursorY);
+			return itemIndex >= 0;
+		}
+
+		// CONSTRUCTOR: --------------------------------------------------------------------- 
+
+		[Preserve]
+		protected BListVE() { }
+
+		// LIFECYCLE METHOD: ------------------------------------------------------------------
+
+		public virtual void Initialize()
+		{
+			if (IsInitialized)
+				return;
+			
+			foreach (var c in DropIndicatorClasses)
+				_dropIndicator.AddToClassList(c);
+
+			IsInitialized = true;
+			DerivedInitialize();
+			
+			DropIndicatorLayer.Add(_dropIndicator);
+		}
+
+		public abstract void Refresh();
+		protected virtual void DerivedInitialize() { }
+
 		// PUBLIC METHOD: ----------------------------------------------------------------------
 
 		public virtual void RefreshItemDragUI(int sourceIndex, int targetIndex)
 		{
 			var items = _itemVEs;
 			if (items.Count <= 0)
+			{
+				_dropIndicator.style.display = DisplayStyle.None;
 				return;
+			}
 
 			foreach (var item in items)
 				item.DisplayAsNormal();
 
-			if (sourceIndex != -1)
+			if (sourceIndex >= 0 && sourceIndex < items.Count)
 				items[sourceIndex].DisplayAsDrag();
 
-			if (targetIndex != -1)
+			if (targetIndex >= 0 && targetIndex <= items.Count)
 			{
-				if (targetIndex < items.Count)
-					items[targetIndex].DisplayAsTargetAbove();
-
-				else
-					items[^1].DisplayAsTargetBelow();
+				var localY = targetIndex < items.Count ? items[targetIndex].localBound.y : items[^1].localBound.yMax;
+				var point = items[0].ChangeCoordinatesTo(DropIndicatorLayer, new Vector2(0, localY));
+				
+				_dropIndicator.SetAnchoredPosition(AnchorKinds.Top, point);
+				_dropIndicator.style.display = DisplayStyle.Flex;
 			}
+			else
+				_dropIndicator.style.display = DisplayStyle.None;
 		}
 
-		public abstract void MoveItems(int sourceIndex, int destinationIndex);
+		public abstract void MoveItem(int sourceIndex, int destinationIndex);
 
-		public void Initialize()
-		{
-			if (IsInitialized)
-				return;
+		// PROTECT METHOD: --------------------------------------------------------------------
 
-			IsInitialized = true;
-			DerivedInitialize();
-		}
-
-		public virtual void Refresh() { }
-
-		protected virtual void DerivedInitialize() { }
-
-		protected virtual void MoveItems(SerializedProperty arrayProperty, int sourceIndex, int destinationIndex)
+		protected virtual void MoveItem(SerializedProperty arrayProperty, int sourceIndex, int destinationIndex)
 		{
 			arrayProperty.MoveArrayElement(sourceIndex, GetDestinationIndex(arrayProperty, destinationIndex));
 			SerializationUtils.ApplyUnregisteredSerialization(arrayProperty.serializedObject);
@@ -105,5 +129,6 @@ namespace CizaAudioModule.Editor
 			arrayProperty.serializedObject.Update();
 			return Math.Clamp(destinationIndex, 0, arrayProperty.arraySize - 1);
 		}
+		
 	}
 }

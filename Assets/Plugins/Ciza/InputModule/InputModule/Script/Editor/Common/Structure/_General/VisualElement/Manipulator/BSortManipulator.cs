@@ -20,6 +20,9 @@ namespace CizaInputModule.Editor
 		[NonSerialized]
 		protected VisualElement _targetVE;
 
+		[NonSerialized]
+		protected VisualElement _dragEventTarget;
+
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
 
 		[field: NonSerialized]
@@ -101,8 +104,38 @@ namespace CizaInputModule.Editor
 
 			if (IsStopPropagation)
 				mouseUpEvent.StopPropagation();
-			_targetVE.ReleaseMouse();
+
+			var captureTarget = _dragEventTarget ?? _targetVE;
+			UnregisterDragCallbacks();
+			if (captureTarget?.HasMouseCapture() == true)
+				captureTarget.ReleaseMouse();
+
 			_targetVE = null;
+		}
+
+		public virtual void PreserveDragOnTargetRefresh()
+		{
+			if (!IsDragging || _targetVE == null || _dragEventTarget != null)
+				return;
+
+			var stableTarget = _list as VisualElement;
+			if (stableTarget == null || stableTarget == _targetVE)
+				return;
+
+			RegisterDragCallbacks(stableTarget);
+			_dragEventTarget.CaptureMouse();
+		}
+
+		protected virtual void OnMouseCaptureOut(MouseCaptureOutEvent mouseCaptureOutEvent)
+		{
+			if (mouseCaptureOutEvent.target == _dragEventTarget)
+				CancelDragging();
+		}
+
+		protected virtual void OnDragEventTargetDetachFromPanel(DetachFromPanelEvent detachFromPanelEvent)
+		{
+			if (detachFromPanelEvent.target == _dragEventTarget)
+				CancelDragging();
 		}
 
 		protected virtual void OnMouseDown(MouseDownEvent mouseDownEvent, VisualElement targetVE)
@@ -113,19 +146,59 @@ namespace CizaInputModule.Editor
 
 		protected virtual void OnMouseMove(MouseMoveEvent mouseMoveEvent, VisualElement targetVE)
 		{
-			_currentIndex = _list.ClosestItemIndex(mouseMoveEvent.mousePosition.y);
-			_list.RefreshItemDragUI(_startIndex, _currentIndex);
+			if (_list.TryGetClosestItemIndex(mouseMoveEvent.mousePosition.y, out _currentIndex))
+				_list.RefreshItemDragUI(_startIndex, _currentIndex);
+			else
+				_list.RefreshItemDragUI(-1, -1);
 		}
 
 		protected virtual void OnMouseUp(MouseUpEvent mouseUpEvent, VisualElement targetVE)
 		{
+			_list.TryGetClosestItemIndex(mouseUpEvent.mousePosition.y, out _currentIndex);
 			_list.RefreshItemDragUI(-1, -1);
 
-			if (_startIndex != _currentIndex)
-				_list.MoveItems(_startIndex, (_currentIndex > _startIndex) ? _currentIndex - 1 : _currentIndex);
+			if (_startIndex < 0 || _currentIndex < 0)
+				_list.Refresh();
+			else if (_startIndex != _currentIndex)
+				_list.MoveItem(_startIndex, (_currentIndex > _startIndex) ? _currentIndex - 1 : _currentIndex);
 
 			else
 				_list.Refresh();
+		}
+
+		protected virtual void RegisterDragCallbacks(VisualElement dragEventTarget)
+		{
+			UnregisterDragCallbacks();
+			_dragEventTarget = dragEventTarget;
+			_dragEventTarget.RegisterCallback<MouseMoveEvent>(OnMouseMove, TrickleDown.TrickleDown);
+			_dragEventTarget.RegisterCallback<MouseUpEvent>(OnMouseUp, TrickleDown.TrickleDown);
+			_dragEventTarget.RegisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOut);
+			_dragEventTarget.RegisterCallback<DetachFromPanelEvent>(OnDragEventTargetDetachFromPanel);
+		}
+
+		protected virtual void UnregisterDragCallbacks()
+		{
+			if (_dragEventTarget == null)
+				return;
+
+			_dragEventTarget.UnregisterCallback<MouseMoveEvent>(OnMouseMove, TrickleDown.TrickleDown);
+			_dragEventTarget.UnregisterCallback<MouseUpEvent>(OnMouseUp, TrickleDown.TrickleDown);
+			_dragEventTarget.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOut);
+			_dragEventTarget.UnregisterCallback<DetachFromPanelEvent>(OnDragEventTargetDetachFromPanel);
+			_dragEventTarget = null;
+		}
+
+		protected virtual void CancelDragging()
+		{
+			if (!IsDragging)
+				return;
+
+			IsDragging = false;
+			_list.RefreshItemDragUI(-1, -1);
+			UnregisterDragCallbacks();
+			_targetVE = null;
+			_startIndex = -1;
+			_currentIndex = -1;
 		}
 	}
 }

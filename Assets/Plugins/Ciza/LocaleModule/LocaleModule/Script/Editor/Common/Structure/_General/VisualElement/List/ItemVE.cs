@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -37,6 +37,9 @@ namespace CizaLocaleModule.Editor
 
 		[NonSerialized]
 		protected readonly Button _headDelete = new Button();
+		
+		[NonSerialized]
+		protected readonly Label _pageLabel = new Label() { pickingMode = PickingMode.Ignore };
 
 		[NonSerialized]
 		protected Object _target;
@@ -50,9 +53,6 @@ namespace CizaLocaleModule.Editor
 		[NonSerialized]
 		protected readonly VisualElement _body = new VisualElement();
 
-		protected override string[] DropAboveClasses => new[] { "list-item-drop-above" };
-		protected override string[] DropBelowClasses => new[] { "list-item-drop-below" };
-
 		protected virtual string[] HeadClasses => new[] { "list-item-head" };
 		protected virtual string[] HeadLeftClasses => new[] { "list-item-head-left" };
 		protected virtual string[] HeadTitleClasses => new[] { "list-item-head-title" };
@@ -60,6 +60,7 @@ namespace CizaLocaleModule.Editor
 		protected virtual string[] HeadRightClasses => new[] { "list-item-head-right" };
 		protected virtual string[] BodyClasses => new[] { "list-item-body" };
 		protected virtual string SelectedItemClass => "selected";
+		protected virtual string PageLabelClass => "list-item-page-label";
 
 
 		protected virtual Texture2D ReorderingIcon => DEFAULT_REORDERING_ICON.Texture;
@@ -87,7 +88,7 @@ namespace CizaLocaleModule.Editor
 		[field: NonSerialized]
 		public virtual SerializedProperty ItemProperty { get; protected set; }
 
-		public virtual string Title => $"Element {Index}";
+		public virtual string Title => Root.GetItemTitle(Index, ItemProperty);
 
 		public virtual bool IsEnable { get; protected set; }
 
@@ -132,7 +133,6 @@ namespace CizaLocaleModule.Editor
 				_body.AddToClassList(c);
 
 			SetupHead();
-			SetupDrop();
 			DerivedInitialize();
 			SetIsExpand(IsExpand);
 		}
@@ -151,12 +151,13 @@ namespace CizaLocaleModule.Editor
 			IsAllowCopyPaste = isAllowCopyPaste;
 
 			RefreshHeadTitle();
+			RefreshPageLabel();
 
 			SetIsExpand(IsExpand);
 
 			if (Root.IsAllowReordering)
 			{
-				GetActiveOpacity(_headReordering, IsAllowReordering, "Reordering");
+				SetActiveOpacity(_headReordering, IsAllowReordering, "Reordering");
 				if (IsAllowReordering)
 					_headReordering.AddManipulator(Root.SortManipulator);
 				else
@@ -168,17 +169,17 @@ namespace CizaLocaleModule.Editor
 				_headTitle.style.opacity = IsEnable ? 1f : 0.25f;
 				_headDisable.SetIsVisible(IsAllowDisable && !IsEnable);
 
-				GetActiveOpacity(_headDisable, IsAllowDisable, "Disable");
+				SetActiveOpacity(_headDisable, IsAllowDisable, "Disable");
 			}
 
 			if (Root.IsAllowDuplicate)
 			{
-				GetActiveOpacity(_headDuplicate, IsAllowDuplicate, "Duplicate");
+				SetActiveOpacity(_headDuplicate, IsAllowDuplicate, "Duplicate");
 			}
 
 			if (Root.IsAllowDelete)
 			{
-				GetActiveOpacity(_headDelete, IsAllowDelete, "Delete");
+				SetActiveOpacity(_headDelete, IsAllowDelete, "Delete");
 			}
 
 			RefreshSelectedStyle();
@@ -190,8 +191,6 @@ namespace CizaLocaleModule.Editor
 		// PROTECT METHOD: --------------------------------------------------------------------
 
 		#region Setup
-
-		#region Setup Head
 
 		protected virtual VisualElement CreateHeadTitle() =>
 			Root.IsElementClass ? new Button() : new PropertyField(ItemProperty);
@@ -234,7 +233,18 @@ namespace CizaLocaleModule.Editor
 							break;
 					}
 				});
+
 				_head.Add(_headTitle);
+				
+				if (Root.IsPage)
+				{
+					_pageLabel.AddToClassList(PageLabelClass);
+					if(Root.IsElementClass)
+						_headTitle.Add(_pageLabel);
+					else
+						_head.Add(_pageLabel);
+					RefreshPageLabel();
+				}
 			}
 
 			if (Root.IsAllowDisable)
@@ -269,15 +279,7 @@ namespace CizaLocaleModule.Editor
 				_head.Add(_headDelete);
 			}
 		}
-
-		#endregion
-
-		protected virtual void SetupDrop()
-		{
-			Insert(0, _dropAbove);
-			Insert(3, _dropBelow);
-		}
-
+		
 		#endregion
 
 		protected virtual void SetItemProperty(SerializedProperty itemProperty, bool isRefreshBodyContent)
@@ -352,6 +354,12 @@ namespace CizaLocaleModule.Editor
 				bindable.BindProperty(ItemProperty);
 		}
 
+		protected virtual void RefreshPageLabel()
+		{
+			var globalPage = (Index / Root.CountPerPage) + 1;
+			_pageLabel.text = $"{globalPage} / {Root.TotalPageCount}";
+		}
+
 		// EVENT CALLBACK: ---------------------------------------------------------------------
 
 		protected virtual void OnOpenMenu(ContextualMenuPopulateEvent populateEvent)
@@ -369,6 +377,7 @@ namespace CizaLocaleModule.Editor
 
 			populateEvent.menu.AppendSeparator();
 
+			var selectedIndices = Root.SelectedItemIndexList;
 			if (Root.IsAllowCopyPaste && IsAllowCopyPaste)
 			{
 				populateEvent.menu.AppendAction("Select All", _ => { Root.SelectAllItem(); }, _ => Root.IsAllowSelection && !Root.IsSelectAll ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
@@ -376,21 +385,36 @@ namespace CizaLocaleModule.Editor
 
 				populateEvent.menu.AppendSeparator();
 
-				populateEvent.menu.AppendAction("Copy", _ => { CopyPasteUtils.Copy(Root.GetSelectedItemsCopy()); }, _ => Root.SelectedItemIndexList.Length > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+				populateEvent.menu.AppendAction("Copy", _ => { CopyPasteUtils.Copy(Root.GetSelectedItemsCopy()); }, _ => selectedIndices.Length > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
 
 				var arrayType = Array.CreateInstance(Root.ItemType, 0).GetType();
 				populateEvent.menu.AppendAction("Paste", _ =>
 				{
 					if (!CopyPasteUtils.TryPaste(arrayType, out var copy) || copy is not Array array)
 						return;
-					var pasteIndex = Index + 1;
-					foreach (var item in array)
-					{
-						Root.InsertItem(pasteIndex, item);
-						pasteIndex++;
-					}
+					Root.InsertItems(Index + 1, array);
 				}, _ => CopyPasteUtils.CheckCanPaste(arrayType) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+				
+				populateEvent.menu.AppendAction("Duplicate", _ =>
+				{
+					foreach (var selectedIndex in selectedIndices.OrderByDescending(i => i))
+						Root.DuplicateItem(selectedIndex);
+				}, _ => selectedIndices.Length > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
 
+				populateEvent.menu.AppendSeparator();
+			}
+
+			if (Root.IsAllowDelete && IsAllowDelete)
+			{
+				var sortedSelectedIndices = selectedIndices.OrderBy(i => -i).ToArray();
+				populateEvent.menu.AppendAction("Delete", _ =>
+				{
+					Root.UnselectAllItem();
+					foreach (var selectedIndex in sortedSelectedIndices)
+						Root.DeleteItem(selectedIndex);
+					
+				}, _ => selectedIndices.Length > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+				
 				populateEvent.menu.AppendSeparator();
 			}
 
@@ -401,7 +425,7 @@ namespace CizaLocaleModule.Editor
 				populateEvent.menu.AppendAction("Expand All", _ => Root.ExpandAll());
 		}
 
-		protected virtual void GetActiveOpacity(VisualElement visualElement, bool isActive, string tooltip)
+		protected virtual void SetActiveOpacity(VisualElement visualElement, bool isActive, string tooltip)
 		{
 			visualElement.enabledSelf = isActive;
 			visualElement.tooltip = isActive ? tooltip : string.Empty;

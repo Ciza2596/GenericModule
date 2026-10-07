@@ -1,4 +1,4 @@
-using UnityEngine.Scripting;
+﻿using UnityEngine.Scripting;
 
 namespace CizaLocaleModule.Editor
 {

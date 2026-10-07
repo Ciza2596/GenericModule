@@ -98,7 +98,9 @@ namespace CizaAddressablesModule.Editor
             tabView.Add(importTab);
             
             var addTab = CreateTab("Add");
-            SetupAdd(addTab.contentContainer);
+            var scrollView = new ScrollView() { horizontalScrollerVisibility = ScrollerVisibility.Hidden };
+            addTab.contentContainer.Add(scrollView);
+            SetupAdd(scrollView.contentContainer);
             tabView.Add(addTab);
 
             tabView.selectedTabIndex = Math.Clamp(TabIndex, 0, 2);
@@ -173,6 +175,7 @@ namespace CizaAddressablesModule.Editor
         {
             var addAddressableListVE = new AddAddressableListVE(_addAddressableDataListKey, _addressablesAssetManager);
             addAddressableListVE.Initialize();
+            addAddressableListVE.style.marginRight = 5;
             container.Add(addAddressableListVE);
         }
         

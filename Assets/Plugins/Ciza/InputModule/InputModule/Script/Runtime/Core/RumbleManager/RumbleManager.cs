@@ -46,7 +46,7 @@ namespace CizaInputModule
 
         public void Rumble(int playerIndex, string dataId)
         {
-            if (!CheckHasPlayer(playerIndex) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo) || !_rumbleInputs.TryGetCurrentControlScheme(playerIndex, out var currentControlScheme) || !rumbleInfo.TryGetControlSchemeInfo(currentControlScheme, out var controlSchemeInfo))
+            if (!CheckHasPlayer(playerIndex) || !_rumbleManagerConfig.TryGetRumbleInfo(dataId, out var rumbleInfo) || !_rumbleInputs.TryGetControlScheme(playerIndex, out var controlScheme) || !rumbleInfo.TryGetControlSchemeInfo(controlScheme, out var controlSchemeInfo))
                 return;
 
             if (TryGetOrder(playerIndex, out var order) && order > rumbleInfo.Order)

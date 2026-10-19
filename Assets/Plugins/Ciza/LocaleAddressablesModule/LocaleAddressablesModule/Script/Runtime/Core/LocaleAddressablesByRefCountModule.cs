@@ -35,10 +35,11 @@ namespace CizaLocaleAddressablesModule
 
 		public virtual bool IsChangingLocale => _localeModule.IsChangingLocale;
 
-		public virtual string DefaultLocale => _localeModule.DefaultLocale;
 		public virtual string[] SupportLocales => _localeModule.SupportLocales;
-		public virtual string CurrentLocale => _localeModule.CurrentLocale;
 		public virtual string SourceLocale => _localeModule.SourceLocale;
+
+		public virtual string DefaultLocale => _localeModule.DefaultLocale;
+		public virtual string Locale => _localeModule.Locale;
 
 		public virtual IReadOnlyDictionary<string, int> RefCountMapByAddress => _addressablesByRefCountModule.RefCountMapByAddress;
 

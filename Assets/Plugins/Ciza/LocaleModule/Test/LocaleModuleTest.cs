@@ -64,13 +64,13 @@ public class LocaleModuleTest
 		// arrange
 		_01_Initialize();
 		await _localeModule.ChangeLocaleAsync(En, AsyncToken.NONE);
-		Assert.AreEqual(En, _localeModule.CurrentLocale, $"LocaleModule should be locale: {En}.");
+		Assert.AreEqual(En, _localeModule.Locale, $"LocaleModule should be locale: {En}.");
 
 		// act
 		await _localeModule.ChangeToDefaultLocaleAsync(AsyncToken.NONE);
 
 		// assert
-		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
+		Assert.AreEqual(DefaultLocale, _localeModule.Locale, $"LocaleModule should be locale: {DefaultLocale}.");
 	}
 
 	[Test]
@@ -78,13 +78,13 @@ public class LocaleModuleTest
 	{
 		// arrange
 		_01_Initialize();
-		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
+		Assert.AreEqual(DefaultLocale, _localeModule.Locale, $"LocaleModule should be locale: {DefaultLocale}.");
 
 		// act
 		await _localeModule.ChangeLocaleAsync(En, AsyncToken.NONE);
 
 		// assert
-		Assert.AreEqual(En, _localeModule.CurrentLocale, $"LocaleModule should be locale: {En}.");
+		Assert.AreEqual(En, _localeModule.Locale, $"LocaleModule should be locale: {En}.");
 	}
 
 	[Test]
@@ -92,7 +92,7 @@ public class LocaleModuleTest
 	{
 		// arrange
 		_01_Initialize();
-		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
+		Assert.AreEqual(DefaultLocale, _localeModule.Locale, $"LocaleModule should be locale: {DefaultLocale}.");
 		_localeModuleConfig.IsIgnoreSourceLocalePrefix.Returns(true);
 
 		// act
@@ -107,7 +107,7 @@ public class LocaleModuleTest
 	{
 		// arrange
 		_01_Initialize();
-		Assert.AreEqual(DefaultLocale, _localeModule.CurrentLocale, $"LocaleModule should be locale: {DefaultLocale}.");
+		Assert.AreEqual(DefaultLocale, _localeModule.Locale, $"LocaleModule should be locale: {DefaultLocale}.");
 		_localeModuleConfig.IsIgnoreSourceLocalePrefix.Returns(false);
 
 		// act

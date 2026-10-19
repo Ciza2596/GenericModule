@@ -18,16 +18,16 @@ namespace CizaInputModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetMoveActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetLeftButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetRightButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetScrollActionPath;
 
 		// PUBLIC VARIABLE: ---------------------------------------------------------------------
@@ -281,16 +281,16 @@ namespace CizaInputModule
 		protected virtual bool TryGetVirtualMouse(int playerIndex, out IVirtualMouse virtualMouse) =>
 			_virtualMouseMapByPlayerIndex.TryGetValue(playerIndex, out virtualMouse);
 
-		protected virtual string GetMoveActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetMoveActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetMoveActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetMoveActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetLeftButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetLeftButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetLeftButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetLeftButtonActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetRightButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetRightButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetRightButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetRightButtonActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetScrollActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetScrollActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetScrollActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetScrollActionPath?.Invoke(playerIndex, actionMapDataId);
 	}
 }

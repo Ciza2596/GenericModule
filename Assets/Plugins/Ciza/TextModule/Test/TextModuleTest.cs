@@ -22,7 +22,7 @@ public class TextModuleTest
 
         // assert
         Assert.AreEqual(DefaultCategory, textModule.DefaultCategory);
-        Assert.AreEqual(DefaultCategory, textModule.CurrentCategory);
+        Assert.AreEqual(DefaultCategory, textModule.Category);
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class TextModuleTest
 
         // assert
         Assert.AreEqual(Categories[1], textModule.DefaultCategory);
-        Assert.AreEqual(Categories[1], textModule.CurrentCategory);
+        Assert.AreEqual(Categories[1], textModule.Category);
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class TextModuleTest
 
         // assert
         Assert.IsTrue(changeSuccess);
-        Assert.AreEqual(Categories[2], textModule.CurrentCategory);
+        Assert.AreEqual(Categories[2], textModule.Category);
 
         textModule.TryGetText(Key, out var text2);
         Assert.AreEqual(ExpectedTexts[2], text2);
@@ -87,7 +87,7 @@ public class TextModuleTest
 
         // assert
         Assert.IsTrue(hasText);
-        Assert.AreEqual(Categories[0], textModule.CurrentCategory);
+        Assert.AreEqual(Categories[0], textModule.Category);
         Assert.AreEqual(ExpectedTexts[0], text);
     }
 

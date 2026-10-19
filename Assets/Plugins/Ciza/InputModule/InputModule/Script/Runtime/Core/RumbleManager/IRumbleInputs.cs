@@ -12,7 +12,7 @@ namespace CizaInputModule
 
         int PlayerCount { get; }
 
-        bool TryGetCurrentControlScheme(int index, out string currentControlScheme);
+        bool TryGetControlScheme(int index, out string controlScheme);
         
         void ResetHaptics(int index);
 

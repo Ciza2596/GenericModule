@@ -18,8 +18,8 @@ namespace CizaInputModule
             _inputModule.OnPlayerLeft += OnPlayerLeftImp;
         }
 
-        public bool TryGetCurrentControlScheme(int index, out string currentControlScheme) =>
-            _inputModule.TryGetCurrentControlScheme(index, out currentControlScheme);
+        public bool TryGetControlScheme(int index, out string controlScheme) =>
+            _inputModule.TryGetControlScheme(index, out controlScheme);
 
         public void ResetHaptics(int index) =>
             _inputModule.ResetHaptics(index);

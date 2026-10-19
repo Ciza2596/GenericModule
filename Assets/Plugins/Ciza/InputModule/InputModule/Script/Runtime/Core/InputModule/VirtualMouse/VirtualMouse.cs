@@ -39,16 +39,16 @@ namespace CizaInputModule
 
 		// EVENT: ---------------------------------------------------------------------------------
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetMoveActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetLeftButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetRightButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetScrollActionPath;
 
 
@@ -60,7 +60,7 @@ namespace CizaInputModule
 		public virtual bool IsEnable => _mouse?.enabled ?? false;
 
 		public virtual Mouse Mouse => _mouse;
-		public virtual string CurrentActionMapDataId { get; protected set; }
+		public virtual string ActionMapDataId { get; protected set; }
 
 		public virtual float MoveSensitivity { get; protected set; }
 		public virtual float ScrollSensitivity { get; protected set; }
@@ -198,16 +198,16 @@ namespace CizaInputModule
 		{
 			var actionMapDataId = playerInput.currentActionMap.name;
 
-			if (CurrentActionMapDataId == actionMapDataId)
+			if (ActionMapDataId == actionMapDataId)
 				return;
 
-			if (!string.IsNullOrEmpty(CurrentActionMapDataId))
+			if (!string.IsNullOrEmpty(ActionMapDataId))
 			{
 				UnregisterButtonActionCallback(_leftButtonAction);
 				UnregisterButtonActionCallback(_rightButtonAction);
 			}
 
-			CurrentActionMapDataId = actionMapDataId;
+			ActionMapDataId = actionMapDataId;
 			RefreshActions();
 			RegisterButtonActionCallback(_leftButtonAction);
 			RegisterButtonActionCallback(_rightButtonAction);
@@ -322,22 +322,22 @@ namespace CizaInputModule
 
 		protected virtual void RefreshActions()
 		{
-			_moveAction = _playerInput?.actions?.FindAction(GetMoveActionPathImp(PlayerIndex, CurrentActionMapDataId));
-			_leftButtonAction = _playerInput?.actions?.FindAction(GetLeftButtonActionPathImp(PlayerIndex, CurrentActionMapDataId));
-			_rightButtonAction = _playerInput?.actions?.FindAction(GetRightButtonActionPathImp(PlayerIndex, CurrentActionMapDataId));
-			_scrollAction = _playerInput?.actions?.FindAction(GetScrollActionPathImp(PlayerIndex, CurrentActionMapDataId));
+			_moveAction = _playerInput?.actions?.FindAction(GetMoveActionPathImp(PlayerIndex, ActionMapDataId));
+			_leftButtonAction = _playerInput?.actions?.FindAction(GetLeftButtonActionPathImp(PlayerIndex, ActionMapDataId));
+			_rightButtonAction = _playerInput?.actions?.FindAction(GetRightButtonActionPathImp(PlayerIndex, ActionMapDataId));
+			_scrollAction = _playerInput?.actions?.FindAction(GetScrollActionPathImp(PlayerIndex, ActionMapDataId));
 		}
 
-		protected virtual string GetMoveActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetMoveActionPath?.Invoke(playerIndex, currentActionMapDataId) ?? string.Empty;
+		protected virtual string GetMoveActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetMoveActionPath?.Invoke(playerIndex, actionMapDataId) ?? string.Empty;
 
-		protected virtual string GetLeftButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetLeftButtonActionPath?.Invoke(playerIndex, currentActionMapDataId) ?? string.Empty;
+		protected virtual string GetLeftButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetLeftButtonActionPath?.Invoke(playerIndex, actionMapDataId) ?? string.Empty;
 
-		protected virtual string GetRightButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetRightButtonActionPath?.Invoke(playerIndex, currentActionMapDataId) ?? string.Empty;
+		protected virtual string GetRightButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetRightButtonActionPath?.Invoke(playerIndex, actionMapDataId) ?? string.Empty;
 
-		protected virtual string GetScrollActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetScrollActionPath?.Invoke(playerIndex, currentActionMapDataId) ?? string.Empty;
+		protected virtual string GetScrollActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetScrollActionPath?.Invoke(playerIndex, actionMapDataId) ?? string.Empty;
 	}
 }

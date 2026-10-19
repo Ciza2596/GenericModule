@@ -37,20 +37,20 @@ namespace CizaInputModule
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected virtual string GetVirtualMouseMoveActionPath(int playerIndex, string currentActionMapDataId) =>
-			GetDefaultActionPath(currentActionMapDataId, MOVE_ACTION_DATA_ID);
+		protected virtual string GetVirtualMouseMoveActionPath(int playerIndex, string actionMapDataId) =>
+			GetDefaultActionPath(actionMapDataId, MOVE_ACTION_DATA_ID);
 
-		protected virtual string GetVirtualMouseLeftButtonActionPath(int playerIndex, string currentActionMapDataId) =>
-			GetDefaultActionPath(currentActionMapDataId, CONFIRM_ACTION_DATA_ID);
+		protected virtual string GetVirtualMouseLeftButtonActionPath(int playerIndex, string actionMapDataId) =>
+			GetDefaultActionPath(actionMapDataId, CONFIRM_ACTION_DATA_ID);
 
-		protected virtual string GetVirtualMouseRightButtonActionPath(int playerIndex, string currentActionMapDataId) =>
-			GetDefaultActionPath(currentActionMapDataId, CANCEL_ACTION_DATA_ID);
+		protected virtual string GetVirtualMouseRightButtonActionPath(int playerIndex, string actionMapDataId) =>
+			GetDefaultActionPath(actionMapDataId, CANCEL_ACTION_DATA_ID);
 
-		protected virtual string GetVirtualMouseScrollActionPath(int playerIndex, string currentActionMapDataId) =>
-			GetDefaultActionPath(currentActionMapDataId, SCROLL_ACTION_DATA_ID);
+		protected virtual string GetVirtualMouseScrollActionPath(int playerIndex, string actionMapDataId) =>
+			GetDefaultActionPath(actionMapDataId, SCROLL_ACTION_DATA_ID);
 
 
-		protected virtual string GetDefaultActionPath(string currentActionMapDataId, string actionDataId) =>
-			$"{currentActionMapDataId}/{actionDataId}";
+		protected virtual string GetDefaultActionPath(string actionMapDataId, string actionDataId) =>
+			$"{actionMapDataId}/{actionDataId}";
 	}
 }

@@ -26,7 +26,7 @@ namespace CizaTextModule
 		public virtual string[] Categories { get; protected set; }
 
 		public virtual string DefaultCategory { get; protected set; }
-		public virtual string CurrentCategory { get; protected set; }
+		public virtual string Category { get; protected set; }
 
 		public virtual bool TryGetTexts(string[] keys, out Dictionary<string, string> textMapByKey)
 		{
@@ -51,7 +51,7 @@ namespace CizaTextModule
 				return false;
 			}
 
-			if (!textMapByCategory.TryGetValue(CurrentCategory, out var oriText))
+			if (!textMapByCategory.TryGetValue(Category, out var oriText))
 			{
 				text = string.Empty;
 				return false;
@@ -76,7 +76,7 @@ namespace CizaTextModule
 		{
 			Categories = Array.Empty<string>();
 			DefaultCategory = string.Empty;
-			CurrentCategory = string.Empty;
+			Category = string.Empty;
 			_textMapByCategoryByKey = new Dictionary<string, Dictionary<string, string>>();
 		}
 
@@ -103,8 +103,8 @@ namespace CizaTextModule
 			if (!Categories.Contains(category))
 				return false;
 
-			CurrentCategory = category;
-			OnChangeCategory?.Invoke(CurrentCategory);
+			Category = category;
+			OnChangeCategory?.Invoke(Category);
 			return true;
 		}
 

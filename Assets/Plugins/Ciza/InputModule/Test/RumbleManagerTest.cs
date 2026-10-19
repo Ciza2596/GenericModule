@@ -43,7 +43,7 @@ public class RumbleManagerTest
 		});
 
 		_rumbleInputs.PlayerCount.Returns(PlayerCount);
-		_rumbleInputs.TryGetCurrentControlScheme(Index0, out var currentControlScheme).Returns(x =>
+		_rumbleInputs.TryGetControlScheme(Index0, out var controlScheme).Returns(x =>
 		{
 			x[1] = CurrentControlScheme;
 			return true;
@@ -67,12 +67,12 @@ public class RumbleManagerTest
 		});
 
 		_rumbleInputs.PlayerCount.Returns(PlayerCount);
-		_rumbleInputs.TryGetCurrentControlScheme(Index0, out var currentControlScheme0).Returns(x =>
+		_rumbleInputs.TryGetControlScheme(Index0, out var controlScheme0).Returns(x =>
 		{
 			x[1] = CurrentControlScheme;
 			return true;
 		});
-		_rumbleInputs.TryGetCurrentControlScheme(Index1, out var currentControlScheme1).Returns(x =>
+		_rumbleInputs.TryGetControlScheme(Index1, out var controlScheme1).Returns(x =>
 		{
 			x[1] = CurrentControlScheme;
 			return true;

@@ -29,10 +29,11 @@ namespace CizaLocaleModule
 
 		public virtual bool IsChangingLocale { get; private set; }
 
-		public virtual string DefaultLocale { get; private set; }
-		public virtual string[] SupportLocales => _supportLocales != null ? _supportLocales.ToArray() : Array.Empty<string>();
-		public virtual string CurrentLocale { get; private set; }
+		public virtual string[] SupportLocales => _supportLocales?.ToArray() ?? Array.Empty<string>();
 		public virtual string SourceLocale { get; private set; }
+
+		public virtual string DefaultLocale { get; private set; }
+		public virtual string Locale { get; private set; }
 
 		// CONSTRUCTOR: ------------------------------------------------------------------------
 
@@ -67,7 +68,7 @@ namespace CizaLocaleModule
 			_supportLocales = _config.SupportLocales;
 			SourceLocale = _config.SourceLocale;
 			DefaultLocale = _config.DefaultLocale;
-			CurrentLocale = DefaultLocale;
+			Locale = DefaultLocale;
 		}
 
 		public virtual void Release()
@@ -80,8 +81,8 @@ namespace CizaLocaleModule
 
 			_supportLocales = null;
 			SourceLocale = string.Empty;
-			CurrentLocale = string.Empty;
 			DefaultLocale = string.Empty;
+			Locale = string.Empty;
 
 			IsInitialized = false;
 		}
@@ -111,18 +112,18 @@ namespace CizaLocaleModule
 			IsChangingLocale = true;
 
 			if (OnChangedLocaleBeforeStartAsync != null)
-				await OnChangedLocaleBeforeStartAsync.Invoke(CurrentLocale, asyncToken);
+				await OnChangedLocaleBeforeStartAsync.Invoke(Locale, asyncToken);
 
 			if (OnChangedLocaleBeforeAsync != null)
-				await OnChangedLocaleBeforeAsync.Invoke(CurrentLocale, asyncToken);
+				await OnChangedLocaleBeforeAsync.Invoke(Locale, asyncToken);
 
-			CurrentLocale = locale;
+			Locale = locale;
 
 			if (OnChangedLocaleStartAsync != null)
-				await OnChangedLocaleStartAsync.Invoke(CurrentLocale, asyncToken);
+				await OnChangedLocaleStartAsync.Invoke(Locale, asyncToken);
 
 			if (OnChangedLocaleAsync != null)
-				await OnChangedLocaleAsync.Invoke(CurrentLocale, asyncToken);
+				await OnChangedLocaleAsync.Invoke(Locale, asyncToken);
 
 			IsChangingLocale = false;
 		}
@@ -135,7 +136,7 @@ namespace CizaLocaleModule
 				return string.Empty;
 			}
 
-			var localePrefix = _config.IsIgnoreSourceLocalePrefix && CurrentLocale.Equals(SourceLocale) ? string.Empty : CurrentLocale + _config.PrefixTag;
+			var localePrefix = _config.IsIgnoreSourceLocalePrefix && Locale.Equals(SourceLocale) ? string.Empty : Locale + _config.PrefixTag;
 			var textByAddLocalePrefix = localePrefix + text;
 
 			return textByAddLocalePrefix;

@@ -5,16 +5,16 @@ namespace CizaInputModule
 {
 	public interface IVirtualMouse : IVirtualMouseReadModel
 	{
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		event Func<int, string, string> GetMoveActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		event Func<int, string, string> GetLeftButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		event Func<int, string, string> GetRightButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		event Func<int, string, string> GetScrollActionPath;
 
 

@@ -28,7 +28,7 @@ namespace CizaInputModule
 		protected PlayerInputManager _playerInputManager;
 		protected PlayerInput _playerInput;
 
-		protected string _currentActionMapDataId;
+		protected string _actionMapDataId;
 		protected string _previousControlScheme;
 
 		protected float _autoHideHardwareCursorTimer;
@@ -45,16 +45,16 @@ namespace CizaInputModule
 
 		#region GetActionPath
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetVirtualMouseMoveActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetVirtualMouseLeftButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetVirtualMouseRightButtonActionPath;
 
-		// PlayerIndex, CurrentActionMapDataId, Returns Path
+		// PlayerIndex, ActionMapDataId, Returns Path
 		public event Func<int, string, string> GetVirtualMouseScrollActionPath;
 
 		#endregion
@@ -73,7 +73,7 @@ namespace CizaInputModule
 
 		public virtual bool IsSinglePlayer { get; private set; }
 
-		public virtual string CurrentActionMapDataId => !string.IsNullOrEmpty(_currentActionMapDataId) ? _currentActionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
+		public virtual string ActionMapDataId => !string.IsNullOrEmpty(_actionMapDataId) ? _actionMapDataId : _inputModuleConfig.DefaultActionMapDataId;
 
 		public virtual int PlayerCount
 		{
@@ -111,16 +111,16 @@ namespace CizaInputModule
 		}
 
 
-		public virtual bool TryGetCurrentControlScheme(int playerIndex, out string currentControlScheme)
+		public virtual bool TryGetControlScheme(int playerIndex, out string controlScheme)
 		{
 			var playerInput = _playerInputs.FirstOrDefault(m_playerInput => m_playerInput.playerIndex == playerIndex);
 			if (playerInput == null)
 			{
-				currentControlScheme = string.Empty;
+				controlScheme = string.Empty;
 				return false;
 			}
 
-			currentControlScheme = playerInput.currentControlScheme;
+			controlScheme = playerInput.currentControlScheme;
 			return true;
 		}
 
@@ -404,7 +404,7 @@ namespace CizaInputModule
 
 		public virtual void EnableInput(int playerIndex)
 		{
-			SwitchCurrentActionMap(playerIndex);
+			SwitchActionMap(playerIndex);
 			_virtualMouseContainer.Enable(playerIndex);
 		}
 
@@ -414,8 +414,8 @@ namespace CizaInputModule
 			_virtualMouseContainer.Disable(playerIndex);
 		}
 
-		public virtual void SetCurrentActionMapDataId(string actionMapDataId) =>
-			_currentActionMapDataId = actionMapDataId;
+		public virtual void SetActionMapDataId(string actionMapDataId) =>
+			_actionMapDataId = actionMapDataId;
 
 		public virtual void HandleActionEvent(Action<int, InputActionAsset> handleEvent)
 		{
@@ -556,7 +556,7 @@ namespace CizaInputModule
 			OnControlsChangedImp_SinglePlayer(_playerInput, false);
 			_playerInput.onControlsChanged += OnControlsChangedImp_SinglePlayer;
 
-			SwitchCurrentActionMap(_playerInput.playerIndex);
+			SwitchActionMap(_playerInput.playerIndex);
 		}
 
 		protected virtual void DestroyPlayerInput()
@@ -575,8 +575,8 @@ namespace CizaInputModule
 			Object.Destroy(playerInput.gameObject);
 		}
 
-		protected virtual void SwitchCurrentActionMap(int playerIndex) =>
-			SwitchActionMap(playerIndex, CurrentActionMapDataId);
+		protected virtual void SwitchActionMap(int playerIndex) =>
+			SwitchActionMap(playerIndex, ActionMapDataId);
 
 		protected virtual void SwitchActionMap(int playerIndex, string actionMapDataId)
 		{
@@ -615,7 +615,7 @@ namespace CizaInputModule
 			OnControlsChangedImp(playerInput, false);
 			playerInput.onControlsChanged += OnControlsChangedImp;
 
-			SwitchCurrentActionMap(playerIndex);
+			SwitchActionMap(playerIndex);
 		}
 
 		protected virtual void OnPlayerLeftImp(PlayerInput playerInput)
@@ -748,16 +748,16 @@ namespace CizaInputModule
 			IsHardwareCursorVisible = false;
 		}
 
-		protected virtual string GetVirtualMouseMoveActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetVirtualMouseMoveActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetVirtualMouseMoveActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetVirtualMouseMoveActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetVirtualMouseLeftButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetVirtualMouseLeftButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetVirtualMouseLeftButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetVirtualMouseLeftButtonActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetVirtualMouseRightButtonActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetVirtualMouseRightButtonActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetVirtualMouseRightButtonActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetVirtualMouseRightButtonActionPath?.Invoke(playerIndex, actionMapDataId);
 
-		protected virtual string GetVirtualMouseScrollActionPathImp(int playerIndex, string currentActionMapDataId) =>
-			GetVirtualMouseScrollActionPath?.Invoke(playerIndex, currentActionMapDataId);
+		protected virtual string GetVirtualMouseScrollActionPathImp(int playerIndex, string actionMapDataId) =>
+			GetVirtualMouseScrollActionPath?.Invoke(playerIndex, actionMapDataId);
 	}
 }

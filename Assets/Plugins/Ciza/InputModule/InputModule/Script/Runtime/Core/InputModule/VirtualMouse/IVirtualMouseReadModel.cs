@@ -11,7 +11,7 @@ namespace CizaInputModule
 		bool IsEnable { get; }
 
 		Mouse Mouse { get; }
-		string CurrentActionMapDataId { get; }
+		string ActionMapDataId { get; }
 
 		float MoveSensitivity { get; }
 		float ScrollSensitivity { get; }

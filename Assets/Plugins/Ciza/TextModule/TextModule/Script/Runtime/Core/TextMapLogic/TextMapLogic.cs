@@ -48,15 +48,15 @@ namespace CizaTextModule
 			return true;
 		}
 
-		public virtual bool TryGetCurrentCategory(string dataId, out string currentCategory)
+		public virtual bool TryGetCategory(string dataId, out string category)
 		{
 			if (!_textModuleMapByDataId.TryGetValue(dataId, out var textModule))
 			{
-				currentCategory = string.Empty;
+				category = string.Empty;
 				return false;
 			}
 
-			currentCategory = textModule.CurrentCategory;
+			category = textModule.Category;
 			return true;
 		}
 
@@ -184,7 +184,7 @@ namespace CizaTextModule
 
 		// PROTECT METHOD: --------------------------------------------------------------------
 
-		protected virtual void OnChangeCategoryImp(string currentCategory)
+		protected virtual void OnChangeCategoryImp(string category)
 		{
 			foreach (var textMap in _textMaps)
 				SetTextMap(textMap);

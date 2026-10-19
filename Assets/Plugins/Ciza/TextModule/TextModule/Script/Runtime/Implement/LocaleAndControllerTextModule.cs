@@ -33,8 +33,8 @@ namespace CizaTextModule
 		public virtual string LocaleDefaultCategory =>
 			_textMapLogic.TryGetDefaultCategory(LOCALE_TEXT_MODULE_DATA_ID, out var defaultCategory) ? defaultCategory : string.Empty;
 
-		public virtual string LocaleCurrentCategory =>
-			_textMapLogic.TryGetCurrentCategory(LOCALE_TEXT_MODULE_DATA_ID, out var currentCategory) ? currentCategory : string.Empty;
+		public virtual string LocaleCategory =>
+			_textMapLogic.TryGetCategory(LOCALE_TEXT_MODULE_DATA_ID, out var category) ? category : string.Empty;
 
 		public virtual bool TryGetLocaleText(string localeTextKey, out string localeText) =>
 			_textMapLogic.TryGetText(LOCALE_TEXT_MODULE_DATA_ID, localeTextKey, out localeText);
@@ -50,8 +50,8 @@ namespace CizaTextModule
 		public virtual string ControllerDefaultCategory =>
 			_textMapLogic.TryGetDefaultCategory(CONTROLLER_TEXT_MODULE_DATA_ID, out var defaultCategory) ? defaultCategory : string.Empty;
 
-		public virtual string ControllerCurrentCategory =>
-			_textMapLogic.TryGetCurrentCategory(CONTROLLER_TEXT_MODULE_DATA_ID, out var currentCategory) ? currentCategory : string.Empty;
+		public virtual string ControllerCategory =>
+			_textMapLogic.TryGetCategory(CONTROLLER_TEXT_MODULE_DATA_ID, out var category) ? category : string.Empty;
 
 		public virtual bool TryGetControllerText(string controllerTextKey, out string controllerText) =>
 			_textMapLogic.TryGetText(CONTROLLER_TEXT_MODULE_DATA_ID, controllerTextKey, out controllerText);

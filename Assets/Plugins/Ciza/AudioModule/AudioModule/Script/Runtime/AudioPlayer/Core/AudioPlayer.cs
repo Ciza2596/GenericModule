@@ -67,10 +67,10 @@ namespace CizaAudioModule
 		#region Bgm
 
 		public virtual bool TryGetBgmMixerGroup(out AudioMixerGroup bgmMixerGroup) =>
-			_bgmModule.TryGetAudioMixerGroup(out bgmMixerGroup);
+			_bgmModule.TryGetMixerGroup(out bgmMixerGroup);
 
 		public virtual bool TryGetBgmMixerGroup(string bgmGroupPath, out AudioMixerGroup bgmMixerGroup) =>
-			_bgmModule.TryGetAudioMixerGroup(bgmGroupPath, out bgmMixerGroup);
+			_bgmModule.TryGetMixerGroup(bgmGroupPath, out bgmMixerGroup);
 
 		#endregion
 
@@ -78,10 +78,10 @@ namespace CizaAudioModule
 		#region Sfx
 
 		public virtual bool TryGetSfxMixerGroup(out AudioMixerGroup sfxMixerGroup) =>
-			_sfxModule.TryGetAudioMixerGroup(out sfxMixerGroup);
+			_sfxModule.TryGetMixerGroup(out sfxMixerGroup);
 
 		public virtual bool TryGetSfxMixerGroup(string sfxGroupPath, out AudioMixerGroup sfxMixerGroup) =>
-			_bgmModule.TryGetAudioMixerGroup(sfxGroupPath, out sfxMixerGroup);
+			_bgmModule.TryGetMixerGroup(sfxGroupPath, out sfxMixerGroup);
 
 		#endregion
 
@@ -89,25 +89,28 @@ namespace CizaAudioModule
 		#region Voice
 
 		public virtual bool TryGetVoiceMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
-			_voiceModule.TryGetAudioMixerGroup(out voiceMixerGroup);
+			_voiceModule.TryGetMixerGroup(out voiceMixerGroup);
 
 		public virtual bool TryGetVoiceMixerGroup(string voiceGroupPath, out AudioMixerGroup voiceMixerGroup) =>
-			_voiceModule.TryGetAudioMixerGroup(voiceGroupPath, out voiceMixerGroup);
+			_voiceModule.TryGetMixerGroup(voiceGroupPath, out voiceMixerGroup);
 
 		public virtual bool TryGetVoiceExtraChannelMixerGroup(out AudioMixerGroup voiceMixerGroup) =>
-			_voiceModule.TryGetExtraChannelAudioMixerGroup(out voiceMixerGroup);
+			_voiceModule.TryGetExtraChannelMixerGroup(out voiceMixerGroup);
 
 		public virtual bool TryGetVoiceChannelMixerGroup(string channelDataId, out AudioMixerGroup voiceMixerGroup) =>
-			_voiceModule.TryGetChannelAudioMixerGroup(channelDataId, out voiceMixerGroup);
+			_voiceModule.TryGetChannelMixerGroup(channelDataId, out voiceMixerGroup);
 
 		#endregion
 
 		#endregion
 
-		public virtual float DefaultMasterVolume =>
-			_audioPlayerConfig.DefaultMasterVolume;
+		public virtual float MinMasterMixerVolume => _audioPlayerConfig.MinMasterMixerVolume;
+		public virtual float MaxMasterMixerVolume => _audioPlayerConfig.MaxMasterMixerVolume;
 
-		public virtual bool TryGetMasterVolume(out float volume)
+		public virtual float DefaultMasterMixerVolume =>
+			_audioPlayerConfig.DefaultMasterMixerVolume;
+
+		public virtual bool TryGetMasterMixerVolume(out float volume)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
@@ -121,14 +124,20 @@ namespace CizaAudioModule
 
 		#region Bgm
 
-		public virtual float DefaultBgmAudioMixerVolume =>
-			_bgmModule.DefaultAudioMixerVolume;
+		public virtual float MinBgmMixerVolume =>
+			_bgmModule.MinMixerVolume;
+
+		public virtual float MaxBgmMixerVolume =>
+			_bgmModule.MaxMixerVolume;
+
+		public virtual float DefaultBgmMixerVolume =>
+			_bgmModule.DefaultMixerVolume;
 
 		public virtual bool TryGetBgmMixerVolume(out float volume) =>
-			_bgmModule.TryGetAudioMixerVolume(out volume);
+			_bgmModule.TryGetMixerVolume(out volume);
 
 		public virtual bool TryGetBgmMixerVolume(string parameter, out float volume) =>
-			_bgmModule.TryGetAudioMixerVolume(parameter, out volume);
+			_bgmModule.TryGetMixerVolume(parameter, out volume);
 
 		public virtual bool CheckHasBgmDataIdInConfig(string voiceDataId) =>
 			_bgmModule.CheckIsAudioDataIdInConfig(voiceDataId);
@@ -153,14 +162,20 @@ namespace CizaAudioModule
 
 		#region Sfx
 
-		public virtual float DefaultSfxAudioMixerVolume =>
-			_sfxModule.DefaultAudioMixerVolume;
+		public virtual float MinSfxMixerVolume =>
+			_sfxModule.MinMixerVolume;
+
+		public virtual float MaxSfxMixerVolume =>
+			_sfxModule.MaxMixerVolume;
+
+		public virtual float DefaultSfxMixerVolume =>
+			_sfxModule.DefaultMixerVolume;
 
 		public virtual bool TryGetSfxMixerVolume(out float volume) =>
-			_sfxModule.TryGetAudioMixerVolume(out volume);
+			_sfxModule.TryGetMixerVolume(out volume);
 
 		public virtual bool TryGetSfxMixerVolume(string parameter, out float volume) =>
-			_sfxModule.TryGetAudioMixerVolume(parameter, out volume);
+			_sfxModule.TryGetMixerVolume(parameter, out volume);
 
 		public virtual bool CheckHasSfxDataIdInConfig(string sfxDataId) =>
 			_sfxModule.CheckIsAudioDataIdInConfig(sfxDataId);
@@ -190,26 +205,44 @@ namespace CizaAudioModule
 
 		#region Voice
 
-		public virtual float DefaultVoiceAudioMixerVolume =>
-			_voiceModule.DefaultAudioMixerVolume;
+		public virtual float MinVoiceMixerVolume =>
+			_voiceModule.MinMixerVolume;
+
+		public virtual float MaxVoiceMixerVolume =>
+			_voiceModule.MaxMixerVolume;
+
+		public virtual float DefaultVoiceMixerVolume =>
+			_voiceModule.DefaultMixerVolume;
 
 		public virtual bool TryGetVoiceMixerVolume(out float volume) =>
-			_voiceModule.TryGetAudioMixerVolume(out volume);
+			_voiceModule.TryGetMixerVolume(out volume);
 
 		public virtual bool TryGetVoiceMixerVolume(string parameter, out float volume) =>
-			_voiceModule.TryGetAudioMixerVolume(parameter, out volume);
+			_voiceModule.TryGetMixerVolume(parameter, out volume);
 
-		public virtual bool TryGetVoiceExtraChannelDefaultAudioMixerVolume(out float volume) =>
-			_voiceModule.TryGetExtraChannelDefaultAudioMixerVolume(out volume);
+		public virtual bool TryGetVoiceExtraChannelMinMixerVolume(out float minVolume) =>
+			_voiceModule.TryGetExtraChannelMinMixerVolume(out minVolume);
+
+		public virtual bool TryGetVoiceExtraChannelMaxMixerVolume(out float maxVolume) =>
+			_voiceModule.TryGetExtraChannelMaxMixerVolume(out maxVolume);
+
+		public virtual bool TryGetVoiceExtraChannelDefaultMixerVolume(out float volume) =>
+			_voiceModule.TryGetExtraChannelDefaultMixerVolume(out volume);
 
 		public virtual bool TryGetVoiceExtraChannelMixerVolume(out float volume) =>
-			_voiceModule.TryGetExtraChannelAudioMixerVolume(out volume);
+			_voiceModule.TryGetExtraChannelMixerVolume(out volume);
 
-		public virtual bool TryGetVoiceChannelDefaultAudioMixerVolume(string channelDataId, out float volume) =>
-			_voiceModule.TryGetChannelDefaultAudioMixerVolume(channelDataId, out volume);
+		public virtual bool TryGetVoiceChannelMinMixerVolume(string channelDataId, out float minVolume) =>
+			_voiceModule.TryGetChannelMinMixerVolume(channelDataId, out minVolume);
+
+		public virtual bool TryGetVoiceChannelMaxMixerVolume(string channelDataId, out float maxVolume) =>
+			_voiceModule.TryGetChannelMaxMixerVolume(channelDataId, out maxVolume);
+
+		public virtual bool TryGetVoiceChannelDefaultMixerVolume(string channelDataId, out float volume) =>
+			_voiceModule.TryGetChannelDefaultMixerVolume(channelDataId, out volume);
 
 		public virtual bool TryGetVoiceChannelMixerVolume(string channelDataId, out float volume) =>
-			_voiceModule.TryGetChannelAudioMixerVolume(channelDataId, out volume);
+			_voiceModule.TryGetChannelMixerVolume(channelDataId, out volume);
 
 
 		public virtual bool CheckHasVoiceDataIdInConfig(string voiceDataId) =>
@@ -291,7 +324,7 @@ namespace CizaAudioModule
 			_sfxModule.Initialize(_root);
 			_voiceModule.Initialize(_root);
 
-			SetMasterVolume(_audioPlayerConfig.DefaultMasterVolume);
+			SetMasterMixerVolume(_audioPlayerConfig.DefaultMasterMixerVolume);
 
 			OnInitialize?.Invoke();
 		}
@@ -325,11 +358,14 @@ namespace CizaAudioModule
 			_voiceModule.Tick(deltaTime);
 		}
 
-		public virtual void SetMasterVolume(float volume)
+		public virtual void SetMasterMixerVolumeDefault() =>
+			SetMasterMixerVolume(_audioPlayerConfig.DefaultMasterMixerVolume);
+
+		public virtual void SetMasterMixerVolume(float volume)
 		{
 			if (_audioPlayerConfig.AudioMixer is null)
 			{
-				Debug.LogWarning("[AudioPlayer::SetMasterVolume] AudioMixer is null.");
+				Debug.LogWarning("[AudioPlayer::SetMasterMixerVolume] AudioMixer is null.");
 				return;
 			}
 
@@ -351,11 +387,11 @@ namespace CizaAudioModule
 
 		#region Bgm
 
-		public virtual void SetBgmDefaultVolume() =>
-			_bgmModule.SetDefaultVolume();
+		public virtual void SetBgmMixerVolumeDefault() =>
+			SetBgmMixerVolume(DefaultBgmMixerVolume);
 
-		public virtual void SetBgmVolume(float volume) =>
-			_bgmModule.SetVolume(volume);
+		public virtual void SetBgmMixerVolume(float volume) =>
+			_bgmModule.SetMixerVolume(volume);
 
 		public virtual Awaitable LoadBgmAssetAsync(string bgmDataId, string errorMessage, AsyncToken asyncToken) =>
 			_bgmModule.LoadAssetAsync(bgmDataId, errorMessage, asyncToken);
@@ -412,11 +448,11 @@ namespace CizaAudioModule
 
 		#region Sfx
 
-		public virtual void SetSfxDefaultVolume() =>
-			_sfxModule.SetDefaultVolume();
+		public virtual void SetSfxMixerVolumeDefault() =>
+			SetSfxMixerVolume(DefaultSfxMixerVolume);
 
-		public virtual void SetSfxVolume(float volume) =>
-			_sfxModule.SetVolume(volume);
+		public virtual void SetSfxMixerVolume(float volume) =>
+			_sfxModule.SetMixerVolume(volume);
 
 		public virtual Awaitable LoadSfxAssetAsync(string sfxDataId, string errorMessage, AsyncToken asyncToken) =>
 			_sfxModule.LoadAssetAsync(sfxDataId, errorMessage, asyncToken);
@@ -477,29 +513,42 @@ namespace CizaAudioModule
 
 		#region Voice
 
-		public virtual void SetVoiceDefaultVolume() =>
-			_voiceModule.SetDefaultVolume();
+		public virtual void SetVoiceMixerVolumeDefault() =>
+			SetVoiceMixerVolume(DefaultVoiceMixerVolume);
 
-		public virtual void SetVoiceVolume(float volume) =>
-			_voiceModule.SetVolume(volume);
+		public virtual void SetVoiceMixerVolume(float volume) =>
+			_voiceModule.SetMixerVolume(volume);
 
-		public virtual void SetVoiceVolume(string volumeParameter, float volume) =>
-			_voiceModule.SetVolume(volumeParameter, volume);
+		public virtual void SetVoiceMixerVolume(string volumeParameter, float volume) =>
+			_voiceModule.SetMixerVolume(volumeParameter, volume);
 
-		public virtual void SetVoiceExtraChannelDefaultVolume() =>
-			_voiceModule.SetExtraChannelDefaultVolume();
+		public virtual void SetVoiceExtraChannelMixerVolumeDefault()
+		{
+			if (!_voiceModule.TryGetExtraChannelDefaultMixerVolume(out var volume))
+				return;
 
-		public virtual void SetVoiceExtraChannelVolume(float volume) =>
-			_voiceModule.SetExtraChannelVolume(volume);
+			SetVoiceExtraChannelMixerVolume(volume);
+		}
 
-		public virtual void SetAllVoiceChannelDefaultVolume() =>
-			_voiceModule.SetAllChannelDefaultVolume();
+		public virtual void SetVoiceExtraChannelMixerVolume(float volume) =>
+			_voiceModule.SetExtraChannelMixerVolume(volume);
 
-		public virtual void SetVoiceChannelDefaultVolume(string channelDataId) =>
-			_voiceModule.SetChannelDefaultVolume(channelDataId);
+		public virtual void SetAllVoiceChannelMixerVolumeDefault()
+		{
+			foreach (var channelDataId in AllVoiceChannelDataIds)
+				SetVoiceChannelMixerVolumeDefault(channelDataId);
+		}
 
-		public virtual void SetVoiceChannelVolume(string channelDataId, float volume) =>
-			_voiceModule.SetChannelVolume(channelDataId, volume);
+		public virtual void SetVoiceChannelMixerVolumeDefault(string channelDataId)
+		{
+			if (!_voiceModule.TryGetChannelDefaultMixerVolume(channelDataId, out var volume))
+				return;
+
+			SetVoiceChannelMixerVolume(channelDataId, volume);
+		}
+
+		public virtual void SetVoiceChannelMixerVolume(string channelDataId, float volume) =>
+			_voiceModule.SetChannelMixerVolume(channelDataId, volume);
 
 
 		public virtual Awaitable LoadVoiceAssetAsync(string voiceDataId, string errorMessage, AsyncToken asyncToken = default) =>

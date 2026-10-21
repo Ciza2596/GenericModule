@@ -1886,7 +1886,7 @@ MonoBehaviour:
   _isLocalPosition: 0
   _position: {x: 10, y: 10, z: 0}
   _componentCollectionData:
-    _audioMixerVolumeSlider: {fileID: 794758323376895144}
+    _mixerVolumeSlider: {fileID: 794758323376895144}
     _clipDataIdDropdown: {fileID: 8365893033122446929}
     _playButton: {fileID: 8990886572224644761}
     _audioIdDropdown: {fileID: 3989270800284383517}

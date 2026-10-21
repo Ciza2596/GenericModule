@@ -9,9 +9,12 @@ namespace CizaAudioModule
 		string PoolPrefix { get; }
 		string PoolSuffix { get; }
 
-		string AudioMixerGroupPath { get; }
-		string AudioMixerVolumeParameter { get; }
-		float DefaultVolume { get; }
+		string MixerGroupPath { get; }
+		string MixerVolumeParameter { get; }
+		
+		float MinMixerVolume { get; }
+		float MaxMixerVolume { get; }
+		float DefaultMixerVolume { get; }
 
 
 		bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo);

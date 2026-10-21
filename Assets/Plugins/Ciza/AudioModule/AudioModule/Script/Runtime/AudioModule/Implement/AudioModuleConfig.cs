@@ -8,6 +8,11 @@ namespace CizaAudioModule.Implement
 	[CreateAssetMenu(fileName = "Aud.Config.asset", menuName = "Ciza/AudioModule/Config")]
 	public class AudioModuleConfig : ScriptableObject, IAudioModuleConfig
 	{
+		// CONST & STATIC: -----------------------------------------------------------------------
+
+		public const float MIN_MIXER_VOLUME = 0f;
+		public const float MAX_MIXER_VOLUME = 1f;
+
 		// VARIABLE: -----------------------------------------------------------------------------
 
 		[SerializeField]
@@ -23,14 +28,14 @@ namespace CizaAudioModule.Implement
 		[Space]
 		[Space]
 		[SerializeField]
-		protected string _audioMixerGroupPath;
+		protected string _mixerGroupPath;
 
 		[SerializeField]
-		protected string _audioMixerVolumeParameter;
+		protected string _mixerVolumeParameter;
 
 		[Range(0, 1)]
 		[SerializeField]
-		protected float _defaultVolume;
+		protected float _defaultMixerVolume;
 
 		[Space]
 		[SerializeField]
@@ -55,9 +60,12 @@ namespace CizaAudioModule.Implement
 		public virtual string PoolPrefix => _poolPrefix;
 		public virtual string PoolSuffix => _poolSuffix;
 
-		public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
-		public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
-		public virtual float DefaultVolume => _defaultVolume;
+		public virtual string MixerGroupPath => _mixerGroupPath;
+		public virtual string MixerVolumeParameter => _mixerVolumeParameter;
+
+		public virtual float MinMixerVolume => MIN_MIXER_VOLUME;
+		public virtual float MaxMixerVolume => MAX_MIXER_VOLUME;
+		public virtual float DefaultMixerVolume => _defaultMixerVolume;
 
 
 		public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo)
@@ -114,9 +122,9 @@ namespace CizaAudioModule.Implement
 			_poolPrefix = "";
 			_poolSuffix = "s";
 
-			_audioMixerGroupPath = "Master";
-			_audioMixerVolumeParameter = "Master";
-			_defaultVolume = 0.7f;
+			_mixerGroupPath = "Master";
+			_mixerVolumeParameter = "Master";
+			_defaultMixerVolume = 0.7f;
 
 			_hasMultipleChannelInfo = new MultipleAudioChannelInfoEnabler();
 

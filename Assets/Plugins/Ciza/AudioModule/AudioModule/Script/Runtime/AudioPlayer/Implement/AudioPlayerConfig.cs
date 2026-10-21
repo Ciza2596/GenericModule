@@ -30,7 +30,7 @@ namespace CizaAudioModule.Implement
 
 		[Range(0, 1)]
 		[SerializeField]
-		protected float _defaultMasterVolume;
+		protected float _defaultMasterMixerVolume;
 
 		[Space]
 		[SerializeField]
@@ -50,7 +50,10 @@ namespace CizaAudioModule.Implement
 		public virtual AudioMixer AudioMixer => _audioMixer;
 		public virtual string MasterMixerGroupPath => _masterMixerGroupPath;
 		public virtual string MasterMixerParameter => _masterMixerParameter;
-		public virtual float DefaultMasterVolume => _defaultMasterVolume;
+
+		public virtual float MinMasterMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MIN_MIXER_VOLUME;
+		public virtual float MaxMasterMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MAX_MIXER_VOLUME;
+		public virtual float DefaultMasterMixerVolume => _defaultMasterMixerVolume;
 
 		public virtual IAudioModuleConfig BgmModuleConfig => _bgmModuleConfig;
 		public virtual IAudioModuleConfig SfxModuleConfig => _sfxModuleConfig;
@@ -68,7 +71,7 @@ namespace CizaAudioModule.Implement
 
 			_masterMixerGroupPath = "Master";
 			_masterMixerParameter = "Master";
-			_defaultMasterVolume = 0.7f;
+			_defaultMasterMixerVolume = 0.7f;
 
 			_bgmModuleConfig = new AudioModuleConfig("Bgm", "Master/Bgm", "Bgm", "Aud.BgmAudio");
 			_sfxModuleConfig = new AudioModuleConfig("Sfx", "Master/Sfx", "Sfx", "Aud.SfxAudio");
@@ -93,14 +96,14 @@ namespace CizaAudioModule.Implement
 			[Space]
 			[Space]
 			[SerializeField]
-			protected string _audioMixerGroupPath;
+			protected string _mixerGroupPath;
 
 			[SerializeField]
-			protected string _audioMixerVolumeParameter;
+			protected string _mixerVolumeParameter;
 
 			[Range(0, 1)]
 			[SerializeField]
-			protected float _defaultVolume;
+			protected float _defaultMixerVolume;
 
 			[Space]
 			[Space]
@@ -121,9 +124,13 @@ namespace CizaAudioModule.Implement
 			public virtual string PoolPrefix => _poolPrefix;
 			public virtual string PoolSuffix => _poolSuffix;
 
-			public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
-			public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
-			public virtual float DefaultVolume => _defaultVolume;
+			public virtual string MixerGroupPath => _mixerGroupPath;
+			public virtual string MixerVolumeParameter => _mixerVolumeParameter;
+
+			public virtual float MinMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MIN_MIXER_VOLUME;
+			public virtual float MaxMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MAX_MIXER_VOLUME;
+
+			public virtual float DefaultMixerVolume => _defaultMixerVolume;
 
 
 			public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo)
@@ -158,19 +165,19 @@ namespace CizaAudioModule.Implement
 			public AudioModuleConfig() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
 
 			[Preserve]
-			public AudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerVolumeParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", audioMixerGroupPath, audioMixerVolumeParameter, 0.7f, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
+			public AudioModuleConfig(string poolRootName, string mixerGroupPath, string mixerVolumeParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", mixerGroupPath, mixerVolumeParameter, 0.7f, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
 
 			[Preserve]
-			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerVolumeParameter, float defaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
+			public AudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string mixerGroupPath, string mixerVolumeParameter, float defaultMixerVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
 			{
 				_poolRootName = poolRootName;
 
 				_poolPrefix = poolPrefix;
 				_poolSuffix = poolSuffix;
 
-				_audioMixerGroupPath = audioMixerGroupPath;
-				_audioMixerVolumeParameter = audioMixerVolumeParameter;
-				_defaultVolume = defaultVolume;
+				_mixerGroupPath = mixerGroupPath;
+				_mixerVolumeParameter = mixerVolumeParameter;
+				_defaultMixerVolume = defaultMixerVolume;
 
 				_hasRestrictContinuousPlay = hasRestrictContinuousPlay;
 
@@ -198,14 +205,14 @@ namespace CizaAudioModule.Implement
 			[Space]
 			[Space]
 			[SerializeField]
-			protected string _audioMixerGroupPath;
+			protected string _mixerGroupPath;
 
 			[SerializeField]
-			protected string _audioMixerVolumeParameter;
+			protected string _mixerVolumeParameter;
 
 			[Range(0, 1)]
 			[SerializeField]
-			protected float _defaultVolume;
+			protected float _defaultMixerVolume;
 
 			[Space]
 			[SerializeField]
@@ -230,9 +237,12 @@ namespace CizaAudioModule.Implement
 			public virtual string PoolPrefix => _poolPrefix;
 			public virtual string PoolSuffix => _poolSuffix;
 
-			public virtual string AudioMixerGroupPath => _audioMixerGroupPath;
-			public virtual string AudioMixerVolumeParameter => _audioMixerVolumeParameter;
-			public virtual float DefaultVolume => _defaultVolume;
+			public virtual string MixerGroupPath => _mixerGroupPath;
+			public virtual string MixerVolumeParameter => _mixerVolumeParameter;
+
+			public virtual float MinMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MIN_MIXER_VOLUME;
+			public virtual float MaxMixerVolume => CizaAudioModule.Implement.AudioModuleConfig.MAX_MIXER_VOLUME;
+			public virtual float DefaultMixerVolume => _defaultMixerVolume;
 
 
 			public virtual bool TryGetExtraChannelInfo(out IAudioChannelInfo extraChannelInfo)
@@ -278,21 +288,21 @@ namespace CizaAudioModule.Implement
 			public VoiceAudioModuleConfig() : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty) { }
 
 			[Preserve]
-			public VoiceAudioModuleConfig(string poolRootName, string audioMixerGroupPath, string audioMixerVolumeParameter, string extraChannelAudioMixerGroupPath, string extraChannelAudioMixerVolumeParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", audioMixerGroupPath, audioMixerVolumeParameter, 0.7f, extraChannelAudioMixerGroupPath, extraChannelAudioMixerVolumeParameter, 1, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
+			public VoiceAudioModuleConfig(string poolRootName, string mixerGroupPath, string mixerVolumeParameter, string extraChannelMixerGroupPath, string extraChannelMixerVolumeParameter, string defaultPrefabAddress) : this(poolRootName, string.Empty, "s", mixerGroupPath, mixerVolumeParameter, 0.7f, extraChannelMixerGroupPath, extraChannelMixerVolumeParameter, 1, new RestrictContinuousPlayEnabler(), defaultPrefabAddress, new AudioInfoMapList()) { }
 
 			[Preserve]
-			public VoiceAudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string audioMixerGroupPath, string audioMixerVolumeParameter, float defaultVolume, string extraChannelAudioMixerGroupPath, string extraChannelAudioMixerVolumeParameter, float extraChannelDefaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
+			public VoiceAudioModuleConfig(string poolRootName, string poolPrefix, string poolSuffix, string mixerGroupPath, string mixerVolumeParameter, float defaultMixerVolume, string extraChannelMixerGroupPath, string extraChannelMixerVolumeParameter, float extraChannelDefaultVolume, RestrictContinuousPlayEnabler hasRestrictContinuousPlay, string prefabAddress, AudioInfoMapList infoMapList)
 			{
 				_poolRootName = poolRootName;
 
 				_poolPrefix = poolPrefix;
 				_poolSuffix = poolSuffix;
 
-				_audioMixerGroupPath = audioMixerGroupPath;
-				_audioMixerVolumeParameter = audioMixerVolumeParameter;
-				_defaultVolume = defaultVolume;
+				_mixerGroupPath = mixerGroupPath;
+				_mixerVolumeParameter = mixerVolumeParameter;
+				_defaultMixerVolume = defaultMixerVolume;
 
-				_hasMultipleChannelInfo = new MultipleAudioChannelInfoEnabler(new MultipleAudioChannelInfo(new AudioChannelInfo(extraChannelAudioMixerGroupPath, extraChannelAudioMixerVolumeParameter, extraChannelDefaultVolume), new AudioChannelInfoMapList()));
+				_hasMultipleChannelInfo = new MultipleAudioChannelInfoEnabler(new MultipleAudioChannelInfo(new AudioChannelInfo(extraChannelMixerGroupPath, extraChannelMixerVolumeParameter, extraChannelDefaultVolume), new AudioChannelInfoMapList()));
 
 				_hasRestrictContinuousPlay = hasRestrictContinuousPlay;
 

@@ -15,9 +15,9 @@ MonoBehaviour:
   _poolRootName: '[AudioModule]'
   _poolPrefix: 
   _poolSuffix: s
-  _audioMixerGroupPath: Master
-  _audioMixerParameter: Master
-  _defaultVolume: 0.7
+  _mixerGroupPath: Master
+  _mixerVolumeParameter: Master
+  _defaultMixerVolume: 0.7
   _hasRestrictContinuousPlay:
     _isEnable: 0
     _value:

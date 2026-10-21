@@ -10,7 +10,10 @@ namespace CizaAudioModule
 		AudioMixer AudioMixer { get; }
 		string MasterMixerGroupPath { get; }
 		string MasterMixerParameter { get; }
-		float DefaultMasterVolume { get; }
+
+		float MinMasterMixerVolume { get; }
+		float MaxMasterMixerVolume { get; }
+		float DefaultMasterMixerVolume { get; }
 
 		IAudioModuleConfig BgmModuleConfig { get; }
 		IAudioModuleConfig SfxModuleConfig { get; }

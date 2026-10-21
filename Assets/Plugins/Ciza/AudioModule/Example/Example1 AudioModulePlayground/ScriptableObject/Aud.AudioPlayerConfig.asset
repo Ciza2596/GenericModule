@@ -17,14 +17,14 @@ MonoBehaviour:
   _audioMixer: {fileID: 0}
   _masterMixerGroupPath: Master
   _masterMixerParameter: Master
-  _defaultMasterVolume: 0.7
+  _defaultMasterMixerVolume: 0.7
   _bgmModuleConfig:
     _poolRootName: Bgm
     _poolPrefix: 
     _poolSuffix: s
-    _audioMixerGroupPath: Master/Bgm
-    _audioMixerVolumeParameter: Bgm
-    _defaultVolume: 0.7
+    _mixerGroupPath: Master/Bgm
+    _mixerVolumeParameter: Bgm
+    _defaultMixerVolume: 0.7
     _hasRestrictContinuousPlay:
       _isEnable: 0
       _value:
@@ -37,9 +37,9 @@ MonoBehaviour:
     _poolRootName: Sfx
     _poolPrefix: 
     _poolSuffix: s
-    _audioMixerGroupPath: Master/Sfx
-    _audioMixerVolumeParameter: Sfx
-    _defaultVolume: 0.7
+    _mixerGroupPath: Master/Sfx
+    _mixerVolumeParameter: Sfx
+    _defaultMixerVolume: 0.7
     _hasRestrictContinuousPlay:
       _isEnable: 0
       _value:
@@ -66,24 +66,24 @@ MonoBehaviour:
     _poolRootName: Voice
     _poolPrefix: 
     _poolSuffix: s
-    _audioMixerGroupPath: Master/Voice
-    _audioMixerVolumeParameter: Voice
-    _defaultVolume: 0.7
+    _mixerGroupPath: Master/Voice
+    _mixerVolumeParameter: Voice
+    _defaultMixerVolume: 0.7
     _hasMultipleChannelInfo:
       _isEnable: 1
       _value:
         _extraChannelInfo:
-          _audioMixerGroupPath: 
-          _audioMixerVolumeParameter: 
-          _defaultVolume: 1
+          _mixerGroupPath: 
+          _mixerVolumeParameter: 
+          _defaultMixerVolume: 1
         _channelInfoMapList:
           _maps:
           - _isEnable: 1
             _key: Default
             _value:
-              _audioMixerGroupPath: 
-              _audioMixerVolumeParameter: 
-              _defaultVolume: 1
+              _mixerGroupPath: 
+              _mixerVolumeParameter: 
+              _defaultMixerVolume: 1
     _hasRestrictContinuousPlay:
       _isEnable: 0
       _value:

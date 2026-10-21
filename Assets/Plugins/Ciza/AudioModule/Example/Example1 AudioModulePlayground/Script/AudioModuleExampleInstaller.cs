@@ -46,7 +46,7 @@ namespace CizaAudioModule.Example1
 			foreach (var audioDataId in audioDataIds)
 				await _audioModule.LoadAssetAsync(audioDataId, string.Empty);
 
-			_componentCollectionData.AudioMixerVolumeSlider.onValueChanged.AddListener(SetAudioMixerVolume);
+			_componentCollectionData.MixerVolumeSlider.onValueChanged.AddListener(SetMixerVolume);
 
 			_componentCollectionData.SetClipDataIds(audioDataIds);
 			_componentCollectionData.PlayButton.onClick.AddListener(Play);
@@ -84,8 +84,8 @@ namespace CizaAudioModule.Example1
 		}
 
 		// private method
-		private void SetAudioMixerVolume(float volume) =>
-			_audioModule.SetVolume(volume);
+		private void SetMixerVolume(float volume) =>
+			_audioModule.SetMixerVolume(volume);
 
 		private async void Play()
 		{
@@ -136,7 +136,7 @@ namespace CizaAudioModule.Example1
 		private class ComponentCollectionData
 		{
 			[SerializeField]
-			private Slider _audioMixerVolumeSlider;
+			private Slider _mixerVolumeSlider;
 
 			[Space]
 			[SerializeField]
@@ -164,7 +164,7 @@ namespace CizaAudioModule.Example1
 			[SerializeField]
 			private Button _stopAllButton;
 
-			public Slider AudioMixerVolumeSlider => _audioMixerVolumeSlider;
+			public Slider MixerVolumeSlider => _mixerVolumeSlider;
 
 			public string ClipDataId => _clipDataIdDropdown.captionText.text;
 			public Button PlayButton => _playButton;

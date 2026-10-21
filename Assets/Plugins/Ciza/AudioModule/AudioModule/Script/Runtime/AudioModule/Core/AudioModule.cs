@@ -54,12 +54,12 @@ namespace CizaAudioModule
 		public virtual string[] ChannelDataIds => _config.ChannelDataIds;
 
 
-		#region AudioMixerGroup
+		#region MixerGroup
 
-		public virtual bool TryGetAudioMixerGroup(out AudioMixerGroup audioMixerGroup) =>
-			TryGetAudioMixerGroup(_config.AudioMixerGroupPath, out audioMixerGroup);
+		public virtual bool TryGetMixerGroup(out AudioMixerGroup audioMixerGroup) =>
+			TryGetMixerGroup(_config.MixerGroupPath, out audioMixerGroup);
 
-		public virtual bool TryGetExtraChannelAudioMixerGroup(out AudioMixerGroup audioMixerGroup)
+		public virtual bool TryGetExtraChannelMixerGroup(out AudioMixerGroup audioMixerGroup)
 		{
 			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
 			{
@@ -67,10 +67,10 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			return TryGetAudioMixerGroup(extraChannelInfo.AudioMixerGroupPath, out audioMixerGroup);
+			return TryGetMixerGroup(extraChannelInfo.MixerGroupPath, out audioMixerGroup);
 		}
 
-		public virtual bool TryGetChannelAudioMixerGroup(string channelDataId, out AudioMixerGroup audioMixerGroup)
+		public virtual bool TryGetChannelMixerGroup(string channelDataId, out AudioMixerGroup audioMixerGroup)
 		{
 			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{
@@ -78,10 +78,10 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			return TryGetAudioMixerGroup(channelInfo.AudioMixerGroupPath, out audioMixerGroup);
+			return TryGetMixerGroup(channelInfo.MixerGroupPath, out audioMixerGroup);
 		}
 
-		public virtual bool TryGetAudioMixerGroup(string groupPath, out AudioMixerGroup audioMixerGroup)
+		public virtual bool TryGetMixerGroup(string groupPath, out AudioMixerGroup audioMixerGroup)
 		{
 			if (_audioMixer is null)
 			{
@@ -98,14 +98,56 @@ namespace CizaAudioModule
 
 		#region volume
 
-		public virtual float DefaultAudioMixerVolume =>
-			_config.DefaultVolume;
+		public virtual float MinMixerVolume =>
+			_config.MinMixerVolume;
 
-		public virtual bool TryGetAudioMixerVolume(out float volume) =>
-			TryGetAudioMixerVolume(_config.AudioMixerVolumeParameter, out volume);
+		public virtual float MaxMixerVolume =>
+			_config.MaxMixerVolume;
+
+		public virtual float DefaultMixerVolume =>
+			_config.DefaultMixerVolume;
+
+		public virtual bool TryGetMixerVolume(out float volume) =>
+			TryGetMixerVolume(_config.MixerVolumeParameter, out volume);
 
 
-		public virtual bool TryGetExtraChannelDefaultAudioMixerVolume(out float volume)
+		public virtual bool TryGetExtraChannelMinMixerVolume(out float minVolume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				minVolume = 0;
+				return false;
+			}
+
+			minVolume = extraChannelInfo.MinMixerVolume;
+			return true;
+		}
+
+		public virtual bool TryGetExtraChannelMaxMixerVolume(out float maxVolume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				maxVolume = 0;
+				return false;
+			}
+
+			maxVolume = extraChannelInfo.MaxMixerVolume;
+			return true;
+		}
+
+		public virtual bool TryGetExtraChannelDefaultMixerVolume(out float defaultVolume)
+		{
+			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			{
+				defaultVolume = 0;
+				return false;
+			}
+
+			defaultVolume = extraChannelInfo.DefaultMixerVolume;
+			return true;
+		}
+
+		public virtual bool TryGetExtraChannelMixerVolume(out float volume)
 		{
 			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
 			{
@@ -113,23 +155,47 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			volume = extraChannelInfo.DefaultVolume;
-			return true;
+			return TryGetMixerVolume(extraChannelInfo.MixerVolumeParameter, out volume);
 		}
 
-		public virtual bool TryGetExtraChannelAudioMixerVolume(out float volume)
+
+		public virtual bool TryGetChannelMinMixerVolume(string channelDataId, out float minVolume)
 		{
-			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{
-				volume = 0;
+				minVolume = 0;
 				return false;
 			}
 
-			return TryGetAudioMixerVolume(extraChannelInfo.AudioMixerVolumeParameter, out volume);
+			minVolume = channelInfo.MinMixerVolume;
+			return true;
 		}
 
+		public virtual bool TryGetChannelMaxMixerVolume(string channelDataId, out float maxVolume)
+		{
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
+			{
+				maxVolume = 0;
+				return false;
+			}
 
-		public virtual bool TryGetChannelDefaultAudioMixerVolume(string channelDataId, out float volume)
+			maxVolume = channelInfo.MaxMixerVolume;
+			return true;
+		}
+
+		public virtual bool TryGetChannelDefaultMixerVolume(string channelDataId, out float defaultVolume)
+		{
+			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
+			{
+				defaultVolume = 0;
+				return false;
+			}
+
+			defaultVolume = channelInfo.DefaultMixerVolume;
+			return true;
+		}
+
+		public virtual bool TryGetChannelMixerVolume(string channelDataId, out float volume)
 		{
 			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 			{
@@ -137,22 +203,10 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			volume = channelInfo.DefaultVolume;
-			return true;
+			return TryGetMixerVolume(channelInfo.MixerVolumeParameter, out volume);
 		}
 
-		public virtual bool TryGetChannelAudioMixerVolume(string channelDataId, out float volume)
-		{
-			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
-			{
-				volume = 0;
-				return false;
-			}
-
-			return TryGetAudioMixerVolume(channelInfo.AudioMixerVolumeParameter, out volume);
-		}
-
-		public virtual bool TryGetAudioMixerVolume(string parameter, out float volume)
+		public virtual bool TryGetMixerVolume(string parameter, out float volume)
 		{
 			if (_audioMixer is null)
 			{
@@ -287,9 +341,9 @@ namespace CizaAudioModule
 					_poolRoot.SetParent(rootParent);
 			}
 
-			SetDefaultVolume();
-			SetExtraChannelDefaultVolume();
-			SetAllChannelDefaultVolume();
+			SetMixerVolumeDefault();
+			SetExtraChannelMixerVolumeDefault();
+			SetAllChannelMixerVolumeDefault();
 		}
 
 		public virtual void Release()
@@ -341,54 +395,56 @@ namespace CizaAudioModule
 		}
 
 
-		public virtual void SetDefaultVolume() =>
-			SetVolume(_config.DefaultVolume);
+		public virtual void SetMixerVolumeDefault() =>
+			SetMixerVolume(_config.DefaultMixerVolume);
 
-		public virtual void SetVolume(float volume) =>
-			SetVolume(_config.AudioMixerVolumeParameter, volume);
+		public virtual void SetMixerVolume(float volume) =>
+			SetMixerVolume(_config.MixerVolumeParameter, volume);
 
 
-		public virtual void SetExtraChannelDefaultVolume()
+		public virtual void SetExtraChannelMixerVolumeDefault()
+		{
+			if (!TryGetExtraChannelDefaultMixerVolume(out var volume))
+				return;
+
+			SetExtraChannelMixerVolume(volume);
+		}
+
+		public virtual void SetExtraChannelMixerVolume(float volume)
 		{
 			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
 				return;
-			SetVolume(extraChannelInfo.AudioMixerVolumeParameter, extraChannelInfo.DefaultVolume);
-		}
-
-		public virtual void SetExtraChannelVolume(float volume)
-		{
-			if (!_config.TryGetExtraChannelInfo(out var extraChannelInfo))
-				return;
-			SetVolume(extraChannelInfo.AudioMixerVolumeParameter, volume);
+			SetMixerVolume(extraChannelInfo.MixerVolumeParameter, volume);
 		}
 
 
-		public virtual void SetAllChannelDefaultVolume()
+		public virtual void SetAllChannelMixerVolumeDefault()
 		{
 			foreach (var channelDataId in _config.ChannelDataIds)
-				SetChannelDefaultVolume(channelDataId);
+				SetChannelMixerVolumeDefault(channelDataId);
 		}
 
-		public virtual void SetChannelDefaultVolume(string channelDataId)
+		public virtual void SetChannelMixerVolumeDefault(string channelDataId)
+		{
+			if (!TryGetChannelDefaultMixerVolume(channelDataId, out var volume))
+				return;
+
+			SetChannelMixerVolume(channelDataId, volume);
+		}
+
+		public virtual void SetChannelMixerVolume(string channelDataId, float volume)
 		{
 			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
 				return;
-			SetVolume(channelInfo.AudioMixerVolumeParameter, channelInfo.DefaultVolume);
-		}
-
-		public virtual void SetChannelVolume(string channelDataId, float volume)
-		{
-			if (!_config.TryGetChannelInfo(channelDataId, out var channelInfo))
-				return;
-			SetVolume(channelInfo.AudioMixerVolumeParameter, volume);
+			SetMixerVolume(channelInfo.MixerVolumeParameter, volume);
 		}
 
 
-		public virtual void SetVolume(string volumeParameter, float volume)
+		public virtual void SetMixerVolume(string volumeParameter, float volume)
 		{
 			if (_audioMixer is null)
 			{
-				Debug.LogWarning("[AudioModule::SetVolume] AudioMixer is null.");
+				Debug.LogWarning("[AudioModule::SetMixerVolume] AudioMixer is null.");
 				return;
 			}
 
@@ -512,7 +568,7 @@ namespace CizaAudioModule
 
 			AddCooldown(audioDataId);
 
-			var audioMixerGroupPath = GetAudioMixerGroupPath(channelDataId);
+			var mixerGroupPath = GetMixerGroupPath(channelDataId);
 			var audio = m_GetOrCreateAudio(prefabAddress);
 
 			var audioId = isCustomId ? customId : Guid.NewGuid().ToString();
@@ -537,8 +593,8 @@ namespace CizaAudioModule
 					var m_prefab = _prefabMapByAddress[m_prefabAddress];
 					var m_audio = Object.Instantiate(m_prefab).GetComponent<IAudio>();
 
-					if (!TryGetAudioMixerGroup(audioMixerGroupPath, out var audioMixerGroup))
-						Debug.LogWarning($"[AudioModule::Spawn] AudioMixerGroup is not found by {audioMixerGroupPath}.");
+					if (!TryGetMixerGroup(mixerGroupPath, out var audioMixerGroup))
+						Debug.LogWarning($"[AudioModule::Spawn] AudioMixerGroup is not found by {mixerGroupPath}.");
 
 					m_audio.Initialize(prefabAddress, audioMixerGroup);
 
@@ -707,12 +763,12 @@ namespace CizaAudioModule
 		}
 
 
-		protected virtual string GetAudioMixerGroupPath(string channelDataId)
+		protected virtual string GetMixerGroupPath(string channelDataId)
 		{
 			if (channelDataId.CheckHasValue() && _config.TryGetChannelInfo(channelDataId, out var channelInfo))
-				return channelInfo.AudioMixerGroupPath;
+				return channelInfo.MixerGroupPath;
 
-			return _config.TryGetExtraChannelInfo(out var extraChannelInfo) ? extraChannelInfo.AudioMixerGroupPath : _config.AudioMixerGroupPath;
+			return _config.TryGetExtraChannelInfo(out var extraChannelInfo) ? extraChannelInfo.MixerGroupPath : _config.MixerGroupPath;
 		}
 
 

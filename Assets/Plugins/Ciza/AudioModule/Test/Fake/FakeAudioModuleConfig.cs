@@ -5,7 +5,7 @@ using CizaAudioModule;
 // {
 // 	private IReadOnlyDictionary<string, IAudioInfo> _audioDataMap;
 // 	
-//     public string                                  AudioMixerGroupPath { get; }
+//     public string                                  MixerGroupPath { get; }
 //     public string                                  PoolRootName              { get; }
 //     public string                                  PoolPrefix                { get; }
 //     public string                                  PoolSuffix                { get; }

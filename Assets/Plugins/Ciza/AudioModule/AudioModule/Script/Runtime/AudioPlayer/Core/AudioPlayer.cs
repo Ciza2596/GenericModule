@@ -119,7 +119,14 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			return _audioPlayerConfig.AudioMixer.GetFloat(_audioPlayerConfig.MasterMixerParameter, out volume);
+			if (!_audioPlayerConfig.AudioMixer.GetFloat(_audioPlayerConfig.MasterMixerParameter, out var logarithmicVolume))
+			{
+				volume = 0;
+				return false;
+			}
+
+			volume = MathUtils.GetLogarithmicToLinearScale(logarithmicVolume);
+			return true;
 		}
 
 		#region Bgm
@@ -369,10 +376,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			_audioPlayerConfig.AudioMixer.SetFloat(_audioPlayerConfig.MasterMixerParameter, m_GetLinearToLogarithmicScale(volume));
-
-			float m_GetLinearToLogarithmicScale(float value) =>
-				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
+			_audioPlayerConfig.AudioMixer.SetFloat(_audioPlayerConfig.MasterMixerParameter, MathUtils.GetLinearToLogarithmicScale(volume));
 		}
 
 		public virtual async Awaitable StopAllAsync(float fadeTime = 0, AsyncToken asyncToken = default)

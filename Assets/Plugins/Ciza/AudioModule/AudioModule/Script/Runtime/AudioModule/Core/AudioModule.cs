@@ -214,7 +214,14 @@ namespace CizaAudioModule
 				return false;
 			}
 
-			return _audioMixer.GetFloat(parameter, out volume);
+			if (!_audioMixer.GetFloat(parameter, out var logarithmicVolume))
+			{
+				volume = 0;
+				return false;
+			}
+
+			volume = MathUtils.GetLogarithmicToLinearScale(logarithmicVolume);
+			return true;
 		}
 
 		#endregion
@@ -448,10 +455,7 @@ namespace CizaAudioModule
 				return;
 			}
 
-			_audioMixer.SetFloat(volumeParameter, m_GetLinearToLogarithmicScale(volume));
-
-			float m_GetLinearToLogarithmicScale(float value) =>
-				Mathf.Log(Mathf.Clamp(value, 0.001f, 1)) * 20.0f;
+			_audioMixer.SetFloat(volumeParameter, MathUtils.GetLinearToLogarithmicScale(volume));
 		}
 
 		public virtual async Awaitable LoadAssetAsync(string audioDataId, string errorMessage, AsyncToken asyncToken = default)
